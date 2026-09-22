@@ -4,8 +4,9 @@
 #   public/token_archive.json, public/*.png, public/*.ico
 #   ui/assets/
 #
-# Source is a ManaBrew checkout — the tree the client, deck art and preset decks
-# were copied from. Default ../manabrew; override with MANABREW_DIR.
+# Source is a ManaBrew checkout. If ../manabrew exists it is used as-is; set
+# MANABREW_DIR to point elsewhere. With neither, the script sparse-clones the
+# ManaBrew repo into a temp dir (override the URL with MANABREW_REPO).
 #
 # The audit JSON (docs/card-audit*.json) is NOT fetched here; regenerate it with
 #   cargo run --release --manifest-path server/Cargo.toml --example audit_cards -- \
@@ -15,11 +16,19 @@ set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 src="${MANABREW_DIR:-$root/../manabrew}"
+tmp=""
 
-if [ ! -d "$src/public/preset_decks" ]; then
-  echo "ManaBrew checkout not found at: $src" >&2
-  echo "Clone it (https://github.com/witchesofthehill/manabrew) or set MANABREW_DIR." >&2
-  exit 1
+if [ ! -f "$src/public/token_archive.json" ]; then
+  if [ -n "${MANABREW_DIR:-}" ]; then
+    echo "No ManaBrew resources under MANABREW_DIR=$src" >&2
+    exit 1
+  fi
+  tmp="$(mktemp -d)"
+  src="$tmp/manabrew"
+  echo "No local ManaBrew checkout; sparse-cloning ${MANABREW_REPO:-https://github.com/witchesofthehill/manabrew} ..." >&2
+  git clone --depth 1 --filter=blob:none --sparse "${MANABREW_REPO:-https://github.com/witchesofthehill/manabrew}" "$src" >&2
+  git -C "$src" sparse-checkout set public src/assets >&2
+  trap 'rm -rf "$tmp"' EXIT
 fi
 
 cp -f "$src/public/token_archive.json" "$root/public/"
