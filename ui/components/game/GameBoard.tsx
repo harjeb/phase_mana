@@ -1,0 +1,1844 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useKeybindings } from "@/hooks/useKeybindings";
+import type { CardDto, DayTime } from "@/protocol/game";
+import type { ClientPlayerDto } from "@/stores/gameStore.types";
+import type { Prompt } from "@/protocol";
+import { validCardIdsInCards, type BoardTargetBuckets } from "@/lib/boardTargets";
+import type { PreviewPointerInput } from "@/lib/cardPreview";
+import { stripUsernameTag } from "@/lib/username";
+import { nextHandOrderMode } from "@/lib/handOrder";
+import { type ZonePanelItem } from "@/stores/usePreferencesStore";
+import { BoardCanvas, type BoardCanvasLayout, type BoardCanvasRegion } from "@/pixi/BoardCanvas";
+import {
+  BoardOverlayCanvas,
+  type BoardOverlayCommandPreviewSpec,
+  type BoardOverlayPreviewSpec,
+} from "@/pixi/BoardOverlayCanvas";
+import type { StackSpec } from "@/pixi/stack/stack.types";
+import type { CombatRow } from "@/components/game/combatRows";
+import type { BoardScene } from "@/pixi/board/BoardScene";
+import { boardAmbientColor, boardBackgroundUrl } from "@/pixi/board/boardBackgrounds";
+import type { PlayerHudSpec, PlayerHudBadge, PlayerHudFact } from "@/pixi/hud/playerHud.types";
+import type { PromptOverlaySpec } from "@/pixi/prompts/prompt.types";
+import { buildPlayerHudBadges, buildZoneBadges } from "@/components/game/panels/playerHudBadges";
+import { PlayerSheetModal } from "@/components/game/panels/PlayerSheetModal";
+import { GlobalStateRail } from "@/components/game/panels/GlobalStateRail";
+import type { ZoneTileSpec } from "@/pixi/board/BoardZoneTiles";
+import { usePreferencesStore } from "@/stores/usePreferencesStore";
+import { useAssetUrl } from "@/stores/useAssetStore";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useGameStore } from "@/stores/useGameStore";
+import { useServerStore } from "@/stores/useServerStore";
+import { useGameDevStore } from "@/stores/useGameDevStore";
+import type { ArrowSpec, BattlefieldState, GameCanvasCallbacks } from "@/pixi/types";
+import { usePhaseStopStore, DEFAULT_OPPONENT_STOPS } from "@/stores/usePhaseStopStore";
+import type { PromptType } from "@/protocol";
+import { OPPONENT_SEATS } from "@/components/game/game.types";
+import { useTheme } from "@/hooks/useTheme";
+import { manaAbilityInfos } from "@/components/game/game.utils";
+import { useHandScale } from "@/hooks/useHandScale";
+import { useIsMobileGame } from "@/hooks/useBreakpoints";
+import { useHandOrder } from "@/hooks/useHandOrder";
+import type { HandDragStart } from "@/hooks/useHandDrag";
+import { HAND_CARD_BASE } from "@/components/game/game.styles";
+import { ZONE_TILE_KEY } from "@/components/game/game.constants";
+import {
+  GAP,
+  HAND_BOTTOM_SINK_FRAC,
+  HAND_BOTTOM_SINK_FRAC_COMPACT,
+  HAND_RESERVE_TRIM,
+  HAND_RESERVE_TRIM_COMPACT,
+} from "@/pixi/constants";
+import type { HandActionOption } from "@/stores/useGameUIStore";
+import { ReconnectBanner } from "@/components/lobby/ReconnectBanner";
+import { GameBoardAccessibility } from "@/components/game/GameBoardAccessibility";
+function promptOf<TType extends PromptType>(
+  prompt: Prompt | null | undefined,
+  type: TType,
+): Extract<
+  Prompt,
+  {
+    input: {
+      type: TType;
+    };
+  }
+> | null {
+  return prompt?.input.type === type
+    ? (prompt as Extract<
+        Prompt,
+        {
+          input: {
+            type: TType;
+          };
+        }
+      >)
+    : null;
+}
+
+const GRAVEYARD_CARD_TYPES = new Set([
+  "Artifact",
+  "Battle",
+  "Creature",
+  "Enchantment",
+  "Instant",
+  "Kindred",
+  "Land",
+  "Planeswalker",
+  "Sorcery",
+]);
+
+function graveyardCardTypeCount(cards: CardDto[]): number {
+  const present = new Set<string>();
+  for (const card of cards) {
+    for (const type of card.types) {
+      if (GRAVEYARD_CARD_TYPES.has(type)) present.add(type);
+    }
+  }
+  return present.size;
+}
+
+interface GameBoardProps {
+  me: ClientPlayerDto;
+  opponents: ClientPlayerDto[];
+  myPermanents: CardDto[];
+  opponentPermanentsByPlayer: Map<string, CardDto[]>;
+  myHand: CardDto[];
+  graveyard: CardDto[];
+  exile: CardDto[];
+  library: CardDto[];
+  myCommandZone?: CardDto[];
+  playableIds: Set<string>;
+  activePlayerId: string;
+  priorityPlayerId: string;
+  step: string;
+  promptType?: PromptType;
+  currentPrompt: Prompt | null;
+  boardTargets: BoardTargetBuckets | null;
+  pendingAttackers: string[];
+  attackAssignments: {
+    attackerId: string;
+    targetId: string;
+  }[];
+  pendingAttacker?: string | null;
+  pendingBlocker?: string | null;
+  damageOrder?: string[];
+  damageOrderBlockerIds?: string[];
+  selectedAttackDefenderId?: string | null;
+  blockAssignments: {
+    blockerId: string;
+    attackerId: string;
+  }[];
+  combatAssignments?: {
+    blockerId: string;
+    attackerId: string;
+  }[];
+  combatRows: CombatRow[];
+  arrowSpecs?: ArrowSpec[];
+  castingArrow?: {
+    sourceCardId: string;
+    hostile: boolean;
+  } | null;
+  playerIsTargetable: (playerId: string) => boolean;
+  monarchId?: string | null;
+  initiativeHolderId?: string | null;
+  dayTime: DayTime;
+  activePlaneNames?: string[];
+
+  turnFlashPlayerId: string | null;
+  zonePanelOrder: ZonePanelItem[];
+  isOverBattlefield: boolean;
+  isOverHand: boolean;
+  draggingCardId?: string;
+  draggingIsPermanent?: boolean;
+  castingCardId?: string | null;
+  onHandCardDragStart: (card: CardDto, e: HandDragStart) => void;
+  onHoverCard: (
+    card: CardDto | null,
+    e?: React.MouseEvent,
+    options?: {
+      useAnchor?: boolean;
+      placement?: "auto" | "top-center";
+      anchorOverride?: DOMRect;
+      trigger?: PreviewPointerInput;
+    },
+  ) => void;
+  onHoverZoneCards: (cards: CardDto[] | null, anchor?: DOMRect) => void;
+  onRightClickCard?: (card: CardDto, anchor: DOMRect) => void;
+  onDismissHoverPreview?: () => void;
+  rulesPreview?: BoardOverlayPreviewSpec | null;
+  commandPreview?: BoardOverlayCommandPreviewSpec | null;
+  externalPreviewActive?: boolean;
+  onPreviewPointerEnter?: () => void;
+  onPreviewPointerLeave?: () => void;
+  onTogglePreviewView?: () => void;
+  onLongPressCard?: (card: CardDto, anchor: DOMRect) => void;
+  onHandHoverChange?: (hovering: boolean) => void;
+  getHandActions?: (card: CardDto) => HandActionOption[];
+  onSelectHandAction?: (action: HandActionOption) => void;
+  onFlipCard: () => void;
+  onBattlefieldClick: (card: CardDto) => void;
+  onAttackerClick: (card: CardDto) => void;
+  onAssignBlock: (blockerId: string, attackerId: string) => void;
+  onUnassignBlock: (blockerId: string) => void;
+  onAssignAttacker: (attackerId: string, targetId: string) => void;
+  onUnassignAttacker: (attackerId: string) => void;
+  onTargetPlayer: (playerId: string) => void;
+  onOpenZone: (
+    title: string,
+    cards: CardDto[],
+    onClickCard?: (cardId: string) => void,
+    clickableCardIds?: string[],
+    targetHostile?: boolean,
+  ) => void;
+  onOpenZoneAndCast: (
+    title: string,
+    cards: CardDto[],
+    onClickCard: (cardId: string) => void,
+    clickableCardIds?: string[],
+  ) => void;
+  onTargetFromZone: (cardId: string) => void;
+  delveAvailable?: boolean;
+  onOpenDelveZone?: () => void;
+  onCastSpell: (cardId: string) => void;
+  waterbendSourceIds?: string[];
+  waterbentCardIds?: string[];
+  onTapLand?: (card: CardDto) => void;
+  onTapLands?: (cardIds: string[]) => void;
+  onTapLandAbility?: (actionId: string) => void;
+  onUntapLand?: (card: CardDto) => void;
+  onUntapLands?: (cardIds: string[]) => void;
+  stackSpec: StackSpec;
+  onTargetSpell: (spellId: string) => void;
+  onHoverStack: (stackObjectId: string | null) => void;
+  onToggleStack: () => void;
+  promptOverlaySpec?: PromptOverlaySpec | null;
+  promptViewportRight?: number;
+
+  boardSceneRef?: React.MutableRefObject<BoardScene | null>;
+  battlefieldContainerRef?: React.RefObject<HTMLDivElement | null>;
+  handSelectionMode?: boolean;
+  handSelectedIds?: Set<string>;
+  onHandCardToggle?: (cardId: string) => void;
+  onLayoutChange?: (layout: BoardCanvasLayout) => void;
+  boardSurfaceRef?: (el: HTMLDivElement | null) => void;
+}
+export function GameBoard({
+  me,
+  opponents,
+  myPermanents,
+  opponentPermanentsByPlayer,
+  myHand,
+  graveyard,
+  exile,
+  library,
+  myCommandZone,
+  playableIds,
+  activePlayerId,
+  priorityPlayerId,
+  step,
+  promptType,
+  currentPrompt,
+  boardTargets,
+  pendingAttackers,
+  attackAssignments,
+  pendingAttacker,
+  pendingBlocker,
+  damageOrder,
+  damageOrderBlockerIds,
+  selectedAttackDefenderId,
+  blockAssignments,
+  combatAssignments,
+  combatRows,
+  arrowSpecs,
+  castingArrow,
+  playerIsTargetable,
+  monarchId,
+  initiativeHolderId,
+  dayTime,
+  activePlaneNames,
+  turnFlashPlayerId,
+  isOverBattlefield,
+  isOverHand,
+  draggingCardId,
+  draggingIsPermanent,
+  castingCardId,
+  onHandCardDragStart,
+  onHoverCard,
+  onHoverZoneCards,
+  onRightClickCard,
+  onDismissHoverPreview,
+  rulesPreview,
+  commandPreview,
+  externalPreviewActive,
+  onPreviewPointerEnter,
+  onPreviewPointerLeave,
+  onTogglePreviewView,
+  onLongPressCard,
+  onHandHoverChange,
+  getHandActions,
+  onSelectHandAction,
+  onFlipCard,
+  onBattlefieldClick,
+  onAttackerClick,
+  onAssignBlock,
+  onUnassignBlock,
+  onAssignAttacker,
+  onUnassignAttacker,
+  onTargetPlayer,
+  onOpenZone,
+  onOpenZoneAndCast,
+  onCastSpell,
+  onTargetFromZone,
+  delveAvailable,
+  onOpenDelveZone,
+  waterbendSourceIds,
+  waterbentCardIds,
+  onTapLand,
+  onTapLands,
+  onTapLandAbility,
+  onUntapLand,
+  onUntapLands,
+  stackSpec,
+  onTargetSpell,
+  onHoverStack,
+  onToggleStack,
+  promptOverlaySpec,
+  promptViewportRight,
+  boardSceneRef,
+  battlefieldContainerRef,
+  handSelectionMode,
+  handSelectedIds,
+  onHandCardToggle,
+  onLayoutChange,
+  boardSurfaceRef,
+}: GameBoardProps) {
+  const selfStops = usePhaseStopStore((s) => s.selfStops);
+  const toggleSelfStop = usePhaseStopStore((s) => s.toggleSelfStop);
+  const vScale = useHandScale();
+  const compactBoard = useIsMobileGame();
+  const handVisibleFrac =
+    1 - (compactBoard ? HAND_BOTTOM_SINK_FRAC_COMPACT : HAND_BOTTOM_SINK_FRAC);
+  const selfBottomReserve = Math.round(
+    (handVisibleFrac * HAND_CARD_BASE.cardH * vScale + GAP) *
+      (compactBoard ? HAND_RESERVE_TRIM_COMPACT : HAND_RESERVE_TRIM),
+  );
+  const opponentLayout = usePreferencesStore((s) => s.opponentLayout);
+
+  const isTargetingPrompt = promptType === "chooseBoardTargets";
+  const chooseActionPrompt = promptOf(currentPrompt, "chooseAction");
+  const chooseAttackersPrompt = promptOf(currentPrompt, "chooseAttackers");
+  const chooseBlockersPrompt = promptOf(currentPrompt, "chooseBlockers");
+  const boardTargetsPrompt = promptOf(currentPrompt, "chooseBoardTargets");
+  const payManaCostPrompt = promptOf(currentPrompt, "payManaCost");
+  const promptAttackerIds = chooseBlockersPrompt?.input.attackers.map((a) => a.attackerId);
+  const [dragBlockerId, setDragBlockerId] = useState<string | null>(null);
+  const [dragAttackerId, setDragAttackerId] = useState<string | null>(null);
+  const [sheetPlayerId, setSheetPlayerId] = useState<string | null>(null);
+  const gameOver = useGameStore((state) => state.gameView?.gameOver);
+  useEffect(
+    () =>
+      useGameStore.subscribe((state) => {
+        if (state.gameView?.gameOver) setSheetPlayerId(null);
+      }),
+    [],
+  );
+
+  // On our turn, one opponent field stays expanded (sticky) instead of an even
+  // split: the last-active opponent by default, or whichever we last hovered.
+  // Remember the active opponent (adjust-state-during-render) so it stays
+  // expanded once the turn returns to us, until we hover a different board.
+  const isSelfTurn = !opponents.some((op) => op.id === activePlayerId);
+  const [stickyOpponentId, setStickyOpponentId] = useState<string | null>(null);
+  const [manualFocusId, setManualFocusId] = useState<string | null>(null);
+  const [prevActivePlayerId, setPrevActivePlayerId] = useState(activePlayerId);
+  if (activePlayerId !== prevActivePlayerId) {
+    setPrevActivePlayerId(activePlayerId);
+    if (!isSelfTurn) setStickyOpponentId(activePlayerId);
+    setManualFocusId(null);
+  }
+  const attackingCardIdSet = useMemo(() => {
+    const s = new Set<string>();
+    for (const c of myPermanents) if (c.isAttacking) s.add(c.id);
+    for (const list of opponentPermanentsByPlayer.values())
+      for (const c of list) if (c.isAttacking) s.add(c.id);
+    return s;
+  }, [myPermanents, opponentPermanentsByPlayer]);
+  const battlefield = useMemo(
+    () => [
+      ...myPermanents,
+      ...opponents.flatMap((op) => opponentPermanentsByPlayer.get(op.id) ?? []),
+    ],
+    [myPermanents, opponents, opponentPermanentsByPlayer],
+  );
+  const oppCombatAttackerIds = useMemo(
+    () => new Set(combatRows.flatMap((r) => r.attackerIds)),
+    [combatRows],
+  );
+  const combatAssignmentsAll = useMemo(() => {
+    const byBlocker = new Map<string, string>();
+    for (const a of combatAssignments ?? []) byBlocker.set(a.blockerId, a.attackerId);
+    for (const a of blockAssignments) byBlocker.set(a.blockerId, a.attackerId);
+    return [...byBlocker]
+      .filter(
+        ([, attackerId]) =>
+          attackingCardIdSet.has(attackerId) && !oppCombatAttackerIds.has(attackerId),
+      )
+      .map(([blockerId, attackerId]) => ({ blockerId, attackerId }));
+  }, [combatAssignments, blockAssignments, attackingCardIdSet, oppCombatAttackerIds]);
+  const chooseActionActions = chooseActionPrompt?.input.actions;
+  const promptActions = chooseActionActions ?? payManaCostPrompt?.input.actions;
+  const manaAbilityOptions = promptActions ? manaAbilityInfos(promptActions) : undefined;
+  const chooseActionAbilityCardIds = chooseActionActions
+    ?.filter((a) => a.type === "activateAbility")
+    .map((a) => a.cardId);
+  const hostileTargeting = boardTargetsPrompt?.input.hostile ?? false;
+  const targetZoneCardIds = (zone: string, cards?: CardDto[]): string[] =>
+    boardTargets?.zone?.zone === zone
+      ? validCardIdsInCards(boardTargets.zone.validCardIds, cards)
+      : [];
+  const commandTargetIds = targetZoneCardIds("Command", myCommandZone);
+  const graveyardTargetIds = targetZoneCardIds("Graveyard", graveyard);
+  const exileTargetIds = targetZoneCardIds("Exile", exile);
+  const commandPlayableIds = myCommandZone
+    ?.filter((card) => playableIds.has(card.id))
+    .map((card) => card.id);
+  const graveyardPlayableIds = graveyard
+    .filter((card) => playableIds.has(card.id))
+    .map((card) => card.id);
+  const exilePlayableIds = exile.filter((card) => playableIds.has(card.id)).map((card) => card.id);
+  const libraryPlayableIds = library
+    .filter((card) => playableIds.has(card.id))
+    .map((card) => card.id);
+  const selectableBattlefieldCardIds = useMemo(
+    () =>
+      promptType === "chooseAttackers"
+        ? [
+            ...(chooseAttackersPrompt?.input.attackers.map((a) => a.attackerId) ?? []),
+            ...(pendingAttackers.length > 0
+              ? (chooseAttackersPrompt?.input.attackTargets
+                  .filter((t) => playerIsTargetable(t.id))
+                  .map((t) => t.id) ?? [])
+              : []),
+            ...(dragAttackerId
+              ? (() => {
+                  const valid =
+                    chooseAttackersPrompt?.input.attackers.find(
+                      (a) => a.attackerId === dragAttackerId,
+                    )?.validTargetIds ?? [];
+                  return (
+                    chooseAttackersPrompt?.input.attackTargets
+                      .filter(
+                        (t) =>
+                          (t.kind === "planeswalker" || t.kind === "battle") &&
+                          valid.includes(t.id),
+                      )
+                      .map((t) => t.id) ?? []
+                  );
+                })()
+              : []),
+          ]
+        : promptType === "chooseBlockers"
+          ? pendingAttacker
+            ? (chooseBlockersPrompt?.input.attackers.find(
+                (a) =>
+                  a.attackerId === pendingAttacker && a.validBlockerIds.length >= a.minBlockers,
+              )?.validBlockerIds ?? [])
+            : (pendingBlocker ?? dragBlockerId)
+              ? (chooseBlockersPrompt?.input.attackers
+                  .filter(
+                    (a) =>
+                      a.validBlockerIds.length >= a.minBlockers &&
+                      a.validBlockerIds.includes((pendingBlocker ?? dragBlockerId)!),
+                  )
+                  .map((a) => a.attackerId) ?? [])
+              : chooseBlockersPrompt?.input.availableBlockerIds
+          : promptType === "chooseDamageAssignmentOrder"
+            ? damageOrderBlockerIds
+            : promptType === "chooseBoardTargets"
+              ? boardTargets?.battlefieldCardIds
+              : promptType === "chooseAction"
+                ? chooseActionAbilityCardIds
+                : undefined,
+    [
+      promptType,
+      chooseAttackersPrompt,
+      pendingAttackers,
+      playerIsTargetable,
+      pendingAttacker,
+      pendingBlocker,
+      dragBlockerId,
+      dragAttackerId,
+      chooseBlockersPrompt,
+      damageOrderBlockerIds,
+      boardTargets,
+      chooseActionAbilityCardIds,
+    ],
+  );
+  const hostileAttackTargetIds = useMemo(
+    () =>
+      new Set(
+        promptType === "chooseAttackers"
+          ? (chooseAttackersPrompt?.input.attackTargets
+              .filter((t) => t.kind === "planeswalker" || t.kind === "battle")
+              .map((t) => t.id) ?? [])
+          : [],
+      ),
+    [promptType, chooseAttackersPrompt],
+  );
+  const pixiBattlefield = useMemo(
+    (): BattlefieldState => ({
+      cards: myPermanents,
+      pendingCardIds:
+        promptType === "chooseAttackers"
+          ? [...pendingAttackers, ...attackAssignments.map((a) => a.attackerId)]
+          : promptType === "chooseBlockers"
+            ? [
+                ...blockAssignments.map((a) => a.blockerId),
+                ...(pendingBlocker ? [pendingBlocker] : []),
+              ]
+            : undefined,
+      attackingCardIds: promptAttackerIds,
+      orderedCardIds: damageOrder,
+      selectableCardIds: selectableBattlefieldCardIds,
+      mustAttackCardIds:
+        promptType === "chooseAttackers"
+          ? chooseAttackersPrompt?.input.attackers
+              .filter((a) => a.mustAttack)
+              .map((a) => a.attackerId)
+          : undefined,
+      tappableLandIds: [
+        ...(manaAbilityOptions?.map((o) => o.cardId) ?? []),
+        ...(waterbendSourceIds ?? []),
+      ],
+      untappableLandIds: [
+        ...(promptActions?.flatMap((a) => (a.type === "undoMana" ? [a.cardId] : [])) ?? []),
+        ...(waterbentCardIds ?? []),
+      ],
+      waterbendSourceIds,
+      waterbentCardIds,
+      manaAbilityOptions,
+      hostileTargeting,
+      hostileTargetCardIds:
+        promptType === "chooseAttackers"
+          ? (selectableBattlefieldCardIds ?? []).filter((id) => hostileAttackTargetIds.has(id))
+          : undefined,
+    }),
+    [
+      myPermanents,
+      promptType,
+      pendingAttackers,
+      attackAssignments,
+      pendingBlocker,
+      blockAssignments,
+      promptAttackerIds,
+      damageOrder,
+      selectableBattlefieldCardIds,
+      chooseAttackersPrompt,
+      promptActions,
+      manaAbilityOptions,
+      waterbendSourceIds,
+      waterbentCardIds,
+      hostileTargeting,
+      hostileAttackTargetIds,
+    ],
+  );
+  const battlefieldAutoSort = usePreferencesStore((s) => s.battlefieldAutoSort);
+  const handOrderMode = usePreferencesStore((s) => s.handOrderMode);
+  const setHandOrderMode = usePreferencesStore((s) => s.setHandOrderMode);
+  const {
+    cards: orderedHand,
+    moveCard: moveHandCard,
+    setMode: setHandOrderModeFromBoard,
+  } = useHandOrder(myHand, handOrderMode, setHandOrderMode);
+  const pixiHand = useMemo(
+    (): import("@/pixi/types").HandState => ({
+      cards: orderedHand,
+      playableIds,
+      draggingCardId,
+      reorderingCardId: isOverHand ? draggingCardId : undefined,
+      draggingIsPermanent,
+      castingCardId,
+      selectionMode: handSelectionMode,
+      selectedIds: handSelectedIds,
+    }),
+    [
+      orderedHand,
+      playableIds,
+      draggingCardId,
+      isOverHand,
+      draggingIsPermanent,
+      castingCardId,
+      handSelectionMode,
+      handSelectedIds,
+    ],
+  );
+  const pixiCallbacks = useMemo(
+    (): GameCanvasCallbacks => ({
+      onClickCard:
+        promptType === "chooseAction" ||
+        promptType === "chooseAttackers" ||
+        promptType === "chooseBlockers" ||
+        promptType === "chooseBoardTargets"
+          ? onBattlefieldClick
+          : undefined,
+      onHoverCard: (card, bounds, options) => {
+        if (card && bounds) {
+          const rect = new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height);
+          onHoverCard(card, undefined, {
+            ...options,
+            useAnchor: true,
+            anchorOverride: rect,
+          });
+        } else {
+          onHoverCard(null);
+        }
+      },
+      onHoverZoneCards: (cards, bounds) => {
+        if (cards && bounds) {
+          onHoverZoneCards(cards, new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height));
+        } else {
+          onHoverZoneCards(null);
+        }
+      },
+      onRightClickCard: onRightClickCard
+        ? (card, bounds) =>
+            onRightClickCard(card, new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height))
+        : undefined,
+      onStartDrag: (card, _screenPos, pointer) => {
+        onHandCardDragStart(card, pointer);
+      },
+      onReorderHand: moveHandCard,
+      onClickCard_Hand: (card) => {
+        if (handSelectionMode) onHandCardToggle?.(card.id);
+      },
+      onDismissHoverPreview,
+      onTapLand,
+      onTapLands,
+      onTapLandAbility,
+      onUntapLand,
+      onUntapLands,
+      onFlipCard,
+      onAttackerClick,
+      onAssignBlock,
+      onUnassignBlock,
+      onBlockDragChange: setDragBlockerId,
+      onAssignAttacker,
+      onUnassignAttacker,
+      onAttackDragChange: setDragAttackerId,
+      onHoverOpponent: (playerId) => {
+        hoveredOpponentRef.current = playerId;
+        if (playerId && isSelfTurn) setStickyOpponentId(playerId);
+      },
+      onTargetPlayer,
+      onShowPlayerSheet: setSheetPlayerId,
+      onHoverHandCard: onHandHoverChange ? (card) => onHandHoverChange(!!card) : undefined,
+      onLongPressCard: onLongPressCard
+        ? (card, bounds) =>
+            onLongPressCard(card, new DOMRect(bounds.x, bounds.y, bounds.width, bounds.height))
+        : undefined,
+    }),
+    [
+      promptType,
+      onBattlefieldClick,
+      onHoverCard,
+      onHoverZoneCards,
+      onDismissHoverPreview,
+      onRightClickCard,
+      onHandCardDragStart,
+      moveHandCard,
+      handSelectionMode,
+      onHandCardToggle,
+      onTapLand,
+      onTapLands,
+      onTapLandAbility,
+      onUntapLand,
+      onUntapLands,
+      onFlipCard,
+      onAttackerClick,
+      onAssignBlock,
+      onUnassignBlock,
+      onAssignAttacker,
+      onUnassignAttacker,
+      onTargetPlayer,
+      setDragBlockerId,
+      setDragAttackerId,
+      setSheetPlayerId,
+      setStickyOpponentId,
+      isSelfTurn,
+      onLongPressCard,
+      onHandHoverChange,
+    ],
+  );
+  const opponentStopsMap = usePhaseStopStore((s) => s.opponentStops);
+  const toggleOpponentStop = usePhaseStopStore((s) => s.toggleOpponentStop);
+  const pixiPhaseStrip = useMemo((): import("@/pixi/PhaseStripLayer").PhaseStripState => {
+    const oppEnabled = new Map<string, Set<string>>();
+    for (const op of opponents) {
+      oppEnabled.set(op.id, opponentStopsMap.get(op.id) ?? new Set(DEFAULT_OPPONENT_STOPS));
+    }
+    return {
+      currentStep: step,
+      isActiveTurn: activePlayerId === me.id,
+      activePlayerId,
+      myPlayerId: me.id,
+      selfEnabledPhases: selfStops,
+      opponentEnabledPhases: oppEnabled,
+      opponents: opponents.map((op, i) => ({ id: op.id, index: i })),
+      isInteractive: true,
+    };
+  }, [step, activePlayerId, me.id, selfStops, opponents, opponentStopsMap]);
+  const pixiPhaseStripCallbacks = useMemo(
+    (): import("@/pixi/PhaseStripLayer").PhaseStripCallbacks => ({
+      onToggleSelfPhase: toggleSelfStop,
+      onToggleOpponentPhase: toggleOpponentStop,
+    }),
+    [toggleSelfStop, toggleOpponentStop],
+  );
+  const boardRef = useRef<HTMLDivElement>(null);
+  const setBoardRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      boardRef.current = el;
+      boardSurfaceRef?.(el);
+    },
+    [boardSurfaceRef],
+  );
+  const [unifiedLayout, setUnifiedLayout] = useState<BoardCanvasLayout | null>(null);
+  const localSceneRef = useRef<BoardScene | null>(null);
+  const sceneRef = boardSceneRef ?? localSceneRef;
+  const [overlayScene, setOverlayScene] = useState<BoardScene | null>(null);
+  const { appTheme, gameTheme } = useTheme();
+  const playerColors = gameTheme.playerColors;
+  // The opponent whose field auto-expands: the active one on their turn,
+  // otherwise the sticky one on ours (defaulting to the first opponent). The
+  // scene owns + eases the delimiters, draws the grips, and applies the clip —
+  const focusedOpponentId = useMemo(() => {
+    if (!isSelfTurn) return activePlayerId;
+    if (stickyOpponentId && opponents.some((op) => op.id === stickyOpponentId)) {
+      return stickyOpponentId;
+    }
+    return opponents[0]?.id ?? null;
+  }, [isSelfTurn, activePlayerId, stickyOpponentId, opponents]);
+
+  const combatFocusIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const row of combatRows) {
+      if (row.defenderId !== me.id) ids.add(row.defenderId);
+      for (const group of row.groups) {
+        if (group.controllerId !== me.id) ids.add(group.controllerId);
+      }
+    }
+    return [...ids];
+  }, [combatRows, me.id]);
+  const cycleField = (dir: 1 | -1) => {
+    if (opponents.length === 0 || document.querySelector('[role="dialog"]')) return;
+    const ids = opponents.map((o) => o.id);
+    setManualFocusId((cur) => {
+      const i = cur ? ids.indexOf(cur) : -1;
+      const next = i < 0 ? (dir === 1 ? 0 : ids.length - 1) : (i + dir + ids.length) % ids.length;
+      return ids[next]!;
+    });
+  };
+
+  // Which opponent's battleground the mouse is over (from the scene's hover
+  // detection). Stashed for later use.
+  const hoveredOpponentRef = useRef<string | null>(null);
+  const gameDecks = useGameStore((s) => s.gameDecks);
+  const hiddenPlaymats = useGameStore((s) => s.hiddenPlaymats);
+  const myAvatar = useAuthStore((s) => s.account?.avatarUrl);
+  const defaultPlaymatAssetId = usePreferencesStore((s) => s.defaultPlaymatAssetId);
+  const defaultPlaymat = useAssetUrl(defaultPlaymatAssetId);
+  const defaultPlaymatSettings = usePreferencesStore((s) => s.defaultPlaymatSettings);
+  const playerDecks = useServerStore((s) => s.playerDecks);
+  const relayPlayers = useServerStore((s) => s.players);
+
+  const roomTableStyle = useServerStore((s) => s.currentRoom?.table_style);
+  const boardBackgroundId = usePreferencesStore((s) => s.boardBackgroundId);
+  const backgroundId = roomTableStyle ?? boardBackgroundId;
+  const [ambientColor, setAmbientColor] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    void boardAmbientColor(boardBackgroundUrl(backgroundId)).then((color) => {
+      if (!cancelled) setAmbientColor(color);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [backgroundId]);
+
+  const avatarByPlayerId = useMemo(() => {
+    const map = new Map<string, string>();
+    if (myAvatar) map.set(me.id, myAvatar);
+    for (const op of opponents) {
+      const entry = playerDecks.find((d) => d.username === op.name);
+      const avatarUrl =
+        relayPlayers.find((p) => p.username === op.name)?.avatar_url ?? entry?.avatar_url;
+      if (avatarUrl) map.set(op.id, avatarUrl);
+    }
+    return map;
+  }, [myAvatar, playerDecks, relayPlayers, me.id, opponents]);
+  const combatEngagedIds = useMemo(() => {
+    const controllerById = new Map(battlefield.map((c) => [c.id, c.controllerId]));
+    const playerSet = new Set([me.id, ...opponents.map((o) => o.id)]);
+    const engaged = new Set<string>();
+    for (const c of battlefield) {
+      if (!c.isAttacking || !c.attackingPlayerId) continue;
+      engaged.add(c.controllerId);
+      const def = playerSet.has(c.attackingPlayerId)
+        ? c.attackingPlayerId
+        : controllerById.get(c.attackingPlayerId);
+      if (def) engaged.add(def);
+    }
+    for (const a of combatAssignments ?? []) {
+      const ctrl = controllerById.get(a.blockerId);
+      if (ctrl) engaged.add(ctrl);
+    }
+    return engaged;
+  }, [battlefield, combatAssignments, me.id, opponents]);
+  const ownerRingByCard = useMemo(() => {
+    const seatColorOf = (pid: string): string =>
+      pid === me.id
+        ? playerColors.self
+        : playerColors[OPPONENT_SEATS[opponents.findIndex((o) => o.id === pid)] ?? "opponent1"];
+    const map: Record<string, string> = {};
+    for (const c of battlefield) {
+      if (c.controllerId !== c.ownerId) map[c.id] = seatColorOf(c.ownerId);
+    }
+    return map;
+  }, [battlefield, playerColors, opponents, me.id]);
+  const incomingDamageByPlayer = useMemo(() => {
+    const blocked = new Set((combatAssignments ?? []).map((a) => a.attackerId));
+    const map = new Map<string, number>();
+    for (const c of battlefield) {
+      if (!c.isAttacking || !c.attackingPlayerId || blocked.has(c.id)) continue;
+      if (c.attackTargetId && c.attackTargetId !== c.attackingPlayerId) continue;
+      const p = Number.parseInt(c.power ?? "", 10);
+      if (!Number.isFinite(p) || p <= 0) continue;
+      const hits = c.keywords.some((keyword) => keyword.toLowerCase().startsWith("double strike"))
+        ? 2
+        : 1;
+      map.set(c.attackingPlayerId, (map.get(c.attackingPlayerId) ?? 0) + p * hits);
+    }
+    return map;
+  }, [battlefield, combatAssignments]);
+  // Pixi player HUD capsules: self bottom-left, opponents across the top of
+  // their fields. Carries the life, mana pool, and active player/game badges.
+  const devOverrides = useGameDevStore((s) => s.playerOverrides);
+  const currentRoom = useServerStore((s) => s.currentRoom);
+  const playerBarSpecs = useMemo<PlayerHudSpec[]>(() => {
+    const allPlayers = [me, ...opponents];
+    const seatColorOf = (pid: string): string => {
+      if (pid === me.id) return playerColors.self;
+      const idx = opponents.findIndex((o) => o.id === pid);
+      return playerColors[OPPONENT_SEATS[idx] ?? "opponent1"];
+    };
+    const nameOf = (pid: string): string =>
+      allPlayers.find((p) => p.id === pid)?.name ?? "a player";
+    // Commander damage is keyed by the source commander's card id; resolve each
+    // to its owner so the badge can take that opponent's seat colour.
+    const cardOwner = new Map<string, string>();
+    const cardNames = new Map<string, string>();
+    const referenceCards = new Map<string, CardDto>();
+    const addCards = (cards?: CardDto[]) =>
+      cards?.forEach((card) => {
+        cardOwner.set(card.id, card.ownerId);
+        referenceCards.set(card.id, card);
+        if (card.identity.name) cardNames.set(card.id, card.identity.name);
+      });
+    addCards(myPermanents);
+    for (const list of opponentPermanentsByPlayer.values()) addCards(list);
+    for (const p of allPlayers) {
+      addCards(p.commandZone);
+      addCards(p.graveyard);
+      addCards(p.exile);
+    }
+    const roomByName = new Map(currentRoom?.players.map((p) => [p.username, p]) ?? []);
+    // Dev overrides are applied to every player (not just self) so the dev
+    // panel can light up each state on all opponents at once. In production
+    // these are all empty/false, so this is a no-op.
+    const dev = devOverrides;
+    const cmdDamageBadges = (player: ClientPlayerDto): PlayerHudBadge[] => {
+      if (dev.cmdDamage != null) {
+        return dev.cmdDamage > 0
+          ? [
+              {
+                id: "cmd-dev",
+                icon: "crossed-swords",
+                color: gameTheme.badges.commanderDamage,
+                label: `Commander Damage Taken`,
+                count: dev.cmdDamage,
+                lethal: dev.cmdDamage >= 21,
+              },
+            ]
+          : [];
+      }
+      return Object.entries(player.commanderDamage ?? {})
+        .filter(([, dmg]) => dmg > 0)
+        .map(([cardId, dmg]) => {
+          const ownerId = cardOwner.get(cardId);
+          return {
+            id: `cmd-${cardId}`,
+            icon: "crossed-swords",
+            color: ownerId ? seatColorOf(ownerId) : gameTheme.badges.commanderDamage,
+            label: `Commander damage from ${cardNames.get(cardId) ?? `commander ${cardId}`}${
+              ownerId ? ` · ${nameOf(ownerId)}` : ""
+            }`,
+            count: dmg,
+            lethal: dmg >= 21,
+            referenceCard: referenceCards.get(cardId),
+          };
+        });
+    };
+
+    const incomingDamageFor = (player: ClientPlayerDto): number =>
+      dev.incomingDamage ?? incomingDamageByPlayer.get(player.id) ?? 0;
+    const incomingDamageBadges = (player: ClientPlayerDto): PlayerHudBadge[] => {
+      const incoming = incomingDamageFor(player);
+      if (incoming <= 0) return [];
+      const lethal = incoming >= (dev.life ?? player.life);
+      return [
+        {
+          id: "incoming-damage",
+          icon: "bleeding-wound",
+          color: gameTheme.pt.lethal,
+          label: lethal ? `Lethal combat damage incoming` : `Combat damage incoming`,
+          count: incoming,
+          lethal,
+        },
+      ];
+    };
+    const toSpec = (player: ClientPlayerDto, color: string, isSelf: boolean): PlayerHudSpec => {
+      const controlledById = dev.forceControlledBy
+        ? isSelf
+          ? opponents[0]?.id
+          : me.id
+        : player.controlledBy;
+      const controlledByName = controlledById ? nameOf(controlledById) : null;
+      const damagePrevention = dev.damagePrevention ?? player.damagePrevention ?? 0;
+      const isExtraTurn = dev.forceExtraTurn || player.isExtraTurn === true;
+      const extraTurnCount = dev.extraTurnCount ?? player.extraTurnCount ?? 0;
+      const maxHandSize = dev.maxHandSize ?? player.maxHandSize ?? 7;
+      const unlimitedHandSize = dev.forceUnlimitedHand || player.unlimitedHandSize === true;
+      const landsPlayed = dev.landsPlayed ?? player.landsPlayedThisTurn ?? 0;
+      const maxLandPlays = dev.maxLandPlays ?? player.maxLandPlaysPerTurn ?? 1;
+      const unlimitedLandPlays = dev.forceUnlimitedLands || player.unlimitedLandPlays === true;
+      const cardsDrawn = dev.cardsDrawn ?? player.cardsDrawnThisTurn ?? 0;
+      const graveyardTypes =
+        dev.graveyardCardTypes ?? graveyardCardTypeCount(player.graveyard ?? []);
+      const playerKeywords = [...(player.playerKeywords ?? [])];
+      if (dev.forcePlayerKeyword && !playerKeywords.includes("Hexproof")) {
+        playerKeywords.push("Hexproof");
+      }
+      const commanderCasts =
+        dev.commanderCasts != null
+          ? player.commandZone.length > 0
+            ? Object.fromEntries(player.commandZone.map((card) => [card.id, dev.commanderCasts!]))
+            : { dev: dev.commanderCasts }
+          : (player.commanderCasts ?? {});
+      const ruleBadges: PlayerHudBadge[] = [
+        ...(isExtraTurn || extraTurnCount > 0
+          ? [
+              {
+                id: "extra-turn",
+                icon: "hourglass",
+                color: gameTheme.activeAction.active,
+                label: isExtraTurn ? "Taking an extra turn" : "Extra turns queued",
+                count: Math.max(extraTurnCount, isExtraTurn ? 1 : 0),
+              },
+            ]
+          : []),
+        ...(controlledByName
+          ? [
+              {
+                id: "controlled-player",
+                icon: "overlord-helm",
+                color: appTheme.primary,
+                label: `Controlled by ${controlledByName}`,
+              },
+            ]
+          : []),
+        ...(damagePrevention > 0
+          ? [
+              {
+                id: "damage-prevention",
+                icon: "round-shield",
+                color: gameTheme.promptAction.defenseAction,
+                label: "Damage prevention",
+                count: damagePrevention,
+              },
+            ]
+          : []),
+        ...(unlimitedLandPlays || maxLandPlays !== 1 || dev.landsPlayed != null
+          ? [
+              {
+                id: "land-plays",
+                icon: "deck",
+                color: gameTheme.textMuted,
+                label: unlimitedLandPlays
+                  ? `${landsPlayed} land plays · unlimited`
+                  : `${landsPlayed} of ${maxLandPlays} land plays`,
+                count: landsPlayed,
+              },
+            ]
+          : []),
+        ...(unlimitedHandSize || maxHandSize !== 7 || dev.maxHandSize != null
+          ? [
+              {
+                id: "hand-limit",
+                icon: "card-pickup",
+                color: gameTheme.textMuted,
+                label: unlimitedHandSize
+                  ? "Unlimited hand size"
+                  : `Maximum hand size: ${maxHandSize}`,
+                count: unlimitedHandSize ? undefined : maxHandSize,
+              },
+            ]
+          : []),
+        ...(dev.cardsDrawn != null
+          ? [
+              {
+                id: "cards-drawn",
+                icon: "card-pickup",
+                color: gameTheme.textMuted,
+                label: "Cards drawn this turn",
+                count: cardsDrawn,
+              },
+            ]
+          : []),
+        ...(dev.graveyardCardTypes != null
+          ? [
+              {
+                id: "graveyard-types",
+                icon: "death-skull",
+                color: gameTheme.textMuted,
+                label:
+                  graveyardTypes >= 4
+                    ? "Card types in graveyard · Delirium"
+                    : "Card types in graveyard",
+                count: graveyardTypes,
+              },
+            ]
+          : []),
+        ...(dev.forcePlayerKeyword
+          ? [
+              {
+                id: "player-keyword",
+                icon: "round-shield",
+                color: appTheme.primary,
+                label: playerKeywords.join(" · "),
+              },
+            ]
+          : []),
+        ...(dev.commanderCasts != null
+          ? [
+              {
+                id: "commander-casts",
+                icon: "crossed-swords",
+                color: gameTheme.badges.commanderDamage,
+                label: "Commander casts",
+                count: dev.commanderCasts,
+              },
+            ]
+          : []),
+      ];
+      const badges = [
+        ...incomingDamageBadges(player),
+        ...ruleBadges,
+        ...buildPlayerHudBadges(
+          {
+            isMonarch: dev.forceMonarch ? true : monarchId === player.id,
+            hasInitiative: dev.forceInitiative ? true : initiativeHolderId === player.id,
+            poison: dev.poison ?? player.poison,
+            energy: dev.energy ?? player.energyCounters,
+            radiation: dev.radiation ?? player.radiationCounters,
+            experience: dev.experience ?? player.experienceCounters,
+            ticket: dev.ticket ?? player.ticketCounters,
+            cityBlessing: dev.forceCityBlessing ? true : player.hasCityBlessing,
+            enduringStory: dev.forceEnduringStory ? true : player.hasEnduringStory,
+            ringLevel: dev.ringLevel ?? player.ringLevel,
+            speed: dev.speed ?? player.speed,
+            handCount: dev.handCount ?? player.handCount,
+          },
+          gameTheme.badges,
+        ),
+        ...cmdDamageBadges(player),
+      ];
+      const ruleFacts: PlayerHudFact[] = [
+        {
+          id: "max-hand",
+          label: "Maximum hand size",
+          value: unlimitedHandSize ? "Unlimited" : String(maxHandSize),
+          emphasized: unlimitedHandSize || maxHandSize !== 7,
+        },
+        {
+          id: "land-plays",
+          label: "Lands played this turn",
+          value: unlimitedLandPlays
+            ? `${landsPlayed} / Unlimited`
+            : `${landsPlayed} / ${maxLandPlays}`,
+          emphasized: unlimitedLandPlays || maxLandPlays !== 1,
+        },
+        {
+          id: "cards-drawn",
+          label: "Cards drawn this turn",
+          value: String(cardsDrawn),
+        },
+        {
+          id: "graveyard-types",
+          label: "Card types in graveyard",
+          value: graveyardTypes >= 4 ? `${graveyardTypes} · Delirium` : String(graveyardTypes),
+          emphasized: graveyardTypes >= 4,
+        },
+      ];
+      if (damagePrevention > 0) {
+        ruleFacts.push({
+          id: "damage-prevention",
+          label: "Damage prevention",
+          value: String(damagePrevention),
+          emphasized: true,
+        });
+      }
+      if (isExtraTurn || extraTurnCount > 0) {
+        ruleFacts.push({
+          id: "extra-turns",
+          label: "Extra turns",
+          value: isExtraTurn ? `Current · ${extraTurnCount} queued` : `${extraTurnCount} queued`,
+          emphasized: true,
+        });
+      }
+      if (controlledByName) {
+        ruleFacts.push({
+          id: "controlled-by",
+          label: "Controlled by",
+          value: controlledByName,
+          emphasized: true,
+        });
+      }
+      if (playerKeywords.length > 0) {
+        ruleFacts.push({
+          id: "player-keywords",
+          label: "Player effects",
+          value: playerKeywords.join(" · "),
+          emphasized: true,
+        });
+      }
+      if (player.dungeonState) {
+        ruleFacts.push({
+          id: "dungeon",
+          label: "Dungeon",
+          value: [player.dungeonState.name, player.dungeonState.room].filter(Boolean).join(" · "),
+          emphasized: true,
+        });
+      }
+      if (player.activeSchemeNames?.length) {
+        ruleFacts.push({
+          id: "active-schemes",
+          label: player.activeSchemeNames.length === 1 ? "Active scheme" : "Active schemes",
+          value: player.activeSchemeNames.join(" · "),
+          emphasized: true,
+        });
+      }
+      if (player.teamNumber != null) {
+        ruleFacts.push({
+          id: "team",
+          label: "Team",
+          value: String(player.teamNumber),
+        });
+      }
+      for (const [cardId, casts] of Object.entries(commanderCasts)) {
+        ruleFacts.push({
+          id: `commander-casts-${cardId}`,
+          label:
+            cardId === "dev" ? "Commander casts" : `${cardNames.get(cardId) ?? "Commander"} casts`,
+          value: String(casts),
+          emphasized: casts > 0,
+        });
+      }
+      const incoming = incomingDamageFor(player);
+      return {
+        playerId: player.id,
+        name: stripUsernameTag(player.name),
+        isSelf,
+        life: dev.life ?? player.life,
+        color,
+        avatarUrl: dev.forceBot || dev.forceNoAvatar ? undefined : avatarByPlayerId.get(player.id),
+        isBot: dev.forceBot ? true : player.isHuman === false,
+        isActiveTurn: dev.forceActiveTurn ? true : activePlayerId === player.id,
+        isPriorityPlayer: dev.forcePriority ? true : priorityPlayerId === player.id,
+        isTargetable: dev.forceTargetable ? true : playerIsTargetable(player.id),
+        isSelectedTarget: dev.forceSelectedTarget ? true : selectedAttackDefenderId === player.id,
+        targetingIntent:
+          promptType === "chooseAttackers" ? "attack" : boardTargetsPrompt?.input.intent,
+        isFlashing: dev.forceFlashing ? true : turnFlashPlayerId === player.id,
+        isEliminated: dev.forceEliminated ? true : player.status !== "playing",
+        isDisconnected: dev.forceDisconnected
+          ? true
+          : !isSelf && player.isHuman && roomByName.get(player.name)?.connected === false,
+        inCombat: dev.forceInCombat || dev.forceCombatLethal || combatEngagedIds.has(player.id),
+        combatLethal:
+          dev.forceCombatLethal || (incoming > 0 && incoming >= (dev.life ?? player.life)),
+        manaPool: {
+          ...player.manaPool,
+          W: dev.manaWhite ?? player.manaPool.W ?? 0,
+          U: dev.manaBlue ?? player.manaPool.U ?? 0,
+          B: dev.manaBlack ?? player.manaPool.B ?? 0,
+          R: dev.manaRed ?? player.manaPool.R ?? 0,
+          G: dev.manaGreen ?? player.manaPool.G ?? 0,
+          C: dev.manaColorless ?? player.manaPool.C ?? 0,
+        },
+        badges,
+        ruleFacts,
+      };
+    };
+    return [
+      toSpec(me, playerColors.self, true),
+      ...opponents.map((op, i) =>
+        toSpec(op, playerColors[OPPONENT_SEATS[i] ?? "opponent1"], false),
+      ),
+    ];
+  }, [
+    me,
+    opponents,
+    combatEngagedIds,
+    incomingDamageByPlayer,
+    playerColors,
+    avatarByPlayerId,
+    activePlayerId,
+    priorityPlayerId,
+    playerIsTargetable,
+    selectedAttackDefenderId,
+    promptType,
+    boardTargetsPrompt,
+    turnFlashPlayerId,
+    monarchId,
+    initiativeHolderId,
+    gameTheme.badges,
+    gameTheme.pt,
+    gameTheme.activeAction.active,
+    appTheme.primary,
+    gameTheme.promptAction.defenseAction,
+    gameTheme.textMuted,
+    devOverrides,
+    currentRoom,
+    myPermanents,
+    opponentPermanentsByPlayer,
+  ]);
+  // Shared open-handlers for the local player's command / graveyard / exile
+  // zones. Used by BOTH the on-grid Pixi tiles and the React panel so the
+  // cast-vs-target-vs-open branching can't drift between them.
+  const openCommandZone = useCallback(() => {
+    if (!myCommandZone || myCommandZone.length === 0) return;
+    if (isTargetingPrompt && commandTargetIds.length > 0) {
+      onOpenZone(
+        "Your Command Zone",
+        myCommandZone,
+        onTargetFromZone,
+        commandTargetIds,
+        hostileTargeting,
+      );
+      return;
+    }
+    if ((commandPlayableIds?.length ?? 0) > 0 && promptType === "chooseAction") {
+      onOpenZoneAndCast("Your Command Zone", myCommandZone, (_cardId) => {}, commandPlayableIds);
+    } else {
+      onOpenZone("Your Command Zone", myCommandZone);
+    }
+  }, [
+    myCommandZone,
+    isTargetingPrompt,
+    commandTargetIds,
+    onOpenZone,
+    onTargetFromZone,
+    hostileTargeting,
+    commandPlayableIds,
+    promptType,
+    onOpenZoneAndCast,
+  ]);
+  const openGraveyard = useCallback(() => {
+    if (delveAvailable && onOpenDelveZone) {
+      onOpenDelveZone();
+      return;
+    }
+    if (isTargetingPrompt && graveyardTargetIds.length > 0) {
+      onOpenZone(
+        "Your Graveyard",
+        graveyard,
+        onTargetFromZone,
+        graveyardTargetIds,
+        hostileTargeting,
+      );
+      return;
+    }
+    if (graveyardPlayableIds.length > 0 && promptType === "chooseAction") {
+      onOpenZoneAndCast("Your Graveyard", graveyard, (_cardId) => {}, graveyardPlayableIds);
+    } else {
+      onOpenZone("Your Graveyard", graveyard);
+    }
+  }, [
+    delveAvailable,
+    onOpenDelveZone,
+    isTargetingPrompt,
+    graveyardTargetIds,
+    onOpenZone,
+    graveyard,
+    onTargetFromZone,
+    hostileTargeting,
+    graveyardPlayableIds,
+    promptType,
+    onOpenZoneAndCast,
+  ]);
+  const openLibrary = useCallback(() => {
+    if (library.length === 0) return;
+    if (libraryPlayableIds.length > 0 && promptType === "chooseAction") {
+      onOpenZoneAndCast("Top of Library", library, (_cardId) => {}, libraryPlayableIds);
+    } else {
+      onOpenZone("Top of Library", library);
+    }
+  }, [library, libraryPlayableIds, promptType, onOpenZoneAndCast, onOpenZone]);
+  const openExile = useCallback(() => {
+    if (isTargetingPrompt && exileTargetIds.length > 0) {
+      onOpenZone("Your Exile", exile, onTargetFromZone, exileTargetIds, hostileTargeting);
+      return;
+    }
+    if (exilePlayableIds.length > 0 && promptType === "chooseAction") {
+      onOpenZoneAndCast("Your Exile", exile, (_cardId) => {}, exilePlayableIds);
+    } else {
+      onOpenZone("Your Exile", exile);
+    }
+  }, [
+    isTargetingPrompt,
+    exileTargetIds,
+    onOpenZone,
+    exile,
+    onTargetFromZone,
+    hostileTargeting,
+    exilePlayableIds,
+    promptType,
+    onOpenZoneAndCast,
+  ]);
+  useKeybindings({
+    "focus-next-field": () => cycleField(1),
+    "focus-prev-field": () => cycleField(-1),
+    "cycle-hand-order": () => {
+      if (document.querySelector('[role="dialog"]')) return;
+      setHandOrderModeFromBoard(nextHandOrderMode(handOrderMode));
+    },
+    "open-graveyard": openGraveyard,
+    "open-exile": openExile,
+  });
+
+  // On-grid zone tiles (deck / graveyard / exile / command) per player — same
+  // data + open/highlight behaviour as the panel, rendered on the battlefield.
+  const zoneTilesByPlayer = useMemo<Record<string, ZoneTileSpec[]>>(() => {
+    const active = gameTheme.activeAction.active;
+    const targetColor = hostileTargeting
+      ? gameTheme.targeting.hostile
+      : gameTheme.targeting.friendly;
+    const top = (cards: CardDto[]) => (cards.length > 0 ? cards[cards.length - 1] : undefined);
+    const gyPlayable =
+      (promptType === "chooseAction" && graveyard.some((c) => playableIds.has(c.id))) ||
+      !!delveAvailable;
+    const exPlayable = promptType === "chooseAction" && exile.some((c) => playableIds.has(c.id));
+    const libPlayable = promptType === "chooseAction" && library.some((c) => playableIds.has(c.id));
+    const self: ZoneTileSpec[] = [
+      {
+        key: ZONE_TILE_KEY.library,
+        count: me.libraryCount,
+        topCard: top(library),
+        back: library.length === 0,
+        onOpen: library.length > 0 ? openLibrary : undefined,
+        highlightColor: libPlayable ? active : undefined,
+      },
+      {
+        key: ZONE_TILE_KEY.graveyard,
+        count: graveyard.length,
+        topCard: top(graveyard),
+        onOpen: openGraveyard,
+        highlightColor:
+          isTargetingPrompt && graveyardTargetIds.length > 0
+            ? targetColor
+            : gyPlayable
+              ? active
+              : undefined,
+      },
+      {
+        key: ZONE_TILE_KEY.exile,
+        count: exile.length,
+        topCard: top(exile),
+        onOpen: openExile,
+        highlightColor:
+          isTargetingPrompt && exileTargetIds.length > 0
+            ? targetColor
+            : exPlayable
+              ? active
+              : undefined,
+      },
+    ];
+    if ((myCommandZone?.length ?? 0) > 0) {
+      self.push({
+        key: ZONE_TILE_KEY.command,
+        count: myCommandZone!.length,
+        topCard: top(myCommandZone!),
+        previewCards: myCommandZone!,
+        onOpen: openCommandZone,
+        highlightColor: (commandPlayableIds?.length ?? 0) > 0 ? active : undefined,
+        commander: playerColors.self,
+        commanderTax: top(myCommandZone!)?.commanderTax,
+      });
+    }
+    const byPlayer: Record<string, ZoneTileSpec[]> = { [me.id]: self };
+    const opZoneTargetIds = (zone: string, cards: CardDto[]): string[] =>
+      isTargetingPrompt && boardTargets?.zone?.zone === zone
+        ? validCardIdsInCards(boardTargets.zone.validCardIds, cards)
+        : [];
+    for (const [oppIndex, op] of opponents.entries()) {
+      const gyTargets = opZoneTargetIds("Graveyard", op.graveyard);
+      const exTargets = opZoneTargetIds("Exile", op.exile);
+      const cmdTargets = opZoneTargetIds("Command", op.commandZone);
+      const playableIn = (cards: CardDto[]) =>
+        promptType === "chooseAction" ? cards.filter((card) => playableIds.has(card.id)) : [];
+      const openOpZone = (title: string, cards: CardDto[], targetIds: string[]) => {
+        if (targetIds.length > 0) {
+          onOpenZone(title, cards, onTargetFromZone, targetIds, hostileTargeting);
+          return;
+        }
+        const playable = playableIn(cards);
+        if (playable.length > 0) {
+          onOpenZoneAndCast(
+            title,
+            cards,
+            (_cardId) => {},
+            playable.map((card) => card.id),
+          );
+          return;
+        }
+        onOpenZone(title, cards);
+      };
+      const gyPlayable = playableIn(op.graveyard).length > 0;
+      const exPlayable = playableIn(op.exile).length > 0;
+      const cmdPlayable = playableIn(op.commandZone).length > 0;
+      const tiles: ZoneTileSpec[] = [
+        {
+          key: ZONE_TILE_KEY.library,
+          count: op.libraryCount,
+          topCard: top(op.library),
+          back: op.library.length === 0,
+          onOpen:
+            op.library.length > 0
+              ? () => onOpenZone(`Top of ${stripUsernameTag(op.name)}'s Library`, op.library)
+              : undefined,
+        },
+        {
+          key: ZONE_TILE_KEY.graveyard,
+          count: op.graveyard.length,
+          topCard: top(op.graveyard),
+          onOpen: () =>
+            openOpZone(`${stripUsernameTag(op.name)}'s Graveyard`, op.graveyard, gyTargets),
+          highlightColor: gyTargets.length > 0 ? targetColor : gyPlayable ? active : undefined,
+        },
+        {
+          key: ZONE_TILE_KEY.exile,
+          count: op.exile.length,
+          topCard: top(op.exile),
+          onOpen: () => openOpZone(`${stripUsernameTag(op.name)}'s Exile`, op.exile, exTargets),
+          highlightColor: exTargets.length > 0 ? targetColor : exPlayable ? active : undefined,
+        },
+      ];
+      if ((op.commandZone?.length ?? 0) > 0) {
+        tiles.push({
+          key: ZONE_TILE_KEY.command,
+          count: op.commandZone.length,
+          topCard: top(op.commandZone),
+          previewCards: op.commandZone,
+          onOpen: () =>
+            openOpZone(`${stripUsernameTag(op.name)}'s Command Zone`, op.commandZone, cmdTargets),
+          highlightColor: cmdTargets.length > 0 ? targetColor : cmdPlayable ? active : undefined,
+          commander: playerColors[OPPONENT_SEATS[oppIndex] ?? "opponent1"],
+          commanderTax: top(op.commandZone)?.commanderTax,
+        });
+      }
+      byPlayer[op.id] = tiles;
+    }
+    return byPlayer;
+  }, [
+    me.id,
+    me.libraryCount,
+    opponents,
+    gameTheme,
+    playerColors,
+    myCommandZone,
+    commandPlayableIds,
+    graveyard,
+    exile,
+    library,
+    playableIds,
+    promptType,
+    delveAvailable,
+    isTargetingPrompt,
+    hostileTargeting,
+    graveyardTargetIds,
+    exileTargetIds,
+    boardTargets,
+    onTargetFromZone,
+    onOpenZone,
+    onOpenZoneAndCast,
+    openCommandZone,
+    openGraveyard,
+    openExile,
+    openLibrary,
+  ]);
+  const boardZoneTiles = useMemo<Record<string, ZoneTileSpec[]>>(() => {
+    if (!compactBoard) return zoneTilesByPlayer;
+    return Object.fromEntries(
+      Object.entries(zoneTilesByPlayer).map(([pid, tiles]) => [
+        pid,
+        tiles.filter((t) => t.key === ZONE_TILE_KEY.command),
+      ]),
+    );
+  }, [zoneTilesByPlayer, compactBoard]);
+  const hudBarSpecs = useMemo<PlayerHudSpec[]>(() => {
+    if (!compactBoard) return playerBarSpecs;
+    return playerBarSpecs.map((spec) => {
+      const zones = buildZoneBadges(zoneTilesByPlayer[spec.playerId] ?? [], gameTheme.textMuted);
+      if (zones.length === 0) return spec;
+      const badges = [...spec.badges];
+      const handIdx = badges.findIndex((b) => b.id === "hand");
+      badges.splice(handIdx + 1, 0, ...zones);
+      return { ...spec, badges };
+    });
+  }, [playerBarSpecs, zoneTilesByPlayer, compactBoard, gameTheme]);
+  const unifiedRegions = useMemo((): BoardCanvasRegion[] => {
+    const rowFields = (combatRow?: CombatRow): Partial<BattlefieldState> => ({
+      combatRowAttackerIds: combatRow?.attackerIds,
+      combatRowBlocks: combatRow?.blocks,
+      combatRowTargets: combatRow?.targets,
+    });
+    const oppState = (cards: CardDto[], combatRow?: CombatRow): BattlefieldState => ({
+      cards,
+      attackingCardIds: promptType === "chooseBlockers" ? promptAttackerIds : undefined,
+      orderedCardIds: damageOrder,
+      selectableCardIds: selectableBattlefieldCardIds,
+      hostileTargeting,
+      ...rowFields(combatRow),
+    });
+    const selfCards = [...pixiBattlefield.cards];
+    const cardsByController = new Map<string, CardDto[]>();
+    cardsByController.set(me.id, selfCards);
+    for (const op of opponents)
+      cardsByController.set(op.id, [...(opponentPermanentsByPlayer.get(op.id) ?? [])]);
+    const combatRowByDefender = new Map<string, CombatRow>();
+    const cardById = new Map(battlefield.map((c) => [c.id, c]));
+    const attachedTo = new Map<string, CardDto[]>();
+    for (const c of battlefield) {
+      if (!c.attachedTo) continue;
+      (attachedTo.get(c.attachedTo) ?? attachedTo.set(c.attachedTo, []).get(c.attachedTo)!).push(c);
+    }
+    const moveToDefender = (id: string, defList: CardDto[]) => {
+      const card = cardById.get(id);
+      if (!card) return;
+      const ctrl = cardsByController.get(card.controllerId);
+      const idx = ctrl?.findIndex((c) => c.id === id) ?? -1;
+      if (ctrl && idx >= 0) ctrl.splice(idx, 1);
+      defList.push(card);
+      for (const child of attachedTo.get(id) ?? []) moveToDefender(child.id, defList);
+    };
+    for (const row of combatRows) {
+      const defList = cardsByController.get(row.defenderId);
+      if (!defList) continue;
+      for (const attackerId of row.attackerIds) moveToDefender(attackerId, defList);
+      combatRowByDefender.set(row.defenderId, row);
+    }
+    const myDeck = gameDecks[me.id];
+    // Local/AI/hotseat decks skip setDeckSelection, so the default playmat is
+    // resolved here too; multiplayer decks already carry it from the relay.
+    const myDeckHasPlaymat = !!myDeck?.playmatUrl || !!myDeck?.playmatSettings?.color;
+    return [
+      {
+        playerId: me.id,
+        isLocal: true,
+        color: playerColors.self,
+        state: {
+          ...pixiBattlefield,
+          cards: selfCards,
+          ...rowFields(combatRowByDefender.get(me.id)),
+          ownerRingByCard,
+        },
+        playmat: hiddenPlaymats.has(me.id)
+          ? undefined
+          : myDeckHasPlaymat
+            ? myDeck?.playmatUrl
+            : defaultPlaymat,
+        playmatSettings: hiddenPlaymats.has(me.id)
+          ? undefined
+          : myDeckHasPlaymat
+            ? myDeck?.playmatSettings
+            : defaultPlaymatSettings,
+      },
+      ...opponents.map((op, i) => ({
+        playerId: op.id,
+        isLocal: false,
+        state: {
+          ...oppState(cardsByController.get(op.id) ?? [], combatRowByDefender.get(op.id)),
+          ownerRingByCard,
+        },
+        playmat: hiddenPlaymats.has(op.id) ? undefined : gameDecks[op.id]?.playmatUrl,
+        playmatSettings: hiddenPlaymats.has(op.id) ? undefined : gameDecks[op.id]?.playmatSettings,
+        color: playerColors[OPPONENT_SEATS[i] ?? "opponent1"],
+      })),
+    ];
+  }, [
+    me.id,
+    opponents,
+    opponentPermanentsByPlayer,
+    battlefield,
+    combatRows,
+    ownerRingByCard,
+    pixiBattlefield,
+    promptType,
+    promptAttackerIds,
+    damageOrder,
+    selectableBattlefieldCardIds,
+    hostileTargeting,
+    gameDecks,
+    hiddenPlaymats,
+    defaultPlaymat,
+    defaultPlaymatSettings,
+    playerColors,
+  ]);
+
+  const sheetPlayer = [me, ...opponents].find((player) => player.id === sheetPlayerId);
+  const baseSheetSpec =
+    sheetPlayerId && !gameOver
+      ? (hudBarSpecs.find((spec) => spec.playerId === sheetPlayerId) ?? null)
+      : null;
+  const sheetSpec = baseSheetSpec
+    ? {
+        ...baseSheetSpec,
+        badges: [
+          ...baseSheetSpec.badges
+            .filter((badge) => !badge.zone)
+            .map((badge) =>
+              badge.id === "hand" && sheetPlayer && sheetPlayer.hand.length > 0
+                ? {
+                    ...badge,
+                    onTap: () => onOpenZone(`${sheetPlayer.name}'s visible hand`, sheetPlayer.hand),
+                  }
+                : badge,
+            ),
+          ...buildZoneBadges(zoneTilesByPlayer[baseSheetSpec.playerId] ?? [], gameTheme.textMuted),
+        ],
+      }
+    : null;
+  // Screen-reader mirror of the Pixi HUD (Pixi has no DOM accessibility).
+  const a11ySummary = useMemo(() => {
+    const active = playerBarSpecs.find((s) => s.isActiveTurn);
+    const players = playerBarSpecs
+      .map((s) => {
+        const tags = [
+          s.isEliminated ? "eliminated" : null,
+          s.isDisconnected ? "disconnected" : null,
+        ].filter(Boolean);
+        const who = s.isSelf ? "You" : s.name;
+        return `${who}: ${s.life} life${tags.length ? ` (${tags.join(", ")})` : ""}`;
+      })
+      .join(". ");
+    const turn = active ? `${active.isSelf ? "Your" : `${active.name}'s`} turn. ` : "";
+    return `${turn}${players}.`;
+  }, [playerBarSpecs]);
+  const combatA11y = useMemo(() => {
+    const nameOf = (id: string) =>
+      id === me.id
+        ? "You"
+        : stripUsernameTag(opponents.find((o) => o.id === id)?.name ?? "a player");
+    const pairs = new Map<
+      string,
+      {
+        attacker: string;
+        defender: string;
+        count: number;
+      }
+    >();
+    for (const c of battlefield) {
+      if (!c.isAttacking || !c.attackingPlayerId) continue;
+      const key = `${c.controllerId}->${c.attackingPlayerId}`;
+      const e = pairs.get(key);
+      if (e) e.count += 1;
+      else
+        pairs.set(key, {
+          attacker: nameOf(c.controllerId),
+          defender: nameOf(c.attackingPlayerId),
+          count: 1,
+        });
+    }
+    if (pairs.size === 0) return "";
+    return `${[...pairs.values()]
+      .map(
+        (p) =>
+          `${p.attacker} ${p.attacker === "You" ? "attack" : "attacks"} ${p.defender} with ${p.count} ${p.count === 1 ? "attacker" : "attackers"}`,
+      )
+      .join(". ")}.`;
+  }, [battlefield, opponents, me.id]);
+  return (
+    <div
+      ref={setBoardRef}
+      className="game-board-surface relative flex flex-col min-h-0 flex-1 overflow-hidden"
+    >
+      <ReconnectBanner />
+      <GlobalStateRail
+        dayTime={dayTime}
+        monarchName={
+          monarchId
+            ? stripUsernameTag(
+                monarchId === me.id
+                  ? me.name
+                  : (opponents.find((player) => player.id === monarchId)?.name ?? "Player"),
+              )
+            : undefined
+        }
+        initiativeName={
+          initiativeHolderId
+            ? stripUsernameTag(
+                initiativeHolderId === me.id
+                  ? me.name
+                  : (opponents.find((player) => player.id === initiativeHolderId)?.name ??
+                      "Player"),
+              )
+            : undefined
+        }
+        dungeonState={me.dungeonState}
+        activePlaneNames={activePlaneNames}
+        activeSchemeNames={[me, ...opponents].flatMap((player) => player.activeSchemeNames ?? [])}
+        teamNumber={me.teamNumber}
+        selfName={stripUsernameTag(me.name)}
+        dividerY={unifiedLayout?.dividerY}
+      />
+      <GameBoardAccessibility
+        players={playerBarSpecs.map((player) => ({
+          id: player.playerId,
+          name: player.name,
+          life: player.life,
+          isSelf: player.isSelf,
+          isTargetable: player.isTargetable,
+        }))}
+        battlefield={battlefield}
+        hand={orderedHand}
+        selectableBattlefieldCardIds={selectableBattlefieldCardIds}
+        playableIds={playableIds}
+        handSelectionMode={!!handSelectionMode}
+        handSelectedIds={handSelectedIds}
+        tappableCardIds={[
+          ...(manaAbilityOptions?.map((option) => option.cardId) ?? []),
+          ...(waterbendSourceIds ?? []),
+        ]}
+        untappableCardIds={[
+          ...(promptActions?.flatMap((action) =>
+            action.type === "undoMana" ? [action.cardId] : [],
+          ) ?? []),
+          ...(waterbentCardIds ?? []),
+        ]}
+        manaAbilityOptions={manaAbilityOptions}
+        zonesByPlayer={zoneTilesByPlayer}
+        stack={stackSpec}
+        currentStep={step}
+        selfStops={selfStops}
+        opponentStops={opponentStopsMap}
+        getHandActions={getHandActions}
+        onSelectHandAction={onSelectHandAction}
+        onToggleHandCard={onHandCardToggle}
+        onTapLand={onTapLand}
+        onUntapLand={onUntapLand}
+        onTapLandAbility={onTapLandAbility}
+        onActivateBattlefieldCard={(card) =>
+          pendingBlocker ? onAttackerClick(card) : onBattlefieldClick(card)
+        }
+        onInspectCard={(card, anchor) => {
+          if (onLongPressCard) {
+            onLongPressCard(card, anchor);
+            return;
+          }
+          onHoverCard(card, undefined, { useAnchor: true, anchorOverride: anchor });
+        }}
+        onFocusCard={(card, anchor) =>
+          onHoverCard(card, undefined, { useAnchor: true, anchorOverride: anchor })
+        }
+        onBlurCard={() => onHoverCard(null)}
+        onInspectPlayer={setSheetPlayerId}
+        onTargetPlayer={onTargetPlayer}
+        onTargetSpell={onTargetSpell}
+        onToggleStack={onToggleStack}
+        onToggleSelfPhase={toggleSelfStop}
+        onToggleOpponentPhase={toggleOpponentStop}
+      />
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {a11ySummary}
+      </div>
+      <div className="sr-only" aria-live="assertive" aria-atomic="true">
+        {combatA11y}
+      </div>
+      <div ref={battlefieldContainerRef} className="absolute inset-0 z-10 overflow-hidden">
+        <BoardCanvas
+          regions={unifiedRegions}
+          hand={pixiHand}
+          opponentLayout={opponentLayout}
+          focusLocked={
+            !!sheetPlayerId ||
+            promptType === "chooseAttackers" ||
+            promptType === "chooseBlockers" ||
+            !!draggingCardId
+          }
+          arrowSpecs={arrowSpecs ?? []}
+          castingArrow={castingArrow}
+          declareBlockers={promptType === "chooseBlockers"}
+          combatBlocks={combatAssignmentsAll}
+          declareAttackers={promptType === "chooseAttackers"}
+          attackTargets={chooseAttackersPrompt?.input.attackTargets ?? []}
+          attackerOptions={chooseAttackersPrompt?.input.attackers ?? []}
+          phaseStrip={pixiPhaseStrip}
+          phaseStripCallbacks={pixiPhaseStripCallbacks}
+          compact={compactBoard}
+          focusedOpponentId={focusedOpponentId}
+          combatFocusIds={combatFocusIds}
+          manualFocusId={manualFocusId}
+          playerBars={hudBarSpecs}
+          showPlayerBars
+          zoneTiles={boardZoneTiles}
+          callbacks={pixiCallbacks}
+          isDropActive={isOverBattlefield}
+          autoSort={battlefieldAutoSort}
+          selfBottomReserve={selfBottomReserve}
+          sceneRef={sceneRef}
+          onSceneChange={setOverlayScene}
+          getHandActions={getHandActions}
+          onSelectHandAction={(_card, action) => onSelectHandAction?.(action)}
+          externalPreviewActive={externalPreviewActive}
+          onLayout={(layout) => {
+            setUnifiedLayout(layout);
+            onLayoutChange?.(layout);
+          }}
+        />
+      </div>
+      <div className="absolute inset-0 z-[9000] pointer-events-none">
+        <BoardOverlayCanvas
+          scene={overlayScene}
+          stackSpec={stackSpec}
+          onTargetSpell={onTargetSpell}
+          onHoverStack={onHoverStack}
+          onToggleStack={onToggleStack}
+          promptSpec={promptOverlaySpec ?? null}
+          promptViewportRight={promptViewportRight}
+          ambientColor={ambientColor}
+          externalPreviewActive={externalPreviewActive}
+          previewSpec={rulesPreview}
+          commandPreviewSpec={commandPreview}
+          onCastCommandCard={onCastSpell}
+          onPreviewPointerEnter={onPreviewPointerEnter}
+          onPreviewPointerLeave={onPreviewPointerLeave}
+          onSelectPreviewAction={onSelectHandAction}
+          onDismissPreview={onDismissHoverPreview}
+          onFlipPreview={onFlipCard}
+          onTogglePreviewView={onTogglePreviewView}
+        />
+      </div>
+      {sheetSpec && <PlayerSheetModal spec={sheetSpec} onClose={() => setSheetPlayerId(null)} />}
+    </div>
+  );
+}

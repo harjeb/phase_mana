@@ -1,0 +1,146 @@
+import { useCallback, useEffect, useState, type CSSProperties } from "react";
+import { t } from "@lingui/core/macro";
+import {
+  Flag,
+  Image as ImageIcon,
+  LogOut,
+  Maximize2,
+  Minimize2,
+  PanelRightClose,
+  PanelRightOpen,
+  Settings2,
+  Swords,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useGameStore } from "@/stores/useGameStore";
+import { getPlatformType } from "@/platform";
+import { useKeybindings } from "@/hooks/useKeybindings";
+interface MiddleBarDockProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onOpenSettings: () => void;
+  onOpenCombat?: () => void;
+  onConcede: () => void;
+  eliminated: boolean;
+  onLeave: () => void;
+  sidePanelCollapsed: boolean;
+  onToggleSidePanel: () => void;
+  /** Every seat, for the per-player playmat show/hide toggles. `color` is the
+   *  player's seat colour (full opacity, matching their Pixi avatar ring) used as
+   *  the row's hover background; `textColor` is the readable text over it. */
+  players: {
+    id: string;
+    name: string;
+    color: string;
+    textColor: string;
+  }[];
+}
+
+export function MiddleBarDock({
+  open,
+  onOpenChange,
+  onOpenSettings,
+  onOpenCombat,
+  onConcede,
+  eliminated,
+  onLeave,
+  sidePanelCollapsed,
+  onToggleSidePanel,
+  players,
+}: MiddleBarDockProps) {
+  const isWeb = getPlatformType() === "web";
+  const hiddenPlaymats = useGameStore((s) => s.hiddenPlaymats);
+  const togglePlaymatHidden = useGameStore((s) => s.togglePlaymatHidden);
+  const [isFullscreen, setIsFullscreen] = useState(
+    typeof document !== "undefined" && document.fullscreenElement !== null,
+  );
+  useEffect(() => {
+    const sync = () => setIsFullscreen(document.fullscreenElement !== null);
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
+  const toggleFullscreen = useCallback(() => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => undefined);
+    } else {
+      void document.documentElement.requestFullscreen().catch(() => undefined);
+    }
+  }, []);
+  useKeybindings({ "toggle-fullscreen": toggleFullscreen });
+  const FullscreenIcon = isFullscreen ? Minimize2 : Maximize2;
+  const PanelIcon = sidePanelCollapsed ? PanelRightOpen : PanelRightClose;
+  return (
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
+      <DropdownMenuTrigger asChild>
+        <span aria-hidden className="pointer-events-none absolute bottom-14 right-6 h-0 w-0" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" side="top">
+        {isWeb && (
+          <DropdownMenuItem onSelect={() => toggleFullscreen()}>
+            <FullscreenIcon className="mr-2 h-4 w-4" />
+            {isFullscreen ? t`Exit full screen` : t`Full screen`}
+          </DropdownMenuItem>
+        )}
+        <DropdownMenuItem onSelect={() => onToggleSidePanel()}>
+          <PanelIcon className="mr-2 h-4 w-4" />
+          {sidePanelCollapsed ? t`Show side panel` : t`Hide side panel`}
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => onOpenSettings()}>
+          <Settings2 className="mr-2 h-4 w-4" />
+          {t`Board settings`}
+        </DropdownMenuItem>
+        {onOpenCombat && (
+          <DropdownMenuItem onSelect={onOpenCombat}>
+            <Swords className="mr-2 h-4 w-4" />
+            {t`Combat breakdown`}
+          </DropdownMenuItem>
+        )}
+        {players.length > 0 && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>
+              <ImageIcon className="mr-2 h-4 w-4" />
+              {t`Playmats`}
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuLabel>{t`Hide playmat`}</DropdownMenuLabel>
+              {players.map((p) => (
+                <DropdownMenuCheckboxItem
+                  key={p.id}
+                  checked={hiddenPlaymats.has(p.id)}
+                  onCheckedChange={() => togglePlaymatHidden(p.id)}
+                  onSelect={(e) => e.preventDefault()}
+                  style={{ "--player-bg": p.color, "--player-fg": p.textColor } as CSSProperties}
+                  className="focus:bg-[var(--player-bg)] focus:text-[var(--player-fg)]"
+                >
+                  {p.name}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="text-destructive focus:text-destructive"
+          onSelect={() => {
+            if (eliminated) onLeave();
+            else onConcede();
+          }}
+        >
+          {eliminated ? <LogOut className="mr-2 h-4 w-4" /> : <Flag className="mr-2 h-4 w-4" />}
+          {eliminated ? t`Leave` : t`Concede`}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

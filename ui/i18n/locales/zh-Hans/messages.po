@@ -1,0 +1,1347 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-09-10 12:38+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: zh-Hans\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:281
+msgid ", action available"
+msgstr "，可执行操作"
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+msgid ", inspect"
+msgstr "，查看"
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:279
+msgid ", selected"
+msgstr "，已选择"
+
+#. placeholder {0}: summary.attackerCount
+#. placeholder {1}: summary.blockedCount
+#. placeholder {2}: summary.unblockedCount
+#: ui/components/game/modals/CombatBreakdownModal.tsx:75
+msgid "{0} attackers · {1} blocked · {2} unblocked"
+msgstr "{0} 个进攻者 · {1} 个被阻挡 · {2} 个未阻挡"
+
+#. placeholder {0}: status.count
+#: ui/components/settings/CardImageLibraryCard.tsx:109
+msgid "{0} card images found."
+msgstr "找到 {0} 张卡图。"
+
+#. placeholder {0}: stats.damage
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1136
+msgid "{0} damage"
+msgstr "{0} 点伤害"
+
+#. placeholder {0}: gameView.battlefield.length
+#: ui/components/game/ManualTabletopControls.tsx:170
+msgid "{0} permanents"
+msgstr "{0} 个永久物"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:201
+msgid "{selectedCount} selected"
+msgstr "已选择 {selectedCount} 张"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:130
+msgid "{totalCount} cards"
+msgstr "{totalCount} 张牌"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:131
+msgid "{visibleCount} of {totalCount} cards"
+msgstr "{totalCount} 张中的 {visibleCount} 张"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:702
+msgid "↑↓ select · Enter activate · 1–9"
+msgstr "↑↓ 选择 · Enter 激活 · 1–9"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:129
+msgid "1 card"
+msgstr "1 张牌"
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:35
+msgid "4-player pod"
+msgstr "四人对局"
+
+#: ui/components/layout/navDestinations.ts:73
+msgid "About"
+msgstr "关于"
+
+#: ui/components/layout/TopBar.tsx:78
+msgid "About Manabrew"
+msgstr "关于 Manabrew"
+
+#: ui/components/AppInitGate.tsx:239
+msgid "Accept and continue"
+msgstr "接受并继续"
+
+#: ui/components/layout/AccountMenu.tsx:101
+#: ui/components/layout/AccountMenu.tsx:148
+msgid "Account"
+msgstr "账户"
+
+#: ui/components/layout/AccountMenu.tsx:100
+msgid "Account menu"
+msgstr "账户菜单"
+
+#. placeholder {0}: signedInAccount.handle
+#: ui/components/layout/AccountMenu.tsx:100
+msgid "Account: @{0}"
+msgstr "账户：@{0}"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:158
+msgid "Activate an ability"
+msgstr "启动异能"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:69
+msgid "Active turn"
+msgstr "当前回合"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:253
+msgid "Active: "
+msgstr "已生效："
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:142
+msgid "All types"
+msgstr "所有类型"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:165
+msgid "Applies to battlefield cards. Hand, stack and dialog view settings are independent."
+msgstr "仅作用于战场上的牌。手牌、堆叠和对话框的显示设置相互独立。"
+
+#: ui/components/game/battlefieldCardStyles.ts:10
+msgid "Art-forward"
+msgstr "画面优先"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:91
+msgid "Attacker"
+msgstr "进攻者"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:172
+msgid "Auto-arrange"
+msgstr "自动排列"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:61
+msgid "Auto-skip optional costs"
+msgstr "自动跳过可选费用"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:130
+msgid "Autopass"
+msgstr "自动让过"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:74
+msgid "Available actions"
+msgstr "可用操作"
+
+#. placeholder {0}: indexedActions.length
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:715
+msgid "Available actions · {0}"
+msgstr "可用操作 · {0}"
+
+#. placeholder {0}: indexedActions.length
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:714
+msgid "Available on current face · {0}"
+msgstr "当前牌面可用 · {0}"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:90
+msgid "Awaiting first chapter"
+msgstr "等待第一章"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:93
+msgid "Awaiting first level"
+msgstr "等待第一级"
+
+#: ui/components/game/CardPreview.tsx:465
+#: ui/components/game/modals/AbilityPickerModal.tsx:126
+#: ui/components/layout/TopBar.tsx:150
+#: ui/components/layout/TopBar.tsx:153
+msgid "Back"
+msgstr "返回"
+
+#: ui/components/game/ManualTabletopControls.tsx:383
+msgid "Battlefield"
+msgstr "战场"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:168
+msgid "Battlefield arrangement"
+msgstr "战场排列"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:161
+msgid "Battlefield card style"
+msgstr "战场牌样式"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
+msgid "Black"
+msgstr "黑"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:96
+msgid "Blocked by"
+msgstr "被阻挡："
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:28
+msgid "Blue"
+msgstr "蓝"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:144
+msgid "Board appearance"
+msgstr "牌桌外观"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:119
+msgid "Board hover preview view"
+msgstr "牌桌悬停预览视图"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:219
+msgid "Board preview trigger"
+msgstr "牌桌预览触发方式"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:85
+#: ui/components/game/panels/MiddleBarDock.tsx:101
+msgid "Board settings"
+msgstr "牌桌设置"
+
+#: ui/components/layout/TopBar.tsx:57
+msgid "Booster Draft"
+msgstr "轮抽"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "Bot player"
+msgstr "机器人玩家"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:94
+msgid "Browse…"
+msgstr "浏览…"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:53
+msgid "Cancel"
+msgstr "取消"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:149
+msgid "Card color"
+msgstr "牌色"
+
+#: ui/components/layout/TopBar.tsx:84
+msgid "Card Face Gallery"
+msgstr "牌面展示"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:780
+msgid "Card identity and rules are hidden."
+msgstr "牌张信息与规则文字已隐藏。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:80
+#: ui/components/settings/CardImageLibraryCard.tsx:90
+msgid "Card image library"
+msgstr "卡图库目录"
+
+#: ui/components/layout/navDestinations.ts:67
+#: ui/components/layout/TopBar.tsx:36
+msgid "Card Search"
+msgstr "牌张搜索"
+
+#. placeholder {0}: Math.round(prefs.cardSizeMultiplier * 100)
+#: ui/components/game/modals/GameSettingsModal.tsx:147
+msgid "Card size · {0}%"
+msgstr "牌张大小 · {0}%"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:176
+msgid "Card sort order"
+msgstr "牌张排序"
+
+#: ui/components/settings/LanguagePreferenceCard.tsx:19
+#: ui/components/settings/LanguagePreferenceCard.tsx:26
+msgid "Card text language"
+msgstr "卡牌文本语言"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:138
+msgid "Card type"
+msgstr "牌张类型"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:91
+msgid "Cards and previews"
+msgstr "牌张与预览"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:104
+#: ui/components/game/panels/PlayerSheetModal.tsx:105
+msgid "Cards and zones"
+msgstr "牌张与区域"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:175
+#: ui/components/game/panels/PlayerSheetModal.tsx:199
+msgid "Cards in hand"
+msgstr "手牌"
+
+#: ui/components/game/modals/DialogCardGrid.tsx:71
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:196
+msgid "Cards in this view"
+msgstr "此视图中的牌"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:87
+msgid "Changes apply immediately. Card view and front/back face are separate controls."
+msgstr "更改立即生效。牌面视图与正/背面是两个独立的控件。"
+
+#. placeholder {0}: notch.label
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:117
+msgid "CHAPTER {0}"
+msgstr "第 {0} 章"
+
+#. placeholder {0}: state.current
+#. placeholder {1}: state.max
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:89
+msgid "Chapter {0} of {1}"
+msgstr "第 {0} 章，共 {1} 章"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:157
+msgid "Choose an action"
+msgstr "选择一项操作"
+
+#: ui/components/game/PlayModePicker.tsx:6
+msgid "Choose how to play this card"
+msgstr "选择如何打出这张牌"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:137
+msgid "Choose simultaneous trigger order"
+msgstr "选择同时触发式异能的顺序"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
+msgid "CLASS LEVELS"
+msgstr "职业等级"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:96
+msgid "Clear search"
+msgstr "清除搜索"
+
+#: ui/components/KeyboardShortcutsDialog.tsx:88
+msgid "Close"
+msgstr "关闭"
+
+#: ui/components/game/modals/Modal.tsx:231
+msgid "Close (Esc)"
+msgstr "关闭 (Esc)"
+
+#: ui/components/game/modals/Modal.tsx:232
+msgid "Close dialog"
+msgstr "关闭对话框"
+
+#: ui/components/game/panels/RightActionPanel.tsx:109
+msgid "Close right panel"
+msgstr "关闭右侧面板"
+
+#: ui/lib/handOrder.ts:10
+msgid "Color"
+msgstr "颜色"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:73
+#: ui/components/game/panels/MiddleBarDock.tsx:106
+msgid "Combat breakdown"
+msgstr "战斗详情"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:144
+msgid "Commander damage by source"
+msgstr "按来源的指挥官伤害"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:154
+msgid "Commander source"
+msgstr "指挥官来源"
+
+#: ui/components/layout/navDestinations.ts:57
+#: ui/components/layout/TopBar.tsx:51
+msgid "Community"
+msgstr "社区"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:56
+#: ui/components/game/panels/MiddleBarDock.tsx:141
+msgid "Concede"
+msgstr "认输"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:31
+msgid "Concede the game?"
+msgstr "认输吗？"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:56
+msgid "Conceding…"
+msgstr "正在认输…"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:42
+msgid "Concession could not be delivered: {error}. You can retry or cancel."
+msgstr "无法发送认输请求：{error}。你可以重试或取消。"
+
+#: ui/components/AppInitGate.tsx:292
+msgid "Connecting"
+msgstr "连接中"
+
+#: ui/components/game/GameLoadingScreen.tsx:88
+msgid "Copied"
+msgstr "已复制"
+
+#: ui/components/game/GameLoadingScreen.tsx:88
+msgid "Copy logs"
+msgstr "复制日志"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:57
+msgid "Could not open the folder picker. Paste the folder path instead."
+msgstr "无法打开文件夹选择窗口，请直接粘贴文件夹路径。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:59
+msgid "Could not save the folder. Check write permissions and try again."
+msgstr "无法保存图库目录，请检查写入权限后重试。"
+
+#. placeholder {0}: APP_LOCALES[activeLocale].label
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:29
+#: ui/components/settings/LanguagePreferenceCard.tsx:30
+msgid "Currently using {0}"
+msgstr "当前使用 {0}"
+
+#: ui/components/KeyboardShortcutsDialog.tsx:85
+msgid "Customize these in Preferences → Shortcuts."
+msgstr "可在“偏好设置 → 快捷键”中自定义。"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:89
+msgid "Debug"
+msgstr "调试"
+
+#: ui/components/layout/TopBar.tsx:40
+msgid "Deck Editor"
+msgstr "套牌编辑器"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:211
+msgid "Decorative animations"
+msgstr "装饰性动画"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:80
+msgid "Defender life: {defenderLife}"
+msgstr "防守方生命：{defenderLife}"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1133
+msgid "Defense"
+msgstr "防御"
+
+#: ui/components/layout/navDestinations.ts:75
+#: ui/components/layout/TopBar.tsx:81
+msgid "Design System"
+msgstr "设计系统"
+
+#: ui/components/game/panels/RightActionPanel.tsx:100
+msgid "Dev"
+msgstr "开发"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:79
+msgid "Disconnected"
+msgstr "已断线"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:247
+msgid "Done"
+msgstr "完成"
+
+#: ui/components/layout/TopBar.tsx:108
+msgid "Downloading…"
+msgstr "下载中…"
+
+#: ui/components/layout/TopBar.tsx:109
+msgid "Downloading… {progress}%"
+msgstr "下载中… {progress}%"
+
+#: ui/components/game/ManualTabletopControls.tsx:274
+msgid "Draw a card"
+msgstr "抓一张牌"
+
+#: ui/components/game/CardRailPreview.tsx:190
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:151
+msgid "Effect text unavailable"
+msgstr "无法获取效应文本"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:84
+msgid "Eliminated"
+msgstr "已淘汰"
+
+#. placeholder {0}: summary.estimatedDamage
+#: ui/components/game/modals/CombatBreakdownModal.tsx:79
+msgid "Estimated unblocked damage: {0}"
+msgstr "预计未被阻挡的伤害：{0}"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:92
+msgid "Exit full screen"
+msgstr "退出全屏"
+
+#: ui/components/layout/AccountMenu.tsx:134
+#: ui/components/layout/AccountMenu.tsx:135
+msgid "Exit fullscreen"
+msgstr "退出全屏"
+
+#: ui/components/game/ManualTabletopControls.tsx:177
+msgid "Exit tabletop"
+msgstr "退出桌面模式"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:36
+#: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:307
+msgid "Face-down card"
+msgstr "牌面朝下的牌"
+
+#: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:309
+msgid "Face-down permanent"
+msgstr "牌面朝下的永久物"
+
+#. placeholder {0}: colorLabel(color)
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:159
+msgid "Filter by {0} identity"
+msgstr "按{0}色系筛选"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
+msgid "Filters"
+msgstr "筛选"
+
+#: ui/views/Game.tsx:2533
+msgid "First Strike Damage"
+msgstr "先制打击伤害"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:807
+msgid "Flavor text"
+msgstr "背景叙述"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:836
+msgid "Flip back · F"
+msgstr "翻到背面 · F"
+
+#. placeholder {0}: showBackFace ? doubleFacedData.frontName : doubleFacedData.backName
+#: ui/components/game/CardPreview.tsx:462
+msgid "Flip card (F) — {0}"
+msgstr "翻面 (F) — {0}"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:836
+msgid "Flip front · F"
+msgstr "翻到正面 · F"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:114
+#: ui/components/game/panels/PlayerSheetModal.tsx:115
+msgid "Floating mana"
+msgstr "浮动法术力"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:180
+msgid "Focused"
+msgstr "聚焦"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:110
+msgid "Folder not found. Cards fall back to Scryfall."
+msgstr "文件夹不存在，卡图将回退到 Scryfall。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:58
+msgid "Folder not found. Check the path and try again."
+msgstr "找不到文件夹，请检查路径后重试。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:89
+msgid "Folder with Forge-named card images"
+msgstr "存放 Forge 命名卡图的文件夹"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:171
+msgid "Free placement"
+msgstr "自由摆放"
+
+#: ui/components/game/CardPreview.tsx:465
+msgid "Front"
+msgstr "正面"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:131
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:52
+msgid "Full control"
+msgstr "完全操控"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:134
+msgid "Full control stops at every window. Autopass skips windows with only mana abilities after a short delay."
+msgstr "完全操控会在每个时点停下。自动让过会在短暂延迟后跳过仅有法术力异能的时点。"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:92
+msgid "Full screen"
+msgstr "全屏"
+
+#: ui/components/layout/AccountMenu.tsx:134
+#: ui/components/layout/AccountMenu.tsx:135
+msgid "Fullscreen"
+msgstr "全屏"
+
+#: ui/components/game/panels/ActionLog.tsx:110
+#: ui/components/game/panels/ActionLog.tsx:117
+msgid "Game Log"
+msgstr "对局日志"
+
+#: ui/components/game/GameLoadingScreen.tsx:67
+msgid "Game starting…"
+msgstr "对局开始中…"
+
+#: ui/components/layout/TopBar.tsx:69
+msgid "Gauntlet"
+msgstr "挑战赛"
+
+#: ui/components/AppInitGate.tsx:253
+msgid "Getting started"
+msgstr "新手指引"
+
+#: ui/components/game/panels/GlobalStateRail.tsx:143
+msgid "Global game state"
+msgstr "全局对局状态"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:34
+msgid "Green"
+msgstr "绿"
+
+#: ui/components/layout/AccountMenu.tsx:124
+msgid "Guest"
+msgstr "访客"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:100
+msgid "Hand default view"
+msgstr "手牌默认视图"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:74
+msgid "Has priority"
+msgstr "拥有优先权"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:116
+msgid "Hide playmat"
+msgstr "隐藏牌垫"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:97
+msgid "Hide side panel"
+msgstr "隐藏侧边栏"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:222
+msgid "Hover"
+msgstr "悬停"
+
+#. placeholder {0}: prefs.cardHoverDelayMs
+#: ui/components/game/modals/GameSettingsModal.tsx:230
+msgid "Hover delay · {0}ms"
+msgstr "悬停延迟 · {0} 毫秒"
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:26
+msgid "How many players?"
+msgstr "选择对局人数"
+
+#: ui/components/AppInitGate.tsx:229
+msgid "I have read and agree to these terms"
+msgstr "我已阅读并同意这些条款"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:96
+msgid "In combat"
+msgstr "战斗中"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:39
+msgid "Inspect {name}"
+msgstr "查看 {name}"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:62
+msgid "Inspect the card, then choose an available action. Viewing another face does not change the action you choose."
+msgstr "查看牌张，然后选择一项可用操作。查看另一面不会改变你所选的操作。"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:217
+msgid "Inspection input"
+msgstr "查看输入方式"
+
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:18
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:25
+msgid "Interface language"
+msgstr "界面语言"
+
+#: ui/components/KeyboardShortcutsDialog.tsx:36
+msgid "Keyboard shortcuts"
+msgstr "键盘快捷键"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:733
+msgid "Keywords, costs & counters"
+msgstr "关键字、费用与指示物"
+
+#: ui/components/settings/LanguagePreferenceCard.tsx:20
+msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
+msgstr "用于卡牌名称、类别行和印刷规则文字的语言。当没有可用的本地化版本时回退为英文。"
+
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:19
+msgid "Language for menus, buttons and messages. Untranslated text falls back to English."
+msgstr "用于菜单、按钮和提示信息的语言。未翻译的文本将回退为英文。"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:141
+msgid "Leave"
+msgstr "离开"
+
+#: ui/components/game/GameFailedScreen.tsx:18
+#: ui/components/game/GameLoadingScreen.tsx:129
+msgid "Leave game"
+msgstr "离开对局"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:277
+msgid "Lethal"
+msgstr "致命"
+
+#. placeholder {0}: notch.label
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:118
+msgid "LEVEL {0}"
+msgstr "第 {0} 级"
+
+#. placeholder {0}: state.current
+#. placeholder {1}: state.max
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:92
+msgid "Level {0} of {1}"
+msgstr "第 {0} 级，共 {1} 级"
+
+#: ui/components/game/zones/LibraryZoneTile.tsx:34
+msgid "Library"
+msgstr "牌库"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:63
+msgid "Life"
+msgstr "生命"
+
+#: ui/components/layout/navDestinations.ts:68
+#: ui/components/layout/TopBar.tsx:72
+msgid "Life Tracker"
+msgstr "生命计数器"
+
+#: ui/components/game/GameLoadingScreen.tsx:15
+msgid "Load card images"
+msgstr "加载牌张图像"
+
+#: ui/components/AppInitGate.tsx:44
+msgid "Loading"
+msgstr "加载中"
+
+#: ui/components/AppInitGate.tsx:38
+msgid "Loading card data"
+msgstr "正在加载牌张数据"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:206
+msgid "Loading card details for search…"
+msgstr "正在加载用于搜索的牌张详情…"
+
+#: ui/components/AppInitGate.tsx:40
+msgid "Loading decks"
+msgstr "正在加载套牌"
+
+#: ui/phase/Launch.tsx:177
+#~ msgid "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
+#~ msgstr "本地双人对战演示。双方均使用服务器上的休闲“森林 / 灰棕熊”套牌。AI 会通过 Phase 的合法操作、优先权、战斗和选择进行游戏。"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:205
+msgid "Locked"
+msgstr "锁定"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:208
+msgid "Locking prevents dragging piles; viewing their cards remains available."
+msgstr "锁定后无法拖动牌堆；仍可查看其中的牌。"
+
+#: ui/components/game/panels/RightActionPanel.tsx:63
+msgid "Log"
+msgstr "日志"
+
+#: ui/components/game/panels/RightActionPanel.tsx:87
+msgid "Log ({logActivityCount})"
+msgstr "日志 ({logActivityCount})"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:102
+msgid "Log prompts to console"
+msgstr "将提示输出到控制台"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
+msgid "LORE CHAPTERS"
+msgstr "传世章节"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1132
+msgid "Loyalty"
+msgstr "忠诚"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:182
+#: ui/lib/handOrder.ts:11
+msgid "Mana value"
+msgstr "法术力值"
+
+#: ui/components/layout/TopBar.tsx:159
+msgid "Manabrew Home"
+msgstr "Manabrew 主页"
+
+#: ui/phase/Launch.tsx:174
+#~ msgid "ManaBrew's battlefield and prompts, powered by phase-engine and phase-ai."
+#~ msgstr "ManaBrew 的战场与提示，由 phase-engine 和 phase-ai 驱动。"
+
+#: ui/lib/handOrder.ts:9
+msgid "Manual"
+msgstr "手动"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:97
+msgid "Manual preserves your placement; automatic modes arrange new cards."
+msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
+
+#: ui/components/layout/NavSheet.tsx:85
+#: ui/components/layout/NavSheet.tsx:88
+#: ui/components/layout/NavSheet.tsx:91
+msgid "Menu"
+msgstr "菜单"
+
+#: ui/components/game/battlefieldCardStyles.ts:11
+msgid "Mini-frame"
+msgstr "迷你牌框"
+
+#: ui/components/layout/NavSheet.tsx:97
+msgid "More"
+msgstr "更多"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:204
+msgid "Movable"
+msgstr "可移动"
+
+#: ui/components/game/ManualTabletopControls.tsx:423
+#: ui/components/game/ManualTabletopControls.tsx:424
+msgid "Move to exile"
+msgstr "移放至放逐区"
+
+#: ui/components/game/ManualTabletopControls.tsx:438
+#: ui/components/game/ManualTabletopControls.tsx:439
+msgid "Move to graveyard"
+msgstr "移放至坟场"
+
+#: ui/components/game/ManualTabletopControls.tsx:413
+#: ui/components/game/ManualTabletopControls.tsx:414
+msgid "Move to hand"
+msgstr "移放至手牌"
+
+#: ui/components/layout/navDestinations.ts:53
+#: ui/components/layout/TopBar.tsx:33
+msgid "Multiplayer"
+msgstr "多人游戏"
+
+#: ui/components/layout/TopBar.tsx:54
+msgid "Multiplayer Draft"
+msgstr "多人轮抽"
+
+#: ui/components/layout/navDestinations.ts:62
+#: ui/components/layout/TopBar.tsx:45
+msgid "My Collection"
+msgstr "我的收藏"
+
+#: ui/components/layout/navDestinations.ts:54
+#: ui/components/layout/TopBar.tsx:40
+msgid "My Decks"
+msgstr "我的套牌"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:181
+msgid "Name"
+msgstr "名称"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:113
+msgid "No actions are currently available for this card."
+msgstr "此牌当前没有可用操作。"
+
+#: ui/components/game/ManualTabletopControls.tsx:337
+msgid "No cards found"
+msgstr "未找到牌张"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:103
+msgid "No current combat assignments."
+msgstr "当前没有战斗分配。"
+
+#: ui/components/game/panels/ActionLog.tsx:111
+msgid "No log entries yet."
+msgstr "暂无日志条目。"
+
+#: ui/components/KeyboardShortcutsDialog.tsx:78
+msgid "No shortcuts match “{query}”."
+msgstr "没有与“{query}”匹配的快捷键。"
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:24
+msgid "No snapshots yet."
+msgstr "暂无快照。"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:253
+msgid "Not gained: "
+msgstr "未获得："
+
+#: ui/components/game/modals/GameSettingsModal.tsx:70
+msgid "Off"
+msgstr "关闭"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:69
+msgid "On"
+msgstr "开启"
+
+#: ui/views/Game.tsx:2535
+msgid "only first & double strikers deal damage now"
+msgstr "现在只有先制打击和连击生物造成伤害"
+
+#: ui/components/game/panels/RightActionPanel.tsx:56
+msgid "Open action log with {logActivityCount} entries"
+msgstr "打开包含 {logActivityCount} 条记录的操作日志"
+
+#: ui/phase/Launch.tsx:196
+#~ msgid "Open the ManaBrew interface"
+#~ msgstr "打开 ManaBrew 界面"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:177
+msgid "Opponent layout"
+msgstr "对手布局"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:16
+msgid "Optional yes/no costs"
+msgstr "可选的是/否费用"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:181
+msgid "Overview"
+msgstr "总览"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:107
+msgid "Pinned by PHASE_MANA_CARD_IMAGES."
+msgstr "已由环境变量 PHASE_MANA_CARD_IMAGES 固定。"
+
+#: ui/components/layout/NavSheet.tsx:93
+msgid "Play"
+msgstr "开始游戏"
+
+#: ui/phase/Launch.tsx:181
+#~ msgid "Play against Phase AI"
+#~ msgstr "与 Phase AI 对战"
+
+#: ui/components/layout/TopBar.tsx:30
+msgid "Play Deck"
+msgstr "使用此套牌游戏"
+
+#: ui/components/layout/navDestinations.ts:52
+#: ui/components/layout/TopBar.tsx:24
+#: ui/components/layout/TopBar.tsx:27
+msgid "Play Offline"
+msgstr "离线游戏"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "Player details"
+msgstr "玩家详情"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:140
+msgid "Player states"
+msgstr "玩家状态"
+
+#: ui/components/layout/AccountMenu.tsx:126
+msgid "Playing as a guest"
+msgstr "以访客身份游戏"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:113
+msgid "Playmats"
+msgstr "牌垫"
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:25
+msgid "Playtest"
+msgstr "试打"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:96
+msgid "Potential lethal combat damage"
+msgstr "潜在致命战斗伤害"
+
+#: ui/components/layout/AccountMenu.tsx:167
+#: ui/components/layout/TopBar.tsx:75
+msgid "Preferences"
+msgstr "偏好设置"
+
+#: ui/components/layout/TopBarNav.tsx:22
+msgid "Primary"
+msgstr "主导航"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:104
+msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
+msgstr "将 UI 收到的每个提示（不包括状态更新）连同完整 JSON 打印到开发者控制台。便于报告提示相关问题。"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:42
+msgid "Priority"
+msgstr "优先权"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:125
+msgid "Priority and prompts"
+msgstr "优先权与提示"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:127
+msgid "Priority windows"
+msgstr "优先权时点"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:756
+msgid "Progression"
+msgstr "进程"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:112
+msgid "Prompt and dialog default view"
+msgstr "提示与对话框默认视图"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
+msgid "Prompts"
+msgstr "提示"
+
+#: ui/components/game/ManualTabletopControls.tsx:291
+msgid "Put top library card onto battlefield"
+msgstr "将牌库顶的牌放置到战场"
+
+#: ui/components/AppInitGate.tsx:42
+msgid "Ready"
+msgstr "就绪"
+
+#: ui/components/game/battlefieldCardStyles.ts:9
+#: ui/components/game/cardPreviewStyles.ts:12
+#: ui/components/game/cardPreviewStyles.ts:22
+msgid "Realistic"
+msgstr "写实"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:116
+msgid "Realistic uses printed art. Rules shows card rules and current game information. Individual cards can still be switched."
+msgstr "写实使用印刷画面。规则显示牌张规则和当前对局信息。单张牌仍可切换。"
+
+#: ui/components/game/GameLoadingScreen.tsx:17
+msgid "Receive the first game state"
+msgstr "接收初始对局状态"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:32
+msgid "Red"
+msgstr "红"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:196
+msgid "Reset"
+msgstr "重置"
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:51
+msgid "Restore"
+msgstr "恢复"
+
+#: ui/phase/Launch.tsx:184
+#~ msgid "Resume local game"
+#~ msgstr "继续本地对局"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:121
+msgid "Return to combat"
+msgstr "返回战斗"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:223
+msgid "Right click"
+msgstr "右键"
+
+#: ui/components/game/CardPreviewOverlay.tsx:222
+msgid "Ring-bearer"
+msgstr "持戒人"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Rotate card"
+msgstr "旋转牌张"
+
+#: ui/components/LandscapeGate.tsx:27
+msgid "Rotate your device"
+msgstr "请旋转设备"
+
+#: ui/components/game/cardPreviewStyles.ts:13
+#: ui/components/game/cardPreviewStyles.ts:23
+msgid "Rules"
+msgstr "规则"
+
+#: ui/components/game/panels/PlayerRuleFacts.tsx:11
+#: ui/components/game/panels/PlayerRuleFacts.tsx:12
+msgid "Rules and turn"
+msgstr "规则与回合"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:782
+msgid "Rules text"
+msgstr "规则文字"
+
+#: ui/components/layout/TopBar.tsx:63
+msgid "Sealed"
+msgstr "现开"
+
+#: ui/components/layout/TopBar.tsx:60
+msgid "Sealed Deck Build"
+msgstr "现开套牌构筑"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:86
+msgid "Search cards"
+msgstr "搜索牌张"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:85
+msgid "Search cards by name, rules, type or mana"
+msgstr "按名称、规则、类型或法术力搜索牌张"
+
+#: ui/components/game/ManualTabletopControls.tsx:329
+msgid "Search Scryfall"
+msgstr "搜索 Scryfall"
+
+#: ui/components/KeyboardShortcutsDialog.tsx:46
+msgid "Search shortcuts…"
+msgstr "搜索快捷键…"
+
+#: ui/components/game/ManualTabletopControls.tsx:335
+msgid "Searching…"
+msgstr "搜索中…"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:114
+msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
+msgstr "选择一个进攻者或阻挡者以查看其写实或规则视图。查看不会改变分配。"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:47
+msgid "Sending concession…"
+msgstr "正在发送认输…"
+
+#: ui/components/game/GameLoadingScreen.tsx:71
+msgid "Setting the table — this usually takes a few seconds."
+msgstr "正在布置牌桌 — 通常需要几秒钟。"
+
+#: ui/components/game/GameLoadingScreen.tsx:79
+msgid "Setup progress"
+msgstr "设置进度"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Show back face"
+msgstr "显示背面"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Show front face"
+msgstr "显示正面"
+
+#: ui/components/game/modals/DialogCardInspector.tsx:43
+msgid "Show realistic card"
+msgstr "显示写实牌面"
+
+#: ui/components/game/CardPreview.tsx:445
+#: ui/components/game/modals/DialogCardInspector.tsx:43
+msgid "Show rules"
+msgstr "显示规则"
+
+#: ui/components/game/CardPreview.tsx:446
+msgid "Show rules (R)"
+msgstr "显示规则 (R)"
+
+#: ui/components/game/panels/MiddleBarDock.tsx:97
+msgid "Show side panel"
+msgstr "显示侧边栏"
+
+#: ui/components/game/ManualTabletopControls.tsx:307
+msgid "Shuffle library"
+msgstr "洗牌库"
+
+#: ui/components/layout/AccountMenu.tsx:158
+msgid "Sign in"
+msgstr "登录"
+
+#: ui/components/layout/AccountMenu.tsx:126
+msgid "Signed in"
+msgstr "已登录"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:17
+msgid "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
+msgstr "跳过是/否费用提示（增幅、购回、非瑞克西亚）— 永不支付额外费用。"
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:23
+#: ui/components/game/panels/SnapshotsPanel.tsx:30
+msgid "Snapshots"
+msgstr "快照"
+
+#. placeholder {0}: snapshots.length
+#: ui/components/game/panels/RightActionPanel.tsx:93
+msgid "Snapshots ({0})"
+msgstr "快照 ({0})"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:207
+msgid "Some card details are unavailable. Visible names and game rules remain searchable."
+msgstr "部分牌张详情不可用。可见的名称和对局规则仍可搜索。"
+
+#: ui/components/game/GameFailedScreen.tsx:14
+msgid "Something went wrong and the game can't continue. Please contact the developer."
+msgstr "出现问题，对局无法继续。请联系开发者。"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:93
+msgid "Sort hand"
+msgstr "手牌排序"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:106
+msgid "Stack default view"
+msgstr "堆叠默认视图"
+
+#: ui/components/game/GameLoadingScreen.tsx:14
+msgid "Start the game engine"
+msgstr "启动对局引擎"
+
+#: ui/phase/Launch.tsx:191
+#~ msgid "Start the Rust host first. Unsupported engine interactions are reported, never silently skipped. This is not the ManaBrew online service."
+#~ msgstr "请先启动 Rust 主机。不支持的引擎交互会被报告，绝不会被静默跳过。这不是 ManaBrew 在线服务。"
+
+#: ui/components/AppInitGate.tsx:36
+msgid "Starting"
+msgstr "正在启动"
+
+#: ui/views/Play.tsx:153
+msgid "Starting multiplayer game…"
+msgstr "正在开始多人游戏…"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:54
+msgid "Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay."
+msgstr "在每个优先权时点都停下，即使你没有任何可行的响应。关闭时，只能横置产生法术力的时点会在短暂延迟后自动让过。"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:186
+msgid "Table background"
+msgstr "牌桌背景"
+
+#: ui/components/game/ManualTabletopControls.tsx:166
+msgid "Tabletop"
+msgstr "桌面模式"
+
+#: ui/components/game/GameLoadingScreen.tsx:16
+msgid "Take your seat"
+msgstr "就座"
+
+#: ui/components/game/ManualTabletopControls.tsx:397
+#: ui/components/game/ManualTabletopControls.tsx:398
+msgid "Tap"
+msgstr "横置"
+
+#: ui/components/game/zones/ManaAbilityTapButton.tsx:50
+msgid "Tap: {description}"
+msgstr "横置：{description}"
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
+msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
+msgstr "自动处理器会回答只有唯一合法答案的提示（目标、模式……）以及信息性确认（RevealCards、掷骰）。这些始终自动处理 — 无需开关。下面的列表涵盖你可能希望不再被询问的可选费用。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:81
+msgid "The folder the server reads card scans from. Pick the root that holds the letter folders (a, b, …); cards it does not hold fall back to Scryfall."
+msgstr "服务器读取卡图的目录。请选择包含字母子目录（a、b、…）的根目录；库里没有的牌会回退到 Scryfall。"
+
+#: ui/components/game/GameFailedScreen.tsx:12
+msgid "The game failed to start"
+msgstr "对局启动失败"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:196
+msgid "The host picked this table's background when creating it."
+msgstr "房主在创建时选定了此牌桌的背景。"
+
+#: ui/components/layout/TopBar.tsx:86
+msgid "Theme Editor"
+msgstr "主题编辑器"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:37
+msgid "This app hosts the table. After conceding, stay connected so the remaining players can finish. Leaving later will end their game."
+msgstr "此应用托管牌桌。认输后请保持连接，以便其余玩家完成对局。之后离开会结束他们的对局。"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:82
+msgid "This estimate does not model trample, prevention or replacement effects."
+msgstr "此估算未考虑践踏、防止或替代效应。"
+
+#: ui/components/game/GameLoadingScreen.tsx:70
+msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
+msgstr "这比预期耗时更长。你可以继续等待，或离开并返回大厅。"
+
+#: ui/components/LandscapeGate.tsx:29
+msgid "This screen is designed for landscape play."
+msgstr "此界面专为横屏游戏设计。"
+
+#: ui/components/layout/TopBar.tsx:48
+msgid "Top Decks"
+msgstr "热门套牌"
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
+msgid "Unavailable with the local Phase host. Choose 1v1."
+msgstr "本地 Phase 暂不支持四人对局，请选择 1v1。"
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:96
+msgid "Unblocked"
+msgstr "未阻挡"
+
+#: ui/components/game/ManualTabletopControls.tsx:397
+#: ui/components/game/ManualTabletopControls.tsx:398
+msgid "Untap"
+msgstr "重置"
+
+#: ui/components/layout/TopBar.tsx:199
+msgid "Update"
+msgstr "更新"
+
+#: ui/components/layout/TopBar.tsx:111
+msgid "Update to {version}"
+msgstr "更新到 {version}"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:102
+msgid "Use folder"
+msgstr "使用此文件夹"
+
+#: ui/components/settings/LocaleSelect.tsx:22
+msgid "Use system language"
+msgstr "跟随系统语言"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:197
+msgid "Used when a table does not provide its own background, including offline games."
+msgstr "用于牌桌未提供自身背景时，包括离线对局。"
+
+#. placeholder {0}: TERMS_AND_CONDITIONS.version
+#. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
+#: ui/components/AppInitGate.tsx:242
+msgid "Version {0} · Updated {1}"
+msgstr "版本 {0} · 更新于 {1}"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:217
+#: ui/components/game/panels/PlayerSheetModal.tsx:289
+msgid "View"
+msgstr "查看"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:175
+msgid "View permitted hand cards"
+msgstr "查看允许看的手牌"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:201
+msgid "View visible cards"
+msgstr "查看可见的牌"
+
+#: ui/views/Play.tsx:154
+msgid "Waiting for game synchronization…"
+msgstr "正在等待游戏同步…"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:119
+msgid "Waiting for the game to respond…"
+msgstr "正在等待对局响应…"
+
+#: ui/phase/Launch.tsx:194
+#~ msgid "Want to pick your own decks?"
+#~ msgstr "想自己选卡组？"
+
+#: ui/components/AppInitGate.tsx:139
+msgid "Welcome to"
+msgstr "欢迎来到"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:141
+msgid "When off, simultaneous triggers are ordered automatically."
+msgstr "关闭时，同时触发的异能会自动排序。"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:26
+msgid "White"
+msgstr "白"
+
+#: ui/components/layout/TopBar.tsx:66
+msgid "Winston Draft"
+msgstr "温斯顿轮抽"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:106
+msgid "Working…"
+msgstr "处理中…"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "You"
+msgstr "你"
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:50
+msgid "You and one AI opponent. Faster turns, quicker goldfishing."
+msgstr "你与一名 AI 对手对战。"
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:34
+msgid "You forfeit the game. This cannot be undone."
+msgstr "你将放弃本局对局。此操作无法撤销。"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:226
+msgid "Zone explorers support persistent tap and keyboard inspection independently."
+msgstr "区域浏览器独立支持按住查看和键盘查看。"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:180
+msgid "Zone order"
+msgstr "区域顺序"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:201
+msgid "Zone piles"
+msgstr "区域牌堆"

@@ -1,0 +1,7 @@
+# The engine's recursive card-DB load and rules resolution need more than the
+# default 2 MiB thread stack (phase's own .cargo/config.toml pins the same
+# value, and does not apply to this sibling checkout). Cargo reads config from
+# the working directory upward, so this covers `server/` and every invocation
+# from the project root — including the test harness's per-test threads.
+[env]
+RUST_MIN_STACK = "16777216"

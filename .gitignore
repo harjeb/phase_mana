@@ -1,0 +1,22 @@
+node_modules/
+dist/
+target/
+core.*
+*.log
+card-images.config.json
+
+# Bulk resource data is not committed. Run scripts/fetch-resources.sh to pull it
+# from a ManaBrew checkout (see README). The two curated decks stay in the repo
+# because they differ from upstream; index.json lists which decks exist.
+public/preset_decks/*.json
+!public/preset_decks/index.json
+!public/preset_decks/starter_deck_animar.json
+!public/preset_decks/ramses_commander.json
+public/token_archive.json
+public/*.png
+public/*.ico
+ui/assets/
+
+# Audit output (regenerate with server/examples/audit_cards + docs/render_card_audit.py)
+docs/card-audit.json
+docs/card-audit-provenance.json

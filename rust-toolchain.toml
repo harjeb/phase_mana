@@ -1,0 +1,7 @@
+# Same channel as /home/jeb/code/phase, whose crates this project builds from
+# source and whose `rust-toolchain.toml` does not apply here: two sibling
+# checkouts, two toolchain files. Without this, a plain `cargo build` in this
+# directory picks the default channel and fails inside the engine.
+[toolchain]
+channel = "nightly-2026-04-19"
+components = ["rustfmt", "clippy"]

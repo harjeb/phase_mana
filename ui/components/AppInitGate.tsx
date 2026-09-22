@@ -1,0 +1,349 @@
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { t } from "@lingui/core/macro";
+import { useAppInitStore } from "@/stores/useAppInitStore";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAcknowledgement } from "@/hooks/useAcknowledgement";
+import { OnboardingWelcome, ONBOARDING_GUIDE_VERSION } from "@/components/OnboardingWelcome";
+import { OnboardingGuide } from "@/components/OnboardingGuide";
+import { BreweryBackdrop } from "@/components/BreweryBackdrop";
+import { TERMS_AND_CONDITIONS } from "@/lib/termsContent";
+import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/useAuthStore";
+const TERMS_STORAGE_KEY = "manabrew.termsAcceptance";
+const ONBOARDING_STORAGE_KEY = "manabrew.onboarding";
+const BAR_FILL_MS = 200;
+// Minimum dwell at the initial `idle` stage. Without it, a cache hit can
+// flash through every milestone in a single frame; a brief hold gives the
+// progress bar a chance to *start* at a recognizable position before the
+// first real stage event yanks it forward.
+const INITIAL_HOLD_MS = 300;
+/**
+ * Each stage maps to a milestone on the progress bar so the fill keeps
+ * moving forward visibly even on a warm load, where the app flashes through
+ * idle → assets → decks → ready in tens of milliseconds.
+ */
+const STAGE_PROGRESS: Record<string, number> = {
+  idle: 4,
+  assets: 35,
+  decks: 80,
+  ready: 100,
+};
+function stageTitle(stage: string): string {
+  switch (stage) {
+    case "idle":
+      return t`Starting`;
+    case "assets":
+      return t`Loading card data`;
+    case "decks":
+      return t`Loading decks`;
+    case "ready":
+      return t`Ready`;
+    default:
+      return t`Loading`;
+  }
+}
+const TERMS_LINK = /((?:github\.com|docs\.manabrew\.app|scryfall\.com)(?:[^\s,)]*[^\s,).])?)/g;
+function linkifyTerms(body: string) {
+  return body.split(TERMS_LINK).map((part, index) =>
+    index % 2 === 1 ? (
+      <a
+        key={part + index}
+        href={`https://${part}`}
+        target="_blank"
+        rel="noreferrer"
+        className="underline underline-offset-2"
+      >
+        {part}
+      </a>
+    ) : (
+      part
+    ),
+  );
+}
+// Prevents reanimating on re-mount
+let hasReleasedOnce = false;
+export function AppInitGate({ children }: { children: ReactNode }) {
+  const rawStage = useAppInitStore((s) => s.stage);
+  const { accepted: termsAccepted, accept: acceptTerms } = useAcknowledgement(
+    TERMS_STORAGE_KEY,
+    TERMS_AND_CONDITIONS.version,
+  );
+  const { accepted: onboardingDone, accept: completeOnboarding } = useAcknowledgement(
+    ONBOARDING_STORAGE_KEY,
+    ONBOARDING_GUIDE_VERSION,
+  );
+  const authStatus = useAuthStore((s) => s.status);
+  const handlePending = useAuthStore((s) => s.account?.handlePending ?? false);
+  const claimed = authStatus === "signedIn" && !handlePending;
+  const onboardingSatisfied = onboardingDone || claimed;
+  const [consent, setConsent] = useState(false);
+
+  useEffect(() => {
+    if (claimed && !onboardingDone) completeOnboarding();
+  }, [claimed, onboardingDone, completeOnboarding]);
+
+  const [minHoldPassed, setMinHoldPassed] = useState(hasReleasedOnce);
+  useEffect(() => {
+    if (minHoldPassed) return;
+    const t = window.setTimeout(() => setMinHoldPassed(true), INITIAL_HOLD_MS);
+    return () => window.clearTimeout(t);
+  }, [minHoldPassed]);
+  const stage = minHoldPassed ? rawStage : "idle";
+  const target = useMemo(() => STAGE_PROGRESS[stage] ?? 0, [stage]);
+  type Phase = "gating" | "releasing" | "done";
+  const [phase, setPhase] = useState<Phase>(() => (hasReleasedOnce ? "done" : "gating"));
+  const HOLD_MS = 300;
+  const GATE_MS = 600;
+  const CHILD_DELAY_MS = 400;
+  const CHILD_MS = 700;
+  const EXIT_MS = Math.max(GATE_MS, CHILD_DELAY_MS + CHILD_MS); // 1100ms
+  const RELEASE_DELAY_MS = BAR_FILL_MS + HOLD_MS;
+  useEffect(() => {
+    if (phase === "done") return;
+    if (stage !== "ready") return;
+    if (!termsAccepted || !onboardingSatisfied) return;
+    const release = window.setTimeout(() => setPhase("releasing"), RELEASE_DELAY_MS);
+    const done = window.setTimeout(() => {
+      setPhase("done");
+      hasReleasedOnce = true;
+    }, RELEASE_DELAY_MS + EXIT_MS);
+    return () => {
+      window.clearTimeout(release);
+      window.clearTimeout(done);
+    };
+  }, [stage, phase, termsAccepted, onboardingSatisfied, RELEASE_DELAY_MS, EXIT_MS]);
+
+  // The companion is pure UI with no engine dependency, so never block it behind
+  // the worker boot — which can't initialise without cross-origin isolation
+  // (e.g. an iOS PWA served over plain http). Render it immediately when it's
+  // the entry route. The auth callback must also never be gated: an OAuth
+  // redirect can return while terms or onboarding are still pending, and the
+  // callback route is what exchanges the code.
+  if (
+    typeof window !== "undefined" &&
+    (window.location.pathname.startsWith("/companion") ||
+      window.location.pathname.startsWith("/auth/callback"))
+  ) {
+    return <>{children}</>;
+  }
+  const title = stageTitle(stage);
+  const pct = Math.round(target);
+  const showTerms = stage === "ready" && !termsAccepted;
+  const showOnboarding = stage === "ready" && termsAccepted && !onboardingSatisfied;
+
+  const welcomeHeader = (
+    <div className="flex flex-col items-center gap-2 text-center">
+      <p className="font-mono text-[0.65rem] uppercase tracking-[0.55em] text-muted-foreground">
+        {t`Welcome to`}
+      </p>
+      <h1 className="font-serif text-5xl font-light tracking-[0.08em] text-foreground md:text-6xl">
+        Manabrew
+      </h1>
+      <div
+        aria-hidden
+        className="mt-2 h-px w-24 bg-gradient-to-r from-transparent via-foreground/50 to-transparent"
+      />
+    </div>
+  );
+
+  const exiting = phase === "releasing";
+  const showChildren = phase !== "gating";
+  const childWrapper = (
+    <div
+      style={
+        exiting
+          ? {
+              animation: `manabrew-arrive ${CHILD_MS}ms ${CHILD_DELAY_MS}ms cubic-bezier(0.16, 1, 0.3, 1) both`,
+              transformOrigin: "center center",
+            }
+          : { display: "contents" }
+      }
+    >
+      {showChildren ? children : null}
+    </div>
+  );
+  if (phase === "done") return childWrapper;
+  return (
+    <>
+      {childWrapper}
+      <div
+        className="fixed inset-0 z-50 overflow-hidden bg-background text-foreground"
+        style={
+          exiting
+            ? {
+                animation: `manabrew-dive-in ${GATE_MS}ms cubic-bezier(0.55, 0, 0.85, 0) forwards`,
+                transformOrigin: "center center",
+              }
+            : undefined
+        }
+      >
+        <BreweryBackdrop />
+
+        <div className="absolute inset-0 z-10 overflow-y-auto">
+          <div className="flex min-h-full w-full flex-col items-center justify-center gap-10 px-8 py-10">
+            {/* No `filter` here: Firefox (ESR 140 and older, bug 2011747) drops
+                any descendant that uses `backdrop-filter`, which hid the
+                onboarding card. The card carries its own `shadow-2xl`. */}
+            <div
+              className={cn(
+                "flex w-full flex-col items-center gap-10",
+                showOnboarding ? "max-w-5xl" : "max-w-2xl",
+              )}
+            >
+              {showTerms ? (
+                <>
+                  {welcomeHeader}
+                  <div className="w-full space-y-5">
+                    <div className="space-y-1 text-center">
+                      <p className="font-mono text-[0.6rem] uppercase tracking-[0.45em] text-muted-foreground/80">
+                        {TERMS_AND_CONDITIONS.title}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {linkifyTerms(TERMS_AND_CONDITIONS.intro)}
+                      </p>
+                    </div>
+
+                    <ScrollArea className="h-[38dvh] max-h-[360px]">
+                      <div className="space-y-4 pr-4 text-sm leading-relaxed">
+                        {TERMS_AND_CONDITIONS.sections.map((section) => (
+                          <section key={section.heading} className="space-y-1.5">
+                            <h3 className="text-sm font-semibold text-foreground">
+                              {section.heading}
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              {linkifyTerms(section.body)}
+                            </p>
+                          </section>
+                        ))}
+                      </div>
+                    </ScrollArea>
+
+                    <label className="flex cursor-pointer select-none items-start justify-center gap-2.5 text-sm">
+                      <Checkbox
+                        checked={consent}
+                        onCheckedChange={(value) => setConsent(value === true)}
+                        className="mt-0.5"
+                      />
+                      <span className="text-foreground">{t`I have read and agree to these terms`}</span>
+                    </label>
+
+                    <div className="flex flex-col items-center gap-3">
+                      <Button
+                        variant="primary"
+                        disabled={!consent}
+                        onClick={acceptTerms}
+                        className="min-w-[200px]"
+                      >
+                        {t`Accept and continue`}
+                      </Button>
+                      <p className="font-mono text-[0.55rem] uppercase tracking-[0.4em] text-muted-foreground/70">
+                        {t`Version ${TERMS_AND_CONDITIONS.version} · Updated ${TERMS_AND_CONDITIONS.lastUpdated}`}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              ) : showOnboarding ? (
+                <div className="grid w-full gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-0">
+                  <div className="flex flex-col items-center justify-center gap-8 lg:pr-14">
+                    {welcomeHeader}
+                    <div className="space-y-1 text-center">
+                      <p className="font-mono text-[0.6rem] uppercase tracking-[0.45em] text-muted-foreground/80">
+                        {t`Getting started`}
+                      </p>
+                    </div>
+                    <OnboardingGuide />
+                  </div>
+                  <div className="flex items-center lg:border-l lg:border-border/60 lg:pl-14">
+                    <div className="w-full rounded-2xl border border-border/60 bg-background/80 p-8 shadow-2xl backdrop-blur-md">
+                      <OnboardingWelcome onComplete={completeOnboarding} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {welcomeHeader}
+                  <div className="w-full space-y-5">
+                    <div className="flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-[0.4em] text-muted-foreground">
+                      <span className="truncate text-foreground/80">{title}</span>
+                      <span className="tabular-nums">{pct.toString().padStart(3, "0")}%</span>
+                    </div>
+
+                    <div className="relative h-3.5 w-full overflow-hidden rounded-full border border-border/80 bg-muted/40">
+                      <div
+                        className="relative h-full overflow-hidden rounded-full bg-gradient-to-r from-primary/70 via-primary to-primary/70 shadow-[inset_0_0_8px] shadow-primary/40 transition-[width] duration-200 ease-out"
+                        style={{ width: `${target}%` }}
+                      >
+                        <div
+                          aria-hidden
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-foreground/45 to-transparent"
+                          style={{ animation: "manabrew-shimmer 2.2s linear infinite" }}
+                        />
+                      </div>
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 rounded-full bg-primary blur-md transition-[left] duration-200 ease-out"
+                        style={{ left: `calc(${target}% - 0.5rem)` }}
+                      />
+                    </div>
+
+                    <p className="text-center font-mono text-[0.6rem] uppercase tracking-[0.45em] text-muted-foreground/80">
+                      {t`Connecting`}
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Inline keyframes scoped by a manabrew-* prefix. */}
+        <style>{`
+          @keyframes manabrew-shimmer {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+          }
+          /* "Dive in": gate races forward past the camera. Aggressive scale
+             so it actually feels like rushing motion (not a gentle zoom).
+             Holds opacity through most of the motion, then dumps to zero —
+             that's what reads as "the lens passes through" instead of
+             "an image fades". Filter blur ramps with motion. */
+          @keyframes manabrew-dive-in {
+            0% {
+              opacity: 1;
+              transform: scale(1);
+              filter: blur(0px);
+            }
+            55% {
+              opacity: 0.85;
+              filter: blur(14px);
+            }
+            100% {
+              opacity: 0;
+              transform: scale(2.6);
+              filter: blur(48px);
+            }
+          }
+          /* The app rises from depth as the gate races past. The 0% state
+             is held during CHILD_DELAY_MS (animation-fill-mode: both),
+             so by the time the gate has cleared the children are sitting
+             blurred and small — that's the moment we actually want to
+             see, since otherwise the gate hides the early frames. */
+          @keyframes manabrew-arrive {
+            0% {
+              opacity: 0;
+              transform: scale(0.88);
+              filter: blur(12px);
+            }
+            100% {
+              opacity: 1;
+              transform: scale(1);
+              filter: blur(0);
+            }
+          }
+        `}</style>
+      </div>
+    </>
+  );
+}

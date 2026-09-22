@@ -1,0 +1,112 @@
+import { useMemo } from "react";
+import {
+  PROMPT_CARD_MODAL_MAX_WIDTH_CLASS,
+  PROMPT_MODAL_HEIGHT_CLASS,
+} from "@/components/game/game.constants";
+import type { CardDto } from "@/protocol/game";
+import { useTheme } from "@/hooks/useTheme";
+import { useGameUIStore } from "@/stores/useGameUIStore";
+import { zoneLocationKey, type ZoneLocation, type ZoneViewMode } from "@/lib/zoneView";
+import { Modal } from "./Modal";
+import { DialogCardBrowser } from "./DialogCardBrowser";
+
+export interface ZoneViewerProps {
+  title: string;
+  cards: CardDto[];
+  mode: ZoneViewMode;
+  source?: ZoneLocation;
+  totalCount?: number;
+  pending?: boolean;
+  onClose: () => void;
+  onClickCard?: (cardId: string) => void;
+  clickableCardIds?: string[];
+  selectedCardIds?: string[];
+  clickLabel?: string;
+  selectedLabel?: string;
+  targetHostile?: boolean;
+  highlightedCardColors?: Record<string, string>;
+}
+const ACTION_LABELS: Record<ZoneViewMode, string> = {
+  browse: "Choose action",
+  cast: "Choose action",
+  target: "Choose this target",
+  cost: "Select for cost",
+  manual: "Put onto battlefield",
+};
+
+export function ZoneViewer({
+  title,
+  cards,
+  mode,
+  source,
+  totalCount,
+  pending,
+  onClose,
+  onClickCard,
+  clickableCardIds,
+  selectedCardIds,
+  clickLabel,
+  selectedLabel,
+  targetHostile,
+  highlightedCardColors,
+}: ZoneViewerProps) {
+  const theme = useTheme().gameTheme;
+  const key = zoneLocationKey(source, title);
+  const saveState = useGameUIStore((s) => s.saveZoneBrowserState);
+  const items = useMemo(() => {
+    const legal = new Set(clickableCardIds);
+    const selected = new Set(selectedCardIds);
+    return cards.map((card) => ({
+      id: card.id,
+      card,
+      selected: selected.has(card.id),
+      highlightColor: highlightedCardColors?.[card.id],
+      legal: !!onClickCard && (mode === "manual" || legal.has(card.id) || selected.has(card.id)),
+    }));
+  }, [cards, mode, onClickCard, clickableCardIds, selectedCardIds, highlightedCardColors]);
+  const color =
+    targetHostile === undefined
+      ? theme.cardRing
+      : targetHostile
+        ? theme.targeting.hostile
+        : theme.targeting.friendly;
+  return (
+    <Modal
+      onClose={onClose}
+      maxWidth={PROMPT_CARD_MODAL_MAX_WIDTH_CLASS}
+      className={PROMPT_MODAL_HEIGHT_CLASS}
+    >
+      <Modal.Header onClose={onClose}>
+        <h2 className="text-base font-semibold">{title}</h2>
+        <p className="text-xs text-muted-foreground">
+          {cards.length} visible card{cards.length === 1 ? "" : "s"}
+          {totalCount != null && totalCount > cards.length
+            ? ` · ${totalCount - cards.length} hidden`
+            : ""}
+        </p>
+      </Modal.Header>
+      <DialogCardBrowser
+        key={key}
+        items={items}
+        picker
+        activateOnClick={mode !== "manual"}
+        pending={pending}
+        intentColor={color}
+        initialState={useGameUIStore.getState().zoneBrowserStates[key]}
+        onStateChange={(state) => saveState(key, state)}
+        onActivate={
+          onClickCard
+            ? (item) => {
+                onClickCard(item.id);
+                if (mode === "browse" || mode === "cast") onClose();
+              }
+            : undefined
+        }
+        defaultActionLabel={clickLabel ?? ACTION_LABELS[mode]}
+        actionLabel={(item) =>
+          item.selected ? (selectedLabel ?? "Undo selection") : (clickLabel ?? ACTION_LABELS[mode])
+        }
+      />
+    </Modal>
+  );
+}

@@ -1,0 +1,173 @@
+import type { CardDto } from "@/protocol/game";
+import type { Deck, DeckCard } from "@/protocol/deck";
+import { resolveDeckName } from "@/lib/deckName";
+import { localCardImageUris } from "@/lib/localCardArt";
+import {
+  getCardTokenScripts,
+  peekArchivedToken,
+  tokenIdentityKey,
+} from "@/stores/useScryfallStore";
+
+function normalizeTokenName(name: string): string {
+  return name.toLowerCase().replace(/\s+token$/i, "");
+}
+
+export function asDeckCard(deck: Deck | undefined, gameCard: CardDto): DeckCard {
+  return resolveDeckCard(deck, gameCard) ?? missingDeckCard(gameCard);
+}
+
+export function asGameDeckCard(gameDecks: Record<string, Deck>, gameCard: CardDto): DeckCard {
+  const ownerMatch = resolveDeckCard(gameDecks[gameCard.ownerId], gameCard);
+  if (ownerMatch) return ownerMatch;
+  for (const [playerId, deck] of Object.entries(gameDecks)) {
+    if (playerId === gameCard.ownerId) continue;
+    const match = resolveDeckCard(deck, gameCard);
+    if (match) return match;
+  }
+  return missingDeckCard(gameCard);
+}
+
+function missingDeckCard(gameCard: CardDto): DeckCard {
+  const { name, setCode, cardNumber } = gameCard.identity;
+  const uris = localCardImageUris(name);
+  return {
+    identity: { id: "", name, setCode, cardNumber },
+    // With no deck record there is no Scryfall url to fall back to, so the
+    // local scan is all this card has. Empty when even the name slurs nowhere,
+    // which leaves the placeholder the caller already knows how to draw.
+    uris: uris ?? {},
+  } as DeckCard;
+}
+
+function resolveDeckCard(deck: Deck | undefined, gameCard: CardDto): DeckCard | null {
+  const { name, setCode, cardNumber, isToken, tokenScript } = gameCard.identity;
+  const pool = deck ? getDeckCardPool(deck) : [];
+  const exact =
+    setCode && cardNumber
+      ? pool.find(
+          (card) =>
+            card.identity.setCode.toLowerCase() === setCode.toLowerCase() &&
+            card.identity.cardNumber.toLowerCase() === cardNumber.toLowerCase(),
+        )
+      : undefined;
+  if (exact) return exact;
+  if (isToken) {
+    const exactToken = gameCard.isCopy ? null : peekArchivedToken({ setCode, cardNumber });
+    const semanticToken = tokenScript ? peekArchivedToken({ tokenScript }) : exactToken;
+    if (semanticToken && (tokenScript || exactToken?.identity.oracleId) && deck?.tokens) {
+      const key = tokenIdentityKey(semanticToken);
+      const customized = deck.tokens.find((token) => tokenIdentityKey(token) === key);
+      if (customized) return customized;
+    }
+    if (tokenScript && semanticToken) return semanticToken;
+    if (exactToken) return exactToken;
+    const target = normalizeTokenName(name);
+    const byName = pool.find(
+      (c) => c.identity.name === name || normalizeTokenName(c.identity.name) === target,
+    );
+    if (byName) return byName;
+    const token = peekArchivedToken({ name });
+    if (token) return token;
+  }
+  // Mirrors the engine's `get_by_card_name`, which splits on " // ".
+  const matchesName = (deckName: string) =>
+    deckName === name || deckName.split(" // ").includes(name);
+  const byName = pool.find((c) => matchesName(c.identity.name));
+  if (byName) return byName;
+  return null;
+}
+
+export function getDeckCardPool(deck: Deck): DeckCard[] {
+  return [
+    ...deck.cards,
+    ...deck.sideboard,
+    ...(deck.attractions ?? []),
+    ...(deck.contraptions ?? []),
+    ...(deck.schemes ?? []),
+    ...(deck.planes ?? []),
+    ...(deck.commanders ?? []),
+    ...(deck.companion ? [deck.companion] : []),
+    ...(deck.tokens ?? []),
+  ];
+}
+
+function getTokenSourceCards(deck: Deck): DeckCard[] {
+  return [
+    ...deck.cards,
+    ...deck.sideboard,
+    ...(deck.attractions ?? []),
+    ...(deck.contraptions ?? []),
+    ...(deck.schemes ?? []),
+    ...(deck.planes ?? []),
+    ...(deck.commanders ?? []),
+    ...(deck.companion ? [deck.companion] : []),
+    ...(deck.maybeboard ?? []),
+  ];
+}
+
+export function collectProducedTokenKeys(deck: Deck): Set<string> {
+  const out = new Set<string>();
+  for (const card of getTokenSourceCards(deck)) {
+    const tokenScripts = getCardTokenScripts(card.identity.name);
+    if (tokenScripts.length > 0) {
+      tokenScripts.forEach((script) => out.add(`script:${script}`));
+      continue;
+    }
+    for (const part of card.allParts ?? []) {
+      if (part.component !== "token") continue;
+      out.add(`name:${part.name.toLowerCase()}`);
+    }
+  }
+  return out;
+}
+
+export function deriveTokens(deck: Deck): DeckCard[] {
+  const seen = new Set<string>();
+  const out: DeckCard[] = [];
+  for (const card of getTokenSourceCards(deck)) {
+    const tokenScripts = getCardTokenScripts(card.identity.name);
+    if (tokenScripts.length > 0) {
+      let resolved = false;
+      for (const tokenScript of tokenScripts) {
+        const key = `script:${tokenScript}`;
+        if (seen.has(key)) continue;
+        const token = peekArchivedToken({ tokenScript });
+        if (!token) continue;
+        resolved = true;
+        seen.add(key);
+        out.push(token);
+      }
+      if (resolved) continue;
+    }
+    for (const part of card.allParts ?? []) {
+      if (part.component !== "token") continue;
+      const token = peekArchivedToken({ name: part.name });
+      if (!token) continue;
+      const key = tokenIdentityKey(token);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(token);
+    }
+  }
+  return out;
+}
+
+export function getDeckFingerprint(deck: Deck): string {
+  const tag = (section: string, list: DeckCard[]) =>
+    list.map((c) => `${section}:${c.identity.name}:${c.identity.setCode}`);
+  const serialized = [
+    ...tag("main", deck.cards),
+    ...tag("sideboard", deck.sideboard),
+    ...tag("attractions", deck.attractions ?? []),
+    ...tag("contraptions", deck.contraptions ?? []),
+    ...tag("schemes", deck.schemes ?? []),
+    ...tag("planes", deck.planes ?? []),
+    ...tag("commander", deck.commanders ?? []),
+  ].sort();
+  return JSON.stringify({
+    name: resolveDeckName(deck.name, deck.commanders),
+    format: deck.format ?? "standard",
+    commander: deck.commanders?.[0]?.identity.name ?? null,
+    cards: serialized,
+  });
+}

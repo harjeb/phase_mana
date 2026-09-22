@@ -1,0 +1,1995 @@
+/**
+ * Web platform implementation.
+ *
+ * This provides the backend for pure web deployments using WASM.
+ * The game engine runs in a Web Worker for non-blocking UI.
+ */
+
+import type { EngineGameStats } from "@/lib/engineTelemetry";
+import {
+  noteEngineThinkTime,
+  noteReplyFrameArrived,
+  noteReplyFrameHandled,
+} from "@/lib/engineTelemetry";
+import type {
+  IPlatformApi,
+  IGameApi,
+  IServerApi,
+  IStorageApi,
+  IEventBus,
+  PlatformFeature,
+  StartGameParams,
+  StartMultiplayerGameParams,
+  RespondParams,
+  RestoreSnapshotParams,
+  SendDirectiveParams,
+  ServerConnectParams,
+  CreateRoomParams,
+  JoinRoomParams,
+  ResumeRoomParams,
+  SetReadyParams,
+  SetDeckSelectionParams,
+  StartServerGameParams,
+  SetFormatParams,
+  SetMaxPlayersParams,
+  SpawnAiBotParams,
+  SendChatParams,
+  InviteToRoomParams,
+} from "./types";
+import {
+  DUPLICATE_USERNAME_ERROR_FRAGMENT,
+  SERVER_ERROR_CODE,
+  TOKEN_EXPIRED_ERROR_FRAGMENT,
+  type GameOutcomeReport,
+  type LocalGameKind,
+} from "@/types/server";
+import type { RoomRelayEnvelope, StateEnvelope } from "@/types/server";
+import { PROTOCOL_VERSION } from "@/protocol";
+import type {
+  ClientToServerMessage,
+  DirectiveInput,
+  Prompt,
+  PromptOutput,
+  StateUpdate,
+} from "@/protocol";
+import { APP_VERSION } from "@/lib/constants";
+import { logComms } from "@/lib/commsLog";
+import { resolveRelayIdentity, type RelayIdentity } from "@/lib/relayIdentity";
+import { getClientPlatform } from "./clientPlatform";
+import { rememberSpawnedBot, forgetSpawnedBot, clearSpawnedBots } from "@/lib/spawnedBots";
+import { isPromptLoggingEnabled } from "@/lib/debugPrompts";
+import { applyStateDelta, diffStateDelta } from "@/lib/stateDelta";
+import {
+  WebRtcPlane,
+  iceServersFrom,
+  planeForRoom,
+  webRtcEndpoint,
+  TRANSPORT_KIND_WEBRTC,
+  type PlaneMeasurement,
+  type RosterMember,
+} from "@/game/webrtcPlane";
+import { ForgeHostBridge } from "@/game/forgeHostBridge";
+import { usePreferencesStore } from "@/stores/usePreferencesStore";
+import {
+  FORGE_LAUNCHER_URL,
+  FORGE_WASM_URL,
+  isForgeWasmHostingEnabled,
+  setForgeWasmActive,
+} from "@/lib/forgeWasm";
+import forgeWorkerUrl from "@forge-wasm/forge-engine.worker.js?url";
+// The seat protocol lives with @manabrew/forge-wasm, which drives the same
+// worker, so there is one implementation rather than one per consumer.
+import {
+  createSeat,
+  deliverSeatDirective,
+  noteSeatMessage,
+  writeSeatMessage,
+  type ForgeSeat,
+} from "@forge-wasm/seat.js";
+
+const DEBUG_TRANSPORT = false;
+
+let wasmReady: Promise<typeof import("@/wasm/wasm")> | null = null;
+
+async function loadWasm(): Promise<typeof import("@/wasm/wasm")> {
+  if (!wasmReady) {
+    wasmReady = (async () => {
+      const wasm = await import("@/wasm/wasm");
+      await wasm.default();
+      return wasm;
+    })();
+  }
+  return wasmReady;
+}
+
+/**
+ * A seat the main thread answers, read by a worker so the engine never waits
+ * on an animation frame for an acknowledgement. Frames arrive in order; the
+ * seat's own bookkeeping (awaiting a response, a held directive) stays here,
+ * where the answers are written.
+ */
+function readSeat<T>(
+  seat: ForgeSeat,
+  onMessage: (message: T, json: string) => void,
+  onError: (error: unknown, json: string) => void,
+): Worker {
+  const worker = new Worker(new URL("../workers/seat-reader.worker.ts", import.meta.url), {
+    type: "module",
+  });
+  worker.onmessage = (event: MessageEvent<string>) => {
+    if (seat.cancelled) return;
+    const json = event.data;
+    try {
+      const message = JSON.parse(json) as T;
+      noteSeatMessage(seat, message);
+      onMessage(message, json);
+    } catch (error) {
+      onError(error, json);
+    }
+  };
+  worker.postMessage({ buffer: seat.buffer });
+  return worker;
+}
+
+const dlog = (...args: unknown[]) => {
+  if (isPromptLoggingEnabled()) console.log(...args);
+};
+
+// The window-level arrays the e2e scripts and benches read live for the tab,
+// across every game it plays, so they are rings: the newest DEBUG_RING entries
+// stay and the rest go. A long session otherwise grows them without bound.
+const DEBUG_RING = 4000;
+function ringPush<T>(ring: T[], item: T): void {
+  ring.push(item);
+  if (ring.length > DEBUG_RING * 2) ring.splice(0, ring.length - DEBUG_RING);
+}
+
+function describeBotFrame(raw: string): string {
+  try {
+    const p = JSON.parse(raw) as {
+      type?: string;
+      state?: {
+        kind?: string;
+        forPlayer?: string;
+        fromPlayer?: string;
+        prompt?: { input?: { type?: string } };
+      };
+    };
+    let d = p.type ?? "?";
+    if ((p.type === "StateUpdate" || p.type === "BroadcastState") && p.state) {
+      d += ` kind=${p.state.kind}`;
+      if (p.state.forPlayer) d += ` forPlayer=${p.state.forPlayer}`;
+      if (p.state.fromPlayer) d += ` fromPlayer=${p.state.fromPlayer}`;
+      if (p.state.prompt?.input?.type) d += ` promptType=${p.state.prompt.input.type}`;
+    }
+    return d;
+  } catch {
+    return "?";
+  }
+}
+
+interface WorkerCommand {
+  type: "command";
+  requestId: string;
+  command: string;
+  args?: Record<string, unknown>;
+}
+
+interface WorkerResponse {
+  type: "response";
+  requestId: string;
+  payload?: unknown;
+  error?: string;
+}
+
+interface WorkerEvent {
+  type: "event";
+  event: string;
+  payload: unknown;
+}
+
+type WorkerMessage = WorkerResponse | WorkerEvent;
+
+// A kind-tagged engine message read off a seat's SAB.
+type EngineMessage = {
+  kind?: string;
+  state?: unknown;
+  event?: unknown;
+  prompt?: unknown;
+  error?: unknown;
+};
+
+// One such message awaiting relay to the seat that owes an answer.
+type RelayMessage = {
+  forPlayer: string;
+  msg: EngineMessage & { kind: string };
+};
+
+/**
+ * Bridge for communicating with the game engine worker.
+ */
+const FORGE_ENGINE_COMMANDS = new Set([
+  "start_game",
+  "start_multiplayer_game",
+  "respond",
+  "end_game",
+  "get_prompt",
+  "get_game_view",
+  "restore_snapshot",
+  "wasm_init",
+  "ensure_card_data",
+  "ping",
+  "echo",
+]);
+
+class WorkerBridge {
+  private worker: Worker | null = null;
+  private pendingRequests = new Map<
+    string,
+    { resolve: (value: unknown) => void; reject: (error: Error) => void }
+  >();
+  private eventBus: WebEventBus;
+  private initPromise: Promise<void> | null = null;
+
+  workerIsForgeWasm = false;
+  private fallbackWorker: Worker | null = null;
+  private localSeat: ForgeSeat | null = null;
+  private seatReaders = new Map<ForgeSeat, Worker>();
+
+  private remoteSeats = new Map<string, ForgeSeat>();
+  private remotePlayerSlots = new Map<string, string>();
+  // Seats a Manabot plays, each in its own worker; the bridge never reads
+  // their buffers.
+  private localBotSlots = new Set<string>();
+  private localBotWorkers = new Map<string, Worker>();
+
+  get gameBuffer(): SharedArrayBuffer | null {
+    return this.localSeat?.buffer ?? null;
+  }
+
+  constructor(eventBus: WebEventBus) {
+    this.eventBus = eventBus;
+
+    eventBus.on<{ buffer: SharedArrayBuffer }>("game:sab", (payload) => {
+      const seat = createSeat(payload.buffer);
+      if (this.localSeat) this.dropSeat(this.localSeat);
+      this.localSeat = seat;
+      if (DEBUG_TRANSPORT) console.log("[WorkerBridge] Received local SAB, starting reader");
+      this.seatReaders.set(
+        seat,
+        readSeat<EngineMessage>(
+          seat,
+          (msg) => this.dispatchEngineMessage(msg),
+          (error) => console.error("[WorkerBridge] Failed to read SAB message:", error),
+        ),
+      );
+    });
+
+    // One SAB per non-host seat, tagged with its player slot; one poll
+    // loop each, plus the shared response listener installed below.
+    eventBus.on<{ buffer: SharedArrayBuffer; playerSlot: string }>("game:remote_sab", (payload) => {
+      const { playerSlot } = payload;
+      if (this.localBotSlots.has(playerSlot)) {
+        this.localBotWorkers.get(playerSlot)?.terminate();
+        const worker = new Worker(new URL("../workers/manabot.worker.ts", import.meta.url), {
+          type: "module",
+        });
+        worker.postMessage({ buffer: payload.buffer, playerSlot });
+        this.localBotWorkers.set(playerSlot, worker);
+        return;
+      }
+      const seat = createSeat(payload.buffer);
+      const previous = this.remoteSeats.get(playerSlot);
+      if (previous) this.dropSeat(previous);
+      this.remoteSeats.set(playerSlot, seat);
+      if (DEBUG_TRANSPORT)
+        console.log(`[WorkerBridge] Received remote SAB for ${playerSlot}, starting reader`);
+      this.seatReaders.set(
+        seat,
+        readSeat<RelayMessage["msg"]>(
+          seat,
+          (msg, json) => {
+            if (DEBUG_TRANSPORT)
+              console.log(`[transport←sab/seat ${playerSlot}] engine emitted:`, json);
+            this.eventBus.emit("game:relay_message", { forPlayer: playerSlot, msg });
+          },
+          (error) =>
+            console.error(`[WorkerBridge] Failed to read SAB message for ${playerSlot}:`, error),
+        ),
+      );
+    });
+
+    // The engine has nothing more to say once the game is over, so the bots
+    // parked on their seats can go.
+    eventBus.on("game:over", () => this.stopLocalBots());
+    eventBus.on("game:forced_end", () => this.stopLocalBots());
+
+    // Eager so a response can't arrive before the listener exists; it
+    // no-ops while remoteSeats is empty.
+    this.installRemoteResponseListener();
+  }
+
+  private dispatchEngineMessage(msg: EngineMessage): void {
+    // The seat reader has already parsed, so a hair of client work lands on
+    // the far side of the cut here; there is no wire on this path anyway.
+    if (msg?.kind === "state" || msg?.kind === "prompt" || msg?.kind === "display") {
+      noteReplyFrameArrived();
+    }
+    try {
+      this.applyEngineMessage(msg);
+    } finally {
+      noteReplyFrameHandled();
+    }
+  }
+
+  private applyEngineMessage(msg: EngineMessage): void {
+    logComms("engine", msg);
+    if (this.workerIsForgeWasm) {
+      const w = window as unknown as { __forgeFrames?: string[] };
+      w.__forgeFrames = w.__forgeFrames ?? [];
+      ringPush(
+        w.__forgeFrames,
+        `${msg?.kind}:${msg?.kind === "state" ? Object.keys((msg.state ?? {}) as object).join("|") : ""}`,
+      );
+    }
+    switch (msg?.kind) {
+      case "state":
+        this.eventBus.emit("game:state", msg.state);
+        break;
+      case "display":
+        this.eventBus.emit("game:display", msg.event);
+        break;
+      case "error":
+        this.eventBus.emit("game:error", msg.error);
+        break;
+      case "prompt": {
+        const w = window as unknown as {
+          __respondedAt?: number;
+          __promptTimings?: Array<{ ms: number; type?: string }>;
+        };
+        if (w.__respondedAt != null) {
+          w.__promptTimings = w.__promptTimings ?? [];
+          ringPush(w.__promptTimings, {
+            ms: performance.now() - w.__respondedAt,
+            type: (msg.prompt as { input?: { type?: string } })?.input?.type,
+          });
+          w.__respondedAt = undefined;
+        }
+        // The seat already noted the prompt and flushed any held directive.
+        this.eventBus.emit("game:prompt", msg.prompt);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Which seats Manabots take at the next table. Set before the engine
+   * starts, and kept across the worker swap `invoke` may do on the way there.
+   */
+  setLocalBotSlots(slots: Iterable<string>): void {
+    this.stopLocalBots();
+    this.localBotSlots = new Set(slots);
+  }
+
+  private dropSeat(seat: ForgeSeat): void {
+    seat.cancelled = true;
+    this.seatReaders.get(seat)?.terminate();
+    this.seatReaders.delete(seat);
+  }
+
+  private stopLocalBots(): void {
+    for (const worker of this.localBotWorkers.values()) worker.terminate();
+    this.localBotWorkers.clear();
+  }
+
+  setEnginePlayerNames(playerNames: string[]): void {
+    this.remotePlayerSlots = new Map(
+      playerNames.map((username, index) => [username, `player-${index}`]),
+    );
+  }
+
+  private installRemoteResponseListener(): void {
+    this.eventBus.on<{
+      from_player: string;
+      state: Record<string, unknown>;
+    }>("server:state_update", (payload) => {
+      const kind = payload.state?.kind;
+      if (kind !== "response" && kind !== "directive") return;
+      const claimedSlot = payload.state.fromPlayer as string | undefined;
+      const authenticatedSlot = this.remotePlayerSlots.get(payload.from_player);
+      if (!claimedSlot || !authenticatedSlot || claimedSlot !== authenticatedSlot) {
+        console.error(`Rejected ${kind} with invalid player slot from ${payload.from_player}`);
+        return;
+      }
+      const seat = this.remoteSeats.get(authenticatedSlot);
+      if (DEBUG_TRANSPORT)
+        console.log(
+          `[MP] ${kind}← ${authenticatedSlot}`,
+          seat ? "(routed to SAB)" : "(NO SEAT — dropped)",
+        );
+      if (!seat) return;
+      if (kind === "directive") {
+        deliverSeatDirective(seat, payload.state.directive as DirectiveInput);
+        return;
+      }
+      const action = payload.state.action as PromptOutput | undefined;
+      if (!action) return;
+      const promptId = Number(payload.state.promptId ?? 0);
+      writeSeatMessage(seat, { kind: "response", promptId, action });
+    });
+  }
+
+  /**
+   * Write a response to the SharedArrayBuffer and wake the worker.
+   */
+  writeResponse(action: PromptOutput, promptId: number): void {
+    (window as unknown as { __respondedAt?: number }).__respondedAt = performance.now();
+    this.writeLocalMessage({ kind: "response", promptId, action });
+  }
+
+  /** Deliver a directive to the local seat: now if the engine is blocked on
+   *  the local prompt, otherwise at its next prompt. */
+  deliverLocalDirective(directive: DirectiveInput): void {
+    if (!this.localSeat) {
+      console.error("[WorkerBridge] No SharedArrayBuffer available for directive");
+      return;
+    }
+    deliverSeatDirective(this.localSeat, directive);
+  }
+
+  /** Deliver a directive to a remote seat by slot; drops unknown slots. */
+  deliverRemoteDirective(playerSlot: string, directive: DirectiveInput): void {
+    const seat = this.remoteSeats.get(playerSlot);
+    if (seat) deliverSeatDirective(seat, directive);
+  }
+
+  hasRemoteSeat(playerSlot: string): boolean {
+    return this.remoteSeats.has(playerSlot);
+  }
+
+  private writeLocalMessage(message: ClientToServerMessage): void {
+    if (!this.localSeat) {
+      console.error("[WorkerBridge] No SharedArrayBuffer available for response");
+      return;
+    }
+    writeSeatMessage(this.localSeat, message);
+  }
+
+  /**
+   * Initialize the worker lazily.
+   */
+  async init(forgeWasm = isForgeWasmHostingEnabled()): Promise<void> {
+    if (this.worker) return;
+
+    if (this.initPromise) {
+      return this.initPromise;
+    }
+
+    this.initPromise = this.doInit(forgeWasm);
+    return this.initPromise;
+  }
+
+  private async doInit(forgeWasm: boolean): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        // Create worker using Vite's worker import pattern. The worker
+        // kicks off `initWasm()` eagerly at module-load time and emits
+        // `worker:init { stage: 'ready' | 'error' }` when done — we wait
+        // for that event instead of pinging, so init has no command-level
+        // timeout to fight.
+        this.workerIsForgeWasm = forgeWasm;
+        setForgeWasmActive(forgeWasm);
+        this.worker = this.workerIsForgeWasm
+          ? new Worker(forgeWorkerUrl)
+          : new Worker(new URL("../workers/game-engine.worker.ts", import.meta.url), {
+              type: "module",
+            });
+
+        if (forgeWasm) {
+          const w = window as unknown as { __forgeLog?: string[] };
+          w.__forgeLog = w.__forgeLog ?? [];
+          type Decision = { ms: number; type: string; turns?: number; bot?: number };
+          const dec = window as unknown as { __engineDecisions?: Decision[] };
+          dec.__engineDecisions = dec.__engineDecisions ?? [];
+          this.eventBus.on<Decision>("forge:decision", (p) => {
+            if (!p) return;
+            if (dec.__engineDecisions) ringPush(dec.__engineDecisions, p);
+            // The engine's own measure of itself, which no other engine
+            // reports: the interval from the answer landing to the next
+            // prompt being ready, with no client polling in it.
+            noteEngineThinkTime(p.ms, p.turns ?? 0, p.bot);
+          });
+          // Forge prints Java stack traces a line at a time, which is hundreds
+          // of console entries for one message. Every line is kept for the
+          // tests; the console gets the message and a count of the frames
+          // under it.
+          let frames = 0;
+          this.eventBus.on<{ level?: string; text?: string }>("forge:log", (p) => {
+            const text = p?.text ?? "";
+            if (w.__forgeLog) ringPush(w.__forgeLog, text);
+            if (/^\s*(at\s|@)/.test(text)) {
+              frames += 1;
+              return;
+            }
+            if (frames > 0) {
+              console.log(`[forge] … ${frames} stack frame${frames === 1 ? "" : "s"}`);
+              frames = 0;
+            }
+            console.log("[forge]", text);
+          });
+        }
+
+        this.worker.onmessage = this.handleMessage.bind(this);
+        this.worker.onerror = (e) => {
+          console.error("[WorkerBridge] Worker error:", e);
+          const error = new Error(`Worker error: ${e.message}`);
+          reject(error);
+          for (const pending of this.pendingRequests.values()) pending.reject(error);
+          this.pendingRequests.clear();
+        };
+
+        const unsubscribe = this.eventBus.on<{ stage?: string; message?: string }>(
+          "worker:init",
+          (payload) => {
+            if (payload?.stage === "ready") {
+              unsubscribe();
+              if (DEBUG_TRANSPORT) console.log("[WorkerBridge] Worker reported ready");
+              resolve();
+            } else if (payload?.stage === "error") {
+              unsubscribe();
+              reject(new Error(payload.message ?? "Worker init failed"));
+            }
+          },
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  private handleMessage(e: MessageEvent<WorkerMessage>): void {
+    const message = e.data;
+
+    if (message.type === "response") {
+      const pending = this.pendingRequests.get(message.requestId);
+      if (pending) {
+        this.pendingRequests.delete(message.requestId);
+        if (message.error) {
+          pending.reject(new Error(message.error));
+        } else {
+          pending.resolve(message.payload);
+        }
+      }
+    } else if (message.type === "event") {
+      this.eventBus.emit(message.event, message.payload);
+    }
+  }
+
+  private queryWorker(): Worker {
+    if (this.fallbackWorker) return this.fallbackWorker;
+    const worker = new Worker(new URL("../workers/game-engine.worker.ts", import.meta.url), {
+      type: "module",
+    });
+    worker.onmessage = (e: MessageEvent<WorkerMessage>) => {
+      if (e.data?.type === "response") this.handleMessage(e);
+    };
+    this.fallbackWorker = worker;
+    return worker;
+  }
+
+  /**
+   * Invoke a command on the worker.
+   */
+  async invoke<T>(command: string, args?: Record<string, unknown>): Promise<T> {
+    const startsGame = command === "start_game" || command === "start_multiplayer_game";
+    let forgeWasm = this.worker ? this.workerIsForgeWasm : isForgeWasmHostingEnabled();
+    if (startsGame) forgeWasm = args?.engine === "Forge";
+    if (startsGame && this.worker && this.workerIsForgeWasm !== forgeWasm) {
+      this.terminate();
+    }
+    await this.init(forgeWasm);
+
+    if (startsGame && this.workerIsForgeWasm) {
+      args = { ...args, forgeLauncherUrl: FORGE_LAUNCHER_URL, forgeWasmUrl: FORGE_WASM_URL };
+    }
+
+    if (!this.worker) {
+      throw new Error("Worker not initialized");
+    }
+
+    // Forge answers the game itself. It has no implementation of the card
+    // database queries or the limited/draft surface, and answering those with
+    // `null` is what took the Limited page down with "Cannot read properties
+    // of null": route them to the Rust worker instead, which is the same
+    // engine that answers them when Forge is off.
+    const target =
+      this.workerIsForgeWasm && !FORGE_ENGINE_COMMANDS.has(command)
+        ? this.queryWorker()
+        : this.worker;
+
+    const requestId = crypto.randomUUID();
+
+    return new Promise((resolve, reject) => {
+      this.pendingRequests.set(requestId, {
+        resolve: resolve as (value: unknown) => void,
+        reject,
+      });
+
+      const message: WorkerCommand = {
+        type: "command",
+        requestId,
+        command,
+        args,
+      };
+
+      target.postMessage(message);
+
+      // start_game blocks for the whole game; everything else is a quick
+      // dispatch over a worker that has already finished initialization
+      // (we `await this.init()` above, which waits for the ready event).
+      // The query worker is the exception: its first card-data command pays
+      // for the whole archive download, which a Forge player never otherwise
+      // pays, and 30s is not enough for 34 MB on an ordinary connection.
+      const timeout =
+        command === "start_game" ? 3600000 : target === this.fallbackWorker ? 300000 : 30000;
+      setTimeout(() => {
+        if (this.pendingRequests.has(requestId)) {
+          this.pendingRequests.delete(requestId);
+          reject(new Error(`Command timed out: ${command}`));
+        }
+      }, timeout);
+    });
+  }
+
+  /**
+   * Terminate the worker.
+   */
+  terminate(): void {
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
+    }
+    if (this.localSeat) this.dropSeat(this.localSeat);
+    this.localSeat = null;
+    for (const seat of this.remoteSeats.values()) this.dropSeat(seat);
+    this.remoteSeats.clear();
+    this.remotePlayerSlots.clear();
+    this.stopLocalBots();
+    // Response listener stays installed — terminate() is per-game, and a
+    // second game on this (singleton) bridge still needs it.
+    this.pendingRequests.clear();
+    this.initPromise = null;
+    setForgeWasmActive(false);
+    // The query worker holds no game state, so it survives a game ending and
+    // is only torn down with the bridge itself.
+  }
+}
+
+// Web Game API (WASM-based)
+
+class WebGameApi implements IGameApi {
+  private bridge: WorkerBridge;
+  private serverApi: WebServerApi | null = null;
+  private isMultiplayer = false;
+  private isHost = false;
+  private myPlayerSlot: string | null = null;
+
+  constructor(bridge: WorkerBridge) {
+    this.bridge = bridge;
+  }
+
+  setServerApi(server: WebServerApi): void {
+    this.serverApi = server;
+  }
+
+  async startGame(params: StartGameParams): Promise<string> {
+    this.bridge.setLocalBotSlots(
+      params.engine === "Forge"
+        ? (params.opponentDecks?.length ? params.opponentDecks : [params.deck]).map(
+            (_, index) => `player-${index + 1}`,
+          )
+        : [],
+    );
+    return this.bridge.invoke<string>("start_game", {
+      deck: params.deck,
+      startingLife: params.startingLife,
+      commanderName: params.commanderName,
+      opponentDecks: params.opponentDecks,
+      engine: params.engine,
+    });
+  }
+
+  async startMultiplayerGame(params: StartMultiplayerGameParams): Promise<void> {
+    this.isMultiplayer = true;
+    this.isHost = params.localIsHost;
+    this.myPlayerSlot = `player-${params.enginePlayerIndex}`;
+
+    if (params.localIsHost) {
+      this.serverApi?.setEnginePlayerNames(params.playerNames);
+      // Every seat here is a person or a Forge AI; a Manabot slot left over
+      // from a solo game (the engine validation plays one) would take a
+      // guest's seat.
+      this.bridge.setLocalBotSlots([]);
+      // Host runs the engine; the worker posts back one SAB per remote
+      // seat (see the game:remote_sab handler in WorkerBridge).
+      await this.bridge.invoke("start_multiplayer_game", {
+        decks: params.decks,
+        commanderNames: params.commanderNames,
+        playerNames: params.playerNames,
+        enginePlayerIndex: params.enginePlayerIndex,
+        startingLife: params.startingLife,
+        engine: params.engine,
+      });
+      this.bridge.setEnginePlayerNames(params.playerNames);
+    }
+    // Non-host: prompts arrive via game:remote_prompt WebSocket events.
+    // Responses are sent via BroadcastState WebSocket relay.
+  }
+
+  async respond(params: RespondParams): Promise<void> {
+    if (this.isMultiplayer && !this.isHost && this.serverApi) {
+      // Non-host multiplayer: relay response via WebSocket to the host
+      const fromPlayer = params.playerSlot ?? this.myPlayerSlot ?? "player-0";
+      const envelope: StateEnvelope = {
+        kind: "response",
+        fromPlayer,
+        promptId: params.promptId,
+        action: params.action,
+      };
+      dlog(
+        `[resume-wire] guest respond → broadcasting response as ${fromPlayer}: ${params.action.type}`,
+      );
+      this.serverApi.broadcastState(envelope);
+    } else if (this.bridge.gameBuffer) {
+      // Host or single-player: write response to local SharedArrayBuffer
+      this.bridge.writeResponse(params.action, params.promptId);
+    } else {
+      await this.bridge.invoke("respond", {
+        action: params.action,
+        playerSlot: params.playerSlot,
+        promptId: params.promptId,
+      });
+    }
+  }
+
+  async sendDirective(params: SendDirectiveParams): Promise<void> {
+    if (this.isMultiplayer && !this.isHost && this.serverApi) {
+      // Non-host multiplayer: relay the directive to whoever hosts the engine.
+      await this.serverApi.broadcastState({
+        kind: "directive",
+        fromPlayer: params.playerSlot,
+        directive: params.directive,
+      });
+    } else if (this.bridge.hasRemoteSeat(params.playerSlot)) {
+      // Host conceding an abandoned relay seat.
+      this.bridge.deliverRemoteDirective(params.playerSlot, params.directive);
+    } else {
+      // Host or single-player conceding the local seat.
+      this.bridge.deliverLocalDirective(params.directive);
+    }
+  }
+
+  async endGame(): Promise<void> {
+    this.isMultiplayer = false;
+    this.isHost = false;
+    this.myPlayerSlot = null;
+    if (this.bridge.gameBuffer) {
+      this.bridge.terminate();
+      return;
+    }
+    await this.bridge.invoke("end_game");
+  }
+
+  async restoreSnapshot(params: RestoreSnapshotParams): Promise<void> {
+    await this.bridge.invoke("restore_snapshot", {
+      checkpointId: params.checkpointId,
+    });
+  }
+
+  async getPrompt(): Promise<Prompt | null> {
+    return this.bridge.invoke<Prompt | null>("get_prompt");
+  }
+}
+
+// Web Storage API (localStorage-based, upgradeable to IndexedDB)
+
+class WebStorageApi implements IStorageApi {
+  private prefix = "manabrew:";
+
+  async get<T>(key: string): Promise<T | null> {
+    const item = localStorage.getItem(this.prefix + key);
+    if (item === null) return null;
+    try {
+      return JSON.parse(item) as T;
+    } catch {
+      return null;
+    }
+  }
+
+  async set<T>(key: string, value: T): Promise<void> {
+    localStorage.setItem(this.prefix + key, JSON.stringify(value));
+  }
+
+  async remove(key: string): Promise<void> {
+    localStorage.removeItem(this.prefix + key);
+  }
+
+  async keys(): Promise<string[]> {
+    const allKeys = Object.keys(localStorage);
+    return allKeys.filter((k) => k.startsWith(this.prefix)).map((k) => k.slice(this.prefix.length));
+  }
+}
+
+// Web Event Bus (pure JS implementation)
+
+class WebEventBus implements IEventBus {
+  private listeners = new Map<string, Set<(payload: unknown) => void>>();
+
+  on<T>(event: string, handler: (payload: T) => void): () => void {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set());
+    }
+
+    const handlers = this.listeners.get(event)!;
+    const typedHandler = handler as (payload: unknown) => void;
+    handlers.add(typedHandler);
+
+    return () => {
+      handlers.delete(typedHandler);
+      if (handlers.size === 0) {
+        this.listeners.delete(event);
+      }
+    };
+  }
+
+  emit<T>(event: string, payload: T): void {
+    const handlers = this.listeners.get(event);
+    if (handlers) {
+      handlers.forEach((h) => h(payload));
+    }
+  }
+}
+
+// Web Server API (WebSocket-based multiplayer)
+
+interface BotEntry {
+  ws: WebSocket | null;
+  stopped: boolean;
+  attempt: number;
+  reconnectTimer: ReturnType<typeof setTimeout> | null;
+}
+
+const RECONNECT_BACKOFF_MS = [1000, 2000, 4000, 8000, 16000, 30000];
+const KEEPALIVE_INTERVAL_MS = 4_000;
+// A half-open socket (peer reset seen only by the relay) stays writable here, so
+// silence is the only signal the connection is gone. The relay answers every Ping.
+const KEEPALIVE_SILENCE_MS = 10_000;
+
+class WebServerApi implements IServerApi {
+  private ws: WebSocket | null = null;
+  private eventBus: WebEventBus;
+  private relayUrl: string | null = null;
+  private serverPassword: string | null = null;
+  private authedUsername: string | null = null;
+  private sessionIdentity: RelayIdentity | null = null;
+  private sessionTokenRejected = false;
+  private bots = new Map<string, BotEntry>();
+  private keepaliveTimer: ReturnType<typeof setInterval> | null = null;
+  private lastInboundAt = 0;
+  private lastKeepaliveTickAt = 0;
+  private connectParams: ServerConnectParams | null = null;
+  private connectedAt: number | null = null;
+  private manualDisconnect = false;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+  private reconnectAttempt = 0;
+  private serverShutdownPending: { reconnectInS: number } | null = null;
+  private lastRelayStates = new Map<
+    string,
+    { state: StateUpdate; json: string; fingerprint: string }
+  >();
+  private relayStateSequence = 0;
+  private deltaBases = new Map<string, { state: StateUpdate; fingerprint: string }>();
+  private lastRelayDisplay: string | null = null;
+  private resumeToken: string | null = null;
+  private pendingRelayPrompts = new Map<string, Record<string, unknown>>();
+  private enginePlayerNames: string[] = [];
+  private webrtc: WebRtcPlane | null = null;
+  private peerSignalling = false;
+  private forgeHostBridge: ForgeHostBridge | null = null;
+  private announcedRoom: string | null = null;
+  private relayRttMs: number | null = null;
+  private planeQualityReporting = false;
+  private pingSentAt: number | null = null;
+  private directTransportOptIn = usePreferencesStore.getState().directTransport;
+  private roomTransport = false;
+  private currentRoomId: string | null = null;
+
+  constructor(eventBus: WebEventBus) {
+    this.eventBus = eventBus;
+
+    usePreferencesStore.subscribe((prefs) => {
+      if (prefs.directTransport === this.directTransportOptIn) return;
+      this.directTransportOptIn = prefs.directTransport;
+      this.onDirectTransportPreference();
+    });
+
+    // Relay engine messages (state/display/prompt) to remote players via WebSocket.
+    eventBus.on<RelayMessage>("game:relay_message", ({ forPlayer, msg }) => {
+      if (msg.kind === "state") {
+        const state = msg.state as StateUpdate;
+        const json = JSON.stringify(state);
+        const previous = this.lastRelayStates.get(forPlayer);
+        if (json === previous?.json) return;
+        // Every later patch is against what this seat was last *sent*, so the
+        // base only moves once the send is going out: recording an unsent state
+        // would leave the seat patching from a board it never received.
+        const targetPlayer = this.enginePlayerName(forPlayer);
+        if (!targetPlayer) return;
+        const patch = previous ? diffStateDelta(previous.state, state) : undefined;
+        if (previous && patch === undefined) return;
+        const fingerprint = `browser-${++this.relayStateSequence}`;
+        this.lastRelayStates.set(forPlayer, { state, json, fingerprint });
+        void this.broadcastState(
+          previous
+            ? { kind: "stateDelta", forPlayer, base: previous.fingerprint, fingerprint, patch }
+            : { kind: "state", forPlayer, state, fingerprint },
+          targetPlayer,
+        );
+      } else if (msg.kind === "display") {
+        const json = JSON.stringify(msg.event);
+        if (json === this.lastRelayDisplay) return;
+        this.lastRelayDisplay = json;
+        this.broadcastState({ kind: "display", event: msg.event });
+      } else if (msg.kind === "prompt") {
+        const envelope = { kind: "prompt", forPlayer, prompt: msg.prompt };
+        this.pendingRelayPrompts.set(forPlayer, envelope);
+        const targetPlayer = this.enginePlayerName(forPlayer);
+        if (targetPlayer) void this.broadcastState(envelope, targetPlayer);
+      } else if (msg.kind === "error") {
+        const targetPlayer = this.enginePlayerName(forPlayer);
+        if (targetPlayer) {
+          void this.broadcastState({ kind: "error", forPlayer, error: msg.error }, targetPlayer);
+        }
+      }
+    });
+  }
+
+  setEnginePlayerNames(playerNames: string[]): void {
+    this.enginePlayerNames = [...playerNames];
+  }
+
+  private enginePlayerName(playerSlot: string): string | undefined {
+    const index = Number(playerSlot.replace("player-", ""));
+    const playerName = Number.isInteger(index) ? this.enginePlayerNames[index] : undefined;
+    if (!playerName) console.error(`No relay player mapped for engine slot ${playerSlot}`);
+    return playerName;
+  }
+
+  private enginePlayerSlot(playerName: string): string | undefined {
+    const index = this.enginePlayerNames.indexOf(playerName);
+    return index >= 0 ? `player-${index}` : undefined;
+  }
+
+  async connect(params: ServerConnectParams): Promise<void> {
+    await this.disconnect();
+    this.manualDisconnect = false;
+    this.connectParams = params;
+    this.reconnectAttempt = 0;
+    this.sessionIdentity = null;
+    this.sessionTokenRejected = false;
+    return this.openSocket(params);
+  }
+
+  private async openSocket(params: ServerConnectParams): Promise<void> {
+    const forceRemint = this.sessionTokenRejected;
+    this.sessionTokenRejected = false;
+    const identity = await resolveRelayIdentity(this.sessionIdentity, params.username, forceRemint);
+    this.sessionIdentity = identity;
+    const { proof, username } = identity;
+    this.authedUsername = username;
+    const url = buildServerUrl(params);
+    this.relayUrl = url;
+    this.serverPassword = params.password;
+
+    return new Promise((resolve, reject) => {
+      const socket = new WebSocket(url);
+      this.ws = socket;
+
+      socket.onopen = () => {
+        if (this.ws !== socket) return;
+        this.connectedAt = Date.now();
+        this.send({
+          type: "Authenticate",
+          username,
+          password: params.password,
+          identity: proof,
+          client_platform: getClientPlatform(),
+          client_version: APP_VERSION,
+        });
+        this.startKeepalive();
+        resolve();
+      };
+
+      socket.onerror = () => {
+        reject(new Error(`Failed to connect to ${url}`));
+      };
+
+      socket.onclose = (event) => {
+        if (this.ws !== socket) return;
+        this.handleSocketClose(event);
+      };
+
+      socket.onmessage = (e: MessageEvent) => {
+        if (this.ws !== socket) return;
+        this.lastInboundAt = Date.now();
+        if (typeof e.data !== "string") return;
+        // Before the parse: a state frame is tens of kilobytes, and parsing
+        // it is this machine's work, not the wire's.
+        const frameAt = performance.now();
+        try {
+          const msg = JSON.parse(e.data);
+          this.handleServerMessage(msg, frameAt, e.data);
+        } catch {
+          // Ignore malformed messages
+        } finally {
+          // Store updates run inside the emit, so the frame's work ends here.
+          noteReplyFrameHandled();
+        }
+      };
+    });
+  }
+
+  private handleSocketClose(event: { code: number; reason: string; wasClean: boolean }): void {
+    const connectedForS =
+      this.connectedAt !== null ? Math.round((Date.now() - this.connectedAt) / 1000) : null;
+    const shutdownPending = this.serverShutdownPending;
+    console.warn("[relay-disconnect]", {
+      code: event.code,
+      reason: event.reason,
+      wasClean: event.wasClean,
+      connected_for_s: connectedForS,
+      visibility: typeof document !== "undefined" ? document.visibilityState : "unknown",
+      hadServerShutdown: shutdownPending !== null,
+    });
+
+    this.stopKeepalive();
+    this.ws = null;
+    this.connectedAt = null;
+
+    if (this.manualDisconnect) {
+      this.eventBus.emit("server:disconnected", { terminal: true });
+      return;
+    }
+
+    if (this.connectParams === null) {
+      this.eventBus.emit("server:disconnected", { terminal: true });
+      return;
+    }
+
+    if (shutdownPending !== null) {
+      this.serverShutdownPending = null;
+      this.scheduleReconnect("server-shutdown", shutdownPending.reconnectInS * 1000);
+      return;
+    }
+
+    this.scheduleReconnect("network", this.nextBackoffMs());
+  }
+
+  private nextBackoffMs(): number {
+    const idx = Math.min(this.reconnectAttempt, RECONNECT_BACKOFF_MS.length - 1);
+    const base = RECONNECT_BACKOFF_MS[idx]!;
+    const jitter = base * (Math.random() * 0.4 - 0.2);
+    return Math.max(250, Math.round(base + jitter));
+  }
+
+  private scheduleReconnect(reason: "network" | "server-shutdown", delayMs: number): void {
+    this.clearReconnectTimer();
+    this.reconnectAttempt += 1;
+    this.eventBus.emit("server:reconnecting", {
+      phase: "reconnecting" as const,
+      attempt: this.reconnectAttempt,
+      delayMs,
+      reason,
+    });
+    this.reconnectTimer = setTimeout(() => {
+      void this.tryReconnect();
+    }, delayMs);
+  }
+
+  private async tryReconnect(): Promise<void> {
+    this.reconnectTimer = null;
+    const params = this.connectParams;
+    if (params === null || this.manualDisconnect) {
+      return;
+    }
+    try {
+      await this.openSocket(params);
+      this.reconnectAttempt = 0;
+      this.eventBus.emit("server:reconnecting", { phase: "idle" as const, attempt: 0 });
+    } catch (e) {
+      console.warn("[relay-disconnect] reconnect attempt failed", e);
+      this.scheduleReconnect("network", this.nextBackoffMs());
+    }
+  }
+
+  private clearReconnectTimer(): void {
+    if (this.reconnectTimer !== null) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+  }
+
+  private startKeepalive(): void {
+    this.stopKeepalive();
+    this.lastInboundAt = Date.now();
+    this.lastKeepaliveTickAt = Date.now();
+    this.keepaliveTimer = setInterval(() => {
+      const now = Date.now();
+      const sinceTick = now - this.lastKeepaliveTickAt;
+      this.lastKeepaliveTickAt = now;
+      if (this.ws?.readyState !== WebSocket.OPEN) return;
+      // A background tab throttles timers to roughly once a minute, so a late tick
+      // says nothing about the socket. Re-baseline instead of reading it as death.
+      if (sinceTick > KEEPALIVE_INTERVAL_MS * 2) {
+        this.lastInboundAt = now;
+      } else if (now - this.lastInboundAt > KEEPALIVE_SILENCE_MS) {
+        this.failStaleSocket();
+        return;
+      }
+      this.pingSentAt = now;
+      this.send({ type: "Ping" });
+    }, KEEPALIVE_INTERVAL_MS);
+  }
+
+  private failStaleSocket(): void {
+    const ws = this.ws;
+    if (ws === null) return;
+    ws.onclose = null;
+    ws.onerror = null;
+    ws.onmessage = null;
+    ws.close();
+    this.handleSocketClose({ code: 4000, reason: "keepalive timeout", wasClean: false });
+  }
+
+  private stopKeepalive(): void {
+    if (this.keepaliveTimer !== null) {
+      clearInterval(this.keepaliveTimer);
+      this.keepaliveTimer = null;
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    this.manualDisconnect = true;
+    this.clearReconnectTimer();
+    this.serverShutdownPending = null;
+    this.reconnectAttempt = 0;
+    this.connectParams = null;
+    this.sessionIdentity = null;
+    this.sessionTokenRejected = false;
+    this.stopKeepalive();
+    this.stopAllBots();
+    const ws = this.ws;
+    this.ws = null;
+    this.relayUrl = null;
+    this.serverPassword = null;
+    this.connectedAt = null;
+    if (!ws || ws.readyState === WebSocket.CLOSED) return;
+    // Wait for the actual close event before resolving. Resolving on
+    // ws.close() alone races against the server still cleaning up the
+    // session, so Settings "Save & Reconnect" (disconnect → connect)
+    // would race the new authenticate against the previous session and
+    // manabrew-server rejected it as a duplicate.
+    await new Promise<void>((resolve) => {
+      const done = () => {
+        ws.removeEventListener("close", done);
+        ws.removeEventListener("error", done);
+        resolve();
+      };
+      ws.addEventListener("close", done);
+      ws.addEventListener("error", done);
+      ws.close();
+    });
+    this.eventBus.emit("server:disconnected", { terminal: true });
+  }
+
+  async listRooms(): Promise<void> {
+    this.send({ type: "ListRooms" });
+  }
+
+  async listPlayers(): Promise<void> {
+    this.send({ type: "ListPlayers" });
+  }
+
+  async setLocalGame(kind: LocalGameKind | null): Promise<void> {
+    this.send({ type: "SetLocalGame", kind });
+  }
+
+  async sendChat(params: SendChatParams): Promise<void> {
+    this.send({ type: "SendChat", scope: params.scope, text: params.text });
+  }
+
+  async inviteToRoom(params: InviteToRoomParams): Promise<void> {
+    this.send({ type: "InviteToRoom", username: params.username });
+  }
+
+  async createRoom(params: CreateRoomParams): Promise<string | null> {
+    if (params.engine === "Forge" && !isForgeWasmHostingEnabled()) {
+      throw new Error("Forge engine is not supported on the web");
+    }
+    this.send({
+      type: "CreateRoom",
+      room_name: params.roomName,
+      max_players: params.maxPlayers,
+      format: params.format,
+      protocol_version: PROTOCOL_VERSION,
+      hosted: params.hosted ?? false,
+      engine: params.engine ?? "Manabrew",
+      draft_config: params.draftConfig ?? null,
+      sealed_config: params.sealedConfig ?? null,
+      reconnect_timeout_s: params.reconnectTimeoutS ?? null,
+      password: params.password ?? null,
+      table_style: params.tableStyle ?? null,
+    });
+    return null;
+  }
+
+  async stopRoom(): Promise<void> {
+    // No embedded room host on web — the relay owns room lifecycle.
+  }
+
+  async joinRoom(params: JoinRoomParams): Promise<void> {
+    this.send({
+      type: "JoinRoom",
+      room_id: params.roomId,
+      observe: params.observe ?? false,
+      password: params.password ?? null,
+    });
+  }
+
+  async resumeRoom(params: ResumeRoomParams): Promise<void> {
+    if (!this.resumeToken) {
+      console.warn("[WebServerApi] Cannot resume room: no resume token");
+      return;
+    }
+    this.send({ type: "ResumeRoom", ...params, resume_token: this.resumeToken });
+  }
+
+  async leaveRoom(): Promise<void> {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      throw new Error("Cannot leave room while disconnected.");
+    }
+    this.stopAllBots();
+    clearSpawnedBots();
+    this.announcedRoom = null;
+    this.currentRoomId = null;
+    this.dropWebRtcPlane();
+    this.send({ type: "LeaveRoom" });
+  }
+
+  async setReady(params: SetReadyParams): Promise<void> {
+    this.send({ type: "SetReady", ready: params.ready });
+  }
+
+  async setDeckSelection(params: SetDeckSelectionParams): Promise<void> {
+    this.send({
+      type: "SetDeckSelection",
+      deck_name: params.deckName,
+      deck: params.deck,
+      published_deck_id: params.publishedDeckId ?? null,
+      commander_name: params.commanderName,
+      avatar_url: params.avatarUrl ?? null,
+    });
+  }
+
+  async setFormat(params: SetFormatParams): Promise<void> {
+    this.send({ type: "SetFormat", format: params.format });
+  }
+
+  async setMaxPlayers(params: SetMaxPlayersParams): Promise<void> {
+    this.send({ type: "SetMaxPlayers", max_players: params.maxPlayers });
+  }
+
+  async startGame(params?: StartServerGameParams): Promise<void> {
+    this.send({ type: "StartGame", format: params?.format ?? null });
+  }
+
+  async endGame(gameId: string): Promise<void> {
+    this.stopAllBots();
+    clearSpawnedBots();
+    this.send({ type: "EndGame", game_id: gameId });
+  }
+
+  async reportEngineStats(stats: EngineGameStats, gameId?: string | null): Promise<void> {
+    // `send` swallows a closed socket, which for a report means losing it
+    // silently: the caller queues for the hub only when this rejects, and a
+    // game that ends with the relay already gone is exactly the case the queue
+    // exists for.
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      throw new Error("Relay is not connected; queue the engine report instead.");
+    }
+    this.send({ type: "ReportEngineStats", game_id: gameId ?? null, stats });
+  }
+
+  async reportGameOutcome(gameId: string, outcome: GameOutcomeReport): Promise<void> {
+    this.send({ type: "ReportGameOutcome", game_id: gameId, outcome });
+  }
+
+  async requestResync(): Promise<void> {
+    this.send({ type: "RequestResync" });
+  }
+
+  async broadcastState(state: Record<string, unknown>, targetPlayer?: string): Promise<void> {
+    if (this.webrtc?.trySend(state, targetPlayer)) return;
+    this.send({ type: "BroadcastState", state, target_player: targetPlayer });
+  }
+
+  async sendRoomMessage(message: RoomRelayEnvelope): Promise<void> {
+    this.send({ type: "BroadcastState", state: message });
+  }
+
+  async spawnAiBot(params: SpawnAiBotParams): Promise<void> {
+    if (!this.relayUrl || this.serverPassword == null) {
+      throw new Error("Cannot spawn bot: not connected to relay.");
+    }
+    if (this.bots.has(params.username)) {
+      throw new Error(`Bot '${params.username}' is already running.`);
+    }
+    const wasm = await loadWasm();
+    const config = JSON.stringify({
+      username: params.username,
+      password: this.serverPassword,
+      roomId: params.roomId,
+      roomPassword: params.roomPassword ?? null,
+      deckName: params.deckName,
+      deck: params.deck,
+      commanderName: params.commanderName,
+      agent: params.agent ?? "simple",
+    });
+    const entry: BotEntry = {
+      ws: null,
+      stopped: false,
+      attempt: 0,
+      reconnectTimer: null,
+    };
+    this.bots.set(params.username, entry);
+    rememberSpawnedBot(params);
+    const connect = () => {
+      entry.reconnectTimer = null;
+      if (entry.stopped || !this.relayUrl) {
+        this.bots.delete(params.username);
+        return;
+      }
+      dlog(`[bot-life ${params.username}] connecting (attempt ${entry.attempt})`);
+      const bot = new wasm.WasmBot(config);
+      const ws = new WebSocket(this.relayUrl);
+      entry.ws = ws;
+      ws.onopen = () => {
+        dlog(`[bot-life ${params.username}] socket open → authenticating`);
+        for (const msg of bot.on_open()) {
+          logComms("bot-send", `[${params.username}] ${msg}`);
+          ws.send(msg);
+        }
+      };
+      ws.onmessage = (e: MessageEvent) => {
+        if (typeof e.data !== "string") return;
+        logComms("bot-recv", `[${params.username}] ${e.data}`);
+        const trace = isPromptLoggingEnabled();
+        const replies = bot.on_server_message(e.data);
+        if (trace) {
+          console.log(
+            `[bot-life ${params.username}] recv ${describeBotFrame(e.data)} → ${replies.length} repl${replies.length === 1 ? "y" : "ies"}`,
+          );
+        }
+        for (const msg of replies) {
+          logComms("bot-send", `[${params.username}] ${msg}`);
+          if (trace) console.log(`[bot-life ${params.username}] send ${describeBotFrame(msg)}`);
+          ws.send(msg);
+        }
+        const failure = bot.failure();
+        if (failure) {
+          console.warn(`[bot ${params.username}] ${failure}`);
+          // A lifecycle failure is terminal — reconnecting would replay the
+          // same rejection forever, silently.
+          entry.stopped = true;
+          forgetSpawnedBot(params.username);
+          this.eventBus.emit("server:bot_failed", {
+            username: params.username,
+            reason: failure,
+          });
+          ws.close();
+        } else {
+          entry.attempt = 0;
+        }
+      };
+      ws.onerror = () => console.error(`[bot ${params.username}] WebSocket error`);
+      ws.onclose = () => {
+        bot.free();
+        entry.ws = null;
+        if (entry.stopped) {
+          this.bots.delete(params.username);
+          return;
+        }
+        const delay =
+          RECONNECT_BACKOFF_MS[Math.min(entry.attempt, RECONNECT_BACKOFF_MS.length - 1)];
+        entry.attempt += 1;
+        console.warn(`[bot ${params.username}] socket closed; reconnecting in ${delay}ms`);
+        entry.reconnectTimer = setTimeout(connect, delay);
+      };
+    };
+    connect();
+  }
+
+  async removeAiBot(username: string): Promise<void> {
+    forgetSpawnedBot(username);
+    const entry = this.bots.get(username);
+    if (!entry) return;
+    entry.stopped = true;
+    if (entry.reconnectTimer) {
+      clearTimeout(entry.reconnectTimer);
+      entry.reconnectTimer = null;
+    }
+    if (entry.ws) {
+      // onclose frees the wasm handle and removes the entry.
+      entry.ws.close();
+    } else {
+      this.bots.delete(username);
+    }
+  }
+
+  private stopAllBots(): void {
+    for (const username of [...this.bots.keys()]) {
+      void this.removeAiBot(username);
+    }
+  }
+
+  /** The host's advertised kinds decide the room's plane. */
+  private onRoomTransport(msg: Record<string, unknown>): void {
+    if (!this.authedUsername) return;
+    const members = Array.isArray(msg.members) ? (msg.members as RosterMember[]) : [];
+    if (!this.directTransportEnabled()) {
+      this.dropWebRtcPlane();
+      return;
+    }
+    if (!msg.host) {
+      this.webrtc?.onRoster([], undefined);
+      void this.forgeHostBridge?.onRoster([], undefined);
+      return;
+    }
+    const host = msg.host as RosterMember;
+
+    if (host.username !== this.authedUsername) {
+      void this.maybeProxyForgeHost(members, host, iceServersFrom(msg));
+    }
+
+    if (planeForRoom(host, this.myTransportKinds()) === TRANSPORT_KIND_WEBRTC) {
+      this.onWebRtcRoster(members, host, iceServersFrom(msg));
+    } else {
+      this.dropWebRtcPlane();
+    }
+  }
+
+  /** The player's opt-in, except on a LAN relay, which stays on the relay for now. */
+  private directTransportEnabled(): boolean {
+    return this.directTransportOptIn && !this.connectParams?.lan;
+  }
+
+  private onDirectTransportPreference(): void {
+    if (this.directTransportEnabled()) {
+      if (this.currentRoomId) this.announceTransport(this.currentRoomId);
+      return;
+    }
+    if (this.announcedRoom && this.ws?.readyState === WebSocket.OPEN) {
+      this.send({ type: "AnnounceTransport", endpoint: null });
+    }
+    this.announcedRoom = null;
+    this.dropWebRtcPlane();
+    this.forgeHostBridge?.stop();
+    this.forgeHostBridge = null;
+  }
+
+  private dropWebRtcPlane(): void {
+    if (!this.webrtc) return;
+    this.webrtc.close();
+    this.webrtc = null;
+  }
+
+  /** Announces on entering a room. The relay names a host once all have. */
+  private announceTransport(roomId: string): void {
+    if (!roomId || this.announcedRoom === roomId) return;
+    if (!this.directTransportEnabled() || !this.roomTransport) return;
+    if (!this.peerSignalling || !WebRtcPlane.supported() || !this.authedUsername) return;
+    this.announcedRoom = roomId;
+    this.send({ type: "AnnounceTransport", endpoint: webRtcEndpoint(this.authedUsername) });
+  }
+
+  private myTransportKinds(): string[] {
+    return this.peerSignalling && WebRtcPlane.supported() ? [TRANSPORT_KIND_WEBRTC] : [];
+  }
+
+  private async maybeProxyForgeHost(
+    members: RosterMember[],
+    host: RosterMember,
+    iceServers: RTCIceServer[],
+  ): Promise<void> {
+    if (!this.directTransportEnabled()) return;
+    if (!this.peerSignalling || !WebRtcPlane.supported()) return;
+    if (getClientPlatform() !== "desktop") return;
+    if (!this.forgeHostBridge) {
+      if (!(await ForgeHostBridge.hosting())) return;
+      this.forgeHostBridge = new ForgeHostBridge(host.username, iceServers);
+    }
+    await this.forgeHostBridge.onRoster(members, host);
+  }
+
+  private onWebRtcRoster(
+    members: RosterMember[],
+    host: RosterMember,
+    iceServers: RTCIceServer[],
+  ): void {
+    if (!this.peerSignalling || !WebRtcPlane.supported()) return;
+    if (!this.webrtc) {
+      if (iceServers.length === 0) {
+        console.warn(
+          "[webrtc] this relay published no ICE servers; the direct plane will " +
+            "not reach a peer on another network. Set MANABREW_ICE_SERVERS on the relay.",
+        );
+      }
+      this.webrtc = new WebRtcPlane({
+        iceServers,
+        username: this.authedUsername!,
+        signal: (to, payload) => this.send({ type: "SignalPeer", to, payload }),
+        deliver: (envelope, fromPlayer) =>
+          this.handleServerMessage(
+            {
+              type: "StateUpdate",
+              from_player: fromPlayer,
+              state: envelope,
+            },
+            performance.now(),
+          ),
+        onMeasurement: (m) => this.onPlaneMeasurement(m),
+      });
+    }
+    this.webrtc.onRoster(members, host);
+  }
+
+  private onPlaneMeasurement(m: PlaneMeasurement): void {
+    const parts = [`peer=${m.peer}`, `outcome=${m.outcome}`];
+    if (m.connectMs !== undefined) parts.push(`connect=${Math.round(m.connectMs)}ms`);
+    if (m.rttMs !== undefined) parts.push(`rtt=${Math.round(m.rttMs)}ms`);
+    if (m.candidatePair) parts.push(`pair=${m.candidatePair}`);
+    if (this.relayRttMs !== null) parts.push(`relayRtt=${this.relayRttMs}ms`);
+    console.info(`[webrtc] ${parts.join(" ")}`);
+    this.eventBus.emit("transport:measurement", { transport: "webrtc", ...m });
+    this.reportPlaneQuality("webrtc", m);
+  }
+
+  /** Sends the measurement to the relay, failures included. */
+  private reportPlaneQuality(plane: string, m: PlaneMeasurement): void {
+    if (!this.planeQualityReporting) return;
+    const whole = (value: number | undefined): number | undefined =>
+      value === undefined || !Number.isFinite(value) ? undefined : Math.max(0, Math.round(value));
+    this.send({
+      type: "ReportPlaneQuality",
+      report: {
+        peer: m.peer,
+        outcome: m.outcome,
+        plane,
+        phase: m.phase,
+        connect_ms: whole(m.connectMs),
+        rtt_ms: whole(m.rttMs),
+        relay_rtt_ms: whole(this.relayRttMs ?? undefined),
+        candidate_pair: m.candidatePair,
+      },
+    });
+  }
+
+  private send(msg: Record<string, unknown>): void {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      console.error("[WebServerApi] Not connected");
+      return;
+    }
+    const raw = JSON.stringify(msg);
+    if (msg.type !== "Ping") logComms("send", raw);
+    this.ws.send(raw);
+  }
+
+  /**
+   * @param frameAt when the frame carrying `` reached this client, for the
+   *   turnaround split. Omitted for synthesised messages, which are not a
+   *   reply arriving.
+   * @param raw the wire text when there is one, so the bug-report log costs a
+   *   slice of it and not a second serialisation of the parsed message.
+   */
+  private handleServerMessage(msg: Record<string, unknown>, frameAt?: number, raw?: string): void {
+    const type = msg.type as string;
+    // The heartbeat would evict real traffic from the bug-report ring buffer.
+    if (type === "Pong") {
+      if (this.pingSentAt !== null) {
+        this.relayRttMs = Date.now() - this.pingSentAt;
+        this.pingSentAt = null;
+      }
+      return;
+    }
+    logComms("recv", raw ?? msg);
+    if (type === "AuthResult" && msg.success) {
+      this.peerSignalling =
+        Array.isArray(msg.features) && (msg.features as string[]).includes("peer_signal");
+      this.roomTransport =
+        Array.isArray(msg.features) && (msg.features as string[]).includes("room_transport");
+      this.planeQualityReporting =
+        Array.isArray(msg.features) && (msg.features as string[]).includes("plane_quality");
+    }
+    if (DEBUG_TRANSPORT) console.log("[transport←ws] received:", JSON.stringify(msg));
+    if (isPromptLoggingEnabled()) {
+      if (type === "AuthResult") {
+        console.log(
+          `[resume-wire] AuthResult success=${msg.success} reconnected=${msg.reconnected}` +
+            ` player_id=${msg.player_id} error=${msg.error ?? "none"}`,
+        );
+      } else if (type === "RoomUpdate") {
+        const room = msg.room as
+          | { room_id?: string; status?: string; host?: string; players?: unknown[] }
+          | undefined;
+        const players = Array.isArray(room?.players)
+          ? (room?.players as { username?: string; is_bot?: boolean; connected?: boolean }[]).map(
+              (p) => `${p.username}${p.is_bot ? "(bot)" : ""}:${p.connected ? "on" : "off"}`,
+            )
+          : [];
+        console.log(
+          `[resume-wire] RoomUpdate id='${room?.room_id}' status='${room?.status}'` +
+            ` host='${room?.host}' players=[${players.join(", ")}]`,
+        );
+      } else if (type === "GameStarted" || type === "GameAborted" || type === "Error") {
+        console.log(`[resume-wire] ${type}`, JSON.stringify(msg));
+      }
+    }
+    if (type === "GameAborted") {
+      this.stopAllBots();
+      clearSpawnedBots();
+    }
+
+    if (type === "ServerShuttingDown") {
+      const reconnectInS = typeof msg.reconnect_in_s === "number" ? msg.reconnect_in_s : 5;
+      this.serverShutdownPending = { reconnectInS };
+      this.eventBus.emit("server:reconnecting", {
+        phase: "reconnecting" as const,
+        attempt: this.reconnectAttempt + 1,
+        delayMs: reconnectInS * 1000,
+        reason: "server-shutdown" as const,
+      });
+      return;
+    }
+
+    if (type === "RoomTransport") {
+      this.onRoomTransport(msg);
+      return;
+    }
+    if (type === "PeerSignal") {
+      void this.webrtc?.onSignal(String(msg.from ?? ""), msg.payload);
+      return;
+    }
+    if (type === "GameStarted") {
+      this.webrtc?.freeze();
+    }
+    if (type === "GameAborted") {
+      this.webrtc?.clear();
+    }
+
+    if (type === "StateUpdate" && msg.state) {
+      const envelope = msg.state as StateEnvelope;
+      const forPlayer = (envelope as { forPlayer?: string }).forPlayer;
+      if (
+        frameAt !== undefined &&
+        (envelope.kind === "state" ||
+          envelope.kind === "stateDelta" ||
+          envelope.kind === "prompt" ||
+          envelope.kind === "display")
+      ) {
+        noteReplyFrameArrived(frameAt);
+      }
+      const promptType =
+        envelope.kind === "prompt"
+          ? ((envelope as { prompt?: { input?: { type?: string } } }).prompt?.input?.type ?? "?")
+          : undefined;
+      dlog(
+        `[resume-wire] main-socket StateUpdate from=${msg.from_player} kind=${envelope.kind}` +
+          (forPlayer ? ` forPlayer=${forPlayer}` : "") +
+          (promptType ? ` promptType=${promptType}` : ""),
+      );
+      switch (envelope.kind) {
+        case "response":
+          if (
+            typeof msg.from_player === "string" &&
+            this.enginePlayerSlot(msg.from_player) === envelope.fromPlayer &&
+            typeof envelope.action === "object" &&
+            envelope.action !== null
+          ) {
+            this.pendingRelayPrompts.delete(envelope.fromPlayer);
+          }
+          this.eventBus.emit("server:state_update", {
+            from_player: msg.from_player,
+            state: envelope,
+          });
+          return;
+        case "directive":
+          // Does not answer the pending prompt — that stays pending.
+          this.eventBus.emit("server:state_update", {
+            from_player: msg.from_player,
+            state: envelope,
+          });
+          return;
+        case "roomRelay":
+          this.eventBus.emit("server:room_message", {
+            from_player: msg.from_player,
+            state: envelope,
+          });
+          break;
+        case "state":
+          if (envelope.fingerprint) {
+            this.deltaBases.set(envelope.forPlayer ?? "", {
+              state: envelope.state,
+              fingerprint: envelope.fingerprint,
+            });
+          }
+          this.eventBus.emit("game:remote_state", envelope);
+          return;
+        case "stateDelta": {
+          const seat = envelope.forPlayer ?? "";
+          const base = this.deltaBases.get(seat);
+          if (!base || base.fingerprint !== envelope.base) {
+            // Patched against a state we do not hold. Dropping it leaves the
+            // board as it was rather than showing a wrong one; the next full
+            // state, on resume or the next game, recovers.
+            dlog(`[state-delta] base mismatch for ${seat || "broadcast"}, ignoring patch`);
+            this.deltaBases.delete(seat);
+            return;
+          }
+          const state = applyStateDelta(base.state, envelope.patch) as StateUpdate;
+          this.deltaBases.set(seat, { state, fingerprint: envelope.fingerprint });
+          this.eventBus.emit("game:remote_state", {
+            kind: "state",
+            forPlayer: envelope.forPlayer,
+            state,
+          });
+          return;
+        }
+        case "display":
+          this.eventBus.emit("game:remote_display", envelope);
+          return;
+        case "prompt":
+          this.eventBus.emit("game:remote_prompt", envelope);
+          return;
+        case "error":
+          this.eventBus.emit("game:remote_error", envelope);
+          return;
+        case "log":
+          this.eventBus.emit("game:log", envelope.entry);
+          return;
+        case "snapshot":
+          this.eventBus.emit("game:snapshot", envelope.entry);
+          return;
+        case "fatal":
+          this.eventBus.emit("game:fatal", { message: envelope.message });
+          return;
+      }
+    }
+
+    if (type === "Error" && msg.code === SERVER_ERROR_CODE.NotInRoom) {
+      this.eventBus.emit("game:forced_end", {
+        reason: SERVER_ERROR_CODE.NotInRoom,
+        message: msg.message,
+      });
+    }
+
+    if (type === "RoomCreated") {
+      this.resumeToken = typeof msg.resume_token === "string" ? msg.resume_token : null;
+      const room = msg.room as { room_id?: string } | undefined;
+      const roomId = String(room?.room_id ?? msg.room_id ?? "");
+      if (roomId) this.currentRoomId = roomId;
+      this.announceTransport(roomId);
+    }
+
+    // RoomUpdate reaches members only, so this never announces into a foreign room.
+    if (type === "RoomUpdate") {
+      const room = msg.room as { room_id?: string } | undefined;
+      const roomId = String(room?.room_id ?? "");
+      if (roomId) this.currentRoomId = roomId;
+      this.announceTransport(roomId);
+    }
+
+    if (type === "GameStarted") {
+      this.lastRelayStates.clear();
+      this.lastRelayDisplay = null;
+      this.pendingRelayPrompts.clear();
+      this.deltaBases.clear();
+    }
+
+    if (type === "RoomResumed") {
+      for (const [playerSlot, { state, fingerprint }] of this.lastRelayStates) {
+        const targetPlayer = this.enginePlayerName(playerSlot);
+        if (targetPlayer) {
+          void this.broadcastState(
+            { kind: "state", forPlayer: playerSlot, state, fingerprint },
+            targetPlayer,
+          );
+        }
+      }
+      for (const [playerSlot, envelope] of this.pendingRelayPrompts) {
+        const targetPlayer = this.enginePlayerName(playerSlot);
+        if (targetPlayer) void this.broadcastState(envelope, targetPlayer);
+      }
+      this.eventBus.emit("server:room_update", { room: msg.room });
+      return;
+    }
+
+    if (type === "AuthResult" && !msg.success) {
+      // openSocket resolves on ws.onopen, before auth completes, so
+      // tryReconnect has already reset the backoff by the time a rejection
+      // (e.g. duplicate_username from a second tab) arrives. Count the
+      // rejection so the retry loop backs off instead of hammering the relay.
+      this.reconnectAttempt += 1;
+      // A duplicate-username holder stays until the relay's 90s idle reap (or
+      // until useServerStore's probe stops the loop) — jump to the slow end
+      // of the backoff instead of retrying every 2s.
+      if (typeof msg.error === "string" && msg.error.includes(DUPLICATE_USERNAME_ERROR_FRAGMENT)) {
+        this.reconnectAttempt = Math.max(this.reconnectAttempt, 4);
+      }
+      if (typeof msg.error === "string" && msg.error.includes(TOKEN_EXPIRED_ERROR_FRAGMENT)) {
+        this.sessionTokenRejected = true;
+      }
+    }
+
+    if (type === "SessionTakenOver") {
+      this.manualDisconnect = true;
+      this.eventBus.emit("server:session_taken_over", {});
+      return;
+    }
+
+    const eventMap: Record<string, [string, unknown]> = {
+      AuthResult: [
+        "server:auth_result",
+        {
+          success: msg.success,
+          player_id: msg.player_id,
+          reconnected: msg.reconnected,
+          error: msg.error,
+          username: this.authedUsername,
+          features: msg.features,
+          art_base_url: msg.art_base_url,
+        },
+      ],
+      RoomList: ["server:room_list", { rooms: msg.rooms }],
+      PlayerList: ["server:player_list", { players: msg.players }],
+      RoomCreated: [
+        "server:room_created",
+        { room_id: msg.room_id, room_name: msg.room_name, room: msg.room },
+      ],
+      PlayerJoined: ["server:player_joined", { room_id: msg.room_id, username: msg.username }],
+      PlayerLeft: ["server:player_left", { room_id: msg.room_id, username: msg.username }],
+      PlayerConnected: ["server:player_connected", { username: msg.username }],
+      PlayerDisconnected: ["server:player_disconnected", { username: msg.username }],
+      ReadyStateChanged: ["server:ready_changed", { username: msg.username, ready: msg.ready }],
+      RoomUpdate: ["server:room_update", { room: msg.room }],
+      GameStarted: [
+        "server:game_started",
+        {
+          room_id: msg.room_id,
+          game_id: msg.game_id,
+          player_order: msg.player_order,
+          player_decks: msg.player_decks,
+          starting_life: msg.starting_life,
+        },
+      ],
+      StateUpdate: ["server:state_update", { from_player: msg.from_player, state: msg.state }],
+      TurnChanged: [
+        "server:turn_changed",
+        {
+          from_player: msg.from_player,
+          new_active_player: msg.new_active_player,
+          turn_number: msg.turn_number,
+        },
+      ],
+      GameAborted: ["server:game_aborted", { room_id: msg.room_id }],
+      ChatMessage: [
+        "server:chat_message",
+        {
+          scope: msg.scope,
+          room_id: msg.room_id,
+          from: msg.from,
+          avatar_url: msg.avatar_url,
+          qualification: msg.qualification,
+          text: msg.text,
+          sent_at_ms: msg.sent_at_ms,
+          seal: msg.seal,
+        },
+      ],
+      ChatHistory: [
+        "server:chat_history",
+        { scope: msg.scope, room_id: msg.room_id, messages: msg.messages },
+      ],
+      RoomInvite: [
+        "server:room_invite",
+        { from: msg.from, room: msg.room, password: msg.password },
+      ],
+      Error: ["server:error", { code: msg.code, message: msg.message }],
+    };
+
+    const mapping = eventMap[type];
+    if (mapping) {
+      this.eventBus.emit(mapping[0], mapping[1]);
+    }
+  }
+}
+
+function buildServerUrl(params: ServerConnectParams): string {
+  if (/^wss?:\/\//i.test(params.host)) {
+    return params.host;
+  }
+  const scheme = params.port === 443 ? "wss" : "ws";
+  return `${scheme}://${params.host}:${params.port}`;
+}
+
+/**
+ * Web platform implementation.
+ * Used for browser-based deployments with WASM game engine.
+ *
+ * The game engine runs in a dedicated Web Worker to keep the UI responsive.
+ * Communication happens via postMessage with a request/response protocol.
+ */
+export class WebPlatform implements IPlatformApi {
+  readonly type = "web" as const;
+  readonly game: IGameApi;
+  readonly storage: IStorageApi;
+  readonly events: WebEventBus;
+  readonly server: IServerApi;
+
+  private bridge: WorkerBridge;
+
+  constructor() {
+    this.events = new WebEventBus();
+    this.storage = new WebStorageApi();
+    this.bridge = new WorkerBridge(this.events);
+    const serverApi = new WebServerApi(this.events);
+    const gameApi = new WebGameApi(this.bridge);
+    gameApi.setServerApi(serverApi);
+    this.game = gameApi;
+    this.server = serverApi;
+  }
+
+  /**
+   * Initialize the platform (and worker) eagerly.
+   * Call this at app startup for faster first game start.
+   */
+  async init(): Promise<void> {
+    await this.bridge.init();
+  }
+
+  async invoke<T>(command: string, args?: Record<string, unknown>): Promise<T> {
+    return this.bridge.invoke<T>(command, args);
+  }
+
+  /**
+   * Clean up resources.
+   */
+  dispose(): void {
+    this.bridge.terminate();
+  }
+
+  isSupported(feature: PlatformFeature): boolean {
+    switch (feature) {
+      case "multiplayer":
+        return true; // WebSocket-based multiplayer viamanabrew-server
+      case "native-dialogs":
+        return false; // Browser has limited file system access
+      case "system-tray":
+        return false; // Not applicable to web
+      case "auto-update":
+        return false; // Web is always "updated" via cache
+      case "offline-play":
+        return false; // Browser path still depends on remote assets and no service worker exists
+      default:
+        return false;
+    }
+  }
+}

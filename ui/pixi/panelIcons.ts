@@ -1,0 +1,220 @@
+import { Sprite, Texture } from "pixi.js";
+import type { GameThemeColors } from "@/themes/gameTheme";
+import { icons as gameIconsPack } from "@iconify-json/game-icons";
+import { VORTEX_PATH } from "@/components/icons/VortexCircleIcon";
+import { rasterizeSvgTexture } from "./assets/rasterizeSvgTexture";
+
+export const SVG: Record<string, string> = {
+  hearts:
+    '<path fill="currentColor" d="M480.25 156.355c0 161.24-224.25 324.43-224.25 324.43S31.75 317.595 31.75 156.355c0-91.41 70.63-125.13 107.77-125.13c77.65 0 116.48 65.72 116.48 65.72s38.83-65.73 116.48-65.73c37.14.01 107.77 33.72 107.77 125.14"/>',
+  hand: '<path fill="currentColor" d="M496 136s-40.486 85.32-51.442 128.988c-14.33 57.118 2.078 100.297-18.747 155.68c-35.998 64.97-38.435 75.466-169.81 75.33c-48.132-.044-186.02-36.76-186.02-36.76C50.97 454.35 16 457.23 16 435.997c0-21.232 24.88-36.736 46.97-36.787l87.03 7.642c21.14-1.326 43.286-13.71 43.96-41.36c-.353-40.927-4.4-72.357-25.175-105.6l-80.67-125.864c-4.818-10.02-5.964-27.105 7.983-34.732c13.947-7.628 29.793 3.71 35.205 13.582l90.11 122.57c9.618 8.955 26.738 10.68 25.278-8.38L206.903 44.652c-2.478-12.96 4.1-28.654 19.1-28.654c19.687 0 31.795 7.515 31.413 19.413l43.75 179.984c3.42 8.76 15.545 7.59 18.807-.49l12.462-175.022c.64-5.583 7.922-15.314 21.9-13.286c13.976 2.027 22.035 17 20.555 22.793l-4.044 172.936c2.838 15.327 14.888 17.565 24.266 9.008l61.22-109.487c3.72-9.183 18.288-11.096 26.715-7.455c7.84 5.107 12.954 11.96 12.954 21.603z"/>',
+  deck: '<path fill="currentColor" d="m209.955 488.202l-121.242-46.62c-11.308-4.34-11.643-12.087-.79-17.288L204.8 469.236c15.024 5.777 37.23 4.92 51.774-1.96l161.522-76.6c10.014 4.436 9.864 11.818-.67 16.798L250.43 486.668c-10.983 5.195-29.128 5.902-40.477 1.534zm0-32.37L88.713 409.21c-9.623-3.69-11.303-9.855-3.76-13.758l.002-.002L204.8 436.867c15.024 5.777 37.23 4.92 51.774-1.962L418.096 358.3c8.37 3.71 8.33 9.503-.67 13.59L250.43 451.088c-10.983 5.195-29.128 5.902-40.477 1.534zM54.46 350.4l150.338 57.81c15.025 5.777 37.232 4.92 51.776-1.962l166.97-79.178c14.84-7.035 15.36-18.254 1.55-24.582l5.76-2.73c14.84 7.036 15.36 18.252 1.55 24.58l-166.97 79.18c-14.544 6.89-36.75 7.74-51.775 1.96L63.32 347.67c-12.232-4.7-12.553-12.13-2.133-17.338L54.46 350.4zm150.34-9.09c15.024 5.777 37.23 4.92 51.774-1.96l166.97-79.18c14.84-7.04 15.22-18.384 1.55-24.592l-150.334-57.8c-15.024-5.777-37.23-4.92-51.774 1.96l-166.97 79.18c-14.84 7.035-15.36 18.254-1.55 24.582l150.338 57.81z"/>',
+  graveyard:
+    '<path fill="currentColor" d="M253.75 18.906c-77.635.03-154.875 54.01-154.875 167.5v209.72c25.67 19.717 46.68 41.386 52.156 69.124-3.507-44.464-4.166-88.692 14.595-133.156 5.265 38.52 8.087 77.137 26.875 115.656 25.316-53.302 59.948-75.555 102.188-72.438-29.706 25.94-56.26 55.26-74.75 95.22 31.477-30.2 66.886-38.728 103.968-40.907-21.57 15.247-41.576 30.414-54.156 50.22h78.344c6.443-27.99-4.756-54.648-17.78-82.908 27.59 18.168 51.09 40.4 61.905 77.657 3.525-39-3.843-73.686-15.19-106.875 13.34 6.44 23.875 15.568 31.595 27.374V186.406c0-113.616-77.24-167.528-154.875-167.5zM150.156 144.594h114.938v18.687H150.156v-18.686zm152.438 0h56.125v18.687h-56.126v-18.686zm-152.438 42.75h36.5v18.687h-36.5v-18.686zm72.25 0H358.72v18.687H222.405v-18.686zm-72.28 40.312h95.81v18.688h-95.81v-18.688zm126.31 0h82.283v18.688h-82.283v-18.688zm-177.56 189.53v62.658h23.686c-4.638-21.58-13.086-42.375-23.687-62.656z"/>',
+  exile: `<clipPath id="mb-exile-clip"><circle cx="256" cy="256" r="256"/></clipPath><path fill="currentColor" clip-path="url(#mb-exile-clip)" d="${VORTEX_PATH}"/>`,
+  poison:
+    '<path fill="currentColor" d="M181.78 33v51.53h149.407V33zm14.19 70.22c-.66 2.9-1.554 5.263-2.75 6.936c-2.684 3.75-7.033 6.594-19.5 6.594c-21.54 0-40.804 5.862-55.157 16.094s-23.907 25.398-23.907 42.5V426.75c0 32.34 26.255 58.625 58.594 58.625h213.47c32.338 0 58.592-26.286 58.592-58.625V175.344c0-17.102-9.527-32.2-23.593-42.438s-32.83-16.156-53.44-16.156c-16.69 0-23.62-3.488-26.874-7.188c-1.41-1.604-2.43-3.698-3.156-6.343h-19.125c1.073 6.658 3.37 13.137 8.25 18.686c8.11 9.223 21.523 13.53 40.906 13.53c16.978 0 32.056 5.008 42.44 12.564c10.38 7.556 15.905 17.1 15.905 27.344V426.75c0 22.355-17.55 39.938-39.906 39.938H153.25c-22.355 0-39.906-17.583-39.906-39.938V175.344c0-10.245 5.455-19.72 16.062-27.28c10.607-7.563 26.22-12.626 44.313-12.626c15.962 0 28.056-5.142 34.686-14.407c3.904-5.455 5.733-11.545 6.625-17.81zm66.093 45.405c-30.545 0-50.062 12.865-63.282 32.313c-12.295 18.09-18.387 42.315-19.186 66.062c25.033 12.795 39.555 27.632 43.844 44.97a46 46 0 0 1 1.312 8.905c9.01 5.134 23.22 8.44 37.813 8.438c12.935-.002 26.08-2.538 36.093-6.875a49.4 49.4 0 0 1 1.47-10c4.486-17.583 19.028-33.2 44.405-45.563c-.838-22.46-6.793-46.595-19-64.938c-13.2-19.84-32.745-33.312-63.467-33.312zM232.188 223.5c9.157 0 16.593 7.405 16.593 16.563s-7.435 16.593-16.593 16.593c-9.157 0-16.562-7.436-16.562-16.594c0-9.157 7.405-16.562 16.563-16.562zm55.437 0c9.158 0 16.594 7.405 16.594 16.563s-7.438 16.593-16.595 16.593s-16.563-7.436-16.563-16.594c0-9.157 7.405-16.562 16.563-16.562zm-28.844 33.594c6.275 13.248 11.25 26.503 13.72 39.75c-9.148-3.022-18.29-3.426-27.438 0c3.34-13.25 7.352-26.504 13.72-39.75zm-37.03 63.47c-2.136 6.42-5.285 12.778-9.188 19.03c11.93 7.99 31.58 12.81 50.875 12.594c18.97-.214 36.878-5.57 46.22-12.407c-3.55-5.764-6.412-11.8-8.344-18c-11.947 4.416-25.424 6.375-38.75 6.376c-14.447.002-28.77-2.222-40.813-7.594zm-70.656 17.06c-8.9 11.268-12.694 22.493-10.03 36.313c68.925 5.54 164.194 31.92 226.686 60.75c9.16-11.166 12.518-22.67 9.97-36.78c-67.77-6.867-164.135-28.736-226.626-60.282zm216.594 0c-20.79 10.496-45.326 19.907-71.313 28.063c20.298 4.434 40.253 8.04 58.72 10.688c7.782-1.026 15.357-1.853 22.624-2.438c2.66-13.82-1.133-25.045-10.033-36.312zm-203.75 57.532a652 652 0 0 1-22.875 2.75c-2.55 14.11.81 25.615 9.968 36.78c21.375-9.86 46.575-19.447 73.25-27.998c-20.87-4.912-41.385-8.868-60.343-11.532"/>',
+  energy:
+    '<path fill="currentColor" d="M491.313 21.406C331.102 120.193 194.688 226.866 70 350.906c29.11-21.616 63.387-37.86 103.875-49.28c40.95-60.157 100.923-106.7 170.844-130.157c-23.522 69.8-70.747 130.135-131.314 171.25c-9.76 38.353-26.835 69.38-48 96.374C289.153 314.63 403.748 181.7 491.312 21.406zM132.656 345.5v.344c-30.526 52.844-71.12 87.318-115.437 115.47c-4.89 28.29 9.777 39.067 34.75 34.56c30.594-51.69 68.69-88.052 115.436-115.468c0-19.56-12.363-34.906-34.75-34.906z"/>',
+  barbute:
+    '<path fill="currentColor" d="M255.406 17.75C189.313 39.42 124.536 85.124 79.03 150.344c21.238 57.44 32.72 94.314 32.72 131.375c0 36.493-11.52 73.723-32.125 129.655c49.72 36.73 100.08 58.95 150.313 64.938c-5.052-60.378-9.83-120.748 1.593-181.125c-30.644-3.28-61.384-13.286-92.03-30.72v-71.312c80.67 42.255 158.908 41.547 242.063 0v71.313c-30.06 14.376-60.192 24.722-90.25 29.28c8.684 60.46 7.723 120.915 2.03 181.375c46.386-7.335 92.89-28.824 139.032-64.312c-33.966-112.954-34.03-145.933.594-260.47C391.162 84.844 317.924 39.89 255.405 17.75zm-75.125 212c-11.16-.13-19.646 3.174-21.25 9.156c-2.33 8.7 10.778 19.76 29.282 24.72c18.505 4.957 35.388 1.92 37.72-6.782c2.33-8.7-10.775-19.76-29.282-24.72c-5.783-1.55-11.396-2.315-16.47-2.374m160.69 0c-5.074.06-10.687.825-16.47 2.375c-18.507 4.96-31.613 16.018-29.28 24.72c2.33 8.7 19.213 11.738 37.717 6.78c18.505-4.958 31.613-16.018 29.282-24.72c-1.604-5.98-10.09-9.286-21.25-9.155z"/>',
+  cmdsword:
+    '<path fill="currentColor" d="M19.75 14.438c59.538 112.29 142.51 202.35 232.28 292.718l3.626 3.75l.063-.062c21.827 21.93 44.04 43.923 66.405 66.25c-18.856 14.813-38.974 28.2-59.938 40.312l28.532 28.53l68.717-68.717c42.337 27.636 76.286 63.646 104.094 105.81l28.064-28.06c-42.47-27.493-79.74-60.206-106.03-103.876l68.936-68.938l-28.53-28.53c-11.115 21.853-24.413 42.015-39.47 60.593c-43.852-43.8-86.462-85.842-130.125-125.47c-.224-.203-.432-.422-.656-.625C183.624 122.75 108.515 63.91 19.75 14.437zm471.875 0c-83.038 46.28-154.122 100.78-221.97 161.156l22.814 21.562l56.81-56.812l13.22 13.187l-56.438 56.44l24.594 23.186c61.802-66.92 117.6-136.92 160.97-218.72zm-329.53 125.906l200.56 200.53a403 403 0 0 1-13.405 13.032L148.875 153.53zm-76.69 113.28l-28.5 28.532l68.907 68.906c-26.29 43.673-63.53 76.414-106 103.907l28.063 28.06c27.807-42.164 61.758-78.174 104.094-105.81l68.718 68.717l28.53-28.53c-20.962-12.113-41.08-25.5-59.937-40.313c17.865-17.83 35.61-35.433 53.157-52.97l-24.843-25.655l-55.47 55.467c-4.565-4.238-9.014-8.62-13.374-13.062l55.844-55.844l-24.53-25.374c-18.28 17.856-36.602 36.06-55.158 54.594c-15.068-18.587-28.38-38.758-39.5-60.625z"/>',
+};
+
+const LUCIDE_SVG: Record<string, string> = {
+  "lucide-alert-circle":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></g>',
+  "lucide-chevron-left":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></g>',
+  "lucide-chevron-right":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></g>',
+  "lucide-ban":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M4.929 4.929 19.07 19.071"/></g>',
+  "lucide-check":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></g>',
+  "lucide-check-bold":
+    '<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></g>',
+  "lucide-crosshair":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></g>',
+  "lucide-hand":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g>',
+  "lucide-heart-crack":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.409 5.824c-.702.792-1.15 1.496-1.415 2.166l2.153 2.156a.5.5 0 0 1 0 .707l-2.293 2.293a.5.5 0 0 0 0 .707L12 15"/><path d="M13.508 20.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.677.6.6 0 0 0 .818.001A5.5 5.5 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5z"/></g>',
+  "lucide-hourglass":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></g>',
+  "lucide-info":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></g>',
+  "lucide-layers":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></g>',
+  "lucide-log-out":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></g>',
+  "lucide-minus":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></g>',
+  "lucide-plus":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></g>',
+  "lucide-rotate-cw":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></g>',
+  "lucide-rotate-cw-bold":
+    '<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></g>',
+  "lucide-search":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></g>',
+  "lucide-settings":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/><circle cx="12" cy="12" r="3"/></g>',
+  "lucide-shield":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></g>',
+  "lucide-skull":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.5 17-.5-1-.5 1h1z"/><path d="M15 22a1 1 0 0 0 1-1v-1a2 2 0 0 0 1.56-3.25 8 8 0 1 0-11.12 0A2 2 0 0 0 8 20v1a1 1 0 0 0 1 1z"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="12" r="1"/></g>',
+  "lucide-sword":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 19-6-6"/><path d="m5 21-2-2"/><path d="m8 16-4 4"/><path d="M9.5 17.5 21 6V3h-3L6.5 14.5"/></g>',
+  "lucide-swords":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></g>',
+  "lucide-wand-sparkles":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></g>',
+  "lucide-x":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></g>',
+  "lucide-zap":
+    '<g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></g>',
+};
+
+export function getIconColor(key: string, theme: GameThemeColors): string {
+  switch (key) {
+    case "hearts":
+      return theme.life;
+    case "poison":
+      return theme.poison;
+    case "energy":
+      return theme.badges.energy;
+    case "hand":
+      return theme.badges.hand;
+    case "barbute":
+      return theme.textGhost;
+    case "deck":
+    case "graveyard":
+    case "exile":
+    case "cmdsword":
+    default:
+      return theme.counter.default;
+  }
+}
+
+interface PendingSprite {
+  displayWidth?: number;
+  displayHeight?: number;
+}
+
+const iconCache = new Map<string, Texture>();
+const pendingSprites = new Map<string, Map<Sprite, PendingSprite>>();
+const pendingKeyBySprite = new WeakMap<Sprite, string>();
+const loadingIcons = new Set<string>();
+
+function detachPendingSprite(sprite: Sprite): void {
+  const cacheKey = pendingKeyBySprite.get(sprite);
+  if (!cacheKey) return;
+  const pending = pendingSprites.get(cacheKey);
+  pending?.delete(sprite);
+  if (pending?.size === 0) pendingSprites.delete(cacheKey);
+  pendingKeyBySprite.delete(sprite);
+}
+
+function takePendingSprites(cacheKey: string): Map<Sprite, PendingSprite> | undefined {
+  const pending = pendingSprites.get(cacheKey);
+  pendingSprites.delete(cacheKey);
+  for (const sprite of pending?.keys() ?? []) {
+    if (pendingKeyBySprite.get(sprite) === cacheKey) pendingKeyBySprite.delete(sprite);
+  }
+  return pending;
+}
+
+export const ICON_RASTER = 64;
+export const PANEL_ICON_VIEWBOX = 512;
+
+/** The single icon-precedence site: the hand-picked `SVG` registry wins over
+ *  the iconify game-icons pack, so a zone glyph renders identically in the
+ *  Pixi texture cache and the DOM `GameIcon`. */
+export function resolveIconBody(
+  name: string,
+): { body: string; width: number; height: number } | null {
+  const lucide = LUCIDE_SVG[name];
+  if (lucide) return { body: lucide, width: 24, height: 24 };
+  const body = SVG[name];
+  if (body) return { body, width: PANEL_ICON_VIEWBOX, height: PANEL_ICON_VIEWBOX };
+  const icon = gameIconsPack.icons[name];
+  if (!icon) return null;
+  return {
+    body: icon.body,
+    width: icon.width ?? gameIconsPack.width ?? PANEL_ICON_VIEWBOX,
+    height: icon.height ?? gameIconsPack.height ?? PANEL_ICON_VIEWBOX,
+  };
+}
+
+export function rasterIcon(key: string, hex: string, size: number): void {
+  const cacheKey = `${key}:${hex}:${size}`;
+  const cached = iconCache.get(cacheKey);
+  if (cached && !cached.destroyed) return;
+  if (cached) iconCache.delete(cacheKey);
+  if (loadingIcons.has(cacheKey)) return;
+
+  const icon = resolveIconBody(key);
+  if (!icon) {
+    takePendingSprites(cacheKey);
+    return;
+  }
+
+  const coloured = icon.body.replaceAll("currentColor", hex);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${icon.width} ${icon.height}" width="${size}" height="${size}">${coloured}</svg>`;
+  loadingIcons.add(cacheKey);
+  const completion = rasterizeSvgTexture(svg, size)
+    .then(
+      (texture) => {
+        loadingIcons.delete(cacheKey);
+        iconCache.set(cacheKey, texture);
+        const pending = takePendingSprites(cacheKey);
+        pending?.forEach((entry, sprite) => {
+          if (sprite.destroyed) return;
+          sprite.texture = texture;
+          if (entry.displayWidth != null) sprite.width = entry.displayWidth;
+          if (entry.displayHeight != null) sprite.height = entry.displayHeight;
+        });
+      },
+      () => {
+        loadingIcons.delete(cacheKey);
+        takePendingSprites(cacheKey);
+      },
+    )
+    .catch(() => {
+      loadingIcons.delete(cacheKey);
+      takePendingSprites(cacheKey);
+    });
+  void completion;
+}
+
+export function applyIcon(
+  sprite: Sprite,
+  key: string,
+  hex: string,
+  size = ICON_RASTER,
+  displayWidth?: number,
+  displayHeight?: number,
+): void {
+  if (sprite.destroyed) return;
+  detachPendingSprite(sprite);
+  const cacheKey = `${key}:${hex}:${size}`;
+  const cached = iconCache.get(cacheKey);
+  if (cached && !cached.destroyed) {
+    sprite.texture = cached;
+    if (displayWidth != null) sprite.width = displayWidth;
+    if (displayHeight != null) sprite.height = displayHeight;
+    return;
+  }
+  if (cached) iconCache.delete(cacheKey);
+
+  let pending = pendingSprites.get(cacheKey);
+  if (!pending) {
+    pending = new Map();
+    pendingSprites.set(cacheKey, pending);
+  }
+  pending.set(sprite, { displayWidth, displayHeight });
+  pendingKeyBySprite.set(sprite, cacheKey);
+  rasterIcon(key, hex, size);
+}

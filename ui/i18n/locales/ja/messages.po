@@ -1,0 +1,1347 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2026-09-10 12:38+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: ja\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:281
+msgid ", action available"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+msgid ", inspect"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardGrid.tsx:121
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:279
+msgid ", selected"
+msgstr ""
+
+#. placeholder {0}: summary.attackerCount
+#. placeholder {1}: summary.blockedCount
+#. placeholder {2}: summary.unblockedCount
+#: ui/components/game/modals/CombatBreakdownModal.tsx:75
+msgid "{0} attackers · {1} blocked · {2} unblocked"
+msgstr ""
+
+#. placeholder {0}: status.count
+#: ui/components/settings/CardImageLibraryCard.tsx:109
+msgid "{0} card images found."
+msgstr ""
+
+#. placeholder {0}: stats.damage
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1136
+msgid "{0} damage"
+msgstr "{0} ダメージ"
+
+#. placeholder {0}: gameView.battlefield.length
+#: ui/components/game/ManualTabletopControls.tsx:170
+msgid "{0} permanents"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:201
+msgid "{selectedCount} selected"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:130
+msgid "{totalCount} cards"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:131
+msgid "{visibleCount} of {totalCount} cards"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:702
+msgid "↑↓ select · Enter activate · 1–9"
+msgstr "↑↓ 選択 · Enter で発動 · 1–9"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:129
+msgid "1 card"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:35
+msgid "4-player pod"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:73
+msgid "About"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:78
+msgid "About Manabrew"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:239
+msgid "Accept and continue"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:101
+#: ui/components/layout/AccountMenu.tsx:148
+msgid "Account"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:100
+msgid "Account menu"
+msgstr ""
+
+#. placeholder {0}: signedInAccount.handle
+#: ui/components/layout/AccountMenu.tsx:100
+msgid "Account: @{0}"
+msgstr ""
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:158
+msgid "Activate an ability"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:69
+msgid "Active turn"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:253
+msgid "Active: "
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:142
+msgid "All types"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:165
+msgid "Applies to battlefield cards. Hand, stack and dialog view settings are independent."
+msgstr ""
+
+#: ui/components/game/battlefieldCardStyles.ts:10
+msgid "Art-forward"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:91
+msgid "Attacker"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:172
+msgid "Auto-arrange"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:61
+msgid "Auto-skip optional costs"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:130
+msgid "Autopass"
+msgstr ""
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:74
+msgid "Available actions"
+msgstr ""
+
+#. placeholder {0}: indexedActions.length
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:715
+msgid "Available actions · {0}"
+msgstr "利用可能なアクション · {0}"
+
+#. placeholder {0}: indexedActions.length
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:714
+msgid "Available on current face · {0}"
+msgstr "現在の面で利用可能 · {0}"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:90
+msgid "Awaiting first chapter"
+msgstr "最初の章を待機中"
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:93
+msgid "Awaiting first level"
+msgstr "最初のレベルを待機中"
+
+#: ui/components/game/CardPreview.tsx:465
+#: ui/components/game/modals/AbilityPickerModal.tsx:126
+#: ui/components/layout/TopBar.tsx:150
+#: ui/components/layout/TopBar.tsx:153
+msgid "Back"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:383
+msgid "Battlefield"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:168
+msgid "Battlefield arrangement"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:161
+msgid "Battlefield card style"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
+msgid "Black"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:96
+msgid "Blocked by"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:28
+msgid "Blue"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:144
+msgid "Board appearance"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:119
+msgid "Board hover preview view"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:219
+msgid "Board preview trigger"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:85
+#: ui/components/game/panels/MiddleBarDock.tsx:101
+msgid "Board settings"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:57
+msgid "Booster Draft"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "Bot player"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:94
+msgid "Browse…"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:53
+msgid "Cancel"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:149
+msgid "Card color"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:84
+msgid "Card Face Gallery"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:780
+msgid "Card identity and rules are hidden."
+msgstr "カードの正体とルールテキストは非表示です。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:80
+#: ui/components/settings/CardImageLibraryCard.tsx:90
+msgid "Card image library"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:67
+#: ui/components/layout/TopBar.tsx:36
+msgid "Card Search"
+msgstr ""
+
+#. placeholder {0}: Math.round(prefs.cardSizeMultiplier * 100)
+#: ui/components/game/modals/GameSettingsModal.tsx:147
+msgid "Card size · {0}%"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:176
+msgid "Card sort order"
+msgstr ""
+
+#: ui/components/settings/LanguagePreferenceCard.tsx:19
+#: ui/components/settings/LanguagePreferenceCard.tsx:26
+msgid "Card text language"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:138
+msgid "Card type"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:91
+msgid "Cards and previews"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:104
+#: ui/components/game/panels/PlayerSheetModal.tsx:105
+msgid "Cards and zones"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:175
+#: ui/components/game/panels/PlayerSheetModal.tsx:199
+msgid "Cards in hand"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardGrid.tsx:71
+#: ui/components/game/modals/DialogCardPickerGrid.tsx:196
+msgid "Cards in this view"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:87
+msgid "Changes apply immediately. Card view and front/back face are separate controls."
+msgstr ""
+
+#. placeholder {0}: notch.label
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:117
+msgid "CHAPTER {0}"
+msgstr "第 {0} 章"
+
+#. placeholder {0}: state.current
+#. placeholder {1}: state.max
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:89
+msgid "Chapter {0} of {1}"
+msgstr "章 {0} / {1}"
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:157
+msgid "Choose an action"
+msgstr ""
+
+#: ui/components/game/PlayModePicker.tsx:6
+msgid "Choose how to play this card"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:137
+msgid "Choose simultaneous trigger order"
+msgstr ""
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
+msgid "CLASS LEVELS"
+msgstr "クラスのレベル"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:96
+msgid "Clear search"
+msgstr ""
+
+#: ui/components/KeyboardShortcutsDialog.tsx:88
+msgid "Close"
+msgstr ""
+
+#: ui/components/game/modals/Modal.tsx:231
+msgid "Close (Esc)"
+msgstr ""
+
+#: ui/components/game/modals/Modal.tsx:232
+msgid "Close dialog"
+msgstr ""
+
+#: ui/components/game/panels/RightActionPanel.tsx:109
+msgid "Close right panel"
+msgstr ""
+
+#: ui/lib/handOrder.ts:10
+msgid "Color"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:73
+#: ui/components/game/panels/MiddleBarDock.tsx:106
+msgid "Combat breakdown"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:144
+msgid "Commander damage by source"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:154
+msgid "Commander source"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:57
+#: ui/components/layout/TopBar.tsx:51
+msgid "Community"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:56
+#: ui/components/game/panels/MiddleBarDock.tsx:141
+msgid "Concede"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:31
+msgid "Concede the game?"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:56
+msgid "Conceding…"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:42
+msgid "Concession could not be delivered: {error}. You can retry or cancel."
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:292
+msgid "Connecting"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:88
+msgid "Copied"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:88
+msgid "Copy logs"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:57
+msgid "Could not open the folder picker. Paste the folder path instead."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:59
+msgid "Could not save the folder. Check write permissions and try again."
+msgstr ""
+
+#. placeholder {0}: APP_LOCALES[activeLocale].label
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:29
+#: ui/components/settings/LanguagePreferenceCard.tsx:30
+msgid "Currently using {0}"
+msgstr ""
+
+#: ui/components/KeyboardShortcutsDialog.tsx:85
+msgid "Customize these in Preferences → Shortcuts."
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:89
+msgid "Debug"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:40
+msgid "Deck Editor"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:211
+msgid "Decorative animations"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:80
+msgid "Defender life: {defenderLife}"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1133
+msgid "Defense"
+msgstr "防衛"
+
+#: ui/components/layout/navDestinations.ts:75
+#: ui/components/layout/TopBar.tsx:81
+msgid "Design System"
+msgstr ""
+
+#: ui/components/game/panels/RightActionPanel.tsx:100
+msgid "Dev"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:79
+msgid "Disconnected"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:247
+msgid "Done"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:108
+msgid "Downloading…"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:109
+msgid "Downloading… {progress}%"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:274
+msgid "Draw a card"
+msgstr ""
+
+#: ui/components/game/CardRailPreview.tsx:190
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:151
+msgid "Effect text unavailable"
+msgstr "効果テキストを利用できません"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:84
+msgid "Eliminated"
+msgstr ""
+
+#. placeholder {0}: summary.estimatedDamage
+#: ui/components/game/modals/CombatBreakdownModal.tsx:79
+msgid "Estimated unblocked damage: {0}"
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:92
+msgid "Exit full screen"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:134
+#: ui/components/layout/AccountMenu.tsx:135
+msgid "Exit fullscreen"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:177
+msgid "Exit tabletop"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:36
+#: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:307
+msgid "Face-down card"
+msgstr "裏向きのカード"
+
+#: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:309
+msgid "Face-down permanent"
+msgstr "裏向きのパーマネント"
+
+#. placeholder {0}: colorLabel(color)
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:159
+msgid "Filter by {0} identity"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
+msgid "Filters"
+msgstr ""
+
+#: ui/views/Game.tsx:2533
+msgid "First Strike Damage"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:807
+msgid "Flavor text"
+msgstr "フレーバーテキスト"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:836
+msgid "Flip back · F"
+msgstr "裏面に切替 · F"
+
+#. placeholder {0}: showBackFace ? doubleFacedData.frontName : doubleFacedData.backName
+#: ui/components/game/CardPreview.tsx:462
+msgid "Flip card (F) — {0}"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:836
+msgid "Flip front · F"
+msgstr "表面に切替 · F"
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:114
+#: ui/components/game/panels/PlayerSheetModal.tsx:115
+msgid "Floating mana"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:180
+msgid "Focused"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:110
+msgid "Folder not found. Cards fall back to Scryfall."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:58
+msgid "Folder not found. Check the path and try again."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:89
+msgid "Folder with Forge-named card images"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:171
+msgid "Free placement"
+msgstr ""
+
+#: ui/components/game/CardPreview.tsx:465
+msgid "Front"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:131
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:52
+msgid "Full control"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:134
+msgid "Full control stops at every window. Autopass skips windows with only mana abilities after a short delay."
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:92
+msgid "Full screen"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:134
+#: ui/components/layout/AccountMenu.tsx:135
+msgid "Fullscreen"
+msgstr ""
+
+#: ui/components/game/panels/ActionLog.tsx:110
+#: ui/components/game/panels/ActionLog.tsx:117
+msgid "Game Log"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:67
+msgid "Game starting…"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:69
+msgid "Gauntlet"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:253
+msgid "Getting started"
+msgstr ""
+
+#: ui/components/game/panels/GlobalStateRail.tsx:143
+msgid "Global game state"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:34
+msgid "Green"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:124
+msgid "Guest"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:100
+msgid "Hand default view"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:74
+msgid "Has priority"
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:116
+msgid "Hide playmat"
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:97
+msgid "Hide side panel"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:222
+msgid "Hover"
+msgstr ""
+
+#. placeholder {0}: prefs.cardHoverDelayMs
+#: ui/components/game/modals/GameSettingsModal.tsx:230
+msgid "Hover delay · {0}ms"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:26
+msgid "How many players?"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:229
+msgid "I have read and agree to these terms"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:96
+msgid "In combat"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:39
+msgid "Inspect {name}"
+msgstr ""
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:62
+msgid "Inspect the card, then choose an available action. Viewing another face does not change the action you choose."
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:217
+msgid "Inspection input"
+msgstr ""
+
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:18
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:25
+msgid "Interface language"
+msgstr ""
+
+#: ui/components/KeyboardShortcutsDialog.tsx:36
+msgid "Keyboard shortcuts"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:733
+msgid "Keywords, costs & counters"
+msgstr "キーワード・コスト・カウンター"
+
+#: ui/components/settings/LanguagePreferenceCard.tsx:20
+msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
+msgstr ""
+
+#: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:19
+msgid "Language for menus, buttons and messages. Untranslated text falls back to English."
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:141
+msgid "Leave"
+msgstr ""
+
+#: ui/components/game/GameFailedScreen.tsx:18
+#: ui/components/game/GameLoadingScreen.tsx:129
+msgid "Leave game"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:277
+msgid "Lethal"
+msgstr ""
+
+#. placeholder {0}: notch.label
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:118
+msgid "LEVEL {0}"
+msgstr "レベル {0}"
+
+#. placeholder {0}: state.current
+#. placeholder {1}: state.max
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:92
+msgid "Level {0} of {1}"
+msgstr "レベル {0} / {1}"
+
+#: ui/components/game/zones/LibraryZoneTile.tsx:34
+msgid "Library"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:63
+msgid "Life"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:68
+#: ui/components/layout/TopBar.tsx:72
+msgid "Life Tracker"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:15
+msgid "Load card images"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:44
+msgid "Loading"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:38
+msgid "Loading card data"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:206
+msgid "Loading card details for search…"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:40
+msgid "Loading decks"
+msgstr ""
+
+#: ui/phase/Launch.tsx:177
+#~ msgid "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
+#~ msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:205
+msgid "Locked"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:208
+msgid "Locking prevents dragging piles; viewing their cards remains available."
+msgstr ""
+
+#: ui/components/game/panels/RightActionPanel.tsx:63
+msgid "Log"
+msgstr ""
+
+#: ui/components/game/panels/RightActionPanel.tsx:87
+msgid "Log ({logActivityCount})"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:102
+msgid "Log prompts to console"
+msgstr ""
+
+#: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
+msgid "LORE CHAPTERS"
+msgstr "サーガの章"
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1132
+msgid "Loyalty"
+msgstr "忠誠度"
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:182
+#: ui/lib/handOrder.ts:11
+msgid "Mana value"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:159
+msgid "Manabrew Home"
+msgstr ""
+
+#: ui/phase/Launch.tsx:174
+#~ msgid "ManaBrew's battlefield and prompts, powered by phase-engine and phase-ai."
+#~ msgstr ""
+
+#: ui/lib/handOrder.ts:9
+msgid "Manual"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:97
+msgid "Manual preserves your placement; automatic modes arrange new cards."
+msgstr ""
+
+#: ui/components/layout/NavSheet.tsx:85
+#: ui/components/layout/NavSheet.tsx:88
+#: ui/components/layout/NavSheet.tsx:91
+msgid "Menu"
+msgstr ""
+
+#: ui/components/game/battlefieldCardStyles.ts:11
+msgid "Mini-frame"
+msgstr ""
+
+#: ui/components/layout/NavSheet.tsx:97
+msgid "More"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:204
+msgid "Movable"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:423
+#: ui/components/game/ManualTabletopControls.tsx:424
+msgid "Move to exile"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:438
+#: ui/components/game/ManualTabletopControls.tsx:439
+msgid "Move to graveyard"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:413
+#: ui/components/game/ManualTabletopControls.tsx:414
+msgid "Move to hand"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:53
+#: ui/components/layout/TopBar.tsx:33
+msgid "Multiplayer"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:54
+msgid "Multiplayer Draft"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:62
+#: ui/components/layout/TopBar.tsx:45
+msgid "My Collection"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:54
+#: ui/components/layout/TopBar.tsx:40
+msgid "My Decks"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:181
+msgid "Name"
+msgstr ""
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:113
+msgid "No actions are currently available for this card."
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:337
+msgid "No cards found"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:103
+msgid "No current combat assignments."
+msgstr ""
+
+#: ui/components/game/panels/ActionLog.tsx:111
+msgid "No log entries yet."
+msgstr ""
+
+#: ui/components/KeyboardShortcutsDialog.tsx:78
+msgid "No shortcuts match “{query}”."
+msgstr ""
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:24
+msgid "No snapshots yet."
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:253
+msgid "Not gained: "
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:70
+msgid "Off"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:69
+msgid "On"
+msgstr ""
+
+#: ui/views/Game.tsx:2535
+msgid "only first & double strikers deal damage now"
+msgstr ""
+
+#: ui/components/game/panels/RightActionPanel.tsx:56
+msgid "Open action log with {logActivityCount} entries"
+msgstr ""
+
+#: ui/phase/Launch.tsx:196
+#~ msgid "Open the ManaBrew interface"
+#~ msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:177
+msgid "Opponent layout"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:16
+msgid "Optional yes/no costs"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:181
+msgid "Overview"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:107
+msgid "Pinned by PHASE_MANA_CARD_IMAGES."
+msgstr ""
+
+#: ui/components/layout/NavSheet.tsx:93
+msgid "Play"
+msgstr ""
+
+#: ui/phase/Launch.tsx:181
+#~ msgid "Play against Phase AI"
+#~ msgstr ""
+
+#: ui/components/layout/TopBar.tsx:30
+msgid "Play Deck"
+msgstr ""
+
+#: ui/components/layout/navDestinations.ts:52
+#: ui/components/layout/TopBar.tsx:24
+#: ui/components/layout/TopBar.tsx:27
+msgid "Play Offline"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "Player details"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:140
+msgid "Player states"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:126
+msgid "Playing as a guest"
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:113
+msgid "Playmats"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:25
+msgid "Playtest"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:96
+msgid "Potential lethal combat damage"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:167
+#: ui/components/layout/TopBar.tsx:75
+msgid "Preferences"
+msgstr ""
+
+#: ui/components/layout/TopBarNav.tsx:22
+msgid "Primary"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:104
+msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:42
+msgid "Priority"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:125
+msgid "Priority and prompts"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:127
+msgid "Priority windows"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:756
+msgid "Progression"
+msgstr "進行"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:112
+msgid "Prompt and dialog default view"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
+msgid "Prompts"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:291
+msgid "Put top library card onto battlefield"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:42
+msgid "Ready"
+msgstr ""
+
+#: ui/components/game/battlefieldCardStyles.ts:9
+#: ui/components/game/cardPreviewStyles.ts:12
+#: ui/components/game/cardPreviewStyles.ts:22
+msgid "Realistic"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:116
+msgid "Realistic uses printed art. Rules shows card rules and current game information. Individual cards can still be switched."
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:17
+msgid "Receive the first game state"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:32
+msgid "Red"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:196
+msgid "Reset"
+msgstr ""
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:51
+msgid "Restore"
+msgstr ""
+
+#: ui/phase/Launch.tsx:184
+#~ msgid "Resume local game"
+#~ msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:121
+msgid "Return to combat"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:223
+msgid "Right click"
+msgstr ""
+
+#: ui/components/game/CardPreviewOverlay.tsx:222
+msgid "Ring-bearer"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Rotate card"
+msgstr ""
+
+#: ui/components/LandscapeGate.tsx:27
+msgid "Rotate your device"
+msgstr ""
+
+#: ui/components/game/cardPreviewStyles.ts:13
+#: ui/components/game/cardPreviewStyles.ts:23
+msgid "Rules"
+msgstr ""
+
+#: ui/components/game/panels/PlayerRuleFacts.tsx:11
+#: ui/components/game/panels/PlayerRuleFacts.tsx:12
+msgid "Rules and turn"
+msgstr ""
+
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:782
+msgid "Rules text"
+msgstr "ルールテキスト"
+
+#: ui/components/layout/TopBar.tsx:63
+msgid "Sealed"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:60
+msgid "Sealed Deck Build"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:86
+msgid "Search cards"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:85
+msgid "Search cards by name, rules, type or mana"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:329
+msgid "Search Scryfall"
+msgstr ""
+
+#: ui/components/KeyboardShortcutsDialog.tsx:46
+msgid "Search shortcuts…"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:335
+msgid "Searching…"
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:114
+msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:47
+msgid "Sending concession…"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:71
+msgid "Setting the table — this usually takes a few seconds."
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:79
+msgid "Setup progress"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Show back face"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:47
+msgid "Show front face"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardInspector.tsx:43
+msgid "Show realistic card"
+msgstr ""
+
+#: ui/components/game/CardPreview.tsx:445
+#: ui/components/game/modals/DialogCardInspector.tsx:43
+msgid "Show rules"
+msgstr ""
+
+#: ui/components/game/CardPreview.tsx:446
+msgid "Show rules (R)"
+msgstr ""
+
+#: ui/components/game/panels/MiddleBarDock.tsx:97
+msgid "Show side panel"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:307
+msgid "Shuffle library"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:158
+msgid "Sign in"
+msgstr ""
+
+#: ui/components/layout/AccountMenu.tsx:126
+msgid "Signed in"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:17
+msgid "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
+msgstr ""
+
+#: ui/components/game/panels/SnapshotsPanel.tsx:23
+#: ui/components/game/panels/SnapshotsPanel.tsx:30
+msgid "Snapshots"
+msgstr ""
+
+#. placeholder {0}: snapshots.length
+#: ui/components/game/panels/RightActionPanel.tsx:93
+msgid "Snapshots ({0})"
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:207
+msgid "Some card details are unavailable. Visible names and game rules remain searchable."
+msgstr ""
+
+#: ui/components/game/GameFailedScreen.tsx:14
+msgid "Something went wrong and the game can't continue. Please contact the developer."
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:93
+msgid "Sort hand"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:106
+msgid "Stack default view"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:14
+msgid "Start the game engine"
+msgstr ""
+
+#: ui/phase/Launch.tsx:191
+#~ msgid "Start the Rust host first. Unsupported engine interactions are reported, never silently skipped. This is not the ManaBrew online service."
+#~ msgstr ""
+
+#: ui/components/AppInitGate.tsx:36
+msgid "Starting"
+msgstr ""
+
+#: ui/views/Play.tsx:153
+msgid "Starting multiplayer game…"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:54
+msgid "Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay."
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:186
+msgid "Table background"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:166
+msgid "Tabletop"
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:16
+msgid "Take your seat"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:397
+#: ui/components/game/ManualTabletopControls.tsx:398
+msgid "Tap"
+msgstr ""
+
+#: ui/components/game/zones/ManaAbilityTapButton.tsx:50
+msgid "Tap: {description}"
+msgstr ""
+
+#: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
+msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:81
+msgid "The folder the server reads card scans from. Pick the root that holds the letter folders (a, b, …); cards it does not hold fall back to Scryfall."
+msgstr ""
+
+#: ui/components/game/GameFailedScreen.tsx:12
+msgid "The game failed to start"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:196
+msgid "The host picked this table's background when creating it."
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:86
+msgid "Theme Editor"
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:37
+msgid "This app hosts the table. After conceding, stay connected so the remaining players can finish. Leaving later will end their game."
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:82
+msgid "This estimate does not model trample, prevention or replacement effects."
+msgstr ""
+
+#: ui/components/game/GameLoadingScreen.tsx:70
+msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
+msgstr ""
+
+#: ui/components/LandscapeGate.tsx:29
+msgid "This screen is designed for landscape play."
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:48
+msgid "Top Decks"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
+msgid "Unavailable with the local Phase host. Choose 1v1."
+msgstr ""
+
+#: ui/components/game/modals/CombatBreakdownModal.tsx:96
+msgid "Unblocked"
+msgstr ""
+
+#: ui/components/game/ManualTabletopControls.tsx:397
+#: ui/components/game/ManualTabletopControls.tsx:398
+msgid "Untap"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:199
+msgid "Update"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:111
+msgid "Update to {version}"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:102
+msgid "Use folder"
+msgstr ""
+
+#: ui/components/settings/LocaleSelect.tsx:22
+msgid "Use system language"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:197
+msgid "Used when a table does not provide its own background, including offline games."
+msgstr ""
+
+#. placeholder {0}: TERMS_AND_CONDITIONS.version
+#. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
+#: ui/components/AppInitGate.tsx:242
+msgid "Version {0} · Updated {1}"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:217
+#: ui/components/game/panels/PlayerSheetModal.tsx:289
+msgid "View"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:175
+msgid "View permitted hand cards"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:201
+msgid "View visible cards"
+msgstr ""
+
+#: ui/views/Play.tsx:154
+msgid "Waiting for game synchronization…"
+msgstr ""
+
+#: ui/components/game/modals/AbilityPickerModal.tsx:119
+msgid "Waiting for the game to respond…"
+msgstr ""
+
+#: ui/phase/Launch.tsx:194
+#~ msgid "Want to pick your own decks?"
+#~ msgstr ""
+
+#: ui/components/AppInitGate.tsx:139
+msgid "Welcome to"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:141
+msgid "When off, simultaneous triggers are ordered automatically."
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:26
+msgid "White"
+msgstr ""
+
+#: ui/components/layout/TopBar.tsx:66
+msgid "Winston Draft"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:106
+msgid "Working…"
+msgstr ""
+
+#: ui/components/game/panels/PlayerSheetModal.tsx:58
+msgid "You"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:50
+msgid "You and one AI opponent. Faster turns, quicker goldfishing."
+msgstr ""
+
+#: ui/components/game/modals/ConcedeGameModal.tsx:34
+msgid "You forfeit the game. This cannot be undone."
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:226
+msgid "Zone explorers support persistent tap and keyboard inspection independently."
+msgstr ""
+
+#: ui/components/game/modals/DialogCardBrowserToolbar.tsx:180
+msgid "Zone order"
+msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:201
+msgid "Zone piles"
+msgstr ""

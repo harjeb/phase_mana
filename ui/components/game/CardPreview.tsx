@@ -1,0 +1,587 @@
+import { topModal } from "@/lib/modalStack";
+import { t } from "@lingui/core/macro";
+import { createPortal } from "react-dom";
+import { Loader2, RotateCw } from "lucide-react";
+import type { CardDto } from "@/protocol/game";
+import type { DeckCard } from "@/protocol/deck";
+import { CounterDisplay } from "@/components/game/CounterBadge";
+import { CARD_RAIL_WIDTH } from "@/components/game/CardRail";
+import { CardRailPreview } from "@/components/game/CardRailPreview";
+import { ManaSymbols } from "@/components/game/ManaSymbols";
+import { CardPreviewOverlay } from "./CardPreviewOverlay";
+import { GameIcon } from "./GameIcon";
+import { CardPreviewActions, type IndexedPreviewAction } from "./CardPreviewActions";
+import { ACTIONABLE_CARD_GLOW_CLASS, actionableCardGlowStyle } from "./cardPreviewStyles";
+import { computePreviewLayout } from "./cardPreviewLayout";
+import { getPreviewActionShortcut } from "./game.utils";
+import { CARD_W, CARD_RADIUS } from "./game.constants";
+import { CARD_BACK_IMAGE_URL } from "./game.constants";
+import { isFacelessCard } from "@/lib/gameCard";
+import { withAlpha } from "@/themes/gameTheme";
+import { useTheme } from "@/hooks/useTheme";
+import { isHorizontalGameCard } from "@/lib/horizontalGameCard";
+import { cn } from "@/lib/utils";
+import { GHOST_CLICK_ARM_MS } from "@/lib/responsive";
+import { PREVIEW_TIMING } from "@/lib/cardPreview";
+import type { HandActionOption } from "@/stores/useGameUIStore";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import { DEBUG_KEYWORD_CARD_ID, useGameDevStore } from "@/stores/useGameDevStore";
+import { ScryfallImg } from "@/components/ScryfallImg";
+import { useResolvedGameCard } from "@/hooks/useResolvedGameCard";
+import { useKeybindings } from "@/hooks/useKeybindings";
+import { deriveCardRailEffects, deriveCardRailState } from "@/components/game/cardRailState";
+import { cardTypeLine, replaceCardName } from "@/components/game/cardPresentation";
+import { localizeRulesPreviewText } from "@/pixi/cardPreview/rulesCardPreviewPresentation";
+interface CardPreviewProps {
+  card: CardDto;
+  mouseX: number;
+  mouseY: number;
+  anchorRect?: DOMRect | null;
+  placement?: "auto" | "top-center" | "pinned";
+  phase?: "open" | "closing";
+  suppressed?: boolean;
+  showBackFace?: boolean;
+  skipEnterAnimation?: boolean;
+  actions?: HandActionOption[];
+  onSelectAction?: (action: HandActionOption) => void;
+  onDismiss?: () => void;
+  onFlip?: () => void;
+  onToggleView?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  isSticky?: boolean;
+  slot?: HTMLElement | null;
+  imageSize?: "normal" | "large";
+}
+const IMG_VERTICAL = "absolute inset-0 w-full h-full object-cover";
+const IMG_HORIZONTAL =
+  "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 origin-center h-[calc(100%*7/5)] aspect-[5/7] object-cover";
+/**
+ * Monotonic image display: pixels already on screen are never removed until
+ * the replacement has finished loading. Swapping an `<img>` src blanks it
+ * immediately, so a naive swap (face URLs resolving, low→high res, card
+ * switch) flashes the preview empty for the load duration.
+ */
+function PreviewImageStack({
+  targetUrl,
+  lowResUrl,
+  horizontal,
+  cardName,
+}: {
+  targetUrl: string;
+  lowResUrl: string | null;
+  horizontal: boolean;
+  cardName: string;
+}) {
+  const [displayed, setDisplayed] = useState<{
+    src: string;
+    horizontal: boolean;
+  } | null>(null);
+  const targetShown = displayed?.src === targetUrl;
+  const showLowRes = !!lowResUrl && !targetShown && displayed?.src !== lowResUrl;
+  return (
+    <>
+      {!displayed && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 bg-black">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          <span className="text-xs text-muted-foreground text-center">{cardName}</span>
+        </div>
+      )}
+      {displayed && !targetShown && (
+        <ScryfallImg
+          src={displayed.src}
+          alt=""
+          title=""
+          aria-hidden
+          className={displayed.horizontal ? IMG_HORIZONTAL : IMG_VERTICAL}
+        />
+      )}
+      {showLowRes && (
+        <ScryfallImg
+          src={lowResUrl}
+          alt=""
+          title=""
+          aria-hidden
+          onLoad={() => setDisplayed({ src: lowResUrl, horizontal })}
+          className={horizontal ? IMG_HORIZONTAL : IMG_VERTICAL}
+        />
+      )}
+      <ScryfallImg
+        src={targetUrl}
+        alt={cardName}
+        title=""
+        onLoad={() => setDisplayed({ src: targetUrl, horizontal })}
+        className={cn(horizontal ? IMG_HORIZONTAL : IMG_VERTICAL, !targetShown && "opacity-0")}
+      />
+    </>
+  );
+}
+export function CardPreview({
+  card,
+  mouseX,
+  mouseY,
+  anchorRect,
+  placement = "auto",
+  phase = "open",
+  suppressed = false,
+  skipEnterAnimation = false,
+  showBackFace = false,
+  actions,
+  onSelectAction,
+  onDismiss,
+  onFlip,
+  onToggleView,
+  onMouseEnter,
+  onMouseLeave,
+  isSticky = false,
+  slot,
+  imageSize = "large",
+}: CardPreviewProps) {
+  const resolvedGameCard = useResolvedGameCard(card);
+  const hasActions = Boolean(actions?.length && onSelectAction);
+  const themeColors = useTheme().gameTheme;
+  const showHoverAreas = useGameDevStore((s) => s.showHoverAreas);
+  const ringColor = themeColors.cardRing;
+  const rail = deriveCardRailState(card);
+  const nextClassLevel =
+    rail?.kind === "class" && rail.current < rail.max ? rail.current + 1 : null;
+  const availableActions = hasActions ? (actions ?? []) : [];
+  const classLevelUpIndex = nextClassLevel
+    ? availableActions.findIndex((action) => action.isClassLevelUp)
+    : -1;
+  const integratedClassLevelUpIndex = classLevelUpIndex >= 0 ? classLevelUpIndex : null;
+  const indexedActions: IndexedPreviewAction[] = availableActions.map((action, index) => ({
+    action,
+    index,
+    shortcut: getPreviewActionShortcut(
+      index,
+      integratedClassLevelUpIndex,
+      integratedClassLevelUpIndex === null ? null : nextClassLevel,
+    ),
+    displayLabel: localizeRulesPreviewText(
+      action.label,
+      resolvedGameCard.info,
+      card.isTransformed ? 1 : 0,
+    ),
+  }));
+  const classLevelUpActions = indexedActions.filter(({ action }) => action.isClassLevelUp);
+  const railClassLevelUpAction =
+    integratedClassLevelUpIndex === null ? undefined : indexedActions[integratedClassLevelUpIndex];
+  const extraClassActions = railClassLevelUpAction
+    ? classLevelUpActions.filter(({ index }) => index !== railClassLevelUpAction.index)
+    : classLevelUpActions;
+  const mainActions = indexedActions.filter(({ action }) => !action.isClassLevelUp);
+  const railInteractions =
+    nextClassLevel && railClassLevelUpAction
+      ? [
+          {
+            position: nextClassLevel,
+            shortcut: railClassLevelUpAction.shortcut,
+            label: railClassLevelUpAction.displayLabel,
+            onActivate: () => onSelectAction!(railClassLevelUpAction.action),
+          },
+        ]
+      : [];
+  const hasMainActions = mainActions.length > 0;
+  const showSidePanel = hasMainActions || Boolean(rail || extraClassActions.length);
+  const isDebugCard = card.id === DEBUG_KEYWORD_CARD_ID;
+  const deckCard: DeckCard = isDebugCard
+    ? ({
+        identity: { id: "", name: card.identity.name, setCode: "", cardNumber: "" },
+        uris: {},
+      } as DeckCard)
+    : resolvedGameCard.deckCard;
+  const cardFaces = resolvedGameCard.cardFaces;
+  const resolveImageUrl = resolvedGameCard.imageUrl;
+  const front = cardFaces.faces[0];
+  const back = cardFaces.faces[1];
+  const previewFaceIndex = showBackFace ? 1 : 0;
+  const railEffects = rail ? deriveCardRailEffects(card, rail) : [];
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [panelHeight, setPanelHeight] = useState(0);
+  const [, setLayoutVersion] = useState(0);
+  // The hero zoom travels across the hovered card; an interactive preview
+  // passing under the cursor steals pointer events from the canvas and kills
+  // the sprite's hover state. Stay pointer-transparent until the enter lands.
+  const [entered, setEntered] = useState(skipEnterAnimation);
+  const interactive = entered && phase === "open" && !suppressed;
+  useEffect(() => {
+    if (skipEnterAnimation) return;
+    const timer = setTimeout(() => setEntered(true), PREVIEW_TIMING.enterMs + 80);
+    return () => clearTimeout(timer);
+  }, [skipEnterAnimation]);
+  useLayoutEffect(() => {
+    const update = () => setLayoutVersion((version) => version + 1);
+    const observer = new ResizeObserver(update);
+    if (slot) observer.observe(slot);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [slot]);
+  useLayoutEffect(() => {
+    const measure = () => setPanelHeight(panelRef.current?.offsetHeight ?? 0);
+    const observer = new ResizeObserver(measure);
+    if (panelRef.current) observer.observe(panelRef.current);
+    const frame = requestAnimationFrame(measure);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [showSidePanel, card.id]);
+  const faceless = isFacelessCard(card);
+  const imageUrl = faceless ? CARD_BACK_IMAGE_URL : resolveImageUrl(0, imageSize);
+  const frontImageUrl = resolveImageUrl(0, imageSize);
+  const backImageUrl = resolveImageUrl(1, imageSize);
+  const hasFlippableFaces = cardFaces.isFlippable && !!frontImageUrl && !!backImageUrl;
+  const doubleFacedData = hasFlippableFaces
+    ? {
+        frontImageUrl: frontImageUrl!,
+        backImageUrl: backImageUrl!,
+        frontImageUrlLow: resolveImageUrl(0, "normal")!,
+        backImageUrlLow: resolveImageUrl(1, "normal")!,
+        frontName: front!.name,
+        backName: back!.name,
+      }
+    : null;
+  const horizontalCard = isDebugCard
+    ? false
+    : isHorizontalGameCard(
+        card,
+        deckCard.layout,
+        previewFaceIndex,
+        cardFaces.faces[previewFaceIndex]?.typeLine,
+      );
+  const fallbackCounters =
+    rail?.kind === "saga" && card.counters
+      ? Object.fromEntries(
+          Object.entries(card.counters).filter(([type, count]) => count > 0 && type !== "Lore"),
+        )
+      : card.counters;
+  useKeybindings(
+    onFlip && hasFlippableFaces
+      ? {
+          "flip-card": onFlip,
+        }
+      : {},
+  );
+  useEffect(() => {
+    if (!onDismiss) return;
+    function handleKey(e: KeyboardEvent) {
+      if (topModal() || e.defaultPrevented || e.isComposing) return;
+      if (e.key === "Escape") {
+        onDismiss!();
+        return;
+      }
+      if (!hasActions) return;
+      const num = parseInt(e.key);
+      const action = actions?.find(
+        (_, index) =>
+          getPreviewActionShortcut(
+            index,
+            integratedClassLevelUpIndex,
+            integratedClassLevelUpIndex === null ? null : nextClassLevel,
+          ) === num,
+      );
+      if (num >= 1 && num <= 9 && action) {
+        e.preventDefault();
+        onSelectAction!(action);
+      }
+    }
+    function handleClick(e: PointerEvent) {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-card-preview]")) {
+        onDismiss!();
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    const timer = setTimeout(() => {
+      if (isSticky) {
+        window.addEventListener("pointerdown", handleClick);
+      }
+    }, GHOST_CLICK_ARM_MS);
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", handleClick);
+    };
+  }, [
+    hasActions,
+    isSticky,
+    onDismiss,
+    onSelectAction,
+    actions,
+    integratedClassLevelUpIndex,
+    nextClassLevel,
+  ]);
+  const horizontal = horizontalCard;
+  const layout = computePreviewLayout({
+    placement,
+    anchorRect: anchorRect ?? null,
+    mouseX,
+    mouseY,
+    horizontal,
+    hasPanel: showSidePanel,
+    panelHeight,
+    slot: slot ?? null,
+  });
+  const { cardLeft, top, cardWidth, cardHeight, sidePanelWidth, panelSide } = layout;
+  const cardCornerRadius = (Math.min(cardWidth, cardHeight) * CARD_RADIUS) / CARD_W;
+  const anchorCenterX = anchorRect ? anchorRect.left + anchorRect.width / 2 : mouseX;
+  const anchorCenterY = anchorRect ? anchorRect.top + anchorRect.height / 2 : mouseY;
+  const heroShiftX = slot ? 0 : anchorCenterX - (cardLeft + cardWidth / 2);
+  const heroShiftY = slot ? 0 : anchorCenterY - (top + cardHeight / 2);
+  const heroScaleFrom = slot
+    ? 0.95
+    : anchorRect
+      ? Math.max(0.25, Math.min(0.85, anchorRect.width / Math.max(1, cardWidth)))
+      : 0.5;
+  const hasDoubleFace = !!doubleFacedData;
+  const currentImageUrl = hasDoubleFace && showBackFace ? doubleFacedData.backImageUrl : imageUrl;
+  const currentCardName =
+    hasDoubleFace && showBackFace ? doubleFacedData.backName : card.identity.name;
+  const currentLowResUrl =
+    imageSize !== "large"
+      ? null
+      : hasDoubleFace
+        ? showBackFace
+          ? doubleFacedData.backImageUrlLow
+          : doubleFacedData.frontImageUrlLow
+        : resolveImageUrl(0, "normal");
+  const cardLookupPending = !isDebugCard && cardFaces.faces.length === 0;
+  const hasPreviewControls = Boolean(onToggleView || (hasDoubleFace && onFlip));
+  return createPortal(
+    <>
+      {hasActions && isSticky && !suppressed && (
+        <div
+          className="fixed inset-0 z-[9998] bg-black/30 animate-preview-fade-in"
+          onClick={onDismiss}
+        />
+      )}
+      <div
+        data-card-preview
+        className={cn(
+          "select-none transition-opacity duration-150",
+          suppressed && "opacity-0",
+          slot
+            ? "relative w-full h-full flex items-start justify-start pointer-events-none"
+            : cn(
+                "fixed z-[9999]",
+                placement !== "pinned" && interactive && (showSidePanel || hasPreviewControls)
+                  ? "pointer-events-auto"
+                  : "pointer-events-none",
+              ),
+        )}
+        style={slot ? undefined : { left: cardLeft, top }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        <div
+          className={cn(
+            "relative @container",
+            phase === "closing"
+              ? "animate-preview-out"
+              : !skipEnterAnimation && "animate-preview-in",
+          )}
+          style={
+            {
+              ["--card-rail-width" as string]: CARD_RAIL_WIDTH,
+              ["--preview-shift-x" as string]: `${heroShiftX}px`,
+              ["--preview-shift-y" as string]: `${heroShiftY}px`,
+              ["--preview-scale-from" as string]: `${heroScaleFrom}`,
+              animationDuration: `${phase === "closing" ? PREVIEW_TIMING.exitMs : PREVIEW_TIMING.enterMs}ms`,
+              width: cardWidth,
+              height: cardHeight,
+              marginLeft: slot ? layout.slotMarginLeft : undefined,
+            } as CSSProperties
+          }
+        >
+          <div
+            className={cn(
+              "w-full h-full shadow-2xl overflow-hidden bg-black relative",
+              hasActions && ACTIONABLE_CARD_GLOW_CLASS,
+              card.foil && "draft-tile-foil",
+            )}
+            style={{
+              borderRadius: cardCornerRadius,
+              ...(hasActions ? actionableCardGlowStyle(ringColor) : {}),
+            }}
+          >
+            {currentImageUrl ? (
+              <>
+                <PreviewImageStack
+                  targetUrl={currentImageUrl}
+                  lowResUrl={currentLowResUrl ?? null}
+                  horizontal={horizontal}
+                  cardName={currentCardName}
+                />
+                <CardPreviewOverlay
+                  card={card}
+                  horizontal={horizontal}
+                  rail={rail}
+                  compactRail={false}
+                />
+                {showHoverAreas && (
+                  <div
+                    className="pointer-events-none absolute inset-0 z-30"
+                    style={{ backgroundColor: withAlpha(themeColors.success, 0.28) }}
+                  />
+                )}
+                {hasPreviewControls && (
+                  <div className="absolute top-[12%] right-2 z-20 flex items-center gap-1">
+                    {onToggleView && (
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onToggleView();
+                        }}
+                        className={cn(
+                          "inline-flex h-7 w-7 items-center justify-center rounded-full bg-black/65 text-white shadow hover:bg-black/85 pointer-coarse:h-9 pointer-coarse:w-9",
+                          interactive ? "pointer-events-auto" : "pointer-events-none",
+                        )}
+                        aria-label={t`Show rules`}
+                        title={t`Show rules (R)`}
+                      >
+                        <GameIcon name="spell-book" className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                    {hasDoubleFace && onFlip && (
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onFlip();
+                        }}
+                        className={cn(
+                          "inline-flex items-center gap-1 rounded-full bg-black/65 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white shadow hover:bg-black/85 pointer-coarse:px-3 pointer-coarse:py-2",
+                          interactive ? "pointer-events-auto" : "pointer-events-none",
+                        )}
+                        title={t`Flip card (F) — ${showBackFace ? doubleFacedData.frontName : doubleFacedData.backName}`}
+                      >
+                        <RotateCw className="h-3 w-3" />
+                        {showBackFace ? t`Front` : t`Back`}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </>
+            ) : cardLookupPending ? (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-4 bg-black">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <span className="text-xs text-muted-foreground text-center">{currentCardName}</span>
+              </div>
+            ) : (
+              <div className="w-full h-full p-4 bg-card">
+                <div className="flex h-full min-w-0 flex-col gap-2">
+                  <div className="flex justify-between items-start gap-2">
+                    <span className="font-bold text-sm leading-tight">{currentCardName}</span>
+                    {!hasDoubleFace &&
+                      (card.effectiveManaCost ? (
+                        <div className="flex flex-col items-end">
+                          <span className="line-through opacity-50">
+                            <ManaSymbols cost={card.manaCost} size="md" />
+                          </span>
+                          <span
+                            className="rounded border px-0.5"
+                            style={{ borderColor: ringColor }}
+                          >
+                            <ManaSymbols cost={card.effectiveManaCost} size="md" />
+                          </span>
+                        </div>
+                      ) : (
+                        <ManaSymbols cost={card.manaCost} size="md" />
+                      ))}
+                  </div>
+                  {!hasDoubleFace && (
+                    <div className="text-xs text-muted-foreground">{cardTypeLine(card)}</div>
+                  )}
+                  <div className="flex-1 text-xs text-foreground/80 whitespace-pre-wrap">
+                    {hasDoubleFace && showBackFace
+                      ? `Back face: ${doubleFacedData!.backName}`
+                      : hasDoubleFace && !showBackFace
+                        ? `Front face: ${doubleFacedData!.frontName}`
+                        : replaceCardName(card.text, card.identity.name)}
+                  </div>
+                  {fallbackCounters && <CounterDisplay counters={fallbackCounters} size="md" />}
+                  {card.power && card.toughness && (
+                    <div className="text-right font-bold text-sm">
+                      {card.power}/{card.toughness}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {showSidePanel && (
+            <div
+              ref={panelRef}
+              className="absolute top-0 flex flex-col gap-1.5"
+              style={{
+                ...(panelSide === "right" ? { left: cardWidth + 10 } : { right: cardWidth + 10 }),
+                width: sidePanelWidth,
+                transform: `scale(${layout.panelScale})`,
+                transformOrigin: panelSide === "right" ? "top left" : "top right",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  ...(panelSide === "right"
+                    ? { left: -10 - cardWidth, borderBottomRightRadius: "100%" }
+                    : { right: -10 - cardWidth, borderBottomLeftRadius: "100%" }),
+                  width: cardWidth + 10 + sidePanelWidth,
+                  height: cardHeight,
+                  backgroundColor: showHoverAreas
+                    ? withAlpha(themeColors.success, 0.28)
+                    : "transparent",
+                  zIndex: -1,
+                }}
+              />
+              {hasMainActions && (
+                <CardPreviewActions
+                  actions={mainActions}
+                  onSelect={onSelectAction!}
+                  ringColor={ringColor}
+                  showHelp
+                  hasFlippableFaces={hasFlippableFaces}
+                />
+              )}
+              {rail && (
+                <CardRailPreview
+                  state={rail}
+                  effects={railEffects}
+                  interactions={railInteractions}
+                />
+              )}
+              {extraClassActions.length > 0 && (
+                <CardPreviewActions
+                  actions={extraClassActions}
+                  onSelect={onSelectAction!}
+                  ringColor={ringColor}
+                  showHelp={!hasMainActions}
+                  hasFlippableFaces={hasFlippableFaces}
+                />
+              )}
+              {!hasActions && hasFlippableFaces && (
+                <div className="px-1 text-[10px] text-muted-foreground">
+                  <span>
+                    <kbd className="rounded border border-border bg-muted px-1 font-mono text-[9px]">
+                      F
+                    </kbd>{" "}
+                    flip
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </>,
+    slot ?? document.body,
+  );
+}

@@ -1,0 +1,13 @@
+[package]
+name = "generate-hub-types"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+anyhow = "1"
+manabrew-protocol = { path = "../manabrew-protocol", version = "=5.11.1" }
+serde.workspace = true
+ts-rs.workspace = true

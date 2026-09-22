@@ -1,0 +1,28 @@
+[package]
+name = "phase-mana-server"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+
+[workspace]
+
+[dependencies]
+engine = { package = "phase-engine", path = "../../phase/crates/engine" }
+phase-ai = { path = "../../phase/crates/phase-ai" }
+manabrew-compat = { path = "../../phase/crates/manabrew-compat" }
+# Match phase/Cargo.lock: later 5.x versions changed Rust DTO fields.
+manabrew-protocol = "=5.2.0"
+axum = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rand = "0.9"
+
+[dev-dependencies]
+engine = { package = "phase-engine", path = "../../phase/crates/engine", features = ["test-support"] }
+
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0

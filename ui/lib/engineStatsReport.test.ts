@@ -1,0 +1,93 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.hoisted(() => vi.stubGlobal("__APP_VERSION__", "test"));
+
+const recordEngineStats = vi.fn<(stats: unknown) => Promise<void>>();
+
+vi.mock("@/api/hub", () => ({
+  recordEngineStats: (stats: unknown) => recordEngineStats(stats),
+  HubRequestError: class HubRequestError extends Error {
+    status = 500;
+  },
+}));
+
+vi.mock("@/platform", () => ({ getPlatform: () => ({ type: "web" }) }));
+
+import { engineReportGameId, reportEngineStats } from "@/lib/engineStatsReport";
+import { beginGame, noteAnswerSent, notePromptArrived } from "@/lib/engineTelemetry";
+
+function playSixDecisions(engine: string) {
+  beginGame(engine);
+  for (let i = 0; i < 6; i += 1) {
+    noteAnswerSent();
+    notePromptArrived("chooseAction");
+  }
+}
+
+describe("engine stats reporting", () => {
+  beforeEach(() => {
+    recordEngineStats.mockReset();
+    recordEngineStats.mockResolvedValue(undefined);
+    const store = new Map<string, string>();
+    vi.stubGlobal("window", {
+      localStorage: {
+        getItem: (key: string) => store.get(key) ?? null,
+        setItem: (key: string, value: string) => void store.set(key, value),
+      },
+    });
+  });
+
+  it("keeps a report the relay could not take, and sends it to the hub", async () => {
+    playSixDecisions("forge-hosted");
+    reportEngineStats({
+      multiplayer: true,
+      seats: 2,
+      format: "standard",
+      endReason: "gameOver",
+      gameId: "game-1",
+      send: () => Promise.reject(new Error("relay is not connected")),
+    });
+    await vi.waitFor(() => expect(recordEngineStats).toHaveBeenCalledTimes(1));
+    // The hub route has no envelope to hang the game on, so the id has to
+    // travel inside the report or the row lands with nothing to join to.
+    expect(recordEngineStats.mock.calls[0]?.[0]).toMatchObject({
+      engine: "forge-hosted",
+      multiplayer: true,
+      endReason: "gameOver",
+      gameId: "game-1",
+    });
+  });
+
+  it("reports a finished game once, however many times the game ends", () => {
+    playSixDecisions("forge-hosted");
+    const send = vi.fn<() => Promise<void>>().mockResolvedValue(undefined);
+    const end = () =>
+      reportEngineStats({
+        multiplayer: true,
+        seats: 2,
+        format: "standard",
+        endReason: "gameOver",
+        gameId: "game-1",
+        send,
+      });
+    end();
+    end();
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("which game a report is filed under", () => {
+  it("files an offline game under the offline record, whatever the server store holds", () => {
+    // The server store keeps "" between rooms, and a finished relay game's id
+    // after it ends; neither is this game.
+    expect(engineReportGameId(false, "", "offline-1")).toBe("offline-1");
+    expect(engineReportGameId(false, "relay-from-last-room", "offline-1")).toBe("offline-1");
+    expect(engineReportGameId(false, "", null)).toBeNull();
+  });
+
+  it("files a relay game under the relay's id, and never under an offline record", () => {
+    expect(engineReportGameId(true, "relay-1", "offline-1")).toBe("relay-1");
+    expect(engineReportGameId(true, "", "offline-1")).toBeNull();
+    expect(engineReportGameId(true, undefined, null)).toBeNull();
+  });
+});

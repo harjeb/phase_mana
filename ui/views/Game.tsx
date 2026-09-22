@@ -1,0 +1,2621 @@
+import { CombatBreakdownModal } from "@/components/game/modals/CombatBreakdownModal";
+import { t } from "@lingui/core/macro";
+import { locateVisibleZone, visibleZoneCards, zoneLocationKey } from "@/lib/zoneView";
+import { isForgeWasmActive } from "@/lib/forgeWasm";
+import { useGameStore } from "@/stores/useGameStore";
+import { useServerStore } from "@/stores/useServerStore";
+import { asDeckCard } from "@/lib/decks";
+import { GAME_CARD_DEFAULTS } from "@/lib/gameCard";
+import { partitionBoardTargets } from "@/lib/boardTargets";
+import { useGameUIStore } from "@/stores/useGameUIStore";
+import { useKeybindings } from "@/hooks/useKeybindings";
+import { usePreferencesStore } from "@/stores/usePreferencesStore";
+import { usePromptPreferencesStore } from "@/stores/usePromptPreferencesStore";
+import { useAutoResolvePrompt } from "@/components/prompts/internal/useAutoResolvePrompt";
+import { useShallow } from "zustand/react/shallow";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CardChoiceDto, CardDto, StackObjectDto } from "@/protocol/game";
+import type { DeckCard } from "@/protocol/deck";
+import type { ClientCardDto, ClientPlayerDto } from "@/stores/gameStore.types";
+import { GameModals } from "@/components/game/GameModals";
+import { LandscapeGate } from "@/components/LandscapeGate";
+import { GameLoadingScreen } from "@/components/game/GameLoadingScreen";
+import { GameFailedScreen } from "@/components/game/GameFailedScreen";
+import { WaitingForPlayerScreen } from "@/components/game/WaitingForPlayerScreen";
+import { DevViewportFrame } from "@/components/dev/DevViewportFrame";
+import { ManualTabletopControls } from "@/components/game/ManualTabletopControls";
+import { MiddleBarDock, RightActionPanel } from "@/components/game/panels";
+import {
+  ConcedeGameModal,
+  EliminatedModal,
+  GameSettingsModal,
+  LeaveGameModal,
+} from "@/components/game/modals";
+import type { StackCardSpec, StackSpec } from "@/pixi/stack/stack.types";
+import { useCastingState } from "@/hooks/useCastingState";
+import { useResolveSourceCard } from "@/components/prompts/internal/usePromptSourceCard";
+import type { BoardScene } from "@/pixi/board/BoardScene";
+import type { BoardCanvasLayout } from "@/pixi/BoardCanvas";
+import type { PromptOverlaySpec } from "@/pixi/prompts/prompt.types";
+import type {
+  BoardOverlayCommandPreviewSpec,
+  BoardOverlayPreviewSpec,
+} from "@/pixi/BoardOverlayCanvas";
+import { buildArrowSpecs } from "@/components/game/arrowSpecs";
+import { getDisplayedManaAbilities } from "@/components/game/manaUtils";
+import { PlayModePicker } from "@/components/game/PlayModePicker";
+import { HAND_CARD_BASE } from "@/components/game/game.styles";
+import { ACTION_DRAWER_BUMP_EVENT, ZONE_TILE_KEY } from "@/components/game/game.constants";
+import { useHandScale } from "@/hooks/useHandScale";
+import { useFlashQueue } from "@/hooks/useFlashQueue";
+import { useHandDrag, type HandDragStart } from "@/hooks/useHandDrag";
+import { useCardPreview } from "@/hooks/useCardPreview";
+import type { PreviewPointerInput } from "@/lib/cardPreview";
+import { useMulliganSelection } from "@/hooks/useMulliganSelection";
+import { HoverCardPreview } from "@/components/game/HoverCardPreview";
+import { usePromptEffects } from "@/hooks/usePromptEffects";
+import { useCombatState } from "@/hooks/useCombatState";
+import { useGameEventListeners } from "@/hooks/useGameEventListeners";
+import { useGamePrefetch } from "@/hooks/useGamePrefetch";
+import { useMultiplayerInterruption } from "@/hooks/useMultiplayerInterruption";
+import { useLiveGameNavigationGuard } from "@/hooks/useLiveGameNavigationGuard";
+import { GameBoard } from "@/components/game/GameBoard";
+import { buildCombatRows } from "@/components/game/combatRows";
+import { readableTextColor, withAlpha } from "@/themes/gameTheme";
+import { useTheme } from "@/hooks/useTheme";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLimitedStore } from "@/stores/useLimitedStore";
+import { peek as peekGauntletMatch, tryConsumeGauntletMatch } from "@/lib/gauntletReturn";
+import { intentIsHostile, intentPrefersArrow } from "@/types/promptType";
+import type { PromptType } from "@/protocol";
+import { declareAttackersOutput } from "@/components/prompts/internal/playerActions";
+import { TargetingCursor } from "@/components/game/TargetingCursor";
+import { OPPONENT_SEATS } from "@/components/game/game.types";
+import type { CombatPairing, LogCardPreviewOptions } from "@/components/game/game.types";
+import { useStackUIStore } from "@/stores/useStackUIStore";
+import {
+  useGameDevStore,
+  applyCardOverrides,
+  DEBUG_KEYWORD_CARD_ID,
+  DEBUG_STACK_OBJECT_ID,
+  DEFAULT_DEBUG_CARD_NAME,
+} from "@/stores/useGameDevStore";
+import {
+  isPermanentSpellCard,
+  stackObjectAbilityText,
+  stackObjectToCardStub,
+} from "@/components/game/game.utils";
+import { createPortal } from "react-dom";
+import { Card } from "@/components/game/Card";
+import { cn } from "@/lib/utils";
+import { applyManualTabletopAction, getSelectedGameRuntime } from "@/game";
+import type { HandActionOption } from "@/stores/useGameUIStore";
+import { parsePrintedCardRailMetadata } from "@/components/game/cardRailState";
+import { peekCard, useScryfallStore } from "@/stores/useScryfallStore";
+import { scryfallToSampleGameCard } from "@/lib/sampleGameCard";
+import type { GameRuntime, ManualTabletopApi } from "@/game";
+const HOVER_ALLOWED_PROMPTS = new Set<PromptType>([
+  "chooseAction",
+  "chooseAttackers",
+  "chooseBlockers",
+  "chooseBoardTargets",
+  "payManaCost",
+  "gameOver",
+]);
+function isManualTabletopApi(runtime: GameRuntime): runtime is GameRuntime & {
+  api: ManualTabletopApi;
+} {
+  return runtime.capabilities.manualTabletop && "applyManualAction" in runtime.api;
+}
+function numericPrintedStat(value: string | undefined): number | undefined {
+  if (value == null) return undefined;
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue) ? numericValue : undefined;
+}
+function buildDebugKeywordCard(
+  controllerId: string,
+  name: string,
+  definition: DeckCard | null,
+  keywords: string[],
+  choices: CardChoiceDto[],
+  railEnabled: boolean,
+  mode: "page" | "saga" | "class",
+  current: number,
+  final: number,
+  transformed: boolean,
+): ClientCardDto {
+  const base: ClientCardDto = {
+    ...GAME_CARD_DEFAULTS,
+    ...(definition ?? {}),
+    id: DEBUG_KEYWORD_CARD_ID,
+    identity: {
+      ...(definition?.identity ?? {}),
+      name: definition?.identity.name ?? (name.trim() || DEFAULT_DEBUG_CARD_NAME),
+      setCode: definition?.identity.setCode ?? "",
+      cardNumber: definition?.identity.cardNumber ?? "",
+      isToken: false,
+    },
+    color: definition?.color ?? "C",
+    manaCost: definition?.manaCost ?? "",
+    cmc: definition?.cmc ?? 0,
+    text: definition?.text ?? "Dev debug card.",
+    controllerId,
+    ownerId: controllerId,
+    zoneId: "dev-zone",
+    keywords,
+    choices,
+    power: definition?.power ?? null,
+    toughness: definition?.toughness ?? null,
+    basePower: numericPrintedStat(definition?.power),
+    baseToughness: numericPrintedStat(definition?.toughness),
+    isTransformed: transformed,
+    isFaceDown: definition?.identity.name === "",
+  };
+  const info =
+    transformed && definition
+      ? peekCard(useScryfallStore.getState().cards, {
+          name: definition.identity.name,
+          setCode: definition.identity.setCode || undefined,
+          collectorNumber: definition.identity.cardNumber || undefined,
+        })
+      : null;
+  const face = info?.card_faces?.[1];
+  if (info && face) {
+    const selected = scryfallToSampleGameCard({
+      ...info,
+      ...face,
+      type_line: face.type_line ?? info.type_line,
+    });
+    base.types = selected.types;
+    base.subtypes = selected.subtypes;
+    base.supertypes = selected.supertypes;
+    base.text = selected.text;
+    base.manaCost = selected.manaCost;
+    base.power = selected.power;
+    base.toughness = selected.toughness;
+    base.basePower = selected.basePower;
+    base.baseToughness = selected.baseToughness;
+  }
+  const printedRail = definition ? parsePrintedCardRailMetadata(definition) : null;
+  if (railEnabled && mode === "saga" && printedRail?.kind === "saga") {
+    return {
+      ...base,
+      counters: {
+        ...base.counters,
+        Lore: Math.max(0, Math.min(printedRail.finalChapter, current)),
+      },
+      finalChapter: printedRail.finalChapter,
+      sagaChapters: printedRail.sagaChapters,
+    };
+  }
+  if (railEnabled && mode === "class" && printedRail?.kind === "class") {
+    const finalLevel = Math.max(...printedRail.classLevels.map((level) => level.level));
+    return {
+      ...base,
+      classLevel: Math.max(1, Math.min(finalLevel, current)),
+      classLevels: printedRail.classLevels,
+    };
+  }
+  if (!railEnabled) return base;
+  if (mode === "saga") {
+    return {
+      ...base,
+      types: ["Enchantment"],
+      subtypes: ["Saga"],
+      counters: { ...base.counters, Lore: current },
+      finalChapter: final,
+      sagaChapters: Array.from({ length: final }, (_, index) => ({
+        chapters: [index + 1],
+        oracle: `Chapter ${index + 1} ability.`,
+      })),
+    };
+  }
+  if (mode === "class") {
+    return {
+      ...base,
+      types: ["Enchantment"],
+      subtypes: ["Class"],
+      classLevel: current,
+      classLevels: Array.from({ length: final }, (_, index) => ({
+        level: index + 1,
+        oracle: `Level ${index + 1} ability.`,
+        cost: index === 0 ? undefined : `{${index}}`,
+      })),
+    };
+  }
+  return {
+    ...base,
+    types: ["Artifact"],
+    subtypes: [],
+    counters: { ...base.counters, Page: current },
+  };
+}
+interface GameProps {
+  exitTo?: string;
+}
+export default function Game({ exitTo }: GameProps = {}) {
+  const responseError = useGameStore((s) =>
+    s.debugInfo.startsWith("Respond error:") ? s.debugInfo : undefined,
+  );
+  const interruption = useMultiplayerInterruption();
+  useAutoResolvePrompt(interruption.waiting);
+  const rawGameView = useGameStore((s) => s.gameView);
+  const myPlayerSlot = useGameStore((s) => s.myPlayerSlot);
+  const currentPrompt = useGameStore((s) => s.currentPrompt);
+  const isGameActive = useGameStore((s) => s.isGameActive);
+  const isPrefetchingCards = useGameStore((s) => s.isPrefetchingCards);
+  const isWaitingForResponse = useGameStore((s) => s.isWaitingForResponse);
+  const relinquishedPriority = useGameStore((s) => s.relinquishedPriority);
+  const gameLog = useGameStore((s) => s.gameLog);
+  const snapshots = useGameStore((s) => s.snapshots);
+  const debugInfo = useGameStore((s) => s.debugInfo);
+  const fatalError = useGameStore((s) => s.fatalError);
+  const engineCrash = useGameStore((s) => s.engineCrash);
+  const isMultiplayer = useGameStore((s) => s.isMultiplayer);
+  const isHost = useGameStore((s) => s.isHost);
+  const selfConceded = useGameStore((s) => s.selfConceded);
+  const gameView = useMemo(() => {
+    if (!rawGameView || !selfConceded || !myPlayerSlot) return rawGameView;
+    const self = rawGameView.players.find((p) => p.id === myPlayerSlot);
+    if (!self || self.status !== "playing") return rawGameView;
+    return {
+      ...rawGameView,
+      players: rawGameView.players.map((p) =>
+        p.id === myPlayerSlot
+          ? {
+              ...p,
+              status: "conceded" as const,
+              hand: [],
+              graveyard: [],
+              exile: [],
+              library: [],
+              commandZone: [],
+            }
+          : p,
+      ),
+      battlefield: rawGameView.battlefield.filter((c) => c.controllerId !== myPlayerSlot),
+    };
+  }, [rawGameView, selfConceded, myPlayerSlot]);
+  const hostingForgeRoom = useServerStore((s) => s.hostingForgeRoom);
+  const selectedRuntime = getSelectedGameRuntime();
+  const manualApi = isManualTabletopApi(selectedRuntime) ? selectedRuntime.api : null;
+  const { respond, concede, endGame, restoreSnapshot, gameDecks } = useGameStore(
+    useShallow((s) => ({
+      respond: s.respond,
+      concede: s.concede,
+      endGame: s.endGame,
+      restoreSnapshot: s.restoreSnapshot,
+      gameDecks: s.gameDecks,
+    })),
+  );
+  const flashDurationMs = usePreferencesStore((s) => s.flashDurationMs);
+  const zonePanelOrder = usePreferencesStore((s) => s.zonePanelOrder);
+  const inGameCardPreviewStyle = usePreferencesStore((s) => s.inGameCardPreviewStyle);
+  const cardPreviewMode = usePreferencesStore((s) => s.cardPreviewMode);
+  const vScale = useHandScale();
+  const themeColors = useTheme().gameTheme;
+  const location = useLocation();
+  const devExtraOpponents =
+    (
+      location.state as {
+        devExtraOpponents?: number;
+      } | null
+    )?.devExtraOpponents ?? 0;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [rightPanelLeft, setRightPanelLeft] = useState<number>();
+  const boardSceneRef = useRef<BoardScene | null>(null);
+  const placementIntentRef = useRef<{
+    cardId: string;
+    castStarted: boolean;
+  } | null>(null);
+  const [boardLayout, setBoardLayout] = useState<BoardCanvasLayout | null>(null);
+  const [handCardLifted, setHandCardLifted] = useState(false);
+  const [boardMenuOpen, setBoardMenuOpen] = useState(false);
+  const [gameSettingsOpen, setGameSettingsOpen] = useState(false);
+  const [eliminatedModalOpen, setEliminatedModalOpen] = useState(false);
+  const eliminatedModalShownRef = useRef(false);
+  const [leaveGameModalOpen, setLeaveGameModalOpen] = useState(false);
+  const [concedeModalOpen, setConcedeModalOpen] = useState(false);
+  const [combatDetailsOpen, setCombatDetailsOpen] = useState(false);
+  const [introDone, setIntroDone] = useState(false);
+  const handleLoadingComplete = useCallback(() => setIntroDone(true), []);
+  const [boardSurfaceEl, setBoardSurfaceEl] = useState<HTMLDivElement | null>(null);
+  const activePrompt = manualApi ? null : currentPrompt;
+  const promptType = activePrompt?.input.type;
+  useEffect(() => {
+    setCombatDetailsOpen(false);
+  }, [promptType]);
+  const chooseActionInput = activePrompt?.input.type === "chooseAction" ? activePrompt.input : null;
+  const chooseAttackersInput =
+    activePrompt?.input.type === "chooseAttackers" ? activePrompt.input : null;
+  const chooseBlockersInput =
+    activePrompt?.input.type === "chooseBlockers" ? activePrompt.input : null;
+  const damageOrderInput =
+    activePrompt?.input.type === "chooseDamageAssignmentOrder" ? activePrompt.input : null;
+  const payManaCostInput = activePrompt?.input.type === "payManaCost" ? activePrompt.input : null;
+  const mulliganInput = activePrompt?.input.type === "mulligan" ? activePrompt.input : null;
+  const promptActions = useMemo(
+    () => chooseActionInput?.actions ?? payManaCostInput?.actions ?? [],
+    [chooseActionInput, payManaCostInput],
+  );
+  const tappableLandIds = useMemo<string[]>(
+    () =>
+      promptActions.flatMap((a) =>
+        a.type === "activateManaAbility" ||
+        (a.type === "activateAbility" && a.isManaAbility) ||
+        (a.type === "useResource" && a.resource === "waterbend")
+          ? [a.cardId]
+          : [],
+      ),
+    [promptActions],
+  );
+  const untappableLandIds = useMemo<string[]>(
+    () => promptActions.flatMap((a) => (a.type === "undoMana" ? [a.cardId] : [])),
+    [promptActions],
+  );
+  const waterbendActionIdByCardId = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const a of promptActions) {
+      if (a.type === "useResource" && a.resource === "waterbend") map.set(a.cardId, a.id);
+    }
+    return map;
+  }, [promptActions]);
+  const unwaterbendActionIdByCardId = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const a of promptActions) {
+      if (a.type === "releaseResource" && a.resource === "waterbend") map.set(a.cardId, a.id);
+    }
+    return map;
+  }, [promptActions]);
+  const waterbendSourceIds = useMemo(
+    () => [...waterbendActionIdByCardId.keys()],
+    [waterbendActionIdByCardId],
+  );
+  const waterbentCardIds = useMemo(
+    () => [...unwaterbendActionIdByCardId.keys()],
+    [unwaterbendActionIdByCardId],
+  );
+  const mulliganPutBack = useMulliganSelection(activePrompt, (cardIds) =>
+    respond({ type: "mulliganPutBackDecision", cardIds }),
+  );
+  const casting = useCastingState({
+    currentPrompt: activePrompt,
+    respond,
+  });
+  const boardTargets = useMemo(
+    () =>
+      activePrompt?.input.type === "chooseBoardTargets"
+        ? partitionBoardTargets(activePrompt.input, gameView)
+        : null,
+    [activePrompt, gameView],
+  );
+  const {
+    abilityPicker: abilityPickerState,
+    playModePicker,
+    viewingZone,
+    isActionPanelCollapsed,
+    promptModalHidden,
+    hidePromptModal,
+    showPromptModal,
+    closeAbilityPicker,
+    openPlayModePicker,
+    closePlayModePicker,
+    openZoneViewer,
+    closeZoneViewer,
+    toggleActionPanel,
+  } = useGameUIStore(
+    useShallow((s) => ({
+      abilityPicker: s.abilityPicker,
+      playModePicker: s.playModePicker,
+      viewingZone: s.viewingZone,
+      isActionPanelCollapsed: s.isActionPanelCollapsed,
+      promptModalHidden: s.promptModalHidden,
+      hidePromptModal: s.hidePromptModal,
+      showPromptModal: s.showPromptModal,
+      closeAbilityPicker: s.closeAbilityPicker,
+      openPlayModePicker: s.openPlayModePicker,
+      closePlayModePicker: s.closePlayModePicker,
+      openZoneViewer: s.openZoneViewer,
+      closeZoneViewer: s.closeZoneViewer,
+      toggleActionPanel: s.toggleActionPanel,
+    })),
+  );
+  const toAbilityOption = (
+    a: {
+      cardId: string;
+      abilityIndex: number;
+      description: string;
+      isManaAbility: boolean;
+      isClassLevelUp?: boolean;
+      cost?: string;
+      displayManaLetters?: string[];
+      colorChoice?: string;
+    },
+    actionId?: string,
+  ): HandActionOption => ({
+    kind: "ability" as const,
+    cardId: a.cardId,
+    abilityIndex: a.abilityIndex,
+    label: a.description,
+    isManaAbility: a.isManaAbility,
+    isClassLevelUp: a.isClassLevelUp,
+    cost: a.cost,
+    displayManaLetters: a.displayManaLetters,
+    colorChoice: a.colorChoice,
+    actionId,
+  });
+  const castOptionsByCardId = useMemo(() => {
+    const map = new Map<string, HandActionOption[]>();
+    for (const a of chooseActionInput?.actions ?? []) {
+      if (a.type !== "cast") continue;
+      const arr = map.get(a.cardId) ?? [];
+      arr.push({
+        kind: "cast" as const,
+        cardId: a.cardId,
+        mode: a.mode.type,
+        label: a.label,
+        actionId: a.id,
+      });
+      map.set(a.cardId, arr);
+    }
+    return map;
+  }, [chooseActionInput?.actions]);
+  const abilitiesByCardId = useMemo(() => {
+    const map = new Map<string, HandActionOption[]>();
+    for (const a of chooseActionInput?.actions ?? []) {
+      if (a.type !== "activateAbility" || a.isManaAbility) continue;
+      const arr = map.get(a.cardId) ?? [];
+      arr.push(toAbilityOption(a, a.id));
+      map.set(a.cardId, arr);
+    }
+    return map;
+  }, [chooseActionInput?.actions]);
+  const manaAbilitiesByCardId = useMemo(() => {
+    const map = new Map<string, HandActionOption[]>();
+    for (const a of promptActions) {
+      const isManaAction =
+        a.type === "activateManaAbility" || (a.type === "activateAbility" && a.isManaAbility);
+      if (!isManaAction) continue;
+      const arr = map.get(a.cardId) ?? [];
+      const displayed = getDisplayedManaAbilities(a.cardId, [
+        {
+          cardId: a.cardId,
+          abilityIndex: a.abilityIndex,
+          description: a.description,
+          isManaAbility: true,
+          isClassLevelUp: false,
+          cost: a.cost,
+          producedMana: a.producedMana,
+          actionId: a.id,
+        },
+      ]);
+      arr.push(...displayed.map((ab) => toAbilityOption(ab, ab.actionId)));
+      map.set(a.cardId, arr);
+    }
+    return map;
+  }, [promptActions]);
+  const tappableLandIdSet = useMemo(() => new Set(tappableLandIds), [tappableLandIds]);
+  const applyManualAction = useCallback(
+    async (action: Parameters<typeof applyManualTabletopAction>[1]) => {
+      if (!manualApi) return;
+      const nextView = await applyManualTabletopAction(manualApi, action);
+      if (nextView) useGameStore.getState().updateGameView(nextView);
+    },
+    [manualApi],
+  );
+  const getManualCardActions = useCallback(
+    (
+      card: CardDto & {
+        zoneId?: string;
+      },
+    ): HandActionOption[] => {
+      if (!manualApi) return [];
+      const humanPlayerId = gameView?.players[0]?.id;
+      const ownsHumanZone = card.controllerId === humanPlayerId || card.ownerId === humanPlayerId;
+      const graveyardZone = ownsHumanZone ? "graveyard" : "opponentGraveyard";
+      const exileZone = ownsHumanZone ? "exile" : "opponentExile";
+      const commandZone = ownsHumanZone ? "command" : "opponentCommand";
+      const move = (label: string, toZoneId: string): HandActionOption => ({
+        kind: "manual-move",
+        cardId: card.id,
+        label,
+        toZoneId,
+      });
+      if (card.zoneId === "battlefield") {
+        return [
+          {
+            kind: "manual-tap",
+            cardId: card.id,
+            label: card.tapped ? `Untap` : `Tap`,
+            tapped: !card.tapped,
+          },
+          move(`Move to Hand`, "hand"),
+          move(`Move to Graveyard`, graveyardZone),
+          move(`Move to Exile`, exileZone),
+          move(`Move to Command`, commandZone),
+        ];
+      }
+      return [
+        move(`Put onto Battlefield`, "battlefield"),
+        move(`Move to Graveyard`, graveyardZone),
+        move(`Move to Exile`, exileZone),
+        move(`Move to Command`, commandZone),
+      ];
+    },
+    [manualApi, gameView?.players],
+  );
+  const castOptions = useCallback(
+    (card: CardDto): HandActionOption[] => castOptionsByCardId.get(card.id) ?? [],
+    [castOptionsByCardId],
+  );
+  const getHandActionOptions = useCallback(
+    (card: CardDto): HandActionOption[] =>
+      manualApi
+        ? getManualCardActions(card)
+        : [...castOptions(card), ...(abilitiesByCardId.get(card.id) ?? [])],
+    [manualApi, getManualCardActions, castOptions, abilitiesByCardId],
+  );
+  const getBattlefieldAbilityOptions = useCallback(
+    (card: CardDto): HandActionOption[] => abilitiesByCardId.get(card.id) ?? [],
+    [abilitiesByCardId],
+  );
+  const getCardActions = useCallback(
+    (card: CardDto): HandActionOption[] => {
+      if (manualApi) return getManualCardActions(card);
+      if (promptType === "payManaCost") {
+        const options = [...(manaAbilitiesByCardId.get(card.id) ?? [])];
+        const waterbend = waterbendActionIdByCardId.get(card.id);
+        if (waterbend) {
+          options.push({
+            kind: "ability",
+            cardId: card.id,
+            label: `Waterbend (pays {1})`,
+            actionId: waterbend,
+          });
+        }
+        return options;
+      }
+      if (promptType !== "chooseAction") return [];
+      const abilities = [...(abilitiesByCardId.get(card.id) ?? [])];
+      const manaAbilities = manaAbilitiesByCardId.get(card.id) ?? [];
+      const isManaSource = tappableLandIdSet.has(card.id);
+      if (isManaSource && manaAbilities.length > 0) {
+        abilities.unshift(...manaAbilities);
+      }
+      return [...castOptions(card), ...abilities];
+    },
+    [
+      manualApi,
+      getManualCardActions,
+      promptType,
+      castOptions,
+      abilitiesByCardId,
+      manaAbilitiesByCardId,
+      waterbendActionIdByCardId,
+      tappableLandIdSet,
+    ],
+  );
+  const respondHandAction = (option: HandActionOption): boolean => {
+    const current = useGameStore.getState();
+    const input = current.currentPrompt?.input;
+    const actions =
+      input?.type === "chooseAction" || input?.type === "payManaCost" ? input.actions : [];
+    if (
+      !current.isWaitingForResponse &&
+      option.actionId != null &&
+      actions.some((action) => action.id === option.actionId)
+    ) {
+      void current.respond({ type: "act", actionId: option.actionId });
+      return true;
+    }
+    return false;
+  };
+  const handleCastSpell = (cardId: string) => {
+    const castActions = castOptionsByCardId.get(cardId) ?? [];
+    if (castActions.length > 1) {
+      const gc = gameView?.players
+        .flatMap((player) => [
+          ...player.hand,
+          ...player.graveyard,
+          ...player.exile,
+          ...player.commandZone,
+        ])
+        .find((card) => card.id === cardId);
+      if (!gc) throw new Error(`No game card to cast: ${cardId}`);
+      openPlayModePicker({
+        cardId,
+        card: asDeckCard(gameDecks[gc.ownerId], gc),
+        options: castActions,
+        promptId: currentPrompt!.promptId,
+        source: gc,
+      });
+      return;
+    }
+    const single = castActions[0];
+    if (single) respondHandAction(single);
+  };
+  const handleHandCardAction = (
+    card: CardDto,
+    e?: {
+      clientX: number;
+      clientY: number;
+    },
+  ) => {
+    if (manualApi) {
+      preview.showSticky(card, e?.clientX, e?.clientY);
+      return;
+    }
+    const actions = getHandActionOptions(card);
+    if (actions.length === 0) {
+      if (playableIds.has(card.id)) {
+        handleCastSpell(card.id);
+      }
+      return;
+    }
+    if (actions.length === 1) {
+      respondHandAction(actions[0]);
+      return;
+    }
+    if (e) {
+      preview.showSticky(card, e.clientX, e.clientY);
+      return;
+    }
+    openPlayModePicker({
+      cardId: card.id,
+      card: asDeckCard(gameDecks[card.ownerId], card),
+      options: actions,
+      promptId: currentPrompt!.promptId,
+      source: card,
+    });
+  };
+  const handleHandCardDragStart = (card: CardDto, e: HandDragStart) => {
+    const actions = getHandActionOptions(card);
+    const canCast =
+      !manualApi &&
+      playableIds.has(card.id) &&
+      actions.length <= 1 &&
+      !actions.some((action) => action.kind === "ability");
+    startHandCardDrag(card, e, { canCast });
+  };
+  const handleBattlefieldCardAction = (card: CardDto, e?: React.MouseEvent) => {
+    const abilities = getBattlefieldAbilityOptions(card);
+    if (abilities.length === 0) return false;
+    if (abilities.length === 1 && !abilities[0].isClassLevelUp) {
+      return respondHandAction(abilities[0]);
+    }
+    preview.showSticky(card, e?.clientX, e?.clientY);
+    return true;
+  };
+  const {
+    pendingAttackers,
+    attackAssignments,
+    submitAttack,
+    pendingAttacker,
+    pendingBlocker,
+    attackDefenderId,
+    blockAssignments,
+    blockError,
+    blockRequirement,
+    assignBlockPair,
+    unassignBlock,
+    assignAttackPair,
+    unassignAttack,
+    damageOrder,
+    toggleDamageOrder,
+    undoDamageOrder,
+    multipleAttackDefenders,
+    playerIsTargetable,
+    handleTargetPlayer,
+    handleBattlefieldClick,
+    handleAttackerClick,
+    selectAllAttackersForPick,
+  } = useCombatState({
+    promptType,
+    targetCard: casting.wrappedTargetCard,
+    targetPlayer: casting.wrappedTargetPlayer,
+    respond,
+    currentPrompt: activePrompt,
+    targetableCardIds: boardTargets?.battlefieldCardIds ?? [],
+    targetablePlayerIds: boardTargets?.playerIds ?? [],
+    engineHasBlocks: (gameView?.combatAssignments?.length ?? 0) > 0,
+  });
+  const blockRequirementError = useMemo<string | null>(() => {
+    if (!blockRequirement) return null;
+    const name =
+      gameView?.battlefield.find((c) => c.id === blockRequirement.attackerId)?.identity.name ??
+      `This attacker`;
+    const creatures = (count: number) => (count === 1 ? `one creature` : `${count} creatures`);
+    return blockRequirement.kind === "min"
+      ? `${name} must be blocked by ${creatures(blockRequirement.count)} (${blockRequirement.assigned} assigned).`
+      : `${name} can be blocked by at most ${creatures(blockRequirement.count)} (${blockRequirement.assigned} assigned).`;
+  }, [blockRequirement, gameView?.battlefield]);
+  const mustAttackHint = useMemo<string | null>(() => {
+    const must = chooseAttackersInput?.attackers.filter((a) => a.mustAttack) ?? [];
+    if (must.length === 0) return null;
+    const nameOf = (id: string) =>
+      gameView?.battlefield.find((c) => c.id === id)?.identity.name ?? `A creature`;
+    return `Must attack if able — ${must.map((a) => nameOf(a.attackerId)).join(", ")}`;
+  }, [chooseAttackersInput, gameView?.battlefield]);
+  const blockRestrictionHint = useMemo<string | null>(() => {
+    const attackers = chooseBlockersInput?.attackers ?? [];
+    const nameOf = (id: string) =>
+      gameView?.battlefield.find((c) => c.id === id)?.identity.name ?? `An attacker`;
+    const parts: string[] = [];
+    const menace = attackers.filter(
+      (a) => a.minBlockers > 1 && a.validBlockerIds.length >= a.minBlockers,
+    );
+    if (menace.length > 0) {
+      const requirements = menace
+        .map((a) => `${nameOf(a.attackerId)} (needs ${a.minBlockers})`)
+        .join(", ");
+      parts.push(`Requires multiple blockers — ${requirements}`);
+    }
+    const mustBlock = attackers.filter((a) => a.mustBeBlocked && a.validBlockerIds.length > 0);
+    if (mustBlock.length > 0) {
+      parts.push(`Must be blocked — ${mustBlock.map((a) => nameOf(a.attackerId)).join(", ")}`);
+    }
+    return parts.length > 0 ? parts.join(" · ") : null;
+  }, [chooseBlockersInput, gameView?.battlefield]);
+  const { declineTargets, cancelTargeting } = casting;
+  const targetCompletion = useMemo(() => {
+    if (activePrompt?.input.type !== "chooseBoardTargets") return null;
+    const input = activePrompt.input;
+    if (input.chosenTargets < input.minTargets) {
+      return input.cancellable
+        ? {
+            label: `Cancel`,
+            kind: "cancel" as const,
+            onComplete: cancelTargeting,
+          }
+        : null;
+    }
+    if (input.maxTargets <= input.minTargets) {
+      return null;
+    }
+    return {
+      label: input.chosenTargets === 0 ? `Skip` : `Done`,
+      kind: "done" as const,
+      onComplete: declineTargets,
+    };
+  }, [activePrompt, declineTargets, cancelTargeting]);
+  function openZone(
+    title: string,
+    cards: CardDto[],
+    onClickCard?: (cardId: string) => void,
+    clickableCardIds?: string[],
+    targetHostile?: boolean,
+  ) {
+    const stickyPromptType =
+      onClickCard && currentPrompt?.input.type === "chooseBoardTargets"
+        ? "chooseBoardTargets"
+        : undefined;
+    openZoneViewer({
+      title,
+      cards,
+      mode: onClickCard ? "target" : "browse",
+      source: locateVisibleZone(cards, gameView),
+      onClickCard,
+      clickableCardIds,
+      targetHostile,
+      stickyPromptType,
+    });
+  }
+  function openManualZone(title: string, cards: ClientCardDto[]) {
+    openZoneViewer({
+      title,
+      cards,
+      mode: "manual",
+      source: locateVisibleZone(cards, gameView),
+      onClickCard: (cardId) => {
+        const card = cards.find((candidate) => candidate.id === cardId);
+        closeZoneViewer();
+        if (!card) return;
+        void applyManualAction({
+          type: "moveCard",
+          cardId,
+          fromZoneId: card.zoneId,
+          toZoneId: "battlefield",
+        });
+      },
+    });
+  }
+  function closeZone() {
+    closeZoneViewer();
+  }
+  function openZoneAndCast(
+    title: string,
+    cards: CardDto[],
+    onClickCard: (cardId: string) => void,
+    clickableCardIds?: string[],
+  ) {
+    openZoneViewer({
+      title,
+      cards,
+      mode: "cast",
+      source: locateVisibleZone(cards, gameView),
+      clickableCardIds,
+      onClickCard,
+    });
+  }
+  const handleTapLand = (card: CardDto) => {
+    const manaAbilities = manaAbilitiesByCardId.get(card.id) ?? [];
+    const waterbend = waterbendActionIdByCardId.get(card.id);
+    if (manaAbilities.length + (waterbend ? 1 : 0) > 1) {
+      preview.showSticky(card);
+      return;
+    }
+    if (manaAbilities.length === 1) {
+      const actionId = manaAbilities[0].actionId;
+      if (actionId) respond({ type: "act", actionId });
+      return;
+    }
+    if (waterbend) {
+      respond({ type: "act", actionId: waterbend });
+      return;
+    }
+    const cardActions = promptActions.filter(
+      (a) => a.type === "activateAbility" && a.cardId === card.id,
+    );
+    if (cardActions.length > 1) {
+      preview.showSticky(card);
+    } else if (cardActions.length === 1) {
+      respond({ type: "act", actionId: cardActions[0].id });
+    }
+  };
+  const handleUntapLand = (card: CardDto) => {
+    const release = unwaterbendActionIdByCardId.get(card.id);
+    if (release) {
+      respond({ type: "act", actionId: release });
+      return;
+    }
+    const undo = promptActions.find((a) => a.type === "undoMana" && a.cardId === card.id);
+    if (undo) respond({ type: "act", actionId: undo.id });
+  };
+  const pendingTapQueueRef = useRef<string[]>([]);
+  const pendingUntapQueueRef = useRef<string[]>([]);
+  const startBatchLandAction = (
+    cardIds: string[],
+    queueRef: React.MutableRefObject<string[]>,
+    action: (id: string) => void,
+  ) => {
+    if (cardIds.length === 0) return;
+    const [first, ...rest] = cardIds;
+    queueRef.current = rest;
+    action(first);
+  };
+  const tapResponse = (id: string) => {
+    const option = manaAbilitiesByCardId.get(id)?.[0];
+    if (option?.actionId) {
+      respond({ type: "act", actionId: option.actionId });
+      return;
+    }
+    const action = promptActions.find(
+      (a) => a.type === "activateAbility" && a.isManaAbility && a.cardId === id,
+    );
+    if (action) {
+      respond({ type: "act", actionId: action.id });
+      return;
+    }
+    const waterbend = waterbendActionIdByCardId.get(id);
+    if (waterbend) respond({ type: "act", actionId: waterbend });
+  };
+  const untapResponse = (id: string) => {
+    const a = promptActions.find((x) => x.type === "undoMana" && x.cardId === id);
+    if (a) respond({ type: "act", actionId: a.id });
+  };
+  const handleTapLands = (cardIds: string[]) =>
+    startBatchLandAction(cardIds, pendingTapQueueRef, tapResponse);
+  const handleUntapLands = (cardIds: string[]) =>
+    startBatchLandAction(cardIds, pendingUntapQueueRef, untapResponse);
+  const drainQueue = (
+    queueRef: React.MutableRefObject<string[]>,
+    validIds: string[],
+    action: (id: string) => void,
+  ): boolean => {
+    const queue = queueRef.current;
+    if (queue.length === 0) return false;
+    const valid = new Set(validIds);
+    const nextId = queue.find((id) => valid.has(id));
+    if (!nextId) {
+      queueRef.current = [];
+      return false;
+    }
+    queueRef.current = queue.filter((id) => id !== nextId);
+    action(nextId);
+    return true;
+  };
+  useEffect(() => {
+    if (isWaitingForResponse) return;
+    if (!promptType) return;
+    if (promptType !== "chooseAction" && promptType !== "payManaCost") {
+      pendingTapQueueRef.current = [];
+      pendingUntapQueueRef.current = [];
+      return;
+    }
+    if (drainQueue(pendingTapQueueRef, tappableLandIds, tapResponse)) return;
+    drainQueue(pendingUntapQueueRef, untappableLandIds, untapResponse);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePrompt, isWaitingForResponse, promptType, tappableLandIds, untappableLandIds]);
+  const _earlyMyPlayerId =
+    gameView?.players?.find((p) => p.isHuman)?.id ?? gameView?.players?.[0]?.id ?? "";
+  const { unifiedPass, unifiedPassEndTurn } = usePromptEffects({
+    currentPrompt: activePrompt,
+    gameView,
+    isWaitingForResponse,
+    respond,
+    myPlayerId: _earlyMyPlayerId,
+  });
+
+  const passPriority = useCallback(() => {
+    window.dispatchEvent(new CustomEvent(ACTION_DRAWER_BUMP_EVENT, { detail: false }));
+    unifiedPass();
+  }, [unifiedPass]);
+  const passEndTurn = useCallback(() => {
+    window.dispatchEvent(new CustomEvent(ACTION_DRAWER_BUMP_EVENT, { detail: true }));
+    unifiedPassEndTurn();
+  }, [unifiedPassEndTurn]);
+  const unifiedPassRef = useRef(passPriority);
+  unifiedPassRef.current = passPriority;
+  const passEndTurnRef = useRef(passEndTurn);
+  passEndTurnRef.current = passEndTurn;
+  const payManaPrimaryRef = useRef(() => {});
+  payManaPrimaryRef.current = () => {
+    if (promptType !== "payManaCost") return;
+    if (activePrompt?.input.canConfirmFromPool) {
+      respond({ type: "pay", auto: false });
+    } else {
+      respond({ type: "pay", auto: true });
+    }
+  };
+  const confirmPromptRef = useRef<() => boolean>(() => false);
+  confirmPromptRef.current = () => {
+    // A response is already in flight — ignore the keyboard confirm so it can't
+    // fire submitAttack (which would clear staging while respond() is dropped).
+    if (isWaitingForResponse) return false;
+    if (promptType === "payManaCost") {
+      payManaPrimaryRef.current();
+      return true;
+    }
+    if (promptType === "mulligan") {
+      respond({ type: "mulliganDecision", keep: true });
+      return true;
+    }
+    if (promptType === "mulliganPutBack") {
+      if (!mulliganPutBack.active || mulliganPutBack.selected.size !== mulliganPutBack.count) {
+        return false;
+      }
+      mulliganPutBack.confirm();
+      return true;
+    }
+    if (promptType === "chooseAttackers") {
+      if (attackAssignments.length === 0 && pendingAttackers.length === 0) return false;
+      // submitAttack merges drag-declared assignments with any still-pending
+      // (tapped) attackers, so both flows commit regardless of defender count.
+      submitAttack();
+      return true;
+    }
+    if (promptType === "chooseBlockers") {
+      if (blockAssignments.length === 0 || blockRequirement) return false;
+      respond({ type: "declareBlockers", assignments: blockAssignments });
+      return true;
+    }
+    return false;
+  };
+
+  const preview = useCardPreview([viewingZone, abilityPickerState], {
+    useTriggerPreference: true,
+  });
+  const commandZonePreview = useCardPreview([viewingZone, abilityPickerState], {
+    useTriggerPreference: true,
+  });
+  const previewViewSwitchCardIdRef = useRef<string | null>(null);
+  const [commandPreviewSource, setCommandPreviewSource] = useState<{
+    cardIds: string[];
+    anchorRect: DOMRect;
+  } | null>(null);
+  useEffect(() => {
+    if (commandZonePreview.phase === "hidden") setCommandPreviewSource(null);
+  }, [commandZonePreview.phase]);
+
+  const battlefieldContainerRef = useRef<HTMLDivElement>(null);
+  const { draggingHandCard, ghostPos, isOverBattlefield, isOverHand, startHandCardDrag } =
+    useHandDrag({
+      battlefieldContainerRef,
+      handDropExclusionPx: Math.round(HAND_CARD_BASE.containerH * vScale * 0.35),
+      getHandBounds: () => boardSceneRef.current?.getHandBounds() ?? null,
+      onClickCard: handleHandCardAction,
+      onCastSpell: handleCastSpell,
+      onBattlefieldDrop: (card, position) => {
+        if (
+          isPermanentSpellCard(card) &&
+          boardSceneRef.current?.commitPendingDrop(card.id, position.clientX, position.clientY)
+        ) {
+          placementIntentRef.current = { cardId: card.id, castStarted: false };
+        }
+      },
+      dismissHover: preview.dismiss,
+      onLongPress: (card, pos) => preview.showSticky(card, pos.x, pos.y),
+    });
+  const draggingIsPermanent = draggingHandCard ? isPermanentSpellCard(draggingHandCard) : false;
+  const ghostCardW = Math.round(HAND_CARD_BASE.cardW * vScale);
+  const ghostCardH = Math.round(HAND_CARD_BASE.cardH * vScale);
+  const handlePreviewAction = (action: HandActionOption) => {
+    preview.dismiss();
+    if (action.kind === "manual-move" && action.toZoneId) {
+      const myPlayer = gameView?.players.find((p) => p.id === myPlayerSlot);
+      const sourceCard = [
+        ...(myPlayer?.hand ?? []),
+        ...(gameView?.battlefield ?? []),
+        ...(myPlayer?.graveyard ?? []),
+        ...(myPlayer?.exile ?? []),
+        ...(myPlayer?.commandZone ?? []),
+      ].find((card) => card.id === action.cardId);
+      void applyManualAction({
+        type: "moveCard",
+        cardId: action.cardId,
+        fromZoneId: sourceCard?.zoneId ?? "",
+        toZoneId: action.toZoneId,
+      });
+      return;
+    }
+    if (action.kind === "manual-tap") {
+      void applyManualAction({
+        type: "tapCard",
+        cardId: action.cardId,
+        tapped: action.tapped ?? true,
+      });
+      return;
+    }
+    respondHandAction(action);
+  };
+  const activeFlash = useFlashQueue(flashDurationMs);
+  const [priorityHighlightPlayerId, setPriorityHighlightPlayerId] = useState<string | null>(null);
+  useEffect(() => {
+    const next = gameView?.priorityPlayerId ?? null;
+    if (priorityHighlightPlayerId == null || next == null) {
+      setPriorityHighlightPlayerId(next);
+      return;
+    }
+    if (next === priorityHighlightPlayerId) return;
+    const timer = setTimeout(() => {
+      setPriorityHighlightPlayerId(next);
+    }, 160);
+    return () => clearTimeout(timer);
+  }, [gameView?.priorityPlayerId, priorityHighlightPlayerId]);
+  useGameEventListeners();
+  useGamePrefetch();
+  useKeybindings({
+    "open-settings": () => setGameSettingsOpen(true),
+    "toggle-stack": () => useStackUIStore.getState().toggleCollapsed(),
+    "toggle-combat-breakdown": () => {
+      if (!manualApi) setCombatDetailsOpen((open) => !open);
+    },
+    "toggle-dev-panel": () => useGameUIStore.getState().toggleDevPanel(),
+    "pass-priority": () => {
+      if (manualApi || document.querySelector('[role="dialog"]')) return false;
+      if (confirmPromptRef.current()) return true;
+      if (promptType !== "chooseAction") return false;
+      unifiedPassRef.current();
+      return true;
+    },
+    "pass-end-of-turn": () => {
+      if (manualApi) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      if (promptType === "chooseAction") passEndTurnRef.current();
+    },
+    "toggle-priority-mode": () => {
+      if (manualApi) return;
+      if (document.querySelector('[role="dialog"]')) return;
+      const prefs = usePromptPreferencesStore.getState();
+      prefs.setFullControl(!prefs.fullControl);
+    },
+  });
+  const me =
+    gameView?.players?.find((p) => p.id === myPlayerSlot) ??
+    gameView?.players?.find((p) => p.isHuman) ??
+    gameView?.players?.[0];
+  useEffect(() => {
+    const intent = placementIntentRef.current;
+    if (!intent || !gameView || !me) return;
+    if (gameView.battlefield.some((card) => card.id === intent.cardId)) {
+      placementIntentRef.current = null;
+      return;
+    }
+    const onStack = gameView.stack.some((item) => item.sourceId === intent.cardId);
+    const promptingForCard =
+      casting.castingCardId === intent.cardId || activePrompt?.sourceCard?.id === intent.cardId;
+    const inHand = me.hand.some((card) => card.id === intent.cardId);
+    if (onStack || promptingForCard || !inHand) intent.castStarted = true;
+    if (!intent.castStarted || onStack || promptingForCard) return;
+    boardSceneRef.current?.clearPendingDrop(intent.cardId);
+    placementIntentRef.current = null;
+  }, [activePrompt, casting.castingCardId, gameView, me]);
+  const opponents = useMemo(
+    () => gameView?.players?.filter((p) => p.id !== me?.id) ?? [],
+    [gameView?.players, me?.id],
+  );
+  const iAmEliminated = selfConceded || (me != null && me.status !== "playing");
+  const ownsEngine = isHost || hostingForgeRoom;
+  const gameContinuesWithoutMe = opponents.filter((p) => p.status === "playing").length >= 2;
+  const handleConcede = useCallback(() => setConcedeModalOpen(true), []);
+  const handleConcedeConfirm = useCallback(async () => {
+    await concede();
+    setConcedeModalOpen(false);
+  }, [concede]);
+  const handleLeave = useCallback(() => {
+    if (ownsEngine) setLeaveGameModalOpen(true);
+    else void endGame();
+  }, [ownsEngine, endGame]);
+  const myStatus = me?.status;
+  const gameOverNow = gameView?.gameOver ?? false;
+  const leaveGameMode = ownsEngine ? "engineOwner" : isMultiplayer ? "seat" : "solo";
+  // Browser back/forward mid-game asks the same question as the Leave button.
+  const navigationBlocker = useLiveGameNavigationGuard(isGameActive && !gameOverNow && !fatalError);
+  const navigationBlocked = navigationBlocker.state === "blocked";
+  useEffect(() => {
+    if (navigationBlocked) setLeaveGameModalOpen(true);
+  }, [navigationBlocked]);
+  const handleStay = useCallback(() => {
+    setLeaveGameModalOpen(false);
+    if (navigationBlocker.state === "blocked") navigationBlocker.reset();
+  }, [navigationBlocker]);
+  const handleLeaveConfirm = useCallback(() => {
+    if (navigationBlocker.state === "blocked") navigationBlocker.reset();
+    return endGame().then(() => setLeaveGameModalOpen(false));
+  }, [navigationBlocker, endGame]);
+  const leaveEndsWithConcede = ownsEngine && !gameContinuesWithoutMe;
+  const handleLeaveConcede = useCallback(async () => {
+    await concede();
+    if (navigationBlocker.state === "blocked") navigationBlocker.reset();
+    eliminatedModalShownRef.current = true;
+    setLeaveGameModalOpen(false);
+  }, [navigationBlocker, concede]);
+  useEffect(() => {
+    if (gameOverNow) {
+      setEliminatedModalOpen(false);
+      setConcedeModalOpen(false);
+      setLeaveGameModalOpen(false);
+      setGameSettingsOpen(false);
+      setCombatDetailsOpen(false);
+      closeZoneViewer();
+      closePlayModePicker();
+      closeAbilityPicker();
+      return;
+    }
+    if (manualApi || !gameContinuesWithoutMe) return;
+    if (
+      (selfConceded || (myStatus && myStatus !== "playing")) &&
+      !eliminatedModalShownRef.current
+    ) {
+      eliminatedModalShownRef.current = true;
+      setEliminatedModalOpen(true);
+    }
+  }, [
+    myStatus,
+    selfConceded,
+    gameOverNow,
+    manualApi,
+    gameContinuesWithoutMe,
+    closeZoneViewer,
+    closePlayModePicker,
+    closeAbilityPicker,
+  ]);
+
+  const payManaCostPrompt =
+    currentPrompt?.input.type === "payManaCost" ? currentPrompt.input : null;
+  const delveActionIdByCardId = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const a of payManaCostPrompt?.actions ?? []) {
+      if ((a.type === "useResource" || a.type === "releaseResource") && a.resource === "delve") {
+        map.set(a.cardId, a.id);
+      }
+    }
+    return map;
+  }, [payManaCostPrompt]);
+  const delveSourceIds = useMemo(() => [...delveActionIdByCardId.keys()], [delveActionIdByCardId]);
+  const delvedCardIds = useMemo(
+    () =>
+      payManaCostPrompt?.actions.flatMap((a) =>
+        a.type === "releaseResource" && a.resource === "delve" ? [a.cardId] : [],
+      ) ?? [],
+    [payManaCostPrompt],
+  );
+  const payLifeAction = payManaCostPrompt?.actions.find((action) => action.type === "payLife");
+  const handleDelveCard = useCallback(
+    (cardId: string) => {
+      if (useGameStore.getState().isWaitingForResponse) return;
+      const actionId = delveActionIdByCardId.get(cardId);
+      if (actionId) respond({ type: "act", actionId });
+    },
+    [respond, delveActionIdByCardId],
+  );
+  const openDelveZone = useCallback(() => {
+    openZoneViewer({
+      title: `Delve \u2014 Your Graveyard`,
+      cards: me?.graveyard ?? [],
+      mode: "cost",
+      source: me ? { playerId: me.id, zone: "graveyard" } : undefined,
+      onClickCard: handleDelveCard,
+      clickableCardIds: delveSourceIds,
+      selectedCardIds: delvedCardIds,
+      clickLabel: "DELVE",
+      selectedLabel: "UN-DELVE",
+      stickyPromptType: "payManaCost",
+    });
+  }, [openZoneViewer, me, handleDelveCard, delveSourceIds, delvedCardIds]);
+
+  useEffect(() => {
+    const sticky = viewingZone?.stickyPromptType;
+    if (
+      (sticky && currentPrompt?.input.type !== sticky) ||
+      (viewingZone?.mode === "cast" && currentPrompt && currentPrompt.input.type !== "chooseAction")
+    ) {
+      closeZoneViewer();
+    }
+  }, [currentPrompt, viewingZone, closeZoneViewer]);
+
+  const hoveredStackObjectIdForSpecs = useStackUIStore((s) => s.hoveredStackObjectId);
+  const highlightedStackTargetColors = useMemo(() => {
+    const stack = gameView?.stack ?? [];
+    const active =
+      (hoveredStackObjectIdForSpecs
+        ? stack.find((object) => object.id === hoveredStackObjectIdForSpecs)
+        : undefined) ?? stack[stack.length - 1];
+    const colors: Record<string, string> = {};
+    for (const target of active?.targets ?? []) {
+      if (target.kind !== "card") continue;
+      colors[target.id] =
+        target.intent != null && intentIsHostile(target.intent)
+          ? themeColors.targeting.hostile
+          : themeColors.targeting.friendly;
+    }
+    return colors;
+  }, [
+    gameView?.stack,
+    hoveredStackObjectIdForSpecs,
+    themeColors.targeting.hostile,
+    themeColors.targeting.friendly,
+  ]);
+
+  const liveZoneCards =
+    viewingZone?.source && gameView
+      ? visibleZoneCards(viewingZone.source, gameView)
+      : (viewingZone?.cards ?? []);
+  const liveZoneCandidates =
+    viewingZone?.mode === "target"
+      ? (boardTargets?.zone?.validCardIds ?? [])
+      : viewingZone?.mode === "cost"
+        ? delveSourceIds
+        : viewingZone?.mode === "cast" || viewingZone?.mode === "browse"
+          ? [...castOptionsByCardId.keys(), ...abilitiesByCardId.keys()]
+          : viewingZone?.mode === "manual"
+            ? liveZoneCards.map((card) => card.id)
+            : [];
+  const liveViewingZone = viewingZone
+    ? {
+        ...viewingZone,
+        cards: liveZoneCards,
+        clickableCardIds: liveZoneCandidates,
+        selectedCardIds: viewingZone.mode === "cost" ? delvedCardIds : viewingZone.selectedCardIds,
+        pending: isWaitingForResponse,
+        highlightedCardColors: highlightedStackTargetColors,
+        totalCount:
+          viewingZone.source?.zone === "library"
+            ? gameView?.players.find((player) => player.id === viewingZone.source!.playerId)
+                ?.libraryCount
+            : undefined,
+        onClickCard:
+          viewingZone.mode === "browse" && liveZoneCandidates.length === 0
+            ? undefined
+            : (cardId: string) => {
+                if (
+                  isWaitingForResponse ||
+                  (!liveZoneCandidates.includes(cardId) &&
+                    !(viewingZone.mode === "cost" && delvedCardIds.includes(cardId)))
+                )
+                  return;
+                const card = liveZoneCards.find((candidate) => candidate.id === cardId);
+                if (!card) return;
+                if (viewingZone.mode === "cast" || viewingZone.mode === "browse") {
+                  if (viewingZone.mode === "browse")
+                    openZoneViewer({ ...viewingZone, mode: "cast" });
+                  handleHandCardAction(card);
+                } else if (viewingZone.mode === "target") casting.wrappedTargetCard(cardId);
+                else if (viewingZone.mode === "cost") handleDelveCard(cardId);
+                else if (manualApi && viewingZone.source && gameView) {
+                  const source = visibleZoneCards(viewingZone.source, gameView).find(
+                    (candidate) => candidate.id === cardId,
+                  );
+                  if (source)
+                    void applyManualAction({
+                      type: "moveCard",
+                      cardId,
+                      fromZoneId: source.zoneId,
+                      toZoneId: "battlefield",
+                    });
+                }
+              },
+      }
+    : null;
+  const opponent = opponents[0];
+  const playerColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    if (me) map.set(me.id, themeColors.playerColors.self);
+    opponents.forEach((opp, i) => {
+      const seat = OPPONENT_SEATS[i] ?? "opponent1";
+      map.set(opp.id, themeColors.playerColors[seat]);
+    });
+    return map;
+  }, [me, opponents, themeColors.playerColors]);
+  const displayOpponents = useMemo(
+    () => [
+      ...opponents,
+      ...Array.from(
+        { length: devExtraOpponents },
+        (_, i) =>
+          ({
+            id: `dev-fake-${i}`,
+            name: `Dev Opp ${opponents.length + i + 1}`,
+            status: "playing",
+            isHuman: false,
+            life: 20,
+            maxHandSize: 7,
+            unlimitedHandSize: false,
+            landsPlayedThisTurn: 0,
+            maxLandPlaysPerTurn: 1,
+            unlimitedLandPlays: false,
+            cardsDrawnThisTurn: 0,
+            damagePrevention: 0,
+            isExtraTurn: false,
+            extraTurnCount: 0,
+            playerKeywords: [],
+            commanderCasts: {},
+            poison: 0,
+            hand: [],
+            graveyard: [],
+            library: [],
+            exile: [],
+            commandZone: [],
+            libraryCount: 40,
+            handCount: 7,
+            manaPool: {} as Record<string, number>,
+            counters: {},
+            commanderDamage: {},
+            energyCounters: 0,
+            radiationCounters: 0,
+            hasCityBlessing: false,
+            hasEnduringStory: false,
+            ringLevel: 0,
+            speed: 0,
+            experienceCounters: 0,
+            ticketCounters: 0,
+          }) as ClientPlayerDto,
+      ),
+    ],
+    [opponents, devExtraOpponents],
+  );
+  const attackerIds = useMemo(
+    () => chooseBlockersInput?.attackers.map((a) => a.attackerId) ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chooseBlockersInput?.attackers.map((a) => a.attackerId).join(",")],
+  );
+  const combatAssignments = useMemo(
+    () => gameView?.combatAssignments ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [gameView?.combatAssignments?.map((a) => `${a.blockerId}:${a.attackerId}`).join(",")],
+  );
+  const combatRows = useMemo(
+    () =>
+      gameView
+        ? buildCombatRows({
+            battlefield: gameView.battlefield,
+            combatAssignments: [
+              ...combatAssignments,
+              ...blockAssignments.filter(
+                (b) => !combatAssignments.some((c) => c.blockerId === b.blockerId),
+              ),
+            ],
+            playerIds: gameView.players.map((p) => p.id),
+            pendingAttacks: attackAssignments,
+          })
+        : [],
+    [gameView, combatAssignments, blockAssignments, attackAssignments],
+  );
+  const oppCombatAttackerIds = useMemo(
+    () => new Set(combatRows.flatMap((r) => r.attackerIds)),
+    [combatRows],
+  );
+
+  const setHoveredStackObjectId = useStackUIStore((s) => s.setHoveredStackObjectId);
+  const stackCollapsed = useStackUIStore((s) => s.collapsed);
+  const toggleStackCollapsed = useStackUIStore((s) => s.toggleCollapsed);
+  const activeAttackers = useMemo(
+    () =>
+      (gameView?.battlefield ?? [])
+        .filter((c) => c.isAttacking && c.attackingPlayerId)
+        .map((c) => {
+          const targetId = c.attackTargetId ?? c.attackingPlayerId!;
+          return {
+            attackerId: c.id,
+            targetId,
+            targetKind: gameView?.players.some((player) => player.id === targetId)
+              ? ("player" as const)
+              : ("card" as const),
+          };
+        }),
+    [gameView?.battlefield, gameView?.players],
+  );
+  const combatPairings = useMemo<CombatPairing[]>(() => {
+    const nameOf = (id: string) =>
+      id === myPlayerSlot
+        ? `You`
+        : (gameView?.players?.find((p) => p.id === id)?.name ?? `A player`);
+    const pairs = new Map<string, CombatPairing>();
+    for (const c of gameView?.battlefield ?? []) {
+      if (!c.isAttacking || !c.attackingPlayerId) continue;
+      const key = `${c.controllerId}->${c.attackingPlayerId}`;
+      const existing = pairs.get(key);
+      if (existing) existing.count += 1;
+      else
+        pairs.set(key, {
+          key,
+          attacker: nameOf(c.controllerId),
+          defender: nameOf(c.attackingPlayerId),
+          count: 1,
+        });
+    }
+    return [...pairs.values()];
+  }, [gameView?.battlefield, gameView?.players, myPlayerSlot]);
+  const cardZoneTiles = useMemo(() => {
+    const map = new Map<
+      string,
+      {
+        playerId: string;
+        key: string;
+      }
+    >();
+    for (const p of gameView?.players ?? []) {
+      for (const c of p.graveyard) map.set(c.id, { playerId: p.id, key: ZONE_TILE_KEY.graveyard });
+      for (const c of p.exile) map.set(c.id, { playerId: p.id, key: ZONE_TILE_KEY.exile });
+      for (const c of p.commandZone) map.set(c.id, { playerId: p.id, key: ZONE_TILE_KEY.command });
+    }
+    return map;
+  }, [gameView?.players]);
+
+  const attackArrows = useMemo(
+    () => activeAttackers.filter((attacker) => !oppCombatAttackerIds.has(attacker.attackerId)),
+    [activeAttackers, oppCombatAttackerIds],
+  );
+  const arrowBlocks = useMemo(
+    () => combatAssignments.filter((a) => !oppCombatAttackerIds.has(a.attackerId)),
+    [combatAssignments, oppCombatAttackerIds],
+  );
+  const liveArrowSpecs = useMemo(
+    () =>
+      buildArrowSpecs({
+        promptType,
+        attackerIds,
+        blockAssignments,
+        combatAssignments: arrowBlocks,
+        activeAttackers: attackArrows,
+        stack: gameView?.stack ?? [],
+        activeStackObjectId: hoveredStackObjectIdForSpecs,
+        stageBlockers: true,
+        cardZoneTiles,
+      }),
+    [
+      promptType,
+      attackerIds,
+      blockAssignments,
+      arrowBlocks,
+      attackArrows,
+      gameView?.stack,
+      hoveredStackObjectIdForSpecs,
+      cardZoneTiles,
+    ],
+  );
+  const debugArrowType = useGameDevStore((s) => s.debugArrowType);
+  const arrowSpecs = useMemo(() => {
+    if (!debugArrowType || !me?.id || !opponent?.id) return liveArrowSpecs;
+    return [
+      ...liveArrowSpecs,
+      {
+        from: { kind: "player" as const, id: me.id },
+        to: { kind: "player" as const, id: opponent.id },
+        type: debugArrowType,
+      },
+    ];
+  }, [liveArrowSpecs, debugArrowType, me?.id, opponent?.id]);
+  const debugBattlefieldKeywords = useGameDevStore((s) => s.debugBattlefieldKeywords);
+  const debugCardChoices = useGameDevStore((s) => s.debugCardChoices);
+  const debugCardEnabled = useGameDevStore((s) => s.debugCardEnabled);
+  const debugStackCardEnabled = useGameDevStore((s) => s.debugStackCardEnabled);
+  const debugCardName = useGameDevStore((s) => s.debugCardName);
+  const debugCardDefinition = useGameDevStore((s) => s.debugCardDefinition);
+  const debugCardRailEnabled = useGameDevStore((s) => s.debugCardRailEnabled);
+  const debugCardMode = useGameDevStore((s) => s.debugCardMode);
+  const debugCardCurrent = useGameDevStore((s) => s.debugCardCurrent);
+  const debugCardFinal = useGameDevStore((s) => s.debugCardFinal);
+  const promptActionOverride = useGameDevStore((state) => state.promptActionOverride);
+  const debugCardOverrides = useGameDevStore((s) => s.cardOverrides);
+  const debugCardTransformed = debugCardOverrides.forceTransformed;
+  const visibleCardsById = useMemo(() => {
+    if (!gameView) return new Map<string, ClientCardDto>();
+    const cards: ClientCardDto[] = [
+      ...gameView.battlefield,
+      ...gameView.players.flatMap((p) => [
+        ...p.hand,
+        ...p.graveyard,
+        ...p.exile,
+        ...p.commandZone,
+        ...p.library,
+      ]),
+    ];
+    const map = new Map(cards.map((c) => [c.id, c]));
+    if (debugCardEnabled && me?.id) {
+      map.set(
+        DEBUG_KEYWORD_CARD_ID,
+        buildDebugKeywordCard(
+          me.id,
+          debugCardName,
+          debugCardDefinition,
+          debugBattlefieldKeywords,
+          debugCardChoices,
+          debugCardRailEnabled,
+          debugCardMode,
+          debugCardCurrent,
+          debugCardFinal,
+          debugCardTransformed,
+        ),
+      );
+    }
+    return map;
+  }, [
+    gameView,
+    debugCardEnabled,
+    debugCardName,
+    debugCardDefinition,
+    debugCardRailEnabled,
+    debugCardMode,
+    debugCardCurrent,
+    debugCardFinal,
+    debugCardTransformed,
+    debugBattlefieldKeywords,
+    debugCardChoices,
+    me?.id,
+  ]);
+
+  useEffect(() => {
+    if (
+      playModePicker &&
+      (currentPrompt?.promptId !== playModePicker.promptId ||
+        !visibleCardsById.has(playModePicker.cardId))
+    )
+      closePlayModePicker();
+    if (
+      abilityPickerState &&
+      (currentPrompt?.promptId !== abilityPickerState.promptId ||
+        !visibleCardsById.has(abilityPickerState.cardId))
+    )
+      closeAbilityPicker();
+  }, [
+    currentPrompt,
+    playModePicker,
+    abilityPickerState,
+    visibleCardsById,
+    closePlayModePicker,
+    closeAbilityPicker,
+  ]);
+  const liveAbilityPicker = abilityPickerState
+    ? {
+        ...abilityPickerState,
+        source: visibleCardsById.get(abilityPickerState.cardId) ?? abilityPickerState.source,
+        abilities:
+          abilityPickerState.promptId === currentPrompt?.promptId
+            ? abilityPickerState.abilities.filter((option) =>
+                promptActions.some((action) => action.id === option.actionId),
+              )
+            : [],
+      }
+    : null;
+
+  const regionOwnerOf = useCallback((card: CardDto, byId: Map<string, CardDto>): string => {
+    let cur = card;
+    const seen = new Set<string>();
+    while (cur.attachedTo && byId.has(cur.attachedTo) && !seen.has(cur.id)) {
+      seen.add(cur.id);
+      cur = byId.get(cur.attachedTo)!;
+    }
+    return cur.controllerId;
+  }, []);
+  const battlefieldById = useMemo(() => {
+    const m = new Map<string, CardDto>();
+    for (const c of gameView?.battlefield ?? []) m.set(c.id, c);
+    return m;
+  }, [gameView?.battlefield]);
+  const myPermanents = useMemo<CardDto[]>(() => {
+    if (!gameView || !me) return [];
+    const pendingSet = new Set([
+      ...pendingAttackers,
+      ...attackAssignments.map((a) => a.attackerId),
+    ]);
+    const list = gameView.battlefield
+      .filter((c) => regionOwnerOf(c, battlefieldById) === me.id)
+      .map((c) =>
+        pendingSet.has(c.id) && !c.keywords.includes("Vigilance") ? { ...c, tapped: true } : c,
+      );
+    if (debugCardEnabled) {
+      list.push(
+        buildDebugKeywordCard(
+          me.id,
+          debugCardName,
+          debugCardDefinition,
+          debugBattlefieldKeywords,
+          debugCardChoices,
+          debugCardRailEnabled,
+          debugCardMode,
+          debugCardCurrent,
+          debugCardFinal,
+          debugCardTransformed,
+        ),
+      );
+    }
+    return list;
+  }, [
+    gameView,
+    me,
+    pendingAttackers,
+    attackAssignments,
+    debugCardEnabled,
+    debugCardName,
+    debugCardDefinition,
+    debugCardRailEnabled,
+    debugCardMode,
+    debugCardCurrent,
+    debugCardFinal,
+    debugCardTransformed,
+    debugBattlefieldKeywords,
+    debugCardChoices,
+    regionOwnerOf,
+    battlefieldById,
+  ]);
+  const opponentPermanentsByPlayer = useMemo(() => {
+    const map = new Map<string, CardDto[]>();
+    if (!gameView) return map;
+    for (const op of opponents) {
+      map.set(
+        op.id,
+        gameView.battlefield.filter((c) => regionOwnerOf(c, battlefieldById) === op.id),
+      );
+    }
+    return map;
+  }, [gameView, opponents, regionOwnerOf, battlefieldById]);
+  const stackCardsBySourceId = useMemo(() => {
+    const byId = new Map<string, ClientCardDto>();
+    for (const s of gameView?.stack ?? []) {
+      if (byId.has(s.sourceId)) continue;
+      byId.set(s.sourceId, stackObjectToCardStub(s));
+    }
+    return byId;
+  }, [gameView?.stack]);
+  const commandPreviewCards = useMemo(
+    () =>
+      commandPreviewSource?.cardIds
+        .map((cardId) => visibleCardsById.get(cardId))
+        .filter((card): card is ClientCardDto => card !== undefined) ?? [],
+    [commandPreviewSource?.cardIds, visibleCardsById],
+  );
+
+  const previewCardId = preview.hoveredCard?.id ?? null;
+  const livePreviewCard = useMemo(() => {
+    if (!previewCardId) return null;
+    return (
+      visibleCardsById.get(previewCardId) ??
+      stackCardsBySourceId.get(previewCardId) ??
+      (preview.hoveredCard ? { ...preview.hoveredCard, zoneId: "prompt" } : null)
+    );
+  }, [preview.hoveredCard, previewCardId, stackCardsBySourceId, visibleCardsById]);
+  const [previewFaceOverride, setPreviewFaceOverride] = useState<{
+    cardId: string;
+    showBackFace: boolean;
+  } | null>(null);
+  useEffect(() => {
+    setPreviewFaceOverride(null);
+  }, [previewCardId]);
+  const previewShowBackFace =
+    previewFaceOverride && previewFaceOverride.cardId === livePreviewCard?.id
+      ? previewFaceOverride.showBackFace
+      : (livePreviewCard?.isTransformed ?? false);
+  const handleFlipPreview = () => {
+    if (!livePreviewCard) return;
+    const showBackFace = !previewShowBackFace;
+    setPreviewFaceOverride(
+      showBackFace === livePreviewCard.isTransformed
+        ? null
+        : { cardId: livePreviewCard.id, showBackFace },
+    );
+  };
+  const hoveredCardActions = useMemo(
+    () => (livePreviewCard ? getCardActions(livePreviewCard) : []),
+    [getCardActions, livePreviewCard],
+  );
+
+  const handleHoverZoneCards = (cards: CardDto[] | null, anchor?: DOMRect) => {
+    if (!cards?.length || !anchor) {
+      commandZonePreview.handleMouseLeave();
+      return;
+    }
+    preview.dismiss();
+    const cardIds = cards.map((card) => card.id);
+    setCommandPreviewSource((current) => {
+      if (
+        current &&
+        current.cardIds.length === cardIds.length &&
+        current.cardIds.every((cardId, index) => cardId === cardIds[index]) &&
+        current.anchorRect.x === anchor.x &&
+        current.anchorRect.y === anchor.y &&
+        current.anchorRect.width === anchor.width &&
+        current.anchorRect.height === anchor.height
+      ) {
+        return current;
+      }
+      return { cardIds, anchorRect: anchor };
+    });
+    commandZonePreview.handleMouseEnter(cards[0]!, undefined, {
+      anchorOverride: anchor,
+      ignoreTriggerPreference: true,
+      useAnchor: true,
+      useDelay: true,
+    });
+  };
+  const dismissInGamePreviews = () => {
+    setCommandPreviewSource(null);
+    commandZonePreview.dismiss();
+    preview.dismiss();
+  };
+  const handlePreviewPointerEnter = () => {
+    commandZonePreview.onMouseEnterPreview();
+    preview.onMouseEnterPreview();
+  };
+  const handlePreviewPointerLeave = () => {
+    commandZonePreview.onMouseLeavePreview();
+    preview.onMouseLeavePreview();
+  };
+
+  const promptSourceDeckCard = useResolveSourceCard(activePrompt?.sourceCard);
+  const handleLogCardHover = (
+    cardId: string | null,
+    e?: React.MouseEvent,
+    options: LogCardPreviewOptions = {},
+  ) => {
+    if (cardId) {
+      setCommandPreviewSource(null);
+      commandZonePreview.dismiss();
+    }
+    if (draggingHandCard) {
+      preview.dismiss();
+      return;
+    }
+    if (!cardId) {
+      preview.handleMouseLeave();
+      return;
+    }
+    const card = visibleCardsById.get(cardId) ?? stackCardsBySourceId.get(cardId);
+    if (!card) {
+      preview.dismiss();
+      return;
+    }
+    if (options.sticky) {
+      const anchor =
+        options.anchorOverride ??
+        (options.useAnchor && e
+          ? (e.currentTarget as HTMLElement).getBoundingClientRect()
+          : undefined);
+      preview.showSticky(
+        card,
+        e?.clientX ?? (anchor ? anchor.left + anchor.width / 2 : undefined),
+        e?.clientY ?? (anchor ? anchor.top + anchor.height / 2 : undefined),
+        anchor,
+      );
+      return;
+    }
+    preview.handleMouseEnter(card, e, { useDelay: true, ...options });
+  };
+  const handleHoverCardGuarded = (
+    card: CardDto | null,
+    e?: React.MouseEvent,
+    options: {
+      useAnchor?: boolean;
+      placement?: "auto" | "top-center";
+      anchorOverride?: DOMRect;
+      trigger?: PreviewPointerInput;
+    } = {},
+  ) => {
+    if (card) {
+      setCommandPreviewSource(null);
+      commandZonePreview.dismiss();
+    }
+    if (draggingHandCard) {
+      preview.dismiss();
+      return;
+    }
+    if (card === null) {
+      preview.handleMouseLeave();
+    } else {
+      preview.handleMouseEnter(card, e, { ...options, useDelay: true });
+    }
+  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const strip = (root: Element) => {
+      for (const node of root.querySelectorAll("[title]")) {
+        const val = node.getAttribute("title");
+        if (val) {
+          node.setAttribute("data-title", val);
+          node.removeAttribute("title");
+        }
+      }
+    };
+    strip(el);
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === "attributes" && m.attributeName === "title" && m.target instanceof Element) {
+          const val = m.target.getAttribute("title");
+          if (val) {
+            m.target.setAttribute("data-title", val);
+            m.target.removeAttribute("title");
+          }
+        }
+        if (m.type === "childList") {
+          for (const node of m.addedNodes) {
+            if (node instanceof Element) strip(node);
+          }
+        }
+      }
+    });
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["title"],
+      childList: true,
+      subtree: true,
+    });
+    return () => observer.disconnect();
+  }, []);
+  const { dismiss: dismissPreview, hoveredCard: previewedCard } = preview;
+  useEffect(() => {
+    if (draggingHandCard) {
+      dismissPreview();
+    }
+  }, [draggingHandCard, dismissPreview]);
+  useEffect(() => {
+    if (!previewedCard) return;
+    if (!livePreviewCard) {
+      dismissPreview();
+    }
+  }, [previewedCard, dismissPreview, livePreviewCard]);
+  const cardNameById = useMemo(() => {
+    const byId = new Map<string, string>();
+    for (const c of visibleCardsById.values()) {
+      byId.set(c.id, c.identity.name);
+    }
+    for (const [sourceId, c] of stackCardsBySourceId.entries()) {
+      if (!byId.has(sourceId)) byId.set(sourceId, c.identity.name);
+    }
+    return byId;
+  }, [visibleCardsById, stackCardsBySourceId]);
+  const playerNameById = useMemo(
+    () => new Map((gameView?.players ?? []).map((p) => [p.id, p.name] as const)),
+    [gameView?.players],
+  );
+  const resolveStackCard = (stackItem: StackObjectDto): CardDto =>
+    visibleCardsById.get(stackItem.sourceId) ?? stackCardsBySourceId.get(stackItem.sourceId)!;
+  const activeFlashCard: CardDto | null = useMemo(() => {
+    if (!activeFlash || activeFlash.kind !== "card") return null;
+    return (
+      visibleCardsById.get(activeFlash.cardId) ??
+      stackCardsBySourceId.get(activeFlash.cardId) ??
+      null
+    );
+  }, [activeFlash, visibleCardsById, stackCardsBySourceId]);
+  const showInGamePreview =
+    livePreviewCard != null &&
+    (livePreviewCard.zoneId !== "hand" || preview.isSticky) &&
+    !draggingHandCard &&
+    !viewingZone &&
+    !abilityPickerState &&
+    preview.phase !== "hidden";
+  const showCommandZonePreview =
+    commandPreviewCards.length > 0 &&
+    !draggingHandCard &&
+    !viewingZone &&
+    !abilityPickerState &&
+    commandZonePreview.phase !== "hidden";
+  const previewSuppressed = !!promptType && !HOVER_ALLOWED_PROMPTS.has(promptType);
+  const externalPreviewActive =
+    !previewSuppressed &&
+    ((showInGamePreview && preview.phase === "open") ||
+      (showCommandZonePreview && commandZonePreview.phase === "open"));
+  useEffect(() => {
+    if (preview.phase !== "open") previewViewSwitchCardIdRef.current = null;
+  }, [preview.phase]);
+  const skipPreviewEnterAnimation =
+    preview.phase === "open" &&
+    livePreviewCard != null &&
+    previewViewSwitchCardIdRef.current === livePreviewCard.id;
+  const togglePreviewView = useCallback(() => {
+    if (!livePreviewCard && !commandPreviewSource) return;
+    if (livePreviewCard) previewViewSwitchCardIdRef.current = livePreviewCard.id;
+    const preferences = usePreferencesStore.getState();
+    preferences.setInGameCardPreviewStyle(
+      preferences.inGameCardPreviewStyle === "printed" ? "rules" : "printed",
+    );
+  }, [commandPreviewSource, livePreviewCard]);
+  useKeybindings(
+    externalPreviewActive
+      ? {
+          "toggle-card-view": togglePreviewView,
+        }
+      : {},
+  );
+  useEffect(() => {
+    if (!gameView?.gameOver && activePrompt?.input.type !== "gameOver") return;
+    if (peekGauntletMatch()) return;
+    const timer = setTimeout(() => endGame(), 3000);
+    return () => clearTimeout(timer);
+  }, [gameView?.gameOver, activePrompt?.input.type, endGame]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!gameView?.gameOver) return;
+    const pending = tryConsumeGauntletMatch();
+    if (!pending) return;
+    const humanWon = gameView.winnerId != null && gameView.winnerId === myPlayerSlot;
+    void (async () => {
+      await useLimitedStore
+        .getState()
+        .recordGauntletOutcome(pending.gauntletId, humanWon, true, humanWon)
+        .catch(() => undefined);
+      await endGame();
+      navigate(`/gauntlet/${pending.gauntletId}`);
+    })();
+  }, [gameView?.gameOver, gameView?.winnerId, myPlayerSlot, navigate, endGame]);
+  if (!isGameActive) return <Navigate to={exitTo ?? "/lobby"} replace />;
+  if (fatalError) {
+    return <GameFailedScreen message={fatalError} onLeave={endGame} />;
+  }
+  if (!gameView || isPrefetchingCards || !me || !introDone) {
+    return <GameLoadingScreen debugInfo={debugInfo} onComplete={handleLoadingComplete} />;
+  }
+  const playableIds = new Set<string>(
+    promptType === "chooseAction"
+      ? (chooseActionInput?.actions ?? []).flatMap((a) =>
+          a.type === "cast" || a.type === "activateAbility" ? [a.cardId] : [],
+        )
+      : [],
+  );
+  if (import.meta.env.DEV && typeof document !== "undefined") {
+    document.documentElement.dataset.manabrewGameDebug = JSON.stringify({
+      promptType,
+      actions: chooseActionInput?.actions ?? [],
+      playableIds: [...playableIds],
+      hand: gameView.players.map((player) => ({
+        id: player.id,
+        name: player.name,
+        hand: player.hand.map((card) => ({ id: card.id, name: card.identity.name })),
+      })),
+      battlefield: gameView.battlefield.map((card) => ({
+        id: card.id,
+        name: card.identity.name,
+        tapped: card.tapped,
+        types: card.types,
+      })),
+      step: gameView.step,
+      priorityPlayerId: gameView.priorityPlayerId,
+    });
+  }
+
+  const turnFlashPlayerId = activeFlash?.kind === "turn" ? activeFlash.playerId : null;
+  const effectivePriorityHighlightPlayerId = priorityHighlightPlayerId ?? gameView.priorityPlayerId;
+  const shouldRenderStackFlashCard = activeFlash?.kind === "card";
+  const shouldShowPreStackFlash = activeFlashCard?.types.includes("Land") ?? false;
+  const targetingCursorActive =
+    casting.showArrow && !casting.targetId && !intentPrefersArrow(casting.arrowIntent);
+  const castingArrow =
+    casting.showArrow &&
+    casting.castingCardId &&
+    !casting.targetId &&
+    intentPrefersArrow(casting.arrowIntent)
+      ? { sourceCardId: casting.castingCardId, hostile: casting.arrowHostile }
+      : null;
+  const stackValidTargetSet = new Set(boardTargets?.spellIds ?? []);
+  const stackTargetingActive = stackValidTargetSet.size > 0;
+  const debugStackCard =
+    debugStackCardEnabled && me
+      ? applyCardOverrides(
+          buildDebugKeywordCard(
+            me.id,
+            debugCardName,
+            debugCardDefinition,
+            debugBattlefieldKeywords,
+            debugCardChoices,
+            debugCardRailEnabled,
+            debugCardMode,
+            debugCardCurrent,
+            debugCardFinal,
+            debugCardTransformed,
+          ),
+          debugCardOverrides,
+        )
+      : null;
+  const stackCards: StackCardSpec[] = (gameView?.stack ?? []).map((obj, idx, arr) => {
+    const isValidTarget = stackTargetingActive && stackValidTargetSet.has(obj.id);
+    return {
+      id: obj.id,
+      sourceId: obj.sourceId,
+      card: resolveStackCard(obj),
+      sourceAbilityText: stackObjectAbilityText(obj),
+      controllerId: obj.controllerId,
+      isCasting: obj.isCasting,
+      isTopOfStack: debugStackCard === null && idx === arr.length - 1,
+      seatColor: playerColorMap.get(obj.controllerId),
+      isValidTarget,
+      isDimmed: stackTargetingActive && !isValidTarget,
+    };
+  });
+  if (debugStackCard) {
+    stackCards.push({
+      id: DEBUG_STACK_OBJECT_ID,
+      sourceId: DEBUG_KEYWORD_CARD_ID,
+      card: debugStackCard,
+      controllerId: me.id,
+      isCasting: false,
+      isTopOfStack: true,
+      seatColor: playerColorMap.get(me.id),
+      isValidTarget: false,
+      isDimmed: false,
+    });
+  }
+  const stackSpec: StackSpec = {
+    cards: stackCards,
+    flash:
+      shouldRenderStackFlashCard && activeFlashCard && activeFlash
+        ? {
+            token: `${activeFlash.cardId}:${activeFlash.cardName}:${activeFlash.setCode}`,
+            card: activeFlashCard,
+          }
+        : null,
+    showPreStackFlash: shouldShowPreStackFlash,
+    collapsed: debugStackCard === null && stackCollapsed,
+  };
+  const boardViewportRight = isActionPanelCollapsed ? undefined : rightPanelLeft;
+  const commandPreview: BoardOverlayCommandPreviewSpec | null =
+    commandPreviewSource && showCommandZonePreview
+      ? {
+          cards: commandPreviewCards,
+          castableCardIds: commandPreviewCards
+            .filter((card) => playableIds.has(card.id))
+            .map((card) => card.id),
+          style: inGameCardPreviewStyle,
+          phase: commandZonePreview.phase === "closing" ? "closing" : "open",
+          suppressed: previewSuppressed,
+          anchorRect: commandPreviewSource.anchorRect,
+          viewportRight: boardViewportRight,
+        }
+      : null;
+  const rulesPreview: BoardOverlayPreviewSpec | null =
+    !commandPreview && inGameCardPreviewStyle === "rules" && showInGamePreview && livePreviewCard
+      ? {
+          card: livePreviewCard,
+          phase: preview.phase === "closing" ? "closing" : "open",
+          sticky: preview.isSticky,
+          showBackFace: previewShowBackFace,
+          suppressed: previewSuppressed,
+          skipEnterAnimation: skipPreviewEnterAnimation,
+          actions: hoveredCardActions,
+          mousePos: preview.mousePos,
+          anchorRect: preview.anchorRect,
+          slotRect: null,
+          viewportRight: boardViewportRight,
+        }
+      : null;
+
+  const promptOverlaySpec: PromptOverlaySpec = {
+    currentPrompt: activePrompt,
+    localPlayerId: me.id,
+    gameView,
+    sourceDeckCard: promptSourceDeckCard,
+    action: {
+      promptType,
+      promptActionOverride,
+      isWaitingForResponse,
+      isWaitingForOthers:
+        relinquishedPriority || (isWaitingForResponse && gameView.priorityPlayerId !== me.id),
+      availableAttackerIds:
+        chooseAttackersInput?.attackers.map((attacker) => attacker.attackerId) ?? [],
+      pendingAttackers,
+      onPassPriority: passPriority,
+      onPassEndTurn: passEndTurn,
+      selectedAttackDefenderId: attackDefenderId,
+      multipleAttackDefenders,
+      attackAssignmentCount: attackAssignments.length,
+      mustAttackHint,
+      onDeclareAttackers: (attackerIds, defenderId) =>
+        void respond(declareAttackersOutput(activePrompt, attackerIds, defenderId)),
+      onBeginAttackTargetPick: selectAllAttackersForPick,
+      onSubmitAttack: submitAttack,
+      pendingAttacker,
+      pendingBlocker,
+      blockError,
+      blockRequirementError,
+      blockRestrictionHint,
+      attackerIds: chooseBlockersInput?.attackers.map((attacker) => attacker.attackerId) ?? [],
+      blockAssignments,
+      combatPairings,
+      combatDefenderLife: me.life,
+      onDeclareBlockers: (assignments) => void respond({ type: "declareBlockers", assignments }),
+      damageOrderCount: damageOrder.length,
+      damageOrderTotal: damageOrderInput?.blockerIds.length ?? 0,
+      onConfirmDamageOrder: () =>
+        void respond({
+          type: "damageAssignmentOrderDecision",
+          orderedBlockerIds: damageOrder,
+        }),
+      onUndoDamageOrder: undoDamageOrder,
+      onDefaultDamageOrder: () =>
+        void respond({
+          type: "damageAssignmentOrderDecision",
+          orderedBlockerIds: damageOrderInput?.blockerIds ?? [],
+        }),
+      onToggleBoardMenu: () => setBoardMenuOpen((open) => !open),
+      onOpenCombat: () => setCombatDetailsOpen(true),
+      targetCompletionLabel: targetCompletion?.label,
+      targetCompletionKind: targetCompletion?.kind,
+      onCompleteTargets: targetCompletion?.onComplete,
+      resolveCardName: (cardId) => cardNameById.get(cardId) ?? cardId,
+      resolveCard: (cardId) => visibleCardsById.get(cardId),
+      turn: gameView.turn,
+      activePlayerName:
+        gameView.players.find((player) => player.id === gameView.activePlayerId)?.name ?? "Unknown",
+      isMyTurn: gameView.activePlayerId === me.id,
+      step: gameView.step,
+      payManaCostInfo: payManaCostInput
+        ? {
+            cardName: payManaCostInput.cardName,
+            sourceCard: promptSourceDeckCard,
+            manaCost: payManaCostInput.manaCost,
+            description: payManaCostInput.presentation.text,
+            manaPool: gameView.players.find((player) => player.isHuman)?.manaPool ?? {},
+            canConfirmFromPool: payManaCostInput.canConfirmFromPool,
+            delveCount: delvedCardIds.length,
+            delveAvailable: delveSourceIds.length > 0,
+            onOpenDelve: openDelveZone,
+            lifeToPay: payLifeAction?.amount,
+            onPayLife: payLifeAction
+              ? () => void respond({ type: "act", actionId: payLifeAction.id })
+              : undefined,
+          }
+        : null,
+      onPayManaCost: () => void respond({ type: "pay", auto: false }),
+      onAutoManaCost: () => void respond({ type: "pay", auto: true }),
+      onCancelManaCost: () => void respond({ type: "cancel" }),
+      mulliganCount: mulliganInput?.mulliganCount ?? 0,
+      onMulliganKeep: () => void respond({ type: "mulliganDecision", keep: true }),
+      onMulliganDraw: () => void respond({ type: "mulliganDecision", keep: false }),
+      mulliganPutBackCount: mulliganPutBack.count,
+      mulliganSelectedCount: mulliganPutBack.selected.size,
+      onMulliganPutBackConfirm: mulliganPutBack.confirm,
+      selfClusterMaxHeight: boardLayout?.selfClusterMaxHeight,
+      dividerY: boardLayout?.dividerY,
+      dimmed: handCardLifted,
+    },
+    damageOrder: damageOrderInput
+      ? {
+          attackerName:
+            gameView.battlefield.find((card) => card.id === damageOrderInput.attackerId)?.identity
+              .name ?? "The attacker",
+          blockerCards: damageOrderInput.blockerCards,
+          order: damageOrder,
+          onToggle: toggleDamageOrder,
+          onUndo: undoDamageOrder,
+          onAuto: () =>
+            void respond({
+              type: "damageAssignmentOrderDecision",
+              orderedBlockerIds: damageOrderInput.blockerIds,
+            }),
+          onConfirm: () =>
+            void respond({
+              type: "damageAssignmentOrderDecision",
+              orderedBlockerIds: damageOrder,
+            }),
+        }
+      : null,
+    gameOver:
+      gameView.gameOver || promptType === "gameOver"
+        ? {
+            winnerId: gameView.winnerId,
+            me,
+            opponents,
+            turn: gameView.turn,
+            engineCrash,
+            onEndGame: () => void endGame(),
+          }
+        : null,
+    modalHidden: promptModalHidden,
+    respond: (output) => void respond(output),
+    onHideModal: hidePromptModal,
+    onShowModal: showPromptModal,
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      className="font-game game-touch-surface relative flex flex-col h-full min-h-0 overflow-hidden select-none pb-[var(--safe-area-inset-bottom)] pl-[var(--safe-area-inset-left)] pr-[var(--safe-area-inset-right)] pt-[var(--safe-area-inset-top)]"
+      style={
+        {
+          "--flash-duration": `${flashDurationMs}ms`,
+          "--playable-ring-color": withAlpha(themeColors.cardRing, 0.75),
+          "--playable-glow-color": withAlpha(themeColors.cardRing, 0.3),
+          "--playable-ring-color-strong": themeColors.cardRing,
+          "--playable-glow-color-strong": withAlpha(themeColors.cardRing, 0.6),
+          "--casting-ring-color": withAlpha(themeColors.targeting.friendly, 0.7),
+          "--casting-ring-color-strong": themeColors.targeting.friendly,
+          "--casting-glow-color": withAlpha(themeColors.targeting.friendly, 0.3),
+          "--casting-glow-color-strong": withAlpha(themeColors.targeting.friendly, 0.6),
+          "--rejecting-ring-color": withAlpha(themeColors.targeting.hostile, 0.9),
+          "--rejecting-ring-color-strong": themeColors.targeting.hostile,
+          "--rejecting-glow-color": withAlpha(themeColors.targeting.hostile, 0.5),
+          "--rejecting-glow-color-strong": withAlpha(themeColors.targeting.hostile, 0.7),
+        } as React.CSSProperties
+      }
+    >
+      <LandscapeGate />
+      <DevViewportFrame>
+        <GameBoard
+          boardSceneRef={boardSceneRef}
+          onLayoutChange={setBoardLayout}
+          boardSurfaceRef={setBoardSurfaceEl}
+          stackSpec={stackSpec}
+          promptOverlaySpec={manualApi ? null : promptOverlaySpec}
+          promptViewportRight={boardViewportRight}
+          onTargetSpell={(spellId) => {
+            casting.wrappedTargetSpell(spellId);
+          }}
+          onHoverStack={setHoveredStackObjectId}
+          onToggleStack={toggleStackCollapsed}
+          handSelectionMode={mulliganPutBack.active}
+          handSelectedIds={mulliganPutBack.selected}
+          onHandCardToggle={mulliganPutBack.toggle}
+          me={me}
+          opponents={displayOpponents}
+          myPermanents={myPermanents}
+          opponentPermanentsByPlayer={opponentPermanentsByPlayer}
+          myHand={me?.hand ?? []}
+          graveyard={me?.graveyard ?? []}
+          exile={me?.exile ?? []}
+          library={me?.library ?? []}
+          myCommandZone={me?.commandZone ?? []}
+          playableIds={playableIds}
+          activePlayerId={gameView.activePlayerId}
+          priorityPlayerId={effectivePriorityHighlightPlayerId}
+          monarchId={gameView.monarchId ?? null}
+          initiativeHolderId={gameView.initiativeHolderId ?? null}
+          dayTime={gameView.dayTime}
+          activePlaneNames={gameView.activePlaneNames}
+          step={gameView.step}
+          promptType={promptType}
+          currentPrompt={activePrompt}
+          boardTargets={boardTargets}
+          pendingAttackers={pendingAttackers}
+          attackAssignments={attackAssignments}
+          pendingAttacker={pendingAttacker}
+          pendingBlocker={pendingBlocker}
+          damageOrder={damageOrder}
+          damageOrderBlockerIds={damageOrderInput?.blockerIds ?? []}
+          selectedAttackDefenderId={attackDefenderId}
+          blockAssignments={blockAssignments}
+          combatAssignments={combatAssignments}
+          combatRows={combatRows}
+          arrowSpecs={arrowSpecs}
+          castingArrow={castingArrow}
+          playerIsTargetable={playerIsTargetable}
+          turnFlashPlayerId={turnFlashPlayerId}
+          zonePanelOrder={zonePanelOrder}
+          isOverBattlefield={isOverBattlefield}
+          isOverHand={isOverHand}
+          battlefieldContainerRef={battlefieldContainerRef}
+          draggingCardId={draggingHandCard?.id}
+          draggingIsPermanent={draggingIsPermanent}
+          castingCardId={casting.castingCardId}
+          onHandCardDragStart={handleHandCardDragStart}
+          onHoverCard={handleHoverCardGuarded}
+          onHoverZoneCards={handleHoverZoneCards}
+          onRightClickCard={
+            cardPreviewMode === "right-click"
+              ? (card, rect) => {
+                  setCommandPreviewSource(null);
+                  commandZonePreview.dismiss();
+                  preview.showSticky(
+                    card,
+                    rect.left + rect.width / 2,
+                    rect.top + rect.height / 2,
+                    rect,
+                  );
+                }
+              : undefined
+          }
+          onDismissHoverPreview={dismissInGamePreviews}
+          rulesPreview={rulesPreview}
+          commandPreview={commandPreview}
+          externalPreviewActive={externalPreviewActive}
+          onPreviewPointerEnter={handlePreviewPointerEnter}
+          onPreviewPointerLeave={handlePreviewPointerLeave}
+          onTogglePreviewView={togglePreviewView}
+          onLongPressCard={(card, rect) => {
+            setCommandPreviewSource(null);
+            commandZonePreview.dismiss();
+            preview.showSticky(card, rect.left + rect.width / 2, rect.top + rect.height / 2, rect);
+          }}
+          onHandHoverChange={setHandCardLifted}
+          getHandActions={getHandActionOptions}
+          onSelectHandAction={handlePreviewAction}
+          onFlipCard={handleFlipPreview}
+          onBattlefieldClick={(card) => {
+            if (manualApi) {
+              void applyManualAction({
+                type: "tapCard",
+                cardId: card.id,
+                tapped: !card.tapped,
+              });
+              return;
+            }
+            if (promptType === "chooseAction" && handleBattlefieldCardAction(card)) {
+              return;
+            }
+            handleBattlefieldClick(card);
+          }}
+          onAttackerClick={handleAttackerClick}
+          onAssignBlock={assignBlockPair}
+          onUnassignBlock={unassignBlock}
+          onAssignAttacker={assignAttackPair}
+          onUnassignAttacker={unassignAttack}
+          onTargetPlayer={handleTargetPlayer}
+          onOpenZone={(title, cards, onClickCard, clickableCardIds, targetHostile) => {
+            if (manualApi) {
+              openManualZone(title, cards as ClientCardDto[]);
+              return;
+            }
+            openZone(title, cards, onClickCard, clickableCardIds, targetHostile);
+          }}
+          onOpenZoneAndCast={(title, cards, onClickCard, clickableCardIds) =>
+            openZoneAndCast(
+              title,
+              cards,
+              (cardId) => {
+                const card = cards.find((c) => c.id === cardId);
+                if (card) handleHandCardAction(card);
+                else handleCastSpell(cardId);
+                onClickCard(cardId);
+              },
+              clickableCardIds,
+            )
+          }
+          delveAvailable={delveSourceIds.length > 0}
+          onOpenDelveZone={openDelveZone}
+          onTargetFromZone={(cardId) => {
+            casting.wrappedTargetCard(cardId);
+          }}
+          onCastSpell={handleCastSpell}
+          waterbendSourceIds={waterbendSourceIds}
+          waterbentCardIds={waterbentCardIds}
+          onTapLand={
+            promptType === "chooseAction" || promptType === "payManaCost"
+              ? handleTapLand
+              : undefined
+          }
+          onTapLands={
+            promptType === "chooseAction" || promptType === "payManaCost"
+              ? handleTapLands
+              : undefined
+          }
+          onTapLandAbility={(actionId) => {
+            if (actionId) respond({ type: "act", actionId });
+          }}
+          onUntapLand={
+            promptType === "chooseAction" || promptType === "payManaCost"
+              ? handleUntapLand
+              : undefined
+          }
+          onUntapLands={
+            promptType === "chooseAction" || promptType === "payManaCost"
+              ? handleUntapLands
+              : undefined
+          }
+        />
+      </DevViewportFrame>
+
+      {manualApi && <ManualTabletopControls gameView={gameView} api={manualApi} />}
+
+      <RightActionPanel
+        collapsed={isActionPanelCollapsed}
+        onLeftEdgeChange={setRightPanelLeft}
+        onToggleCollapse={toggleActionPanel}
+        gameLog={gameLog}
+        onHoverLogCard={handleLogCardHover}
+        resolveCardName={(cardId) => cardNameById.get(cardId) ?? cardId}
+        resolvePlayerName={(playerId) => playerNameById.get(playerId) ?? playerId}
+        snapshots={snapshots}
+        // The browser Forge engine cannot rewind — the harness rejects
+        // restoreSnapshot outright — so the control is offered only by an
+        // engine that can honour it.
+        canRestoreSnapshots={
+          (!isMultiplayer || isHost) && promptType === "chooseAction" && !isForgeWasmActive()
+        }
+        onRestoreSnapshot={restoreSnapshot}
+      />
+
+      {boardSurfaceEl &&
+        createPortal(
+          !manualApi && (
+            <MiddleBarDock
+              open={boardMenuOpen}
+              onOpenChange={setBoardMenuOpen}
+              onOpenSettings={() => setGameSettingsOpen(true)}
+              onOpenCombat={() => setCombatDetailsOpen(true)}
+              onConcede={handleConcede}
+              eliminated={iAmEliminated}
+              onLeave={handleLeave}
+              sidePanelCollapsed={isActionPanelCollapsed}
+              onToggleSidePanel={toggleActionPanel}
+              players={gameView.players.map((player) => {
+                const color = playerColorMap.get(player.id) ?? themeColors.playerColors.self;
+                return {
+                  id: player.id,
+                  name: player.name,
+                  color,
+                  textColor: readableTextColor(
+                    color,
+                    themeColors.canvas.shadow,
+                    themeColors.textOnTinted,
+                  ),
+                };
+              })}
+            />
+          ),
+          boardSurfaceEl,
+        )}
+
+      {gameSettingsOpen && <GameSettingsModal onClose={() => setGameSettingsOpen(false)} />}
+      {combatDetailsOpen && (
+        <CombatBreakdownModal
+          attackerIds={
+            promptType === "chooseAttackers"
+              ? pendingAttackers
+              : (chooseBlockersInput?.attackers.map((attacker) => attacker.attackerId) ??
+                gameView.battlefield.filter((card) => card.isAttacking).map((card) => card.id))
+          }
+          blockAssignments={promptType === "chooseBlockers" ? blockAssignments : combatAssignments}
+          resolveCard={(id) => visibleCardsById.get(id)}
+          resolveCardName={(id) => cardNameById.get(id) ?? id}
+          defenderLife={promptType === "chooseBlockers" ? me.life : undefined}
+          onClose={() => setCombatDetailsOpen(false)}
+        />
+      )}
+      {eliminatedModalOpen && (
+        <EliminatedModal
+          heading={selfConceded || me?.status === "conceded" ? `You conceded` : `You lost`}
+          hosting={ownsEngine}
+          onObserve={() => setEliminatedModalOpen(false)}
+          onLeave={() => {
+            setEliminatedModalOpen(false);
+            void endGame();
+          }}
+        />
+      )}
+      {leaveGameModalOpen && (
+        <LeaveGameModal
+          mode={leaveGameMode}
+          endsWithConcede={leaveEndsWithConcede}
+          onStay={handleStay}
+          onLeave={leaveEndsWithConcede ? handleLeaveConcede : handleLeaveConfirm}
+        />
+      )}
+      {concedeModalOpen && (
+        <ConcedeGameModal
+          hosting={ownsEngine && gameContinuesWithoutMe}
+          onConfirm={handleConcedeConfirm}
+          onCancel={() => setConcedeModalOpen(false)}
+        />
+      )}
+
+      {gameView.step === "combatFirstStrikeDamage" && (
+        <div className="pointer-events-none absolute top-[calc(1rem+var(--safe-area-inset-top))] left-1/2 z-50 -translate-x-1/2">
+          <div className="flex items-center gap-2 rounded-full border border-border/70 bg-background/90 px-4 py-2 shadow-lg backdrop-blur">
+            <span className="text-sm font-semibold tracking-wide">{t`First Strike Damage`}</span>
+            <span className="text-xs text-muted-foreground">
+              {t`only first & double strikers deal damage now`}
+            </span>
+          </div>
+        </div>
+      )}
+
+      <GameModals
+        viewingZone={liveViewingZone}
+        onCloseZone={closeZone}
+        abilityPickerState={liveAbilityPicker}
+        onSelectAbility={respondHandAction}
+        onCancelAbilityPicker={closeAbilityPicker}
+      />
+
+      {playModePicker && (
+        <PlayModePicker
+          card={playModePicker.card}
+          sourceCard={visibleCardsById.get(playModePicker.cardId) ?? playModePicker.source}
+          initialInspection={
+            viewingZone
+              ? useGameUIStore.getState().zoneBrowserStates[
+                  zoneLocationKey(viewingZone.source, viewingZone.title)
+                ]?.inspection[playModePicker.cardId]
+              : undefined
+          }
+          pending={isWaitingForResponse}
+          error={responseError}
+          options={
+            playModePicker.promptId === currentPrompt?.promptId
+              ? playModePicker.options.filter((option) =>
+                  promptActions.some((action) => action.id === option.actionId),
+                )
+              : []
+          }
+          onSelect={respondHandAction}
+          onCancel={closePlayModePicker}
+        />
+      )}
+
+      <TargetingCursor
+        active={targetingCursorActive}
+        intent={casting.arrowIntent}
+        hostile={casting.arrowHostile}
+      />
+
+      {draggingHandCard &&
+        (!draggingIsPermanent || isOverHand) &&
+        createPortal(
+          <div
+            className="fixed pointer-events-none z-[9999]"
+            style={{ left: ghostPos.x - ghostCardW / 2, top: ghostPos.y - ghostCardH / 2 }}
+          >
+            <Card
+              card={draggingHandCard}
+              className={cn("shadow-2xl ring-2 ring-primary playable-card")}
+              style={{ width: ghostCardW, height: ghostCardH }}
+            />
+          </div>,
+          document.body,
+        )}
+
+      {!commandPreview && inGameCardPreviewStyle === "printed" && showInGamePreview && (
+        <HoverCardPreview
+          preview={{
+            ...preview,
+            hoveredCard: livePreviewCard,
+            showBackFace: previewShowBackFace,
+            flipCard: handleFlipPreview,
+          }}
+          actions={hoveredCardActions}
+          onSelectAction={handlePreviewAction}
+          suppressed={previewSuppressed}
+          skipEnterAnimation={skipPreviewEnterAnimation}
+          onToggleView={togglePreviewView}
+        />
+      )}
+
+      {interruption.waiting && (
+        <WaitingForPlayerScreen
+          reason={interruption.reason}
+          secondsLeft={interruption.secondsLeft}
+          disconnectedNames={interruption.disconnectedNames}
+        />
+      )}
+    </div>
+  );
+}
