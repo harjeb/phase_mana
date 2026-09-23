@@ -31,6 +31,8 @@ import { useEffect, useState } from "react";
 import { frontFaceName } from "@/lib/scryfall.utils";
 import { cardFaceImageUris } from "@/lib/cardImage";
 import { DEFAULT_SCRYFALL_LANGUAGE, type ScryfallLanguage } from "@/i18n/locales";
+import { localizeWithMtgch } from "@/api/mtgch";
+import { usePreferencesStore } from "@/stores/usePreferencesStore";
 
 export interface ScryfallCardLookup {
   id?: string;
@@ -88,6 +90,7 @@ interface ScryfallState {
   updatePrinting: (card: ScryfallCard) => CardEntry;
   invalidateCard: (name: string) => void;
   clearImageCaches: () => void;
+  clearCardCache: () => void;
   getRulings: (card: {
     rulings_uri: string;
     oracle_id?: string;
@@ -158,10 +161,21 @@ async function localizeScryfallCard(
   language: ScryfallLanguage,
   fallback: LocalizedPrintingFallback,
 ): Promise<ScryfallCard> {
+  if (
+    language === DEFAULT_SCRYFALL_LANGUAGE ||
+    card.lang === language ||
+    !usePreferencesStore.getState().onlineCardLocalizationEnabled
+  ) {
+    return card;
+  }
+
+  if (language === "zhs" || language === "zht") {
+    return localizeWithMtgch(card);
+  }
+
   const matchingPrinting = await getLocalizedCardPrinting(card, language);
   if (
     matchingPrinting.lang === language ||
-    language === DEFAULT_SCRYFALL_LANGUAGE ||
     fallback === "same-printing"
   ) {
     return matchingPrinting;
@@ -220,7 +234,18 @@ async function localizeScryfallCards(
   preservePrinting: (card: ScryfallCard) => boolean,
   signal?: AbortSignal,
 ): Promise<ScryfallCard[]> {
-  if (language === DEFAULT_SCRYFALL_LANGUAGE || cards.length === 0) return cards;
+  if (
+    language === DEFAULT_SCRYFALL_LANGUAGE ||
+    cards.length === 0 ||
+    !usePreferencesStore.getState().onlineCardLocalizationEnabled
+  ) {
+    return cards;
+  }
+
+  if (language === "zhs" || language === "zht") {
+    return Promise.all(cards.map((card) => localizeWithMtgch(card, signal)));
+  }
+
   try {
     const localized = await fetchPrintsByOracleIds(
       cards.map((card) => card.oracle_id),
@@ -804,6 +829,13 @@ export const useScryfallStore = create<ScryfallState>()(
         textureCache.clear();
         pendingTexturePromises.clear();
         clearScryfallImageCache();
+      },
+      clearCardCache: () => {
+        printingsByOracleId.clear();
+        set((state) => {
+          state.cards = {};
+          state.hydratedSets = {};
+        });
       },
       init: async () => {
         const sets = await fetchSets();

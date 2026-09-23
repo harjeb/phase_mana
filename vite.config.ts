@@ -1,5 +1,6 @@
 import { execFile } from "node:child_process";
-import { createReadStream, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from "node:fs";
+import { DatabaseSync } from "node:sqlite";
 import type { IncomingMessage } from "node:http";
 import { extname, resolve, sep } from "node:path";
 import { fileURLToPath, URL } from "node:url";
@@ -306,6 +307,151 @@ function cardImagesPlugin(): Plugin {
   };
 }
 
+const SCRYFALL_DB_PATH = resolve("data/scryfall.db");
+
+function readRequestBody(req: IncomingMessage, maxBytes = 524288): Promise<unknown> {
+  return new Promise((settle) => {
+    let raw = "";
+    req.on("error", () => settle(null));
+    req.on("aborted", () => settle(null));
+    req.on("data", (chunk) => {
+      raw += chunk;
+      if (raw.length > maxBytes) {
+        settle(null);
+        req.destroy();
+      }
+    });
+    req.on("end", () => {
+      try {
+        settle(JSON.parse(raw || "{}"));
+      } catch {
+        settle(null);
+      }
+    });
+  });
+}
+
+function localScryfallPlugin(): Plugin {
+  let db: DatabaseSync | null = null;
+  let selectBySetCn: any = null;
+  let selectByName: any = null;
+  let selectById: any = null;
+
+  try {
+    if (existsSync(SCRYFALL_DB_PATH)) {
+      db = new DatabaseSync(SCRYFALL_DB_PATH, { readOnly: true });
+      selectBySetCn = db.prepare(
+        "SELECT json FROM cards WHERE set_code = ? AND collector_number = ? LIMIT 1",
+      );
+      selectByName = db.prepare(
+        "SELECT json FROM cards WHERE name = ? COLLATE NOCASE LIMIT 1",
+      );
+      selectById = db.prepare("SELECT json FROM cards WHERE id = ? LIMIT 1");
+      console.log(`[local-scryfall] Offline card database loaded from ${SCRYFALL_DB_PATH}`);
+    }
+  } catch (err) {
+    console.warn("[local-scryfall] Could not open offline database:", err);
+  }
+
+  const handler: Connect.NextHandleFunction = (req, res, next) => {
+    if (!db || !req.url?.startsWith("/hub-api/api/scryfall")) return next();
+
+    const parsedUrl = new URL(req.url, "http://localhost");
+    const subpath = parsedUrl.pathname.replace(/^\/hub-api\/api\/scryfall/, "");
+
+    // 1. POST /cards/collection
+    if (subpath === "/cards/collection" && req.method === "POST") {
+      void readRequestBody(req).then((body) => {
+        const identifiers = (body as { identifiers?: any[] })?.identifiers;
+        if (!Array.isArray(identifiers)) return next();
+
+        const data: any[] = [];
+        const notFound: any[] = [];
+
+        for (const id of identifiers) {
+          let row: any = null;
+          if (id.set && id.collector_number) {
+            row = selectBySetCn.get(String(id.set).toLowerCase(), String(id.collector_number));
+          }
+          if (!row && id.name) {
+            row = selectByName.get(String(id.name));
+          }
+          if (!row && id.id) {
+            row = selectById.get(String(id.id));
+          }
+
+          if (row) {
+            try {
+              data.push(JSON.parse(row.json));
+            } catch {
+              notFound.push(id);
+            }
+          } else {
+            notFound.push(id);
+          }
+        }
+
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ object: "list", not_found: notFound, data }));
+      });
+      return;
+    }
+
+    // 2. GET /cards/named
+    if (subpath === "/cards/named" && req.method === "GET") {
+      const name = parsedUrl.searchParams.get("exact") || parsedUrl.searchParams.get("fuzzy");
+      if (name) {
+        const row: any = selectByName.get(name);
+        if (row) {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.end(row.json);
+          return;
+        }
+      }
+    }
+
+    // 3. GET /cards/:set/:number
+    const setNumMatch = subpath.match(/^\/cards\/([a-zA-Z0-9]+)\/([a-zA-Z0-9_\-]+)$/);
+    if (setNumMatch && req.method === "GET") {
+      const [, setCode, collectorNumber] = setNumMatch;
+      const row: any = selectBySetCn.get(setCode.toLowerCase(), collectorNumber);
+      if (row) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.end(row.json);
+        return;
+      }
+    }
+
+    // 4. GET /cards/:id
+    const idMatch = subpath.match(/^\/cards\/([0-9a-fA-F\-]{36})$/);
+    if (idMatch && req.method === "GET") {
+      const [, id] = idMatch;
+      const row: any = selectById.get(id);
+      if (row) {
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.end(row.json);
+        return;
+      }
+    }
+
+    next();
+  };
+
+  return {
+    name: "phase-mana-local-scryfall",
+    configureServer: (server) => {
+      server.middlewares.use(handler);
+    },
+    configurePreviewServer: (server) => {
+      server.middlewares.use(handler);
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     react({ babel: { plugins: ["@lingui/babel-plugin-lingui-macro"] } }),
@@ -313,6 +459,7 @@ export default defineConfig({
     tailwindcss(),
     Icons({ compiler: "raw" }),
     cardImagesPlugin(),
+    localScryfallPlugin(),
   ],
   // One entry point: the ManaBrew shell (`index.html` → `ui/main.tsx`), whose
   // routes live in the URL fragment. This block is the vite default; it is
@@ -324,6 +471,6 @@ export default defineConfig({
   },
   resolve: { alias: { "@": fileURLToPath(new URL("./ui", import.meta.url)) } },
   define: { __APP_VERSION__: JSON.stringify("phase-mana-0.1.0") },
-  server: { host: "127.0.0.1", port: 1420, strictPort: true, proxy, watch: { ignored: ["**/target/**", "**/card-images/**"] } },
+  server: { host: "127.0.0.1", port: 1420, strictPort: true, proxy, watch: { ignored: ["**/target/**", "**/card-images/**", "**/data/**"] } },
   preview: { host: "127.0.0.1", port: 1420, strictPort: true, proxy },
 });

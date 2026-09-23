@@ -41,6 +41,8 @@ export interface PreferencesState {
   setCardLanguage: (language: AppLanguagePreference) => void;
   uiLanguage: AppLanguagePreference;
   setUiLanguage: (language: AppLanguagePreference) => void;
+  onlineCardLocalizationEnabled: boolean;
+  setOnlineCardLocalizationEnabled: (enabled: boolean) => void;
 
   flashDurationMs: number;
   setFlashDurationMs: (ms: number) => void;
@@ -163,6 +165,7 @@ const PERSISTED_PREFERENCE_KEYS = [
   "personalThemeName",
   "cardLanguage",
   "uiLanguage",
+  "onlineCardLocalizationEnabled",
   "flashDurationMs",
   "serverHost",
   "serverPort",
@@ -248,6 +251,9 @@ function pickPersistedPreferences(persistedState: unknown): Partial<PreferencesS
       delete next[key];
     }
   }
+  if (typeof next.onlineCardLocalizationEnabled !== "boolean") {
+    delete next.onlineCardLocalizationEnabled;
+  }
   return next as Partial<PreferencesState>;
 }
 
@@ -274,6 +280,9 @@ export const usePreferencesStore = create<PreferencesState>()(
           setCardLanguage: (cardLanguage) => set({ cardLanguage }),
           uiLanguage: "system",
           setUiLanguage: (uiLanguage) => set({ uiLanguage }),
+          onlineCardLocalizationEnabled: false,
+          setOnlineCardLocalizationEnabled: (onlineCardLocalizationEnabled) =>
+            set({ onlineCardLocalizationEnabled }),
 
           flashDurationMs: 1000,
           setFlashDurationMs: (ms) => set({ flashDurationMs: ms }),

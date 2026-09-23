@@ -8,10 +8,18 @@ use std::path::{Path, PathBuf};
 /// startup) or a pre-parsed oracle-gen export (`{"card name": {…}}`). The two
 /// formats share no keys, so the first one decides.
 fn is_raw_mtgjson(path: &Path) -> bool {
-    let mut head = [0u8; 16];
+    let mut head = [0u8; 64];
     std::fs::File::open(path)
         .and_then(|mut file| file.read(&mut head))
-        .is_ok_and(|read| head[..read].starts_with(b"{\"meta\""))
+        .is_ok_and(|read| {
+            let filtered: Vec<u8> = head[..read]
+                .iter()
+                .copied()
+                .filter(|b| !b.is_ascii_whitespace())
+                .take(7)
+                .collect();
+            filtered == b"{\"meta\""
+        })
 }
 
 fn load_card_db(path: &Path) -> Result<CardDatabase, String> {

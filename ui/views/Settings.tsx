@@ -29,6 +29,7 @@ import { CardArtDownloadSection } from "@/components/settings/CardArtDownloadSec
 import { PreferenceCard } from "@/components/settings/PreferenceCard";
 import { LanguagePreferenceCard } from "@/components/settings/LanguagePreferenceCard";
 import { InterfaceLanguagePreferenceCard } from "@/components/settings/InterfaceLanguagePreferenceCard";
+import { OnlineCardLocalizationCard } from "@/components/settings/OnlineCardLocalizationCard";
 import { CardImageLibraryCard } from "@/components/settings/CardImageLibraryCard";
 import { toPickerHexColor, parseThemeColor, formatThemeColor } from "@/themes/gameTheme";
 import type { GameThemeColorKey } from "@/themes/gameTheme";
@@ -531,6 +532,7 @@ export default function Settings() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <InterfaceLanguagePreferenceCard />
             <LanguagePreferenceCard />
+            <OnlineCardLocalizationCard />
             <CardImageLibraryCard />
 
             <PreferenceCard

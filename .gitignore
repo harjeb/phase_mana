@@ -17,6 +17,10 @@ public/*.png
 public/*.ico
 ui/assets/
 
-# Audit output (regenerate with server/examples/audit_cards + docs/render_card_audit.py)
 docs/card-audit.json
 docs/card-audit-provenance.json
+
+# Offline card databases
+data/
+*.db
+

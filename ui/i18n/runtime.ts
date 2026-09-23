@@ -6,8 +6,9 @@ import { useScryfallStore } from "@/stores/useScryfallStore";
 let initialized = false;
 let appliedCardLanguage = usePreferencesStore.getState().cardLanguage;
 let appliedUiLanguage = usePreferencesStore.getState().uiLanguage;
+let appliedOnlineLocalization = usePreferencesStore.getState().onlineCardLocalizationEnabled;
 
-// Card text is resolved by Scryfall, not Lingui: the locale only selects which
+// Card text is resolved by Scryfall/MTGCH, not Lingui: the locale only selects which
 // printing's name/type line/rules text we ask for.
 function applyCardLanguage(): void {
   const locale = resolveLanguagePreference(usePreferencesStore.getState().cardLanguage);
@@ -30,6 +31,10 @@ export async function initializeLocalization(): Promise<void> {
       if (state.uiLanguage !== appliedUiLanguage) {
         appliedUiLanguage = state.uiLanguage;
         void applyUiLanguage();
+      }
+      if (state.onlineCardLocalizationEnabled !== appliedOnlineLocalization) {
+        appliedOnlineLocalization = state.onlineCardLocalizationEnabled;
+        useScryfallStore.getState().clearCardCache();
       }
     });
     window.addEventListener("languagechange", () => {

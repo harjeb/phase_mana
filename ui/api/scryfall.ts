@@ -262,7 +262,14 @@ export async function getLocalizedCardPrinting(
   card: ScryfallCard,
   language: ScryfallLanguage,
 ): Promise<ScryfallCard> {
-  if (language === DEFAULT_SCRYFALL_LANGUAGE || card.lang === language) return card;
+  if (
+    language === DEFAULT_SCRYFALL_LANGUAGE ||
+    card.lang === language ||
+    language === "zhs" ||
+    language === "zht"
+  ) {
+    return card;
+  }
   try {
     return await scryfallFetch<ScryfallCard>(
       `${SCRYFALL_API}/cards/${encodeURIComponent(card.set)}/${encodeURIComponent(card.collector_number)}/${language}`,
