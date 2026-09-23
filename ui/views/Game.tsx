@@ -60,6 +60,8 @@ import { useGamePrefetch } from "@/hooks/useGamePrefetch";
 import { useMultiplayerInterruption } from "@/hooks/useMultiplayerInterruption";
 import { useLiveGameNavigationGuard } from "@/hooks/useLiveGameNavigationGuard";
 import { GameBoard } from "@/components/game/GameBoard";
+import { SideboardDialog } from "@/components/game/SideboardDialog";
+import { ConspiracyReveal } from "@/components/game/ConspiracyReveal";
 import { buildCombatRows } from "@/components/game/combatRows";
 import { readableTextColor, withAlpha } from "@/themes/gameTheme";
 import { useTheme } from "@/hooks/useTheme";
@@ -2269,13 +2271,27 @@ export default function Game({ exitTo }: GameProps = {}) {
       }
     >
       <LandscapeGate />
+      {activePrompt?.input.type === "sideboard" && (
+        <SideboardDialog
+          key={`${myPlayerSlot}:${activePrompt.promptId}`}
+          input={activePrompt.input}
+          pending={isWaitingForResponse}
+          error={responseError}
+          onSubmit={(output) => {
+            const current = useGameStore.getState();
+            if (current.myPlayerSlot !== myPlayerSlot || current.currentPrompt?.promptId !== activePrompt.promptId) return;
+            void respond(output);
+          }}
+        />
+      )}
+      <ConspiracyReveal commandZone={me?.commandZone ?? []} canReveal={activePrompt?.input.type === "chooseAction"} />
       <DevViewportFrame>
         <GameBoard
           boardSceneRef={boardSceneRef}
           onLayoutChange={setBoardLayout}
           boardSurfaceRef={setBoardSurfaceEl}
           stackSpec={stackSpec}
-          promptOverlaySpec={manualApi ? null : promptOverlaySpec}
+          promptOverlaySpec={manualApi || activePrompt?.input.type === "sideboard" ? null : promptOverlaySpec}
           promptViewportRight={boardViewportRight}
           onTargetSpell={(spellId) => {
             casting.wrappedTargetSpell(spellId);

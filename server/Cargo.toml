@@ -9,6 +9,9 @@ license = "AGPL-3.0-or-later"
 [dependencies]
 engine = { package = "phase-engine", path = "../../phase/crates/engine" }
 phase-ai = { path = "../../phase/crates/phase-ai" }
+draft-core = { path = "../../phase/crates/draft-core" }
+draft-wasm = { path = "../../phase/crates/draft-wasm" }
+rand_chacha = "0.9"
 manabrew-compat = { path = "../../phase/crates/manabrew-compat" }
 # Match phase/Cargo.lock: later 5.x versions changed Rust DTO fields.
 manabrew-protocol = "=5.2.0"

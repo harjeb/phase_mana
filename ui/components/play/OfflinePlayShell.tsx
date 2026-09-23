@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Boxes, Swords } from "lucide-react";
+import { Boxes, Shuffle, Swords } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,12 @@ const TABS = [
     hint: `Draft & sealed`,
     icon: Boxes,
   },
+  {
+    to: ROUTES.PLAY_OFFLINE_CASUAL,
+    label: `Casual`,
+    hint: `Special modes`,
+    icon: Shuffle,
+  },
 ];
 export function OfflinePlayShell({ children }: OfflinePlayShellProps) {
   const location = useLocation();
@@ -26,7 +32,7 @@ export function OfflinePlayShell({ children }: OfflinePlayShellProps) {
     <div className="relative h-full min-h-0 overflow-hidden">
       <div className="relative z-10 flex h-full min-h-0 flex-col">
         <nav aria-label={`Offline play type`} className="shrink-0 px-4 pt-4 sm:px-6 lg:px-8">
-          <div className="mx-auto grid w-full max-w-xl grid-cols-2 rounded-2xl border border-border/70 bg-background/80 p-1.5 shadow-xl backdrop-blur-md">
+          <div className="mx-auto grid w-full max-w-2xl grid-cols-3 rounded-2xl border border-border/70 bg-background/80 p-1.5 shadow-xl backdrop-blur-md">
             {TABS.map(({ to, label, hint, icon: Icon }) => {
               const active = location.pathname === to;
               return (

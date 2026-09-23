@@ -62,6 +62,7 @@ import {
   PromptLayerBase,
 } from "./PromptLayerBase";
 
+import type { SideboardInput } from "@/protocol/prompts/sideboard";
 const CHOICE_MODAL_WIDTH = 560;
 const CARD_PROMPT_MIN_WIDTH = 360;
 const SCRY_DESTINATION_VERTICAL_PADDING = 48;
@@ -70,6 +71,74 @@ const MODAL_SCROLL_HALF_LIFE_MS = 28;
 const MODAL_SCROLL_SNAP_PIXELS = 0.5;
 
 export abstract class PromptModalLayer extends PromptLayerBase {
+  private sideboardPromptId: string | undefined;
+  private sideboardInput: SideboardInput | null = null;
+  private sideboardRows: Array<{ name: string; main: number; sideboard: number }> = [];
+
+  protected renderSideboard(input: SideboardInput): void {
+    const promptId = this.spec!.currentPrompt!.promptId;
+    if (this.sideboardInput === null || this.sideboardPromptId !== promptId ||
+        (promptId === undefined && this.sideboardInput !== input)) {
+      this.sideboardPromptId = promptId;
+      this.sideboardInput = input;
+      const rows = new Map<string, { name: string; main: number; sideboard: number }>();
+      for (const zone of ["main", "sideboard"] as const) {
+        for (const card of input[zone]) {
+          const row = rows.get(card.name) ?? { name: card.name, main: 0, sideboard: 0 };
+          row[zone] += card.count;
+          rows.set(card.name, row);
+        }
+      }
+      this.sideboardRows = [...rows.values()].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    const width = this.modalPromptWidth(620);
+    const height = Math.min(620, this.viewportHeight - 24);
+    const { body, footer } = this.createModalShell(width, height, input.presentation, false, 88);
+    const availableWidth = width - PANEL_PADDING * 2;
+    const mainTotal = this.sideboardRows.reduce((sum, row) => sum + row.main, 0);
+    const sideTotal = this.sideboardRows.reduce((sum, row) => sum + row.sideboard, 0);
+    const valid = mainTotal >= input.minMainDeckSize &&
+      (input.maxSideboardSize === null || sideTotal <= input.maxSideboardSize);
+    const hint = promptText("− moves one to sideboard · + moves one to main", 12,
+      this.theme.appTheme["muted-foreground"], { width: availableWidth });
+    body.addChild(hint);
+    this.sideboardRows.forEach((row, index) => {
+      const y = 36 + index * 58;
+      const label = promptText(row.name, 13, this.theme.appTheme.foreground,
+        { width: availableWidth - 90, truncate: true });
+      label.position.set(0, y);
+      const counts = promptText(`Main ${row.main} · Sideboard ${row.sideboard}`, 12,
+        this.theme.appTheme["muted-foreground"]);
+      counts.position.set(0, y + 22);
+      body.addChild(label, counts);
+      for (const toMain of [false, true]) {
+        const button = this.makeButton(toMain ? "+" : "−", () => {
+          if (toMain ? row.sideboard === 0 : row.main === 0) return;
+          row.main += toMain ? 1 : -1;
+          row.sideboard += toMain ? -1 : 1;
+          this.rebuild();
+        }, {
+          title: `${toMain ? "Move to main" : "Move to sideboard"}: ${row.name}`,
+          width: 36, height: 36, outline: true,
+          disabled: toMain ? row.sideboard === 0 : row.main === 0,
+        });
+        button.position.set(availableWidth - (toMain ? 38 : 80), y);
+        body.addChild(button);
+      }
+    });
+    const totals = promptText(`Main ${mainTotal} (min ${input.minMainDeckSize}) · Sideboard ${sideTotal}${input.maxSideboardSize === null ? "" : ` (max ${input.maxSideboardSize})`}`,
+      12, this.theme.appTheme.foreground, { width: availableWidth });
+    footer.addChild(totals);
+    const submit = this.makeButton("Submit deck", () => {
+      if (!valid) return;
+      const partition = (zone: "main" | "sideboard") => this.sideboardRows
+        .filter(row => row[zone] > 0).map(row => ({ name: row.name, count: row[zone] }));
+      this.spec!.respond({ type: "submitSideboard", main: partition("main"), sideboard: partition("sideboard") });
+    }, { width: 160, height: 36, disabled: !valid });
+    submit.position.set((availableWidth - 160) / 2, 28);
+    footer.addChild(submit);
+  }
+
   protected renderModal(): void {
     const input = this.spec!.currentPrompt!.input;
     const boardContext =
@@ -85,6 +154,9 @@ export abstract class PromptModalLayer extends PromptLayerBase {
     backdrop.hitArea = new Rectangle(0, 0, this.viewportWidth, this.viewportHeight);
     this.container.addChild(backdrop);
     switch (input.type) {
+      case "sideboard":
+        this.renderSideboard(input);
+        break;
       case "chooseBoolean":
         this.renderBoolean(input.presentation, input.denyLabel, input.confirmLabel);
         break;

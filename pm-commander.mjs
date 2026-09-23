@@ -1,7 +1,9 @@
-// GUI smoke: existing preset picker -> Commander 1v1 -> real engine snapshot.
-// Run with the release host and Vite running: node pm-commander.mjs
+// GUI smoke: existing preset picker -> Commander -> real engine snapshot.
+// With host and Vite running: node pm-commander.mjs (or PLAYERS=4 node pm-commander.mjs)
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+const playerCount = Number(process.env.PLAYERS ?? 2);
+assert.ok([2, 4].includes(playerCount));
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
 try {
   const page = await browser.newPage({ viewport: { width: 1600, height: 1000 } });
@@ -16,9 +18,9 @@ try {
   await page.locator('button[aria-label="Ognis"]').click();
   await page.getByRole('button', { name: 'Fight!', exact: true }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Fight', exact: true }).click();
-  assert.ok(await page.getByRole('dialog').getByRole('button', { name: /4-player pod/ }).isDisabled());
+  assert.ok(await page.getByRole('dialog').getByRole('button', { name: /4-player pod/ }).isEnabled());
   const responsePromise = page.waitForResponse(r => r.url().endsWith('/api/start'), { timeout: 120000 });
-  await page.getByRole('dialog').getByRole('button', { name: /1v1 You and one/ }).click();
+  await page.getByRole('dialog').getByRole('button', { name: playerCount === 4 ? /4-player pod/ : /1v1 You and one/ }).click();
   const response = await responsePromise;
   const data = await response.json();
   assert.equal(response.status(), 200, JSON.stringify(data));
@@ -28,13 +30,19 @@ try {
   assert.equal(request.aiDeck.length, 99);
   assert.deepEqual(request.humanCommanders, ['Neheb, the Worthy']);
   assert.deepEqual(request.aiCommanders, ["Ognis, the Dragon's Lash"]);
+  assert.equal(request.extraOpponents.length, playerCount - 2);
+  for (const opponent of request.extraOpponents) {
+    assert.equal(opponent.deck.length + opponent.commanders.length, 100);
+    assert.ok(opponent.commanders.length > 0);
+  }
   await page.waitForFunction(() => window.__pm?.getState().currentPrompt?.input?.type === 'mulligan');
   const state = await page.evaluate(() => {
     const s = window.__pm.getState();
     return { prompt: s.currentPrompt.input.type, players: s.gameView.players.map(p => ({ life: p.life, command: p.commandZone.map(c => c.identity.name) })) };
   });
-  assert.deepEqual(state.players.map(p => p.life), [40, 40]);
-  assert.deepEqual(state.players.map(p => p.command), [['Neheb, the Worthy'], ["Ognis, the Dragon's Lash"]]);
+  assert.deepEqual(state.players.map(p => p.life), Array(playerCount).fill(40));
+  assert.deepEqual(state.players.slice(0, 2).map(p => p.command), [['Neheb, the Worthy'], ["Ognis, the Dragon's Lash"]]);
+  assert.ok(state.players.every(p => p.command.length > 0));
   assert.deepEqual(errors, []);
   await page.screenshot({ path: '/tmp/pm-commander.png' });
   console.log('Commander GUI passed:', JSON.stringify(state));

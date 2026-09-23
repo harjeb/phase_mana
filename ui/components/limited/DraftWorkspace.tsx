@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import type { ConspiracyHook, DraftCard, DraftState } from "@/types/limited";
 interface DraftWorkspaceProps {
   draft: DraftState;
-  onPick: (card: DraftCard) => void | Promise<void>;
+  onPick: (card: DraftCard, useDraftEffect?: boolean) => void | Promise<void>;
   onBuild?: () => void;
   pickPending?: boolean;
   conspiracyHooks?: ConspiracyHook[];
@@ -38,6 +38,9 @@ export function DraftWorkspace({
       typeof window !== "undefined" &&
       window.localStorage.getItem("draft.previewPanelCollapsed") === "true",
   );
+  const [effectStep, setEffectStep] = useState<string | null>(null);
+  const stepKey = `${draft.sessionId}:${draft.round}:${draft.pickNumber}`;
+  const useDraftEffect = effectStep === stepKey;
   const packKey = `${draft.round}:${draft.pickNumber}:${draft.currentPack.length}`;
   const selectedStillVisible = draft.currentPack.some(
     (card, index) => cardKey(card, index) === selectedCardKey,
@@ -46,7 +49,9 @@ export function DraftWorkspace({
   const submitPick = (card: DraftCard, index: number) => {
     if (!draft.awaitingHuman || pickPending) return;
     setSelectedCardKey(cardKey(card, index));
-    void Promise.resolve(onPick(card)).catch(() => setSelectedCardKey(null));
+    void Promise.resolve(onPick(card, Boolean(draft.draftEffectAvailable && useDraftEffect)))
+      .then(() => setEffectStep(null))
+      .catch(() => setSelectedCardKey(null));
   };
   const togglePreview = () => {
     setPreviewCollapsed((value) => {
@@ -65,6 +70,17 @@ export function DraftWorkspace({
           {draft.awaitingHuman ? `Choose a card` : `Waiting for the next pack`}
         </span>
       </div>
+      {draft.draftEffectAvailable && (
+        <label className="flex items-center gap-2 px-3 py-2 text-xs">
+          <input
+            type="checkbox"
+            checked={useDraftEffect}
+            disabled={pickPending}
+            onChange={(event) => setEffectStep(event.target.checked ? stepKey : null)}
+          />
+          Use Cogwork Librarian: pick two and return it to the pack (unchecked: keep it).
+        </label>
+      )}
       <div
         key={packKey}
         className="min-h-0 flex-1 overflow-y-auto p-3 motion-safe:animate-draft-pack-arrive"

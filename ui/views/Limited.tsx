@@ -4,11 +4,9 @@ import { Boxes, Crown, Dice5, Hourglass, Layers, Shuffle, Swords, Wand2, X } fro
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SetPicker } from "@/components/limited/SetPicker";
-import { DRAFTABLE_SET_TYPES } from "@/components/limited/setFilters";
 import { SetSymbol } from "@/components/limited/SetSymbol";
 import { useLimitedStore } from "@/stores/useLimitedStore";
-import { useScryfallStore } from "@/stores/useScryfallStore";
-import { fetchEditionInfo, fetchSetPool, type EditionInfo } from "@/api/limitedEdition";
+import { fetchEditionInfo, fetchLocalSets, fetchSetPool, type EditionInfo } from "@/api/limitedEdition";
 import { cn } from "@/lib/utils";
 import type { DraftCard } from "@/types/limited";
 import type { ScryfallSet } from "@/types/scryfall";
@@ -17,6 +15,7 @@ export default function Limited() {
   const startSealed = useLimitedStore((s) => s.startSealed);
   const startBoosterDraft = useLimitedStore((s) => s.startBoosterDraft);
   const startWinston = useLimitedStore((s) => s.startWinston);
+  const startCommanderDraft = useLimitedStore((s) => s.startCommanderDraft);
   const importCube = useLimitedStore((s) => s.importCubeFromCubeCobra);
   const isStarting = useLimitedStore((s) => s.isStarting);
   const lastError = useLimitedStore((s) => s.lastError);
@@ -25,21 +24,22 @@ export default function Limited() {
   const sealedTemplates = useLimitedStore((s) => s.sealedTemplates);
   const chaosThemes = useLimitedStore((s) => s.chaosThemes);
   const lastImportedCube = useLimitedStore((s) => s.lastImportedCube);
-  const allSets = useScryfallStore((s) => s.sets);
-  const prefetchSet = useScryfallStore((s) => s.prefetchSet);
-  const draftableSets = useMemo(
-    () =>
-      [...(allSets ?? [])]
-        .filter((s) => DRAFTABLE_SET_TYPES.has(s.set_type) && !s.digital && s.card_count > 0)
-        .sort((a, b) => (b.released_at ?? "").localeCompare(a.released_at ?? "")),
-    [allSets],
-  );
+  const [draftableSets, setDraftableSets] = useState<ScryfallSet[]>([]);
+  const [setsLoading, setSetsLoading] = useState(true);
+  const [setsError, setSetsError] = useState<string | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetchLocalSets()
+      .then((sets) => { if (!cancelled) setDraftableSets(sets); })
+      .catch((err: unknown) => { if (!cancelled) setSetsError(String(err)); })
+      .finally(() => { if (!cancelled) setSetsLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
   const [numBoosters, setNumBoosters] = useState(6);
   const [podSize, setPodSize] = useState(8);
   const [winstonPacks, setWinstonPacks] = useState(6);
   const [cubeInput, setCubeInput] = useState("");
   const [selectedSetCode, setSelectedSetCode] = useState("");
-  const [prefetchingSet, setPrefetchingSet] = useState<string | null>(null);
   const [fetchingPool, setFetchingPool] = useState(false);
   const [editionInfo, setEditionInfo] = useState<EditionInfo | null>(null);
   const [editionInfoLoading, setEditionInfoLoading] = useState(false);
@@ -135,6 +135,21 @@ export default function Limited() {
       /* surfaced via lastError */
     }
   };
+  const handleStartCommanderDraft = async () => {
+    try {
+      const pool = await fetchPool();
+      const state = await startCommanderDraft({
+        podSize: Math.max(4, podSize),
+        rounds: 3,
+        pool,
+        seed: seedOpt,
+        picksPerPass: 2,
+      });
+      navigate(`/draft/${state.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
   const handleImportCube = async () => {
     if (!cubeInput.trim()) return;
     try {
@@ -176,33 +191,28 @@ export default function Limited() {
       useLimitedStore.setState({ lastError: `Failed to load pool: ${err}` });
     }
   };
-  const startBlocked = isStarting || fetchingPool || !selectedSetCode || prefetchingSet !== null;
+  const startBlocked = isStarting || fetchingPool || !selectedSetCode;
   const selectedSet = draftableSets.find((s) => s.code === selectedSetCode) ?? null;
   return (
     <div className="flex h-full flex-col gap-6 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
       <header className="flex items-end justify-between gap-4">
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Open packs, build a deck on the fly, then play a quick gauntlet against AI opponents.
+          Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README).
         </p>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>{draftableSets.length} sets available</span>
+          <span>{setsLoading ? "Loading local sets…" : `${draftableSets.length} local sets listed`}</span>
         </div>
       </header>
 
+      {setsError && (
+        <p role="alert" className="rounded-md border border-destructive/70 bg-destructive/10 p-3 text-sm text-destructive">
+          {setsError}
+        </p>
+      )}
       <SetPicker
         sets={draftableSets}
         selectedCode={selectedSetCode}
-        prefetching={prefetchingSet}
-        onSelect={async (code) => {
-          setSelectedSetCode(code);
-          if (!code) return;
-          setPrefetchingSet(code);
-          try {
-            await prefetchSet(code);
-          } finally {
-            setPrefetchingSet((current) => (current === code ? null : current));
-          }
-        }}
+        onSelect={setSelectedSetCode}
       />
 
       {selectedSet && (
@@ -210,7 +220,6 @@ export default function Limited() {
           set={selectedSet}
           info={editionInfo}
           loading={editionInfoLoading}
-          prefetching={prefetchingSet === selectedSet.code}
           selectedVariant={selectedVariant}
           onVariantChange={setSelectedVariant}
           onClear={() => setSelectedSetCode("")}
@@ -230,6 +239,9 @@ export default function Limited() {
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Choose a mode
         </h2>
+        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground/80">
+          Standard Modes
+        </h3>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
           <ModeCard
             icon={<Boxes className="h-5 w-5" />}
@@ -243,8 +255,8 @@ export default function Limited() {
               id="numBoosters"
               label={`Packs`}
               value={numBoosters}
-              min={3}
-              max={12}
+              min={6}
+              max={6}
               onChange={setNumBoosters}
             />
           </ModeCard>
@@ -266,12 +278,35 @@ export default function Limited() {
               onChange={setPodSize}
             />
           </ModeCard>
+        </div>
+
+        <h3 className="mb-2 mt-5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground/80">
+          Casual Modes
+        </h3>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <ModeCard
+            icon={<Crown className="h-5 w-5" />}
+            title={`Commander Draft`}
+            description={`Four-seat, two-card picks (CR 903.13), then a 4-player Commander game.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, `Open packs`, `Start Commander Draft`)}
+            disabled={startBlocked}
+            onStart={handleStartCommanderDraft}
+          >
+            <NumberField
+              id="commanderPodSize"
+              label={`Pod size`}
+              value={podSize}
+              min={4}
+              max={8}
+              onChange={setPodSize}
+            />
+          </ModeCard>
 
           <ModeCard
             icon={<Layers className="h-5 w-5" />}
             title={`Winston Draft`}
-            description={`2-player pile draft against the AI.`}
-            ctaLabel={ctaLabel(fetchingPool, isStarting, `Shuffle`, `Start Winston`)}
+            description={`Two-seat shared-stack pile draft against the AI.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, `Deal piles`, `Start Winston`)}
             disabled={startBlocked}
             onStart={handleStartWinston}
           >
@@ -279,8 +314,8 @@ export default function Limited() {
               id="winstonPacks"
               label={`Packs`}
               value={winstonPacks}
-              min={2}
-              max={12}
+              min={6}
+              max={6}
               onChange={setWinstonPacks}
             />
           </ModeCard>
@@ -445,7 +480,7 @@ export default function Limited() {
                   className="group flex w-full items-center justify-between gap-2 rounded border border-border/40 bg-card/30 px-3 py-2 text-left transition hover:border-primary/50 hover:bg-card/60 disabled:cursor-not-allowed disabled:opacity-60"
                   title={
                     matched.length === 0
-                      ? `No matching sets in the Scryfall list yet`
+                      ? `No matching local sets`
                       : `${matched.length} sets · ${matched
                           .slice(0, 6)
                           .map((s) => s.code.toUpperCase())
@@ -472,7 +507,6 @@ interface SelectedSetSummaryProps {
   set: ScryfallSet;
   info: EditionInfo | null;
   loading: boolean;
-  prefetching: boolean;
   selectedVariant: string;
   onVariantChange: (v: string) => void;
   onClear: () => void;
@@ -481,7 +515,6 @@ function SelectedSetSummary({
   set,
   info,
   loading,
-  prefetching,
   selectedVariant,
   onVariantChange,
   onClear,
@@ -506,7 +539,6 @@ function SelectedSetSummary({
               {info?.boosterCovers && info.boosterCovers > 1 && (
                 <span className="ml-1">· {info.boosterCovers} cover arts</span>
               )}
-              {prefetching && <span className="ml-2 text-primary">· prefetching images…</span>}
             </p>
             {info?.prerelease && (
               <p className="mt-0.5 break-words text-[11px] text-muted-foreground">
@@ -549,7 +581,7 @@ function SelectedSetSummary({
             <div className="flex items-start gap-2 text-xs text-yellow-100">
               <span aria-hidden>⚠</span>
               <span className="min-w-0 break-words">
-                No Forge booster recipe for this set — using generic 10C / 3U / 1RM / 1 Land.
+                Local booster information could not be loaded. No substitute recipe will be used.
               </span>
             </div>
           )}
@@ -808,6 +840,10 @@ function CollapsibleSection({ icon, title, count, children }: CollapsibleSection
   );
 }
 function matchSetsForTheme(tag: string, sets: ScryfallSet[]): ScryfallSet[] {
+  // Local pools report `set_type: "local"`; treat them as expansion-like so the
+  // themed windows still select from downloaded sets.
+  const isExpansionLike = (s: ScryfallSet) =>
+    s.set_type === "expansion" || s.set_type === "local" || s.set_type === "core";
   const sorted = [...sets].sort((a, b) => (b.released_at ?? "").localeCompare(a.released_at ?? ""));
   switch (tag.toUpperCase()) {
     case "STANDARD": {
@@ -815,19 +851,19 @@ function matchSetsForTheme(tag: string, sets: ScryfallSet[]): ScryfallSet[] {
       cutoff.setFullYear(cutoff.getFullYear() - 3);
       const stamp = cutoff.toISOString().slice(0, 10);
       return sorted
-        .filter((s) => s.set_type === "expansion" && (s.released_at ?? "") >= stamp)
+        .filter((s) => isExpansionLike(s) && (s.released_at ?? "") >= stamp)
         .slice(0, 8);
     }
     case "PIONEER": {
       const cutoff = "2012-10-05"; // Return to Ravnica era.
       return sorted
-        .filter((s) => s.set_type === "expansion" && (s.released_at ?? "") >= cutoff)
+        .filter((s) => isExpansionLike(s) && (s.released_at ?? "") >= cutoff)
         .slice(0, 8);
     }
     case "MODERN": {
       const cutoff = "2003-07-28"; // Eighth Edition era.
       return sorted
-        .filter((s) => s.set_type === "expansion" && (s.released_at ?? "") >= cutoff)
+        .filter((s) => isExpansionLike(s) && (s.released_at ?? "") >= cutoff)
         .slice(0, 8);
     }
     case "DEFAULT":

@@ -1,4 +1,4 @@
-import { LibraryBig, Swords, Users } from "lucide-react";
+import { LibraryBig, Shuffle, Swords, Trophy, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UpdateCallout } from "@/components/layout/UpdateCallout";
 import { FeatureTile } from "@/components/play/FeatureTile";
@@ -23,11 +23,25 @@ const MODES = [
     tone: "primary",
   },
   {
-    to: ROUTES.LOBBY,
+    to: "/play/online",
     label: `Multiplayer`,
     desc: "Join an open table or create a room for your group.",
     icon: Users,
     tone: "secondary",
+  },
+  {
+    to: "/play/tournaments",
+    label: `Tournaments`,
+    desc: "Organize pairings, report results and follow standings.",
+    icon: Trophy,
+    tone: "secondary",
+  },
+  {
+    to: ROUTES.PLAY_OFFLINE_CASUAL,
+    label: `Casual Modes`,
+    desc: "Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets.",
+    icon: Shuffle,
+    tone: "amber",
   },
 ];
 export function PlayHome() {
@@ -102,7 +116,7 @@ export function PlayHome() {
               resumePending && "hidden",
             )}
           >
-            <section aria-label={`Play modes`} className="grid gap-4 md:grid-cols-2">
+            <section aria-label={`Play modes`} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {MODES.map(({ to, label, desc, icon, tone }) => (
                 <FeatureTile
                   key={to}

@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { usePhaseStopStore, getNextStop, getEndTurnStop } from "@/stores/usePhaseStopStore";
 import type { Prompt, PromptOutput, PassUntil } from "@/protocol";
 import { passOutput } from "@/components/prompts/internal/playerActions";
 import type { GameViewDto } from "@/protocol/game";
@@ -17,7 +16,6 @@ export function usePromptEffects({
   gameView,
   isWaitingForResponse,
   respond,
-  myPlayerId,
 }: UsePromptEffectsOptions) {
   const pass = useCallback(
     (until: PassUntil | null, exhaustStack = false) => {
@@ -29,24 +27,9 @@ export function usePromptEffects({
   const unifiedPass = useCallback(() => {
     if (!currentPrompt || !gameView || isWaitingForResponse) return;
 
-    const gv = gameView;
-    if ((gv.stack?.length ?? 0) > 0) {
-      pass(null);
-      return;
-    }
-
-    const store = usePhaseStopStore.getState();
-    const nextStop = getNextStop(
-      gv.players.filter((p) => p.status === "playing").map((p) => p.id),
-      gv.activePlayerId,
-      gv.step,
-      myPlayerId,
-      store.selfStops,
-      store.getOpponentStops,
-    );
-
-    pass(nextStop ? { ...nextStop, throughCombat: false } : null);
-  }, [currentPrompt, gameView, isWaitingForResponse, pass, myPlayerId]);
+    // Ordinary passing remains one authoritative priority action.
+    pass(null);
+  }, [currentPrompt, gameView, isWaitingForResponse, pass]);
 
   const unifiedPassEndTurn = useCallback(() => {
     if (!currentPrompt || !gameView || isWaitingForResponse) return;
@@ -55,17 +38,9 @@ export function usePromptEffects({
       return;
     }
 
-    const store = usePhaseStopStore.getState();
-    const target = getEndTurnStop(
-      gameView.players.filter((p) => p.status === "playing").map((p) => p.id),
-      gameView.activePlayerId,
-      myPlayerId,
-      store.selfStops,
-      store.getOpponentStops,
-    );
-
-    pass(target ? { ...target, throughCombat: true } : null);
-  }, [currentPrompt, gameView, isWaitingForResponse, pass, myPlayerId]);
+    if (currentPrompt.input.type !== "chooseAction") return;
+    respond({ type: "autoPass", mode: "turnBoundary" });
+  }, [currentPrompt, gameView, isWaitingForResponse, pass, respond]);
 
   return {
     unifiedPass,

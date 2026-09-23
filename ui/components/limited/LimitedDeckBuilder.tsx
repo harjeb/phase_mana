@@ -154,7 +154,9 @@ export default function LimitedDeckBuilder({
   onConfirm,
   onSaved,
 }: LimitedDeckBuilderProps) {
-  const [extraBasics, setExtraBasics] = useState<DraftCard[]>([]);
+  const [extraBasics, setExtraBasics] = useState<DraftCard[]>(() =>
+    [...(initialMain ?? []), ...(initialSideboard ?? [])].filter(isSynthBasic),
+  );
   const fullPool = useMemo(() => [...pool, ...extraBasics], [pool, extraBasics]);
   const entries = useMemo(() => indexPool(fullPool), [fullPool]);
   const scryfallCache = useScryfallStore((s) => s.cards);

@@ -19,6 +19,11 @@ export interface StartGameParams {
   commanderName: string | null;
   opponentDecks: Deck[] | null;
   engine?: EngineKind;
+  /** CR 905.4: conspiracy card names that start in the local host's command zone. */
+  conspiracies?: string[];
+  opponentConspiracies?: string[][];
+  /** P5: a full custom ruleset from the format editor; overrides `format`. */
+  customRules?: unknown;
 }
 
 export interface StartMultiplayerGameParams {

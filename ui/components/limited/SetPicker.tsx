@@ -9,14 +9,14 @@ import type { ScryfallSet } from "@/types/scryfall";
 interface SetPickerProps {
   sets: ScryfallSet[];
   selectedCode: string;
-  prefetching: string | null;
+  prefetching?: string | null;
   onSelect: (code: string) => void;
   variant?: "inline" | "column";
 }
 export function SetPicker({
   sets,
   selectedCode,
-  prefetching,
+  prefetching = null,
   onSelect,
   variant = "inline",
 }: SetPickerProps) {

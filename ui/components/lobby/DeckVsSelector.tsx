@@ -14,6 +14,8 @@ import { resolveAiOpponent } from "@/lib/aiOpponent";
 import { getDeckFingerprint } from "@/lib/decks";
 import { reportPublishedDeckPlay } from "@/lib/deckPlayEvidence";
 import { GAME_FORMATS, getFormat, validateDeckSections } from "@/lib/formats";
+import { customFormatPlayerCount, type CustomFormatRules, type SavedCustomFormat } from "@/lib/customFormats";
+import { CustomFormatDialog } from "./CustomFormatDialog";
 import { resolveOfflineEngine } from "@/lib/offlineEngine";
 import { hubEntryEngines, supportsEngine } from "@/lib/engines";
 import { savePresetToAccountOnUse } from "@/lib/presetDeckAccount";
@@ -42,11 +44,13 @@ interface SelectedDeck {
 interface DeckVsSelectorProps {
   preSelectedDeckId?: string;
   preSelectedHubDeckId?: string;
+  preSelectedFormatId?: string;
   onStart: (
     playerDeck: Deck,
     opponentDecks: Deck[],
     formatId?: string,
     commanderName?: string,
+    customRules?: CustomFormatRules,
   ) => Promise<boolean>;
 }
 type PickingSide = "player" | "opponent" | null;
@@ -54,6 +58,7 @@ type PlayFormatId = string;
 export function DeckVsSelector({
   preSelectedDeckId,
   preSelectedHubDeckId,
+  preSelectedFormatId,
   onStart,
 }: DeckVsSelectorProps) {
   const denseDecks = useIsShortScreen();
@@ -61,8 +66,8 @@ export function DeckVsSelector({
   const currentDeck = useDeckStore((state) => state.currentDeck);
   const savedDecks = useOwnedDecks();
   const preSelectedSavedDeck = savedDecks.find((saved) => saved.id === preSelectedDeckId);
-  const preSelectedFormatId = preSelectedSavedDeck?.deck.format ?? "standard";
-  const preSelectedFormat = getFormat(preSelectedFormatId);
+  const preSelectedSavedFormatId = preSelectedSavedDeck?.deck.format ?? "standard";
+  const preSelectedFormat = getFormat(preSelectedSavedFormatId);
   const preSelectedCommanderName = preSelectedSavedDeck?.deck.commanders?.[0]?.identity.name;
   const preSelectedDeckEntry: SelectedDeck | null =
     preSelectedSavedDeck &&
@@ -77,7 +82,7 @@ export function DeckVsSelector({
           name: preSelectedSavedDeck.deck.name,
           sourceDeck: preSelectedSavedDeck.deck,
           source: "local" as const,
-          formatId: preSelectedFormatId,
+          formatId: preSelectedSavedFormatId,
           commanderName: preSelectedCommanderName,
         }
       : null;
@@ -95,7 +100,7 @@ export function DeckVsSelector({
     preSelectedDeckEntry ? "opponent" : "player",
   );
   const [selectedFormat, setSelectedFormat] = useState<PlayFormatId | null>(
-    preSelectedDeckEntry?.formatId ?? rememberedFormatId,
+    preSelectedDeckEntry?.formatId ?? preSelectedFormatId ?? rememberedFormatId,
   );
   const [opponentConfirmed, setOpponentConfirmed] = useState(false);
   const [deckSearch, setDeckSearch] = useState("");
@@ -103,6 +108,11 @@ export function DeckVsSelector({
   const [playersDialogOpen, setPlayersDialogOpen] = useState(false);
   const [tableDialogOpen, setTableDialogOpen] = useState(false);
   const [loadingHubDeckId, setLoadingHubDeckId] = useState<string | null>(null);
+  const [customFormat, setCustomFormat] = useState<SavedCustomFormat | null>(null);
+  const [customFormatOpen, setCustomFormatOpen] = useState(false);
+  const [customPlayerCount, setCustomPlayerCount] = useState(2);
+  /** A custom format is picked via the dialog, not a `GAME_FORMATS` entry. */
+  const customFormatId = customFormat ? `custom:${customFormat.key}` : null;
   const selectedFormatRef = useRef(selectedFormat);
   selectedFormatRef.current = selectedFormat;
   const opponentTouchedRef = useRef(false);
@@ -118,7 +128,7 @@ export function DeckVsSelector({
   );
   const hubDecks = useHubDeckSearch(
     deckSearch,
-    selectedFormat ?? undefined,
+    customFormat ? undefined : selectedFormat ?? undefined,
     true,
     [offlineEngine],
     "community",
@@ -171,9 +181,15 @@ export function DeckVsSelector({
       });
   }, [hubDecks.enabled, hubRestoreAttempt, loadHubDeck, preSelectedHubDeckId]);
   const searchLower = deckSearch.toLowerCase();
-  const formatFilteredPresets = presetDecks.filter(
-    (deck) => selectedFormat === null || (deck.format ?? "standard") === selectedFormat,
+  const formatMatchedPresets = presetDecks.filter(
+    (deck) =>
+      selectedFormat === null || customFormatId !== null || (deck.format ?? "standard") === selectedFormat,
   );
+  // Casual table formats (Archenemy, Planechase, Two-Headed Giant) have no
+  // presets tagged with their own id; fall back to every preset so those
+  // tables can still be set up rather than showing an empty picker.
+  const formatFilteredPresets =
+    formatMatchedPresets.length > 0 ? formatMatchedPresets : presetDecks;
   const filteredDecks = searchLower
     ? formatFilteredPresets.filter(
         (deck) =>
@@ -229,7 +245,7 @@ export function DeckVsSelector({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedDecks, currentDeck]);
   const formatFilteredUserDecks = userDeckEntries.filter(
-    (deck) => selectedFormat === null || deck.formatId === selectedFormat,
+    (deck) => selectedFormat === null || customFormatId !== null || deck.formatId === selectedFormat,
   );
   const filteredUserDecks = searchLower
     ? formatFilteredUserDecks.filter((deck) => deck.name.toLowerCase().includes(searchLower))
@@ -269,7 +285,19 @@ export function DeckVsSelector({
     setOpponentDeck(null);
     setOpponentConfirmed(false);
     setPickingSide("player");
+    if (formatId !== customFormatId) setCustomFormat(null);
     setSelectedFormat(formatId);
+  }
+  function chooseCustomFormat(format: SavedCustomFormat) {
+    invalidateHubSelection();
+    opponentTouchedRef.current = false;
+    setPlayerDeck(null);
+    setOpponentDeck(null);
+    setOpponentConfirmed(false);
+    setPickingSide("player");
+    setCustomFormat(format);
+    setCustomPlayerCount(customFormatPlayerCount(format.rules));
+    setSelectedFormat(`custom:${format.key}`);
   }
   function assignDeck(selected: SelectedDeck, hubRequestId?: number) {
     if (hubRequestId === undefined) {
@@ -314,7 +342,7 @@ export function DeckVsSelector({
       const deck = detail.deck;
       const formatId = deck.format ?? summary.format ?? "standard";
       const currentFormat = selectedFormatRef.current;
-      if (currentFormat && formatId !== currentFormat) {
+      if (currentFormat && !currentFormat.startsWith("custom:") && formatId !== currentFormat) {
         toast.error(
           `"${detail.title}" is not a ${getFormat(currentFormat)?.name ?? currentFormat} deck`,
         );
@@ -373,7 +401,17 @@ export function DeckVsSelector({
 
   function handleTableChosen() {
     setTableDialogOpen(false);
-    if (playerDeck?.formatId === "commander") {
+    // Two-Headed Giant is exactly four seats (two teams of two); the engine
+    // rejects any other count, so skip the 1v1/pod choice and fill the table.
+    if (customFormat) {
+      void startFight(customPlayerCount - 1);
+      return;
+    }
+    if (selectedFormat === "two_headed_giant") {
+      void startFight(3);
+      return;
+    }
+    if (selectedFormat === "commander") {
       setPlayersDialogOpen(true);
       return;
     }
@@ -389,7 +427,7 @@ export function DeckVsSelector({
       return;
     }
     for (const selected of [playerDeck, opponentDeck]) {
-      if (selected.source !== "hub") continue;
+      if (customFormat || selected.source !== "hub") continue;
       const format = getFormat(selected.formatId ?? "standard");
       if (!format) continue;
       const validation = validateDeckSections(
@@ -414,16 +452,24 @@ export function DeckVsSelector({
       opponentCount - 1,
     );
     if (additionalOpponents.length !== opponentCount - 1) {
-      toast.error(`Not enough distinct Commander decks are available for a 4-player game.`);
+      toast.error(`Not enough distinct decks are available for a ${opponentCount + 1}-player game.`);
       return;
     }
     setStarting(true);
-    const started = await onStart(
+    let started: boolean;
+    try {
+      started = await onStart(
       playerDeck.sourceDeck,
       [opponentDeck.sourceDeck, ...additionalOpponents],
-      playerDeck.formatId,
+      customFormat ? customFormatId! : selectedFormat ?? playerDeck.formatId,
       playerDeck.commanderName,
-    );
+      customFormat?.rules,
+      );
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not start the game.");
+      setStarting(false);
+      return;
+    }
     if (!started) {
       setStarting(false);
       return;
@@ -446,7 +492,7 @@ export function DeckVsSelector({
     }
   }
   const hubSelectionIsLegal = (selected: SelectedDeck | null) => {
-    if (!selected || selected.source !== "hub") return true;
+    if (customFormat || !selected || selected.source !== "hub") return true;
     const format = getFormat(selected.formatId ?? "standard");
     return (
       !format ||
@@ -486,6 +532,28 @@ export function DeckVsSelector({
               {format.name}
             </button>
           ))}
+          {customFormat ? (
+            <button
+              type="button"
+              aria-pressed={selectedFormat === customFormatId}
+              onClick={() => chooseCustomFormat(customFormat)}
+              className={cn(
+                "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors motion-reduce:transition-none pointer-coarse:min-h-10 pointer-coarse:px-3",
+                selectedFormat === customFormatId
+                  ? "border-primary/50 bg-primary/15 text-primary"
+                  : "border-border/70 text-muted-foreground hover:border-border hover:text-foreground",
+              )}
+            >
+              {customFormat.label}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setCustomFormatOpen(true)}
+            className="shrink-0 rounded-full border border-dashed border-border/70 px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors motion-reduce:transition-none hover:border-border hover:text-foreground pointer-coarse:min-h-10 pointer-coarse:px-3"
+          >
+            + Custom
+          </button>
         </div>
         <p
           className="hidden shrink-0 text-right text-xs font-medium text-muted-foreground lg:block"
@@ -552,7 +620,7 @@ export function DeckVsSelector({
                   ...(entry.sourceDeck?.commanders ?? []),
                 ];
                 const cover = entry.sourceDeck ? resolveCoverCard(entry.sourceDeck) : undefined;
-                const validation = deckValidations.get(entry.id) ?? {
+                const validation = (!customFormat && deckValidations.get(entry.id)) || {
                   legal: true,
                   errors: [] as string[],
                 };
@@ -636,7 +704,7 @@ export function DeckVsSelector({
                     );
                     const format = selected ? getFormat(selected.formatId ?? "standard") : null;
                     const validation =
-                      selected && format
+                      !customFormat && selected && format
                         ? validateDeckSections(
                             { deck: selected.sourceDeck, commanderName: selected.commanderName },
                             format,
@@ -809,10 +877,26 @@ export function DeckVsSelector({
         centerContent={
           selectedFormat ? (
             <span className="font-serif text-lg font-light text-foreground/90">
-              {getFormat(selectedFormat)?.name ?? selectedFormat}
+              {customFormat?.label ?? getFormat(selectedFormat)?.name ?? selectedFormat}
+              {customFormat ? (
+                <select
+                  aria-label="Custom format player count"
+                  className="ml-3 rounded border border-input bg-background px-2 text-sm"
+                  value={customPlayerCount}
+                  onChange={(event) => setCustomPlayerCount(Number(event.target.value))}
+                >
+                  {[2, 3, 4].filter((count) => count >= customFormat.rules.structural.min_players && count <= customFormat.rules.structural.max_players)
+                    .map((count) => <option key={count} value={count}>{count} players</option>)}
+                </select>
+              ) : null}
             </span>
           ) : undefined
         }
+      />
+      <CustomFormatDialog
+        open={customFormatOpen}
+        onOpenChange={setCustomFormatOpen}
+        onPlay={chooseCustomFormat}
       />
     </div>
   );

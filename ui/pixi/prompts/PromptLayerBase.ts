@@ -51,6 +51,7 @@ import { type RollTokenVisual } from "./dice/DiceGeometry";
 import { type RollTrajectory } from "./dice/DiceAnimation";
 
 export const MODAL_TYPES = new Set([
+  "sideboard",
   "chooseBoolean",
   "chooseFromSelection",
   "revealCards",

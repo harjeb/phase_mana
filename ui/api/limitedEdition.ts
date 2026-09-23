@@ -1,5 +1,6 @@
 import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
 import { getPlatform, getPlatformType } from "@/platform";
+import type { ScryfallSet } from "@/types/scryfall";
 import type { CubeImportResult, DraftCard } from "@/types/limited";
 
 export interface EditionSlot {
@@ -20,6 +21,10 @@ export interface EditionInfo {
   boosterCovers?: number;
   prerelease?: string | null;
   alias?: string | null;
+}
+
+export async function fetchLocalSets(): Promise<ScryfallSet[]> {
+  return getPlatform().invoke<ScryfallSet[]>("limited_list_sets");
 }
 
 export async function fetchEditionInfo(setCode: string): Promise<EditionInfo | null> {

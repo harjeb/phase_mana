@@ -40,6 +40,9 @@ export function DraftStatusBar({
         <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
           {draft.currentPack.length} in pack
         </span>
+        {draft.draftEffectActive && (
+          <span className="text-xs text-primary">Cogwork Librarian · choose one more card</span>
+        )}
         {packsWaiting > 0 && (
           <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
             {packsWaiting} waiting

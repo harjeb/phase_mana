@@ -3,6 +3,7 @@ import { create } from "zustand";
 import type {
   BoosterDraftSetup,
   ChaosTheme,
+  CommanderGameSetup,
   ConspiracyHook,
   CubeImportResult,
   DraftCard,
@@ -38,7 +39,17 @@ interface LimitedStore {
   fetchSealedTemplates: () => Promise<void>;
 
   startBoosterDraft: (setup: BoosterDraftSetup) => Promise<DraftState>;
-  pickDraftCard: (sessionId: string, card: DraftCard) => Promise<DraftState>;
+  startCommanderDraft: (setup: BoosterDraftSetup) => Promise<DraftState>;
+  commanderDraftInfo: (
+    sessionId: string,
+  ) => Promise<{ commanders: string[]; minDeckSize: number }>;
+  startCommanderGame: (
+    sessionId: string,
+    main: DraftCard[],
+    sideboard: DraftCard[],
+    commander: string,
+  ) => Promise<CommanderGameSetup>;
+  pickDraftCard: (sessionId: string, card: DraftCard, useDraftEffect?: boolean) => Promise<DraftState>;
   undoDraftPick: (sessionId: string) => Promise<DraftState>;
   refreshDraftState: (sessionId: string) => Promise<void>;
 
@@ -52,7 +63,8 @@ interface LimitedStore {
 
   activeGauntlet: GauntletState | null;
   conspiracyHooks: ConspiracyHook[];
-  startGauntletFromSealed: (
+  startGauntlet: (
+    kind: "sealed" | "draft",
     sessionId: string,
     rounds: number,
     main: DraftCard[],
@@ -135,10 +147,50 @@ export const useLimitedStore = create<LimitedStore>((set) => ({
     }
   },
 
-  pickDraftCard: async (sessionId, card) => {
+  startCommanderDraft: async (setup) => {
+    set({ isStarting: true, lastError: null });
+    try {
+      const state = await invoke<DraftState>("limited_start_commander_draft", { setup });
+      set({ activeDraft: state, isStarting: false });
+      return state;
+    } catch (err) {
+      const msg = String(err);
+      set({ isStarting: false, lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  commanderDraftInfo: async (sessionId) => {
+    return invoke<{ commanders: string[]; minDeckSize: number }>(
+      "limited_commander_draft_info",
+      { sessionId },
+    );
+  },
+
+  startCommanderGame: async (sessionId, main, sideboard, commander) => {
+    set({ isStarting: true, lastError: null });
+    try {
+      const setup = await invoke<CommanderGameSetup>("limited_start_commander_game", {
+        sessionId,
+        main,
+        sideboard,
+        commander,
+      });
+      set({ isStarting: false });
+      return setup;
+    } catch (err) {
+      const msg = String(err);
+      set({ isStarting: false, lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  pickDraftCard: async (sessionId, card, useDraftEffect = false) => {
     try {
       const state = await invoke<DraftState>("limited_pick_card", {
         sessionId,
+        cardId: card.id,
+        useDraftEffect,
         cardName: card.name,
         setCode: card.setCode,
         cardNumber: card.cardNumber,
@@ -243,10 +295,10 @@ export const useLimitedStore = create<LimitedStore>((set) => ({
     }
   },
 
-  startGauntletFromSealed: async (sessionId, rounds, main, sideboard) => {
+  startGauntlet: async (kind, sessionId, rounds, main, sideboard) => {
     set({ isStarting: true, lastError: null });
     try {
-      const state = await invoke<GauntletState>("limited_start_gauntlet_from_sealed", {
+      const state = await invoke<GauntletState>(`limited_start_gauntlet_from_${kind}`, {
         sessionId,
         rounds,
         main,

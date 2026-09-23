@@ -8,6 +8,9 @@ import { OfflinePlayShell } from "@/components/play/OfflinePlayShell";
 import { PlayHome } from "@/components/play/PlayHome";
 import { DeckPlayActions } from "@/components/play/DeckPlayActions";
 import Game from "./Game";
+import CasualModes from "./CasualModes";
+import OnlinePlay from "./OnlinePlay";
+import Tournaments from "./Tournaments";
 import { isLiveEngineGameRouteState } from "@/game/engineGameLaunch";
 import { ROUTES } from "@/lib/constants";
 import { resolveOfflineEngine } from "@/lib/offlineEngine";
@@ -36,6 +39,13 @@ export default function Play() {
     "preSelectedHubDeckId" in routeState &&
     typeof routeState.preSelectedHubDeckId === "string"
       ? routeState.preSelectedHubDeckId
+      : undefined;
+  const preSelectedFormatId =
+    routeState &&
+    typeof routeState === "object" &&
+    "preSelectedFormatId" in routeState &&
+    typeof routeState.preSelectedFormatId === "string"
+      ? routeState.preSelectedFormatId
       : undefined;
   const mpState = useMemo(
     () => (isLiveEngineGameRouteState(routeState) ? routeState : null),
@@ -156,6 +166,8 @@ export default function Play() {
       </div>
     );
   }
+  if (pathname === "/play/online") return <OnlinePlay />;
+  if (pathname === "/play/tournaments") return <Tournaments />;
   if (pathname === ROUTES.PLAY_OFFLINE) {
     return <Navigate to={ROUTES.PLAY_OFFLINE_CONSTRUCTED} replace />;
   }
@@ -178,6 +190,13 @@ export default function Play() {
       </OfflinePlayShell>
     );
   }
+  if (pathname === ROUTES.PLAY_OFFLINE_CASUAL) {
+    return (
+      <OfflinePlayShell>
+        <CasualModes />
+      </OfflinePlayShell>
+    );
+  }
   if (pathname !== ROUTES.PLAY_OFFLINE_CONSTRUCTED) {
     return <Navigate to={ROUTES.PLAY} replace />;
   }
@@ -186,8 +205,17 @@ export default function Play() {
       <OfflinePlaySetup
         preSelectedDeckId={preSelectedDeckId}
         preSelectedHubDeckId={preSelectedHubDeckId}
-        onStart={(playerDeck, opponentDecks, formatId, commanderName) =>
-          startGame(playerDeck, formatId, commanderName, opponentDecks, resolveOfflineEngine())
+        preSelectedFormatId={preSelectedFormatId}
+        onStart={(playerDeck, opponentDecks, formatId, commanderName, customRules) =>
+          startGame(
+            playerDeck,
+            formatId,
+            commanderName,
+            opponentDecks,
+            resolveOfflineEngine(),
+            undefined,
+            customRules,
+          )
         }
       />
     </OfflinePlayShell>

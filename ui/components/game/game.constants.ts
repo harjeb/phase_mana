@@ -117,6 +117,7 @@ export const CARD_BACK_IMAGE_URL = scryfallAssetUrl(
 );
 
 export const PROMPT_LABELS: Record<string, string> = {
+  sideboard: "Sideboard for the next game",
   get ["mulligan"]() {
     return `Keep this hand?`;
   },

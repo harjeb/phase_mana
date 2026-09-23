@@ -25,6 +25,7 @@ import {
   IronsmithUnsupportedDeckError,
 } from "@/game";
 import { getFormat } from "@/lib/formats";
+import type { CustomFormatRules } from "@/lib/customFormats";
 import {
   armActiveGameSession,
   clearActiveGameSession,
@@ -47,7 +48,8 @@ import { getPlatform } from "@/platform";
 import { applyPrompt } from "./gameStore.constants";
 import { DEFAULT_STARTING_LIFE, useServerStore } from "./useServerStore";
 import type { ClientCardDto, ClientGameView, GameState } from "./gameStore.types";
-import type { Prompt, PromptOutput } from "@/protocol";
+import type { Prompt } from "@/protocol";
+import { promptResponse } from "./promptResponse";
 import type { Deck, DeckCard } from "@/protocol/deck";
 import type { EngineKind } from "@/types/server";
 import { GAME_CARD_DEFAULTS } from "@/lib/gameCard";
@@ -133,6 +135,9 @@ async function initializeGame({
   get,
   commanderName,
   engine,
+  conspiracies,
+  customRules,
+  opponentConspiracies,
   isLaunchCurrent,
 }: {
   deck: Deck;
@@ -140,6 +145,11 @@ async function initializeGame({
   formatId?: string;
   commanderName?: string;
   engine?: EngineKind;
+  /** CR 905.4: conspiracy card names that start in the local host's command zone. */
+  conspiracies?: string[];
+  opponentConspiracies?: string[][];
+  /** P5: a full custom ruleset; when set the host ignores `formatId`. */
+  customRules?: CustomFormatRules;
   set: (partial: Partial<GameState>) => void;
   get: () => GameState;
   isLaunchCurrent: () => boolean;
@@ -147,7 +157,11 @@ async function initializeGame({
   deck = withResolvedDeckName(deck);
   const selectedFormatId = formatId ?? deck.format ?? "standard";
   const format = getFormat(selectedFormatId);
-  const startingLife = format?.deckRules.startingLife ?? DEFAULT_STARTING_LIFE;
+  // A custom ruleset overrides the named format entirely; the host rebuilds
+  // its `FormatConfig` from these rules, so read life from the same source.
+  const customLife = customRules?.structural.starting_life;
+  const startingLife =
+    typeof customLife === "number" ? customLife : (format?.deckRules.startingLife ?? DEFAULT_STARTING_LIFE);
   const platformType = getPlatform().type;
   const useHostedBrowserForge =
     platformType === "web" && !isForgeWasmSupported() && isHostedEngineAvailable();
@@ -285,6 +299,9 @@ async function initializeGame({
       commanderName: commanderName ?? null,
       opponentDecks: opponentDecks ?? null,
       engine,
+      conspiracies,
+      customRules,
+      opponentConspiracies,
     });
     const result = await (firstForgeStart ? withForgeStartTimeout(start) : start);
     if (!isLaunchCurrent()) {
@@ -311,6 +328,9 @@ async function initializeGame({
         get,
         commanderName,
         engine,
+        conspiracies,
+        customRules,
+        opponentConspiracies,
         isLaunchCurrent,
       });
     }
@@ -352,7 +372,7 @@ export const useGameStore = create<GameState>()(
       updateGameView: (view) => set({ gameView: view }),
       setGameConfig: (config) => set({ gameConfig: config }),
       dismissIronsmithDeckError: () => set({ ironsmithDeckError: null }),
-      startGame: async (deck, formatId, commanderName, opponentDecks, engine) => {
+      startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies) => {
         if (get().isGameActive) return false;
         if (gameLaunchInFlight !== null) {
           toast.info(`The previous game is still closing. Try again in a moment.`);
@@ -367,6 +387,9 @@ export const useGameStore = create<GameState>()(
             formatId,
             commanderName,
             engine,
+            conspiracies,
+            customRules,
+            opponentConspiracies,
             set,
             get,
             isLaunchCurrent: () => launchGeneration === gameLaunchGeneration,
@@ -590,9 +613,13 @@ export const useGameStore = create<GameState>()(
         const promptType = get().currentPrompt?.input.type;
         if (!promptType) {
           console.warn("[store] respond() called with no active prompt");
-          return;
+          return false;
         }
-        const action = { type: promptType, output } as PromptOutput;
+        const action = promptResponse(promptType, output);
+        if (!action) {
+          console.warn(`[store] respond(${output.type}) does not match ${promptType}`);
+          return false;
+        }
         // Single-prompt invariant: the engine sends exactly one prompt
         // at a time per agent and expects exactly one response. If a
         // response is already in flight, drop the duplicate — the modal
@@ -602,12 +629,12 @@ export const useGameStore = create<GameState>()(
         // gets misrouted by the next recv on the engine side.
         if (get().isWaitingForResponse) {
           console.warn(`[store] respond(${output.type}) ignored — already waiting for a response`);
-          return;
+          return false;
         }
         // A pass / empty combat declaration relinquishes priority: reflect
         // "waiting for others" optimistically, before the engine state lags in.
         const relinquishedPriority =
-          output.type === "pass" ||
+          output.type === "pass" || output.type === "autoPass" ||
           ((output.type === "declareAttackers" || output.type === "declareBlockers") &&
             output.assignments.length === 0);
         try {
@@ -621,6 +648,7 @@ export const useGameStore = create<GameState>()(
           const promptId = Number(get().currentPrompt?.promptId ?? 0);
           const runtime = getSelectedGameRuntime();
           await runtime.api.respond({ action, playerSlot: myPlayerSlot, promptId });
+          return true;
         } catch (e) {
           set({
             isWaitingForResponse: false,
@@ -628,6 +656,7 @@ export const useGameStore = create<GameState>()(
             debugInfo: `Respond error: ${e}`,
           });
           console.error("Failed to respond:", e);
+          return false;
         }
       },
       concede: async () => {
@@ -643,7 +672,8 @@ export const useGameStore = create<GameState>()(
             playerSlot: myPlayerSlot,
             directive: { type: "concede" },
           });
-          set({ selfConceded: true, currentPrompt: null, isWaitingForResponse: false });
+          // The acknowledged native snapshot owns elimination and match state.
+          // A Bo3 concession can already have delivered the next sideboard prompt.
         } catch (e) {
           console.warn("[store] concede directive failed:", e);
           throw e;

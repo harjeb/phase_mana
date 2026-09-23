@@ -80,9 +80,32 @@ export async function startLocalDeckGame(decks: {
   format?: string;
   humanDeck?: string[];
   aiDeck?: string[];
+  humanSideboard?: string[];
+  aiSideboard?: string[];
   humanCommanders?: string[];
   aiCommanders?: string[];
+  humanConspiracies?: string[];
+  conspiracyChoices?: import("./conspiracies").ConspiracyChoice[];
+  aiConspiracies?: string[];
+  /** P5: a full custom ruleset from the format editor; overrides `format`. */
+  customRules?: unknown;
+  extraOpponents?: { deck: string[]; commanders: string[]; conspiracy?: string[]; sideboard?: string[] }[];
 }): Promise<void> {
   invalidateSnapshotGeneration();
   acceptSnapshot(await requestSnapshot("start", decks));
+}
+
+/**
+ * CR 905.4a + CR 702.106: turn one of the human's face-down hidden-agenda
+ * conspiracies face up using the authorized special action in the current prompt.
+ * Addressed by wire card id because compat redacts a face-down card's name.
+ */
+export async function revealConspiracy(cardId: string): Promise<void> {
+  const state = useGameStore.getState();
+  const prompt = state.currentPrompt;
+  const action = prompt?.input.type === "chooseAction" && prompt.input.actions.find(
+    action => action.type === "activateAbility" && action.cardId === cardId,
+  );
+  if (!action) throw new Error("No authorized conspiracy reveal action");
+  if (!await state.respond({ type: "act", actionId: action.id })) throw new Error("Conspiracy reveal was rejected");
 }

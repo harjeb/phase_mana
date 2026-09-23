@@ -11,7 +11,7 @@ export default function Sealed() {
   const navigate = useNavigate();
   const activeSealed = useLimitedStore((s) => s.activeSealed);
   const refresh = useLimitedStore((s) => s.refreshSealedPool);
-  const startGauntlet = useLimitedStore((s) => s.startGauntletFromSealed);
+  const startGauntlet = useLimitedStore((s) => s.startGauntlet);
   const isStarting = useLimitedStore((s) => s.isStarting);
   const lastError = useLimitedStore((s) => s.lastError);
   const [builtDeck, setBuiltDeck] = useState<{
@@ -78,6 +78,7 @@ export default function Sealed() {
               if (!id) return;
               try {
                 const g = await startGauntlet(
+                  "sealed",
                   id,
                   activeSealed.aiDecks.length,
                   builtDeck.main,

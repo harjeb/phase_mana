@@ -46,7 +46,7 @@ export type DeckEditorTag = { id: string, name: string, color?: string, icon?: s
 
 export type DeckEditorViewMode = "list" | "visual" | "stack";
 
-export type DeckFormat = "standard" | "pioneer" | "modern" | "legacy" | "vintage" | "pauper" | "premodern" | "commander" | "brawl" | "oathbreaker" | "draft" | "sealed";
+export type DeckFormat = "standard" | "pioneer" | "modern" | "legacy" | "vintage" | "pauper" | "premodern" | "commander" | "brawl" | "oathbreaker" | "tiny_leaders" | "duel_commander" | "pauper_commander" | "momir" | "archenemy" | "planechase" | "two_headed_giant" | "old_school_93_94" | "old_school_95" | "draft" | "sealed";
 
 export type DeckLabel = { name: string, color?: string, };
 

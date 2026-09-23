@@ -13,6 +13,9 @@ export interface GauntletMatchDecks {
   humanDeckName: string;
   humanMain: DraftCard[];
   humanSideboard: DraftCard[];
+  /** CR 905.4: submitted conspiracy cards, played from the command zone. */
+  humanConspiracies?: string[];
+  opponentConspiracies?: string[];
   opponentName: string;
   opponentMain: DraftCard[];
   opponentSideboard: DraftCard[];
@@ -75,9 +78,22 @@ export interface DraftState {
   isComplete: boolean;
   awaitingHuman: boolean;
   humanConspiracies?: string[];
+  draftEffectAvailable?: boolean;
+  draftEffectActive?: boolean;
   picksPerPass: number;
   picksRemainingInPack: number;
   passDirection?: "left" | "right";
+  /** True for a CR 903.13a Commander Draft pod. */
+  commanderDraft?: boolean;
+  /** Deck-construction floor reported by the session (40 draft, 60 commander). */
+  minDeckSize?: number;
+}
+
+export interface CommanderGameSetup {
+  humanDeck: string[];
+  humanCommanders: string[];
+  humanSideboard: string[];
+  opponents: { deck: string[]; commanders: string[] }[];
 }
 
 export interface BoosterDraftSetup {

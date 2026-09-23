@@ -5,6 +5,7 @@ import type { Deck } from "@/protocol/deck";
 import type { GameLogEntry } from "@/types/gameLog";
 import type { GameSnapshotEntry } from "@/types/gameSnapshot";
 import type { EngineKind, GameFormat } from "@/types/server";
+import type { CustomFormatRules } from "@/lib/customFormats";
 import type { IronsmithDeckIssue } from "@/game";
 
 export type { DisplayEvent };
@@ -103,6 +104,11 @@ export interface GameState {
     commanderName?: string,
     opponentDecks?: Deck[],
     engine?: EngineKind,
+    /** CR 905.4: conspiracy card names that start in the local host's command zone. */
+    conspiracies?: string[],
+    /** P5: a full custom ruleset; when set the host ignores `formatId`. */
+    customRules?: CustomFormatRules,
+    opponentConspiracies?: string[][],
   ) => Promise<boolean>;
   startManualTabletopGame: (deck: Deck, formatId?: string, commanderName?: string) => Promise<void>;
   startManualRoomHost: (localPlayerSlot: string) => Promise<void>;
@@ -123,7 +129,7 @@ export interface GameState {
     hostPlayerSlot?: string | null,
     botPlayerSlots?: string[],
   ) => Promise<boolean>;
-  respond: (output: PromptOutput["output"]) => Promise<void>;
+  respond: (output: PromptOutput["output"]) => Promise<boolean>;
   concede: () => Promise<void>;
   endGame: () => Promise<void>;
   setMultiplayerState: (

@@ -27,15 +27,15 @@ export function PlaytestPlayersDialog({ open, onChoose, onCancel }: PlaytestPlay
         </DialogHeader>
         <div className="grid gap-3 sm:grid-cols-2">
           <button
-            disabled
-            className="text-left rounded-lg border p-4 opacity-50 cursor-not-allowed"
+            onClick={() => onChoose(3)}
+            className="text-left rounded-lg border p-4 transition-colors hover:border-primary/40 hover:bg-muted/30"
           >
             <div className="flex items-center gap-2 mb-1.5">
               <Users className="h-4 w-4 text-primary" />
               <span className="font-semibold text-sm"><Trans>4-player pod</Trans></span>
             </div>
             <p className="text-xs text-muted-foreground leading-snug">
-              <Trans>Unavailable with the local Phase host. Choose 1v1.</Trans>
+              <Trans>You and three AI opponents at a four-player table.</Trans>
             </p>
           </button>
           <button

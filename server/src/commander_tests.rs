@@ -56,6 +56,10 @@ fn commander_return_prompt_translates_both_choices() {
             commander_id,
             current_zone: Zone::Graveyard,
         };
+        if let Some(session_id) = game.interaction_session_id.clone() {
+            engine::game::interaction::bind_interaction_authority(&mut game, session_id)
+                .expect("test state must rebind to its interaction session");
+        }
         let (prepared, snap) = snapshot(&game, &host.db, 900, 0).unwrap();
         for index in 0..2 {
             let message = serde_json::from_value(serde_json::json!({
@@ -132,6 +136,13 @@ fn commander_boundary_rejections_preserve_session() {
 fn refresh(host: &mut Host) {
     let id = host.reserve_prompt().unwrap();
     let session = host.session.as_mut().unwrap();
+    // These tests hand-edit `waiting_for` instead of routing through `apply`, so
+    // re-run the engine's own authority binding before the snapshot's
+    // consistency assertion. A live game rebinds on every engine action.
+    if let Some(session_id) = session.game.interaction_session_id.clone() {
+        engine::game::interaction::bind_interaction_authority(&mut session.game, session_id)
+            .expect("test state must rebind to its interaction session");
+    }
     let (prepared, snap) = snapshot(&session.game, &host.db, id, 0).unwrap();
     session.prepared = prepared;
     session.snapshot = snap;

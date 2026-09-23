@@ -22,5 +22,6 @@ docs/card-audit-provenance.json
 
 # Offline card databases
 data/
+resources/draft-pools/
 *.db
 

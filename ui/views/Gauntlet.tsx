@@ -110,7 +110,7 @@ export default function Gauntlet() {
         ),
       ]);
       armGauntletReturn(gauntletId, activeGauntlet.currentRound);
-      const started = await startGame(human, formatId, undefined, [opponent]);
+      const started = await startGame(human, formatId, undefined, [opponent], undefined, decks.humanConspiracies ?? [], undefined, [decks.opponentConspiracies ?? []]);
       if (!started) {
         clearGauntletReturn();
         return;
