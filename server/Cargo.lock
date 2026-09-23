@@ -156,7 +156,7 @@ dependencies = [
 
 [[package]]
 name = "draft-core"
-version = "0.90.0"
+version = "0.92.0"
 dependencies = [
  "phase-engine",
  "rand",
@@ -168,7 +168,7 @@ dependencies = [
 
 [[package]]
 name = "draft-wasm"
-version = "0.90.0"
+version = "0.92.0"
 dependencies = [
  "console_error_panic_hook",
  "draft-core",
@@ -176,6 +176,7 @@ dependencies = [
  "js-sys",
  "phase-ai",
  "phase-engine",
+ "phase-llm",
  "rand",
  "rand_chacha",
  "serde",
@@ -433,7 +434,7 @@ checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
 name = "manabrew-compat"
-version = "0.90.0"
+version = "0.92.0"
 dependencies = [
  "manabrew-protocol",
  "phase-engine",
@@ -543,7 +544,7 @@ dependencies = [
 
 [[package]]
 name = "phase-ai"
-version = "0.90.0"
+version = "0.92.0"
 dependencies = [
  "mimalloc",
  "phase-engine",
@@ -559,7 +560,7 @@ dependencies = [
 
 [[package]]
 name = "phase-engine"
-version = "0.90.0"
+version = "0.92.0"
 dependencies = [
  "im",
  "indexmap",
@@ -579,6 +580,17 @@ dependencies = [
  "toml",
  "tracing",
  "web-time",
+]
+
+[[package]]
+name = "phase-llm"
+version = "0.92.0"
+dependencies = [
+ "draft-core",
+ "phase-ai",
+ "phase-engine",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
