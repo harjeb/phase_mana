@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { ImageSource, Texture } from "pixi.js";
 
 export function rasterizeSvgTexture(svg: string, width: number, height = width): Promise<Texture> {
@@ -28,7 +29,7 @@ export function rasterizeSvgTexture(svg: string, width: number, height = width):
           canvas.width = width;
           canvas.height = height;
           const context = canvas.getContext("2d");
-          if (!context) throw new Error("2d context unavailable");
+          if (!context) throw new Error(t`2d context unavailable`);
           context.drawImage(loadedImage, 0, 0, width, height);
           resolve(new Texture({ source: new ImageSource({ resource: canvas }) }));
         } catch (error) {

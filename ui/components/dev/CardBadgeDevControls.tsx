@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   hasActiveCardOverride,
   useGameDevStore,
@@ -185,7 +186,7 @@ export function CardBadgeDevControls() {
       <section className={DEV_SECTION}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className={DEV_SECTION_HEADING}>Card appearance</p>
+            <p className={DEV_SECTION_HEADING}><Trans>Card appearance</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">
               Force states and counters on the staged card.
             </p>

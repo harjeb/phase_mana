@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { CircleDollarSign } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -104,7 +105,7 @@ export function DeckBudgetPanel() {
         <div className="flex items-center gap-2">
           <CircleDollarSign className="h-4 w-4 text-primary" />
           <div>
-            <h3 className="text-sm font-semibold">Deck budget</h3>
+            <h3 className="text-sm font-semibold"><Trans>Deck budget</Trans></h3>
             <p className="text-[10px] text-muted-foreground">
               Current selected printings · {PRICE_PROVIDERS[provider].label}
             </p>

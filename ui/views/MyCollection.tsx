@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Download, LayoutGrid, LibraryBig, List, Search, Trash2, Upload } from "lucide-react";
 import { Navigate, useSearchParams } from "react-router-dom";
@@ -73,16 +75,16 @@ export default function MyCollection() {
   }
   function updateQuantity(cardKey: string, quantity: number) {
     void setQuantity(cardKey, quantity).catch(() => {
-      toast.error(`Account sync failed. This change is preserved locally.`);
+      toast.error(t`Account sync failed. This change is preserved locally.`);
     });
   }
   async function deleteCollection() {
     try {
       await replaceQuantities({});
       setQuery("");
-      toast.success(`Collection deleted`);
+      toast.success(t`Collection deleted`);
     } catch (error) {
-      toast.error(`Account sync failed. The deletion is preserved locally and will retry.`);
+      toast.error(t`Account sync failed. The deletion is preserved locally and will retry.`);
       throw error;
     }
   }
@@ -94,7 +96,7 @@ export default function MyCollection() {
             <div>
               <div className="flex items-center gap-2">
                 <LibraryBig className="h-5 w-5 text-primary" />
-                <h1 className="text-2xl font-semibold">My Collection</h1>
+                <h1 className="text-2xl font-semibold"><Trans>My Collection</Trans></h1>
               </div>
               <p className="mt-1 text-sm text-muted-foreground">
                 {loading

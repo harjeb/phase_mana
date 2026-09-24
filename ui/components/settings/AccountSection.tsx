@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Button } from "@/components/ui/button";
 import { AvatarPicker } from "@/components/settings/AvatarPicker";
 import { GuestNamePicker } from "@/components/settings/GuestNamePicker";
@@ -24,7 +25,7 @@ export function AccountSection() {
           <div className="mt-5 border-t border-border/70 pt-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Sync your decks on every device</p>
+                <p className="text-sm font-medium"><Trans>Sync your decks on every device</Trans></p>
                 <p className="text-sm text-muted-foreground">
                   An account keeps your decks and Community publications yours wherever you play.
                   Playing never requires one.

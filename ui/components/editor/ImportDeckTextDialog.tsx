@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useMemo, useState } from "react";
 import { ArrowLeft, CheckCircle2, ClipboardPaste, Download } from "lucide-react";
 import { toast } from "sonner";
@@ -88,7 +90,7 @@ export function ImportDeckTextDialog({
       const clip = await navigator.clipboard.readText();
       if (clip.trim()) setText(clip);
     } catch {
-      toast.error(`Couldn't read the clipboard \u2014 paste manually instead`);
+      toast.error(t`Couldn't read the clipboard \u2014 paste manually instead`);
     }
   }, []);
   const handleImportClick = useCallback(async () => {
@@ -163,10 +165,10 @@ export function ImportDeckTextDialog({
                 <table className="w-full text-xs">
                   <thead className="sticky top-0 bg-background text-left text-muted-foreground">
                     <tr>
-                      <th className="px-3 py-2 font-medium">Qty</th>
-                      <th className="px-3 py-2 font-medium">Card</th>
-                      <th className="px-3 py-2 font-medium">Destination</th>
-                      <th className="px-3 py-2 font-medium">Printing</th>
+                      <th className="px-3 py-2 font-medium"><Trans>Qty</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Card</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Destination</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Printing</Trans></th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -243,7 +245,7 @@ export function ImportDeckTextDialog({
               {mode === "create" && (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_10rem]">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium">Deck name</label>
+                    <label className="text-xs font-medium"><Trans>Deck name</Trans></label>
                     <Input
                       value={name}
                       onChange={(e) => setCustomName(e.target.value)}
@@ -251,7 +253,7 @@ export function ImportDeckTextDialog({
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium">Format</label>
+                    <label className="text-xs font-medium"><Trans>Format</Trans></label>
                     <select
                       value={formatId}
                       onChange={(e) =>
@@ -261,7 +263,7 @@ export function ImportDeckTextDialog({
                       }
                       className="h-9 w-full cursor-pointer rounded-md border bg-background px-2 text-xs pointer-coarse:text-base"
                     >
-                      <option value="">Auto-detect</option>
+                      <option value=""><Trans>Auto-detect</Trans></option>
                       {IMPORT_FORMATS.map((format) => (
                         <option key={format.id} value={format.id}>
                           {format.name}
@@ -274,7 +276,7 @@ export function ImportDeckTextDialog({
 
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-medium">Deck list</label>
+                  <label className="text-xs font-medium"><Trans>Deck list</Trans></label>
                   <Button
                     variant="ghost"
                     size="sm"
@@ -305,7 +307,7 @@ export function ImportDeckTextDialog({
                   className="flex items-center gap-2 rounded-md border border-legality-legal/40 bg-legality-legal/10 px-3 py-2 text-legality-legal"
                 >
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
-                  <span className="text-sm font-medium">Looks good!</span>
+                  <span className="text-sm font-medium"><Trans>Looks good!</Trans></span>
                   <span className="text-xs text-muted-foreground">
                     {commanderCount > 0 ? `${commanderCount} commander · ` : ""}
                     {mainCount} main
@@ -314,7 +316,7 @@ export function ImportDeckTextDialog({
                   </span>
                 </div>
               ) : dirty ? (
-                <p className="text-xs text-destructive">No recognizable card entries yet</p>
+                <p className="text-xs text-destructive"><Trans>No recognizable card entries yet</Trans></p>
               ) : null}
               {mode === "add" && commanderCount > 0 && (
                 <p className="text-xs text-muted-foreground">

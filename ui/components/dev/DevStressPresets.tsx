@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -146,7 +147,7 @@ export function DevStressPresets() {
       <section className={DEV_SECTION}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className={DEV_SECTION_HEADING}>Stress scenarios</p>
+            <p className={DEV_SECTION_HEADING}><Trans>Stress scenarios</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">
               Deterministic high-pressure states for the current staged card and player HUD.
             </p>

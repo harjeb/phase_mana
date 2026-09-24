@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -234,7 +235,7 @@ export function UserList({
           </TooltipTrigger>
           <TooltipContent>{status.label}</TooltipContent>
         </Tooltip>
-        <h3 className="font-semibold text-sm">Players</h3>
+        <h3 className="font-semibold text-sm"><Trans>Players</Trans></h3>
         <span className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">
           {uniquePlayers.length}
         </span>

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { fetchCubeMetadata, fetchSetPool } from "@/api/limitedEdition";
 import { getPlatform } from "@/platform";
 import { useMultiplayerSealedStore } from "@/stores/useMultiplayerSealedStore";
@@ -50,7 +51,7 @@ export async function startMpSealed({ room, username }: StartMpSealedArgs): Prom
       pool = await fetchSetPool(config.set_code);
       poolName = config.set_code;
     } else {
-      throw new Error("sealed config has no pool source");
+      throw new Error(t`sealed config has no pool source`);
     }
   } catch (err) {
     const msg = `failed to load sealed pool: ${String(err)}`;

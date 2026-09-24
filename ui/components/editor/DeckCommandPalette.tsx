@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import {
@@ -45,8 +46,8 @@ export function DeckCommandPalette({ open, onOpenChange, commands }: DeckCommand
     >
       <DialogContent className="max-w-lg gap-2 p-3">
         <DialogHeader className="sr-only">
-          <DialogTitle>Deck commands</DialogTitle>
-          <DialogDescription>Search for an action to run in the deck editor.</DialogDescription>
+          <DialogTitle><Trans>Deck commands</Trans></DialogTitle>
+          <DialogDescription><Trans>Search for an action to run in the deck editor.</Trans></DialogDescription>
         </DialogHeader>
         <div className="relative">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />

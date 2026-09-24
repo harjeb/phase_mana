@@ -58,6 +58,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "npm run check && vite build",
     "check": "tsc -p tsconfig.app.json --noEmit",
+    "extract": "node tools/lingui-extract.mjs",
     "server": "cargo run --release --manifest-path server/Cargo.toml",
     "preview": "vite preview --host 127.0.0.1",
     "test:server": "cargo test --manifest-path server/Cargo.toml",

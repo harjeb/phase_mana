@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { beginGame, noteAnswerSent } from "@/lib/engineTelemetry";
 import {
   engineReportGameId,
@@ -375,7 +376,7 @@ export const useGameStore = create<GameState>()(
       startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies) => {
         if (get().isGameActive) return false;
         if (gameLaunchInFlight !== null) {
-          toast.info(`The previous game is still closing. Try again in a moment.`);
+          toast.info(t`The previous game is still closing. Try again in a moment.`);
           return false;
         }
         const launchGeneration = ++gameLaunchGeneration;
@@ -433,7 +434,7 @@ export const useGameStore = create<GameState>()(
       startManualRoomHost: async (localPlayerSlot: string) => {
         const runtime = getSelectedGameRuntime();
         if (!isManualTabletopApi(runtime)) {
-          throw new Error("Manual room host requires the manual tabletop runtime.");
+          throw new Error(t`Manual room host requires the manual tabletop runtime.`);
         }
         const roomHost = new BroadcastRoomHost({
           localPlayerSlot,
@@ -462,7 +463,7 @@ export const useGameStore = create<GameState>()(
         selectGameRuntime("manual-tabletop");
         const runtime = getSelectedGameRuntime();
         if (!isManualTabletopApi(runtime)) {
-          throw new Error("Manual room client requires the manual tabletop runtime.");
+          throw new Error(t`Manual room client requires the manual tabletop runtime.`);
         }
         const roomHost = new BroadcastRoomHost({
           localPlayerSlot,
@@ -666,7 +667,7 @@ export const useGameStore = create<GameState>()(
           return;
         }
         const { myPlayerSlot } = get();
-        if (!myPlayerSlot) throw new Error("No local player is available to concede.");
+        if (!myPlayerSlot) throw new Error(t`No local player is available to concede.`);
         try {
           await runtime.api.sendDirective({
             playerSlot: myPlayerSlot,

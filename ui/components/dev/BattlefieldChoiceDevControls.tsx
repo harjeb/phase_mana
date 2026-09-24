@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import type { CardChoiceDto } from "@/protocol/game";
 import { cn } from "@/lib/utils";
 import { DEV_CARD_CHOICE_KINDS, useGameDevStore } from "@/stores/useGameDevStore";
@@ -26,7 +27,7 @@ export function BattlefieldChoiceDevControls() {
     <div className="mt-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className={DEV_SECTION_HEADING}>Persistent choices</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Persistent choices</Trans></p>
           <p className="mt-1 text-[10px] text-muted-foreground">
             {selected.length === 0 ? `No forced choices` : `${selected.length} forced`}
           </p>

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { parseDeckListText } from "@/lib/deckImport";
@@ -19,7 +21,7 @@ export default function OnlinePlay() {
       if (kind === "reconnect") return connectOnline(endpoint, "reconnect");
       const entries = parseDeckListText(deck).filter(card => !card.maybe);
       if (!entries.length || entries.some(card => !Number.isSafeInteger(card.count) || card.count < 1 || card.count > 250)
-        || entries.reduce((total, card) => total + card.count, 0) > 500) throw new Error("Enter a deck list with valid card quantities (up to 500 cards).");
+        || entries.reduce((total, card) => total + card.count, 0) > 500) throw new Error(t`Enter a deck list with valid card quantities (up to 500 cards).`);
       const names = (section: "main" | "side" | "commander") => entries.filter(card =>
         section === "commander" ? card.commander : section === "side" ? card.side && !card.commander : !card.side && !card.commander,
       ).flatMap(card => Array<string>(card.count).fill(card.name));
@@ -29,7 +31,7 @@ export default function OnlinePlay() {
         timer_seconds: null, player_count: players,
       } });
       else {
-        if (!code.trim()) throw new Error("Enter the room code.");
+        if (!code.trim()) throw new Error(t`Enter the room code.`);
         connectOnline(endpoint, { type: "JoinGameWithPassword", data: {
           game_code: code.trim().toUpperCase(), deck: data,
           display_name: name.trim() || "Player", password: null,
@@ -39,24 +41,24 @@ export default function OnlinePlay() {
   }
   const field = "w-full rounded border bg-background p-2";
   return <section className="mx-auto max-w-2xl space-y-4 p-6">
-    <h1 className="text-2xl font-bold">Online multiplayer</h1>
-    <p>Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private.</p>
-    <label className="block">Server URL<input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
-    <label className="block">Your name<input className={field} value={name} maxLength={80} onChange={event => setName(event.target.value)} /></label>
-    <div className="flex gap-2"><Button variant={mode === "constructed" ? "primary" : "outline"} onClick={() => setMode("constructed")}>Constructed</Button><Button variant={mode === "draft" ? "primary" : "outline"} onClick={() => setMode("draft")}>Draft</Button></div>
+    <h1 className="text-2xl font-bold"><Trans>Online multiplayer</Trans></h1>
+    <p><Trans>Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private.</Trans></p>
+    <label className="block"><Trans>Server URL</Trans><input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
+    <label className="block"><Trans>Your name</Trans><input className={field} value={name} maxLength={80} onChange={event => setName(event.target.value)} /></label>
+    <div className="flex gap-2"><Button variant={mode === "constructed" ? "primary" : "outline"} onClick={() => setMode("constructed")}><Trans>Constructed</Trans></Button><Button variant={mode === "draft" ? "primary" : "outline"} onClick={() => setMode("draft")}><Trans>Draft</Trans></Button></div>
     {mode === "draft" ? <OnlineDraftPanel endpoint={endpoint} name={name} connected={state.connected} /> : <>
-    <label className="block">Players<select aria-label="Players" className={field} value={players} onChange={event => setPlayers(Number(event.target.value))}>
+    <label className="block"><Trans>Players</Trans><select aria-label={t`Players`} className={field} value={players} onChange={event => setPlayers(Number(event.target.value))}>
       {[2, 3, 4].map(count => <option key={count} value={count}>{count}</option>)}
     </select></label>
-    <label className="block">Deck list<textarea className={field} rows={10} placeholder={"4 Lightning Bolt\n24 Mountain\n…"} value={deck} onChange={event => setDeck(event.target.value)} /></label>
-    <label className="block">Room code<input className={field} value={code} onChange={event => setCode(event.target.value)} /></label>
+    <label className="block"><Trans>Deck list</Trans><textarea className={field} rows={10} placeholder={"4 Lightning Bolt\n24 Mountain\n…"} value={deck} onChange={event => setDeck(event.target.value)} /></label>
+    <label className="block"><Trans>Room code</Trans><input className={field} value={code} onChange={event => setCode(event.target.value)} /></label>
     <div className="flex flex-wrap gap-2">
-      <Button variant="primary" onClick={() => connect("create")} disabled={state.connected}>Create room</Button>
-      <Button variant="primary" onClick={() => connect("join")} disabled={state.connected}>Join room</Button>
-      <Button variant="outline" onClick={() => connect("reconnect")}>Reconnect saved seat</Button>
+      <Button variant="primary" onClick={() => connect("create")} disabled={state.connected}><Trans>Create room</Trans></Button>
+      <Button variant="primary" onClick={() => connect("join")} disabled={state.connected}><Trans>Join room</Trans></Button>
+      <Button variant="outline" onClick={() => connect("reconnect")}><Trans>Reconnect saved seat</Trans></Button>
     </div>
     </>}
-    <Button variant="outline" onClick={closeOnline}>Disconnect</Button>
+    <Button variant="outline" onClick={closeOnline}><Trans>Disconnect</Trans></Button>
     {state.code && <p>Room code: <strong>{state.code}</strong></p>}
     <p role="status">{state.message}</p>
     {error && <p role="alert" className="text-destructive">{error}</p>}

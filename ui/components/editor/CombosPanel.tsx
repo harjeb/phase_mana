@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { ChevronRight, Sparkles, Trophy, Plus, Layers, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -111,9 +113,9 @@ export function CombosPanel() {
       const sc = await useScryfallStore.getState().getCard({ name: frontFaceName(name) });
       const base = scryfallToDeckCard(sc.info);
       addToMain({ ...base, identity: { ...base.identity, id: crypto.randomUUID() } });
-      toast.success(`Added ${name}`);
+      toast.success(t`Added ${name}`);
     } catch {
-      toast.error(`Couldn't add ${name}`);
+      toast.error(t`Couldn't add ${name}`);
     }
   }
   if (!loading && included.length === 0 && suggestions.length === 0) return null;
@@ -122,7 +124,7 @@ export function CombosPanel() {
       <section className={EDITOR_PANEL_CLASS}>
         <div className="flex items-center gap-2.5">
           <Sparkles className="h-4 w-4 text-counter-charge shrink-0" />
-          <h3 className="text-base font-semibold">Combos</h3>
+          <h3 className="text-base font-semibold"><Trans>Combos</Trans></h3>
           <div className="ml-auto flex items-center gap-2 text-xs text-muted-foreground/70">
             {loading && <Loader2 className="h-3 w-3 animate-spin" />}
             {included.length > 0 && <span>{included.length} in deck</span>}
@@ -206,7 +208,7 @@ export function CombosPanel() {
           )}
 
           {!loading && included.length === 0 && suggestions.length === 0 && (
-            <p className="text-xs text-muted-foreground italic">No combos detected yet.</p>
+            <p className="text-xs text-muted-foreground italic"><Trans>No combos detected yet.</Trans></p>
           )}
 
           <p className="text-[10px] text-muted-foreground/50">

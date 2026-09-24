@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -85,7 +87,7 @@ export function PublishDeckDialog({
       let accountDeck;
       if (localSaved?.accountDeckId) {
         if (!localSaved.accountVersionNo) {
-          throw new Error(`Reload this account deck before publishing it.`);
+          throw new Error(t`Reload this account deck before publishing it.`);
         }
         accountDeck = await useAccountDecksStore
           .getState()
@@ -114,7 +116,7 @@ export function PublishDeckDialog({
         coverCardName: deck.coverCardName,
       });
       void refresh();
-      toast.success(`"${title.trim()}" published to Community`);
+      toast.success(t`"${title.trim()}" published to Community`);
       handleOpenChange(false);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : `Publishing failed`);
@@ -138,7 +140,7 @@ export function PublishDeckDialog({
     <Dialog open={publishEnabled && open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Publish to Community</DialogTitle>
+          <DialogTitle><Trans>Publish to Community</Trans></DialogTitle>
           <DialogDescription>
             {!capabilitiesLoaded
               ? `Checking Community support before publishing "${resolvedDeckName}".`
@@ -183,7 +185,7 @@ export function PublishDeckDialog({
               placeholder={`control, budget, tokens`}
               maxLength={200}
             />
-            <p className="text-xs text-muted-foreground">Up to 10 tags, separated by commas.</p>
+            <p className="text-xs text-muted-foreground"><Trans>Up to 10 tags, separated by commas.</Trans></p>
           </div>
         )}
         {!capabilitiesLoaded && capabilitiesError && (

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,12 +74,12 @@ export function ThemeTokenRail({
   return (
     <aside
       className="order-2 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-lg border border-border bg-background md:order-1 md:w-[300px] md:flex-none"
-      aria-label="Theme controls"
+      aria-label={t`Theme controls`}
     >
       <div className="shrink-0 space-y-2 border-b border-border p-3">
         <Input
-          aria-label="Search all theme tokens"
-          placeholder="Search every app and game token"
+          aria-label={t`Search all theme tokens`}
+          placeholder={t`Search every app and game token`}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           className="h-8 text-xs md:text-xs"
@@ -117,12 +119,12 @@ export function ThemeTokenRail({
           </p>
         </div>
         {count === 0 && (
-          <p className="text-xs text-muted-foreground">No tokens match this search.</p>
+          <p className="text-xs text-muted-foreground"><Trans>No tokens match this search.</Trans></p>
         )}
         {showApp &&
           appGroups.map((group) => (
             <section key={group.heading} className="space-y-1">
-              <h3 className="text-xs font-semibold">App · {group.heading}</h3>
+              <h3 className="text-xs font-semibold"><Trans>App · {group.heading}</Trans></h3>
               <p className="text-[11px] text-muted-foreground">{group.description}</p>
               {group.keys.map((key) => (
                 <ThemeColorControl
@@ -142,7 +144,7 @@ export function ThemeTokenRail({
         {showGame &&
           gameGroups.map((group) => (
             <section key={group.heading} className="space-y-1">
-              <h3 className="text-xs font-semibold">Game · {group.heading}</h3>
+              <h3 className="text-xs font-semibold"><Trans>Game · {group.heading}</Trans></h3>
               {group.description && (
                 <p className="text-[11px] text-muted-foreground">{group.description}</p>
               )}

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -43,7 +44,7 @@ export default function Sealed() {
         {lastError ? (
           <p className="text-destructive">{lastError}</p>
         ) : (
-          <p className="text-muted-foreground">Loading sealed pool…</p>
+          <p className="text-muted-foreground"><Trans>Loading sealed pool…</Trans></p>
         )}
       </div>
     );

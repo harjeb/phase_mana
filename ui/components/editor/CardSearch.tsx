@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState, useRef, useEffect } from "react";
 import { useCardSearch } from "@/hooks/useCards";
 import { useKeybindings } from "@/hooks/useKeybindings";
@@ -836,7 +838,7 @@ export function CardSearch({
   const addToMain = useDeckStore((s) => s.addToMain);
   const addCard = (card: DeckCard) => {
     addToMain({ ...card, identity: { ...card.identity, id: crypto.randomUUID() } });
-    toast.success(`Added ${card.identity.name}`);
+    toast.success(t`Added ${card.identity.name}`);
   };
   const [text, setText] = useState("");
   const [debouncedText, setDebouncedText] = useState("");
@@ -959,7 +961,7 @@ export function CardSearch({
             onClick={() => setShowFilters((v) => !v)}
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
-            <span className="text-xs">Filters</span>
+            <span className="text-xs"><Trans>Filters</Trans></span>
             {hasActiveFilters && (
               <span className="bg-selection text-selection-foreground text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
                 {basicCount + advCount}
@@ -1001,7 +1003,7 @@ export function CardSearch({
             <FilterSeparator label={`Colors & Mana`} />
 
             <FilterRow>
-              <FilterLabel>Color</FilterLabel>
+              <FilterLabel><Trans>Color</Trans></FilterLabel>
               <div className="flex items-center gap-0.5">
                 {COLOR_FILTERS.map((f) =>
                   f.id === "M" ? (
@@ -1027,7 +1029,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow>
-              <FilterLabel>Identity</FilterLabel>
+              <FilterLabel><Trans>Identity</Trans></FilterLabel>
               <div className="flex items-center gap-0.5">
                 {COLOR_IDENTITY_FILTERS.map((f) => (
                   <ManaFilterBtn
@@ -1042,7 +1044,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow>
-              <FilterLabel>Produces</FilterLabel>
+              <FilterLabel><Trans>Produces</Trans></FilterLabel>
               <div className="flex items-center gap-0.5">
                 {PRODUCES_FILTERS.map((f) => (
                   <ManaFilterBtn
@@ -1057,7 +1059,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow>
-              <FilterLabel>Mana</FilterLabel>
+              <FilterLabel><Trans>Mana</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs w-40"
                 placeholder={`e.g. {2}{W}{W}`}
@@ -1069,7 +1071,7 @@ export function CardSearch({
             <FilterSeparator label={`Card Properties`} />
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Type</FilterLabel>
+              <FilterLabel><Trans>Type</Trans></FilterLabel>
               {TYPE_FILTERS.map((f) => (
                 <FilterBtn
                   key={f.id}
@@ -1082,7 +1084,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>CMC</FilterLabel>
+              <FilterLabel><Trans>CMC</Trans></FilterLabel>
               {CMC_FILTERS.map((f) => (
                 <FilterBtn
                   key={f.id}
@@ -1095,7 +1097,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Rarity</FilterLabel>
+              <FilterLabel><Trans>Rarity</Trans></FilterLabel>
               {RARITY_FILTERS.map((f) => (
                 <FilterBtn
                   key={f.id}
@@ -1109,9 +1111,9 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Stats</FilterLabel>
+              <FilterLabel><Trans>Stats</Trans></FilterLabel>
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-muted-foreground/60 uppercase">pow</span>
+                <span className="text-[10px] text-muted-foreground/60 uppercase"><Trans>pow</Trans></span>
                 <select
                   className="h-6 text-xs pointer-coarse:h-9 pointer-coarse:text-base bg-background border rounded px-1"
                   value={advanced.powerOp}
@@ -1131,7 +1133,7 @@ export function CardSearch({
                 />
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-muted-foreground/60 uppercase">tou</span>
+                <span className="text-[10px] text-muted-foreground/60 uppercase"><Trans>tou</Trans></span>
                 <select
                   className="h-6 text-xs pointer-coarse:h-9 pointer-coarse:text-base bg-background border rounded px-1"
                   value={advanced.toughnessOp}
@@ -1151,7 +1153,7 @@ export function CardSearch({
                 />
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-muted-foreground/60 uppercase">loy</span>
+                <span className="text-[10px] text-muted-foreground/60 uppercase"><Trans>loy</Trans></span>
                 <select
                   className="h-6 text-xs pointer-coarse:h-9 pointer-coarse:text-base bg-background border rounded px-1"
                   value={advanced.loyaltyOp}
@@ -1175,7 +1177,7 @@ export function CardSearch({
             <FilterSeparator label={`Text Search`} />
 
             <FilterRow>
-              <FilterLabel>Oracle</FilterLabel>
+              <FilterLabel><Trans>Oracle</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
                 placeholder={`Card text contains\u2026`}
@@ -1185,7 +1187,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow>
-              <FilterLabel>Flavor</FilterLabel>
+              <FilterLabel><Trans>Flavor</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
                 placeholder={`Flavor text contains\u2026`}
@@ -1195,7 +1197,7 @@ export function CardSearch({
             </FilterRow>
 
             <FilterRow>
-              <FilterLabel>Keyword</FilterLabel>
+              <FilterLabel><Trans>Keyword</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
                 placeholder={`e.g. flying, haste, deathtouch`}
@@ -1207,7 +1209,7 @@ export function CardSearch({
             <FilterSeparator label={`Format & Legality`} />
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Format</FilterLabel>
+              <FilterLabel><Trans>Format</Trans></FilterLabel>
               {FORMAT_FILTERS.map((f) => (
                 <FilterBtn
                   key={f.id}
@@ -1222,16 +1224,16 @@ export function CardSearch({
             <FilterSeparator label={`Printing & Availability`} />
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Set</FilterLabel>
+              <FilterLabel><Trans>Set</Trans></FilterLabel>
               <SetSelect value={advanced.set} onChange={(v) => setAdv("set", v)} className="w-48" />
-              <FilterLabel>Artist</FilterLabel>
+              <FilterLabel><Trans>Artist</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
                 placeholder={`Artist name\u2026`}
                 value={advanced.artist}
                 onChange={(e) => setAdv("artist", e.target.value)}
               />
-              <FilterLabel>Year</FilterLabel>
+              <FilterLabel><Trans>Year</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs w-16"
                 placeholder="2024"
@@ -1299,7 +1301,7 @@ export function CardSearch({
             <FilterSeparator label={`Card Modifiers`} />
 
             <FilterRow className="flex-wrap">
-              <FilterLabel>Is</FilterLabel>
+              <FilterLabel><Trans>Is</Trans></FilterLabel>
               {IS_FILTERS.map((f) => (
                 <FilterBtn
                   key={f.id}
@@ -1314,13 +1316,13 @@ export function CardSearch({
             <FilterSeparator label={`Sort & Order`} />
 
             <FilterRow>
-              <FilterLabel>Sort by</FilterLabel>
+              <FilterLabel><Trans>Sort by</Trans></FilterLabel>
               <select
                 className="h-7 text-xs pointer-coarse:h-9 pointer-coarse:text-base bg-background border rounded px-2"
                 value={advanced.sort}
                 onChange={(e) => setAdv("sort", e.target.value)}
               >
-                <option value="">Default (CMC)</option>
+                <option value=""><Trans>Default (CMC)</Trans></option>
                 {SORT_OPTIONS.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.label}
@@ -1332,9 +1334,9 @@ export function CardSearch({
                 value={advanced.sortDir}
                 onChange={(e) => setAdv("sortDir", e.target.value)}
               >
-                <option value="auto">Auto</option>
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
+                <option value="auto"><Trans>Auto</Trans></option>
+                <option value="asc"><Trans>Ascending</Trans></option>
+                <option value="desc"><Trans>Descending</Trans></option>
               </select>
             </FilterRow>
           </div>

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { ArrowDownToLine, CircleCheck, Loader2, RefreshCw, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ export function VersionInfo() {
           <Tag className="size-4" />
         </span>
         <div className="leading-tight">
-          <span className="block text-sm font-semibold text-foreground">Manabrew</span>
+          <span className="block text-sm font-semibold text-foreground"><Trans>Manabrew</Trans></span>
           <span className="block text-xs text-muted-foreground">Version {APP_VERSION}</span>
         </div>
       </div>

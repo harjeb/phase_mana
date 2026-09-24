@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { AlertTriangle, CheckCircle2, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getFormat } from "@/lib/formats";
@@ -59,7 +60,7 @@ export function DeckHealthPanel({
         <div>
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-primary" />
-            <h3 className="text-sm font-semibold">Deck health</h3>
+            <h3 className="text-sm font-semibold"><Trans>Deck health</Trans></h3>
             <span
               className={cn(
                 "rounded-full px-2 py-0.5 text-[10px] font-semibold",

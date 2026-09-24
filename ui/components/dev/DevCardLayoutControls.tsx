@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -70,7 +72,7 @@ export function DevCardLayoutControls() {
       setCardOverride("forceFaceDown", !scenario.name);
       setDebugCardEnabled(true);
     } catch {
-      setError(`Could not load ${scenario.label}.`);
+      setError(t`Could not load ${scenario.label}.`);
     } finally {
       setLoadingId(null);
     }
@@ -79,7 +81,7 @@ export function DevCardLayoutControls() {
     <section className={DEV_SECTION}>
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className={DEV_SECTION_HEADING}>Card layouts and previews</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Card layouts and previews</Trans></p>
           <p className="mt-1 text-xs text-muted-foreground">
             Stage a scenario, then hover the staged card. Use its flip and rotate buttons to inspect
             each face.

@@ -1,3 +1,5 @@
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Swords, X } from "lucide-react";
@@ -81,14 +83,14 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
       ) {
         await server.leaveRoom(true);
       } else if (!server.connected) {
-        throw new Error("Connection failed.");
+        throw new Error(t`Connection failed.`);
       }
       forgetMatch();
     } catch {
       endActiveGameSessionAbandonment();
       setAbandoning(false);
       setAbandonFailed(true);
-      toast.error(`Couldn't reach the previous match relay.`);
+      toast.error(t`Couldn't reach the previous match relay.`);
     }
   }
   return (
@@ -98,7 +100,7 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
           <Swords className="h-5 w-5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-medium">Match in progress</p>
+          <p className="font-medium"><Trans>Match in progress</Trans></p>
           <p className="truncate text-sm text-muted-foreground">
             {currentRoom?.room_id === session.roomId
               ? `You're still seated at ${currentRoom.room_name}.`
@@ -140,7 +142,7 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
       >
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Abandon match?</DialogTitle>
+            <DialogTitle><Trans>Abandon match?</Trans></DialogTitle>
             <DialogDescription>
               {abandonFailed
                 ? `The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out.`

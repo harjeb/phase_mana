@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ChevronDown, TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -40,7 +41,7 @@ export function TableSetupHostingCard({
           : `The Manabrew engine is a work in progress and may have bugs or missing cards. For the most stable experience, play on the Forge engine.`;
   return (
     <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-      <h2 className="text-sm font-semibold">Hosting</h2>
+      <h2 className="text-sm font-semibold"><Trans>Hosting</Trans></h2>
       <div className="mt-3 space-y-4">
         {kind === "match" ? (
           <details className="group rounded-lg border border-border/70 bg-muted/20">
@@ -150,7 +151,7 @@ export function TableSetupHostingCard({
         )}
         {kind === "match" && !(engine === "Forge" && hostedNode) && (
           <div className="space-y-1.5">
-            <Label className="text-xs font-medium">Reconnect timeout</Label>
+            <Label className="text-xs font-medium"><Trans>Reconnect timeout</Trans></Label>
             <div className="flex items-center gap-2">
               {RECONNECT_TIMEOUT_OPTIONS.map((seconds) => (
                 <button

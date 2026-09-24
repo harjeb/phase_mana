@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { BadgeCheck, LockKeyhole, UserRoundPlus, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -110,9 +111,9 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
             {joining ? `Joining\u2026` : `Join table`}
           </Button>
         ) : room.status === "InGame" ? (
-          <span className="text-xs text-muted-foreground">Playing</span>
+          <span className="text-xs text-muted-foreground"><Trans>Playing</Trans></span>
         ) : isFull ? (
-          <span className="text-xs text-muted-foreground">Full</span>
+          <span className="text-xs text-muted-foreground"><Trans>Full</Trans></span>
         ) : null}
       </div>
     </article>

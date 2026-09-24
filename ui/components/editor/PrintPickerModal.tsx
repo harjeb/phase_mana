@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState, useEffect } from "react";
 import { Modal } from "@/components/game/modals/Modal";
 import { Loader2 } from "lucide-react";
@@ -48,7 +50,7 @@ export function PrintPickerModal({ cardName, onClose, onSelect, token }: PrintPi
         if (mounted) setPrints(prints.get(cardKey({ name })) ?? []);
       } catch {
         if (mounted) {
-          setError(`Failed to fetch printings.`);
+          setError(t`Failed to fetch printings.`);
         }
       } finally {
         if (mounted) {
@@ -135,7 +137,7 @@ export function PrintPickerModal({ cardName, onClose, onSelect, token }: PrintPi
                           />
                         )
                       ) : (
-                        <span className="text-xs text-muted-foreground text-center">No Image</span>
+                        <span className="text-xs text-muted-foreground text-center"><Trans>No Image</Trans></span>
                       )}
                     </div>
                     <div className="text-center w-full">

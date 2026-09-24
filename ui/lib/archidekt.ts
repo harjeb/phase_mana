@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 // Pure Archidekt client. No React, no Node, no side effects beyond the
 // injected fetch. Shared by the CLI importer and the in-app deck importer.
 
@@ -77,7 +78,7 @@ export interface RequestOptions {
 
 function resolveFetch(opts?: RequestOptions): FetchFn {
   const f = opts?.fetch ?? (globalThis as { fetch?: FetchFn }).fetch;
-  if (!f) throw new Error("No fetch implementation available");
+  if (!f) throw new Error(t`No fetch implementation available`);
   return f;
 }
 
@@ -138,7 +139,7 @@ export async function searchArchidekt(
     headers: { "User-Agent": USER_AGENT },
     signal: opts.signal,
   });
-  if (!res.ok) throw new Error(`Archidekt search failed: ${res.status}`);
+  if (!res.ok) throw new Error(t`Archidekt search failed: ${res.status}`);
   const data = (await res.json()) as RawSearchResponse;
   return (data.results ?? []).map(mapSearchResult);
 }
@@ -180,7 +181,7 @@ export async function fetchArchidektDeck(
     headers: { "User-Agent": USER_AGENT },
     signal: opts.signal,
   });
-  if (!res.ok) throw new Error(`Archidekt fetch failed: ${res.status}`);
+  if (!res.ok) throw new Error(t`Archidekt fetch failed: ${res.status}`);
   const data = (await res.json()) as RawDeckResponse;
   const cards: ArchidektDeckCard[] = [];
   const commanders: ArchidektDeckCard[] = [];
@@ -217,7 +218,7 @@ export async function fetchArchidektResult(
     headers: { "User-Agent": USER_AGENT },
     signal: opts.signal,
   });
-  if (!res.ok) throw new Error(`Archidekt fetch failed: ${res.status}`);
+  if (!res.ok) throw new Error(t`Archidekt fetch failed: ${res.status}`);
   const d = (await res.json()) as RawDeckResponse;
   return mapSearchResult({
     id: d.id,

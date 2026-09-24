@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { battlefieldCardStyleOptions } from "@/components/game/battlefieldCardStyles";
 import { cn } from "@/lib/utils";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
@@ -30,7 +31,7 @@ export function BattlefieldStyleDevControls() {
 
   return (
     <section className={DEV_SECTION}>
-      <p className={DEV_SECTION_HEADING}>Battlefield card style</p>
+      <p className={DEV_SECTION_HEADING}><Trans>Battlefield card style</Trans></p>
       <p className="mt-1 text-xs text-muted-foreground">
         Switch every battlefield card live. This also updates the saved app preference.
       </p>

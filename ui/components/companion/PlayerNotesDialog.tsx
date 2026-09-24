@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Trans } from "@lingui/react/macro";
 import { useCompanionStore } from "@/stores/useCompanionStore";
 import type { CompanionPlayer } from "@/stores/useCompanionStore.types";
 interface PlayerNotesDialogProps {
@@ -19,7 +20,7 @@ export function PlayerNotesDialog({ open, onOpenChange, player }: PlayerNotesDia
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Notes — {player.name}</DialogTitle>
+          <DialogTitle><Trans>Notes — {player.name}</Trans></DialogTitle>
         </DialogHeader>
         {open && <PlayerNotesForm player={player} onClose={() => onOpenChange(false)} />}
       </DialogContent>

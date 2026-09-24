@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,7 @@ export function SignInDialog() {
     <Dialog open={open} onOpenChange={(next) => (next ? undefined : hide())}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="sr-only">Sign in to Manabrew</DialogTitle>
+          <DialogTitle className="sr-only"><Trans>Sign in to Manabrew</Trans></DialogTitle>
           <DialogDescription className="sr-only">
             Your account syncs your decks and keeps publications yours on any device.
           </DialogDescription>

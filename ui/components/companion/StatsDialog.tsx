@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useMemo } from "react";
 import { Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +58,7 @@ export function StatsDialog() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Play stats</DialogTitle>
+          <DialogTitle><Trans>Play stats</Trans></DialogTitle>
         </DialogHeader>
         {stats.totalGames === 0 ? (
           <p className="text-sm text-muted-foreground">
@@ -72,7 +73,7 @@ export function StatsDialog() {
               <Stat label={`Total time`} value={formatDuration(stats.totalDurationMs)} />
             </div>
             <div>
-              <div className="mb-1 font-medium">Wins by player</div>
+              <div className="mb-1 font-medium"><Trans>Wins by player</Trans></div>
               {stats.winsByName.length === 0 ? (
                 <p className="text-xs text-muted-foreground">
                   No clean wins recorded (last-standing only).

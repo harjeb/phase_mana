@@ -12,6 +12,7 @@
  */
 
 /** Engine `CustomFormatId` is a transparent u16; `LOBBY_SAVE_CUSTOM_FORMAT_ID` is 0. */
+import { t } from "@lingui/core/macro";
 import { z } from "zod";
 
 export const CUSTOM_FORMAT_SAVE_ID = 0;
@@ -139,7 +140,7 @@ function storage() {
       if (raw) {
         const previous = JSON.parse(raw);
         if (!Array.isArray(previous) && previous?.version !== 1) {
-          throw new Error("Unsupported custom format storage version; existing data was not overwritten.");
+          throw new Error(t`Unsupported custom format storage version; existing data was not overwritten.`);
         }
       }
       localStorage.setItem(`phase-mana:${STORAGE_KEY}`, JSON.stringify({ version: 1, formats }));
@@ -211,7 +212,7 @@ export async function validateCustomFormat(
   rulesSchema.parse(rules);
   if (!Number.isInteger(playerCount) || playerCount < 2 || playerCount > 4 ||
       playerCount < rules.structural.min_players || playerCount > rules.structural.max_players) {
-    throw new Error("Unsupported player count for this custom format.");
+    throw new Error(t`Unsupported player count for this custom format.`);
   }
   const response = await fetch("/api/custom-formats/validate", {
     method: "POST",
@@ -250,7 +251,7 @@ export function importCustomFormat(
   existing: SavedCustomFormat[],
 ): SavedCustomFormat {
   const input = JSON.parse(json);
-  if (input?.version !== undefined && input.version !== 1) throw new Error("Unsupported custom format version.");
+  if (input?.version !== undefined && input.version !== 1) throw new Error(t`Unsupported custom format version.`);
   const parsed = formatSchema.parse(input);
   const label = parsed.label;
   return {

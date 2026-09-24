@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -41,7 +43,7 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
       await deleteAccount(token);
       await useAuthStore.getState().signOut();
       onOpenChange(false);
-      toast.success(`Your account has been deleted`);
+      toast.success(t`Your account has been deleted`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
       setBusy(false);
@@ -51,7 +53,7 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Delete account</DialogTitle>
+          <DialogTitle><Trans>Delete account</Trans></DialogTitle>
           <DialogDescription>
             This erases your account, sign-in methods, saved decks and version history. Decks you
             published to Community stay up without your name on them. This cannot be undone — export

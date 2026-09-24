@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -86,7 +87,7 @@ export function useQuickPlay() {
         const formatId = deck.format ?? "standard";
         const format = getFormat(formatId);
         if (!format) {
-          toast.error(`This deck uses an unsupported format.`);
+          toast.error(t`This deck uses an unsupported format.`);
           navigate(`${ROUTES.DECK_EDITOR}?deck=${encodeURIComponent(savedDeckId)}`, {
             state: { deckEditorFromList: true },
           });
@@ -96,7 +97,7 @@ export function useQuickPlay() {
         const opponents = await resolveOpponents(engine, formatId, opponentCount);
         if (!mountedRef.current) return;
         if (opponents.decks.length === 0) {
-          toast.error(`No AI deck available for this format \u2014 pick one yourself.`);
+          toast.error(t`No AI deck available for this format \u2014 pick one yourself.`);
           navigate(ROUTES.PLAY_OFFLINE_CONSTRUCTED, {
             state: { preSelectedDeckId: savedDeckId },
           });
@@ -134,7 +135,7 @@ export function useQuickPlay() {
       const opponents = await resolveOpponents(engine, formatId, opponentCount);
       if (!mountedRef.current) return;
       if (opponents.decks.length === 0) {
-        toast.error(`No AI deck available for this format \u2014 pick one yourself.`);
+        toast.error(t`No AI deck available for this format \u2014 pick one yourself.`);
         return;
       }
       const started = await useGameStore
@@ -173,7 +174,7 @@ export function useQuickPlay() {
       const opponents = await resolveOpponents(engine, formatId, opponentCount);
       if (!mountedRef.current) return;
       if (opponents.decks.length === 0) {
-        toast.error(`No AI deck available for this format \u2014 pick one yourself.`);
+        toast.error(t`No AI deck available for this format \u2014 pick one yourself.`);
         return;
       }
       const started = await useGameStore
@@ -213,12 +214,12 @@ export function useQuickPlay() {
       if (pendingRef.current) return;
       const formatId = preset.format ?? "standard";
       if (formatId === "oathbreaker" || getFormat(formatId) === undefined) {
-        toast.error(`This starter deck uses an unsupported format.`);
+        toast.error(t`This starter deck uses an unsupported format.`);
         return;
       }
       if (!presetSupportsEngine(preset, resolveOfflineEngine())) {
         toast.error(
-          `This deck is built for the ${preset.engines?.[0] ?? "Ironsmith"} engine — start a table with that engine from Multiplayer.`,
+          t`This deck is built for the ${preset.engines?.[0] ?? "Ironsmith"} engine — start a table with that engine from Multiplayer.`,
         );
         return;
       }
@@ -239,13 +240,13 @@ export function useQuickPlay() {
         const entry = await useHubStore.getState().loadEntry(entryId);
         const formatId = entry.deck.format ?? entry.format ?? "standard";
         if (getFormat(formatId) === undefined) {
-          toast.error(`This Community deck uses an unsupported format.`);
+          toast.error(t`This Community deck uses an unsupported format.`);
           return;
         }
         const engine = resolveOfflineEngine();
         if (entry.engines?.length && !entry.engines.includes(engine)) {
           toast.error(
-            `This deck is built for the ${entry.engines[0]} engine — start a table with that engine from Multiplayer.`,
+            t`This deck is built for the ${entry.engines[0]} engine — start a table with that engine from Multiplayer.`,
           );
           return;
         }

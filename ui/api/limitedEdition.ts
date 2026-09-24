@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { fetch as tauriFetch } from "@tauri-apps/plugin-http";
 import { getPlatform, getPlatformType } from "@/platform";
 import type { ScryfallSet } from "@/types/scryfall";
@@ -56,12 +57,12 @@ export async function fetchSetPool(setCode: string): Promise<DraftCard[]> {
 async function platformFetchText(url: string): Promise<string> {
   if (getPlatformType() === "tauri") {
     const r = await tauriFetch(url, { method: "GET" });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    if (!r.ok) throw new Error(t`HTTP ${r.status}`);
     return r.text();
   }
   const cubeUrl = new URL(url);
   const r = await fetch(`/cubecobra-download${cubeUrl.pathname}`, { method: "GET" });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  if (!r.ok) throw new Error(t`HTTP ${r.status}`);
   return r.text();
 }
 
@@ -103,7 +104,7 @@ export async function fetchCubeMetadata(cubeIdOrUrl: string): Promise<CubeImport
 export async function fetchCubePool(cubeIdOrUrl: string): Promise<DraftCard[]> {
   const result = await fetchCubeMetadata(cubeIdOrUrl);
   if (!result.pool || result.pool.length === 0) {
-    throw new Error(`Cube "${cubeIdOrUrl}" came back empty`);
+    throw new Error(t`Cube "${cubeIdOrUrl}" came back empty`);
   }
   return result.pool;
 }

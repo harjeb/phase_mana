@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState, useEffect, useRef } from "react";
 import { usePresetDecks } from "@/stores/usePresetDecksStore";
 import { Button } from "@/components/ui/button";
@@ -130,7 +132,7 @@ export function CreateGameDialog({
         const formatId = detail.deck.format ?? detail.format ?? "standard";
         if (formatId !== selectedFormat.id) {
           restoredHubDeckRef.current = null;
-          toast.error(`"${detail.title}" is not a ${selectedFormat.name} deck`);
+          toast.error(t`"${detail.title}" is not a ${selectedFormat.name} deck`);
           return;
         }
         setLoadedHubDecks((current) => ({ ...current, [detail.id]: detail }));
@@ -320,7 +322,7 @@ export function CreateGameDialog({
       };
       const currentFormat = selectedFormatRef.current;
       if (entry.formatId !== currentFormat.id) {
-        toast.error(`"${detail.title}" is not a ${currentFormat.name} deck`);
+        toast.error(t`"${detail.title}" is not a ${currentFormat.name} deck`);
         return;
       }
       setSelectedDeck(entry.id);
@@ -340,15 +342,15 @@ export function CreateGameDialog({
   ) {
     if (starting) return;
     if (!entry) {
-      toast.error(`Please select a deck`);
+      toast.error(t`Please select a deck`);
       return;
     }
     if (entry.formatId !== selectedFormat.id) {
-      toast.error(`Please select a deck for this format`);
+      toast.error(t`Please select a deck for this format`);
       return;
     }
     if (entry.sourceDeck.cards.length === 0 && (entry.sourceDeck.commanders?.length ?? 0) === 0) {
-      toast.error(`"${entry.name}" has no cards`);
+      toast.error(t`"${entry.name}" has no cards`);
       return;
     }
     const commander =
@@ -364,7 +366,7 @@ export function CreateGameDialog({
       return;
     }
     if (needsCommander && !(commander || entry.commanderName)) {
-      toast.error(`Please select a commander`);
+      toast.error(t`Please select a commander`);
       return;
     }
     setStarting(true);
@@ -430,7 +432,7 @@ export function CreateGameDialog({
           {!isLobbyMode && (
             <div className="w-48 border-r flex-shrink-0 p-4 space-y-5 overflow-y-auto bg-muted/20">
               <div>
-                <SectionLabel>Format</SectionLabel>
+                <SectionLabel><Trans>Format</Trans></SectionLabel>
                 <div className="mt-2 space-y-2">
                   {GAME_FORMATS.map((format) => (
                     <button
@@ -460,7 +462,7 @@ export function CreateGameDialog({
               </div>
 
               <div>
-                <SectionLabel>Rules</SectionLabel>
+                <SectionLabel><Trans>Rules</Trans></SectionLabel>
                 <div className="mt-2 space-y-1.5">
                   <RulePill
                     label={`Deck`}
@@ -486,7 +488,7 @@ export function CreateGameDialog({
 
               {needsCommander && (
                 <div>
-                  <SectionLabel>Commander</SectionLabel>
+                  <SectionLabel><Trans>Commander</Trans></SectionLabel>
                   <div className="mt-2 space-y-1.5">
                     {selectedPartnerLabel ? (
                       <div className="flex flex-wrap items-center gap-1.5 rounded border border-border bg-background px-2 py-1.5 text-xs">
@@ -508,7 +510,7 @@ export function CreateGameDialog({
                             value={selectedCommander}
                             onChange={(event) => setSelectedCommander(event.target.value)}
                           >
-                            <option value="">— Choose —</option>
+                            <option value=""><Trans>— Choose —</Trans></option>
                             {legendaryCreatures.map((name) => (
                               <option key={name} value={name}>
                                 {name}
@@ -582,7 +584,7 @@ export function CreateGameDialog({
 
             <div className="flex-1 overflow-y-auto">
               <div className="p-4 pt-2">
-                <SectionLabel>Your Decks</SectionLabel>
+                <SectionLabel><Trans>Your Decks</Trans></SectionLabel>
                 <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
                   Decks you've built in the editor.
                 </p>
@@ -644,7 +646,7 @@ export function CreateGameDialog({
                   hubDecks.error !== null ||
                   hubSearchResults.length > 0) && (
                   <div className="p-4">
-                    <SectionLabel>Community</SectionLabel>
+                    <SectionLabel><Trans>Community</Trans></SectionLabel>
                     <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
                       Community decks are downloaded when selected.
                     </p>
@@ -736,7 +738,7 @@ export function CreateGameDialog({
               <div className="mx-4 border-t" />
 
               <div className="p-4">
-                <SectionLabel>Starter Decks</SectionLabel>
+                <SectionLabel><Trans>Starter Decks</Trans></SectionLabel>
                 <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
                   Pre-built themed decks — always legal, great for testing mechanics.
                 </p>
@@ -781,9 +783,9 @@ export function CreateGameDialog({
           <div className="flex items-center gap-2 text-sm min-w-0">
             {!isLobbyMode && selectedDeckEntry ? (
               <>
-                <span className="text-muted-foreground shrink-0">Playing</span>
+                <span className="text-muted-foreground shrink-0"><Trans>Playing</Trans></span>
                 <span className="font-medium truncate">{selectedDeckEntry.name}</span>
-                <span className="text-muted-foreground shrink-0">vs</span>
+                <span className="text-muted-foreground shrink-0"><Trans>vs</Trans></span>
                 <span className="inline-flex items-center gap-1 text-muted-foreground shrink-0">
                   <Shuffle className="h-3 w-3" />
                   Random AI
@@ -803,7 +805,7 @@ export function CreateGameDialog({
                 )}
               </div>
             ) : (
-              <span className="text-muted-foreground italic text-xs">No deck selected</span>
+              <span className="text-muted-foreground italic text-xs"><Trans>No deck selected</Trans></span>
             )}
           </div>
           <div className="flex gap-2 shrink-0">

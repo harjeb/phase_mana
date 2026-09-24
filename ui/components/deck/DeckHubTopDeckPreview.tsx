@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect } from "react";
 import { ArrowRight, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -33,7 +34,7 @@ export function DeckHubTopDeckPreview({ onOpen, onAuthor }: DeckHubTopDeckPrevie
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Trophy className="h-5 w-5 text-primary" />
-          <h2 className="font-serif text-xl font-semibold">Top decks right now</h2>
+          <h2 className="font-serif text-xl font-semibold"><Trans>Top decks right now</Trans></h2>
         </div>
         <Link
           to={ROUTES.HUB_TOP}

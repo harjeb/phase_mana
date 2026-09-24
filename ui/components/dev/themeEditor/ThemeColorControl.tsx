@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useId, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -58,7 +60,7 @@ export function ThemeColorControl({
           variant="ghost"
           className="h-6 px-1.5 text-[10px]"
           disabled={!overridden && !invalid}
-          title="Remove this override and inherit the base preset color"
+          title={t`Remove this override and inherit the base preset color`}
           onClick={() => {
             setRaw(value);
             onReset();
@@ -112,7 +114,7 @@ export function ThemeColorControl({
       )}
       {parsed && (
         <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-          <label htmlFor={`${id}-alpha`}>Alpha</label>
+          <label htmlFor={`${id}-alpha`}><Trans>Alpha</Trans></label>
           <input
             id={`${id}-alpha`}
             type="range"

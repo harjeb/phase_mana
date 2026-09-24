@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { ArrowDown, ArrowUp, Check, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -27,7 +29,7 @@ function TagRow({ tag, first, last }: { tag: string; first: boolean; last: boole
     if (duplicate) {
       setName(tag);
       setEditing(false);
-      toast.error(`A tag named "${nextName}" already exists`);
+      toast.error(t`A tag named "${nextName}" already exists`);
       return;
     }
     if (nextName && nextName !== tag) {
@@ -106,7 +108,7 @@ export function DeckTagManagerDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Manage deck tags</DialogTitle>
+          <DialogTitle><Trans>Manage deck tags</Trans></DialogTitle>
           <DialogDescription>
             Rename and order the roles used to organize this deck.
           </DialogDescription>

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -46,7 +48,7 @@ export default function AuthCallback() {
       return;
     }
     if (linked) {
-      toast.success(`${PROVIDER_LABELS[linked] ?? linked} linked to your account`);
+      toast.success(t`${PROVIDER_LABELS[linked] ?? linked} linked to your account`);
       void useAuthStore.getState().refresh();
       navigate(ROUTES.SETTINGS, { replace: true, state: { settingsTab: "account" } });
       return;
@@ -70,12 +72,12 @@ export default function AuthCallback() {
           if (session.account.handlePending) {
             useSignInDialog.getState().show({ claimHandle: true });
           } else {
-            toast.success(`Signed in as @${session.account.handle}`);
+            toast.success(t`Signed in as @${session.account.handle}`);
           }
           navigate(returnIntent.returnTo, { replace: true, state: returnState });
         })
         .catch(() => {
-          toast.error(`Sign-in failed. Try again.`);
+          toast.error(t`Sign-in failed. Try again.`);
           navigate(returnIntent.returnTo, { replace: true });
         });
       return;
@@ -84,7 +86,7 @@ export default function AuthCallback() {
   }, [navigate]);
   return (
     <div className="flex h-full items-center justify-center">
-      <p className="text-sm text-muted-foreground">Completing sign-in…</p>
+      <p className="text-sm text-muted-foreground"><Trans>Completing sign-in…</Trans></p>
     </div>
   );
 }

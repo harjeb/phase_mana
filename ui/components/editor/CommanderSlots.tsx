@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { AlertTriangle, ChevronDown, Crown, Palette, Plus, X } from "lucide-react";
 import { type PointerEvent as ReactPointerEvent } from "react";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
@@ -213,8 +214,8 @@ export function CommanderSlots({
       >
         <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", !open && "-rotate-90")} />
         <Crown className="h-3.5 w-3.5 text-primary" />
-        <h3 className="text-xs font-semibold uppercase tracking-wide">Command zone</h3>
-        <span className="text-xs text-muted-foreground">Set your deck identity</span>
+        <h3 className="text-xs font-semibold uppercase tracking-wide"><Trans>Command zone</Trans></h3>
+        <span className="text-xs text-muted-foreground"><Trans>Set your deck identity</Trans></span>
       </button>
       {open && (
         <div className="flex flex-wrap items-start gap-2">

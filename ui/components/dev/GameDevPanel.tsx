@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import {
   CreditCard,
@@ -130,7 +131,7 @@ export function GameDevPanel() {
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <FlaskConical className="h-4 w-4 text-primary" />
-              <h2 className="text-sm font-semibold">Battlefield lab</h2>
+              <h2 className="text-sm font-semibold"><Trans>Battlefield lab</Trans></h2>
               {activeCount > 0 ? (
                 <span className="rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[10px] font-semibold text-primary">
                   {activeCount} active

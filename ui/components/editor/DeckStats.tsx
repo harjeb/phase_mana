@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { useDeckStore } from "@/stores/useDeckStore";
 import { cn } from "@/lib/utils";
@@ -54,7 +55,7 @@ export function DeckStats({ activeBucket = null, onBucketClick }: DeckStatsProps
   return (
     <section className={EDITOR_PANEL_CLASS}>
       <div className="mb-5 flex items-baseline gap-2.5">
-        <h3 className="text-base font-semibold">Mana Curve</h3>
+        <h3 className="text-base font-semibold"><Trans>Mana Curve</Trans></h3>
         <span className="text-xs text-muted-foreground/70">
           {spells.length} spells &middot; {lands.length} lands
         </span>

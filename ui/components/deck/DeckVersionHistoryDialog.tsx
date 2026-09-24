@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { History, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -67,7 +68,7 @@ export function DeckVersionHistoryDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Version history</DialogTitle>
+          <DialogTitle><Trans>Version history</Trans></DialogTitle>
           <DialogDescription>
             Older versions are immutable. Restoring one loads its cards into the editor; saving
             creates a new version.
@@ -118,7 +119,7 @@ export function DeckVersionHistoryDialog({
                 {version.versionNo !== currentVersionNo &&
                   (confirmingVersion === version.versionNo ? (
                     <span className="flex shrink-0 items-center gap-1">
-                      <span className="text-xs text-destructive">Replace unsaved changes?</span>
+                      <span className="text-xs text-destructive"><Trans>Replace unsaved changes?</Trans></span>
                       <Button
                         variant="ghost"
                         size="sm"

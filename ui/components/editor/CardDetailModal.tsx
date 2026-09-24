@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Modal } from "@/components/game/modals/Modal";
 import { ManaSymbols } from "@/components/game/ManaSymbols";
@@ -170,18 +172,18 @@ export function CardDetailModal({
   function handleAddToCurrentDeck() {
     addToMain(scryfallToDeckCard(card));
     setShowDeckPicker(false);
-    toast.success(`Added to ${currentDeck.name}`);
+    toast.success(t`Added to ${currentDeck.name}`);
   }
   function handleAddToSavedDeck(deckId: string, deckName: string) {
     addCardToSavedDeck(deckId, scryfallToDeckCard(card));
     setShowDeckPicker(false);
-    toast.success(`Added to ${deckName}`);
+    toast.success(t`Added to ${deckName}`);
   }
   function handleAddNewTag() {
     if (!newTagInput.trim() || !deckEditorActions?.onTagCard) return;
     deckEditorActions.onAddTag?.(newTagInput.trim());
     deckEditorActions.onTagCard(deckCardName, newTagInput.trim());
-    toast.success(`Tagged "${deckCardName}" with "${newTagInput.trim()}"`);
+    toast.success(t`Tagged "${deckCardName}" with "${newTagInput.trim()}"`);
     setNewTagInput("");
     setShowDeckPicker(false);
   }
@@ -253,7 +255,7 @@ export function CardDetailModal({
                         isHorizontalActiveFace ? "aspect-[7/5]" : "aspect-[5/7]",
                       )}
                     >
-                      <span className="text-muted-foreground text-sm">No Image</span>
+                      <span className="text-muted-foreground text-sm"><Trans>No Image</Trans></span>
                     </div>
                   )}
 
@@ -286,22 +288,22 @@ export function CardDetailModal({
 
                 <div className="flex-1 min-w-0 space-y-3">
                   <div>
-                    <div className="text-sm font-semibold text-muted-foreground">Type</div>
+                    <div className="text-sm font-semibold text-muted-foreground"><Trans>Type</Trans></div>
                     <div className="text-sm">{typeLine}</div>
                   </div>
 
                   {deckEditorActions && matchingDeckCard && (
                     <div className="space-y-2 rounded-lg border bg-muted/20 p-3">
-                      <div className="text-sm font-semibold">Deck inspector</div>
+                      <div className="text-sm font-semibold"><Trans>Deck inspector</Trans></div>
                       <div className="flex flex-wrap gap-1.5 text-xs">
                         {zoneCounts.main > 0 && (
                           <Badge variant="outline">Main {zoneCounts.main}</Badge>
                         )}
                         {zoneCounts.side > 0 && (
-                          <Badge variant="outline">Side {zoneCounts.side}</Badge>
+                          <Badge variant="outline"><Trans>Side {zoneCounts.side}</Trans></Badge>
                         )}
                         {zoneCounts.maybe > 0 && (
-                          <Badge variant="outline">Maybe {zoneCounts.maybe}</Badge>
+                          <Badge variant="outline"><Trans>Maybe {zoneCounts.maybe}</Trans></Badge>
                         )}
                         {zoneCounts.command > 0 && (
                           <Badge variant="outline">Command {zoneCounts.command}</Badge>
@@ -354,7 +356,7 @@ export function CardDetailModal({
 
                   {oracleText && (
                     <div>
-                      <div className="text-sm font-semibold text-muted-foreground">Oracle Text</div>
+                      <div className="text-sm font-semibold text-muted-foreground"><Trans>Oracle Text</Trans></div>
                       <div className="text-sm whitespace-pre-wrap bg-muted/30 rounded p-2 border">
                         {oracleText}
                       </div>
@@ -370,7 +372,7 @@ export function CardDetailModal({
                         </span>
                       </div>
                       <div>
-                        <span className="text-sm font-semibold text-muted-foreground">CMC:</span>
+                        <span className="text-sm font-semibold text-muted-foreground"><Trans>CMC:</Trans></span>
                         <span className="text-sm">{card.cmc}</span>
                       </div>
                     </div>
@@ -378,7 +380,7 @@ export function CardDetailModal({
 
                   <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                     <div className="flex items-center gap-1">
-                      <span className="font-semibold text-muted-foreground">Set:</span>
+                      <span className="font-semibold text-muted-foreground"><Trans>Set:</Trans></span>
                       {setLookup.get(card.set)?.icon_svg_uri && (
                         <ScryfallImg
                           src={setLookup.get(card.set)!.icon_svg_uri}
@@ -391,7 +393,7 @@ export function CardDetailModal({
                       </span>
                     </div>
                     <div>
-                      <span className="font-semibold text-muted-foreground">Rarity:</span>
+                      <span className="font-semibold text-muted-foreground"><Trans>Rarity:</Trans></span>
                       <span className="capitalize">{card.rarity}</span>
                     </div>
                     <div>
@@ -401,26 +403,26 @@ export function CardDetailModal({
                   </div>
 
                   <div className="text-sm">
-                    <span className="font-semibold text-muted-foreground">Artist:</span>
+                    <span className="font-semibold text-muted-foreground"><Trans>Artist:</Trans></span>
                     <span>{card.artist}</span>
                   </div>
 
                   {card.edhrec_rank && (
                     <div className="text-sm">
-                      <span className="font-semibold text-muted-foreground">EDHREC Rank:</span>
+                      <span className="font-semibold text-muted-foreground"><Trans>EDHREC Rank:</Trans></span>
                       <span>#{card.edhrec_rank.toLocaleString()}</span>
                     </div>
                   )}
 
                   <div>
-                    <div className="text-sm font-semibold text-muted-foreground mb-1">Prices</div>
+                    <div className="text-sm font-semibold text-muted-foreground mb-1"><Trans>Prices</Trans></div>
                     <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
                       {card.prices.usd && <span>USD ${card.prices.usd}</span>}
                       {card.prices.usd_foil && <span>Foil ${card.prices.usd_foil}</span>}
                       {card.prices.eur && <span>EUR €{card.prices.eur}</span>}
                       {card.prices.tix && <span>TIX {card.prices.tix}</span>}
                       {!card.prices.usd && !card.prices.eur && !card.prices.tix && (
-                        <span className="text-muted-foreground">No price data</span>
+                        <span className="text-muted-foreground"><Trans>No price data</Trans></span>
                       )}
                     </div>
                   </div>
@@ -428,7 +430,7 @@ export function CardDetailModal({
               </div>
 
               <div>
-                <div className="text-sm font-semibold text-muted-foreground mb-1">Legalities</div>
+                <div className="text-sm font-semibold text-muted-foreground mb-1"><Trans>Legalities</Trans></div>
                 <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                   {Object.entries(FORMAT_DISPLAY).map(([key, label]) => {
                     const status = card.legalities[key] ?? "not_legal";
@@ -459,7 +461,7 @@ export function CardDetailModal({
                   </div>
                 )}
                 {!rulingsLoading && rulings.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No rulings available.</p>
+                  <p className="text-sm text-muted-foreground"><Trans>No rulings available.</Trans></p>
                 )}
                 {rulings.length > 0 && (
                   <div className="space-y-1.5 max-h-48 overflow-y-auto">
@@ -489,7 +491,7 @@ export function CardDetailModal({
                     title={`Remove one copy`}
                     onClick={() => {
                       deckEditorActions.onRemoveOne(deckCardName);
-                      toast.success(`Removed one ${deckCardName}`);
+                      toast.success(t`Removed one ${deckCardName}`);
                     }}
                   >
                     <Minus className="h-3.5 w-3.5" />
@@ -503,7 +505,7 @@ export function CardDetailModal({
                     title={`Add one copy`}
                     onClick={() => {
                       deckEditorActions.onAddOne(deckCardName);
-                      toast.success(`Added ${deckCardName}`);
+                      toast.success(t`Added ${deckCardName}`);
                     }}
                   >
                     <Plus className="h-3.5 w-3.5" />
@@ -607,7 +609,7 @@ export function CardDetailModal({
                             onClick={() => {
                               deckEditorActions.onTagCard!(deckCardName, tag);
                               setShowDeckPicker(false);
-                              toast.success(`Tagged "${deckCardName}" with "${tag}"`);
+                              toast.success(t`Tagged "${deckCardName}" with "${tag}"`);
                             }}
                           >
                             <Tag className="h-3 w-3 text-primary/60" />

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Github } from "lucide-react";
@@ -88,7 +90,7 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
       return;
     }
     if (!session.account.handlePending) {
-      toast.success(`Signed in as @${session.account.handle}`);
+      toast.success(t`Signed in as @${session.account.handle}`);
     }
     onComplete?.();
   }
@@ -149,11 +151,11 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
         const account = await updateHandle(token, handle.trim());
         if (useAuthStore.getState().refreshToken !== refreshToken) return;
         setAccount(account);
-        toast.success(`Signed in as @${account.handle}`);
+        toast.success(t`Signed in as @${account.handle}`);
         onComplete?.();
       } catch (err) {
         if (err instanceof AuthRequestError && err.status === 409) {
-          throw new Error("That handle is already taken");
+          throw new Error(t`That handle is already taken`);
         }
         throw err;
       }
@@ -162,7 +164,7 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
 
   function handleSkipHandle() {
     const account = useAuthStore.getState().account;
-    if (account) toast.success(`Signed in as @${account.handle}`);
+    if (account) toast.success(t`Signed in as @${account.handle}`);
     onComplete?.();
   }
 
@@ -183,7 +185,7 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
         <div className="space-y-4">
           {providersError ? (
             <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm">
-              <p>Sign-in methods could not be loaded.</p>
+              <p><Trans>Sign-in methods could not be loaded.</Trans></p>
               <Button variant="outline" size="sm" className="mt-2" onClick={loadProviders}>
                 Try again
               </Button>
@@ -233,16 +235,16 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
                 <>
                   <div className="flex items-center gap-3">
                     <div className="h-px flex-1 bg-border" />
-                    <span className="text-xs uppercase text-muted-foreground">or</span>
+                    <span className="text-xs uppercase text-muted-foreground"><Trans>or</Trans></span>
                     <div className="h-px flex-1 bg-border" />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email"><Trans>Email</Trans></Label>
                     <Input
                       id="signin-email"
                       type="email"
                       value={email}
-                      placeholder="you@example.com"
+                      placeholder={t`you@example.com`}
                       onChange={(e) => setEmail(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && isValidEmail(email)) handleSendCode();
@@ -270,7 +272,7 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
             We sent a code to <span className="font-medium text-foreground">{email}</span>. Enter it
             here, or click the link in the email.
           </p>
-          <Label htmlFor="signin-code">Code</Label>
+          <Label htmlFor="signin-code"><Trans>Code</Trans></Label>
           <Input
             id="signin-code"
             value={code}
@@ -307,7 +309,7 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
           <p className="text-sm text-muted-foreground">
             Finish signing in with your browser, then enter the code it shows you.
           </p>
-          <Label htmlFor="desktop-code">Code</Label>
+          <Label htmlFor="desktop-code"><Trans>Code</Trans></Label>
           <Input
             id="desktop-code"
             value={code}
@@ -341,13 +343,13 @@ export function SignInFlow({ prefill, deferHandleStep = false, onComplete }: Sig
       {step === "handle" && (
         <div className="space-y-3">
           <div className="space-y-2">
-            <Label htmlFor="claim-handle">Handle</Label>
+            <Label htmlFor="claim-handle"><Trans>Handle</Trans></Label>
             <Input
               id="claim-handle"
               value={handle}
               autoFocus
               maxLength={24}
-              placeholder="your-handle"
+              placeholder={t`your-handle`}
               onChange={(e) => setHandle(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && termsAgreed && handle.trim().length >= 3)

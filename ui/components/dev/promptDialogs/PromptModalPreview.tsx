@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -131,7 +132,7 @@ export function PromptModalPreview({ preview, fixtures, onClose }: PromptModalPr
   return createPortal(
     <>
       <div className="pointer-events-none fixed inset-0 z-[9998]">
-        <div ref={panelRef} className="h-full" role="dialog" aria-label="Prompt preview">
+        <div ref={panelRef} className="h-full" role="dialog" aria-label={t`Prompt preview`}>
           <BoardOverlayCanvas
             scene={null}
             stackSpec={EMPTY_STACK}

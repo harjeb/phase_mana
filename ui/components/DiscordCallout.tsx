@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ArrowRight } from "lucide-react";
 import { DiscordIcon } from "@/components/icons/DiscordIcon";
 import { DISCORD_INVITE_URL } from "@/lib/constants";
@@ -17,7 +18,7 @@ export function DiscordCallout() {
         <DiscordIcon className="size-5" />
       </span>
       <span className="relative flex-1 space-y-0.5">
-        <span className="block text-sm font-semibold text-foreground">Join our community</span>
+        <span className="block text-sm font-semibold text-foreground"><Trans>Join our community</Trans></span>
         <span className="block text-xs text-muted-foreground">
           Brewers, drafters, and bug hunters hang out on Discord — pull up a chair.
         </span>

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { DeckBuilder } from "@/components/editor/DeckBuilder";
 import {
   useDeckUnsavedChanges,
@@ -384,7 +386,7 @@ export default function DeckEditor() {
     try {
       await useAccountDecksStore.getState().remove(saved.accountDeckId);
       deleteSavedDeck(saved.id);
-      toast.success(`"${saved.deck.name}" removed from your account`);
+      toast.success(t`"${saved.deck.name}" removed from your account`);
       setDeletingAccountDeck(null);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : `Failed to remove account deck`);
@@ -481,7 +483,7 @@ export default function DeckEditor() {
   });
   function handleDelete(id: string) {
     deleteSavedDeck(id);
-    toast.success(`Deck deleted`);
+    toast.success(t`Deck deleted`);
   }
   function startRename(id: string, name: string) {
     setRenamingId(id);
@@ -500,7 +502,7 @@ export default function DeckEditor() {
           : state.currentDeck,
     }));
     setRenamingId(null);
-    toast.success(`Deck renamed`);
+    toast.success(t`Deck renamed`);
   }
   function handleDragStart(event: DragStartEvent) {
     const data = event.active.data.current;
@@ -549,7 +551,7 @@ export default function DeckEditor() {
           ? canBeOathbreaker(card) || canBeSignatureSpell(card)
           : isCommanderEligible(card);
       if (!eligible) {
-        toast.error(`${card.identity.name} is not eligible for the command zone`);
+        toast.error(t`${card.identity.name} is not eligible for the command zone`);
         return;
       }
       executeDeckEdit(`Set ${card.identity.name} in the command zone`, () => {
@@ -557,7 +559,7 @@ export default function DeckEditor() {
         if (activeId.startsWith("deck-sideboard-")) removeFromSide(card.identity.id);
         else if (activeId.startsWith("deck-maybeboard-")) removeFromMaybe(card.identity.id);
       });
-      toast.success(`Set ${card.identity.name} in the command zone`, {
+      toast.success(t`Set ${card.identity.name} in the command zone`, {
         action: {
           label: `Undo`,
           onClick: undoDeckEdit,
@@ -584,7 +586,7 @@ export default function DeckEditor() {
           tagCard(name, destTag);
         }
       });
-      toast.success(`Tagged ${draggedNames.length} cards with ${destTag}`, {
+      toast.success(t`Tagged ${draggedNames.length} cards with ${destTag}`, {
         action: {
           label: `Undo`,
           onClick: undoDeckEdit,
@@ -630,7 +632,7 @@ export default function DeckEditor() {
           }
           moveSelectedCards(draggedNames, dest);
         });
-        toast.success(`Moved ${draggedNames.length} cards to ${dest}`, {
+        toast.success(t`Moved ${draggedNames.length} cards to ${dest}`, {
           action: {
             label: `Undo`,
             onClick: undoDeckEdit,
@@ -642,7 +644,7 @@ export default function DeckEditor() {
         if (sourceTag) untagCard(cardName, sourceTag);
         moveCardCopies(cardName, source as DeckSourceZone, dest, "one");
       });
-      toast.success(`Moved ${cardName} to ${dest}`, {
+      toast.success(t`Moved ${cardName} to ${dest}`, {
         action: {
           label: `Undo`,
           onClick: undoDeckEdit,
@@ -731,7 +733,7 @@ export default function DeckEditor() {
                       )}
                     >
                       <Plus className="h-6 w-6" />
-                      <span className="text-xs font-medium">Add deck</span>
+                      <span className="text-xs font-medium"><Trans>Add deck</Trans></span>
                     </button>
                   </div>
 
@@ -779,7 +781,7 @@ export default function DeckEditor() {
                       </Button>
                     </div>
                   ) : publishedDecksLoading && publishedDecks.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">Loading published decks…</p>
+                    <p className="text-sm text-muted-foreground"><Trans>Loading published decks…</Trans></p>
                   ) : publishedDecks.length === 0 ? (
                     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <span>
@@ -914,7 +916,7 @@ export default function DeckEditor() {
         >
           <DialogContent className="max-w-sm">
             <DialogHeader>
-              <DialogTitle>Rename Deck</DialogTitle>
+              <DialogTitle><Trans>Rename Deck</Trans></DialogTitle>
             </DialogHeader>
             <Input
               value={renameInput}
@@ -949,7 +951,7 @@ export default function DeckEditor() {
         >
           <DialogContent className="max-w-sm">
             <DialogHeader>
-              <DialogTitle>Remove account deck</DialogTitle>
+              <DialogTitle><Trans>Remove account deck</Trans></DialogTitle>
               <DialogDescription>
                 “{deletingAccountDeck?.deck.name}” and all its versions will be permanently removed
                 from your account on every device. Publications of it in Community stay online.
@@ -1086,7 +1088,7 @@ export default function DeckEditor() {
       <Dialog open={newTagDropOpen} onOpenChange={setNewTagDropOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Create tag</DialogTitle>
+            <DialogTitle><Trans>Create tag</Trans></DialogTitle>
             <DialogDescription>
               Create a reusable tag and add the dropped cards to it.
             </DialogDescription>
@@ -1115,7 +1117,7 @@ export default function DeckEditor() {
       {showBackConfirm && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-overlay/50 backdrop-blur-sm">
           <div className="bg-card border rounded-xl shadow-xl p-6 max-w-sm space-y-4">
-            <h3 className="text-lg font-semibold">Unsaved Changes</h3>
+            <h3 className="text-lg font-semibold"><Trans>Unsaved Changes</Trans></h3>
             <p className="text-sm text-muted-foreground">
               You have unsaved changes to your deck. Do you want to go back without saving?
             </p>
@@ -1142,7 +1144,7 @@ export default function DeckEditor() {
       {blocker.state === "blocked" && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-overlay/50 backdrop-blur-sm">
           <div className="bg-card border rounded-xl shadow-xl p-6 max-w-sm space-y-4">
-            <h3 className="text-lg font-semibold">Unsaved Changes</h3>
+            <h3 className="text-lg font-semibold"><Trans>Unsaved Changes</Trans></h3>
             <p className="text-sm text-muted-foreground">
               You have unsaved changes to your deck. Do you want to leave without saving?
             </p>

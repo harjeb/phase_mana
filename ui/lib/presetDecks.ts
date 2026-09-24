@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type {
   CardBackFaceSummary,
   CardPartComponent,
@@ -70,7 +71,7 @@ export async function loadPresetDeckDefinitions(
 ): Promise<PresetDeckDefinition[]> {
   const indexResponse = await fetch(indexUrl);
   if (!indexResponse.ok) {
-    throw new Error(`Failed to fetch preset deck index: ${indexResponse.status}`);
+    throw new Error(t`Failed to fetch preset deck index: ${indexResponse.status}`);
   }
   const ids = (await indexResponse.json()) as string[];
   const results = await Promise.all(
@@ -139,7 +140,7 @@ export function expandPresetDeckDefinition(preset: PresetDeckDefinition): Preset
 
   // Commander goes in `commanders[]`, not the main 99 — strip it out of cards.
   if (preset.commander && !commander) {
-    throw new Error(`Preset commander missing from cards: ${preset.commander}`);
+    throw new Error(t`Preset commander missing from cards: ${preset.commander}`);
   }
 
   return {

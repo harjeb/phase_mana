@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, LayoutTemplate, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -144,7 +145,7 @@ export function DeckLayoutMenu({
           >
             <LayoutTemplate className="h-3.5 w-3.5" />
             {compact ? (
-              <span className="sr-only">Saved views</span>
+              <span className="sr-only"><Trans>Saved views</Trans></span>
             ) : (
               <>
                 {activeLayout?.name ?? `View`}
@@ -202,7 +203,7 @@ export function DeckLayoutMenu({
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Save deck view</DialogTitle>
+            <DialogTitle><Trans>Save deck view</Trans></DialogTitle>
             <DialogDescription>
               Keep the current grouping, sorting, and card size.
             </DialogDescription>

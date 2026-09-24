@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { AuthRequestError, requestGuestToken } from "@/api/auth";
 import { isFeatureEnabled } from "@/featureFlags";
 import { deviceSecret } from "@/lib/relayIdentity";
@@ -11,11 +12,11 @@ export function isNameClaimedError(err: unknown): boolean {
 
 export async function reserveGuestName(base: string): Promise<void> {
   const name = base.trim();
-  if (!name) throw new Error("Enter a name.");
+  if (!name) throw new Error(t`Enter a name.`);
   const prefs = usePreferencesStore.getState();
   if (isFeatureEnabled("accounts")) {
     const device = deviceSecret();
-    if (!device) throw new Error("This browser can't store an identity (enable local storage).");
+    if (!device) throw new Error(t`This browser can't store an identity (enable local storage).`);
     await requestGuestToken(ensureUsernameTag(name, prefs.serverUsername), device);
   }
   prefs.setServerUsername(name);

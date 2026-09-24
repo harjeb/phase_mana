@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Flag, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
@@ -103,7 +104,7 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
             <ShieldCheck className="h-4 w-4 text-success" />
             Thank you
           </DialogTitle>
-          <DialogDescription>Your report has been sent.</DialogDescription>
+          <DialogDescription><Trans>Your report has been sent.</Trans></DialogDescription>
           <p className="text-sm text-foreground/90">
             Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at
             this promptly and take action where it is warranted.

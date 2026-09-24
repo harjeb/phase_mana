@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Eye, Grid3X3, Layers3, MousePointer2, PanelTop, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -88,14 +89,14 @@ export function BoardDevControls() {
         <section className={DEV_SECTION}>
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className={DEV_SECTION_HEADING}>Renderer</p>
+              <p className={DEV_SECTION_HEADING}><Trans>Renderer</Trans></p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Live Pixi performance for the current battlefield.
               </p>
             </div>
             <div className="text-right">
               <p className={cn("font-mono text-2xl font-semibold tabular-nums", fpsColor)}>{fps}</p>
-              <p className="font-mono text-[10px] text-muted-foreground">FPS</p>
+              <p className="font-mono text-[10px] text-muted-foreground"><Trans>FPS</Trans></p>
             </div>
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2">
@@ -107,7 +108,7 @@ export function BoardDevControls() {
 
       {showBoardGuides ? (
         <section className={DEV_SECTION}>
-          <p className={DEV_SECTION_HEADING}>Board guides</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Board guides</Trans></p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <GuideToggle
               icon={MousePointer2}
@@ -147,7 +148,7 @@ export function BoardDevControls() {
 
       {showGameState ? (
         <section className={DEV_SECTION}>
-          <p className={DEV_SECTION_HEADING}>Game state</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Game state</Trans></p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <GuideToggle
               label={`Log activity`}
@@ -169,7 +170,7 @@ export function BoardDevControls() {
 
       {showGlobalMechanics ? (
         <section className={DEV_SECTION}>
-          <p className={DEV_SECTION_HEADING}>Global mechanics</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Global mechanics</Trans></p>
           <div className="mt-3 grid grid-cols-3 gap-2">
             {(["none", "day", "night"] as const)
               .filter((value) =>
@@ -222,7 +223,7 @@ export function BoardDevControls() {
 
       {showTools ? (
         <section className={DEV_SECTION}>
-          <p className={DEV_SECTION_HEADING}>Tools</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Tools</Trans></p>
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <DevSearchable terms={["Replay ETB glow", "Tools"]}>
               <Button

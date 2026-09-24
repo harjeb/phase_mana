@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Grid3X3, Layers3, List, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -289,14 +290,14 @@ export function DeckCardBrowserFilters({
           </SheetTrigger>
           <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto rounded-t-xl">
             <SheetHeader className="pr-8 text-left">
-              <SheetTitle>Card filters</SheetTitle>
+              <SheetTitle><Trans>Card filters</Trans></SheetTitle>
               <SheetDescription>
                 Colors match any selected color identity. Search also matches type and rules text.
               </SheetDescription>
             </SheetHeader>
             <div className="mt-5 space-y-5">
               <div>
-                <p className="mb-2 text-xs font-medium text-muted-foreground">Deck section</p>
+                <p className="mb-2 text-xs font-medium text-muted-foreground"><Trans>Deck section</Trans></p>
                 {zoneControl}
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -305,7 +306,7 @@ export function DeckCardBrowserFilters({
                 <div className="col-span-2">{manaControl}</div>
               </div>
               <div>
-                <p className="mb-2 text-xs font-medium text-muted-foreground">Color identity</p>
+                <p className="mb-2 text-xs font-medium text-muted-foreground"><Trans>Color identity</Trans></p>
                 <ColorControl colors={colors} onToggle={onColorToggle} />
               </div>
               {viewMode !== "list" && (
@@ -328,7 +329,7 @@ export function DeckCardBrowserFilters({
                 Clear filters
               </Button>
               <SheetClose asChild>
-                <Button variant="primary">Show cards</Button>
+                <Button variant="primary"><Trans>Show cards</Trans></Button>
               </SheetClose>
             </div>
           </SheetContent>

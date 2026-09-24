@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { getPlatform } from "@/platform";
 import type {
   RespondParams,
@@ -235,15 +236,15 @@ export class ManualTabletopGameApi implements ManualTabletopApi {
   }
 
   async startMultiplayerGame(_params: StartMultiplayerGameParams): Promise<void> {
-    throw new Error("Manual tabletop multiplayer is not implemented yet.");
+    throw new Error(t`Manual tabletop multiplayer is not implemented yet.`);
   }
 
   async respond(_params: RespondParams): Promise<void> {
-    throw new Error("Manual tabletop API expects manual table actions.");
+    throw new Error(t`Manual tabletop API expects manual table actions.`);
   }
 
   async sendDirective(_params: SendDirectiveParams): Promise<void> {
-    throw new Error("Manual tabletop has no engine to direct.");
+    throw new Error(t`Manual tabletop has no engine to direct.`);
   }
 
   async endGame(): Promise<void> {
@@ -253,7 +254,7 @@ export class ManualTabletopGameApi implements ManualTabletopApi {
   }
 
   async restoreSnapshot(_params: RestoreSnapshotParams): Promise<void> {
-    throw new Error("Manual tabletop snapshots are not implemented yet.");
+    throw new Error(t`Manual tabletop snapshots are not implemented yet.`);
   }
 
   async getPrompt(): Promise<Prompt | null> {
@@ -266,7 +267,7 @@ export class ManualTabletopGameApi implements ManualTabletopApi {
 
   async applyManualAction(action: ManualTabletopAction): Promise<ClientGameView> {
     if (!this.gameView && action.type !== "replaceState") {
-      throw new Error("No active manual tabletop game.");
+      throw new Error(t`No active manual tabletop game.`);
     }
 
     this.gameView = syncVisibleZoneCountsWithLibraries(
@@ -285,7 +286,7 @@ export class ManualTabletopGameApi implements ManualTabletopApi {
       this.libraries = action.libraries ?? {};
       return action.gameView;
     }
-    if (!gameView) throw new Error("No active manual tabletop game.");
+    if (!gameView) throw new Error(t`No active manual tabletop game.`);
 
     switch (action.type) {
       case "moveCard": {

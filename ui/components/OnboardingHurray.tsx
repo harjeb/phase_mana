@@ -1,3 +1,5 @@
+import { Trans } from "@lingui/react/macro";
+import { t } from "@lingui/core/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PartyPopper, Sparkles } from "lucide-react";
@@ -25,7 +27,7 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
       if (!token) return;
       const updated = await updateHandle(token, trimmed);
       setAccount(updated);
-      toast.success(`Welcome, @${updated.handle}!`);
+      toast.success(t`Welcome, @${updated.handle}!`);
       onComplete();
     } catch (err) {
       setError(
@@ -51,7 +53,7 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
       </div>
 
       <div className="space-y-1 text-center">
-        <h3 className="text-lg font-semibold text-foreground">Hurray, you're in!</h3>
+        <h3 className="text-lg font-semibold text-foreground"><Trans>Hurray, you're in!</Trans></h3>
         <p className="text-sm text-muted-foreground">
           Claim your username, others won't be able to steal it!
         </p>
@@ -62,7 +64,7 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
           autoFocus
           value={handle}
           maxLength={HANDLE_MAX_LENGTH}
-          placeholder="your-username"
+          placeholder={t`your-username`}
           onChange={(event) => {
             setHandle(event.target.value);
             if (error) setError(null);

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { cn } from "@/lib/utils";
 import { useGameDevStore } from "@/stores/useGameDevStore";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
@@ -40,7 +41,7 @@ export function DevSizingControls() {
 
   return (
     <section className={DEV_SECTION}>
-      <p className={DEV_SECTION_HEADING}>Size and viewport</p>
+      <p className={DEV_SECTION_HEADING}><Trans>Size and viewport</Trans></p>
       <p className="mt-1 text-xs text-muted-foreground">
         Reflow the real Pixi board at fixed dimensions without opening browser tools.
       </p>

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Undo2 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -23,11 +24,11 @@ export function GameLog({ session, open, onOpenChange }: GameLogProps) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-80 overflow-y-auto p-0">
         <SheetHeader className="px-4 py-3">
-          <SheetTitle>Game log</SheetTitle>
+          <SheetTitle><Trans>Game log</Trans></SheetTitle>
         </SheetHeader>
         <ol className="divide-y divide-border">
           {history.length === 0 && (
-            <li className="px-4 py-6 text-center text-sm text-muted-foreground">No events yet.</li>
+            <li className="px-4 py-6 text-center text-sm text-muted-foreground"><Trans>No events yet.</Trans></li>
           )}
           {history
             .map((event, index) => ({ event, index }))

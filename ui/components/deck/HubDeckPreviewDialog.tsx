@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, Loader2, MoreHorizontal, Swords, Users } from "lucide-react";
@@ -143,7 +145,7 @@ export function HubDeckPreviewDialog({
       setBusy(true);
       try {
         await useAccountDecksStore.getState().forkPreset(entryDetail.presetKey);
-        toast.success(`"${detail.name}" added to your account decks`);
+        toast.success(t`"${detail.name}" added to your account decks`);
         onClose();
       } catch (error) {
         toast.error(error instanceof Error ? error.message : `Failed to save preset`);
@@ -153,7 +155,7 @@ export function HubDeckPreviewDialog({
       return;
     }
     addSavedDeck(detail.deck as EditorDeck);
-    toast.success(`"${detail.name}" saved to My Decks`);
+    toast.success(t`"${detail.name}" saved to My Decks`);
     onClose();
   }
   function handleOpen() {
@@ -188,9 +190,9 @@ export function HubDeckPreviewDialog({
     const url = `${window.location.origin}/hub?deck=${encodeURIComponent(entryRef)}`;
     try {
       await navigator.clipboard.writeText(url);
-      toast.success(`Share link copied \u2014 anyone can open and play this deck`);
+      toast.success(t`Share link copied \u2014 anyone can open and play this deck`);
     } catch {
-      toast.error(`Couldn\u2019t copy the share link`);
+      toast.error(t`Couldn\u2019t copy the share link`);
     }
   }
   function handlePlayOffline() {
@@ -214,7 +216,7 @@ export function HubDeckPreviewDialog({
       removeEntry(deckId);
       void refresh();
       const deckName = detail?.name ?? `Deck`;
-      toast.success(`"${deckName}" removed from Community`);
+      toast.success(t`"${deckName}" removed from Community`);
       onClose();
       onUnpublished?.();
     } catch (err) {
@@ -264,7 +266,7 @@ export function HubDeckPreviewDialog({
           {error ? (
             <div className="grid min-h-0 flex-1 place-items-center px-6 text-center">
               <div>
-                <p className="text-sm font-medium">This deck could not be loaded</p>
+                <p className="text-sm font-medium"><Trans>This deck could not be loaded</Trans></p>
                 <p className="mt-1 max-w-md text-sm text-muted-foreground">{error}</p>
                 <Button
                   variant="outline"
@@ -290,7 +292,7 @@ export function HubDeckPreviewDialog({
           <div className="shrink-0 border-t bg-background/95 px-3 py-2 backdrop-blur sm:px-4">
             {signedIn && ownershipError && (
               <div className="mb-2 flex flex-wrap items-center gap-2 text-xs text-destructive">
-                <span className="min-w-0 break-words">Couldn’t verify deck ownership.</span>
+                <span className="min-w-0 break-words"><Trans>Couldn’t verify deck ownership.</Trans></span>
                 <Button variant="outline" size="sm" onClick={() => void refresh()}>
                   Retry
                 </Button>

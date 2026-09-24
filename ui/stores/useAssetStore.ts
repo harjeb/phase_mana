@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { useEffect } from "react";
@@ -66,7 +67,7 @@ export const useAssetStore = create<AssetState>()(
       replace: async (kind, source, replaces) => {
         const limits = useHubStore.getState().capabilities?.assets;
         if (!limits) {
-          toast.error(`Image uploads aren't available on this server`);
+          toast.error(t`Image uploads aren't available on this server`);
           return undefined;
         }
         set({ busy: true });
@@ -158,19 +159,19 @@ async function discard(assetId: string | undefined): Promise<void> {
   try {
     await deleteAsset(assetId);
   } catch {
-    toast.error(`Couldn't remove the previous image from your storage`);
+    toast.error(t`Couldn't remove the previous image from your storage`);
   }
 }
 function reportUploadFailure(error: unknown): void {
   const quota = assetQuotaFromError(error);
   if (quota) {
     toast.error(
-      `You've used ${formatBytes(quota.usedBytes)} of your ${formatBytes(quota.quotaBytes)} of image storage. Remove an image to free space.`,
+      t`You've used ${formatBytes(quota.usedBytes)} of your ${formatBytes(quota.quotaBytes)} of image storage. Remove an image to free space.`,
     );
   } else if (error instanceof ImageTooLargeError) {
     toast.error(error.message);
   } else {
-    toast.error(`Couldn't upload that image`);
+    toast.error(t`Couldn't upload that image`);
   }
 }
 export function formatBytes(bytes: number): string {

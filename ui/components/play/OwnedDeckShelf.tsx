@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { LibraryBig, Plus } from "lucide-react";
 import { DeckGridCard } from "@/components/deck/DeckGridCard";
 import { DECK_SHELF_CARD_CLASS, DeckShelfRow } from "@/components/play/DeckShelfRow";
@@ -28,7 +29,7 @@ export function OwnedDeckShelf({
     return (
       <div className="flex min-h-36 flex-col items-center justify-center rounded-xl border border-dashed border-border/80 bg-muted/30 px-6 py-8 text-center">
         <LibraryBig className="mb-3 h-7 w-7 text-secondary" />
-        <p className="font-medium">Your first deck is waiting to be brewed.</p>
+        <p className="font-medium"><Trans>Your first deck is waiting to be brewed.</Trans></p>
         <p className="mt-1 text-sm text-muted-foreground">
           Build from scratch, import a decklist, or start with a preset below.
         </p>

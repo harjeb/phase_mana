@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { boardBackgroundUrl } from "@/pixi/board/boardBackgrounds";
 import { Shield, Swords } from "lucide-react";
 import { OpenTableSeats } from "@/components/lobby/OpenTableSeats";
@@ -73,16 +74,16 @@ export function TableRoom({
     if (room.status !== "Lobby") {
       return (
         <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5 text-center sm:text-right">
-          <p className="text-sm font-medium text-primary">Game in progress</p>
-          <p className="text-xs text-muted-foreground">Opening the game table...</p>
+          <p className="text-sm font-medium text-primary"><Trans>Game in progress</Trans></p>
+          <p className="text-xs text-muted-foreground"><Trans>Opening the game table...</Trans></p>
         </div>
       );
     }
     if (needsFormat) {
       return (
         <div className="rounded-lg border border-border/60 bg-muted/30 px-4 py-2.5 text-center sm:text-right">
-          <p className="text-sm font-medium">Choose a format</p>
-          <p className="text-xs text-muted-foreground">Select one in Table settings to continue.</p>
+          <p className="text-sm font-medium"><Trans>Choose a format</Trans></p>
+          <p className="text-xs text-muted-foreground"><Trans>Select one in Table settings to continue.</Trans></p>
         </div>
       );
     }
@@ -108,8 +109,8 @@ export function TableRoom({
     if (!isController && myPlayer?.ready) {
       return (
         <div className="rounded-lg border border-primary/30 bg-primary/5 px-4 py-2.5 text-center sm:text-right">
-          <p className="text-sm font-medium text-primary">You're ready</p>
-          <p className="text-xs text-muted-foreground">Waiting for the host to start.</p>
+          <p className="text-sm font-medium text-primary"><Trans>You're ready</Trans></p>
+          <p className="text-xs text-muted-foreground"><Trans>Waiting for the host to start.</Trans></p>
         </div>
       );
     }

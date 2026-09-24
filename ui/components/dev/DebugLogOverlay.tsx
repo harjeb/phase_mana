@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 /**
  * In-app log panel for staging builds. Tees `console.*` into a ring buffer.
  */
@@ -126,7 +127,7 @@ export function DebugLogOverlay() {
           borderBottom: "1px solid rgba(128,128,128,0.25)",
         }}
       >
-        <strong style={{ fontWeight: 600 }}>logs</strong>
+        <strong style={{ fontWeight: 600 }}><Trans>logs</Trans></strong>
         <button
           onClick={() => setTransportOnly((v) => !v)}
           style={chip(transportOnly)}
@@ -176,7 +177,7 @@ export function DebugLogOverlay() {
       </div>
       <div ref={scroller} style={{ flex: 1, overflow: "auto", padding: "6px 8px" }}>
         {lines.length === 0 ? (
-          <div style={{ opacity: 0.5 }}>no lines yet</div>
+          <div style={{ opacity: 0.5 }}><Trans>no lines yet</Trans></div>
         ) : (
           lines.map((l) => (
             <div key={l.seq} style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>

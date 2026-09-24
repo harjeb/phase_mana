@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, ClipboardPaste, FileUp, Loader2, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
@@ -190,7 +192,7 @@ export function CollectionImportDialog({
       const clipboard = await navigator.clipboard.readText();
       if (clipboard.trim()) loadText(clipboard);
     } catch {
-      toast.error(`Couldn't read the clipboard \u2014 paste into a file instead`);
+      toast.error(t`Couldn't read the clipboard \u2014 paste into a file instead`);
     }
   }
   async function applyImport() {
@@ -198,10 +200,10 @@ export function CollectionImportDialog({
     setSaving(true);
     try {
       await onImport(imported, mode);
-      toast.success(`Imported ${Object.keys(imported).length} collection entries`);
+      toast.success(t`Imported ${Object.keys(imported).length} collection entries`);
       resetAndClose();
     } catch {
-      toast.error(`Collection import failed`);
+      toast.error(t`Collection import failed`);
     } finally {
       setSaving(false);
     }
@@ -233,7 +235,7 @@ export function CollectionImportDialog({
     >
       <DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Import collection</DialogTitle>
+          <DialogTitle><Trans>Import collection</Trans></DialogTitle>
           <DialogDescription>
             Import ManaBox, Moxfield, Archidekt, or any CSV/TSV file. Review and customize the
             columns before saving. Set and collector number preserve each exact printing.
@@ -260,8 +262,8 @@ export function CollectionImportDialog({
               onClick={() => fileInput.current?.click()}
             >
               <FileUp className="h-8 w-8 text-primary" />
-              <span className="font-medium">Choose an export file</span>
-              <span className="text-xs text-muted-foreground">CSV, TSV, or text</span>
+              <span className="font-medium"><Trans>Choose an export file</Trans></span>
+              <span className="text-xs text-muted-foreground"><Trans>CSV, TSV, or text</Trans></span>
             </button>
             <button
               type="button"
@@ -269,8 +271,8 @@ export function CollectionImportDialog({
               onClick={() => void pasteFromClipboard()}
             >
               <ClipboardPaste className="h-8 w-8 text-primary" />
-              <span className="font-medium">Paste from clipboard</span>
-              <span className="text-xs text-muted-foreground">Copy rows from a spreadsheet</span>
+              <span className="font-medium"><Trans>Paste from clipboard</Trans></span>
+              <span className="text-xs text-muted-foreground"><Trans>Copy rows from a spreadsheet</Trans></span>
             </button>
           </div>
         ) : (
@@ -328,7 +330,7 @@ export function CollectionImportDialog({
 
             <div className="space-y-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Import preview</h3>
+                <h3 className="text-sm font-semibold"><Trans>Import preview</Trans></h3>
                 <div className="flex items-center gap-3 text-xs">
                   {printingValidationError && (
                     <Button
@@ -389,12 +391,12 @@ export function CollectionImportDialog({
                 <table className="w-full text-left text-xs">
                   <thead className="sticky top-0 bg-background">
                     <tr className="border-b text-muted-foreground">
-                      <th className="px-3 py-2 font-medium">Row</th>
-                      <th className="px-3 py-2 font-medium">Card name</th>
-                      <th className="px-3 py-2 font-medium">Printing</th>
-                      <th className="px-3 py-2 font-medium">Finish</th>
-                      <th className="px-3 py-2 text-right font-medium">Quantity</th>
-                      <th className="px-3 py-2 font-medium">Status</th>
+                      <th className="px-3 py-2 font-medium"><Trans>Row</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Card name</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Printing</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Finish</Trans></th>
+                      <th className="px-3 py-2 text-right font-medium"><Trans>Quantity</Trans></th>
+                      <th className="px-3 py-2 font-medium"><Trans>Status</Trans></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -447,7 +449,7 @@ export function CollectionImportDialog({
             </div>
 
             <fieldset className="space-y-2">
-              <legend className="text-sm font-semibold">Import behavior</legend>
+              <legend className="text-sm font-semibold"><Trans>Import behavior</Trans></legend>
               <div className="grid gap-2 sm:grid-cols-2">
                 <ImportMode
                   checked={mode === "merge"}

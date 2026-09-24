@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ListOrdered, Minus, Plus, RotateCcw, Settings, XOctagon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,7 +47,7 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-64">
-        <DropdownMenuLabel>Players</DropdownMenuLabel>
+        <DropdownMenuLabel><Trans>Players</Trans></DropdownMenuLabel>
         <div className="flex items-center justify-between gap-2 px-2 pb-2">
           <Button
             size="icon"
@@ -71,7 +72,7 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
           </Button>
         </div>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Starting life</DropdownMenuLabel>
+        <DropdownMenuLabel><Trans>Starting life</Trans></DropdownMenuLabel>
         <div className="flex flex-wrap gap-1 px-2 pb-2">
           {COMPANION_STARTING_LIFE_PRESETS.map((value) => (
             <button
@@ -98,7 +99,7 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
           className={cn(session.commanderRules && "bg-accent")}
         >
           <GameIcon icon="crown" className="mr-2 size-4" /> Commander rules
-          {session.commanderRules && <span className="ml-auto text-xs">on</span>}
+          {session.commanderRules && <span className="ml-auto text-xs"><Trans>on</Trans></span>}
         </DropdownMenuItem>
         <DropdownMenuItem
           onSelect={(e) => {
@@ -108,10 +109,10 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
           className={cn(session.phasesEnabled && "bg-accent")}
         >
           <ListOrdered className="mr-2 size-4" /> Phase tracking
-          {session.phasesEnabled && <span className="ml-auto text-xs">on</span>}
+          {session.phasesEnabled && <span className="ml-auto text-xs"><Trans>on</Trans></span>}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Timer mode</DropdownMenuLabel>
+        <DropdownMenuLabel><Trans>Timer mode</Trans></DropdownMenuLabel>
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();
@@ -131,7 +132,7 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
           Per-player chess clock
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Game title</DropdownMenuLabel>
+        <DropdownMenuLabel><Trans>Game title</Trans></DropdownMenuLabel>
         <div className="px-2 pb-2">
           <Input
             key={session.id}
@@ -152,7 +153,7 @@ export function SetupMenu({ session, onOpenLog }: SetupMenuProps) {
           </span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Reset</DropdownMenuLabel>
+        <DropdownMenuLabel><Trans>Reset</Trans></DropdownMenuLabel>
         <DropdownMenuItem onSelect={() => resetCounters("life")}>
           <RotateCcw className="mr-2 size-4" /> Life only
         </DropdownMenuItem>

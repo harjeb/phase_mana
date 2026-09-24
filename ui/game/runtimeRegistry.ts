@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { getPlatform } from "@/platform";
 import type { GameRuntime, GameRuntimeKind } from "./runtime.types";
 
@@ -19,6 +20,6 @@ export const getSelectedGameRuntimeKind = (): GameRuntimeKind => runtime.kind;
 export const getDefaultGameRuntime = () => runtime;
 export const resetSelectedGameRuntime = () => runtime;
 export function selectGameRuntime(kind: GameRuntimeKind): GameRuntime {
-  if (kind !== runtime.kind) throw new Error(`Runtime unavailable: ${kind}`);
+  if (kind !== runtime.kind) throw new Error(t`Runtime unavailable: ${kind}`);
   return runtime;
 }

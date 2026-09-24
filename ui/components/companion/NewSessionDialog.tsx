@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,7 +47,7 @@ export function NewSessionDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>New game</DialogTitle>
+          <DialogTitle><Trans>New game</Trans></DialogTitle>
         </DialogHeader>
         {open && (
           <NewSessionForm
@@ -101,7 +102,7 @@ function NewSessionForm({
     <>
       <div className="space-y-4">
         <div className="space-y-1">
-          <Label>Format preset</Label>
+          <Label><Trans>Format preset</Trans></Label>
           <div className="flex flex-wrap gap-1.5">
             <PillButton active={presetMatch === "standard"} onClick={() => applyPreset("standard")}>
               Standard (20)
@@ -116,7 +117,7 @@ function NewSessionForm({
         </div>
 
         <div className="space-y-1">
-          <Label>Players</Label>
+          <Label><Trans>Players</Trans></Label>
           <div className="flex flex-wrap gap-1.5">
             {Array.from(
               { length: COMPANION_MAX_PLAYERS - COMPANION_MIN_PLAYERS + 1 },
@@ -130,7 +131,7 @@ function NewSessionForm({
         </div>
 
         <div className="space-y-1">
-          <Label>Starting life</Label>
+          <Label><Trans>Starting life</Trans></Label>
           <div className="flex flex-wrap items-center gap-1.5">
             {COMPANION_STARTING_LIFE_PRESETS.map((value) => (
               <PillButton
@@ -173,7 +174,7 @@ function NewSessionForm({
         </label>
 
         <div className="space-y-1">
-          <Label>Layout</Label>
+          <Label><Trans>Layout</Trans></Label>
           <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-4">
             {layoutChoices.map((option) => (
               <LayoutCard

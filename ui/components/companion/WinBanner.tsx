@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useCompanionStore } from "@/stores/useCompanionStore";
@@ -31,7 +32,7 @@ function WinBannerInner({ winner }: { winner: CompanionPlayer }) {
           <GameIcon icon="trophy-cup" className="size-8" />
         </div>
         <div>
-          <p className="text-sm uppercase tracking-wide text-muted-foreground">Last standing</p>
+          <p className="text-sm uppercase tracking-wide text-muted-foreground"><Trans>Last standing</Trans></p>
           <h2 className="text-2xl font-bold">{winner.name}</h2>
         </div>
         <div className="flex gap-2">

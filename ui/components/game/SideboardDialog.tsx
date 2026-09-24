@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -32,7 +33,7 @@ export function SideboardDialog({ input, pending, error, onSubmit }: {
   return <Dialog open>
     <DialogContent className="max-w-3xl [&>button:last-child]:hidden" onEscapeKeyDown={(event) => event.preventDefault()} onPointerDownOutside={(event) => event.preventDefault()}>
       <DialogHeader>
-        <DialogTitle>Sideboard</DialogTitle>
+        <DialogTitle><Trans>Sideboard</Trans></DialogTitle>
         <DialogDescription>{input.presentation.text}</DialogDescription>
       </DialogHeader>
       <p className="text-sm">Move cards between your main deck and sideboard. Minimum main deck: {input.minMainDeckSize}. {input.maxSideboardSize == null ? "No sideboard size limit." : `Maximum sideboard: ${input.maxSideboardSize}.`}</p>
@@ -47,10 +48,10 @@ export function SideboardDialog({ input, pending, error, onSubmit }: {
           </ul>
         </section>)}
       </div>
-      {!valid && <p role="alert">Your deck does not meet the size requirements.</p>}
+      {!valid && <p role="alert"><Trans>Your deck does not meet the size requirements.</Trans></p>}
       {error && <p role="alert">{error}</p>}
       <DialogFooter>
-        <Button variant="outline" disabled={pending} onClick={() => { setMain(input.main.map((card) => ({ ...card }))); setSideboard(input.sideboard.map((card) => ({ ...card }))); }}>Reset</Button>
+        <Button variant="outline" disabled={pending} onClick={() => { setMain(input.main.map((card) => ({ ...card }))); setSideboard(input.sideboard.map((card) => ({ ...card }))); }}><Trans>Reset</Trans></Button>
         <Button variant="primary" disabled={pending || !valid} onClick={() => onSubmit({ type: "submitSideboard", main, sideboard })}>{pending ? "Submitting…" : "Ready for next game"}</Button>
       </DialogFooter>
     </DialogContent>

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
@@ -43,11 +44,11 @@ const useFormField = () => {
   const { getFieldState, formState } = useFormContext();
 
   if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>");
+    throw new Error(t`useFormField should be used within <FormField>`);
   }
 
   if (!itemContext) {
-    throw new Error("useFormField should be used within <FormItem>");
+    throw new Error(t`useFormField should be used within <FormItem>`);
   }
 
   const fieldState = getFieldState(fieldContext.name, formState);

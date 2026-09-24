@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 import {
   createAccountDeck,
@@ -55,7 +56,7 @@ function currentAccountId(): string | null {
 
 function requireAccountId(): string {
   const accountId = currentAccountId();
-  if (!accountId) throw new Error("Sign in to use account decks.");
+  if (!accountId) throw new Error(t`Sign in to use account decks.`);
   return accountId;
 }
 

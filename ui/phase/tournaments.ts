@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 export type TournamentRole = "Organizer" | "Player";
 export type TournamentOutcome = "Draw" | { Decisive: { winner: string; game_wins: Record<string, number> } };
 export interface TournamentPlayer { player_key: string; display_name: string; dropped: boolean }
@@ -57,7 +58,7 @@ export class TournamentClient {
   connect = (endpoint: string) => {
     const url = new URL(endpoint);
     if (!["ws:", "wss:"].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
-      throw new Error("Enter a ws:// or wss:// broker URL without credentials or query parameters.");
+      throw new Error(t`Enter a ws:// or wss:// broker URL without credentials or query parameters.`);
     }
     if (url.pathname === "/") url.pathname = "/ws";
     const address = url.href;
@@ -79,7 +80,7 @@ export class TournamentClient {
         const data = (frame.data ?? {}) as Reply;
         if (frame.type === "ServerHello") {
           if (hello || typeof data.protocol_version !== "number" || typeof data.lobby_protocol_version !== "number" || data.lobby_protocol_version < 9) {
-            throw new Error("Tournament management requires lobby protocol 9 or newer.");
+            throw new Error(t`Tournament management requires lobby protocol 9 or newer.`);
           }
           hello = true;
           clearTimeout(timer);
@@ -89,7 +90,7 @@ export class TournamentClient {
           if (previousCode) void this.open(previousCode).catch(error => this.update({ error: error.message }));
           return;
         }
-        if (!hello) throw new Error("Broker sent data before its handshake.");
+        if (!hello) throw new Error(t`Broker sent data before its handshake.`);
         if (frame.type === "TournamentListUpdate" && Array.isArray(data.tournaments)) this.update({ list: data.tournaments as TournamentSummary[] });
         if (frame.type === "TournamentUpdate" && data.view && data.code === this.state.view?.summary.code) this.update({ view: data.view });
         if (frame.type === "TournamentRemoved") {
@@ -115,7 +116,7 @@ export class TournamentClient {
     ws.onerror = () => { if (this.socket === ws) this.update({ error: "Could not connect to the tournament broker." }); };
   };
   private send(type: string, data?: unknown) {
-    if (!this.state.connected || this.socket?.readyState !== WebSocket.OPEN) throw new Error("Reconnect to the tournament broker first.");
+    if (!this.state.connected || this.socket?.readyState !== WebSocket.OPEN) throw new Error(t`Reconnect to the tournament broker first.`);
     this.socket.send(JSON.stringify(data === undefined ? { type } : { type, data }));
   }
   private request(type: string, data: Record<string, unknown>, reply: string, requestId?: number): Promise<Reply> {
@@ -143,26 +144,26 @@ export class TournamentClient {
     this.saveCredential(reply, "Player", "player_token", playerKey);
   };
   private saveCredential(reply: Reply, role: TournamentRole, field: string, playerKey?: string) {
-    if (!reply.code || typeof reply[field] !== "string" || typeof reply.expires_at_ms !== "number" || !reply.view) throw new Error("Broker omitted tournament credentials.");
+    if (!reply.code || typeof reply[field] !== "string" || typeof reply.expires_at_ms !== "number" || !reply.view) throw new Error(t`Broker omitted tournament credentials.`);
     this.state.credentials[reply.code] = { ...this.state.credentials[reply.code], [role]: { token: reply[field], expires: reply.expires_at_ms, playerKey } };
     this.update({ view: reply.view });
     this.persist();
   }
   renew = async (code: string, role: TournamentRole) => {
     const credential = this.state.credentials[code]?.[role];
-    if (!credential) throw new Error("No saved credential for this role.");
+    if (!credential) throw new Error(t`No saved credential for this role.`);
     // Persist BEFORE sending: a lost reply can be recovered with the same old secret and nonce.
     credential.nonce ??= crypto.randomUUID();
     this.persist();
     const reply = await this.request("RenewTournamentCredential", { code, role, token: credential.token, rotation_nonce: credential.nonce }, "TournamentCredentialRenewed");
-    if (typeof reply.token !== "string" || typeof reply.expires_at_ms !== "number") throw new Error("Invalid credential renewal reply.");
+    if (typeof reply.token !== "string" || typeof reply.expires_at_ms !== "number") throw new Error(t`Invalid credential renewal reply.`);
     this.state.credentials[code][role] = { token: reply.token, expires: reply.expires_at_ms, playerKey: credential.playerKey };
     this.persist();
   };
   action = async (type: "StartTournamentRound" | "ReportMatchResult" | "DropFromTournament" | "EndTournament", code: string, extra: Record<string, unknown> = {}) => {
     const role = type === "StartTournamentRound" || type === "EndTournament" ? "Organizer" : "Player";
     let credential = this.state.credentials[code]?.[role];
-    if (!credential) throw new Error("No saved credential for this role.");
+    if (!credential) throw new Error(t`No saved credential for this role.`);
     if (credential.nonce || credential.expires - Date.now() < 300000) await this.renew(code, role);
     credential = this.state.credentials[code][role]!;
     const requestId = this.nextId++;

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -64,7 +65,7 @@ export default function Draft() {
         {lastError ? (
           <p className="text-destructive">{lastError}</p>
         ) : (
-          <p className="text-muted-foreground">Loading draft…</p>
+          <p className="text-muted-foreground"><Trans>Loading draft…</Trans></p>
         )}
       </div>
     );
@@ -105,7 +106,7 @@ export default function Draft() {
         <div className="min-h-0 flex-1">
           {isCommanderDraft && (
             <label className="mb-2 flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Commander</span>
+              <span className="text-muted-foreground"><Trans>Commander</Trans></span>
               <select
                 value={commander}
                 onChange={(e) => setCommander(e.target.value)}

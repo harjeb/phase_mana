@@ -3,6 +3,7 @@
  *
  */
 
+import { t } from "@lingui/core/macro";
 import type { EngineGameStats } from "@/lib/engineTelemetry";
 import { invoke } from "@tauri-apps/api/core";
 import { WebPlatform } from "./web";
@@ -52,7 +53,7 @@ class TauriServerApi implements IServerApi {
   async createRoom(params: CreateRoomParams): Promise<string | null> {
     if (params.engine === "Forge") {
       if (!this.connection) {
-        throw new Error("Connect to a server before hosting a Forge room");
+        throw new Error(t`Connect to a server before hosting a Forge room`);
       }
       return invoke<string>("start_forge_host", {
         host: this.connection.host,

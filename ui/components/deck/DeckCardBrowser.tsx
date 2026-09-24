@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Loader2, Search, X } from "lucide-react";
@@ -529,7 +530,7 @@ export function DeckCardBrowser({ deck }: { deck: Deck }) {
           {shownCount === 0 ? (
             <div className="grid min-h-48 place-items-center text-center">
               <div>
-                <p className="text-sm font-medium">No cards match these filters</p>
+                <p className="text-sm font-medium"><Trans>No cards match these filters</Trans></p>
                 <Button variant="ghost" size="sm" className="mt-2" onClick={clearFilters}>
                   Clear filters
                 </Button>

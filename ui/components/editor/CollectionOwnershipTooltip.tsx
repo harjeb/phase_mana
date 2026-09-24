@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Link } from "react-router-dom";
 import { CheckCircle2, ExternalLink, Layers3 } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -79,7 +80,7 @@ export function CollectionOwnershipTooltip({
             <Layers3 className="h-4 w-4 text-primary" />
           )}
           <div className="min-w-0">
-            <p className="font-semibold">Collection tracker</p>
+            <p className="font-semibold"><Trans>Collection tracker</Trans></p>
             <p className="text-[11px] text-muted-foreground">
               {ownership === "exact" ? `Exact printing owned` : `Owned in another printing`}
             </p>

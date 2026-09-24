@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import { scryfallCardKey } from "@/api/scryfall";
@@ -114,7 +115,7 @@ export async function resolveDeckTextImport(
     maybeboard.length === 0 &&
     commanders.length === 0
   ) {
-    throw new Error("None of the cards could be found on Scryfall");
+    throw new Error(t`None of the cards could be found on Scryfall`);
   }
   return { cards, sideboard, maybeboard, commanders, notFound, substitutedPrintings };
 }
@@ -158,7 +159,7 @@ export function useDeckTextImport() {
       if (notFound.length > 0) {
         const shown = notFound.slice(0, 3).join(", ");
         const extra = notFound.length > 3 ? ` +${notFound.length - 3} more` : "";
-        toast.warning(`Imported "${deckName}" — couldn't find: ${shown}${extra}`);
+        toast.warning(t`Imported "${deckName}" — couldn't find: ${shown}${extra}`);
       } else if (substitutedPrintings.length > 0) {
         toast.warning(
           substitutedPrintings.length === 1
@@ -166,7 +167,7 @@ export function useDeckTextImport() {
             : `Imported "${deckName}" with ${substitutedPrintings.length} default printing substitutions`,
         );
       } else {
-        toast.success(`Imported "${deckName}"`);
+        toast.success(t`Imported "${deckName}"`);
       }
       return id;
     },
@@ -198,7 +199,7 @@ export function useDeckTextImportIntoCurrent() {
       if (result.notFound.length > 0) {
         const shown = result.notFound.slice(0, 3).join(", ");
         const extra = result.notFound.length > 3 ? ` +${result.notFound.length - 3} more` : "";
-        toast.warning(`Added ${count} cards — couldn't find: ${shown}${extra}`);
+        toast.warning(t`Added ${count} cards — couldn't find: ${shown}${extra}`);
       } else if (result.substitutedPrintings.length > 0) {
         toast.warning(
           result.substitutedPrintings.length === 1
@@ -206,7 +207,7 @@ export function useDeckTextImportIntoCurrent() {
             : `Added ${count} cards with ${result.substitutedPrintings.length} default printing substitutions`,
         );
       } else {
-        toast.success(`Added ${count} cards to this deck`);
+        toast.success(t`Added ${count} cards to this deck`);
       }
       return true;
     },

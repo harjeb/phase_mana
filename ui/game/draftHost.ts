@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { fetchCubePool, fetchSetPool } from "@/api/limitedEdition";
 import {
   type DraftPickMessage,
@@ -232,7 +233,7 @@ async function applyPick(
       cardNumber: card.cardNumber,
     });
   } catch (err) {
-    useMultiplayerDraftStore.getState().setError(`pick failed: ${String(err)}`);
+    useMultiplayerDraftStore.getState().setError(t`pick failed: ${String(err)}`);
     if (seat === session.mySeat) useMultiplayerDraftStore.getState().setPickPending(false);
     await broadcastPerSeatStates(
       session.seats,

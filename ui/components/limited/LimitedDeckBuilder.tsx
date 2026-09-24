@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   DndContext,
@@ -239,7 +241,7 @@ export default function LimitedDeckBuilder({
     );
     const targetLands = Math.max(0, targetMainSize - nonLand.length);
     if (targetLands === 0) {
-      toast.info(`No room for basics \u2014 main deck is already at target size.`);
+      toast.info(t`No room for basics \u2014 main deck is already at target size.`);
       return;
     }
     const pips: Record<BasicLandName, number> = {
@@ -325,7 +327,7 @@ export default function LimitedDeckBuilder({
       return fresh;
     });
     toast.success(
-      `Mana base reset · ${(Object.entries(allocation) as Array<[string, number]>)
+      t`Mana base reset · ${(Object.entries(allocation) as Array<[string, number]>)
         .filter(([, n]) => n > 0)
         .map(([k, n]) => `${n} ${k.slice(0, 1)}`)
         .join(" · ")}`,
@@ -385,18 +387,18 @@ export default function LimitedDeckBuilder({
     try {
       const name = saveDeckName.trim();
       if (!name) {
-        toast.error(`Deck name cannot be empty.`);
+        toast.error(t`Deck name cannot be empty.`);
         return;
       }
       const mainCards = main.map((i) => fullPool[i]).filter(Boolean);
       const sideboardCards = sideboard.map((i) => fullPool[i]).filter(Boolean);
       if (mainCards.length === 0 && sideboardCards.length === 0) {
-        toast.error(`Add some cards before saving.`);
+        toast.error(t`Add some cards before saving.`);
         return;
       }
       if (requireCompleteToSave && mainCards.length < targetMainSize) {
         toast.error(
-          `Main deck needs ${targetMainSize - mainCards.length} more card${targetMainSize - mainCards.length === 1 ? "" : "s"}.`,
+          t`Main deck needs ${targetMainSize - mainCards.length} more card${targetMainSize - mainCards.length === 1 ? "" : "s"}.`,
         );
         return;
       }
@@ -416,10 +418,10 @@ export default function LimitedDeckBuilder({
       };
       addSavedDeck(deck);
       setSaveDialogOpen(false);
-      toast.success(`Saved "${name}" to My Decks.`);
+      toast.success(t`Saved "${name}" to My Decks.`);
       onSaved?.(name);
     } catch {
-      toast.error(`Couldn't save the deck. Try again.`);
+      toast.error(t`Couldn't save the deck. Try again.`);
     } finally {
       savingDeckRef.current = false;
       setSavingDeck(false);
@@ -439,9 +441,9 @@ export default function LimitedDeckBuilder({
       await navigator.clipboard.writeText(
         exportToArena({ name: defaultDeckName, cards: resolvedMain, sideboard: resolvedSide }),
       );
-      toast.success(`Deck copied to clipboard.`);
+      toast.success(t`Deck copied to clipboard.`);
     } catch {
-      toast.error(`Couldn't copy the deck. Try again.`);
+      toast.error(t`Couldn't copy the deck. Try again.`);
     }
   };
   return (
@@ -539,13 +541,13 @@ export default function LimitedDeckBuilder({
       >
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Save to My Decks</DialogTitle>
+            <DialogTitle><Trans>Save to My Decks</Trans></DialogTitle>
             <DialogDescription>
               Saved decks live in your browser and appear in the Decks section.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-2">
-            <Label htmlFor="limited-save-name">Deck name</Label>
+            <Label htmlFor="limited-save-name"><Trans>Deck name</Trans></Label>
             <Input
               id="limited-save-name"
               value={saveDeckName}
@@ -643,7 +645,7 @@ function Toolbar({
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-md border border-border/70 bg-card/40 p-3 text-sm">
       <div className="flex items-center gap-2">
-        <span className="text-muted-foreground">Group by</span>
+        <span className="text-muted-foreground"><Trans>Group by</Trans></span>
         {(["rarity", "name", "cmc", "color"] as GroupMode[]).map((m) => (
           <Button
             key={m}
@@ -658,7 +660,7 @@ function Toolbar({
       </div>
 
       <div className="flex items-center gap-1">
-        <span className="text-muted-foreground">Filter:</span>
+        <span className="text-muted-foreground"><Trans>Filter:</Trans></span>
         {POOL_COLOR_CHIPS.map((chip) => (
           <Button
             key={chip.key}
@@ -689,7 +691,7 @@ function Toolbar({
       </div>
 
       <div className="flex items-center gap-1">
-        <span className="text-muted-foreground">Add basic:</span>
+        <span className="text-muted-foreground"><Trans>Add basic:</Trans></span>
         {BASIC_LAND_NAMES.map((name) => (
           <Button
             key={name}
@@ -719,7 +721,7 @@ function Toolbar({
         <span className={mainShortBy === 0 ? "text-primary" : "text-muted-foreground"}>
           Main {mainCount}/{targetMainSize}
         </span>
-        <span className="text-muted-foreground">SB {sideboardCount}</span>
+        <span className="text-muted-foreground"><Trans>SB {sideboardCount}</Trans></span>
         <span className="text-muted-foreground">Pool {unusedCount}</span>
         {onReset && (
           <Button

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Clock3, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -69,12 +71,12 @@ export function DeckCheckpointsDialog({
     const next = [checkpoint, ...checkpoints];
     const persisted = writeCheckpoints(next);
     if (!persisted?.some((candidate) => candidate.id === checkpoint.id)) {
-      toast.error(`This checkpoint is too large to save on this device`);
+      toast.error(t`This checkpoint is too large to save on this device`);
       return;
     }
     setCheckpoints(persisted);
     if (persisted.length < next.length) {
-      toast.warning(`Older checkpoints were removed to free device storage`);
+      toast.warning(t`Older checkpoints were removed to free device storage`);
     }
     setName("");
   }
@@ -82,7 +84,7 @@ export function DeckCheckpointsDialog({
     const next = checkpoints.filter((checkpoint) => checkpoint.id !== id);
     const persisted = writeCheckpoints(next);
     if (!persisted) {
-      toast.error(`Could not update checkpoints on this device`);
+      toast.error(t`Could not update checkpoints on this device`);
       return;
     }
     setCheckpoints(persisted);
@@ -91,7 +93,7 @@ export function DeckCheckpointsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Local checkpoints</DialogTitle>
+          <DialogTitle><Trans>Local checkpoints</Trans></DialogTitle>
           <DialogDescription>
             Capture an experiment before changing direction. Checkpoints stay on this device.
           </DialogDescription>

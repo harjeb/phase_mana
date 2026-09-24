@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   DEFAULT_DEV_PLAYER_OVERRIDES,
   useGameDevStore,
@@ -134,7 +135,7 @@ export function PlayerBadgeDevControls() {
       <section className={DEV_SECTION}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className={DEV_SECTION_HEADING}>Player HUD</p>
+            <p className={DEV_SECTION_HEADING}><Trans>Player HUD</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">
               Override every player's HUD with the same values.
             </p>

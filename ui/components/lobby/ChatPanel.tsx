@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -155,7 +156,7 @@ export function ChatPanel({
               >
                 Sign in
               </button>
-              <span className="ml-1">to chat in General</span>
+              <span className="ml-1"><Trans>to chat in General</Trans></span>
             </span>
           )}
         </div>

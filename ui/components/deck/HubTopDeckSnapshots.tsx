@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Trophy } from "lucide-react";
@@ -134,7 +135,7 @@ export function HubTopDeckSnapshots({ onOpenDeck }: HubTopDeckSnapshotsProps) {
       <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:px-6 lg:px-8">
         {error ? (
           <div className="rounded-lg border border-dashed p-8 text-center">
-            <p className="text-sm font-medium">This ranking is unavailable</p>
+            <p className="text-sm font-medium"><Trans>This ranking is unavailable</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">{error}</p>
             <Button
               variant="outline"
@@ -154,7 +155,7 @@ export function HubTopDeckSnapshots({ onOpenDeck }: HubTopDeckSnapshotsProps) {
         ) : snapshot.entries.length === 0 ? (
           <div className="rounded-lg border border-dashed p-8 text-center">
             <Trophy className="mx-auto h-8 w-8 text-muted-foreground/50" />
-            <p className="mt-3 text-sm font-medium">No snapshot published yet</p>
+            <p className="mt-3 text-sm font-medium"><Trans>No snapshot published yet</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">
               This ranking appears after its first evidence-backed snapshot is available.
             </p>

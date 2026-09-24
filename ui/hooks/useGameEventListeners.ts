@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { getPlatform } from "@/platform";
@@ -99,7 +100,7 @@ async function rejoinAfterRelayRestart() {
           getState().isGameActive
         ) {
           setReconnectPhase("idle");
-          toast.error(`Your seat was forfeited while you were disconnected.`);
+          toast.error(t`Your seat was forfeited while you were disconnected.`);
           void useGameStore.getState().endGame();
           return;
         }
@@ -108,7 +109,7 @@ async function rejoinAfterRelayRestart() {
     }
     setReconnectPhase("idle");
     if (getState().isGameActive) {
-      toast.error(`Game could not be resumed \u2014 the room did not come back.`);
+      toast.error(t`Game could not be resumed \u2014 the room did not come back.`);
       void useGameStore.getState().endGame();
     }
   } finally {
@@ -125,7 +126,7 @@ function toastOpponentPublicAction(entry: GameLogEntry) {
   if (!me || entry.playerId === me.id) return;
   const actor = players.find((p) => p.id === entry.playerId)?.name ?? "Opponent";
   if (entry.message.startsWith(FORETELL_LOG_PREFIX)) {
-    toast.info(`${actor} foretold a card`);
+    toast.info(t`${actor} foretold a card`);
   }
 }
 function isOver(state: Pick<GameState, "gameView" | "currentPrompt">): boolean {
@@ -287,7 +288,7 @@ export function useGameEventListeners() {
         }
         if (!error?.code) return;
         applyProtocolError(error, source, setState);
-        toast.error(`Action rejected (${error.code}) — try again`);
+        toast.error(t`Action rejected (${error.code}) — try again`);
       };
       unsubscribers.push(
         platform.events.on<ProtocolError>("game:error", (payload) => {
@@ -421,7 +422,7 @@ export function useGameEventListeners() {
             peekActiveGameSession()?.roomId ?? useServerStore.getState().currentRoom?.room_id;
           if (roomId && payload.room_id !== roomId) return;
           if (state.gameView?.gameOver || isGameOverPrompt(state.currentPrompt)) return;
-          toast.error(`Game aborted \u2014 a player did not reconnect.`);
+          toast.error(t`Game aborted \u2014 a player did not reconnect.`);
           void useGameStore.getState().endGame();
         }),
       );
@@ -450,7 +451,7 @@ export function useGameEventListeners() {
           // Without EndGame the relay room stays InGame and every rematch
           // action bounces off "Game has already started".
           if (isMultiplayer && isHost) {
-            toast.error(`Game ended unexpectedly \u2014 returning the room to the lobby.`);
+            toast.error(t`Game ended unexpectedly \u2014 returning the room to the lobby.`);
             void useServerStore.getState().endGame();
           } else if (activeSession?.ownsForgeHost || activeSession?.relayHost) {
             void teardownForgeAiSession(activeSession);

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 export interface CropTransform {
   scale: number;
   offsetX: number;
@@ -33,7 +34,7 @@ export async function renderCroppedAvatar(
     canvas.width = outPx;
     canvas.height = outPx;
     const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("2d canvas context unavailable");
+    if (!ctx) throw new Error(t`2d canvas context unavailable`);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(bitmap, sx, sy, cropSize, cropSize, 0, 0, outPx, outPx);

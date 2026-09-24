@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 export interface ConspiracyChoice {
   player: number;
   index: number;
@@ -16,7 +17,7 @@ export async function prepareConspiracyChoices(
   if (!response.ok) throw new Error(await response.text());
   const counts: unknown = await response.json();
   if (!Array.isArray(counts) || counts.length !== names.length || counts.some((count) => count !== 0 && count !== 1)) {
-    throw new Error("Unsupported conspiracy preparation response");
+    throw new Error(t`Unsupported conspiracy preparation response`);
   }
   const choices: ConspiracyChoice[] = [];
   let offset = 0;
@@ -26,7 +27,7 @@ export async function prepareConspiracyChoices(
       const selected = player === 0
         ? window.prompt(`Secretly choose an Oracle card name for ${name} (copy ${index + 1}).`, seat.deck[0] ?? "")
         : seat.deck[0];
-      if (!selected?.trim()) throw new Error("A secret card name is required; game was not started.");
+      if (!selected?.trim()) throw new Error(t`A secret card name is required; game was not started.`);
       choices.push({ player, index, choices: [{ type: "CardName", value: selected.trim() }] });
     }
   }

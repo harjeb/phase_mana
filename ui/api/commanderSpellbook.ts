@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { platformFetch } from "@/lib/platformFetch";
 import { getPlatformType } from "@/platform";
 
@@ -58,7 +59,7 @@ export async function findMyCombos(
     body: JSON.stringify({ commanders: toEntries(commanders), main: toEntries(main) }),
   });
   if (!response.ok) {
-    throw new Error(`Commander Spellbook request failed (HTTP ${response.status})`);
+    throw new Error(t`Commander Spellbook request failed (HTTP ${response.status})`);
   }
   const data: FindMyCombosResponse = await response.json();
   return data.results;

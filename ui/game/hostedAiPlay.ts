@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { getPlatform } from "@/platform";
 import type { ActiveGameSession } from "@/lib/activeGameSession";
 import { getHostedAiServerConnectionDefaults } from "@/config/webRuntimeConfig";
@@ -36,12 +37,12 @@ export interface HostedAiGameLaunch {
 export async function startHostedAiGame(request: HostedAiGameRequest): Promise<HostedAiGameLaunch> {
   const platform = getPlatform();
   if (!platform.server) {
-    throw new Error("Hosted AI play requires a multiplayer server.");
+    throw new Error(t`Hosted AI play requires a multiplayer server.`);
   }
 
   await ensureServerConnection(getHostedAiServerConnectionDefaults(), true);
   const username = useServerStore.getState().username;
-  if (!username) throw new Error("Hosted AI play requires a server username.");
+  if (!username) throw new Error(t`Hosted AI play requires a server username.`);
 
   const format = serverFormatFromId(request.formatId);
   const room = await findHostedRoom(format, 1 + request.opponentDecks.length);
@@ -67,7 +68,7 @@ export async function startTauriForgeAiGame(
 ): Promise<HostedAiGameLaunch> {
   const platform = getPlatform();
   if (!platform.server) {
-    throw new Error("Forge play vs AI requires a multiplayer server.");
+    throw new Error(t`Forge play vs AI requires a multiplayer server.`);
   }
 
   const serverState = useServerStore.getState();
@@ -77,7 +78,7 @@ export async function startTauriForgeAiGame(
   try {
     await ensureServerConnection(localRelay ?? getHostedAiServerConnectionDefaults());
     const username = useServerStore.getState().username;
-    if (!username) throw new Error("Forge play vs AI requires a server username.");
+    if (!username) throw new Error(t`Forge play vs AI requires a server username.`);
 
     const format = serverFormatFromId(request.formatId);
     await leaveCurrentRoomIfNeeded();
@@ -85,7 +86,7 @@ export async function startTauriForgeAiGame(
       .getState()
       .createRoom(`${username}'s Forge game`, 1 + request.opponentDecks.length, format, "Forge");
     const roomId = useServerStore.getState().currentRoom?.room_id;
-    if (!roomId) throw new Error("Failed to join the local Forge room.");
+    if (!roomId) throw new Error(t`Failed to join the local Forge room.`);
     const launch = await joinHostedRoomAndPlay(roomId, format, request, username);
     return { ...launch, ownsForgeHost: true, relay: localRelay ?? undefined };
   } catch (error) {
@@ -123,7 +124,7 @@ async function joinHostedRoomAndPlay(
 ): Promise<HostedAiGameLaunch> {
   const platform = getPlatform();
   if (!platform.server) {
-    throw new Error("Hosted AI play requires a multiplayer server.");
+    throw new Error(t`Hosted AI play requires a multiplayer server.`);
   }
 
   try {
@@ -173,7 +174,7 @@ async function joinHostedRoomAndPlay(
     const payload = await gameStarted;
     const enginePlayerIndex = payload.player_order.indexOf(username);
     if (enginePlayerIndex < 0) {
-      throw new Error("Hosted game started without the local player.");
+      throw new Error(t`Hosted game started without the local player.`);
     }
 
     return {
@@ -218,7 +219,7 @@ async function ensureServerConnection(
   reconnect = false,
 ): Promise<void> {
   const server = getPlatform().server;
-  if (!server) throw new Error("Hosted AI play requires a multiplayer server.");
+  if (!server) throw new Error(t`Hosted AI play requires a multiplayer server.`);
 
   const state = useServerStore.getState();
   if (state.connected && !reconnect) return;
@@ -257,7 +258,7 @@ async function findHostedRoom(format: GameFormat, requiredSeats: number): Promis
   );
   const room = candidates[Math.floor(Math.random() * candidates.length)];
   if (!room) {
-    throw new Error(`No self-hosted room is available for ${format}.`);
+    throw new Error(t`No self-hosted room is available for ${format}.`);
   }
   return room;
 }

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { HubRequestError, hubJson, hubRequest } from "@/api/hub";
 import type {
   AccountAssetList,
@@ -44,7 +45,7 @@ export async function uploadAsset(kind: AssetKind, blob: Blob): Promise<Uploaded
     headers: upload.headers,
     body: blob,
   });
-  if (!response.ok) throw new Error(`Could not upload the image (${response.status})`);
+  if (!response.ok) throw new Error(t`Could not upload the image (${response.status})`);
   return { assetId: upload.assetId, url: upload.publicUrl };
 }
 

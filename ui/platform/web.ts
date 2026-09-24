@@ -5,6 +5,7 @@
  * The game engine runs in a Web Worker for non-blocking UI.
  */
 
+import { t } from "@lingui/core/macro";
 import type { EngineGameStats } from "@/lib/engineTelemetry";
 import {
   noteEngineThinkTime,
@@ -594,7 +595,7 @@ class WorkerBridge {
     }
 
     if (!this.worker) {
-      throw new Error("Worker not initialized");
+      throw new Error(t`Worker not initialized`);
     }
 
     // Forge answers the game itself. It has no implementation of the card
@@ -1214,7 +1215,7 @@ class WebServerApi implements IServerApi {
 
   async createRoom(params: CreateRoomParams): Promise<string | null> {
     if (params.engine === "Forge" && !isForgeWasmHostingEnabled()) {
-      throw new Error("Forge engine is not supported on the web");
+      throw new Error(t`Forge engine is not supported on the web`);
     }
     this.send({
       type: "CreateRoom",
@@ -1256,7 +1257,7 @@ class WebServerApi implements IServerApi {
 
   async leaveRoom(): Promise<void> {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      throw new Error("Cannot leave room while disconnected.");
+      throw new Error(t`Cannot leave room while disconnected.`);
     }
     this.stopAllBots();
     clearSpawnedBots();
@@ -1305,7 +1306,7 @@ class WebServerApi implements IServerApi {
     // game that ends with the relay already gone is exactly the case the queue
     // exists for.
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
-      throw new Error("Relay is not connected; queue the engine report instead.");
+      throw new Error(t`Relay is not connected; queue the engine report instead.`);
     }
     this.send({ type: "ReportEngineStats", game_id: gameId ?? null, stats });
   }
@@ -1329,10 +1330,10 @@ class WebServerApi implements IServerApi {
 
   async spawnAiBot(params: SpawnAiBotParams): Promise<void> {
     if (!this.relayUrl || this.serverPassword == null) {
-      throw new Error("Cannot spawn bot: not connected to relay.");
+      throw new Error(t`Cannot spawn bot: not connected to relay.`);
     }
     if (this.bots.has(params.username)) {
-      throw new Error(`Bot '${params.username}' is already running.`);
+      throw new Error(t`Bot '${params.username}' is already running.`);
     }
     const wasm = await loadWasm();
     const config = JSON.stringify({

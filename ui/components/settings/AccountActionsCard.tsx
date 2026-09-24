@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Download, LogOut, Trash2 } from "lucide-react";
@@ -50,7 +51,7 @@ export function AccountActionsCard() {
   return (
     <>
       <section className="rounded-lg border bg-card/40 p-4 sm:p-5 space-y-1">
-        <Label>Data &amp; session</Label>
+        <Label><Trans>Data &amp; session</Trans></Label>
         <div className="divide-y divide-border/70">
           <ActionRow
             title={`Export my data`}
@@ -106,7 +107,7 @@ export function AccountActionsCard() {
         </p>
       </section>
       <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 sm:p-5 space-y-1">
-        <Label className="text-destructive">Danger zone</Label>
+        <Label className="text-destructive"><Trans>Danger zone</Trans></Label>
         <ActionRow
           title={`Delete account`}
           description={`Erases your account, sign-in methods, decks, and history. Community publications stay up without your name.`}

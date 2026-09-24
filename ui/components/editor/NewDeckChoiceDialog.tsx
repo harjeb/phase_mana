@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import type { ComponentType } from "react";
 import { ClipboardPaste, Sparkles } from "lucide-react";
 import {
@@ -52,8 +53,8 @@ export function NewDeckChoiceDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Add a deck</DialogTitle>
-          <DialogDescription>How would you like to start?</DialogDescription>
+          <DialogTitle><Trans>Add a deck</Trans></DialogTitle>
+          <DialogDescription><Trans>How would you like to start?</Trans></DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 sm:grid-cols-2">
           <ChoiceCard

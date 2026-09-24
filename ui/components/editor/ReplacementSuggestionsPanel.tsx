@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useRef, useState, type MouseEvent } from "react";
 import { ArrowRightLeft, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -106,7 +108,7 @@ export function ReplacementSuggestionsPanel({
         <div className="flex items-center gap-2">
           <ArrowRightLeft className="h-4 w-4 text-primary" />
           <div>
-            <h3 className="text-sm font-semibold">Explainable replacements</h3>
+            <h3 className="text-sm font-semibold"><Trans>Explainable replacements</Trans></h3>
             <p className="text-[10px] text-muted-foreground">
               Same colour identity, mana value, and primary card type.
             </p>
@@ -272,7 +274,7 @@ export function ReplacementSuggestionsPanel({
                     addToMain(card);
                     for (const tag of tags) tagCard(card.identity.name, tag);
                   });
-                  toast.success(`Replaced ${target.identity.name} with ${suggestion.name}`);
+                  toast.success(t`Replaced ${target.identity.name} with ${suggestion.name}`);
                 }}
               >
                 <ArrowRightLeft className="h-3.5 w-3.5" />

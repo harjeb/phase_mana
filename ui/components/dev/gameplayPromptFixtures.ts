@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { PromptInput } from "@/protocol";
 import type { DevDialogPreview } from "./promptDialogPreviews";
 import type { DevDialogFixtures } from "./promptDialogs/useDevDialogFixtures";
@@ -157,5 +158,5 @@ export function previewInput(preview: DevDialogPreview, fixtures: DevDialogFixtu
     case "game-over":
       return { type: "gameOver" } as PromptInput;
   }
-  throw new Error(`Unsupported prompt preview: ${preview}`);
+  throw new Error(t`Unsupported prompt preview: ${preview}`);
 }

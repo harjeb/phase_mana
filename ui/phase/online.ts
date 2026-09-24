@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { toast } from "sonner";
 import type { Prompt, StateUpdate } from "@/protocol";
 import { acceptSnapshot, invalidateSnapshotGeneration } from "./transport";
@@ -29,7 +30,7 @@ const key = (endpoint: string) => `phase-online:${endpoint}`;
 export function normalizeServer(endpoint: string): string {
   const url = new URL(endpoint);
   if (!["ws:", "wss:"].includes(url.protocol) || url.username || url.password || url.search || url.hash) {
-    throw new Error("Enter a ws:// or wss:// server URL without credentials or query parameters.");
+    throw new Error(t`Enter a ws:// or wss:// server URL without credentials or query parameters.`);
   }
   if (url.pathname === "/") url.pathname = "/ws";
   return url.href;
@@ -39,7 +40,7 @@ export function savedOnlineSession(endpoint: string): boolean {
 }
 export const isOnlineSession = () => active;
 function send(type: string, data?: unknown) {
-  if (socket?.readyState !== WebSocket.OPEN) throw new Error("Disconnected. Reconnect before responding.");
+  if (socket?.readyState !== WebSocket.OPEN) throw new Error(t`Disconnected. Reconnect before responding.`);
   socket.send(JSON.stringify(data === undefined ? { type } : { type, data }));
 }
 function settle(error?: Error) {
@@ -68,9 +69,9 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
   let initial = request;
   if (initial === "reconnect") {
     const saved = sessionStorage.getItem(key(endpoint));
-    if (!saved) throw new Error("No saved session for this server in this tab.");
+    if (!saved) throw new Error(t`No saved session for this server in this tab.`);
     const parsed = JSON.parse(saved) as Credentials;
-    if (!parsed.game_code || !parsed.player_token || !parsed.full_key) throw new Error("Invalid saved session.");
+    if (!parsed.game_code || !parsed.player_token || !parsed.full_key) throw new Error(t`Invalid saved session.`);
     initial = { type: "Reconnect", data: parsed };
   }
   const draftSession = ["CreateDraft", "CreateDraftWithSettings", "JoinDraft", "JoinDraftWithPassword", "ReconnectDraft"].includes(initial.type);
@@ -96,9 +97,9 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
       const frame = JSON.parse(String(event.data));
       const data = frame.data;
       if (frame.type === "ServerHello") {
-        if (hello) throw new Error("Duplicate server handshake");
+        if (hello) throw new Error(t`Duplicate server handshake`);
         if (data.mode !== "Full" || data.protocol_version !== 76 || data.manabrew_version !== 2) {
-          throw new Error("This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2).");
+          throw new Error(t`This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2).`);
         }
         hello = true;
         send("ClientHello", { client_version: "0.1.0", build_commit: "phase-mana", protocol_version: 76, wire_formats: [] });
@@ -107,13 +108,13 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
           send("BootstrapTerminalDelivery", { request: { key: credentials.full_key, playerToken: credentials.player_token, requestId: crypto.randomUUID() } });
         } else send(initial.type, initial.data);
       } else if (!hello) {
-        throw new Error("Server sent data before its handshake");
+        throw new Error(t`Server sent data before its handshake`);
       } else if (handleOnlineDraftFrame(frame, endpoint)) {
         return;
       } else if (frame.type === "DraftMatchStart") {
         if (!draftSession || !data.game_code || data.full_key?.game_code !== data.game_code ||
           !Number.isSafeInteger(data.full_key.generation) || data.full_key.generation < 1 || !data.player_token || !onlineDraftStatus().code) {
-          throw new Error("Invalid draft match attachment");
+          throw new Error(t`Invalid draft match attachment`);
         }
         const matchKey = JSON.stringify(data.full_key);
         if (draftMatchKey !== matchKey) {
@@ -135,7 +136,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
         if (!Number.isSafeInteger(delivery.terminalRevision) || delivery.terminalRevision < revision ||
           typeof delivery.deliveryId !== "string" || !delivery.deliveryId || typeof delivery.credential !== "string" || !delivery.credential ||
           typeof delivery.display?.reason !== "string" || !(delivery.display.winner === null || Number.isInteger(delivery.display.winner))) {
-          throw new Error("Invalid terminal result");
+          throw new Error(t`Invalid terminal result`);
         }
         const gameView = revision >= 0 ? useGameStore.getState().gameView : null;
         credentials = { ...credentials, terminal: delivery };
@@ -151,7 +152,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
       } else if (["GameCreated", "SessionAttached", "GameStarted"].includes(frame.type)) {
         if (data.player_token && data.full_key) {
           credentials = { game_code: data.game_code ?? credentials?.game_code ?? status.code, player_token: data.player_token, full_key: data.full_key };
-          if (!credentials.game_code) throw new Error("Server omitted the session code");
+          if (!credentials.game_code) throw new Error(t`Server omitted the session code`);
           sessionStorage.setItem(key(endpoint), JSON.stringify(credentials));
           update({ code: credentials.game_code });
         }
@@ -161,7 +162,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
         if (data.state?.waiting_for?.type !== "GameOver") send("ManabrewSnapshot");
       } else if (frame.type === "ManabrewSnapshot") {
         const view = data.snapshot as { game_code: string; state_revision: number; your_player: number; update: StateUpdate; prompt: Prompt | null };
-        if (view.game_code !== status.code || !Number.isSafeInteger(view.state_revision)) throw new Error("Invalid session snapshot");
+        if (view.game_code !== status.code || !Number.isSafeInteger(view.state_revision)) throw new Error(t`Invalid session snapshot`);
         if (view.state_revision < revision) return;
         revision = view.state_revision;
         acceptSnapshot({ state: view.update, prompt: view.prompt, humanPlayerId: `player-${view.your_player}`, aiActions: 0 });
@@ -194,7 +195,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
     update({ connected: false, message: "Disconnected — reconnect to resume your seat." });
     settle(new Error("Connection closed"));
     useGameStore.setState({ currentPrompt: null, isWaitingForResponse: false });
-    toast.error("Connection lost", { action: { label: "Reconnect", onClick: () => draftSession ? reconnectOnlineDraft(endpoint) : connectOnline(endpoint, "reconnect") } });
+    toast.error(t`Connection lost`, { action: { label: "Reconnect", onClick: () => draftSession ? reconnectOnlineDraft(endpoint) : connectOnline(endpoint, "reconnect") } });
   };
   current.onerror = () => { if (socket === current) fail("Could not connect to the Phase server"); };
 }

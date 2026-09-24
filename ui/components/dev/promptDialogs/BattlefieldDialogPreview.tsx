@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { PlayModePicker } from "@/components/game/PlayModePicker";
 import { CombatBreakdownModal } from "@/components/game/modals/CombatBreakdownModal";
 import {
@@ -48,7 +49,7 @@ export function BattlefieldDialogPreview({
     case "zone-viewer":
       return (
         <ZoneViewer
-          title="Choose a card from your graveyard"
+          title={t`Choose a card from your graveyard`}
           cards={cards}
           mode="target"
           onClose={onClose}
@@ -68,11 +69,11 @@ export function BattlefieldDialogPreview({
       return <LeaveGameModal onStay={onClose} onLeave={onClose} />;
     case "eliminated-player":
       return (
-        <EliminatedModal heading="You lost" hosting={false} onObserve={onClose} onLeave={onClose} />
+        <EliminatedModal heading={t`You lost`} hosting={false} onObserve={onClose} onLeave={onClose} />
       );
     case "eliminated-host":
       return (
-        <EliminatedModal heading="You conceded" hosting onObserve={onClose} onLeave={onClose} />
+        <EliminatedModal heading={t`You conceded`} hosting onObserve={onClose} onLeave={onClose} />
       );
     case "player-details":
       return <PlayerSheetModal spec={playerSpec} onClose={onClose} />;

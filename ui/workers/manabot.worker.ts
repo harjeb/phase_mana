@@ -12,6 +12,7 @@
  * comes back as the bytes the engine reads, so no JSON is parsed here.
  */
 
+import { t } from "@lingui/core/macro";
 import init, { WasmManabot } from "../wasm/wasm";
 import {
   SAB_SIZE,
@@ -47,7 +48,7 @@ function takeFrame(signal: Int32Array, data: Uint8Array): string {
 function writeFrame(signal: Int32Array, data: Uint8Array, json: string): void {
   const bytes = encoder.encode(json);
   if (bytes.length > data.length) {
-    throw new Error("Manabot response exceeds the shared buffer capacity.");
+    throw new Error(t`Manabot response exceeds the shared buffer capacity.`);
   }
   data.set(bytes, 0);
   Atomics.store(signal, 1, bytes.length);

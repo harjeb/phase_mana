@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Section, Subhead, Panel } from "../kit";
 import { RADIUS_TOKENS, CARD_SIZES } from "../designSystem.data";
 const SPACING = [1, 2, 3, 4, 6, 8, 12] as const;
@@ -8,7 +9,7 @@ export function SpacingSection() {
       title={`Spacing & radius`}
       intro="Tailwind's default spacing scale (rem-based, so it scales on large displays). Radius derives from a single --radius base. Card sizing is fixed px."
     >
-      <Subhead>Radius</Subhead>
+      <Subhead><Trans>Radius</Trans></Subhead>
       <Panel className="flex flex-wrap gap-4">
         {RADIUS_TOKENS.map((r) => (
           <div key={r.token} className="flex flex-col items-center gap-2">
@@ -24,7 +25,7 @@ export function SpacingSection() {
         ))}
       </Panel>
 
-      <Subhead>Spacing scale</Subhead>
+      <Subhead><Trans>Spacing scale</Trans></Subhead>
       <Panel className="space-y-2">
         {SPACING.map((n) => (
           <div key={n} className="flex items-center gap-3">
@@ -35,15 +36,15 @@ export function SpacingSection() {
         ))}
       </Panel>
 
-      <Subhead>Card sizes (px)</Subhead>
+      <Subhead><Trans>Card sizes (px)</Trans></Subhead>
       <Panel>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[420px] text-left text-sm">
             <thead className="text-[11px] uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="pb-2 pr-4 font-semibold">Surface</th>
-                <th className="pb-2 pr-4 font-semibold">Dimensions</th>
-                <th className="pb-2 font-semibold">Constant</th>
+                <th className="pb-2 pr-4 font-semibold"><Trans>Surface</Trans></th>
+                <th className="pb-2 pr-4 font-semibold"><Trans>Dimensions</Trans></th>
+                <th className="pb-2 font-semibold"><Trans>Constant</Trans></th>
               </tr>
             </thead>
             <tbody>

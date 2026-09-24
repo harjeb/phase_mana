@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import initIronsmith, { WasmGame } from "ironsmith-wasm";
 import ironsmithWasmModuleUrl from "ironsmith-wasm/ironsmith_bg.wasm?url";
 import { getPlatform } from "@/platform";
@@ -212,7 +213,7 @@ export class IronsmithTrustedGameApi implements IGameApi {
       const hostSlot = this.hostPlayerSlot;
       if (!hostSlot) {
         await this.sendRelayHello();
-        throw new Error("Ironsmith host relay is not ready yet; try again in a moment.");
+        throw new Error(t`Ironsmith host relay is not ready yet; try again in a moment.`);
       }
       const sent = await this.sendPrivateRelay(hostSlot, {
         type: "response",
@@ -220,7 +221,7 @@ export class IronsmithTrustedGameApi implements IGameApi {
         action,
       });
       if (!sent) {
-        throw new Error("Ironsmith private relay is not ready yet; try again in a moment.");
+        throw new Error(t`Ironsmith private relay is not ready yet; try again in a moment.`);
       }
       return;
     }
@@ -233,14 +234,14 @@ export class IronsmithTrustedGameApi implements IGameApi {
       const hostSlot = this.hostPlayerSlot;
       if (!hostSlot) {
         await this.sendRelayHello();
-        throw new Error("Ironsmith host relay is not ready yet; try again in a moment.");
+        throw new Error(t`Ironsmith host relay is not ready yet; try again in a moment.`);
       }
       const sent = await this.sendPrivateRelay(hostSlot, {
         type: "directive",
         directive: params.directive,
       });
       if (!sent) {
-        throw new Error("Ironsmith private relay is not ready yet; try again in a moment.");
+        throw new Error(t`Ironsmith private relay is not ready yet; try again in a moment.`);
       }
       return;
     }
@@ -267,7 +268,7 @@ export class IronsmithTrustedGameApi implements IGameApi {
   }
 
   async restoreSnapshot(_params: RestoreSnapshotParams): Promise<void> {
-    throw new Error("Ironsmith trusted runtime snapshots are not wired to Manabrew restore yet");
+    throw new Error(t`Ironsmith trusted runtime snapshots are not wired to Manabrew restore yet`);
   }
 
   async getPrompt(): Promise<Prompt | null> {
@@ -407,12 +408,12 @@ export class IronsmithTrustedGameApi implements IGameApi {
     prompt: Prompt | null;
     error: ProtocolError | null;
   } {
-    if (!this.game) throw new Error("Ironsmith game is not initialized");
+    if (!this.game) throw new Error(t`Ironsmith game is not initialized`);
     const view = plainify(this.game.manabrewView(viewer)) as IronsmithViewResult;
     const rawGameView = view.state?.gameView;
     const gameView = rawGameView ? this.applyKnownPlayerStatuses(rawGameView) : null;
     if (!gameView) {
-      throw new Error("Ironsmith WASM did not return a Manabrew game view");
+      throw new Error(t`Ironsmith WASM did not return a Manabrew game view`);
     }
     return {
       state: { gameView },
@@ -425,7 +426,7 @@ export class IronsmithTrustedGameApi implements IGameApi {
   private readPublicState(): { gameView: GameViewDto } {
     const state = plainify(this.game?.manabrewPublicState()) as { gameView?: GameViewDto } | null;
     if (state?.gameView) return { gameView: this.applyKnownPlayerStatuses(state.gameView) };
-    throw new Error("Ironsmith WASM did not return a public Manabrew game view");
+    throw new Error(t`Ironsmith WASM did not return a public Manabrew game view`);
   }
 
   private applyKnownPlayerStatuses(gameView: GameViewDto): GameViewDto {
@@ -560,7 +561,7 @@ export class IronsmithTrustedGameApi implements IGameApi {
   private async ownKeyPair(): Promise<CryptoKeyPair | null> {
     if (typeof crypto === "undefined" || !crypto.subtle) {
       throw new Error(
-        "Ironsmith trusted multiplayer requires Web Crypto in a secure context. Use HTTPS, localhost, or a browser that exposes crypto.subtle.",
+        t`Ironsmith trusted multiplayer requires Web Crypto in a secure context. Use HTTPS, localhost, or a browser that exposes crypto.subtle.`,
       );
     }
     this.keyPairPromise ??= crypto.subtle

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +17,7 @@ export function GameSummaryDialog() {
     <Dialog open={Boolean(summary)} onOpenChange={(open) => !open && dismissSummary()}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Game summary</DialogTitle>
+          <DialogTitle><Trans>Game summary</Trans></DialogTitle>
         </DialogHeader>
         {summary && <SummaryBody session={summary.session} winnerId={summary.winnerId} />}
       </DialogContent>
@@ -37,7 +38,7 @@ function SummaryBody({
       <div className="space-y-3">
         {winner && <p className="text-center text-lg font-semibold">🏆 {winner.name} wins</p>}
         <div className="rounded-md border border-border p-3 text-sm">
-          <div className="mb-1 font-medium">Final scores</div>
+          <div className="mb-1 font-medium"><Trans>Final scores</Trans></div>
           <ul className="space-y-0.5 text-muted-foreground">
             {session.players.map((p) => (
               <li key={p.id} className="flex justify-between gap-2">
@@ -52,19 +53,19 @@ function SummaryBody({
         </div>
         <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
           <div>
-            <div className="font-medium text-foreground">Length</div>
+            <div className="font-medium text-foreground"><Trans>Length</Trans></div>
             <div>{formatDuration(lengthMs)}</div>
           </div>
           <div>
-            <div className="font-medium text-foreground">Turns</div>
+            <div className="font-medium text-foreground"><Trans>Turns</Trans></div>
             <div>{session.turn || "—"}</div>
           </div>
           <div>
-            <div className="font-medium text-foreground">Players</div>
+            <div className="font-medium text-foreground"><Trans>Players</Trans></div>
             <div>{session.players.length}</div>
           </div>
           <div>
-            <div className="font-medium text-foreground">Events</div>
+            <div className="font-medium text-foreground"><Trans>Events</Trans></div>
             <div>{session.history.length}</div>
           </div>
         </div>

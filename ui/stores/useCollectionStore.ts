@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 
 import { fetchAccountCollection, HubRequestError, saveAccountCollection } from "@/api/hub";
@@ -100,7 +101,7 @@ function queueAccountSave(
     .then(() => {
       if (useAuthStore.getState().account?.id !== accountId) {
         writePendingAccountCollection(accountId, quantities, baseQuantities);
-        throw new Error("Collection account changed before this edit could sync");
+        throw new Error(t`Collection account changed before this edit could sync`);
       }
       const state = useCollectionStore.getState();
       let pending = quantities;
@@ -289,7 +290,7 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
       if (intendedAccountId) {
         writePendingAccountCollection(intendedAccountId, pendingQuantities, pendingBaseQuantities);
       } else localStorage.setItem(LOCAL_COLLECTION_KEY, JSON.stringify(pendingQuantities));
-      throw new Error("Collection account changed before this edit could be applied");
+      throw new Error(t`Collection account changed before this edit could be applied`);
     }
     const baseQuantities = get().syncedQuantities;
     const quantities = { ...get().quantities };
@@ -329,7 +330,7 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
       if (intendedAccountId) {
         writePendingAccountCollection(intendedAccountId, pendingQuantities, pendingBaseQuantities);
       } else localStorage.setItem(LOCAL_COLLECTION_KEY, JSON.stringify(pendingQuantities));
-      throw new Error("Collection account changed before this import could be applied");
+      throw new Error(t`Collection account changed before this import could be applied`);
     }
     const baseQuantities = get().syncedQuantities;
     const quantities = { ...get().quantities };
@@ -372,7 +373,7 @@ export const useCollectionStore = create<CollectionState>((set, get) => ({
       if (intendedAccountId) {
         writePendingAccountCollection(intendedAccountId, normalized, baseQuantities);
       } else localStorage.setItem(LOCAL_COLLECTION_KEY, JSON.stringify(normalized));
-      throw new Error("Collection account changed before this import could be applied");
+      throw new Error(t`Collection account changed before this import could be applied`);
     }
     set({ quantities: normalized });
     const accountId = intendedAccountId;

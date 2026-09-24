@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { listen } from "@tauri-apps/api/event";
@@ -81,7 +83,7 @@ export function CardArtDownloadSection() {
     try {
       const urls = [...new Set(decks.flatMap((saved) => deckArtUrls(saved.deck, variants)))];
       if (urls.length === 0) {
-        toast.info(`No decks to download art for yet.`);
+        toast.info(t`No decks to download art for yet.`);
         return;
       }
       const result = await preseedCardArt(urls);
@@ -94,7 +96,7 @@ export function CardArtDownloadSection() {
       );
       refresh();
     } catch (error) {
-      toast.error(`Could not download art: ${String(error)}`);
+      toast.error(t`Could not download art: ${String(error)}`);
     } finally {
       setBusy(null);
     }
@@ -108,7 +110,7 @@ export function CardArtDownloadSection() {
       toast.success(result.failed > 0 ? `${summary}, ${result.failed} failed` : summary);
       refresh();
     } catch (error) {
-      toast.error(`Could not download every card: ${String(error)}`);
+      toast.error(t`Could not download every card: ${String(error)}`);
     } finally {
       setBusy(null);
       setProgress(null);
@@ -120,7 +122,7 @@ export function CardArtDownloadSection() {
       await clearCardArtCache(includeDownloaded);
       refresh();
     } catch (error) {
-      toast.error(`Could not clear the art cache: ${String(error)}`);
+      toast.error(t`Could not clear the art cache: ${String(error)}`);
     } finally {
       setBusy(null);
     }
@@ -128,11 +130,11 @@ export function CardArtDownloadSection() {
   const deckCards = new Set(decks.flatMap((saved) => saved.deck.cards.map((c) => c.identity.name)));
   return (
     <div className="rounded-lg border bg-card/40 p-4 space-y-3 max-w-xl">
-      <Label>Card Art On This Machine</Label>
+      <Label><Trans>Card Art On This Machine</Trans></Label>
       <p className="text-xs text-muted-foreground">
         Art is kept on disk once drawn, so a board does not fetch it twice, and a deliberate
         download is never dropped when the cache is trimmed for space. Either download also keeps
-        what each card <em>is</em>, which is what a board with no internet needs to know which
+        what each card <em><Trans>is</Trans></em>, which is what a board with no internet needs to know which
         picture to draw — pictures alone are not enough. Every card additionally keeps every card
         name, the set list and every ruling, so searching and pasting a decklist work offline too.
       </p>

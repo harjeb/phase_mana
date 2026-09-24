@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { Crown, Dice5, Layers, Sparkles, Swords, Wand2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +59,7 @@ export default function CasualModes() {
   return (
     <div className="flex h-full flex-col gap-6 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
       <header className="max-w-2xl">
-        <h1 className="font-serif text-2xl font-light tracking-[0.02em]">Casual Modes</h1>
+        <h1 className="font-serif text-2xl font-light tracking-[0.02em]"><Trans>Casual Modes</Trans></h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Local play against the AI. Draft variants, Commander offshoots and retro rulesets that
           don&apos;t fit the standard formats.
@@ -71,22 +73,22 @@ export default function CasualModes() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           <CasualCard
             icon={<Crown className="h-4 w-4" />}
-            title="Commander Draft"
-            description="Four-seat, two-card picks (CR 903.13), then a four-player Commander game."
+            title={t`Commander Draft`}
+            description={t`Four-seat, two-card picks (CR 903.13), then a four-player Commander game.`}
             cta="Open Commander Draft"
             onClick={openLimited}
           />
           <CasualCard
             icon={<Layers className="h-4 w-4" />}
-            title="Winston Draft"
-            description="Two-seat shared-stack pile draft: take a pile or decline it."
+            title={t`Winston Draft`}
+            description={t`Two-seat shared-stack pile draft: take a pile or decline it.`}
             cta="Open Winston Draft"
             onClick={openLimited}
           />
           <CasualCard
             icon={<Wand2 className="h-4 w-4" />}
-            title="Cube / local pool"
-            description="Paste a CubeCobra id or load a saved pool, then draft or seal it."
+            title={t`Cube / local pool`}
+            description={t`Paste a CubeCobra id or load a saved pool, then draft or seal it.`}
             cta="Open cube import"
             onClick={openLimited}
           />
@@ -100,43 +102,43 @@ export default function CasualModes() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           <CasualCard
             icon={<Sparkles className="h-4 w-4" />}
-            title="Oathbreaker"
+            title={t`Oathbreaker`}
             description="60-card singleton, 20 life, a planeswalker plus its signature spell."
             cta="Build / play Oathbreaker"
             onClick={() => openConstructed("oathbreaker")}
           />
           <CasualCard
             icon={<Swords className="h-4 w-4" />}
-            title="Tiny Leaders"
+            title={t`Tiny Leaders`}
             description="50-card singleton, 20 life, a legendary commander with mana value 3 or less."
             cta="Build / play Tiny Leaders"
             onClick={() => openConstructed("tiny_leaders")}
           />
           <CasualCard
             icon={<Swords className="h-4 w-4" />}
-            title="Duel Commander"
+            title={t`Duel Commander`}
             description="100-card singleton, 30 life, tuned for 1v1."
             cta="Build / play Duel Commander"
             onClick={() => openConstructed("duel_commander")}
           />
           <CasualCard
             icon={<Swords className="h-4 w-4" />}
-            title="Pauper Commander"
+            title={t`Pauper Commander`}
             description="100-card singleton, 40 life, an uncommon creature commander, commons only."
             cta="Build / play Pauper Commander"
             onClick={() => openConstructed("pauper_commander")}
           />
           <CasualCard
             icon={<Dice5 className="h-4 w-4" />}
-            title="Old School 93/94"
-            description="Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn."
+            title={t`Old School 93/94`}
+            description={t`Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn.`}
             cta="Build / play Old School 93/94"
             onClick={() => openConstructed("old_school_93_94")}
           />
           <CasualCard
             icon={<Dice5 className="h-4 w-4" />}
-            title="Old School 95"
-            description="Old School 93/94 plus Fourth Edition through Homelands."
+            title={t`Old School 95`}
+            description={t`Old School 93/94 plus Fourth Edition through Homelands.`}
             cta="Build / play Old School 95"
             onClick={() => openConstructed("old_school_95")}
           />
@@ -150,36 +152,36 @@ export default function CasualModes() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           <CasualCard
             icon={<Dice5 className="h-4 w-4" />}
-            title="Momir"
-            description="Momir's Madness — the engine supplies a snow-basic deck and the random-creature emblem."
+            title={t`Momir`}
+            description={t`Momir's Madness — the engine supplies a snow-basic deck and the random-creature emblem.`}
             cta="Start Momir"
             onClick={startMomir}
           />
           <CasualCard
             icon={<Crown className="h-4 w-4" />}
-            title="Four-player Commander"
-            description="One human plus three AI at 40 life each; add opponents in the setup screen."
+            title={t`Four-player Commander`}
+            description={t`One human plus three AI at 40 life each; add opponents in the setup screen.`}
             cta="Set up four-player table"
             onClick={() => openConstructed("commander")}
           />
           <CasualCard
             icon={<Sparkles className="h-4 w-4" />}
-            title="Archenemy"
-            description="You at 40 life against the heroes at 20, with the engine-managed scheme deck."
+            title={t`Archenemy`}
+            description={t`You at 40 life against the heroes at 20, with the engine-managed scheme deck.`}
             cta="Set up Archenemy"
             onClick={() => openConstructed("archenemy")}
           />
           <CasualCard
             icon={<Dice5 className="h-4 w-4" />}
-            title="Planechase"
-            description="A shared planar deck and the planar die; roll it from the active plane card."
+            title={t`Planechase`}
+            description={t`A shared planar deck and the planar die; roll it from the active plane card.`}
             cta="Set up Planechase"
             onClick={() => openConstructed("planechase")}
           />
           <CasualCard
             icon={<Swords className="h-4 w-4" />}
-            title="Two-Headed Giant"
-            description="Two teams of two share a 30-life total and take their turns together."
+            title={t`Two-Headed Giant`}
+            description={t`Two teams of two share a 30-life total and take their turns together.`}
             cta="Set up Two-Headed Giant"
             onClick={() => openConstructed("two_headed_giant")}
           />

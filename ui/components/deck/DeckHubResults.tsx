@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Layers } from "lucide-react";
@@ -83,11 +84,11 @@ export function DeckHubResults({
                 ? `${total.toLocaleString()} ${total === 1 ? "publication" : "publications"}`
                 : `Loading publications\u2026`}
             </p>
-            {loading && loaded && <p className="text-xs text-muted-foreground">Updating…</p>}
+            {loading && loaded && <p className="text-xs text-muted-foreground"><Trans>Updating…</Trans></p>}
           </div>
           {error ? (
             <div className="rounded-lg border border-dashed p-8 text-center">
-              <p className="text-sm font-medium">Community could not be loaded</p>
+              <p className="text-sm font-medium"><Trans>Community could not be loaded</Trans></p>
               <p className="mt-1 text-xs text-muted-foreground">{error}</p>
               <Button variant="outline" size="sm" className="mt-4" onClick={onRetry}>
                 Retry
@@ -116,7 +117,7 @@ export function DeckHubResults({
                 </Button>
               ) : (
                 <Button variant="primary" asChild size="sm" className="mt-4">
-                  <Link to={ROUTES.DECK_EDITOR}>Open My Decks</Link>
+                  <Link to={ROUTES.DECK_EDITOR}><Trans>Open My Decks</Trans></Link>
                 </Button>
               )}
             </div>
@@ -124,7 +125,7 @@ export function DeckHubResults({
             <div className="space-y-6">
               {!hasFilters && <DeckHubCuratedSections onOpen={onOpen} onAuthor={onAuthor} />}
               {!hasFilters && (
-                <h2 className="font-serif text-xl font-semibold">Explore all decks</h2>
+                <h2 className="font-serif text-xl font-semibold"><Trans>Explore all decks</Trans></h2>
               )}
               {[...groups.entries()].map(([label, groupedEntries]) => (
                 <section key={label}>

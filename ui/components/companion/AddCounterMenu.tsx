@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export function AddCounterMenu({ player }: AddCounterMenuProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
-          <DropdownMenuLabel>Add counter</DropdownMenuLabel>
+          <DropdownMenuLabel><Trans>Add counter</Trans></DropdownMenuLabel>
           <DropdownMenuSeparator />
           {COMPANION_COUNTER_PRESETS.map((preset) => {
             const already = player.counters.some(

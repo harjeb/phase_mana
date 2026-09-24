@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { ImageUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -76,11 +77,11 @@ export function MyAssetsSection() {
   }
   return (
     <section className="space-y-4">
-      <h2 className="text-lg font-semibold">Manage uploaded assets here</h2>
+      <h2 className="text-lg font-semibold"><Trans>Manage uploaded assets here</Trans></h2>
       <div className="max-w-2xl space-y-4 rounded-lg border bg-card/40 p-5">
         <div className="space-y-2">
           <div className="flex items-baseline justify-between gap-3">
-            <Label>Storage</Label>
+            <Label><Trans>Storage</Trans></Label>
             {loaded && (
               <span className="text-xs text-muted-foreground">
                 {formatBytes(usedBytes)} of {formatBytes(quotaBytes)} used
@@ -109,7 +110,7 @@ export function MyAssetsSection() {
 
         {loadError ? (
           <div className="flex items-center gap-3">
-            <p className="text-sm text-destructive">Couldn&apos;t load your images.</p>
+            <p className="text-sm text-destructive"><Trans>Couldn&apos;t load your images.</Trans></p>
             <Button
               variant="outline"
               size="sm"
@@ -125,7 +126,7 @@ export function MyAssetsSection() {
             </Button>
           </div>
         ) : !loaded ? (
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-sm text-muted-foreground"><Trans>Loading…</Trans></p>
         ) : assets.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No images yet. Upload an avatar or a playmat and it will show up here.
@@ -154,7 +155,7 @@ export function MyAssetsSection() {
       <Dialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Delete image</DialogTitle>
+            <DialogTitle><Trans>Delete image</Trans></DialogTitle>
             <DialogDescription>
               This permanently removes the image from your storage and frees its space. If it&apos;s
               your current avatar or a deck&apos;s playmat, that falls back to the default.

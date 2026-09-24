@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
@@ -123,7 +124,7 @@ export function cardKey(lookup: ScryfallCardLookup): string {
   if (set && cn) return `set:${set}::cn:${cn}`;
   if (lookup.name) return `name:${lookup.name.toLowerCase()}`;
   if (lookup.id) return `id:${lookup.id}`;
-  throw new Error("cardKey requires setCode+collectorNumber, name, or id");
+  throw new Error(t`cardKey requires setCode+collectorNumber, name, or id`);
 }
 
 function mirrorCardKeys(entry: ScryfallEntry): string[] {
@@ -210,7 +211,7 @@ async function fetchScryfallCard(
       fallback = "same-printing";
     } else {
       if (!lookup.name) {
-        throw new Error("Scryfall lookup requires a name or id");
+        throw new Error(t`Scryfall lookup requires a name or id`);
       }
       if (lookup.setCode) {
         try {
@@ -282,7 +283,7 @@ const printingsByOracleId = new Map<string, ScryfallCard[]>();
 async function loadTokenArchive(): Promise<TokenArchiveIndex> {
   tokenArchivePromise ??= fetch("/token_archive.json")
     .then((response) => {
-      if (!response.ok) throw new Error(`Failed to load token archive: ${response.status}`);
+      if (!response.ok) throw new Error(t`Failed to load token archive: ${response.status}`);
       return response.json() as Promise<TokenArchive>;
     })
     .then((archive) => {
@@ -584,7 +585,7 @@ export const useScryfallStore = create<ScryfallState>()(
 
         const uris = chooseImageUrisForCard(card, { frontOnly: true });
         if (!uris) {
-          throw new Error("Couldn't find a texture url for: " + JSON.stringify(lookup));
+          throw new Error(t`Couldn't find a texture url for: ` + JSON.stringify(lookup));
         }
 
         const entry: ScryfallEntry = {
@@ -795,7 +796,7 @@ export const useScryfallStore = create<ScryfallState>()(
         const token = print.layout.includes("token");
         const uris = chooseImageUrisForCard(print, { frontOnly: true });
         if (!uris) {
-          throw new Error("Couldnt find uris for printing: " + setCnKey);
+          throw new Error(t`Couldnt find uris for printing: ` + setCnKey);
         }
         const lowerName = print.name.toLowerCase();
         set((state) => {

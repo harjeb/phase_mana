@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Eye, Loader2 } from "lucide-react";
 
@@ -61,7 +62,7 @@ export function PromptDialogDevControls() {
       <section className={DEV_SECTION}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className={DEV_SECTION_HEADING}>Dialogs and screens</p>
+            <p className={DEV_SECTION_HEADING}><Trans>Dialogs and screens</Trans></p>
             <p className="mt-1 text-xs text-muted-foreground">
               Open the real battlefield UI with representative data. Preview actions never reach the
               engine.

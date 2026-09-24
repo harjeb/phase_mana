@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import type { CardDto } from "@/protocol/game";
 import { useCard } from "@/stores/useScryfallStore";
@@ -177,7 +178,7 @@ function CardSpecimens() {
       </header>
 
       <section className="space-y-3">
-        <h2 className="text-sm font-semibold text-muted-foreground">Battlefield size (70×98)</h2>
+        <h2 className="text-sm font-semibold text-muted-foreground"><Trans>Battlefield size (70×98)</Trans></h2>
         <div className="flex flex-wrap gap-4">
           {SPECS.map((spec, i) => (
             <div

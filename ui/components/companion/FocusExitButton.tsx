@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { Eye, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -60,7 +61,7 @@ export function FocusExitButton({ onExit, onShowChrome }: FocusExitButtonProps) 
         title={`Exit focus mode`}
       >
         <Minimize2 className="size-4" />
-        <span>Exit</span>
+        <span><Trans>Exit</Trans></span>
       </Button>
     </div>
   );

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -49,7 +50,7 @@ export default function Winston() {
         {lastError ? (
           <p className="text-destructive">{lastError}</p>
         ) : (
-          <p className="text-muted-foreground">Loading Winston draft…</p>
+          <p className="text-muted-foreground"><Trans>Loading Winston draft…</Trans></p>
         )}
       </div>
     );
@@ -144,7 +145,7 @@ export default function Winston() {
       <Dialog open={confirmDrawOpen} onOpenChange={setConfirmDrawOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Pass the last pile?</DialogTitle>
+            <DialogTitle><Trans>Pass the last pile?</Trans></DialogTitle>
             <DialogDescription>
               Passing the last pile means you'll draw the top card of the deck instead. The pile you
               skip stays on the table for the next player. Are you sure?
@@ -289,7 +290,7 @@ function DraftingView({
 }
 function FaceDownStack({ count, compact = false }: { count: number; compact?: boolean }) {
   if (count === 0) {
-    return <p className="text-xs text-muted-foreground">(empty)</p>;
+    return <p className="text-xs text-muted-foreground"><Trans>(empty)</Trans></p>;
   }
   return (
     <div className={cn("relative aspect-[5/7] w-full", compact && "mx-auto max-w-24")}>

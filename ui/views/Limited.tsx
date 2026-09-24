@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Boxes, Crown, Dice5, Hourglass, Layers, Shuffle, Swords, Wand2, X } from "lucide-react";
@@ -80,7 +82,7 @@ export default function Limited() {
   }, [fetchSealedTemplates, fetchChaosThemes]);
   const fetchPool = async (): Promise<DraftCard[]> => {
     if (!selectedSetCode) {
-      throw new Error("Pick a set to draft first.");
+      throw new Error(t`Pick a set to draft first.`);
     }
     setFetchingPool(true);
     try {
@@ -170,7 +172,7 @@ export default function Limited() {
         | DraftCard[];
       const pool = Array.isArray(parsed) ? parsed : (parsed.pool ?? []);
       if (!Array.isArray(pool) || pool.length === 0) {
-        throw new Error("Pool file must contain a non-empty `pool` array of DraftCards.");
+        throw new Error(t`Pool file must contain a non-empty \`pool\` array of DraftCards.`);
       }
       const name =
         (Array.isArray(parsed) ? null : parsed.name) ?? file.name.replace(/\.json$/i, "");
@@ -356,7 +358,7 @@ export default function Limited() {
                   e.target.value = ""; // allow re-upload of same file
                 }}
               />
-              <span>or load saved pool…</span>
+              <span><Trans>or load saved pool…</Trans></span>
             </label>
           </ModeCard>
         </div>
@@ -559,7 +561,7 @@ function SelectedSetSummary({
             Booster recipe
           </div>
           {loading ? (
-            <div className="text-xs text-muted-foreground">Loading…</div>
+            <div className="text-xs text-muted-foreground"><Trans>Loading…</Trans></div>
           ) : info ? (
             <div className="flex flex-wrap items-center gap-1">
               {info.slots.map((slot, i) => (
@@ -608,7 +610,7 @@ function SelectedSetSummary({
                 </div>
               </div>
             ) : (
-              <div className="text-xs text-muted-foreground">Not supported</div>
+              <div className="text-xs text-muted-foreground"><Trans>Not supported</Trans></div>
             )
           ) : (
             <div className="text-xs text-muted-foreground">—</div>
@@ -625,7 +627,7 @@ function SelectedSetSummary({
               onChange={(e) => onVariantChange(e.target.value)}
               className="w-full rounded border border-border/70 bg-background px-2 py-1 text-xs pointer-coarse:text-base"
             >
-              <option value="">Default</option>
+              <option value=""><Trans>Default</Trans></option>
               {info.variants.map((v) => (
                 <option key={v} value={v}>
                   {v}
@@ -633,12 +635,12 @@ function SelectedSetSummary({
               ))}
             </select>
           ) : (
-            <div className="text-xs text-muted-foreground">Single recipe</div>
+            <div className="text-xs text-muted-foreground"><Trans>Single recipe</Trans></div>
           )}
           {info?.hasReplacementHooks && (
             <div className="mt-2 inline-flex max-w-full items-center gap-1 rounded bg-yellow-500/10 px-1.5 py-0.5 text-[10px] text-yellow-200">
               <Crown className="h-3 w-3 shrink-0" />
-              <span className="truncate">guaranteed slot active</span>
+              <span className="truncate"><Trans>guaranteed slot active</Trans></span>
             </div>
           )}
         </div>
@@ -672,7 +674,7 @@ function AdvancedToggle({
     >
       <summary className="flex cursor-pointer flex-wrap items-center gap-2 text-muted-foreground">
         <Dice5 className="h-3.5 w-3.5" />
-        <span>Advanced</span>
+        <span><Trans>Advanced</Trans></span>
         {seed.trim() && (
           <span className="rounded bg-primary/15 px-1.5 py-0.5 font-mono text-[10px] text-primary">
             seed = {seed.trim()}
@@ -687,7 +689,7 @@ function AdvancedToggle({
       <div className="mt-3 flex flex-wrap items-start gap-x-6 gap-y-3">
         <div className="flex flex-col gap-1">
           <label className="flex items-center gap-2">
-            <span>RNG seed</span>
+            <span><Trans>RNG seed</Trans></span>
             <Input
               type="text"
               inputMode="numeric"
@@ -713,7 +715,7 @@ function AdvancedToggle({
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="picksPerPass" className="flex items-center gap-2">
-            <span>Picks per pass</span>
+            <span><Trans>Picks per pass</Trans></span>
             <Input
               id="picksPerPass"
               type="number"
@@ -911,7 +913,7 @@ function CubeStartActions({
           <p className="text-xs text-muted-foreground">
             <span className="font-medium text-foreground/90">{cube.name}</span> · {cube.cardCount}{" "}
             cards · {cube.numPacks} packs/player{" "}
-            {cube.singleton && <span className="text-muted-foreground">· singleton</span>}
+            {cube.singleton && <span className="text-muted-foreground"><Trans>· singleton</Trans></span>}
             {cube.rejectedCardCount > 0 && (
               <span className="ml-2 text-muted-foreground">
                 {cube.playableCardCount} locally recognized · {cube.rejectedCardCount} name-only

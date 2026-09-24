@@ -623,7 +623,7 @@ export default function Game({ exitTo }: GameProps = {}) {
           ...player.commandZone,
         ])
         .find((card) => card.id === cardId);
-      if (!gc) throw new Error(`No game card to cast: ${cardId}`);
+      if (!gc) throw new Error(t`No game card to cast: ${cardId}`);
       openPlayModePicker({
         cardId,
         card: asDeckCard(gameDecks[gc.ownerId], gc),

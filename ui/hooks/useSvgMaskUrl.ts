@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useState } from "react";
 
 const objectUrls = new Map<string, string>();
@@ -8,7 +9,7 @@ function loadSvgObjectUrl(url: string): Promise<string> {
   if (inflight) return inflight;
   const promise = fetch(url, { mode: "cors", credentials: "omit" })
     .then(async (response) => {
-      if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+      if (!response.ok) throw new Error(t`${url}: HTTP ${response.status}`);
       const objectUrl = URL.createObjectURL(await response.blob());
       objectUrls.set(url, objectUrl);
       return objectUrl;

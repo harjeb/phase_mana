@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Search, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
           <UserPlus className="h-4 w-4" />
           Invite players
         </DialogTitle>
-        <DialogDescription>Players in the lobby who aren't at a table.</DialogDescription>
+        <DialogDescription><Trans>Players in the lobby who aren't at a table.</Trans></DialogDescription>
         <div className="relative">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -67,7 +68,7 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
                   key={player.player_id}
                   player={player}
                   presenceDotClass="bg-success"
-                  status={<span className="text-[10px] text-muted-foreground">Available</span>}
+                  status={<span className="text-[10px] text-muted-foreground"><Trans>Available</Trans></span>}
                   action={
                     <Button
                       size="sm"

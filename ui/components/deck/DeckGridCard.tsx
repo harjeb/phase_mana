@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { CloudUpload, LibraryBig, Pencil, Share2, Swords, Trash2 } from "lucide-react";
 import { DeckCardSurface } from "@/components/deck/DeckCardSurface";
@@ -77,8 +79,8 @@ export function DeckGridCard({
                 <Button
                   variant="secondary"
                   size="icon-xs"
-                  aria-label="Playtest vs AI"
-                  title="Playtest vs AI"
+                  aria-label={t`Playtest vs AI`}
+                  title={t`Playtest vs AI`}
                   onClick={onPlaytest}
                 >
                   <Swords className="h-3 w-3" />
@@ -177,7 +179,7 @@ export function DeckGridCard({
       <Dialog open={confirmDelete} onOpenChange={setConfirmDelete}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Delete Deck</DialogTitle>
+            <DialogTitle><Trans>Delete Deck</Trans></DialogTitle>
             <DialogDescription>
               Are you sure you want to delete &ldquo;{deck.deck.name}&rdquo;? This action cannot be
               undone.

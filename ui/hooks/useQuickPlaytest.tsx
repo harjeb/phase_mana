@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -38,7 +39,7 @@ export function useQuickPlaytest(): {
   }
   function quickPlaytest(deck: Deck) {
     if (deck.cards.length === 0 && (deck.commanders?.length ?? 0) === 0) {
-      toast.error(`"${deck.name}" has no cards`);
+      toast.error(t`"${deck.name}" has no cards`);
       return;
     }
     if ((deck.format ?? "standard") === "commander") {

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { createContext, useContext } from "react";
 import { requireValidCustomFormat, type CustomFormatRules } from "@/lib/customFormats";
 import type { Deck } from "@/protocol/deck";
@@ -8,7 +9,7 @@ export { getClientPlatform } from "./clientPlatform";
 
 const events = new EventTarget();
 const unsupported = async (): Promise<never> => {
-  throw new Error("This feature is not available in the local Phase backend.");
+  throw new Error(t`This feature is not available in the local Phase backend.`);
 };
 
 /**
@@ -28,7 +29,7 @@ const platform: IPlatformApi = {
     // built-in casual deck.
     startGame: async ({ deck, format, commanderName, opponentDecks, conspiracies, customRules, opponentConspiracies }) => {
       if ((opponentDecks?.length ?? 0) > 3) {
-        throw new Error("Local Phase supports up to three AI opponents (four players).");
+        throw new Error(t`Local Phase supports up to three AI opponents (four players).`);
       }
       if (customRules) await requireValidCustomFormat(customRules as CustomFormatRules, Math.max(2, 1 + (opponentDecks?.length ?? 0)));
       const commandZoneDisabled = !!customRules && (customRules as CustomFormatRules).structural.command_zone_mode === "Disabled";

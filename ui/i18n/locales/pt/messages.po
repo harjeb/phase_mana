@@ -13,6 +13,17 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. js-lingui-explicit-id
+#: ui/views/OnlineDraftPanel.tsx:24
+#: ui/views/OnlinePlay.tsx:20
+#: ui/views/Tournaments.tsx:26
+#~ msgid "_-Z5u4"
+#~ msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:513
+msgid "— Choose —"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardGrid.tsx:121
 #: ui/components/game/modals/DialogCardPickerGrid.tsx:281
 msgid ", action available"
@@ -27,6 +38,101 @@ msgstr ""
 msgid ", selected"
 msgstr ""
 
+#: ui/views/Limited.tsx:916
+msgid "· singleton"
+msgstr ""
+
+#. placeholder {0}: detail.name
+#: ui/components/deck/HubDeckPreviewDialog.tsx:148
+msgid "\"{0}\" added to your account decks"
+msgstr ""
+
+#. placeholder {0}: deck.name
+#. placeholder {0}: empty.name
+#. placeholder {0}: entry.name
+#: ui/components/lobby/CreateGameDialog.tsx:353
+#: ui/components/lobby/DeckVsSelector.tsx:428
+#: ui/hooks/useQuickPlaytest.tsx:42
+msgid "\"{0}\" has no cards"
+msgstr ""
+
+#. placeholder {0}: detail.title
+#. placeholder {1}: currentFormat.name
+#. placeholder {1}: getFormat(currentFormat)?.name ?? currentFormat
+#. placeholder {1}: selectedFormat.name
+#: ui/components/lobby/CreateGameDialog.tsx:135
+#: ui/components/lobby/CreateGameDialog.tsx:325
+#: ui/components/lobby/DeckVsSelector.tsx:349
+msgid "\"{0}\" is not a {1} deck"
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:919
+msgid "\"{0}\" is not a legal commander"
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:911
+msgid "\"{0}\" is not a legal oathbreaker or signature spell — an oathbreaker must be a planeswalker, a signature spell an instant or sorcery"
+msgstr ""
+
+#. placeholder {0}: title.trim()
+#: ui/components/deck/PublishDeckDialog.tsx:119
+msgid "\"{0}\" published to Community"
+msgstr ""
+
+#. placeholder {0}: saved.deck.name
+#: ui/views/DeckEditor.tsx:389
+msgid "\"{0}\" removed from your account"
+msgstr ""
+
+#. placeholder {0}: existing[0].identity.name
+#. placeholder {1}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:939
+msgid "\"{0}\" replaced — \"{1}\" must partner with a different card"
+msgstr ""
+
+#. placeholder {0}: existing[0].identity.name
+#: ui/components/editor/DeckBuilder.tsx:932
+msgid "\"{0}\" replaced — it doesn't have a partner ability"
+msgstr ""
+
+#. placeholder {0}: existing[0].identity.name
+#: ui/components/editor/DeckBuilder.tsx:929
+msgid "\"{0}\" replaced — neither commander has a partner ability"
+msgstr ""
+
+#. placeholder {0}: detail.name
+#: ui/components/deck/HubDeckPreviewDialog.tsx:158
+msgid "\"{0}\" saved to My Decks"
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:935
+msgid "\"{0}\" set as sole commander — it doesn't have a partner ability"
+msgstr ""
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:219
+msgid "\"{deckName}\" removed from Community"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:119
+msgid "(dropped)"
+msgstr ""
+
+#: ui/views/Winston.tsx:293
+msgid "(empty)"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:59
+msgid "(you)"
+msgstr ""
+
+#. placeholder {0}: SCRYFALL_IMAGE_MAX_RETRIES + 1
+#: ui/api/scryfall.ts:433
+msgid "[scryfall-image] failed after {0} attempts: {url} ({reason})"
+msgstr ""
+
 #. placeholder {0}: summary.attackerCount
 #. placeholder {1}: summary.blockedCount
 #. placeholder {2}: summary.unblockedCount
@@ -35,7 +141,7 @@ msgid "{0} attackers · {1} blocked · {2} unblocked"
 msgstr ""
 
 #. placeholder {0}: status.count
-#: ui/components/settings/CardImageLibraryCard.tsx:109
+#: ui/components/settings/CardImageLibraryCard.tsx:122
 msgid "{0} card images found."
 msgstr ""
 
@@ -44,9 +150,42 @@ msgstr ""
 msgid "{0} damage"
 msgstr "{0} de dano"
 
+#. placeholder {0}: card.identity.name
+#: ui/views/DeckEditor.tsx:554
+msgid "{0} is not eligible for the command zone"
+msgstr ""
+
+#. placeholder {0}: PROVIDER_LABELS[linked] ?? linked
+#: ui/views/AuthCallback.tsx:51
+msgid "{0} linked to your account"
+msgstr ""
+
 #. placeholder {0}: gameView.battlefield.length
 #: ui/components/game/ManualTabletopControls.tsx:170
 msgid "{0} permanents"
+msgstr ""
+
+#. placeholder {0}: PROVIDER_LABELS[provider] ?? provider
+#: ui/components/settings/SignInMethodsCard.tsx:64
+msgid "{0} unlinked"
+msgstr ""
+
+#. placeholder {0}: gp.name
+#: ui/hooks/useMultiplayerInterruption.ts:55
+msgid "{0}'s seat was forfeited — conceded."
+msgstr ""
+
+#: ui/hooks/useGameEventListeners.ts:129
+msgid "{actor} foretold a card"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/api/scryfall.ts:115
+msgid "{errorMsg} (HTTP {0})"
+msgstr ""
+
+#: ui/themes/themeDocument.ts:24
+msgid "{label} must be an object."
 msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:201
@@ -55,6 +194,11 @@ msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:130
 msgid "{totalCount} cards"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/hooks/useSvgMaskUrl.ts:12
+msgid "{url}: HTTP {0}"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:131
@@ -69,8 +213,49 @@ msgstr "↑↓ selecionar · Enter ativar · 1–9"
 msgid "1 card"
 msgstr ""
 
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:24
+msgid "28px"
+msgstr ""
+
+#: ui/lib/avatarCrop.ts:37
+#: ui/lib/imageEncode.ts:29
+msgid "2d canvas context unavailable"
+msgstr ""
+
+#: ui/pixi/cardPreview/setSymbolCache.ts:15
+msgid "2d canvas unavailable"
+msgstr ""
+
+#: ui/pixi/assets/rasterizeSvgTexture.ts:32
+msgid "2d context unavailable"
+msgstr ""
+
 #: ui/components/lobby/PlaytestPlayersDialog.tsx:35
 msgid "4-player pod"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:20
+msgid "48px"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:16
+msgid "96px"
+msgstr ""
+
+#: ui/phase/conspiracies.ts:30
+msgid "A secret card name is required; game was not started."
+msgstr ""
+
+#: ui/views/CasualModes.tsx:177
+msgid "A shared planar deck and the planar die; roll it from the active plane card."
+msgstr ""
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:32
+msgid "A tag named \"{nextName}\" already exists"
+msgstr ""
+
+#: ui/components/play/RejoinMatchCard.tsx:145
+msgid "Abandon match?"
 msgstr ""
 
 #: ui/components/layout/navDestinations.ts:73
@@ -79,6 +264,10 @@ msgstr ""
 
 #: ui/components/layout/TopBar.tsx:78
 msgid "About Manabrew"
+msgstr ""
+
+#: ui/components/companion/PlayerMenu.tsx:118
+msgid "Accent"
 msgstr ""
 
 #: ui/components/AppInitGate.tsx:239
@@ -94,9 +283,27 @@ msgstr ""
 msgid "Account menu"
 msgstr ""
 
+#: ui/views/MyCollection.tsx:87
+msgid "Account sync failed. The deletion is preserved locally and will retry."
+msgstr ""
+
+#: ui/components/editor/DeckCollectionPanel.tsx:131
+#: ui/views/MyCollection.tsx:78
+msgid "Account sync failed. This change is preserved locally."
+msgstr ""
+
 #. placeholder {0}: signedInAccount.handle
 #: ui/components/layout/AccountMenu.tsx:100
 msgid "Account: @{0}"
+msgstr ""
+
+#. placeholder {0}: error.code
+#: ui/hooks/useGameEventListeners.ts:291
+msgid "Action rejected ({0}) — try again"
+msgstr ""
+
+#: ui/components/dev/PromptDevControls.tsx:58
+msgid "Action view"
 msgstr ""
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:158
@@ -111,32 +318,202 @@ msgstr ""
 msgid "Active: "
 msgstr ""
 
+#: ui/components/editor/NewDeckChoiceDialog.tsx:56
+msgid "Add a deck"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:694
+msgid "Add basic:"
+msgstr ""
+
+#: ui/components/companion/AddCounterMenu.tsx:41
+msgid "Add counter"
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:101
+msgid "Add Custom Label"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:736
+msgid "Add deck"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:396
+msgid "Add some cards before saving."
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CardSearch.tsx:841
+msgid "Added {0}"
+msgstr ""
+
+#: ui/components/editor/useDeckTextImport.ts:202
+msgid "Added {count} cards — couldn't find: {shown}{extra}"
+msgstr ""
+
+#: ui/components/editor/useDeckTextImport.ts:210
+msgid "Added {count} cards to this deck"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:508
+msgid "Added {deckCardName}"
+msgstr ""
+
+#: ui/components/editor/CombosPanel.tsx:116
+msgid "Added {name}"
+msgstr ""
+
+#. placeholder {0}: sc.name
+#: ui/components/editor/DeckBuilder.tsx:1789
+msgid "Added {quantity} {0} to {destination}"
+msgstr ""
+
+#. placeholder {0}: request.quantity
+#. placeholder {1}: sc.name
+#. placeholder {2}: copyLimit ?? 0
+#: ui/components/editor/DeckBuilder.tsx:1780
+msgid "Added {quantity} of {0} {1}; {formatName} allows {2}"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:633
+msgid "Added one copy of {added} cards"
+msgstr ""
+
+#. placeholder {0}: currentDeck.name
+#: ui/components/editor/CardDetailModal.tsx:175
+msgid "Added to {0}"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:180
+msgid "Added to {deckName}"
+msgstr ""
+
+#: ui/views/Limited.tsx:677
+msgid "Advanced"
+msgstr ""
+
+#: ui/components/deck/DeckListControls.tsx:109
+msgid "All"
+msgstr ""
+
+#: ui/components/deck/DeckListControls.tsx:116
+msgid "All formats"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:142
 msgid "All types"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeColorControl.tsx:117
+msgid "Alpha"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:134
+msgid "Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn."
+msgstr ""
+
+#: ui/components/dev/BoardPlayground.tsx:497
+msgid "Any card name"
+msgstr ""
+
+#. placeholder {0}: group.heading
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:127
+msgid "App · {0}"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:105
+msgid "App chrome"
+msgstr ""
+
+#: ui/views/Settings.tsx:952
+msgid "App Theme"
+msgstr ""
+
+#: ui/views/Settings.tsx:1088
+msgid "App Theme Colors"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:111
+msgid "App tokens"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:165
 msgid "Applies to battlefield cards. Hand, stack and dialog view settings are independent."
 msgstr ""
 
+#: ui/views/CasualModes.tsx:169
+msgid "Archenemy"
+msgstr ""
+
+#. placeholder {0}: res.status
+#: ui/lib/archidekt.ts:184
+#: ui/lib/archidekt.ts:221
+msgid "Archidekt fetch failed: {0}"
+msgstr ""
+
+#. placeholder {0}: res.status
+#: ui/lib/archidekt.ts:142
+msgid "Archidekt search failed: {0}"
+msgstr ""
+
 #: ui/components/game/battlefieldCardStyles.ts:10
 msgid "Art-forward"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1229
+msgid "Artist"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:406
+msgid "Artist:"
+msgstr ""
+
+#: ui/components/companion/StatusChips.tsx:35
+msgid "Ascend"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1338
+msgid "Ascending"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:353
+msgid "At least"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:378
+msgid "At most"
 msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:91
 msgid "Attacker"
 msgstr ""
 
+#: ui/components/editor/CardSearch.tsx:1337
+msgid "Auto"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:172
 msgid "Auto-arrange"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:266
+msgid "Auto-detect"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:61
 msgid "Auto-skip optional costs"
 msgstr ""
 
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:150
+msgid "Automatic cover"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:130
 msgid "Autopass"
+msgstr ""
+
+#: ui/components/lobby/InvitePlayersDialog.tsx:71
+msgid "Available"
 msgstr ""
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:74
@@ -153,6 +530,10 @@ msgstr "Ações disponíveis · {0}"
 msgid "Available on current face · {0}"
 msgstr "Disponível na face atual · {0}"
 
+#: ui/views/Tournaments.tsx:65
+msgid "Available tournaments"
+msgstr ""
+
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:90
 msgid "Awaiting first chapter"
 msgstr "Aguardando o primeiro capítulo"
@@ -168,6 +549,22 @@ msgstr "Aguardando o primeiro nível"
 msgid "Back"
 msgstr ""
 
+#: ui/components/editor/PlaymatEditorModal.tsx:383
+msgid "Background color"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:68
+msgid "Badge — variants"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:484
+msgid "Banned cards (one name per line)"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:30
+msgid "Base preset"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:383
 msgid "Battlefield"
 msgstr ""
@@ -176,8 +573,25 @@ msgstr ""
 msgid "Battlefield arrangement"
 msgstr ""
 
+#: ui/components/dev/BattlefieldStyleDevControls.tsx:34
 #: ui/components/game/modals/GameSettingsModal.tsx:161
 msgid "Battlefield card style"
+msgstr ""
+
+#: ui/components/dev/GameDevPanel.tsx:134
+msgid "Battlefield lab"
+msgstr ""
+
+#: ui/views/CardMockGallery.tsx:181
+msgid "Battlefield size (70×98)"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:55
+msgid "Best of one"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:55
+msgid "Best of three"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
@@ -194,6 +608,10 @@ msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:144
 msgid "Board appearance"
+msgstr ""
+
+#: ui/components/dev/BoardDevControls.tsx:111
+msgid "Board guides"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:119
@@ -213,16 +631,115 @@ msgstr ""
 msgid "Booster Draft"
 msgstr ""
 
+#. placeholder {0}: params.username
+#: ui/platform/web.ts:1336
+msgid "Bot '{0}' is already running."
+msgstr ""
+
+#. placeholder {0}: payload.reason
+#: ui/views/Lobby.tsx:175
+msgid "Bot couldn't join the table: {0}"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
 msgid "Bot player"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:94
+#: ui/components/editor/DeckBracketPanel.tsx:31
+msgid "Bracket"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:12
+msgid "Brand mark"
+msgstr ""
+
+#: ui/phase/tournaments.ts:147
+msgid "Broker omitted tournament credentials."
+msgstr ""
+
+#: ui/phase/tournaments.ts:93
+msgid "Broker sent data before its handshake."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:106
 msgid "Browse…"
 msgstr ""
 
+#: ui/views/OnlineDraftBuilder.tsx:16
+msgid "Build draft deck"
+msgstr ""
+
+#: ui/views/Settings.tsx:429
+msgid "Built-in"
+msgstr ""
+
+#: ui/components/editor/DeckSelectionTray.tsx:74
+msgid "Bulk editor"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:42
+msgid "Button — variants × sizes"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:58
+msgid "Button states"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:129
+msgid "By color"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:128
+msgid "By format"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:127
+msgid "By source"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:130
+msgid "By tag"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:97
+msgid "Bye"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:118
+msgid "Byes"
+msgstr ""
+
+#: ui/views/Settings.tsx:359
+msgid "Cache"
+msgstr ""
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:53
+#: ui/views/Tournaments.tsx:87
 msgid "Cancel"
+msgstr ""
+
+#: ui/themes/themeColor.ts:62
+msgid "Cannot composite an invalid theme color"
+msgstr ""
+
+#: ui/platform/web.ts:1260
+msgid "Cannot leave room while disconnected."
+msgstr ""
+
+#: ui/platform/web.ts:1333
+msgid "Cannot spawn bot: not connected to relay."
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:169
+msgid "Card"
+msgstr ""
+
+#: ui/components/dev/CardBadgeDevControls.tsx:189
+msgid "Card appearance"
+msgstr ""
+
+#: ui/components/settings/CardArtDownloadSection.tsx:133
+msgid "Card Art On This Machine"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:149
@@ -233,13 +750,33 @@ msgstr ""
 msgid "Card Face Gallery"
 msgstr ""
 
+#: ui/components/deck/DeckCardBrowserFilters.tsx:293
+msgid "Card filters"
+msgstr ""
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:780
 msgid "Card identity and rules are hidden."
 msgstr "A identidade do card e as regras estão ocultas."
 
-#: ui/components/settings/CardImageLibraryCard.tsx:80
-#: ui/components/settings/CardImageLibraryCard.tsx:90
+#: ui/views/Settings.tsx:361
+msgid "Card Image Cache"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:92
+#: ui/components/settings/CardImageLibraryCard.tsx:102
 msgid "Card image library"
+msgstr ""
+
+#: ui/components/dev/DevCardLayoutControls.tsx:84
+msgid "Card layouts and previews"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:395
+msgid "Card name"
+msgstr ""
+
+#: ui/components/editor/DeckChangeSummary.tsx:117
+msgid "Card quantity changes across the open deck."
 msgstr ""
 
 #: ui/components/layout/navDestinations.ts:67
@@ -252,8 +789,17 @@ msgstr ""
 msgid "Card size · {0}%"
 msgstr ""
 
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:39
+msgid "Card sizes (px)"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:176
 msgid "Card sort order"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:34
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:86
+msgid "Card surface"
 msgstr ""
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:19
@@ -263,6 +809,18 @@ msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:138
 msgid "Card type"
+msgstr ""
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:142
+msgid "Card under test"
+msgstr ""
+
+#: ui/api/hub.ts:154
+msgid "Card verification returned an incomplete response"
+msgstr ""
+
+#: ui/stores/useScryfallStore.ts:127
+msgid "cardKey requires setCode+collectorNumber, name, or id"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:91
@@ -284,8 +842,32 @@ msgstr ""
 msgid "Cards in this view"
 msgstr ""
 
+#: ui/components/editor/DeckListView.tsx:2436
+msgid "Cards you're considering"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:62
+msgid "Casual Modes"
+msgstr ""
+
+#: ui/components/auth/HandleDialog.tsx:63
+msgid "Change handle"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:34
+msgid "Change the inherited palette. Your overrides stay in the draft."
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:87
 msgid "Changes apply immediately. Card view and front/back face are separate controls."
+msgstr ""
+
+#: ui/components/editor/DeckChangeSummary.tsx:116
+msgid "Changes since last save"
+msgstr ""
+
+#: ui/game/webrtcPlane.test.ts:310
+msgid "channel broke"
 msgstr ""
 
 #. placeholder {0}: notch.label
@@ -299,8 +881,38 @@ msgstr "CAPÍTULO {0}"
 msgid "Chapter {0} of {1}"
 msgstr "Capítulo {0} de {1}"
 
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:87
+msgid "Checkbox"
+msgstr ""
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:52
+msgid "Choose a card from your graveyard"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:70
+msgid "Choose a folder in the dialog that opened."
+msgstr ""
+
+#: ui/components/lobby/ChooseFormatDialog.tsx:39
+#: ui/components/lobby/FormatPicker.tsx:13
+#: ui/components/lobby/TableRoom.tsx:85
+msgid "Choose a format"
+msgstr ""
+
 #: ui/components/game/modals/AbilityPickerModal.tsx:157
 msgid "Choose an action"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:265
+msgid "Choose an export file"
+msgstr ""
+
+#: ui/views/OnlineDraftBuilder.tsx:18
+msgid "Choose cards for your main deck. The server retains the remaining pool as your sideboard."
+msgstr ""
+
+#: ui/components/companion/CommanderPickerDialog.tsx:42
+msgid "Choose commander"
 msgstr ""
 
 #: ui/components/game/PlayModePicker.tsx:6
@@ -311,15 +923,33 @@ msgstr ""
 msgid "Choose simultaneous trigger order"
 msgstr ""
 
+#: ui/components/lobby/TablePickerDialog.tsx:51
+msgid "Choose your table"
+msgstr ""
+
+#: ui/components/limited/LimitedCompareDialog.tsx:58
+msgid "Choose…"
+msgstr ""
+
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
 msgid "CLASS LEVELS"
 msgstr "NÍVEIS DE CLASSE"
+
+#: ui/components/editor/DeckBuilder.tsx:2495
+msgid "Clear Deck"
+msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:96
 msgid "Clear search"
 msgstr ""
 
+#: ui/components/editor/DeckBuilder.tsx:604
+msgid "Clipboard does not contain a recognized card list"
+msgstr ""
+
 #: ui/components/KeyboardShortcutsDialog.tsx:88
+#: ui/components/ui/dialog.tsx:41
+#: ui/components/ui/sheet.tsx:56
 msgid "Close"
 msgstr ""
 
@@ -335,8 +965,71 @@ msgstr ""
 msgid "Close right panel"
 msgstr ""
 
+#: ui/components/editor/CardSearch.tsx:1087
+msgid "CMC"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:375
+msgid "CMC:"
+msgstr ""
+
+#: ui/components/auth/SignInFlow.tsx:275
+#: ui/components/auth/SignInFlow.tsx:312
+msgid "Code"
+msgstr ""
+
+#: ui/components/limited/DraftStatusBar.tsx:45
+msgid "Cogwork Librarian · choose one more card"
+msgstr ""
+
+#: ui/components/companion/DiceMenu.tsx:58
+#: ui/components/companion/DiceTray.tsx:48
+msgid "Coin flip"
+msgstr ""
+
+#: ui/stores/useCollectionStore.ts:293
+msgid "Collection account changed before this edit could be applied"
+msgstr ""
+
+#: ui/stores/useCollectionStore.ts:104
+msgid "Collection account changed before this edit could sync"
+msgstr ""
+
+#: ui/stores/useCollectionStore.ts:333
+#: ui/stores/useCollectionStore.ts:376
+msgid "Collection account changed before this import could be applied"
+msgstr ""
+
+#: ui/components/editor/DeckCollectionPanel.tsx:169
+msgid "Collection coverage"
+msgstr ""
+
+#: ui/views/MyCollection.tsx:85
+msgid "Collection deleted"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:206
+msgid "Collection import failed"
+msgstr ""
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:83
+msgid "Collection tracker"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:148
+#: ui/components/editor/CardSearch.tsx:1006
+#: ui/components/editor/PlaymatEditorModal.tsx:433
 #: ui/lib/handOrder.ts:10
 msgid "Color"
+msgstr ""
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:309
+#: ui/components/deck/DeckHubFilterPanel.tsx:171
+msgid "Color identity"
+msgstr ""
+
+#: ui/views/Settings.tsx:980
+msgid "Color Preset"
 msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:73
@@ -344,17 +1037,72 @@ msgstr ""
 msgid "Combat breakdown"
 msgstr ""
 
+#: ui/components/editor/CombosPanel.tsx:127
+msgid "Combos"
+msgstr ""
+
+#: ui/components/editor/CommanderSlots.tsx:217
+msgid "Command zone"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:635
+msgid "Command-zone and special-section cards were not duplicated"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:491
+#: ui/views/Draft.tsx:109
+msgid "Commander"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:144
 msgid "Commander damage by source"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:76
+msgid "Commander Draft"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:154
 msgid "Commander source"
 msgstr ""
 
+#. placeholder {0}: response.status
+#: ui/api/commanderSpellbook.ts:62
+msgid "Commander Spellbook request failed (HTTP {0})"
+msgstr ""
+
 #: ui/components/layout/navDestinations.ts:57
 #: ui/components/layout/TopBar.tsx:51
+#: ui/components/lobby/CreateGameDialog.tsx:649
 msgid "Community"
+msgstr ""
+
+#: ui/components/deck/DeckHubResults.tsx:91
+msgid "Community could not be loaded"
+msgstr ""
+
+#: ui/views/DeckHub.tsx:53
+msgid "Community could not be reached"
+msgstr ""
+
+#: ui/components/play/CommunityDeckShelf.tsx:62
+msgid "Community decks"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterSheet.tsx:39
+msgid "Community filters"
+msgstr ""
+
+#: ui/components/limited/LimitedCompareDialog.tsx:37
+msgid "Compare with saved deck"
+msgstr ""
+
+#: ui/views/AuthCallback.tsx:89
+msgid "Completing sign-in…"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:39
+msgid "Components"
 msgstr ""
 
 #: ui/components/game/modals/ConcedeGameModal.tsx:56
@@ -374,24 +1122,289 @@ msgstr ""
 msgid "Concession could not be delivered: {error}. You can retry or cancel."
 msgstr ""
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:64
+msgid "Configure addition"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:87
+msgid "Confirm end tournament"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:71
+msgid "Confirm pick"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:37
+msgid "Connect"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:45
+msgid "Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private."
+msgstr ""
+
+#: ui/platform/tauri.ts:56
+msgid "Connect to a server before hosting a Forge room"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:59
+#: ui/views/Tournaments.tsx:39
+msgid "Connected"
+msgstr ""
+
 #: ui/components/AppInitGate.tsx:292
 msgid "Connecting"
+msgstr ""
+
+#: ui/views/Settings.tsx:492
+msgid "Connecting..."
+msgstr ""
+
+#: ui/components/play/RejoinMatchCard.tsx:86
+msgid "Connection failed."
+msgstr ""
+
+#: ui/phase/online.ts:198
+msgid "Connection lost"
+msgstr ""
+
+#: ui/phase/transport.ts:111
+msgid "Conspiracy reveal was rejected"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:47
+msgid "Constant"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:48
+msgid "Constructed"
+msgstr ""
+
+#: ui/views/Settings.tsx:976
+msgid "Controls app theme preference."
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:88
 msgid "Copied"
 msgstr ""
 
+#: ui/components/editor/DeckBuilder.tsx:1200
+msgid "Copied \"{importedName}\" to My Decks"
+msgstr ""
+
+#. placeholder {0}: counts.size
+#. placeholder {1}: counts.size === 1 ? "" : "s"
+#: ui/components/editor/DeckBuilder.tsx:594
+msgid "Copied {0} selected card{1}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:234
+msgid "Copied JSON to clipboard."
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:365
+msgid "Copies"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:368
+msgid "Copy limit rule"
+msgstr ""
+
 #: ui/components/game/GameLoadingScreen.tsx:88
 msgid "Copy logs"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:57
+#: ui/components/collection/CollectionImportDialog.tsx:275
+msgid "Copy rows from a spreadsheet"
+msgstr ""
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:125
+msgid "Could not clear the art cache: {0}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:235
+msgid "Could not copy to the clipboard."
+msgstr ""
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:99
+msgid "Could not download art: {0}"
+msgstr ""
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:113
+msgid "Could not download every card: {0}"
+msgstr ""
+
+#. placeholder {0}: deckCard.identity.name
+#. placeholder {0}: token.identity.name
+#: ui/components/editor/DeckBuilder.tsx:861
+#: ui/components/editor/DeckBuilder.tsx:875
+msgid "Could not fetch info for \"{0}\""
+msgstr ""
+
+#. placeholder {0}: scenario.label
+#: ui/components/dev/DevCardLayoutControls.tsx:75
+msgid "Could not load {0}."
+msgstr ""
+
+#: ui/components/editor/BatchPrintingDialog.tsx:40
+msgid "Could not load Magic sets"
+msgstr ""
+
+#. placeholder {0}: set.name
+#: ui/components/editor/BatchPrintingDialog.tsx:118
+msgid "Could not load printings from {0}"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:62
 msgid "Could not open the folder picker. Paste the folder path instead."
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:59
+#: ui/components/editor/DeckBuilder.tsx:609
+msgid "Could not read cards from the clipboard"
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/PrintingOptimizerDialog.tsx:205
+msgid "Could not resolve {0}"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:64
 msgid "Could not save the folder. Check write permissions and try again."
+msgstr ""
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:87
+msgid "Could not update checkpoints on this device"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/api/assets.ts:48
+msgid "Could not upload the image ({0})"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:596
+msgid "Could not write selected cards to the clipboard"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:998
+msgid "Could not write to the clipboard"
+msgstr ""
+
+#: ui/components/editor/CombosPanel.tsx:118
+msgid "Couldn't add {name}"
+msgstr ""
+
+#: ui/views/Settings.tsx:236
+msgid "Couldn't clear the image cache"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:446
+msgid "Couldn't copy the deck. Try again."
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:80
+msgid "Couldn't copy the password"
+msgstr ""
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:195
+msgid "Couldn’t copy the share link"
+msgstr ""
+
+#: ui/stores/useScryfallStore.ts:588
+msgid "Couldn't find a texture url for: "
+msgstr ""
+
+#: ui/components/editor/PlaymatEditorModal.tsx:156
+msgid "Couldn't load that preset."
+msgstr ""
+
+#: ui/components/settings/MyAssetsSection.tsx:113
+msgid "Couldn't load your images."
+msgstr ""
+
+#: ui/App.tsx:76
+msgid "Couldn't load your saved decks — they're left untouched on disk. Please contact the developer."
+msgstr ""
+
+#: ui/components/play/RejoinMatchCard.tsx:93
+msgid "Couldn't reach the previous match relay."
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:195
+msgid "Couldn't read the clipboard — paste into a file instead"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:93
+msgid "Couldn't read the clipboard — paste manually instead"
+msgstr ""
+
+#: ui/stores/useAssetStore.ts:162
+msgid "Couldn't remove the previous image from your storage"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:424
+msgid "Couldn't save the deck. Try again."
+msgstr ""
+
+#: ui/stores/useAssetStore.ts:174
+msgid "Couldn't upload that image"
+msgstr ""
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:295
+msgid "Couldn’t verify deck ownership."
+msgstr ""
+
+#: ui/stores/useScryfallStore.ts:799
+msgid "Couldnt find uris for printing: "
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:68
+msgid "Counters — CounterBadge"
+msgstr ""
+
+#: ui/components/editor/PlaymatEditorModal.tsx:273
+msgid "Cover"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:59
+msgid "Create"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:50
+msgid "Create draft"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:56
+msgid "Create room"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:1091
+msgid "Create tag"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:45
+msgid "Create tournament"
+msgstr ""
+
+#: ui/components/settings/AvatarCropDialog.tsx:97
+msgid "Crop avatar"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:266
+msgid "CSV, TSV, or text"
+msgstr ""
+
+#: ui/api/limitedEdition.ts:107
+msgid "Cube \"{cubeIdOrUrl}\" came back empty"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:90
+msgid "Cube / local pool"
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:65
+msgid "Current Labels"
 msgstr ""
 
 #. placeholder {0}: APP_LOCALES[activeLocale].label
@@ -400,20 +1413,144 @@ msgstr ""
 msgid "Currently using {0}"
 msgstr ""
 
+#: ui/components/companion/CustomCounterDialog.tsx:31
+msgid "Custom counter"
+msgstr ""
+
+#: ui/components/lobby/DeckVsSelector.tsx:885
+msgid "Custom format player count"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:140
+msgid "Custom formats"
+msgstr ""
+
+#: ui/components/dev/BoardPlayground.tsx:496
+msgid "Custom preview card name"
+msgstr ""
+
 #: ui/components/KeyboardShortcutsDialog.tsx:85
 msgid "Customize these in Preferences → Shortcuts."
+msgstr ""
+
+#: ui/components/settings/AccountActionsCard.tsx:110
+msgid "Danger zone"
+msgstr ""
+
+#: ui/components/settings/AccountActionsCard.tsx:54
+msgid "Data & session"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:89
 msgid "Debug"
 msgstr ""
 
+#: ui/components/editor/DeckBudgetPanel.tsx:108
+msgid "Deck budget"
+msgstr ""
+
+#: ui/components/editor/DeckCommandPalette.tsx:49
+msgid "Deck commands"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:992
+msgid "Deck copied to clipboard"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:444
+msgid "Deck copied to clipboard."
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:1166
+#: ui/views/DeckEditor.tsx:486
+msgid "Deck deleted"
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:40
 msgid "Deck Editor"
 msgstr ""
 
+#: ui/components/editor/DeckGoalsPanel.tsx:84
+msgid "Deck goals"
+msgstr ""
+
+#: ui/components/editor/DeckHealthPanel.tsx:63
+msgid "Deck health"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:297
+msgid "Deck inspector"
+msgstr ""
+
+#: ui/components/editor/DeckIntentPanel.tsx:42
+msgid "Deck intent"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:143
+msgid "Deck labels"
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:59
+msgid "Deck Labels"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:279
+#: ui/views/OnlinePlay.tsx:53
+msgid "Deck list"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:248
+#: ui/components/limited/LimitedDeckBuilder.tsx:550
+msgid "Deck name"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:390
+msgid "Deck name cannot be empty."
+msgstr ""
+
+#: ui/components/play/DeckPlayActions.tsx:30
+msgid "Deck not found"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:59
+msgid "Deck ready"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:505
+msgid "Deck renamed"
+msgstr ""
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:300
+msgid "Deck section"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:338
+msgid "Deck size"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:341
+msgid "Deck size rule"
+msgstr ""
+
+#: ui/views/OnlineDraftBuilder.tsx:26
+msgid "Deck submitted"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:211
 msgid "Decorative animations"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
+#: ui/views/Limited.tsx:630
+msgid "Default"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1325
+msgid "Default (CMC)"
+msgstr ""
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:13
+msgid "Default is off to read local card data directly without online requests. When enabled, Chinese card names and rules text are fetched online via MTGCH."
 msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:80
@@ -424,17 +1561,73 @@ msgstr ""
 msgid "Defense"
 msgstr "Defesa"
 
+#: ui/components/settings/DeleteAccountDialog.tsx:56
+msgid "Delete account"
+msgstr ""
+
+#: ui/components/deck/DeckGridCard.tsx:182
+msgid "Delete Deck"
+msgstr ""
+
+#: ui/components/collection/CollectionDeleteDialog.tsx:41
+msgid "Delete entire collection?"
+msgstr ""
+
+#: ui/components/settings/MyAssetsSection.tsx:158
+msgid "Delete image"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1339
+msgid "Descending"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:311
+msgid "Description"
+msgstr ""
+
 #: ui/components/layout/navDestinations.ts:75
 #: ui/components/layout/TopBar.tsx:81
 msgid "Design System"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:170
+msgid "Destination"
 msgstr ""
 
 #: ui/components/game/panels/RightActionPanel.tsx:100
 msgid "Dev"
 msgstr ""
 
+#: ui/components/dev/PromptDialogDevControls.tsx:65
+msgid "Dialogs and screens"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:46
+msgid "Dimensions"
+msgstr ""
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:14
+msgid "Disabled"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:61
+#: ui/views/Tournaments.tsx:38
+msgid "Disconnect"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:79
+#: ui/phase/onlineDraft.test.ts:40
+#: ui/views/OnlineDraftPanel.tsx:59
+#: ui/views/Tournaments.tsx:39
 msgid "Disconnected"
+msgstr ""
+
+#: ui/phase/online.ts:43
+msgid "Disconnected. Reconnect before responding."
+msgstr ""
+
+#: ui/components/play/PlayHomeLinks.tsx:120
+msgid "Discord"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:247
@@ -449,8 +1642,83 @@ msgstr ""
 msgid "Downloading… {progress}%"
 msgstr ""
 
+#: ui/views/OnlinePlay.tsx:48
+msgid "Draft"
+msgstr ""
+
+#. placeholder {0}: currentDeck.name
+#: ui/components/editor/DeckBuilder.tsx:1136
+msgid "Draft \"{0}\" saved"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:48
+msgid "Draft code"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:55
+msgid "Draft code:"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:42
+msgid "Draft color mode"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:42
+msgid "Draft format"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:40
+msgid "Draft with human players on the server, build from your private pool, and play the pod’s matches."
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:2203
+msgid "Drag cards here from the search panel"
+msgstr ""
+
+#: ui/components/settings/AvatarCropDialog.tsx:98
+msgid "Drag to position, use the slider to zoom."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:100
+#: ui/views/Tournaments.tsx:112
+msgid "Draw"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:274
 msgid "Draw a card"
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:1435
+#: ui/components/editor/DeckListView.tsx:2320
+msgid "Drop cards here"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:89
+msgid "Drop from tournament"
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:731
+msgid "Drop here"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:93
+msgid "dropped"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:119
+msgid "Duel Commander"
+msgstr ""
+
+#: ui/phase/online.ts:100
+msgid "Duplicate server handshake"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:412
+msgid "EDHREC Rank:"
+msgstr ""
+
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:93
+msgid "Edit publication"
 msgstr ""
 
 #: ui/components/game/CardRailPreview.tsx:190
@@ -462,9 +1730,97 @@ msgstr "Texto do efeito indisponível"
 msgid "Eliminated"
 msgstr ""
 
+#: ui/components/auth/SignInFlow.tsx:242
+msgid "Email"
+msgstr ""
+
+#: ui/components/companion/PlayerMenu.tsx:116
+msgid "Empty mana pool"
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:190
+msgid "Empty seats"
+msgstr ""
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:14
+msgid "Enabled"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:86
+msgid "End tournament"
+msgstr ""
+
+#: ui/api/auth.ts:80
+msgid "Enter a complete email address, including its domain."
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:24
+msgid "Enter a deck list with valid card quantities (up to 500 cards)."
+msgstr ""
+
+#: ui/lib/guestName.ts:15
+msgid "Enter a name."
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:28
+msgid "Enter a set code."
+msgstr ""
+
+#: ui/phase/tournaments.ts:61
+msgid "Enter a ws:// or wss:// broker URL without credentials or query parameters."
+msgstr ""
+
+#: ui/phase/online.ts:33
+msgid "Enter a ws:// or wss:// server URL without credentials or query parameters."
+msgstr ""
+
+#: ui/components/lobby/JoinPasswordDialog.tsx:93
+msgid "Enter password"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:27
+msgid "Enter the draft code."
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:34
+msgid "Enter the room code."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:92
+msgid "Entrants"
+msgstr ""
+
 #. placeholder {0}: summary.estimatedDamage
 #: ui/components/game/modals/CombatBreakdownModal.tsx:79
 msgid "Estimated unblocked damage: {0}"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:46
+msgid "Event name"
+msgstr ""
+
+#: ui/components/companion/GameSummaryDialog.tsx:68
+msgid "Events"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:194
+msgid "Exact colors"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:997
+msgid "Exact printings copied to clipboard"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:354
+msgid "Exactly"
+msgstr ""
+
+#: ui/views/Settings.tsx:618
+msgid "Exile"
+msgstr ""
+
+#: ui/components/companion/FocusExitButton.tsx:64
+msgid "Exit"
 msgstr ""
 
 #: ui/components/game/panels/MiddleBarDock.tsx:92
@@ -480,6 +1836,18 @@ msgstr ""
 msgid "Exit tabletop"
 msgstr ""
 
+#: ui/views/Tournaments.tsx:77
+msgid "Expires"
+msgstr ""
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:111
+msgid "Explainable replacements"
+msgstr ""
+
+#: ui/components/deck/DeckHubResults.tsx:128
+msgid "Explore all decks"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardInspector.tsx:36
 #: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:307
 msgid "Face-down card"
@@ -489,17 +1857,113 @@ msgstr "Card virado para baixo"
 msgid "Face-down permanent"
 msgstr "Permanente virado para baixo"
 
+#. placeholder {0}: manifestResp.status
+#: ui/workers/game-engine.worker.ts:211
+msgid "Failed to fetch card archive manifest: {0}"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/workers/game-engine.worker.ts:231
+msgid "Failed to fetch card archive: {0}"
+msgstr ""
+
+#. placeholder {0}: indexResponse.status
+#: ui/lib/presetDecks.ts:74
+msgid "Failed to fetch preset deck index: {0}"
+msgstr ""
+
+#: ui/components/editor/PrintPickerModal.tsx:53
+msgid "Failed to fetch printings."
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:89
+msgid "Failed to join the local Forge room."
+msgstr ""
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:122
+msgid "Failed to launch match: {0}"
+msgstr ""
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:134
+msgid "Failed to load decks: {0}"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/stores/useScryfallStore.ts:286
+msgid "Failed to load token archive: {0}"
+msgstr ""
+
+#. placeholder {0}: String(err)
+#: ui/views/Lobby.tsx:251
+msgid "Failed to open sealed pool: {0}"
+msgstr ""
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:144
+msgid "Failed to save sideboard: {0}"
+msgstr ""
+
+#. placeholder {0}: String(error)
+#: ui/views/Lobby.tsx:327
+msgid "Failed to set deck: {0}"
+msgstr ""
+
+#. placeholder {0}: String(e)
+#. placeholder {0}: result.error
+#: ui/views/Lobby.tsx:375
+#: ui/views/Lobby.tsx:395
+msgid "Failed to start draft: {0}"
+msgstr ""
+
+#. placeholder {0}: String(e)
+#: ui/views/Lobby.tsx:351
+msgid "Failed to start game: {0}"
+msgstr ""
+
+#. placeholder {0}: String(e)
+#: ui/views/Lobby.tsx:420
+msgid "Failed to start sealed: {0}"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:116
+msgid "Favorites"
+msgstr ""
+
+#: ui/components/lobby/TableSetupGameCard.tsx:354
+msgid "Fill empty seats with AI bots"
+msgstr ""
+
 #. placeholder {0}: colorLabel(color)
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:159
 msgid "Filter by {0} identity"
 msgstr ""
 
+#: ui/components/limited/LimitedDeckBuilder.tsx:663
+msgid "Filter:"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilters.tsx:49
+#: ui/components/editor/CardSearch.tsx:964
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
 msgid "Filters"
 msgstr ""
 
-#: ui/views/Game.tsx:2533
+#: ui/components/companion/GameSummaryDialog.tsx:41
+msgid "Final scores"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:397
+msgid "Finish"
+msgstr ""
+
+#: ui/views/Game.tsx:2549
 msgid "First Strike Damage"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1190
+msgid "Flavor"
 msgstr ""
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:807
@@ -519,25 +1983,86 @@ msgstr ""
 msgid "Flip front · F"
 msgstr "Virar para a face · F"
 
+#: ui/components/companion/PlayerMenu.tsx:102
 #: ui/components/game/panels/PlayerSheetModal.tsx:114
 #: ui/components/game/panels/PlayerSheetModal.tsx:115
 msgid "Floating mana"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:124
+msgid "Focus or type here"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:180
 msgid "Focused"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:110
+#: ui/components/settings/CardImageLibraryCard.tsx:123
 msgid "Folder not found. Cards fall back to Scryfall."
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:58
+#: ui/components/settings/CardImageLibraryCard.tsx:63
 msgid "Folder not found. Check the path and try again."
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:89
+#: ui/components/settings/CardImageLibraryCard.tsx:101
 msgid "Folder with Forge-named card images"
+msgstr ""
+
+#: ui/components/dev/PromptDevControls.tsx:81
+msgid "Follow game"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:87
+msgid "Foreground and muted copy"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:97
+msgid "Forfeit"
+msgstr ""
+
+#: ui/platform/web.ts:1218
+msgid "Forge engine is not supported on the web"
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:71
+msgid "Forge play vs AI requires a multiplayer server."
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:81
+msgid "Forge play vs AI requires a server username."
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1212
+#: ui/components/editor/ImportDeckTextDialog.tsx:256
+#: ui/components/lobby/CreateGameDialog.tsx:435
+#: ui/components/lobby/TableRoomSidebar.tsx:89
+#: ui/components/lobby/TableSetupGameCard.tsx:137
+msgid "Format"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:99
+msgid "Format badges"
+msgstr ""
+
+#: ui/components/companion/NewSessionDialog.tsx:105
+msgid "Format preset"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:153
+msgid "Formats"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:162
+msgid "Four-player Commander"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:77
+msgid "Four-seat, two-card picks (CR 903.13), then a four-player Commander game."
+msgstr ""
+
+#: ui/components/dev/BoardDevControls.tsx:99
+msgid "FPS"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:171
@@ -546,6 +2071,10 @@ msgstr ""
 
 #: ui/components/game/CardPreview.tsx:465
 msgid "Front"
+msgstr ""
+
+#: ui/components/lobby/OpenTableCard.tsx:116
+msgid "Full"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:131
@@ -566,6 +2095,52 @@ msgstr ""
 msgid "Fullscreen"
 msgstr ""
 
+#: ui/views/DesignSystem.tsx:20
+msgid "Gallery sections"
+msgstr ""
+
+#. placeholder {0}: group.heading
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:147
+msgid "Game · {0}"
+msgstr ""
+
+#: ui/hooks/useGameEventListeners.ts:425
+msgid "Game aborted — a player did not reconnect."
+msgstr ""
+
+#: ui/hooks/useMultiplayerInterruption.ts:88
+msgid "Game aborted — connection could not be restored."
+msgstr ""
+
+#: ui/hooks/useMultiplayerInterruption.ts:99
+msgid "Game aborted — the host did not reconnect in time."
+msgstr ""
+
+#: ui/components/game/GameBoardAccessibility.tsx:127
+#: ui/components/game/GameBoardAccessibility.tsx:138
+msgid "Game board controls"
+msgstr ""
+
+#: ui/hooks/useGameEventListeners.ts:112
+msgid "Game could not be resumed — the room did not come back."
+msgstr ""
+
+#: ui/hooks/useGameEventListeners.ts:454
+msgid "Game ended unexpectedly — returning the room to the lobby."
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:74
+msgid "Game font-size tokens"
+msgstr ""
+
+#: ui/components/lobby/TableRoom.tsx:77
+msgid "Game in progress"
+msgstr ""
+
+#: ui/components/companion/GameLog.tsx:27
+msgid "Game log"
+msgstr ""
+
 #: ui/components/game/panels/ActionLog.tsx:110
 #: ui/components/game/panels/ActionLog.tsx:117
 msgid "Game Log"
@@ -573,6 +2148,38 @@ msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:67
 msgid "Game starting…"
+msgstr ""
+
+#: ui/components/dev/BoardDevControls.tsx:151
+msgid "Game state"
+msgstr ""
+
+#: ui/components/companion/GameSummaryDialog.tsx:20
+msgid "Game summary"
+msgstr ""
+
+#: ui/views/Settings.tsx:1202
+msgid "Game Theme Colors"
+msgstr ""
+
+#: ui/components/companion/SetupMenu.tsx:135
+msgid "Game title"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:117
+msgid "Game tokens"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:38
+msgid "game-icons — GameIcon whitelist"
+msgstr ""
+
+#: ui/components/dev/BoardGameplayPreviewControls.tsx:38
+msgid "Gameplay action preview"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:80
+msgid "Games"
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:69
@@ -583,12 +2190,44 @@ msgstr ""
 msgid "Getting started"
 msgstr ""
 
+#: ui/components/play/PlayHomeLinks.tsx:126
+msgid "GitHub"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:94
+msgid "Give the format a name."
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:1005
+msgid "Give this deck a name before saving"
+msgstr ""
+
 #: ui/components/game/panels/GlobalStateRail.tsx:143
 msgid "Global game state"
 msgstr ""
 
+#: ui/components/dev/BoardDevControls.tsx:173
+msgid "Global mechanics"
+msgstr ""
+
+#: ui/components/companion/StatusChips.tsx:17
+msgid "Goes first"
+msgstr ""
+
+#: ui/views/Settings.tsx:617
+msgid "Graveyard"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:34
 msgid "Green"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:648
+msgid "Group by"
+msgstr ""
+
+#: ui/views/Limited.tsx:643
+msgid "guaranteed slot active"
 msgstr ""
 
 #: ui/components/layout/AccountMenu.tsx:124
@@ -597,6 +2236,20 @@ msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:100
 msgid "Hand default view"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:47
+msgid "Hand-rolled brand SVGs"
+msgstr ""
+
+#: ui/components/auth/HandleDialog.tsx:70
+#: ui/components/auth/SignInFlow.tsx:346
+msgid "Handle"
+msgstr ""
+
+#. placeholder {0}: updated.handle
+#: ui/components/auth/HandleDialog.tsx:46
+msgid "Handle updated to @{0}"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:74
@@ -611,8 +2264,34 @@ msgstr ""
 msgid "Hide side panel"
 msgstr ""
 
+#: ui/views/Settings.tsx:388
+msgid "Host"
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:40
+#: ui/game/hostedAiPlay.ts:127
+#: ui/game/hostedAiPlay.ts:222
+msgid "Hosted AI play requires a multiplayer server."
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:45
+msgid "Hosted AI play requires a server username."
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:177
+msgid "Hosted game started without the local player."
+msgstr ""
+
+#: ui/components/lobby/TableSetupHostingCard.tsx:44
+msgid "Hosting"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:222
 msgid "Hover"
+msgstr ""
+
+#: ui/components/limited/DraftPreviewPanel.tsx:48
+msgid "Hover a card to preview"
 msgstr ""
 
 #. placeholder {0}: prefs.cardHoverDelayMs
@@ -624,12 +2303,98 @@ msgstr ""
 msgid "How many players?"
 msgstr ""
 
+#: ui/components/editor/NewDeckChoiceDialog.tsx:57
+msgid "How would you like to start?"
+msgstr ""
+
+#. placeholder {0}: r.status
+#. placeholder {0}: res.status
+#. placeholder {0}: response.status
+#: ui/api/limitedEdition.ts:60
+#: ui/api/limitedEdition.ts:65
+#: ui/api/scryfall.ts:383
+#: ui/components/editor/PlaymatEditorModal.tsx:150
+msgid "HTTP {0}"
+msgstr ""
+
+#. placeholder {0}: response.status
+#: ui/pixi/manaSymbolCache.ts:19
+msgid "HTTP {0} for {url}"
+msgstr ""
+
+#: ui/components/OnboardingHurray.tsx:56
+msgid "Hurray, you're in!"
+msgstr ""
+
 #: ui/components/AppInitGate.tsx:229
 msgid "I have read and agree to these terms"
 msgstr ""
 
+#: ui/components/companion/CustomCounterDialog.tsx:79
+msgid "Icon"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1032
+msgid "Identity"
+msgstr ""
+
+#: ui/views/Settings.tsx:232
+msgid "Image cache cleared — reloading…"
+msgstr ""
+
+#: ui/stores/useAssetStore.ts:70
+msgid "Image uploads aren't available on this server"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:29
+msgid "Images & icons"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:452
+msgid "Import behavior"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:238
+msgid "Import collection"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:333
+msgid "Import preview"
+msgstr ""
+
+#. placeholder {0}: imported.label
+#: ui/components/lobby/CustomFormatDialog.tsx:128
+msgid "Imported \"{0}\"."
+msgstr ""
+
+#: ui/components/editor/useDeckTextImport.ts:170
+msgid "Imported \"{deckName}\""
+msgstr ""
+
+#: ui/components/editor/useDeckTextImport.ts:162
+msgid "Imported \"{deckName}\" — couldn't find: {shown}{extra}"
+msgstr ""
+
+#. placeholder {0}: Object.keys(imported).length
+#: ui/components/collection/CollectionImportDialog.tsx:203
+msgid "Imported {0} collection entries"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:96
 msgid "In combat"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:195
+msgid "Includes colors"
+msgstr ""
+
+#: ui/components/companion/StatusChips.tsx:29
+msgid "Initiative"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:79
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:52
+msgid "Input"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardInspector.tsx:39
@@ -649,13 +2414,134 @@ msgstr ""
 msgid "Interface language"
 msgstr ""
 
+#: ui/themes/themeDocument.ts:40
+msgid "Invalid color for {label}.{key}. Use hex or rgb/rgba."
+msgstr ""
+
+#: ui/phase/tournaments.ts:159
+msgid "Invalid credential renewal reply."
+msgstr ""
+
+#: ui/phase/online.ts:117
+msgid "Invalid draft match attachment"
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:48
+msgid "Invalid draft seat response"
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:39
+msgid "Invalid saved draft seat."
+msgstr ""
+
+#: ui/phase/online.ts:74
+msgid "Invalid saved session."
+msgstr ""
+
+#: ui/phase/online.ts:165
+msgid "Invalid session snapshot"
+msgstr ""
+
+#: ui/phase/online.ts:139
+msgid "Invalid terminal result"
+msgstr ""
+
+#. placeholder {0}: stripUsernameTag(username)
+#: ui/stores/useServerStore.ts:471
+msgid "Invited {0} to your table"
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:411
+msgid "Ironsmith game is not initialized"
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:216
+#: ui/game/ironsmithRuntime.ts:237
+msgid "Ironsmith host relay is not ready yet; try again in a moment."
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:224
+#: ui/game/ironsmithRuntime.ts:244
+msgid "Ironsmith private relay is not ready yet; try again in a moment."
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:564
+msgid "Ironsmith trusted multiplayer requires Web Crypto in a secure context. Use HTTPS, localhost, or a browser that exposes crypto.subtle."
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:271
+msgid "Ironsmith trusted runtime snapshots are not wired to Manabrew restore yet"
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:416
+msgid "Ironsmith WASM did not return a Manabrew game view"
+msgstr ""
+
+#: ui/game/ironsmithRuntime.ts:429
+msgid "Ironsmith WASM did not return a public Manabrew game view"
+msgstr ""
+
+#: ui/components/settings/CardArtDownloadSection.tsx:137
+msgid "is"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1304
+msgid "Is"
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:69
+msgid "Join a draft first."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:81
+msgid "Join as player"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:51
+msgid "Join draft"
+msgstr ""
+
+#: ui/components/DiscordCallout.tsx:21
+msgid "Join our community"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:57
+msgid "Join room"
+msgstr ""
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:52
+msgid "Keep my changes"
+msgstr ""
+
 #: ui/components/KeyboardShortcutsDialog.tsx:36
+#: ui/components/settings/KeybindingsPanel.tsx:52
 msgid "Keyboard shortcuts"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1200
+msgid "Keyword"
+msgstr ""
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:192
+msgid "Keyword chips"
 msgstr ""
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:733
 msgid "Keywords, costs & counters"
 msgstr "Habilidades, custos e marcadores"
+
+#: ui/components/companion/CustomCounterDialog.tsx:60
+msgid "Label"
+msgstr ""
+
+#. placeholder {0}: label.name
+#: ui/components/editor/DeckLabelsModal.tsx:89
+msgid "Label \"{0}\" removed"
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:51
+msgid "Label \"{trimmed}\" added"
+msgstr ""
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:20
 msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
@@ -665,6 +2551,19 @@ msgstr ""
 msgid "Language for menus, buttons and messages. Untranslated text falls back to English."
 msgstr ""
 
+#: ui/components/companion/WinBanner.tsx:35
+msgid "Last standing"
+msgstr ""
+
+#: ui/components/companion/CompanionBar.tsx:85
+#: ui/components/companion/NewSessionDialog.tsx:177
+msgid "Layout"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:425
+msgid "LEA, LEB, ARN, …"
+msgstr ""
+
 #: ui/components/game/panels/MiddleBarDock.tsx:141
 msgid "Leave"
 msgstr ""
@@ -672,6 +2571,30 @@ msgstr ""
 #: ui/components/game/GameFailedScreen.tsx:18
 #: ui/components/game/GameLoadingScreen.tsx:129
 msgid "Leave game"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:422
+msgid "Legal sets (comma separated; empty = all sets)"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:433
+msgid "Legalities"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:108
+msgid "Legality"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:465
+msgid "Legend rule"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:467
+msgid "Legend rule scope"
+msgstr ""
+
+#: ui/components/companion/GameSummaryDialog.tsx:56
+msgid "Length"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:277
@@ -690,6 +2613,7 @@ msgid "Level {0} of {1}"
 msgstr "Nível {0} de {1}"
 
 #: ui/components/game/zones/LibraryZoneTile.tsx:34
+#: ui/views/Settings.tsx:616
 msgid "Library"
 msgstr ""
 
@@ -700,6 +2624,14 @@ msgstr ""
 #: ui/components/layout/navDestinations.ts:68
 #: ui/components/layout/TopBar.tsx:72
 msgid "Life Tracker"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:403
+msgid "Limited"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:25
+msgid "Live theme preview"
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:15
@@ -720,6 +2652,47 @@ msgstr ""
 
 #: ui/components/AppInitGate.tsx:40
 msgid "Loading decks"
+msgstr ""
+
+#: ui/views/Gauntlet.tsx:317
+msgid "Loading decks…"
+msgstr ""
+
+#: ui/views/Draft.tsx:68
+msgid "Loading draft…"
+msgstr ""
+
+#: ui/views/Gauntlet.tsx:75
+msgid "Loading gauntlet…"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:784
+msgid "Loading published decks…"
+msgstr ""
+
+#: ui/views/Sealed.tsx:47
+msgid "Loading sealed pool…"
+msgstr ""
+
+#: ui/views/Winston.tsx:53
+msgid "Loading Winston draft…"
+msgstr ""
+
+#: ui/components/settings/MyAssetsSection.tsx:129
+#: ui/views/Limited.tsx:564
+msgid "Loading…"
+msgstr ""
+
+#: ui/components/editor/DeckIntentPanel.tsx:43
+msgid "local analysis"
+msgstr ""
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:96
+msgid "Local checkpoints"
+msgstr ""
+
+#: ui/platform/index.ts:32
+msgid "Local Phase supports up to three AI opponents (four players)."
 msgstr ""
 
 #: ui/phase/Launch.tsx:177
@@ -746,17 +2719,94 @@ msgstr ""
 msgid "Log prompts to console"
 msgstr ""
 
+#: ui/components/dev/DebugLogOverlay.tsx:130
+msgid "logs"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:310
+msgid "Looks good!"
+msgstr ""
+
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
 msgid "LORE CHAPTERS"
 msgstr "CAPÍTULOS DA SAGA"
+
+#: ui/views/Tournaments.tsx:113
+msgid "Loser's game wins"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1156
+msgid "loy"
+msgstr ""
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1132
 msgid "Loyalty"
 msgstr "Lealdade"
 
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:20
+msgid "lucide-react — UI chrome"
+msgstr ""
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:103
+msgid "Main"
+msgstr ""
+
+#. placeholder {0}: targetMainSize - mainCards.length
+#. placeholder {1}: targetMainSize - mainCards.length === 1 ? "" : "s"
+#: ui/components/limited/LimitedDeckBuilder.tsx:401
+msgid "Main deck needs {0} more card{1}."
+msgstr ""
+
+#: ui/views/OnlineDraftBuilder.tsx:17
+msgid "Main deck:"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1062
+msgid "Mana"
+msgstr ""
+
+#. placeholder {0}: (Object.entries(allocation) as Array<[string, number]>) .filter(([, n]) => n > 0) .map(([k, n]) => `${n} ${k.slice(0, 1)}`) .join(" · ")
+#: ui/components/limited/LimitedDeckBuilder.tsx:330
+msgid "Mana base reset · {0}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:439
+#: ui/components/lobby/CustomFormatDialog.tsx:447
+msgid "Mana burn"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:441
+msgid "Mana burn policy"
+msgstr ""
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:44
+msgid "Mana consistency"
+msgstr ""
+
+#: ui/components/editor/DeckStats.tsx:58
+msgid "Mana Curve"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:57
+msgid "Mana symbols — ManaSymbols (Scryfall SVG)"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:182
 #: ui/lib/handOrder.ts:11
 msgid "Mana value"
+msgstr ""
+
+#: ui/components/editor/ComboDetailModal.tsx:86
+msgid "Mana:"
+msgstr ""
+
+#: ui/workers/manabot.worker.ts:51
+msgid "Manabot response exceeds the shared buffer capacity."
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:69
+#: ui/components/VersionInfo.tsx:33
+msgid "Manabrew"
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:159
@@ -767,12 +2817,96 @@ msgstr ""
 #~ msgid "ManaBrew's battlefield and prompts, powered by phase-engine and phase-ai."
 #~ msgstr ""
 
+#: ui/components/editor/DeckTagManagerDialog.tsx:111
+msgid "Manage deck tags"
+msgstr ""
+
+#: ui/components/settings/MyAssetsSection.tsx:80
+msgid "Manage uploaded assets here"
+msgstr ""
+
 #: ui/lib/handOrder.ts:9
 msgid "Manual"
 msgstr ""
 
+#: ui/views/Tournaments.tsx:112
+msgid "Manual match outcome"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:97
 msgid "Manual preserves your placement; automatic modes arrange new cards."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:97
+msgid "Manual result — unverified"
+msgstr ""
+
+#: ui/stores/useGameStore.ts:466
+msgid "Manual room client requires the manual tabletop runtime."
+msgstr ""
+
+#: ui/stores/useGameStore.ts:437
+msgid "Manual room host requires the manual tabletop runtime."
+msgstr ""
+
+#: ui/game/manualTabletopApi.ts:243
+msgid "Manual tabletop API expects manual table actions."
+msgstr ""
+
+#: ui/game/manualTabletopApi.ts:247
+msgid "Manual tabletop has no engine to direct."
+msgstr ""
+
+#: ui/game/manualTabletopApi.ts:239
+msgid "Manual tabletop multiplayer is not implemented yet."
+msgstr ""
+
+#: ui/game/manualTabletopApi.ts:257
+msgid "Manual tabletop snapshots are not implemented yet."
+msgstr ""
+
+#: ui/components/play/RejoinMatchCard.tsx:103
+msgid "Match in progress"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:54
+msgid "Match structure"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:80
+#: ui/views/Tournaments.tsx:118
+msgid "Matches"
+msgstr ""
+
+#. placeholder {0}: copyLimit ?? 0
+#. placeholder {0}: format?.deckRules.maxCopies ?? 0
+#. placeholder {1}: group.card.identity.name
+#. placeholder {1}: sc.name
+#: ui/components/editor/DeckBuilder.tsx:966
+#: ui/components/editor/DeckBuilder.tsx:1758
+msgid "Max {0} copies of \"{1}\" allowed in {formatName}"
+msgstr ""
+
+#. placeholder {0}: format?.deckRules.maxCopies ?? 0
+#: ui/components/editor/DeckBuilder.tsx:979
+msgid "Max {0} copies of \"{cardName}\" allowed in {formatName}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:327
+msgid "Maximum players"
+msgstr ""
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:105
+msgid "Maybe"
+msgstr ""
+
+#. placeholder {0}: zoneCounts.maybe
+#: ui/components/editor/CardDetailModal.tsx:306
+msgid "Maybe {0}"
+msgstr ""
+
+#: ui/components/editor/DeckSelectionTray.tsx:90
+msgid "Maybeboard"
 msgstr ""
 
 #: ui/components/layout/NavSheet.tsx:85
@@ -785,12 +2919,44 @@ msgstr ""
 msgid "Mini-frame"
 msgstr ""
 
+#: ui/components/lobby/CustomFormatDialog.tsx:323
+msgid "Minimum players"
+msgstr ""
+
+#: ui/views/OnlineDraftBuilder.tsx:17
+msgid "Minimum:"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:476
+msgid "Modern"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:155
+msgid "Momir"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:156
+msgid "Momir's Madness — the engine supplies a snow-basic deck and the random-creature emblem."
+msgstr ""
+
+#: ui/components/companion/StatusChips.tsx:23
+msgid "Monarch"
+msgstr ""
+
 #: ui/components/layout/NavSheet.tsx:97
 msgid "More"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:204
 msgid "Movable"
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:323
+msgid "Move 1"
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:324
+msgid "Move all ({count})"
 msgstr ""
 
 #: ui/components/game/ManualTabletopControls.tsx:423
@@ -808,6 +2974,26 @@ msgstr ""
 msgid "Move to hand"
 msgstr ""
 
+#. placeholder {0}: draggedNames.length
+#: ui/views/DeckEditor.tsx:635
+msgid "Moved {0} cards to {dest}"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:647
+msgid "Moved {cardName} to {dest}"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:826
+msgid "Moved {moved} {cardName} to {label}"
+msgstr ""
+
+#. placeholder {0}: res.status
+#: ui/lib/moxfield.ts:86
+#: ui/lib/moxfield.ts:112
+msgid "Moxfield fetch failed: {0}"
+msgstr ""
+
+#: ui/components/GuestNameConflictModal.tsx:92
 #: ui/components/layout/navDestinations.ts:53
 #: ui/components/layout/TopBar.tsx:33
 msgid "Multiplayer"
@@ -817,82 +3003,475 @@ msgstr ""
 msgid "Multiplayer Draft"
 msgstr ""
 
+#: ui/stores/useServerStore.ts:384
+msgid "Multiplayer server is unavailable."
+msgstr ""
+
 #: ui/components/layout/navDestinations.ts:62
 #: ui/components/layout/TopBar.tsx:45
+#: ui/views/MyCollection.tsx:99
 msgid "My Collection"
 msgstr ""
 
 #: ui/components/layout/navDestinations.ts:54
 #: ui/components/layout/TopBar.tsx:40
+#: ui/components/play/PlayDeckShelf.tsx:124
 msgid "My Decks"
 msgstr ""
 
+#: ui/components/deck/DeckHubFilterPanel.tsx:115
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:181
+#: ui/components/lobby/CustomFormatDialog.tsx:296
 msgid "Name"
+msgstr ""
+
+#: ui/components/companion/CompanionBar.tsx:65
+#: ui/components/companion/NewSessionDialog.tsx:50
+msgid "New game"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:114
+msgid "Newest"
 msgstr ""
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:113
 msgid "No actions are currently available for this card."
 msgstr ""
 
+#: ui/game/manualTabletopApi.ts:270
+#: ui/game/manualTabletopApi.ts:289
+msgid "No active manual tabletop game."
+msgstr ""
+
+#: ui/hooks/useQuickPlay.tsx:100
+#: ui/hooks/useQuickPlay.tsx:138
+#: ui/hooks/useQuickPlay.tsx:177
+msgid "No AI deck available for this format — pick one yourself."
+msgstr ""
+
+#: ui/phase/transport.ts:110
+msgid "No authorized conspiracy reveal action"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:337
 msgid "No cards found"
+msgstr ""
+
+#: ui/components/deck/DeckCardBrowser.tsx:533
+msgid "No cards match these filters"
+msgstr ""
+
+#: ui/components/editor/CombosPanel.tsx:211
+msgid "No combos detected yet."
 msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:103
 msgid "No current combat assignments."
 msgstr ""
 
+#: ui/components/lobby/CreateGameDialog.tsx:808
+msgid "No deck selected"
+msgstr ""
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:133
+msgid "No deck tags yet"
+msgstr ""
+
+#: ui/components/settings/CardArtDownloadSection.tsx:86
+msgid "No decks to download art for yet."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:93
+msgid "No entrants yet."
+msgstr ""
+
+#: ui/components/companion/GameLog.tsx:31
+msgid "No events yet."
+msgstr ""
+
+#: ui/lib/archidekt.ts:81
+#: ui/lib/moxfield.ts:17
+msgid "No fetch implementation available"
+msgstr ""
+
+#: ui/views/Game.tsx:626
+msgid "No game card to cast: {cardId}"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:126
+msgid "No groups"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:258
+#: ui/components/editor/PrintPickerModal.tsx:140
+msgid "No Image"
+msgstr ""
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:245
+msgid "No keyword matches."
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:67
+msgid "No labels yet"
+msgstr ""
+
+#: ui/components/dev/DebugLogOverlay.tsx:180
+msgid "no lines yet"
+msgstr ""
+
+#: ui/stores/useGameStore.ts:670
+msgid "No local player is available to concede."
+msgstr ""
+
 #: ui/components/game/panels/ActionLog.tsx:111
 msgid "No log entries yet."
+msgstr ""
+
+#: ui/views/Gauntlet.tsx:201
+msgid "No opponent — gauntlet finished."
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:425
+msgid "No price data"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:319
+msgid "No recognizable card entries yet"
+msgstr ""
+
+#: ui/game/webrtcPlane.test.ts:66
+msgid "no remote description"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:244
+msgid "No room for basics — main deck is already at target size."
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:464
+msgid "No rulings available."
+msgstr ""
+
+#: ui/phase/tournaments.ts:154
+#: ui/phase/tournaments.ts:166
+msgid "No saved credential for this role."
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:37
+msgid "No saved draft seat for this server in this tab."
+msgstr ""
+
+#: ui/phase/online.ts:72
+msgid "No saved session for this server in this tab."
+msgstr ""
+
+#: ui/game/hostedAiPlay.ts:261
+msgid "No self-hosted room is available for {format}."
 msgstr ""
 
 #: ui/components/KeyboardShortcutsDialog.tsx:78
 msgid "No shortcuts match “{query}”."
 msgstr ""
 
+#: ui/components/deck/HubTopDeckSnapshots.tsx:158
+msgid "No snapshot published yet"
+msgstr ""
+
 #: ui/components/game/panels/SnapshotsPanel.tsx:24
 msgid "No snapshots yet."
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:383
+msgid "No tags yet"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:122
+msgid "No tokens match this search."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:66
+msgid "No tournaments listed."
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:402
+msgid "None"
+msgstr ""
+
+#: ui/components/editor/useDeckTextImport.ts:118
+msgid "None of the cards could be found on Scryfall"
+msgstr ""
+
+#. placeholder {0}: opponentCount + 1
+#: ui/components/lobby/DeckVsSelector.tsx:457
+msgid "Not enough distinct decks are available for a {0}-player game."
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:253
 msgid "Not gained: "
 msgstr ""
 
+#: ui/components/editor/DeckListView.tsx:2431
+msgid "not in deck"
+msgstr ""
+
+#: ui/game/webrtcPlane.test.ts:23
+msgid "not open"
+msgstr ""
+
+#: ui/views/Limited.tsx:613
+msgid "Not supported"
+msgstr ""
+
+#. placeholder {0}: player.name
+#: ui/components/companion/PlayerNotesDialog.tsx:23
+msgid "Notes — {0}"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:105
+msgid "Oathbreaker"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:70
 msgid "Off"
+msgstr ""
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:22
+msgid "Off (Local only)"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:133
+msgid "Old School 93/94"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:141
+msgid "Old School 93/94 plus Fourth Edition through Homelands."
+msgstr ""
+
+#: ui/views/CasualModes.tsx:140
+msgid "Old School 95"
+msgstr ""
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:79
+msgid "Older checkpoints were removed to free device storage"
+msgstr ""
+
+#: ui/components/companion/SetupMenu.tsx:102
+#: ui/components/companion/SetupMenu.tsx:112
+msgid "on"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:69
 msgid "On"
 msgstr ""
 
-#: ui/views/Game.tsx:2535
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:29
+msgid "On (MTGCH)"
+msgstr ""
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:45
+msgid "on the play"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:163
+msgid "One human plus three AI at 40 life each; add opponents in the setup screen."
+msgstr ""
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:12
+msgid "Online card localization"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:39
+msgid "Online draft"
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:30
+msgid "Online draft transport is unavailable."
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:44
+msgid "Online multiplayer"
+msgstr ""
+
+#: ui/views/Game.tsx:2551
 msgid "only first & double strikers deal damage now"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:63
+msgid "Open"
 msgstr ""
 
 #: ui/components/game/panels/RightActionPanel.tsx:56
 msgid "Open action log with {logActivityCount} entries"
 msgstr ""
 
+#: ui/components/deck/DeckHubResults.tsx:120
+msgid "Open My Decks"
+msgstr ""
+
 #: ui/phase/Launch.tsx:196
 #~ msgid "Open the ManaBrew interface"
 #~ msgstr ""
 
+#: ui/components/lobby/TableRoom.tsx:78
+msgid "Opening the game table..."
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:177
 msgid "Opponent layout"
+msgstr ""
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:270
+msgid "Optimize deck printings"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:16
 msgid "Optional yes/no costs"
 msgstr ""
 
+#: ui/components/auth/SignInFlow.tsx:238
+msgid "or"
+msgstr ""
+
+#: ui/views/Limited.tsx:361
+msgid "or load saved pool…"
+msgstr ""
+
+#: ui/components/editor/DeckListView.tsx:2204
+msgid "or use the + buttons on hover"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1180
+msgid "Oracle"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:359
+msgid "Oracle Text"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:30
+msgid "Organizer"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:42
+msgid "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:80
+msgid "Outline"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:181
 msgid "Overview"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:107
+#: ui/components/collection/CollectionCard.tsx:65
+msgid "Owned"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:63
+msgid "Pack"
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:182
+msgid "Packs"
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:199
+msgid "Packs per player"
+msgstr ""
+
+#: ui/router.tsx:41
+msgid "Page Not Found"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:85
+msgid "Pair next round"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:51
+msgid "Pairing system"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:94
+msgid "Pairings and manual results (unverified)"
+msgstr ""
+
+#: ui/views/Winston.tsx:148
+msgid "Pass the last pile?"
+msgstr ""
+
+#: ui/views/Settings.tsx:407
+msgid "Password"
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:78
+msgid "Password copied to clipboard"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:91
+msgid "Paste a CubeCobra id or load a saved pool, then draft or seal it."
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:174
+msgid "Paste an exported custom format"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:274
+msgid "Paste from clipboard"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:126
+msgid "Pauper Commander"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:97
+msgid "Pending"
+msgstr ""
+
+#: ui/components/dev/BattlefieldChoiceDevControls.tsx:30
+msgid "Persistent choices"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:22
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:23
+msgid "Personal theme name"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:36
+msgid "Phase broker URL"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:63
+msgid "Pick"
+msgstr ""
+
+#: ui/components/limited/LimitedCompareDialog.tsx:104
+msgid "Pick a saved deck to see its breakdown."
+msgstr ""
+
+#: ui/views/Limited.tsx:85
+msgid "Pick a set to draft first."
+msgstr ""
+
+#. placeholder {0}: String(err)
+#: ui/game/draftHost.ts:236
+msgid "pick failed: {0}"
+msgstr ""
+
+#: ui/components/lobby/TableRoomSidebar.tsx:186
+#: ui/views/Limited.tsx:718
+msgid "Picks per pass"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:120
 msgid "Pinned by PHASE_MANA_CARD_IMAGES."
+msgstr ""
+
+#: ui/components/editor/PlaymatEditorModal.tsx:279
+msgid "Placement"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:176
+msgid "Planechase"
 msgstr ""
 
 #: ui/components/layout/NavSheet.tsx:93
@@ -907,22 +3486,74 @@ msgstr ""
 msgid "Play Deck"
 msgstr ""
 
+#: ui/views/OnlineDraftPanel.tsx:78
+msgid "Play match"
+msgstr ""
+
 #: ui/components/layout/navDestinations.ts:52
 #: ui/components/layout/TopBar.tsx:24
 #: ui/components/layout/TopBar.tsx:27
 msgid "Play Offline"
 msgstr ""
 
+#: ui/components/companion/StatsDialog.tsx:61
+msgid "Play stats"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:80
+#: ui/views/Tournaments.tsx:30
+#: ui/views/Tournaments.tsx:118
+msgid "Player"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
 msgid "Player details"
+msgstr ""
+
+#: ui/components/dev/PlayerBadgeDevControls.tsx:138
+msgid "Player HUD"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:81
+msgid "Player name"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:140
 msgid "Player states"
 msgstr ""
 
+#: ui/components/companion/GameSummaryDialog.tsx:64
+#: ui/components/companion/NewSessionDialog.tsx:120
+#: ui/components/companion/SetupMenu.tsx:50
+#: ui/components/lobby/UserList.tsx:238
+#: ui/views/OnlinePlay.tsx:50
+#: ui/views/OnlinePlay.tsx:50
+msgid "Players"
+msgstr ""
+
+#: ui/views/Lobby.tsx:558
+msgid "Players and chat"
+msgstr ""
+
+#: ui/components/lobby/InvitePlayersDialog.tsx:46
+msgid "Players in the lobby who aren't at a table."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:48
+msgid "Players per table"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:786
+#: ui/components/lobby/OpenTableCard.tsx:114
+msgid "Playing"
+msgstr ""
+
 #: ui/components/layout/AccountMenu.tsx:126
 msgid "Playing as a guest"
+msgstr ""
+
+#: ui/components/settings/GuestNamePicker.tsx:58
+msgid "Playing as a guest."
 msgstr ""
 
 #: ui/components/game/panels/MiddleBarDock.tsx:113
@@ -933,13 +3564,75 @@ msgstr ""
 msgid "Playtest"
 msgstr ""
 
+#: ui/components/deck/DeckGridCard.tsx:82
+#: ui/components/deck/DeckGridCard.tsx:83
+msgid "Playtest vs AI"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:369
+msgid "Please select a commander"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:345
+msgid "Please select a deck"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:349
+msgid "Please select a deck for this format"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:46
+msgid "Pod size"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:118
+msgid "Points"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:74
+msgid "Points: win / draw / loss"
+msgstr ""
+
+#: ui/views/Limited.tsx:175
+msgid "Pool file must contain a non-empty `pool` array of DraftCards."
+msgstr ""
+
+#: ui/views/Settings.tsx:397
+msgid "Port"
+msgstr ""
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:96
 msgid "Potential lethal combat damage"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1116
+msgid "pow"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:477
+msgid "Pre-M14 (any controller)"
 msgstr ""
 
 #: ui/components/layout/AccountMenu.tsx:167
 #: ui/components/layout/TopBar.tsx:75
 msgid "Preferences"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:43
+msgid "Premier (Bo1)"
+msgstr ""
+
+#. placeholder {0}: preset.commander
+#: ui/lib/presetDecks.ts:143
+msgid "Preset commander missing from cards: {0}"
+msgstr ""
+
+#: ui/components/dev/BoardPlayground.tsx:528
+msgid "Preview viewport"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:418
+msgid "Prices"
 msgstr ""
 
 #: ui/components/layout/TopBarNav.tsx:22
@@ -948,6 +3641,15 @@ msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:104
 msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:396
+#: ui/components/editor/ImportDeckTextDialog.tsx:171
+msgid "Printing"
+msgstr ""
+
+#: ui/components/editor/DeckChangeSummary.tsx:151
+msgid "printing changed"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:42
@@ -962,6 +3664,19 @@ msgstr ""
 msgid "Priority windows"
 msgstr ""
 
+#: ui/components/lobby/TableRoomSidebar.tsx:155
+msgid "Privacy"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1047
+#: ui/components/editor/ComboDetailModal.tsx:65
+msgid "Produces"
+msgstr ""
+
+#: ui/components/dev/CardRailDevControls.tsx:139
+msgid "Progress rails"
+msgstr ""
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:756
 msgid "Progression"
 msgstr "Progressão"
@@ -970,12 +3685,57 @@ msgstr "Progressão"
 msgid "Prompt and dialog default view"
 msgstr ""
 
+#: ui/components/dev/promptDialogs/PromptModalPreview.tsx:135
+msgid "Prompt preview"
+msgstr ""
+
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
 msgid "Prompts"
 msgstr ""
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:360
+msgid "Proposal ready"
+msgstr ""
+
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:82
+msgid "Publication details updated"
+msgstr ""
+
+#: ui/components/deck/PublishDeckDialog.tsx:143
+msgid "Publish to Community"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:291
 msgid "Put top library card onto battlefield"
+msgstr ""
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:168
+msgid "Qty"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:398
+msgid "Quantity"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:12
+msgid "Radius"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:118
+msgid "Rank"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:121
+#: ui/components/editor/CardSearch.tsx:1100
+msgid "Rarity"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:396
+msgid "Rarity:"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:462
+msgid "Reach exile"
 msgstr ""
 
 #: ui/components/AppInitGate.tsx:42
@@ -996,16 +3756,114 @@ msgstr ""
 msgid "Receive the first game state"
 msgstr ""
 
+#: ui/views/Tournaments.tsx:37
+msgid "Reconnect"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:54
+msgid "Reconnect draft seat"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:58
+msgid "Reconnect saved seat"
+msgstr ""
+
+#: ui/components/lobby/TableSetupHostingCard.tsx:154
+msgid "Reconnect timeout"
+msgstr ""
+
+#: ui/phase/tournaments.ts:119
+msgid "Reconnect to the tournament broker first."
+msgstr ""
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:32
 msgid "Red"
 msgstr ""
 
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:95
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:96
+msgid "Redo draft change"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilters.tsx:50
+msgid "Refine published deck results."
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterSheet.tsx:40
+msgid "Refine the published decks shown in the grid."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:90
+msgid "Refresh"
+msgstr ""
+
+#: ui/platform/web.ts:1309
+msgid "Relay is not connected; queue the engine report instead."
+msgstr ""
+
+#: ui/components/deck/PublishDeckDialog.tsx:90
+msgid "Reload this account deck before publishing it."
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:954
+msgid "Remove account deck"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeColorControl.tsx:63
+msgid "Remove this override and inherit the base preset color"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:446
+msgid "Removed"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:494
+msgid "Removed one {deckCardName}"
+msgstr ""
+
+#. placeholder {0}: selectedCards.size
+#: ui/components/editor/DeckBuilder.tsx:646
+msgid "Removed one copy of {0} cards"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:919
+msgid "Rename Deck"
+msgstr ""
+
+#: ui/components/dev/BoardDevControls.tsx:92
+msgid "Renderer"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:77
+msgid "Renew credential"
+msgstr ""
+
+#: ui/components/deck/DeckVersionHistoryDialog.tsx:122
+msgid "Replace unsaved changes?"
+msgstr ""
+
+#. placeholder {0}: target.identity.name
+#. placeholder {1}: suggestion.name
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:277
+msgid "Replaced {0} with {1}"
+msgstr ""
+
+#: ui/components/companion/SetupMenu.tsx:156
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:196
+#: ui/components/game/SideboardDialog.tsx:54
 msgid "Reset"
 msgstr ""
 
 #: ui/components/game/panels/SnapshotsPanel.tsx:51
 msgid "Restore"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:2267
+msgid "Restored \"{checkpointName}\""
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:491
+msgid "Restricted cards (one name per line)"
 msgstr ""
 
 #: ui/phase/Launch.tsx:184
@@ -1020,8 +3878,29 @@ msgstr ""
 msgid "Right click"
 msgstr ""
 
+#: ui/components/companion/StatusChips.tsx:41
+msgid "Ring"
+msgstr ""
+
 #: ui/components/game/CardPreviewOverlay.tsx:222
 msgid "Ring-bearer"
+msgstr ""
+
+#: ui/views/Limited.tsx:692
+msgid "RNG seed"
+msgstr ""
+
+#: ui/components/companion/DiceMenu.tsx:50
+#: ui/components/companion/DiceTray.tsx:40
+msgid "Roll"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:54
+msgid "Room code"
+msgstr ""
+
+#: ui/game/roomHost.ts:79
+msgid "Room hosting requires a server connection."
 msgstr ""
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
@@ -1032,8 +3911,23 @@ msgstr ""
 msgid "Rotate your device"
 msgstr ""
 
+#: ui/views/OnlineDraftPanel.tsx:57
+#: ui/views/Tournaments.tsx:74
+#: ui/views/Tournaments.tsx:96
+msgid "Round"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:58
+msgid "Rounds (blank for automatic)"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:394
+msgid "Row"
+msgstr ""
+
 #: ui/components/game/cardPreviewStyles.ts:13
 #: ui/components/game/cardPreviewStyles.ts:23
+#: ui/components/lobby/CreateGameDialog.tsx:465
 msgid "Rules"
 msgstr ""
 
@@ -1046,12 +3940,98 @@ msgstr ""
 msgid "Rules text"
 msgstr "Texto de regras"
 
+#: ui/game/runtimeRegistry.ts:23
+msgid "Runtime unavailable: {kind}"
+msgstr ""
+
+#: ui/components/editor/DeckLayoutMenu.tsx:206
+msgid "Save deck view"
+msgstr ""
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:80
+msgid "Save mine as a copy"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:544
+msgid "Save to My Decks"
+msgstr ""
+
+#. placeholder {0}: deckToSave.name
+#: ui/components/editor/DeckBuilder.tsx:1046
+msgid "Saved \"{0}\" — {validationError}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:105
+msgid "Saved \"{label}\"."
+msgstr ""
+
+#: ui/views/Settings.tsx:222
+msgid "Saved \"{name}\""
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:421
+msgid "Saved \"{name}\" to My Decks."
+msgstr ""
+
+#: ui/components/limited/LimitedCompareDialog.tsx:52
+msgid "Saved deck"
+msgstr ""
+
+#. placeholder {0}: detail.currentVersionNo
+#: ui/components/editor/DeckBuilder.tsx:1033
+msgid "Saved version {0} to your account"
+msgstr ""
+
+#: ui/components/editor/DeckLayoutMenu.tsx:148
+msgid "Saved views"
+msgstr ""
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:724
+msgid "SB {sideboardCount}"
+msgstr ""
+
+#. placeholder {0}: sc.name
+#. placeholder {0}: scryfallCard.name
+#: ui/lib/scryfall.utils.ts:93
+#: ui/stores/useDeckStore.ts:681
+#: ui/stores/useDeckStore.ts:698
+#: ui/stores/useDeckStore.ts:714
+#: ui/stores/useDeckStore.ts:734
+msgid "Scryfall card has no image uris: {0}"
+msgstr ""
+
+#. placeholder {0}: res.status
+#: ui/lib/scryfallImageSource.ts:99
+msgid "scryfall image {url}: HTTP {0}"
+msgstr ""
+
+#. placeholder {0}: Math.ceil(retryAfterMs / 1000)
+#: ui/api/scryfall.ts:111
+msgid "Scryfall is rate limited. Try again in {0} seconds."
+msgstr ""
+
+#: ui/stores/useScryfallStore.ts:214
+msgid "Scryfall lookup requires a name or id"
+msgstr ""
+
+#: ui/api/scryfall.ts:370
+msgid "Scryfall returned no cards for set {setCode}"
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:63
 msgid "Sealed"
 msgstr ""
 
+#: ui/game/sealedStart.ts:54
+msgid "sealed config has no pool source"
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:60
 msgid "Sealed Deck Build"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:81
+msgid "Search all theme tokens"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:86
@@ -1060,6 +4040,18 @@ msgstr ""
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:85
 msgid "Search cards by name, rules, type or mana"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:53
+msgid "Search cards…"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:82
+msgid "Search every app and game token"
+msgstr ""
+
+#: ui/components/editor/DeckCommandPalette.tsx:50
+msgid "Search for an action to run in the deck editor."
 msgstr ""
 
 #: ui/components/game/ManualTabletopControls.tsx:329
@@ -1074,12 +4066,65 @@ msgstr ""
 msgid "Searching…"
 msgstr ""
 
+#: ui/components/lobby/TableRoomSidebar.tsx:116
+msgid "Seats"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:78
+msgid "Secondary"
+msgstr ""
+
+#: ui/stores/useDeckStore.ts:272
+msgid "Seems like you reached the limit of your browser storage — contact us on Discord for more info."
+msgstr ""
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:114
 msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
 msgstr ""
 
+#: ui/components/lobby/TableRoom.tsx:86
+msgid "Select one in Table settings to continue."
+msgstr ""
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:47
 msgid "Sending concession…"
+msgstr ""
+
+#: ui/views/Settings.tsx:384
+msgid "Server"
+msgstr ""
+
+#: ui/phase/online.ts:155
+msgid "Server omitted the session code"
+msgstr ""
+
+#: ui/phase/online.ts:111
+msgid "Server sent data before its handshake"
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:46
+msgid "Server URL"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1227
+msgid "Set"
+msgstr ""
+
+#. placeholder {0}: card.identity.name
+#: ui/views/DeckEditor.tsx:562
+msgid "Set {0} in the command zone"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:45
+msgid "Set code"
+msgstr ""
+
+#: ui/components/editor/CommanderSlots.tsx:218
+msgid "Set your deck identity"
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:383
+msgid "Set:"
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:71
@@ -1090,8 +4135,20 @@ msgstr ""
 msgid "Setup progress"
 msgstr ""
 
+#: ui/components/deck/HubDeckPreviewDialog.tsx:193
+msgid "Share link copied — anyone can open and play this deck"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:302
+msgid "Short label"
+msgstr ""
+
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show back face"
+msgstr ""
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:332
+msgid "Show cards"
 msgstr ""
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
@@ -1119,12 +4176,87 @@ msgstr ""
 msgid "Shuffle library"
 msgstr ""
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:104
+msgid "Side"
+msgstr ""
+
+#. placeholder {0}: zoneCounts.side
+#: ui/components/editor/CardDetailModal.tsx:303
+msgid "Side {0}"
+msgstr ""
+
+#: ui/components/game/SideboardDialog.tsx:36
+#: ui/components/lobby/CustomFormatDialog.tsx:389
+msgid "Sideboard"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:461
+msgid "Sideboard only"
+msgstr ""
+
+#: ui/components/editor/SideboardPlansDialog.tsx:62
+msgid "Sideboard plans"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:392
+msgid "Sideboard policy"
+msgstr ""
+
+#: ui/views/Gauntlet.tsx:141
+msgid "Sideboard updated."
+msgstr ""
+
 #: ui/components/layout/AccountMenu.tsx:158
 msgid "Sign in"
 msgstr ""
 
+#: ui/components/auth/SignInDialog.tsx:21
+msgid "Sign in to Manabrew"
+msgstr ""
+
+#: ui/stores/useAccountDecksStore.ts:59
+msgid "Sign in to use account decks."
+msgstr ""
+
+#: ui/views/AuthCallback.tsx:80
+msgid "Sign-in failed. Try again."
+msgstr ""
+
+#: ui/components/settings/SignInMethodsCard.tsx:77
+msgid "Sign-in methods"
+msgstr ""
+
+#: ui/components/auth/SignInFlow.tsx:188
+msgid "Sign-in methods could not be loaded."
+msgstr ""
+
 #: ui/components/layout/AccountMenu.tsx:126
 msgid "Signed in"
+msgstr ""
+
+#. placeholder {0}: account.handle
+#. placeholder {0}: session.account.handle
+#: ui/components/auth/SignInFlow.tsx:93
+#: ui/components/auth/SignInFlow.tsx:154
+#: ui/components/auth/SignInFlow.tsx:167
+#: ui/views/AuthCallback.tsx:75
+msgid "Signed in as @{0}"
+msgstr ""
+
+#: ui/stores/useServerStore.ts:240
+msgid "Signed in from another tab — this tab was disconnected."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:52
+msgid "Single elimination"
+msgstr ""
+
+#: ui/views/Limited.tsx:638
+msgid "Single recipe"
+msgstr ""
+
+#: ui/components/dev/DevSizingControls.tsx:44
+msgid "Size and viewport"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:17
@@ -1149,12 +4281,49 @@ msgstr ""
 msgid "Something went wrong and the game can't continue. Please contact the developer."
 msgstr ""
 
+#: ui/components/editor/CardSearch.tsx:1319
+msgid "Sort by"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:93
 msgid "Sort hand"
 msgstr ""
 
+#. placeholder {0}: SORT_OPTIONS.find((option) => option.value === sortBy)?.label
+#: ui/components/editor/DeckBuilder.tsx:1657
+msgid "Sort: {0}"
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:135
+msgid "Source"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:28
+msgid "Spacing scale"
+msgstr ""
+
+#: ui/components/companion/StatusChips.tsx:48
+msgid "Speed"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:26
+msgid "src/assets/manaBrew.png"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:106
 msgid "Stack default view"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:117
+msgid "Standings from manual reports (unverified)"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:61
+msgid "Start draft"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:77
+msgid "Start next round"
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:14
@@ -1165,24 +4334,133 @@ msgstr ""
 #~ msgid "Start the Rust host first. Unsupported engine interactions are reported, never silently skipped. This is not the ManaBrew online service."
 #~ msgstr ""
 
+#: ui/views/Companion.tsx:45
+msgid "Start tracking"
+msgstr ""
+
+#: ui/workers/game-engine.worker.ts:434
+msgid "start_game handled outside handleCommand"
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:741
+msgid "Starter Decks"
+msgstr ""
+
 #: ui/components/AppInitGate.tsx:36
 msgid "Starting"
 msgstr ""
 
-#: ui/views/Play.tsx:153
+#: ui/components/companion/NewSessionDialog.tsx:134
+#: ui/components/companion/SetupMenu.tsx:75
+#: ui/components/lobby/CustomFormatDialog.tsx:331
+msgid "Starting life"
+msgstr ""
+
+#: ui/views/Play.tsx:163
 msgid "Starting multiplayer game…"
+msgstr ""
+
+#: ui/components/companion/CustomCounterDialog.tsx:70
+msgid "Starting value"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:54
+msgid "Static data files"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1114
+msgid "Stats"
+msgstr ""
+
+#: ui/components/collection/CollectionImportDialog.tsx:399
+msgid "Status"
+msgstr ""
+
+#: ui/components/editor/ComboDetailModal.tsx:102
+msgid "Steps"
 msgstr ""
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:54
 msgid "Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay."
 msgstr ""
 
+#: ui/components/settings/MyAssetsSection.tsx:84
+msgid "Storage"
+msgstr ""
+
+#: ui/components/dev/DevStressPresets.tsx:150
+msgid "Stress scenarios"
+msgstr ""
+
+#: ui/views/OnlineDraftBuilder.tsx:26
+msgid "Submit deck"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:114
+msgid "Submit unverified result"
+msgstr ""
+
+#: ui/components/editor/DeckLabelsModal.tsx:134
+msgid "Suggestions"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:45
+msgid "Surface"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:52
+msgid "Swiss"
+msgstr ""
+
+#: ui/components/settings/AccountSection.tsx:28
+msgid "Sync your decks on every device"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:186
 msgid "Table background"
 msgstr ""
 
+#: ui/components/lobby/TableRoomSidebar.tsx:207
+msgid "Table controls"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:166
 msgid "Tabletop"
+msgstr ""
+
+#. placeholder {0}: newTagInput.trim()
+#: ui/components/editor/DeckBuilder.tsx:1996
+msgid "Tag \"{0}\" added"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:1975
+msgid "Tag \"{tag}\" removed"
+msgstr ""
+
+#: ui/components/editor/DeckTagDialog.tsx:57
+msgid "Tag selected cards"
+msgstr ""
+
+#. placeholder {0}: newTagInput.trim()
+#: ui/components/editor/CardDetailModal.tsx:186
+msgid "Tagged \"{deckCardName}\" with \"{0}\""
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:612
+msgid "Tagged \"{deckCardName}\" with \"{tag}\""
+msgstr ""
+
+#. placeholder {0}: draggedNames.length
+#: ui/views/DeckEditor.tsx:589
+msgid "Tagged {0} cards with {destTag}"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:667
+msgid "Tagged cards with \"{tag}\""
+msgstr ""
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:216
+msgid "Tags"
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:16
@@ -1198,12 +4476,37 @@ msgstr ""
 msgid "Tap: {description}"
 msgstr ""
 
+#: ui/components/dev/BoardPlayground.tsx:513
+msgid "Test action count"
+msgstr ""
+
+#: ui/components/auth/HandleDialog.tsx:51
+#: ui/components/auth/SignInFlow.tsx:158
+msgid "That handle is already taken"
+msgstr ""
+
+#: ui/views/Settings.tsx:216
+msgid "That name is reserved for a built-in server"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:1059
+msgid "The account version could not be loaded. Your local copy is still saved."
+msgstr ""
+
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:81
+#: ui/components/lobby/TablePickerDialog.tsx:52
+msgid "The felt you'll play this game on."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:93
 msgid "The folder the server reads card scans from. Pick the root that holds the letter folders (a, b, …); cards it does not hold fall back to Scryfall."
+msgstr ""
+
+#: ui/components/lobby/TableSetupGameCard.tsx:107
+msgid "The game"
 msgstr ""
 
 #: ui/components/game/GameFailedScreen.tsx:12
@@ -1214,36 +4517,285 @@ msgstr ""
 msgid "The host picked this table's background when creating it."
 msgstr ""
 
+#: ui/views/OnlineDraftPanel.tsx:76
+msgid "The match starts when every player has submitted a deck."
+msgstr ""
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:174
+#: ui/components/editor/PrintingOptimizerDialog.tsx:209
+msgid "The open deck changed while printings were being checked"
+msgstr ""
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:230
+msgid "The open deck changed. Build the printing proposal again."
+msgstr ""
+
+#: ui/router.tsx:42
+msgid "The page you're looking for doesn't exist."
+msgstr ""
+
+#: ui/stores/useGameStore.ts:379
+msgid "The previous game is still closing. Try again in a moment."
+msgstr ""
+
+#: ui/views/Lobby.tsx:334
+msgid "The room is full."
+msgstr ""
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:214
+msgid "The selected policy would not change this deck"
+msgstr ""
+
+#: ui/phase/transport.ts:47
+msgid "The session was left or replaced before this response arrived."
+msgstr ""
+
+#: ui/views/Settings.tsx:948
+msgid "Theme"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:77
+msgid "Theme controls"
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:86
 msgid "Theme Editor"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:123
+msgid "Theme input example"
+msgstr ""
+
+#: ui/themes/themeDocument.ts:55
+msgid "Theme mode must be light or dark."
+msgstr ""
+
+#: ui/themes/themeDocument.ts:50
+msgid "Theme name must contain 1 to 80 characters."
 msgstr ""
 
 #: ui/components/game/modals/ConcedeGameModal.tsx:37
 msgid "This app hosts the table. After conceding, stay connected so the remaining players can finish. Leaving later will end their game."
 msgstr ""
 
+#: ui/lib/guestName.ts:19
+msgid "This browser can't store an identity (enable local storage)."
+msgstr ""
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:74
+msgid "This checkpoint is too large to save on this device"
+msgstr ""
+
+#: ui/hooks/useQuickPlay.tsx:243
+msgid "This Community deck uses an unsupported format."
+msgstr ""
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:32
+msgid "This deck changed on another device"
+msgstr ""
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:269
+msgid "This deck could not be loaded"
+msgstr ""
+
+#. placeholder {0}: entry.engines[0]
+#. placeholder {0}: preset.engines?.[0] ?? "Ironsmith"
+#: ui/hooks/useQuickPlay.tsx:222
+#: ui/hooks/useQuickPlay.tsx:249
+msgid "This deck is built for the {0} engine — start a table with that engine from Multiplayer."
+msgstr ""
+
+#: ui/hooks/useQuickPlay.tsx:90
+msgid "This deck uses an unsupported format."
+msgstr ""
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:82
 msgid "This estimate does not model trample, prevention or replacement effects."
+msgstr ""
+
+#: ui/platform/index.ts:12
+msgid "This feature is not available in the local Phase backend."
 msgstr ""
 
 #: ui/components/game/GameLoadingScreen.tsx:70
 msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
 msgstr ""
 
+#: ui/components/deck/HubTopDeckSnapshots.tsx:138
+msgid "This ranking is unavailable"
+msgstr ""
+
+#: ui/stores/useChatStore.ts:67
+msgid "This relay doesn't support chat"
+msgstr ""
+
+#: ui/views/Lobby.tsx:361
+msgid "This room has no draft config — recreate it as a Draft room."
+msgstr ""
+
+#: ui/views/Lobby.tsx:409
+msgid "This room has no sealed config — recreate it as a Sealed room."
+msgstr ""
+
 #: ui/components/LandscapeGate.tsx:29
 msgid "This screen is designed for landscape play."
+msgstr ""
+
+#: ui/phase/online.ts:102
+msgid "This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2)."
+msgstr ""
+
+#: ui/hooks/useQuickPlay.tsx:217
+msgid "This starter deck uses an unsupported format."
+msgstr ""
+
+#: ui/components/companion/SetupMenu.tsx:115
+#: ui/components/companion/TurnTimer.tsx:94
+msgid "Timer mode"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:112
+msgid "Tiny Leaders"
+msgstr ""
+
+#: ui/components/lobby/ChatPanel.tsx:159
+msgid "to chat in General"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:80
+msgid "Token"
+msgstr ""
+
+#: ui/components/editor/TokenSection.tsx:43
+msgid "Tokens"
+msgstr ""
+
+#: ui/api/auth.ts:23
+msgid "Too many attempts — try again in a few minutes."
+msgstr ""
+
+#: ui/components/dev/BoardDevControls.tsx:226
+msgid "Tools"
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:48
 msgid "Top Decks"
 msgstr ""
 
-#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
-msgid "Unavailable with the local Phase host. Choose 1v1."
+#: ui/components/deck/DeckHubTopDeckPreview.tsx:37
+msgid "Top decks right now"
 msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1136
+msgid "tou"
+msgstr ""
+
+#: ui/views/Tournaments.tsx:63
+msgid "Tournament code"
+msgstr ""
+
+#: ui/phase/tournaments.ts:83
+msgid "Tournament management requires lobby protocol 9 or newer."
+msgstr ""
+
+#: ui/views/Tournaments.tsx:33
+msgid "Tournament organizer: manual results are unverified. Pairings do not create hosted games, verify decks, or automatically report results. Standings reflect player reports."
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:43
+msgid "Traditional (Bo3)"
+msgstr ""
+
+#: ui/components/companion/GameSummaryDialog.tsx:60
+msgid "Turns"
+msgstr ""
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:49
+msgid "Two or more lands in your opener"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:184
+msgid "Two teams of two share a 30-life total and take their turns together."
+msgstr ""
+
+#: ui/views/CasualModes.tsx:183
+msgid "Two-Headed Giant"
+msgstr ""
+
+#: ui/views/CasualModes.tsx:84
+msgid "Two-seat shared-stack pile draft: take a pile or decline it."
+msgstr ""
+
+#: ui/components/editor/CardDetailModal.tsx:291
+#: ui/components/editor/CardSearch.tsx:1074
+msgid "Type"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:62
+msgid "Type scale"
+msgstr ""
+
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
+#~ msgid "Unavailable with the local Phase host. Choose 1v1."
+#~ msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:96
 msgid "Unblocked"
+msgstr ""
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:85
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:86
+msgid "Undo draft change"
+msgstr ""
+
+#: ui/themes/themeDocument.ts:38
+msgid "Unknown {label} color: {key}."
+msgstr ""
+
+#: ui/themes/themeDocument.ts:53
+msgid "Unknown base preset."
+msgstr ""
+
+#: ui/workers/game-engine.worker.ts:563
+msgid "Unknown command: {command}"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:379
+#: ui/components/lobby/CustomFormatDialog.tsx:404
+msgid "Unlimited"
+msgstr ""
+
+#: ui/views/DeckEditor.tsx:1120
+#: ui/views/DeckEditor.tsx:1147
+msgid "Unsaved Changes"
+msgstr ""
+
+#: ui/phase/conspiracies.ts:20
+msgid "Unsupported conspiracy preparation response"
+msgstr ""
+
+#: ui/lib/customFormats.ts:143
+msgid "Unsupported custom format storage version; existing data was not overwritten."
+msgstr ""
+
+#: ui/lib/customFormats.ts:254
+msgid "Unsupported custom format version."
+msgstr ""
+
+#: ui/pixi/manaSymbolCache.ts:16
+msgid "unsupported mana symbol: {symbol}"
+msgstr ""
+
+#: ui/lib/customFormats.ts:215
+msgid "Unsupported player count for this custom format."
+msgstr ""
+
+#: ui/components/dev/gameplayPromptFixtures.ts:161
+msgid "Unsupported prompt preview: {preview}"
+msgstr ""
+
+#: ui/themes/themeDocument.ts:48
+msgid "Unsupported theme version. Expected version 1."
 msgstr ""
 
 #: ui/components/game/ManualTabletopControls.tsx:397
@@ -1251,15 +4803,43 @@ msgstr ""
 msgid "Untap"
 msgstr ""
 
+#: ui/components/deck/PublishDeckDialog.tsx:188
+msgid "Up to 10 tags, separated by commas."
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:199
 msgid "Update"
+msgstr ""
+
+#: ui/components/layout/UpdateCallout.tsx:20
+msgid "Update available"
+msgstr ""
+
+#: ui/hooks/useDesktopUpdater.ts:52
+msgid "Update failed to install. You can retry from the home page."
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:111
 msgid "Update to {version}"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:102
+#: ui/components/deck/DeckHubResults.tsx:87
+msgid "Updating…"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:82
+msgid "Usage"
+msgstr ""
+
+#: ui/components/lobby/TableSetupGameCard.tsx:214
+msgid "Use a CubeCobra cube instead of a set"
+msgstr ""
+
+#: ui/views/Settings.tsx:172
+msgid "Use a valid hex or rgb/rgba color."
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:114
 msgid "Use folder"
 msgstr ""
 
@@ -1267,14 +4847,46 @@ msgstr ""
 msgid "Use system language"
 msgstr ""
 
+#: ui/components/editor/DeckSaveConflictDialog.tsx:66
+msgid "Use the account version"
+msgstr ""
+
 #: ui/components/game/modals/GameSettingsModal.tsx:197
 msgid "Used when a table does not provide its own background, including offline games."
+msgstr ""
+
+#: ui/components/ui/form.tsx:47
+msgid "useFormField should be used within <FormField>"
+msgstr ""
+
+#: ui/components/ui/form.tsx:51
+msgid "useFormField should be used within <FormItem>"
+msgstr ""
+
+#: ui/components/settings/GuestNamePicker.tsx:39
+msgid "Username"
+msgstr ""
+
+#: ui/components/settings/GuestNamePicker.tsx:24
+msgid "Username updated"
+msgstr ""
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:81
+msgid "Value"
 msgstr ""
 
 #. placeholder {0}: TERMS_AND_CONDITIONS.version
 #. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
 #: ui/components/AppInitGate.tsx:242
 msgid "Version {0} · Updated {1}"
+msgstr ""
+
+#: ui/components/editor/DeckBuilder.tsx:2475
+msgid "Version {versionNo} loaded. Save to create a new version."
+msgstr ""
+
+#: ui/components/deck/DeckVersionHistoryDialog.tsx:71
+msgid "Version history"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:217
@@ -1290,7 +4902,15 @@ msgstr ""
 msgid "View visible cards"
 msgstr ""
 
-#: ui/views/Play.tsx:154
+#: ui/components/lobby/CreateGameDialog.tsx:788
+msgid "vs"
+msgstr ""
+
+#: ui/components/lobby/DeckVsSelector.tsx:806
+msgid "VS"
+msgstr ""
+
+#: ui/views/Play.tsx:164
 msgid "Waiting for game synchronization…"
 msgstr ""
 
@@ -1298,12 +4918,41 @@ msgstr ""
 msgid "Waiting for the game to respond…"
 msgstr ""
 
+#: ui/components/lobby/TableRoom.tsx:113
+msgid "Waiting for the host to start."
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:72
+msgid "Waiting for the next pack…"
+msgstr ""
+
+#: ui/phase/onlineDraft.ts:68
+msgid "Waiting for the server to confirm the previous draft action."
+msgstr ""
+
 #: ui/phase/Launch.tsx:194
 #~ msgid "Want to pick your own decks?"
 #~ msgstr ""
 
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:79
+msgid "Warning"
+msgstr ""
+
+#: ui/lib/imageEncode.ts:49
+msgid "WebP encoding unsupported"
+msgstr ""
+
+#: ui/components/play/PlayHomeLinks.tsx:132
+msgid "Website"
+msgstr ""
+
 #: ui/components/AppInitGate.tsx:139
 msgid "Welcome to"
+msgstr ""
+
+#. placeholder {0}: updated.handle
+#: ui/components/OnboardingHurray.tsx:30
+msgid "Welcome, @{0}!"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:141
@@ -1314,12 +4963,33 @@ msgstr ""
 msgid "White"
 msgstr ""
 
+#: ui/components/companion/StatsDialog.tsx:76
+msgid "Wins by player"
+msgstr ""
+
 #: ui/components/layout/TopBar.tsx:66
+#: ui/views/CasualModes.tsx:83
 msgid "Winston Draft"
 msgstr ""
 
-#: ui/components/settings/CardImageLibraryCard.tsx:106
+#: ui/components/lobby/CustomFormatDialog.tsx:452
+msgid "Wish scope"
+msgstr ""
+
+#: ui/components/lobby/CustomFormatDialog.tsx:450
+msgid "Wishes"
+msgstr ""
+
+#: ui/platform/web.ts:598
+msgid "Worker not initialized"
+msgstr ""
+
+#: ui/components/settings/CardImageLibraryCard.tsx:118
 msgid "Working…"
+msgstr ""
+
+#: ui/components/editor/CardSearch.tsx:1236
+msgid "Year"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
@@ -1330,8 +5000,98 @@ msgstr ""
 msgid "You and one AI opponent. Faster turns, quicker goldfishing."
 msgstr ""
 
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
+msgid "You and three AI opponents at a four-player table."
+msgstr ""
+
+#: ui/views/CasualModes.tsx:170
+msgid "You at 40 life against the heroes at 20, with the engine-managed scheme deck."
+msgstr ""
+
+#: ui/components/settings/SignInMethodsCard.tsx:67
+msgid "You can't unlink your only sign-in method"
+msgstr ""
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:76
+msgid "You conceded"
+msgstr ""
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:34
 msgid "You forfeit the game. This cannot be undone."
+msgstr ""
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:72
+msgid "You lost"
+msgstr ""
+
+#: ui/components/lobby/TableRoom.tsx:112
+msgid "You're ready"
+msgstr ""
+
+#. placeholder {0}: formatBytes(quota.usedBytes)
+#. placeholder {1}: formatBytes(quota.quotaBytes)
+#: ui/stores/useAssetStore.ts:169
+msgid "You've used {0} of your {1} of image storage. Remove an image to free space."
+msgstr ""
+
+#: ui/components/auth/SignInFlow.tsx:247
+msgid "you@example.com"
+msgstr ""
+
+#: ui/components/settings/DeleteAccountDialog.tsx:46
+msgid "Your account has been deleted"
+msgstr ""
+
+#: ui/components/game/SideboardDialog.tsx:51
+msgid "Your deck does not meet the size requirements."
+msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:587
+msgid "Your Decks"
+msgstr ""
+
+#: ui/components/play/OwnedDeckShelf.tsx:32
+msgid "Your first deck is waiting to be brewed."
+msgstr ""
+
+#: ui/hooks/useGameSessionResume.ts:141
+msgid "Your game could not be resumed — the host left mid-game."
+msgstr ""
+
+#: ui/views/OnlinePlay.tsx:47
+msgid "Your name"
+msgstr ""
+
+#: ui/views/OnlineDraftPanel.tsx:73
+msgid "Your pool"
+msgstr ""
+
+#: ui/hooks/useGameSessionResume.ts:60
+msgid "Your previous desktop Forge game ended when the app closed."
+msgstr ""
+
+#: ui/hooks/useGameSessionResume.ts:237
+msgid "Your previous game has ended."
+msgstr ""
+
+#: ui/components/lobby/ReportPlayerDialog.tsx:107
+msgid "Your report has been sent."
+msgstr ""
+
+#: ui/hooks/useGameEventListeners.ts:103
+msgid "Your seat was forfeited while you were disconnected."
+msgstr ""
+
+#: ui/views/Settings.tsx:443
+msgid "Your servers"
+msgstr ""
+
+#: ui/components/auth/SignInFlow.tsx:352
+msgid "your-handle"
+msgstr ""
+
+#: ui/components/OnboardingHurray.tsx:67
+msgid "your-username"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:226

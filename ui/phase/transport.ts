@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { toast } from "sonner";
 import type { Prompt, StateUpdate } from "@/protocol";
 import { applyPrompt, applyState } from "@/stores/gameStore.constants";
@@ -43,7 +44,7 @@ export async function requestSnapshot(
   }
   const snapshot = (await response.json()) as Snapshot;
   if (requestGeneration !== generation) {
-    throw new Error("The session was left or replaced before this response arrived.");
+    throw new Error(t`The session was left or replaced before this response arrived.`);
   }
   return snapshot;
 }
@@ -106,6 +107,6 @@ export async function revealConspiracy(cardId: string): Promise<void> {
   const action = prompt?.input.type === "chooseAction" && prompt.input.actions.find(
     action => action.type === "activateAbility" && action.cardId === cardId,
   );
-  if (!action) throw new Error("No authorized conspiracy reveal action");
-  if (!await state.respond({ type: "act", actionId: action.id })) throw new Error("Conspiracy reveal was rejected");
+  if (!action) throw new Error(t`No authorized conspiracy reveal action`);
+  if (!await state.respond({ type: "act", actionId: action.id })) throw new Error(t`Conspiracy reveal was rejected`);
 }

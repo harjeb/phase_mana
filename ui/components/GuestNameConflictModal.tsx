@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { GiEvilEyes } from "react-icons/gi";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,7 @@ export function GuestNameConflictModal() {
           </DialogTitle>
           <DialogDescription className="text-sm leading-relaxed">
             They claimed it as a permanent account handle. Track them down in the{" "}
-            <span className="font-medium text-foreground">Multiplayer</span> tab and challenge them
+            <span className="font-medium text-foreground"><Trans>Multiplayer</Trans></span> tab and challenge them
             to a duel to reclaim your honor! Or don't - just grab another good name for now.
           </DialogDescription>
         </DialogHeader>

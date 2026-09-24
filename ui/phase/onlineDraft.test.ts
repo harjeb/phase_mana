@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { configureOnlineDraftTransport, handleOnlineDraftFrame, onlineDraftStatus, reconnectOnlineDraft, sendOnlineDraftAction, startOnlineDraft } from "./onlineDraft";
 const endpoint = "ws://localhost:9374/ws";
@@ -36,7 +37,7 @@ describe("native draft client", () => {
     expect(handleOnlineDraftFrame({ type: "ManabrewSnapshot", data: {} }, endpoint)).toBe(false);
   });
   it("does not retain a pending lock after a disconnected send", () => {
-    attach(); send.mockImplementation(() => { throw new Error("Disconnected"); });
+    attach(); send.mockImplementation(() => { throw new Error(t`Disconnected`); });
     expect(() => sendOnlineDraftAction("StartDraft")).toThrow("Disconnected");
     expect(onlineDraftStatus().pending).toBe(false);
   });

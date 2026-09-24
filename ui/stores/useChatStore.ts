@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { toast } from "sonner";
@@ -63,7 +64,7 @@ export const useChatStore = create<ChatState>()(
         const server = getPlatform().server;
         if (!server) return;
         if (!useServerStore.getState().hasRelayFeature(RELAY_FEATURE.Chat)) {
-          toast.error(`This relay doesn't support chat`);
+          toast.error(t`This relay doesn't support chat`);
           return;
         }
         set({ lastSentScope: scope });

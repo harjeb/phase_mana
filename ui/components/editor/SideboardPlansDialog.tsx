@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -58,7 +59,7 @@ export function SideboardPlansDialog({
     >
       <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Sideboard plans</DialogTitle>
+          <DialogTitle><Trans>Sideboard plans</Trans></DialogTitle>
           <DialogDescription>
             Keep the exact swaps and play-pattern notes you need for each matchup.
           </DialogDescription>

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { TablesList } from "@/components/lobby/TablesList";
 import { LobbySidePanel } from "@/components/lobby/LobbySidePanel";
 import type { ConnectionState } from "@/components/lobby/UserList";
@@ -170,7 +172,7 @@ export default function Lobby() {
   useEffect(() => {
     return getPlatform().events.on<BotFailedPayload>("server:bot_failed", (payload) => {
       setMySpawnedBots((prev) => prev.filter((name) => name !== payload.username));
-      toast.error(`Bot couldn't join the table: ${payload.reason}`);
+      toast.error(t`Bot couldn't join the table: ${payload.reason}`);
     });
   }, []);
   useEffect(() => {
@@ -246,7 +248,7 @@ export default function Lobby() {
         const room = currentRoom;
         const amHost = room.host === username;
         void startMpSealed({ room, username }).catch((err) => {
-          toast.error(`Failed to open sealed pool: ${String(err)}`);
+          toast.error(t`Failed to open sealed pool: ${String(err)}`);
           if (amHost) {
             void useServerStore
               .getState()
@@ -322,14 +324,14 @@ export default function Lobby() {
         await setReady(true);
       }
     } catch (error) {
-      toast.error(`Failed to set deck: ${String(error)}`);
+      toast.error(t`Failed to set deck: ${String(error)}`);
     }
   }
   function handleAddAiBot() {
     const room = currentRoom;
     if (!room || !username) return;
     if (room.players.length >= room.max_players) {
-      toast.error(`The room is full.`);
+      toast.error(t`The room is full.`);
       return;
     }
     const botName = `${stripUsernameTag(username)}-bot-${Date.now().toString(36)}`;
@@ -346,7 +348,7 @@ export default function Lobby() {
       await startGame();
       await ackPromise;
     } catch (e) {
-      toast.error(`Failed to start game: ${String(e)}`);
+      toast.error(t`Failed to start game: ${String(e)}`);
     } finally {
       setStartingGame(false);
     }
@@ -356,7 +358,7 @@ export default function Lobby() {
     if (!room || !username) return;
     const config: DraftConfig | undefined = room.draft_config;
     if (!config) {
-      toast.error(`This room has no draft config \u2014 recreate it as a Draft room.`);
+      toast.error(t`This room has no draft config \u2014 recreate it as a Draft room.`);
       return;
     }
     setStartingLimited(true);
@@ -370,7 +372,7 @@ export default function Lobby() {
         await startGame("Draft");
         await ackPromise;
       } catch (e) {
-        toast.error(`Failed to start draft: ${String(e)}`);
+        toast.error(t`Failed to start draft: ${String(e)}`);
         return;
       }
       const result = await startDraftAsHost({
@@ -390,7 +392,7 @@ export default function Lobby() {
         },
       });
       if (!result.ok) {
-        toast.error(`Failed to start draft: ${result.error}`);
+        toast.error(t`Failed to start draft: ${result.error}`);
         await useServerStore
           .getState()
           .endGame()
@@ -404,7 +406,7 @@ export default function Lobby() {
     const room = currentRoom;
     if (!room || !username) return;
     if (!room.sealed_config) {
-      toast.error(`This room has no sealed config \u2014 recreate it as a Sealed room.`);
+      toast.error(t`This room has no sealed config \u2014 recreate it as a Sealed room.`);
       return;
     }
     setStartingLimited(true);
@@ -415,7 +417,7 @@ export default function Lobby() {
         await startGame("Sealed");
         await ackPromise;
       } catch (e) {
-        toast.error(`Failed to start sealed: ${String(e)}`);
+        toast.error(t`Failed to start sealed: ${String(e)}`);
       }
     } finally {
       setStartingLimited(false);
@@ -553,7 +555,7 @@ export default function Lobby() {
       {myUsername && (
         <Sheet open={playersDrawerOpen} onOpenChange={setPlayersDrawerOpen}>
           <SheetContent side="right" className="w-80 max-w-[88vw] p-0 sm:w-96">
-            <SheetTitle className="sr-only">Players and chat</SheetTitle>
+            <SheetTitle className="sr-only"><Trans>Players and chat</Trans></SheetTitle>
             <LobbySidePanel
               players={players}
               rooms={rooms}

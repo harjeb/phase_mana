@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import type { MouseEvent } from "react";
 import { ImageIcon } from "lucide-react";
 import { CardThumbnail } from "@/components/editor/deckEditor.primitives";
@@ -61,7 +62,7 @@ export function CollectionCard({
             {foil ? `Foil` : `Non-foil`}
           </span>
         )}
-        <span className="text-xs text-muted-foreground">Owned</span>
+        <span className="text-xs text-muted-foreground"><Trans>Owned</Trans></span>
         {quantityInput}
       </div>
     );

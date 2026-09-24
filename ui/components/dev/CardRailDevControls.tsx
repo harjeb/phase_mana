@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { type DevCardRailMode, useGameDevStore } from "@/stores/useGameDevStore";
@@ -135,7 +136,7 @@ export function CardRailDevControls() {
     <section className={DEV_SECTION}>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className={DEV_SECTION_HEADING}>Progress rails</p>
+          <p className={DEV_SECTION_HEADING}><Trans>Progress rails</Trans></p>
           <p className="mt-1 text-xs text-muted-foreground">
             Check page, saga, and class milestones on the staged card.
           </p>

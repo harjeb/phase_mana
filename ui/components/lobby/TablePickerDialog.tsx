@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { type ReactNode } from "react";
 import {
   Dialog,
@@ -47,8 +48,8 @@ export function TablePickerDialog({
     >
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Choose your table</DialogTitle>
-          <DialogDescription>The felt you'll play this game on.</DialogDescription>
+          <DialogTitle><Trans>Choose your table</Trans></DialogTitle>
+          <DialogDescription><Trans>The felt you'll play this game on.</Trans></DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
           <div className="flex items-center justify-center sm:pr-2">

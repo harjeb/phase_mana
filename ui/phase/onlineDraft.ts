@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 export interface OnlineDraftCard {
   instance_id: string; name: string; set_code: string; collector_number: string;
   type_line: string; rarity: string; cmc: number;
@@ -26,16 +27,16 @@ export const subscribeOnlineDraft = (listener: () => void) => { listeners.add(li
 function update(patch: Partial<DraftStatus>) { state = { ...state, ...patch }; listeners.forEach(listener => listener()); }
 const storageKey = (endpoint: string) => `phase-online-draft:${endpoint}`;
 export function configureOnlineDraftTransport(value: DraftTransport) { transport = value; }
-function connection() { if (!transport) throw new Error("Online draft transport is unavailable."); return transport; }
+function connection() { if (!transport) throw new Error(t`Online draft transport is unavailable.`); return transport; }
 export function startOnlineDraft(endpoint: string, request: Request) {
   update({ endpoint, code: "", seat: null, view: null, pending: false, error: "", remainingMs: null, matchCode: null });
   connection().connect(endpoint, request);
 }
 export function reconnectOnlineDraft(endpoint: string) {
   const saved = sessionStorage.getItem(storageKey(endpoint));
-  if (!saved) throw new Error("No saved draft seat for this server in this tab.");
+  if (!saved) throw new Error(t`No saved draft seat for this server in this tab.`);
   const credential = JSON.parse(saved) as DraftCredential;
-  if (!credential.draft_code || !credential.player_token || !Number.isInteger(credential.seat_index)) throw new Error("Invalid saved draft seat.");
+  if (!credential.draft_code || !credential.player_token || !Number.isInteger(credential.seat_index)) throw new Error(t`Invalid saved draft seat.`);
   update({ endpoint, code: credential.draft_code, seat: credential.seat_index, view: null, pending: false, error: "", matchCode: null });
   connection().connect(endpoint, { type: "ReconnectDraft", data: { draft_code: credential.draft_code, player_token: credential.player_token } });
 }
@@ -44,7 +45,7 @@ export function handleOnlineDraftFrame(frame: { type: string; data?: unknown }, 
   const data = frame.data as Record<string, unknown> | undefined;
   if (frame.type === "DraftCreated" || frame.type === "DraftJoined") {
     const credential = data as unknown as DraftCredential;
-    if (!credential?.draft_code || !credential.player_token || !Number.isInteger(credential.seat_index)) throw new Error("Invalid draft seat response");
+    if (!credential?.draft_code || !credential.player_token || !Number.isInteger(credential.seat_index)) throw new Error(t`Invalid draft seat response`);
     sessionStorage.setItem(storageKey(endpoint), JSON.stringify({ draft_code: credential.draft_code, player_token: credential.player_token, seat_index: credential.seat_index }));
     update({ endpoint, code: credential.draft_code, seat: credential.seat_index, pending: false, error: "", ...(data?.view ? { view: data.view as OnlineDraftView } : {}) });
     return true;
@@ -64,8 +65,8 @@ export function handleOnlineDraftFrame(frame: { type: string; data?: unknown }, 
   return false;
 }
 export function sendOnlineDraftAction(type: string, data?: unknown) {
-  if (state.pending) throw new Error("Waiting for the server to confirm the previous draft action.");
-  if (state.seat === null || !state.code) throw new Error("Join a draft first.");
+  if (state.pending) throw new Error(t`Waiting for the server to confirm the previous draft action.`);
+  if (state.seat === null || !state.code) throw new Error(t`Join a draft first.`);
   update({ pending: true, error: "" });
   try { connection().send("DraftAction", { draft_code: state.code, action: data === undefined ? { type } : { type, data } }); }
   catch (error) { update({ pending: false }); throw error; }

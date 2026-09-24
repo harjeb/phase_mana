@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -167,7 +169,7 @@ export default function Settings() {
     const next = editingThemeColorValue.trim() || fallbackValue;
     const parsed = parseThemeColor(next);
     if (!parsed) {
-      toast.error("Use a valid hex or rgb/rgba color.");
+      toast.error(t`Use a valid hex or rgb/rgba color.`);
       return;
     }
     const color = formatThemeColor(parsed.hex, parsed.alpha);
@@ -211,13 +213,13 @@ export default function Settings() {
     const name = newServerName.trim();
     if (!name) return;
     if (KNOWN_RELAYS.some((r) => r.name === name)) {
-      toast.error(`That name is reserved for a built-in server`);
+      toast.error(t`That name is reserved for a built-in server`);
       return;
     }
     prefs.addSavedServer({ name, host, port: Number(port), password });
     setNewServerName("");
     setSavingServer(false);
-    toast.success(`Saved "${name}"`);
+    toast.success(t`Saved "${name}"`);
   }
   async function handleClearImageCache() {
     setClearingCache(true);
@@ -227,11 +229,11 @@ export default function Settings() {
         const keys = await caches.keys();
         await Promise.all(keys.map((k) => caches.delete(k)));
       }
-      toast.success(`Image cache cleared \u2014 reloading\u2026`);
+      toast.success(t`Image cache cleared \u2014 reloading\u2026`);
       window.location.reload();
     } catch {
       setClearingCache(false);
-      toast.error(`Couldn't clear the image cache`);
+      toast.error(t`Couldn't clear the image cache`);
     }
   }
   if (isGameActive) {
@@ -354,9 +356,9 @@ export default function Settings() {
 
       {activeTab === "cache" && (
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Cache</h2>
+          <h2 className="text-lg font-semibold"><Trans>Cache</Trans></h2>
           <div className="rounded-lg border bg-card/40 p-4 space-y-3 max-w-xl">
-            <Label>Card Image Cache</Label>
+            <Label><Trans>Card Image Cache</Trans></Label>
             <p className="text-xs text-muted-foreground">
               Drops Manabrew&apos;s in-memory card textures and image object URLs, clears the
               CacheStorage API, then reloads so every card image is fetched fresh. Use this if
@@ -379,11 +381,11 @@ export default function Settings() {
 
       {activeTab === "server" && (
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Server</h2>
+          <h2 className="text-lg font-semibold"><Trans>Server</Trans></h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label htmlFor="server-host">Host</Label>
+              <Label htmlFor="server-host"><Trans>Host</Trans></Label>
               <Input
                 id="server-host"
                 value={host}
@@ -392,7 +394,7 @@ export default function Settings() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="server-port">Port</Label>
+              <Label htmlFor="server-port"><Trans>Port</Trans></Label>
               <Input
                 id="server-port"
                 type="number"
@@ -402,7 +404,7 @@ export default function Settings() {
               />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="server-password">Password</Label>
+              <Label htmlFor="server-password"><Trans>Password</Trans></Label>
               <Input
                 id="server-password"
                 type="password"
@@ -424,7 +426,7 @@ export default function Settings() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="min-w-56">
-                <DropdownMenuLabel>Built-in</DropdownMenuLabel>
+                <DropdownMenuLabel><Trans>Built-in</Trans></DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {KNOWN_RELAYS.map((relay) => (
                   <DropdownMenuItem key={relay.name} onSelect={() => void applyKnownRelay(relay)}>
@@ -438,7 +440,7 @@ export default function Settings() {
                 ))}
                 {prefs.savedServers.length > 0 && (
                   <>
-                    <DropdownMenuLabel>Your servers</DropdownMenuLabel>
+                    <DropdownMenuLabel><Trans>Your servers</Trans></DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {prefs.savedServers.map((relay) => (
                       <DropdownMenuItem
@@ -487,7 +489,7 @@ export default function Settings() {
               </span>
             )}
             {server.connecting && (
-              <span className="text-xs text-muted-foreground">Connecting...</span>
+              <span className="text-xs text-muted-foreground"><Trans>Connecting...</Trans></span>
             )}
             {server.error && <span className="text-xs text-destructive">{server.error}</span>}
           </div>
@@ -611,9 +613,9 @@ export default function Settings() {
                       onChange={(e) => setZoneSlot(index, e.target.value as ZonePanelItem)}
                       className="w-full h-9 rounded-md border border-input bg-background px-2 text-sm pointer-coarse:text-base"
                     >
-                      <option value="library">Library</option>
-                      <option value="graveyard">Graveyard</option>
-                      <option value="exile">Exile</option>
+                      <option value="library"><Trans>Library</Trans></option>
+                      <option value="graveyard"><Trans>Graveyard</Trans></option>
+                      <option value="exile"><Trans>Exile</Trans></option>
                     </select>
                   </div>
                 ))}
@@ -943,11 +945,11 @@ export default function Settings() {
 
       {activeTab === "theme" && (
         <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Theme</h2>
+          <h2 className="text-lg font-semibold"><Trans>Theme</Trans></h2>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-lg border bg-card/40 p-4 space-y-2">
-              <Label>App Theme</Label>
+              <Label><Trans>App Theme</Trans></Label>
               <div className="flex items-center gap-2">
                 <Button
                   variant={theme === "light" ? "selected" : "outline"}
@@ -971,11 +973,11 @@ export default function Settings() {
                   System
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">Controls app theme preference.</p>
+              <p className="text-xs text-muted-foreground"><Trans>Controls app theme preference.</Trans></p>
             </div>
 
             <div className="rounded-lg border bg-card/40 p-4 space-y-2">
-              <Label>Color Preset</Label>
+              <Label><Trans>Color Preset</Trans></Label>
               {(() => {
                 const active = THEME_PRESETS.find((p) => p.id === prefs.appThemePreset);
                 const mode = resolvedTheme === "dark" ? "dark" : "light";
@@ -1083,7 +1085,7 @@ export default function Settings() {
 
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between gap-2">
-              <Label>App Theme Colors</Label>
+              <Label><Trans>App Theme Colors</Trans></Label>
               <Button
                 size="sm"
                 variant="outline"
@@ -1197,7 +1199,7 @@ export default function Settings() {
 
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between gap-2">
-              <Label>Game Theme Colors</Label>
+              <Label><Trans>Game Theme Colors</Trans></Label>
               <Button size="sm" variant="outline" onClick={prefs.resetGameThemeColorOverrides}>
                 Reset Colors
               </Button>

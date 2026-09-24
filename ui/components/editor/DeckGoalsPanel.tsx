@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Target } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { deckOwnershipByName } from "@/lib/collection";
@@ -80,7 +81,7 @@ export function DeckGoalsPanel() {
       <div className="mb-3 flex items-center gap-2">
         <Target className="h-4 w-4 text-primary" />
         <div>
-          <h3 className="text-sm font-semibold">Deck goals</h3>
+          <h3 className="text-sm font-semibold"><Trans>Deck goals</Trans></h3>
           <p className="text-[10px] text-muted-foreground">
             Optional targets, separate from legality.
           </p>

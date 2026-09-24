@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import { SECTIONS } from "@/components/dev/designSystem/designSystem.data";
 import { BrandSection } from "@/components/dev/designSystem/sections/BrandSection";
@@ -16,7 +17,7 @@ export default function DesignSystem() {
     <div className="h-full overflow-auto">
       <div className="px-4 pt-6 sm:px-6 lg:px-8">
         <div className="rounded-xl border border-border bg-card p-3">
-          <nav className="flex gap-1.5 overflow-x-auto" aria-label="Gallery sections">
+          <nav className="flex gap-1.5 overflow-x-auto" aria-label={t`Gallery sections`}>
             {SECTIONS.map((s) => (
               <a
                 key={s.id}

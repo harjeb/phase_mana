@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -105,14 +106,14 @@ export function DeckListControls({
               {formatFilter ? (
                 <FormatBadge formatId={formatFilter} />
               ) : (
-                <span className="text-muted-foreground">All</span>
+                <span className="text-muted-foreground"><Trans>All</Trans></span>
               )}
               <ChevronDown className="h-2.5 w-2.5 opacity-60 shrink-0" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onSelect={() => onFormatChange("")} className="gap-2">
-              <span className="text-xs">All formats</span>
+              <span className="text-xs"><Trans>All formats</Trans></span>
               {!formatFilter && <Check className="h-3 w-3 ml-auto text-primary" />}
             </DropdownMenuItem>
             {GAME_FORMATS.map((f) => (

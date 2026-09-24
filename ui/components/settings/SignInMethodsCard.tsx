@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Github, Mail, Unlink } from "lucide-react";
@@ -59,10 +61,10 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
     try {
       await unlinkIdentity(token, provider);
       await refresh();
-      toast.success(`${PROVIDER_LABELS[provider] ?? provider} unlinked`);
+      toast.success(t`${PROVIDER_LABELS[provider] ?? provider} unlinked`);
     } catch (err) {
       if (err instanceof AuthRequestError && err.status === 409) {
-        toast.error(`You can't unlink your only sign-in method`);
+        toast.error(t`You can't unlink your only sign-in method`);
       } else {
         toast.error(err instanceof Error ? err.message : `Unlinking failed`);
       }
@@ -72,7 +74,7 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
   }
   return (
     <section className="rounded-lg border bg-card/40 p-4 sm:p-5 space-y-3">
-      <Label>Sign-in methods</Label>
+      <Label><Trans>Sign-in methods</Trans></Label>
       <div className="space-y-2">
         {identities.map((identity) => {
           const label = PROVIDER_LABELS[identity.provider] ?? identity.provider;

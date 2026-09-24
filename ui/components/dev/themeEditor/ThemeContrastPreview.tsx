@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Panel } from "@/components/dev/designSystem/kit";
@@ -119,8 +120,8 @@ export function ThemeContrastPreview({
             </Button>
           </div>
           <Input
-            aria-label="Theme input example"
-            placeholder="Focus or type here"
+            aria-label={t`Theme input example`}
+            placeholder={t`Focus or type here`}
             className="h-8 text-xs"
           />
           <p className="text-[11px] text-muted-foreground">

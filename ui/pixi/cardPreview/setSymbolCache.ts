@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { ImageSource, Texture } from "pixi.js";
 import { fetchImageElement } from "@/api/scryfall";
 
@@ -11,7 +12,7 @@ async function loadSetSymbolTexture(url: string): Promise<Texture> {
   canvas.width = RASTER_SIZE;
   canvas.height = RASTER_SIZE;
   const context = canvas.getContext("2d");
-  if (!context) throw new Error("2d canvas unavailable");
+  if (!context) throw new Error(t`2d canvas unavailable`);
 
   const width = image.naturalWidth || RASTER_SIZE;
   const height = image.naturalHeight || RASTER_SIZE;

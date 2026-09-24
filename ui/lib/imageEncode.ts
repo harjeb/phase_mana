@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 const WEBP_MIME = "image/webp";
 const QUALITY_LADDER = [0.85, 0.7, 0.55, 0.4];
 const SHRINK_STEPS = 2;
@@ -25,7 +26,7 @@ type Canvas2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
 function get2dContext(canvas: HTMLCanvasElement | OffscreenCanvas): Canvas2D {
   const ctx = canvas.getContext("2d") as Canvas2D | null;
-  if (!ctx) throw new Error("2d canvas context unavailable");
+  if (!ctx) throw new Error(t`2d canvas context unavailable`);
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
   return ctx;
@@ -45,7 +46,7 @@ async function encodeUnderBudget(
     get2dContext(canvas).drawImage(source, 0, 0, width, height);
     for (const quality of QUALITY_LADDER) {
       const blob = await canvasToWebp(canvas, quality);
-      if (blob.type !== WEBP_MIME) throw new Error("WebP encoding unsupported");
+      if (blob.type !== WEBP_MIME) throw new Error(t`WebP encoding unsupported`);
       if (blob.size <= maxBytes) return blob;
     }
     scale *= SHRINK_FACTOR;

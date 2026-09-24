@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -41,12 +43,12 @@ export function HandleDialog({ open, onOpenChange }: HandleDialogProps) {
       const updated = await updateHandle(token, handle.trim());
       if (useAuthStore.getState().refreshToken !== refreshToken) return;
       setAccount(updated);
-      toast.success(`Handle updated to @${updated.handle}`);
+      toast.success(t`Handle updated to @${updated.handle}`);
       onOpenChange(false);
       void resyncRelayIdentity();
     } catch (err) {
       if (err instanceof AuthRequestError && err.status === 409) {
-        setError(`That handle is already taken`);
+        setError(t`That handle is already taken`);
       } else {
         setError(err instanceof Error ? err.message : "Something went wrong");
       }
@@ -58,14 +60,14 @@ export function HandleDialog({ open, onOpenChange }: HandleDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Change handle</DialogTitle>
+          <DialogTitle><Trans>Change handle</Trans></DialogTitle>
           <DialogDescription>
             Your handle is the public name other players see in Community. 3-24 characters: letters,
             digits, _ and -.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="account-handle">Handle</Label>
+          <Label htmlFor="account-handle"><Trans>Handle</Trans></Label>
           <Input
             id="account-handle"
             value={handle}

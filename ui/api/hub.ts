@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { EngineGameStats } from "@/lib/engineTelemetry";
 import type { OfflinePlayGame } from "@/lib/offlinePlayRecord";
 import { getHubApiUrl } from "@/config/webRuntimeConfig";
@@ -150,7 +151,7 @@ export async function verifyCardPrintings(
       body: JSON.stringify({ identifiers }),
     });
     if (response.matched.length !== identifiers.length) {
-      throw new Error("Card verification returned an incomplete response");
+      throw new Error(t`Card verification returned an incomplete response`);
     }
     matched.push(...response.matched);
     onBatch?.(response.matched, index, request.identifiers.length);

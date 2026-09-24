@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { usePresetDecks } from "@/stores/usePresetDecksStore";
@@ -344,7 +346,7 @@ export function DeckVsSelector({
       const currentFormat = selectedFormatRef.current;
       if (currentFormat && !currentFormat.startsWith("custom:") && formatId !== currentFormat) {
         toast.error(
-          `"${detail.title}" is not a ${getFormat(currentFormat)?.name ?? currentFormat} deck`,
+          t`"${detail.title}" is not a ${getFormat(currentFormat)?.name ?? currentFormat} deck`,
         );
         return;
       }
@@ -423,7 +425,7 @@ export function DeckVsSelector({
       (d) => d.sourceDeck.cards.length === 0 && (d.sourceDeck.commanders?.length ?? 0) === 0,
     );
     if (empty) {
-      toast.error(`"${empty.name}" has no cards`);
+      toast.error(t`"${empty.name}" has no cards`);
       return;
     }
     for (const selected of [playerDeck, opponentDeck]) {
@@ -452,7 +454,7 @@ export function DeckVsSelector({
       opponentCount - 1,
     );
     if (additionalOpponents.length !== opponentCount - 1) {
-      toast.error(`Not enough distinct decks are available for a ${opponentCount + 1}-player game.`);
+      toast.error(t`Not enough distinct decks are available for a ${opponentCount + 1}-player game.`);
       return;
     }
     setStarting(true);
@@ -801,7 +803,7 @@ export function DeckVsSelector({
               setPickingSide("player");
             }}
           />
-          <span className="text-xs font-bold tracking-wider text-muted-foreground/60">VS</span>
+          <span className="text-xs font-bold tracking-wider text-muted-foreground/60"><Trans>VS</Trans></span>
           <DeckSlot
             label={`AI`}
             icon={<Bot className="h-3 w-3" />}
@@ -880,7 +882,7 @@ export function DeckVsSelector({
               {customFormat?.label ?? getFormat(selectedFormat)?.name ?? selectedFormat}
               {customFormat ? (
                 <select
-                  aria-label="Custom format player count"
+                  aria-label={t`Custom format player count`}
                   className="ml-3 rounded border border-input bg-background px-2 text-sm"
                   value={customPlayerCount}
                   onChange={(event) => setCustomPlayerCount(Number(event.target.value))}

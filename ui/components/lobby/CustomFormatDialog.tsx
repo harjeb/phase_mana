@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -89,7 +91,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
     if (!draft) return;
     const label = draft.label.trim();
     if (!label) {
-      toast.error("Give the format a name.");
+      toast.error(t`Give the format a name.`);
       return;
     }
     const toSave: SavedCustomFormat = {
@@ -100,7 +102,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
     try {
       setFormats(await upsertCustomFormat(toSave));
       setDraft(null);
-      toast.success(`Saved "${label}".`);
+      toast.success(t`Saved "${label}".`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not save the format.");
     }
@@ -123,7 +125,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
       setFormats(await upsertCustomFormat(imported));
       setImportText("");
       setShowImport(false);
-      toast.success(`Imported "${imported.label}".`);
+      toast.success(t`Imported "${imported.label}".`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Could not parse that JSON.");
     }
@@ -135,7 +137,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Custom formats</DialogTitle>
+          <DialogTitle><Trans>Custom formats</Trans></DialogTitle>
           <DialogDescription>
             Build a ruleset from the engine&apos;s structural and legacy axes. Saved formats are
             checked by the host before they can be played.
@@ -169,7 +171,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
             {showImport ? (
               <div className="flex flex-col gap-2 rounded-md border border-border/70 p-3">
                 <textarea
-                  aria-label="Paste an exported custom format"
+                  aria-label={t`Paste an exported custom format`}
                   className="min-h-24 w-full rounded-md border border-input bg-background p-2 font-mono text-xs"
                   value={importText}
                   onChange={(event) => setImportText(event.target.value)}
@@ -229,8 +231,8 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
                         onClick={() => {
                           void navigator.clipboard
                             ?.writeText(exportCustomFormat(format))
-                            .then(() => toast.success("Copied JSON to clipboard."))
-                            .catch(() => toast.error("Could not copy to the clipboard."));
+                            .then(() => toast.success(t`Copied JSON to clipboard.`))
+                            .catch(() => toast.error(t`Could not copy to the clipboard.`));
                         }}
                       >
                         Export
@@ -291,13 +293,13 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
   return (
     <div className="flex max-h-[65dvh] flex-col gap-4 overflow-y-auto">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Name">
+        <Field label={t`Name`}>
           <Input
             value={draft.label}
             onChange={(event) => onChange({ ...draft, label: event.target.value })}
           />
         </Field>
-        <Field label="Short label">
+        <Field label={t`Short label`}>
           <Input
             value={draft.shortLabel}
             maxLength={8}
@@ -306,7 +308,7 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
         </Field>
       </div>
 
-      <Field label="Description">
+      <Field label={t`Description`}>
         <Input
           value={draft.description}
           onChange={(event) => onChange({ ...draft, description: event.target.value })}
@@ -318,25 +320,25 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
           Structure
         </h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Field label="Minimum players">
+          <Field label={t`Minimum players`}>
             <NumberInput value={structural.min_players} min={2}
               onValue={(min_players) => setStructural({ min_players })} />
           </Field>
-          <Field label="Maximum players">
+          <Field label={t`Maximum players`}>
             <NumberInput value={structural.max_players} min={2}
               onValue={(max_players) => setStructural({ max_players })} />
           </Field>
-          <Field label="Starting life">
+          <Field label={t`Starting life`}>
             <NumberInput
               value={structural.starting_life}
               min={1}
               onValue={(starting_life) => setStructural({ starting_life })}
             />
           </Field>
-          <Field label="Deck size">
+          <Field label={t`Deck size`}>
             <div className="flex gap-1.5">
               <select
-                aria-label="Deck size rule"
+                aria-label={t`Deck size rule`}
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                 value={deckMode}
                 onChange={(event) =>
@@ -348,8 +350,8 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
                   })
                 }
               >
-                <option value="Minimum">At least</option>
-                <option value="Exactly">Exactly</option>
+                <option value="Minimum"><Trans>At least</Trans></option>
+                <option value="Exactly"><Trans>Exactly</Trans></option>
               </select>
               <NumberInput
                 value={deckValue}
@@ -360,10 +362,10 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
               />
             </div>
           </Field>
-          <Field label="Copies">
+          <Field label={t`Copies`}>
             <div className="flex gap-1.5">
               <select
-                aria-label="Copy limit rule"
+                aria-label={t`Copy limit rule`}
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                 value={copiesMode}
                 onChange={(event) =>
@@ -373,8 +375,8 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
                   })
                 }
               >
-                <option value="UpTo">At most</option>
-                <option value="Unlimited">Unlimited</option>
+                <option value="UpTo"><Trans>At most</Trans></option>
+                <option value="Unlimited"><Trans>Unlimited</Trans></option>
               </select>
               <NumberInput
                 value={copiesValue}
@@ -384,10 +386,10 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
               />
             </div>
           </Field>
-          <Field label="Sideboard">
+          <Field label={t`Sideboard`}>
             <div className="flex gap-1.5">
               <select
-                aria-label="Sideboard policy"
+                aria-label={t`Sideboard policy`}
                 className="h-9 rounded-md border border-input bg-background px-2 text-sm"
                 value={sideboardMode}
                 onChange={(event) => {
@@ -397,9 +399,9 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
                   setStructural({ sideboard_policy: policy });
                 }}
               >
-                <option value="Forbidden">None</option>
-                <option value="Limited">Limited</option>
-                <option value="Unlimited">Unlimited</option>
+                <option value="Forbidden"><Trans>None</Trans></option>
+                <option value="Limited"><Trans>Limited</Trans></option>
+                <option value="Unlimited"><Trans>Unlimited</Trans></option>
               </select>
               <NumberInput
                 value={sideboardValue}
@@ -417,10 +419,10 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
           />
           Singleton (max one copy of each card)
         </label>
-        <Field label="Legal sets (comma separated; empty = all sets)">
+        <Field label={t`Legal sets (comma separated; empty = all sets)`}>
           <Input
             defaultValue={(legality.legal_sets ?? []).join(", ")}
-            placeholder="LEA, LEB, ARN, …"
+            placeholder={t`LEA, LEB, ARN, …`}
             onBlur={(event) => {
               const list = splitList(event.target.value);
               setLegality({ legal_sets: list.length ? list : null });
@@ -434,20 +436,20 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
           Legacy axes
         </h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <Field label="Mana burn">
+          <Field label={t`Mana burn`}>
             <select
-              aria-label="Mana burn policy"
+              aria-label={t`Mana burn policy`}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
               value={legality.legacy.mana_burn}
               onChange={(event) => setLegacy({ mana_burn: event.target.value as "Modern" | "Obsolete" })}
             >
-              <option value="Modern">Removed</option>
-              <option value="Obsolete">Mana burn</option>
+              <option value="Modern"><Trans>Removed</Trans></option>
+              <option value="Obsolete"><Trans>Mana burn</Trans></option>
             </select>
           </Field>
-          <Field label="Wishes">
+          <Field label={t`Wishes`}>
             <select
-              aria-label="Wish scope"
+              aria-label={t`Wish scope`}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
               value={legality.legacy.wish_scope}
               onChange={(event) =>
@@ -456,13 +458,13 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
                 })
               }
             >
-              <option value="PostM10SideboardOnly">Sideboard only</option>
-              <option value="PreM10ReachesExile">Reach exile</option>
+              <option value="PostM10SideboardOnly"><Trans>Sideboard only</Trans></option>
+              <option value="PreM10ReachesExile"><Trans>Reach exile</Trans></option>
             </select>
           </Field>
-          <Field label="Legend rule">
+          <Field label={t`Legend rule`}>
             <select
-              aria-label="Legend rule scope"
+              aria-label={t`Legend rule scope`}
               className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
               value={legality.legacy.legend_rule_scope}
               onChange={(event) =>
@@ -471,22 +473,22 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
                 })
               }
             >
-              <option value="Modern">Modern</option>
-              <option value="PreM14AnyController">Pre-M14 (any controller)</option>
+              <option value="Modern"><Trans>Modern</Trans></option>
+              <option value="PreM14AnyController"><Trans>Pre-M14 (any controller)</Trans></option>
             </select>
           </Field>
         </div>
       </section>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Field label="Banned cards (one name per line)">
+        <Field label={t`Banned cards (one name per line)`}>
           <textarea
             className="rounded-md border border-input bg-background p-2 text-sm"
             defaultValue={legality.banned.join("\n")}
             onBlur={(event) => setLegality({ banned: event.target.value.split("\n").map((name) => name.trim()).filter(Boolean) })}
           />
         </Field>
-        <Field label="Restricted cards (one name per line)">
+        <Field label={t`Restricted cards (one name per line)`}>
           <textarea
             className="rounded-md border border-input bg-background p-2 text-sm"
             defaultValue={legality.restricted.join("\n")}

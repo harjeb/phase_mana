@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -56,7 +57,7 @@ export function useGameSessionResume() {
           useServerStore.setState({ hostingForgeRoom: false });
           await useServerStore.getState().leaveRoom();
           if (localRelayRunning && session.relayHost) await stopLocalHostedAiRelay();
-          toast.info(`Your previous desktop Forge game ended when the app closed.`);
+          toast.info(t`Your previous desktop Forge game ended when the app closed.`);
           navigate("/lobby", { replace: true });
           return;
         }
@@ -137,7 +138,7 @@ export function useGameSessionResume() {
       clearActiveGameSession();
       useServerStore.setState({ gameId: session.gameId });
       void useServerStore.getState().endGame();
-      toast.error(`Your game could not be resumed \u2014 the host left mid-game.`);
+      toast.error(t`Your game could not be resumed \u2014 the host left mid-game.`);
       navigate("/lobby", { replace: true });
       return;
     }
@@ -233,7 +234,7 @@ export function useGameSessionResume() {
       settled.current = true;
       clearActiveGameSession();
       void teardownForgeAiSession(session);
-      toast.info(`Your previous game has ended.`);
+      toast.info(t`Your previous game has ended.`);
       navigate("/lobby", { replace: true });
     }, NO_GAME_FOUND_AFTER_MS);
     return () => clearTimeout(timer);

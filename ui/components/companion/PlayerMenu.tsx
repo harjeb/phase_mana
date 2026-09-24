@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Flag, MoreVertical, NotebookPen, PlayCircle, UserMinus, UserPlus } from "lucide-react";
 import { PlayerNotesDialog } from "./PlayerNotesDialog";
@@ -98,7 +99,7 @@ export function PlayerMenu({ player, onPickCommander }: PlayerMenuProps) {
           <GameIcon icon="lightning-trio" className="mr-2 size-4" /> Speed ({player.speed ?? 0}/4)
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs">Floating mana</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs"><Trans>Floating mana</Trans></DropdownMenuLabel>
         <div className="grid grid-cols-6 gap-1 px-2 pb-2">
           {MANA_COLORS.map((color) => (
             <button
@@ -112,9 +113,9 @@ export function PlayerMenu({ player, onPickCommander }: PlayerMenuProps) {
             </button>
           ))}
         </div>
-        <DropdownMenuItem onSelect={() => clearMana(player.id)}>Empty mana pool</DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => clearMana(player.id)}><Trans>Empty mana pool</Trans></DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel className="text-xs">Accent</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-xs"><Trans>Accent</Trans></DropdownMenuLabel>
         <div className="grid grid-cols-8 gap-1 px-2 pb-2">
           {COMPANION_ACCENT_KEYS.map((key) => (
             <button

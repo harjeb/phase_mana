@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { ChevronRight, EyeOff, Moon, Redo2, Sun, SunMoon, Undo2 } from "lucide-react";
 import { LayoutIcon } from "./LayoutIcon";
@@ -61,7 +62,7 @@ export function CompanionBar({
         aria-label={`New game`}
         title={`New game`}
       >
-        <span className="hidden sm:inline">New game</span>
+        <span className="hidden sm:inline"><Trans>New game</Trans></span>
         <span className="sm:hidden">+</span>
       </Button>
 
@@ -81,7 +82,7 @@ export function CompanionBar({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Layout</DropdownMenuLabel>
+          <DropdownMenuLabel><Trans>Layout</Trans></DropdownMenuLabel>
           <DropdownMenuSeparator />
           {layoutChoices.map((option) => (
             <DropdownMenuItem

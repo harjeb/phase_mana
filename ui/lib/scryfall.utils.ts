@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { CardBackFaceSummary, DeckCard } from "@/protocol/deck";
 import type { CardDto } from "@/protocol/game";
 import type { ScryfallCard } from "@/types/scryfall";
@@ -89,7 +90,7 @@ export function scryfallToDeckCard(sc: ScryfallCard): DeckCard {
   const id = sc.id;
   const { supertypes, types, subtypes } = parseTypeLine(getFrontTypeLine(sc));
   const uris = chooseImageUrisForCard(sc, { frontOnly: true });
-  if (!uris) throw new Error(`Scryfall card has no image uris: ${sc.name}`);
+  if (!uris) throw new Error(t`Scryfall card has no image uris: ${sc.name}`);
   return {
     identity: {
       id: id ?? crypto.randomUUID(),

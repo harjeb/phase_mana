@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { cn } from "@/lib/utils";
 import { Section, Subhead, Panel } from "../kit";
 import { FONTS, GAME_FONT_SIZES } from "../designSystem.data";
@@ -58,27 +59,27 @@ export function TypographySection() {
         ))}
       </div>
 
-      <Subhead>Type scale</Subhead>
+      <Subhead><Trans>Type scale</Trans></Subhead>
       <Panel className="space-y-4">
         {SCALE.map((s) => (
           <div key={s.label} className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <span className="w-40 shrink-0 font-mono text-[11px] text-muted-foreground">
               {s.label}
             </span>
-            <span className={s.cls}>Manabrew</span>
+            <span className={s.cls}><Trans>Manabrew</Trans></span>
           </div>
         ))}
       </Panel>
 
-      <Subhead>Game font-size tokens</Subhead>
+      <Subhead><Trans>Game font-size tokens</Trans></Subhead>
       <Panel>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[420px] text-left text-sm">
             <thead className="text-[11px] uppercase tracking-wide text-muted-foreground">
               <tr>
-                <th className="pb-2 pr-4 font-semibold">Token</th>
-                <th className="pb-2 pr-4 font-semibold">Value</th>
-                <th className="pb-2 font-semibold">Usage</th>
+                <th className="pb-2 pr-4 font-semibold"><Trans>Token</Trans></th>
+                <th className="pb-2 pr-4 font-semibold"><Trans>Value</Trans></th>
+                <th className="pb-2 font-semibold"><Trans>Usage</Trans></th>
               </tr>
             </thead>
             <tbody>

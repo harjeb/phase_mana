@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -48,7 +49,7 @@ export function KeybindingsPanel() {
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold">Keyboard shortcuts</h2>
+          <h2 className="text-lg font-semibold"><Trans>Keyboard shortcuts</Trans></h2>
           <p className="text-xs text-muted-foreground">
             Click a shortcut, then press the key combination you want.
           </p>

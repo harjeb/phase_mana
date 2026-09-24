@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { RouterProvider } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { I18nProvider, useLingui } from "@lingui/react";
@@ -72,7 +73,7 @@ function PlatformRuntimeChecks() {
   useEffect(() => {
     if (!deckMigrationError) return;
     toast.error(
-      `Couldn't load your saved decks — they're left untouched on disk. Please contact the developer.`,
+      t`Couldn't load your saved decks — they're left untouched on disk. Please contact the developer.`,
       { duration: Infinity },
     );
   }, [deckMigrationError]);

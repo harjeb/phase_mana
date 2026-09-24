@@ -6,6 +6,7 @@
  * when the human player needs to make a decision.
  */
 
+import { t } from "@lingui/core/macro";
 import init, {
   wasm_init,
   echo,
@@ -207,7 +208,7 @@ async function fetchCardArchive(reload: boolean): Promise<ArrayBuffer> {
     : CARD_ARCHIVE_MANIFEST_URL;
   const manifestResp = await fetch(manifestUrl, { cache: reload ? "reload" : "no-cache" });
   if (!manifestResp.ok) {
-    throw new Error(`Failed to fetch card archive manifest: ${manifestResp.status}`);
+    throw new Error(t`Failed to fetch card archive manifest: ${manifestResp.status}`);
   }
   const manifest = (await manifestResp.json()) as CardArchiveManifest;
   const archiveUrl = `/wasm/${manifest.archive}`;
@@ -227,7 +228,7 @@ async function fetchCardArchive(reload: boolean): Promise<ArrayBuffer> {
 
   const response = await fetch(archiveUrl);
   if (!response.ok) {
-    throw new Error(`Failed to fetch card archive: ${response.status}`);
+    throw new Error(t`Failed to fetch card archive: ${response.status}`);
   }
   const total = Number(response.headers.get("content-length")) || 0;
   postEvent("engine:cards", { stage: "downloading", loaded: 0, total });
@@ -430,7 +431,7 @@ async function handleCommand(command: string, args?: Record<string, unknown>): P
 
     case "start_game": {
       // Handled separately in onmessage — should not reach here
-      throw new Error("start_game handled outside handleCommand");
+      throw new Error(t`start_game handled outside handleCommand`);
     }
 
     case "respond": {
@@ -559,7 +560,7 @@ async function handleCommand(command: string, args?: Record<string, unknown>): P
       return limited_drop_session(args?.kind as string, args?.sessionId as string);
 
     default:
-      throw new Error(`Unknown command: ${command}`);
+      throw new Error(t`Unknown command: ${command}`);
   }
 }
 

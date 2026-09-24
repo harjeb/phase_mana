@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Gauge, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDeckAnalysisStore } from "@/stores/useDeckAnalysisStore";
@@ -27,7 +28,7 @@ export function DeckBracketPanel() {
     <section className={EDITOR_PANEL_CLASS}>
       <div className="mb-4 flex items-center gap-2.5">
         <Gauge className="h-4 w-4 text-muted-foreground shrink-0" />
-        <h3 className="text-base font-semibold">Bracket</h3>
+        <h3 className="text-base font-semibold"><Trans>Bracket</Trans></h3>
         <div className="ml-auto flex items-center gap-2">
           {loading && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
           {bracket && info && style && (

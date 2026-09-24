@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ArrowLeft, Bot, Loader2, Pencil, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { DeckCoverImage } from "@/components/deck/deckCover";
@@ -26,7 +27,7 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
       <div className="relative h-full min-h-0 overflow-hidden">
         <div className="relative z-10 flex h-full items-center justify-center overflow-y-auto px-4 py-4">
           <div className="w-full max-w-md rounded-2xl border border-border/70 bg-card/90 p-6 text-center shadow-xl backdrop-blur-md">
-            <h2 className="font-serif text-3xl font-light">Deck not found</h2>
+            <h2 className="font-serif text-3xl font-light"><Trans>Deck not found</Trans></h2>
             <p className="mt-2 text-sm text-muted-foreground">
               This saved deck may have been renamed or removed.
             </p>

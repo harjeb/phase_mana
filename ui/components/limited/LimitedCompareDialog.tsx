@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -33,7 +34,7 @@ export function LimitedCompareDialog({ current, open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Compare with saved deck</DialogTitle>
+          <DialogTitle><Trans>Compare with saved deck</Trans></DialogTitle>
           <DialogDescription>
             Pick a previously saved limited deck to compare its mana curve, colour pips, and
             composition against the deck you're building right now.
@@ -48,13 +49,13 @@ export function LimitedCompareDialog({ current, open, onOpenChange }: Props) {
         ) : (
           <div className="grid gap-3">
             <label className="flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Saved deck</span>
+              <span className="text-muted-foreground"><Trans>Saved deck</Trans></span>
               <select
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
                 className="flex-1 rounded border border-border/70 bg-background px-2 py-1 text-sm pointer-coarse:text-base"
               >
-                <option value="">Choose…</option>
+                <option value=""><Trans>Choose…</Trans></option>
                 {limitedDecks.map((d) => (
                   <option key={d.id} value={d.id}>
                     {d.deck.name} ({d.deck.format ?? "draft"} · {d.deck.cards.length}/
@@ -100,7 +101,7 @@ function CompareColumn({
         <span className="text-muted-foreground/70">({empty ? "—" : `${cards.length} cards`})</span>
       </h3>
       {empty ? (
-        <p className="text-xs text-muted-foreground">Pick a saved deck to see its breakdown.</p>
+        <p className="text-xs text-muted-foreground"><Trans>Pick a saved deck to see its breakdown.</Trans></p>
       ) : (
         <LimitedDeckStats cards={cards} />
       )}

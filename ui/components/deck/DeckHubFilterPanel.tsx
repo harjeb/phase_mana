@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Heart, Search, X } from "lucide-react";
 import { ManaSymbols } from "@/components/game/ManaSymbols";
@@ -110,9 +111,9 @@ export function DeckHubFilterPanel({
             onChange({ sort: event.target.value as DeckHubDiscoveryFilters["sort"] })
           }
         >
-          <option value="newest">Newest</option>
-          <option value="name">Name</option>
-          <option value="favorites">Favorites</option>
+          <option value="newest"><Trans>Newest</Trans></option>
+          <option value="name"><Trans>Name</Trans></option>
+          <option value="favorites"><Trans>Favorites</Trans></option>
         </select>
         <select
           value={filters.group}
@@ -122,16 +123,16 @@ export function DeckHubFilterPanel({
             onChange({ group: event.target.value as DeckHubDiscoveryFilters["group"] })
           }
         >
-          <option value="none">No groups</option>
-          <option value="source">By source</option>
-          <option value="format">By format</option>
-          <option value="color">By color</option>
-          <option value="tag">By tag</option>
+          <option value="none"><Trans>No groups</Trans></option>
+          <option value="source"><Trans>By source</Trans></option>
+          <option value="format"><Trans>By format</Trans></option>
+          <option value="color"><Trans>By color</Trans></option>
+          <option value="tag"><Trans>By tag</Trans></option>
         </select>
       </div>
 
       <div className="space-y-2">
-        <span className="text-sm font-medium">Source</span>
+        <span className="text-sm font-medium"><Trans>Source</Trans></span>
         <div className="grid grid-cols-3 gap-2">
           {(["all", "community", "presets"] as const).map((source) => (
             <Button
@@ -149,7 +150,7 @@ export function DeckHubFilterPanel({
       </div>
 
       <div className="space-y-2">
-        <span className="text-sm font-medium">Formats</span>
+        <span className="text-sm font-medium"><Trans>Formats</Trans></span>
         <div className="flex flex-wrap gap-1.5">
           {formats.map((format) => (
             <Button
@@ -167,7 +168,7 @@ export function DeckHubFilterPanel({
       </div>
 
       <div className="space-y-2">
-        <span className="text-sm font-medium">Color identity</span>
+        <span className="text-sm font-medium"><Trans>Color identity</Trans></span>
         <div className="flex flex-wrap gap-2">
           {MANA_LETTERS.map((color) => (
             <Button
@@ -190,8 +191,8 @@ export function DeckHubFilterPanel({
             onChange({ colorMatch: event.target.value as DeckHubDiscoveryFilters["colorMatch"] })
           }
         >
-          <option value="exact">Exact colors</option>
-          <option value="includes">Includes colors</option>
+          <option value="exact"><Trans>Exact colors</Trans></option>
+          <option value="includes"><Trans>Includes colors</Trans></option>
         </select>
       </div>
 
@@ -212,7 +213,7 @@ export function DeckHubFilterPanel({
 
       {userTags && userTags.length > 0 && (
         <div className="space-y-2">
-          <span className="text-sm font-medium">Tags</span>
+          <span className="text-sm font-medium"><Trans>Tags</Trans></span>
           <div className="flex flex-wrap gap-1.5">
             {userTags.map((tag) => (
               <Button

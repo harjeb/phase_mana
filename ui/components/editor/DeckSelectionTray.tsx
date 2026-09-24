@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   ArrowDownToLine,
   ArrowUpToLine,
@@ -70,7 +71,7 @@ export function DeckSelectionTray({
           <div className="text-sm font-medium text-selection">
             {count} card{count !== 1 ? "s" : ""} selected
           </div>
-          <div className="text-[10px] text-muted-foreground">Bulk editor</div>
+          <div className="text-[10px] text-muted-foreground"><Trans>Bulk editor</Trans></div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -86,7 +87,7 @@ export function DeckSelectionTray({
             <DropdownMenuItem onSelect={onMoveToSide}>
               <ArrowDownToLine className="mr-2 h-3.5 w-3.5" /> Sideboard
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={onMoveToMaybe}>Maybeboard</DropdownMenuItem>
+            <DropdownMenuItem onSelect={onMoveToMaybe}><Trans>Maybeboard</Trans></DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>

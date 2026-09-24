@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
@@ -36,7 +37,7 @@ export function BatchPrintingDialog({
       .getState()
       .fetchSets()
       .then(setSets)
-      .catch(() => toast.error(`Could not load Magic sets`))
+      .catch(() => toast.error(t`Could not load Magic sets`))
       .finally(() => setLoadingSets(false));
   }, [open, sets.length]);
   const filteredSets = useMemo(() => {
@@ -114,7 +115,7 @@ export function BatchPrintingDialog({
       onOpenChange(false);
     } catch {
       if (operation === operationRef.current) {
-        toast.error(`Could not load printings from ${set.name}`);
+        toast.error(t`Could not load printings from ${set.name}`);
       }
     } finally {
       if (operation === operationRef.current) setApplyingSet(null);

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { LoaderCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +38,7 @@ export function CollectionDeleteDialog({
     <Dialog open={open} onOpenChange={(nextOpen) => !deleting && onOpenChange(nextOpen)}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Delete entire collection?</DialogTitle>
+          <DialogTitle><Trans>Delete entire collection?</Trans></DialogTitle>
           <DialogDescription>
             This will permanently remove all {entryCount} collection entries from your account. This
             action cannot be undone.

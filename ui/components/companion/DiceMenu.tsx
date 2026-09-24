@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Shuffle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -46,7 +47,7 @@ export function DiceMenu({ players }: DiceMenuProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuLabel>Roll</DropdownMenuLabel>
+          <DropdownMenuLabel><Trans>Roll</Trans></DropdownMenuLabel>
           <DropdownMenuSeparator />
           {DICE.map((sides) => (
             <DropdownMenuItem key={sides} onSelect={() => setRoll({ kind: "die", sides })}>
@@ -54,7 +55,7 @@ export function DiceMenu({ players }: DiceMenuProps) {
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => setRoll({ kind: "coin" })}>Coin flip</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setRoll({ kind: "coin" })}><Trans>Coin flip</Trans></DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setRoll({ kind: "first" })}>
             <Shuffle className="mr-2 size-4" /> Random first player
           </DropdownMenuItem>

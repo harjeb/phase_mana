@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ManaBrewLogo } from "@/components/layout/ManaBrewLogo";
 import { Section, Subhead, Panel } from "../kit";
 import { ASSETS, DATA_ASSETS } from "../designSystem.data";
@@ -8,24 +9,24 @@ export function AssetsSection() {
       title={`Assets`}
       intro="Brand imagery, favicons/PWA icons, and the static data files the app ships. Image assets live in public/ (URL-served) except the logo, which is a bundled src/assets import."
     >
-      <Subhead>Brand mark</Subhead>
+      <Subhead><Trans>Brand mark</Trans></Subhead>
       <Panel className="flex flex-wrap items-center gap-6">
         <div className="flex flex-col items-center gap-2">
           <ManaBrewLogo size={96} className="rounded-xl" />
-          <span className="font-mono text-[11px] text-muted-foreground">96px</span>
+          <span className="font-mono text-[11px] text-muted-foreground"><Trans>96px</Trans></span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <ManaBrewLogo size={48} className="rounded-lg" />
-          <span className="font-mono text-[11px] text-muted-foreground">48px</span>
+          <span className="font-mono text-[11px] text-muted-foreground"><Trans>48px</Trans></span>
         </div>
         <div className="flex flex-col items-center gap-2">
           <ManaBrewLogo size={28} className="rounded-lg" />
-          <span className="font-mono text-[11px] text-muted-foreground">28px</span>
+          <span className="font-mono text-[11px] text-muted-foreground"><Trans>28px</Trans></span>
         </div>
-        <span className="font-mono text-[11px] text-muted-foreground">src/assets/manaBrew.png</span>
+        <span className="font-mono text-[11px] text-muted-foreground"><Trans>src/assets/manaBrew.png</Trans></span>
       </Panel>
 
-      <Subhead>Images & icons</Subhead>
+      <Subhead><Trans>Images & icons</Trans></Subhead>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
         {ASSETS.map((a) => (
           <div key={a.file} className="overflow-hidden rounded-lg border border-border bg-card">
@@ -50,7 +51,7 @@ export function AssetsSection() {
         ))}
       </div>
 
-      <Subhead>Static data files</Subhead>
+      <Subhead><Trans>Static data files</Trans></Subhead>
       <Panel>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[420px] text-left text-sm">

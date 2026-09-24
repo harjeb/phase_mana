@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { create } from "zustand";
 import { persist, devtools, createJSONStorage } from "zustand/middleware";
 import { toast } from "sonner";
@@ -268,7 +269,7 @@ const deckStorage = createJSONStorage(() => ({
       localStorage.setItem(name, value);
     } catch {
       toast.error(
-        `Seems like you reached the limit of your browser storage \u2014 contact us on Discord for more info.`,
+        t`Seems like you reached the limit of your browser storage \u2014 contact us on Discord for more info.`,
         { id: "deck-storage-full" },
       );
     }
@@ -677,7 +678,7 @@ export const useDeckStore = create<DeckState>()(
         updatePrint: (cardName, scryfallCard) =>
           set((state) => {
             const uris = chooseImageUrisForCard(scryfallCard, { frontOnly: true });
-            if (!uris) throw new Error(`Scryfall card has no image uris: ${scryfallCard.name}`);
+            if (!uris) throw new Error(t`Scryfall card has no image uris: ${scryfallCard.name}`);
             const updates = new Map<string, CardPatch>();
             updates.set(cardName.toLowerCase(), {
               identity: {
@@ -694,7 +695,7 @@ export const useDeckStore = create<DeckState>()(
         updateCardPrint: (cardId, scryfallCard, foil) =>
           set((state) => {
             const uris = chooseImageUrisForCard(scryfallCard, { frontOnly: true });
-            if (!uris) throw new Error(`Scryfall card has no image uris: ${scryfallCard.name}`);
+            if (!uris) throw new Error(t`Scryfall card has no image uris: ${scryfallCard.name}`);
             return {
               currentDeck: patchDeckCardById(state.currentDeck, cardId, {
                 identity: {
@@ -710,7 +711,7 @@ export const useDeckStore = create<DeckState>()(
         updatePrintingVariant: (printing, scryfallCard) =>
           set((state) => {
             const uris = chooseImageUrisForCard(scryfallCard, { frontOnly: true });
-            if (!uris) throw new Error(`Scryfall card has no image uris: ${scryfallCard.name}`);
+            if (!uris) throw new Error(t`Scryfall card has no image uris: ${scryfallCard.name}`);
             return {
               currentDeck: patchDeckPrintingVariant(state.currentDeck, printing, {
                 identity: {
@@ -730,7 +731,7 @@ export const useDeckStore = create<DeckState>()(
         updateTokenPrint: (token, scryfallCard) =>
           set((state) => {
             const uris = chooseImageUrisForCard(scryfallCard, { frontOnly: true });
-            if (!uris) throw new Error(`Scryfall card has no image uris: ${scryfallCard.name}`);
+            if (!uris) throw new Error(t`Scryfall card has no image uris: ${scryfallCard.name}`);
             const key = tokenIdentityKey(token);
             const customized: DeckCard = {
               ...token,

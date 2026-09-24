@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -77,7 +79,7 @@ export function EditDeckHubEntryDialog({
       });
       onSaved(updated);
       onOpenChange(false);
-      toast.success(`Publication details updated`);
+      toast.success(t`Publication details updated`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : `Failed to update publication`);
     } finally {
@@ -88,7 +90,7 @@ export function EditDeckHubEntryDialog({
     <Dialog open={open} onOpenChange={(nextOpen) => !busy && onOpenChange(nextOpen)}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Edit publication</DialogTitle>
+          <DialogTitle><Trans>Edit publication</Trans></DialogTitle>
           <DialogDescription>
             Update how this exact deck version appears in Community discovery and Top Decks.
           </DialogDescription>
@@ -145,7 +147,7 @@ export function EditDeckHubEntryDialog({
               className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm pointer-coarse:text-base"
               onChange={(event) => setCoverCardName(event.target.value)}
             >
-              <option value="">Automatic cover</option>
+              <option value=""><Trans>Automatic cover</Trans></option>
               {coverCards.map((card) => (
                 <option key={card.identity.name} value={card.identity.name}>
                   {card.identity.name}

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 
 import type { CardDto } from "@/protocol/game";
@@ -122,7 +124,7 @@ export function GameBoardAccessibility({
 
   return (
     <nav
-      aria-label="Game board controls"
+      aria-label={t`Game board controls`}
       className={
         focused
           ? "absolute top-2 left-2 z-[70] flex max-h-[calc(100%-1rem)] w-[min(28rem,calc(100%-1rem))] flex-col gap-3 overflow-y-auto rounded-lg border border-border bg-background p-3 shadow-xl"
@@ -133,7 +135,7 @@ export function GameBoardAccessibility({
         if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false);
       }}
     >
-      <h2 className="text-base font-semibold text-foreground">Game board controls</h2>
+      <h2 className="text-base font-semibold text-foreground"><Trans>Game board controls</Trans></h2>
 
       <section aria-labelledby="accessible-players-heading" className="space-y-1.5">
         <h3 id="accessible-players-heading" className="text-sm font-semibold text-muted-foreground">

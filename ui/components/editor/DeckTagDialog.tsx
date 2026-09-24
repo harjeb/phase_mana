@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Check, Plus, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,7 @@ export function DeckTagDialog({
     >
       <DialogContent className="max-w-sm gap-3">
         <DialogHeader>
-          <DialogTitle>Tag selected cards</DialogTitle>
+          <DialogTitle><Trans>Tag selected cards</Trans></DialogTitle>
           <DialogDescription>
             Apply a role or custom group to {selectedCount} selected card
             {selectedCount === 1 ? "" : "s"}.

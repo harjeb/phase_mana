@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -138,7 +139,7 @@ export function BattlefieldKeywordDevControls() {
         <>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className={DEV_SECTION_HEADING}>Card under test</p>
+              <p className={DEV_SECTION_HEADING}><Trans>Card under test</Trans></p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Resolve a real print, then layer debug-only visuals over it.
               </p>
@@ -188,7 +189,7 @@ export function BattlefieldKeywordDevControls() {
         <>
           <div className="mt-4 flex items-center justify-between gap-3">
             <div>
-              <p className={DEV_SECTION_HEADING}>Keyword chips</p>
+              <p className={DEV_SECTION_HEADING}><Trans>Keyword chips</Trans></p>
               <p className="mt-1 text-[10px] text-muted-foreground">
                 {selected.length === 0 ? "No forced keywords" : `${selected.length} forced`}
               </p>
@@ -241,7 +242,7 @@ export function BattlefieldKeywordDevControls() {
             })}
           </div>
           {visibleKeywords.length === 0 ? (
-            <p className="mt-3 text-center text-xs text-muted-foreground">No keyword matches.</p>
+            <p className="mt-3 text-center text-xs text-muted-foreground"><Trans>No keyword matches.</Trans></p>
           ) : null}
         </>
       ) : null}

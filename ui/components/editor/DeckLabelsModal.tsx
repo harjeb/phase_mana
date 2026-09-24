@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Modal } from "@/components/game/modals/Modal";
 import { Button } from "@/components/ui/button";
@@ -46,7 +48,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
     saveCurrentDeck();
     setNewLabel("");
     setNewLabelColor("");
-    toast.success(`Label "${trimmed}" added`);
+    toast.success(t`Label "${trimmed}" added`);
   }
   const unusedSuggestions = SUGGESTED_LABELS.filter(
     ({ value }) => !labels.some((label) => label.name.toLowerCase() === value.toLowerCase()),
@@ -54,15 +56,15 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
   return (
     <Modal onClose={onClose} maxWidth="max-w-md" maxHeight="max-h-[70dvh]">
       <Modal.Header onClose={onClose}>
-        <h2 className="text-lg font-bold">Deck Labels</h2>
+        <h2 className="text-lg font-bold"><Trans>Deck Labels</Trans></h2>
       </Modal.Header>
 
       <Modal.Body>
         <div className="space-y-4">
           <div>
-            <div className="text-sm font-medium text-muted-foreground mb-2">Current Labels</div>
+            <div className="text-sm font-medium text-muted-foreground mb-2"><Trans>Current Labels</Trans></div>
             {labels.length === 0 ? (
-              <p className="text-xs text-muted-foreground italic">No labels yet</p>
+              <p className="text-xs text-muted-foreground italic"><Trans>No labels yet</Trans></p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {labels.map((label) => (
@@ -84,7 +86,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
                       onClick={() => {
                         removeDeckLabel(label.name);
                         saveCurrentDeck();
-                        toast.success(`Label "${label.name}" removed`);
+                        toast.success(t`Label "${label.name}" removed`);
                       }}
                     >
                       <X className="h-3.5 w-3.5" />
@@ -96,7 +98,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
           </div>
 
           <div>
-            <div className="text-sm font-medium text-muted-foreground mb-2">Add Custom Label</div>
+            <div className="text-sm font-medium text-muted-foreground mb-2"><Trans>Add Custom Label</Trans></div>
             <div className="flex items-center gap-2">
               <Input
                 className="h-8 text-sm flex-1"
@@ -129,7 +131,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
 
           {unusedSuggestions.length > 0 && (
             <div>
-              <div className="text-sm font-medium text-muted-foreground mb-2">Suggestions</div>
+              <div className="text-sm font-medium text-muted-foreground mb-2"><Trans>Suggestions</Trans></div>
               <div className="flex flex-wrap gap-1.5">
                 {unusedSuggestions.map(({ value, label }) => (
                   <Badge

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DraftPodButton } from "@/components/limited/DraftPodButton";
@@ -41,7 +42,7 @@ export function DraftStatusBar({
           {draft.currentPack.length} in pack
         </span>
         {draft.draftEffectActive && (
-          <span className="text-xs text-primary">Cogwork Librarian · choose one more card</span>
+          <span className="text-xs text-primary"><Trans>Cogwork Librarian · choose one more card</Trans></span>
         )}
         {packsWaiting > 0 && (
           <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">

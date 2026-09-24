@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Bot, Check, ChevronDown, Copy, LockKeyhole, LogOut, Shield, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -73,9 +75,9 @@ export function TableRoomSidebar({
       await navigator.clipboard.writeText(roomPassword);
       setCopiedPassword(true);
       setTimeout(() => setCopiedPassword(false), 1500);
-      toast.success(`Password copied to clipboard`);
+      toast.success(t`Password copied to clipboard`);
     } catch {
-      toast.error(`Couldn't copy the password`);
+      toast.error(t`Couldn't copy the password`);
     }
   }
   return (
@@ -84,7 +86,7 @@ export function TableRoomSidebar({
         <h2 className="truncate font-serif text-xl font-light">{room.room_name}</h2>
         <dl className="mt-3 space-y-3 text-sm">
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Format</dt>
+            <dt className="text-muted-foreground"><Trans>Format</Trans></dt>
             <dd>
               {inLobby && isController && !isLimitedRoom && onSetFormat ? (
                 <DropdownMenu>
@@ -111,7 +113,7 @@ export function TableRoomSidebar({
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Seats</dt>
+            <dt className="text-muted-foreground"><Trans>Seats</Trans></dt>
             <dd>
               {inLobby && isController && !isLimitedRoom && onSetMaxPlayers ? (
                 <DropdownMenu>
@@ -150,7 +152,7 @@ export function TableRoomSidebar({
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground">Privacy</dt>
+            <dt className="text-muted-foreground"><Trans>Privacy</Trans></dt>
             <dd className="flex items-center gap-1.5">
               {room.password_protected ? (
                 <>
@@ -177,15 +179,15 @@ export function TableRoomSidebar({
           {room.draft_config && (
             <>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground">Packs</dt>
+                <dt className="text-muted-foreground"><Trans>Packs</Trans></dt>
                 <dd className="font-medium">{room.draft_config.rounds}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground">Picks per pass</dt>
+                <dt className="text-muted-foreground"><Trans>Picks per pass</Trans></dt>
                 <dd className="font-medium">{room.draft_config.picks_per_pass}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground">Empty seats</dt>
+                <dt className="text-muted-foreground"><Trans>Empty seats</Trans></dt>
                 <dd className="text-right font-medium">
                   {room.draft_config.fill_with_bots ? `Fill with bots` : `Humans only`}
                 </dd>
@@ -194,7 +196,7 @@ export function TableRoomSidebar({
           )}
           {room.sealed_config && (
             <div className="flex items-center justify-between gap-3">
-              <dt className="text-muted-foreground">Packs per player</dt>
+              <dt className="text-muted-foreground"><Trans>Packs per player</Trans></dt>
               <dd className="font-medium">{room.sealed_config.num_boosters}</dd>
             </div>
           )}
@@ -202,7 +204,7 @@ export function TableRoomSidebar({
       </section>
 
       <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-        <h2 className="text-sm font-semibold">Table controls</h2>
+        <h2 className="text-sm font-semibold"><Trans>Table controls</Trans></h2>
         <div className="mt-3 grid gap-2">
           {inLobby && !isOpenFormat && !needsDeck && (
             <Button variant="outline" onClick={onOpenDeckDialog}>

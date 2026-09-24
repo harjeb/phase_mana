@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { GitCompareArrows } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -112,8 +113,8 @@ export function DeckChangeSummary({
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Changes since last save</DialogTitle>
-            <DialogDescription>Card quantity changes across the open deck.</DialogDescription>
+            <DialogTitle><Trans>Changes since last save</Trans></DialogTitle>
+            <DialogDescription><Trans>Card quantity changes across the open deck.</Trans></DialogDescription>
           </DialogHeader>
           <div className="max-h-80 space-y-1 overflow-y-auto">
             {changes.coverageDelta !== 0 && (
@@ -147,7 +148,7 @@ export function DeckChangeSummary({
                 className="rounded-md px-2 py-1.5 text-sm odd:bg-muted/40"
               >
                 <span className="font-medium">{change.name}</span>
-                <span className="ml-2 text-xs text-muted-foreground">printing changed</span>
+                <span className="ml-2 text-xs text-muted-foreground"><Trans>printing changed</Trans></span>
               </div>
             ))}
             {changes.quantityChanges.map((change) => (

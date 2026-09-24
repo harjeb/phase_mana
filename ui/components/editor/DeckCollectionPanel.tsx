@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react";
 import {
   Download,
@@ -126,7 +128,7 @@ export function DeckCollectionPanel({
     const currentTotal = collectionQuantityForName(quantities, name);
     const printingTotal = currentTotal - (quantities[key] ?? 0);
     void setQuantity(key, Math.max(0, quantity - printingTotal)).catch(() => {
-      toast.error(`Account sync failed. This change is preserved locally.`);
+      toast.error(t`Account sync failed. This change is preserved locally.`);
     });
   }
   function exportMissing() {
@@ -164,7 +166,7 @@ export function DeckCollectionPanel({
         <div className="flex items-center gap-2">
           <LibraryBig className="h-4 w-4 text-primary" />
           <div>
-            <h3 className="text-sm font-semibold">Collection coverage</h3>
+            <h3 className="text-sm font-semibold"><Trans>Collection coverage</Trans></h3>
             <p className="text-[10px] text-muted-foreground">
               {accountId ? `Synced to your account` : `Saved on this device`}
             </p>

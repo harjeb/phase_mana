@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { THEME_PRESETS } from "@/themes";
 import type { ThemePreset, ThemeColors } from "@/themes";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
@@ -29,7 +31,7 @@ function AppChrome({ colors, mode }: { colors: ThemeColors; mode: string }) {
           className="flex flex-col gap-2 rounded-lg border p-3"
           style={{ background: g("card"), borderColor: g("border"), color: g("card-foreground") }}
         >
-          <div className="text-sm font-semibold">Card surface</div>
+          <div className="text-sm font-semibold"><Trans>Card surface</Trans></div>
           <div className="text-xs" style={{ color: g("muted-foreground") }}>
             Muted secondary text
           </div>
@@ -100,19 +102,19 @@ function PresetCard({ preset }: { preset: ThemePreset }) {
       </div>
       <p className="text-xs text-muted-foreground">{preset.description}</p>
 
-      <Subhead>App chrome</Subhead>
+      <Subhead><Trans>App chrome</Trans></Subhead>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <AppChrome colors={preset.light} mode="Light" />
         <AppChrome colors={preset.dark} mode="Dark" />
       </div>
 
-      <Subhead>App tokens</Subhead>
+      <Subhead><Trans>App tokens</Trans></Subhead>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <AppTokens colors={preset.light} mode="Light" />
         <AppTokens colors={preset.dark} mode="Dark" />
       </div>
 
-      <Subhead>Game tokens</Subhead>
+      <Subhead><Trans>Game tokens</Trans></Subhead>
       <div className="space-y-3">
         {groupGameColors(preset).map((grp) => (
           <div key={grp.name} className="space-y-1.5">
@@ -143,7 +145,7 @@ export function ColorSection({ presetId }: { presetId: string }) {
   return (
     <Section
       id="color"
-      title="Color"
+      title={t`Color`}
       intro="Your current theme, including personal color overrides. Light and dark app colors are shown together."
     >
       <PresetCard preset={resolvedPreset} />

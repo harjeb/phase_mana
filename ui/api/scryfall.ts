@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import {
   MANA_CODE_FILE_OVERRIDES,
   MANA_CODE_SET,
@@ -107,11 +108,11 @@ export async function scryfallFetch<T>(
       const retryAfterMs = applyScryfallCooldown(response);
       if (attempt === 0) continue;
       throw new Error(
-        `Scryfall is rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)} seconds.`,
+        t`Scryfall is rate limited. Try again in ${Math.ceil(retryAfterMs / 1000)} seconds.`,
       );
     }
     if (!response.ok) {
-      throw new Error(`${errorMsg} (HTTP ${response.status})`);
+      throw new Error(t`${errorMsg} (HTTP ${response.status})`);
     }
     return response.json();
   }
@@ -366,7 +367,7 @@ export async function fetchCardsBySet(setCode: string): Promise<ScryfallCard[]> 
     url = page.has_more ? page.next_page : undefined;
   }
   if (out.length === 0) {
-    throw new Error(`Scryfall returned no cards for set ${setCode}`);
+    throw new Error(t`Scryfall returned no cards for set ${setCode}`);
   }
   return out;
 }
@@ -379,7 +380,7 @@ async function fetchImageBlob(url: string, cache: RequestCache): Promise<string>
     credentials: "omit",
     mode: "cors",
   });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  if (!response.ok) throw new Error(t`HTTP ${response.status}`);
   return URL.createObjectURL(await response.blob());
 }
 
@@ -429,7 +430,7 @@ export async function fetchImageElement(url: string): Promise<HTMLImageElement> 
   }
   const reason = lastError instanceof Error ? lastError.message : String(lastError);
   throw new Error(
-    `[scryfall-image] failed after ${SCRYFALL_IMAGE_MAX_RETRIES + 1} attempts: ${url} (${reason})`,
+    t`[scryfall-image] failed after ${SCRYFALL_IMAGE_MAX_RETRIES + 1} attempts: ${url} (${reason})`,
   );
 }
 

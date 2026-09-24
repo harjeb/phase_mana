@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ClientCardDto } from "@/stores/gameStore.types";
 import type { CardDto, ZoneKind } from "@/protocol/game";
@@ -492,8 +493,8 @@ export function BoardPlayground({ themeEditor = false }: { themeEditor?: boolean
               }}
             >
               <Input
-                aria-label="Custom preview card name"
-                placeholder="Any card name"
+                aria-label={t`Custom preview card name`}
+                placeholder={t`Any card name`}
                 value={customName}
                 onChange={(event) => setCustomName(event.target.value)}
                 className="max-w-72"
@@ -509,7 +510,7 @@ export function BoardPlayground({ themeEditor = false }: { themeEditor?: boolean
               <label className="flex items-center gap-2 text-sm">
                 Test actions
                 <select
-                  aria-label="Test action count"
+                  aria-label={t`Test action count`}
                   className="h-9 rounded-md border border-input bg-background px-2"
                   value={actionCount}
                   onChange={(event) => setActionCount(Number(event.target.value))}
@@ -524,7 +525,7 @@ export function BoardPlayground({ themeEditor = false }: { themeEditor?: boolean
               <label className="flex items-center gap-2 text-sm">
                 Viewport
                 <select
-                  aria-label="Preview viewport"
+                  aria-label={t`Preview viewport`}
                   className="h-9 rounded-md border border-input bg-background px-2"
                   value={viewportIndex}
                   onChange={(event) => setViewportIndex(Number(event.target.value))}

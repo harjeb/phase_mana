@@ -40,7 +40,7 @@ export default function OnlineDraftPanel({ endpoint, name, connected }: { endpoi
     <p><Trans>Draft with human players on the server, build from your private pool, and play the pod’s matches.</Trans></p>
     {!view && <>
       <label className="block"><Trans>Draft format</Trans><select className={field} value={kind} onChange={event => setKind(event.target.value)}>
-        <option value="Premier">Premier (Bo1)</option><option value="Traditional">Traditional (Bo3)</option>
+        <option value="Premier"><Trans>Premier (Bo1)</Trans></option><option value="Traditional"><Trans>Traditional (Bo3)</Trans></option>
       </select></label>
       <label className="block"><Trans>Set code</Trans><input className={field} value={setCode} onChange={event => setSetCode(event.target.value)} /></label>
       <label className="block"><Trans>Pod size</Trans><select className={field} value={podSize} onChange={event => setPodSize(Number(event.target.value))}>

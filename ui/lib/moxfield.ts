@@ -2,6 +2,7 @@
 // Only direct deck fetch by public ID is supported — search is intentionally
 // omitted because Moxfield's public search ignores the query param.
 
+import { t } from "@lingui/core/macro";
 import type {
   ArchidektDeck,
   ArchidektDeckCard,
@@ -13,7 +14,7 @@ const USER_AGENT = "manabrew-deck-importer";
 
 function resolveFetch(opts?: RequestOptions): typeof fetch {
   const f = opts?.fetch ?? (globalThis as { fetch?: typeof fetch }).fetch;
-  if (!f) throw new Error("No fetch implementation available");
+  if (!f) throw new Error(t`No fetch implementation available`);
   return f;
 }
 
@@ -82,7 +83,7 @@ export async function fetchMoxfieldDeck(
     headers: { "User-Agent": USER_AGENT },
     signal: opts.signal,
   });
-  if (!res.ok) throw new Error(`Moxfield fetch failed: ${res.status}`);
+  if (!res.ok) throw new Error(t`Moxfield fetch failed: ${res.status}`);
   const data = (await res.json()) as RawMoxfieldDeck;
   const colors = new Set<string>();
   const cards = collectBoard(data.mainboard, colors);
@@ -108,7 +109,7 @@ export async function fetchMoxfieldResult(
     headers: { "User-Agent": USER_AGENT },
     signal: opts.signal,
   });
-  if (!res.ok) throw new Error(`Moxfield fetch failed: ${res.status}`);
+  if (!res.ok) throw new Error(t`Moxfield fetch failed: ${res.status}`);
   const d = (await res.json()) as RawMoxfieldDeck;
   return {
     id: d.publicId,

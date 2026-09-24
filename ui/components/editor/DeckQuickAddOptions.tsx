@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Bookmark, Plus, X } from "lucide-react";
 import { ScryfallImg } from "@/components/ScryfallImg";
 import { Button } from "@/components/ui/button";
@@ -60,7 +61,7 @@ export function DeckQuickAddOptions({
         )}
         <div className="min-w-0 flex-1">
           <div className="truncate text-xs font-medium">{displayName}</div>
-          <div className="text-[10px] text-muted-foreground">Configure addition</div>
+          <div className="text-[10px] text-muted-foreground"><Trans>Configure addition</Trans></div>
         </div>
         <Button
           type="button"
@@ -99,9 +100,9 @@ export function DeckQuickAddOptions({
             onDestinationChange(event.target.value as DeckQuickAddRequest["destination"])
           }
         >
-          <option value="main">Main</option>
-          <option value="side">Side</option>
-          <option value="maybe">Maybe</option>
+          <option value="main"><Trans>Main</Trans></option>
+          <option value="side"><Trans>Side</Trans></option>
+          <option value="maybe"><Trans>Maybe</Trans></option>
         </select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -129,7 +130,7 @@ export function DeckQuickAddOptions({
                 </DropdownMenuCheckboxItem>
               ))
             ) : (
-              <div className="px-2 py-1.5 text-xs text-muted-foreground">No deck tags yet</div>
+              <div className="px-2 py-1.5 text-xs text-muted-foreground"><Trans>No deck tags yet</Trans></div>
             )}
           </DropdownMenuContent>
         </DropdownMenu>

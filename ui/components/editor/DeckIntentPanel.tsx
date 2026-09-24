@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Compass } from "lucide-react";
 import { isLand } from "@/lib/mana";
 import { useCardRolesStore, CARD_ROLE_LABELS } from "@/stores/useCardRolesStore";
@@ -38,8 +39,8 @@ export function DeckIntentPanel({ deck }: { deck: EditorDeck }) {
     <section className={EDITOR_PANEL_CLASS}>
       <div className="flex items-center gap-2">
         <Compass className="h-4 w-4 text-primary" />
-        <h3 className="text-sm font-semibold">Deck intent</h3>
-        <span className="text-[10px] text-muted-foreground">local analysis</span>
+        <h3 className="text-sm font-semibold"><Trans>Deck intent</Trans></h3>
+        <span className="text-[10px] text-muted-foreground"><Trans>local analysis</Trans></span>
       </div>
       <p className="mt-3 max-w-4xl text-sm leading-relaxed text-muted-foreground">
         {sentences.join(" ")}

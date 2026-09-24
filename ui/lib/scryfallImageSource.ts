@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { platformFetch } from "@/lib/platformFetch";
 import { lanArtUrl } from "@/lib/lanCache";
 import { getPlatform, getPlatformType } from "@/platform";
@@ -95,7 +96,7 @@ async function fetchImageBytes(url: string): Promise<Blob> {
   // cache: "reload" bypasses any non-CORS entry the display <img> cached for
   // this URL — a plain fetch would reuse it and CORS-fail (no ACAO header).
   const res = await platformFetch(url, { cache: "reload" });
-  if (!res.ok) throw new Error(`scryfall image ${url}: HTTP ${res.status}`);
+  if (!res.ok) throw new Error(t`scryfall image ${url}: HTTP ${res.status}`);
   return await res.blob();
 }
 

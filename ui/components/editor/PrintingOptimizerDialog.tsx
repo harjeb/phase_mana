@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useRef, useState } from "react";
 import {
   BadgeDollarSign,
@@ -169,7 +171,7 @@ export function PrintingOptimizerDialog({
         abortController.signal.throwIfAborted();
         for (const card of uniqueCards) {
           if (useDeckStore.getState().editorSessionId !== sessionId) {
-            throw new Error("The open deck changed while printings were being checked");
+            throw new Error(t`The open deck changed while printings were being checked`);
           }
           const prints =
             printsByName.get(
@@ -200,16 +202,16 @@ export function PrintingOptimizerDialog({
                 })),
             );
           }
-          if (prints.length === 0) throw new Error(`Could not resolve ${card.identity.name}`);
+          if (prints.length === 0) throw new Error(t`Could not resolve ${card.identity.name}`);
         }
       }
       if (useDeckStore.getState().editorSessionId !== sessionId) {
-        throw new Error(`The open deck changed while printings were being checked`);
+        throw new Error(t`The open deck changed while printings were being checked`);
       }
       setChanges(proposal);
       setSkipped(unresolved);
       if (proposal.length === 0 && unresolved.length === 0) {
-        toast.info(`The selected policy would not change this deck`);
+        toast.info(t`The selected policy would not change this deck`);
       }
     } catch (error) {
       if (!(error instanceof DOMException && error.name === "AbortError")) {
@@ -225,7 +227,7 @@ export function PrintingOptimizerDialog({
   }
   function applyProposal() {
     if (proposalSessionId !== useDeckStore.getState().editorSessionId) {
-      toast.error(`The open deck changed. Build the printing proposal again.`);
+      toast.error(t`The open deck changed. Build the printing proposal again.`);
       setChanges([]);
       setSkipped([]);
       return;
@@ -265,7 +267,7 @@ export function PrintingOptimizerDialog({
     >
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Optimize deck printings</DialogTitle>
+          <DialogTitle><Trans>Optimize deck printings</Trans></DialogTitle>
           <DialogDescription>
             Choose a policy, review every proposed change, then apply it as one undoable edit.
           </DialogDescription>
@@ -355,7 +357,7 @@ export function PrintingOptimizerDialog({
           <div className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
               <div>
-                <p className="font-medium">Proposal ready</p>
+                <p className="font-medium"><Trans>Proposal ready</Trans></p>
                 <p className="text-xs text-muted-foreground">
                   {changes.length === 1
                     ? `One copy will change · one undoable edit`

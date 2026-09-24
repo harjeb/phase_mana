@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Texture } from "pixi.js";
 import { platformFetch } from "@/lib/platformFetch";
 import { manaSymbolUrl, normalizeManaCode } from "@/api/scryfall";
@@ -12,10 +13,10 @@ let cacheGeneration = 0;
 
 async function fetchSvgText(symbol: string): Promise<string> {
   const code = normalizeManaCode(symbol);
-  if (!code) throw new Error(`unsupported mana symbol: ${symbol}`);
+  if (!code) throw new Error(t`unsupported mana symbol: ${symbol}`);
   const url = manaSymbolUrl(code);
   const response = await platformFetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
+  if (!response.ok) throw new Error(t`HTTP ${response.status} for ${url}`);
   return await response.text();
 }
 

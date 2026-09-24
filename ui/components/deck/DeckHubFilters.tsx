@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { PanelRightClose, PanelRightOpen } from "lucide-react";
 import { DeckHubFilterPanel } from "@/components/deck/DeckHubFilterPanel";
@@ -45,8 +46,8 @@ export function DeckHubFilters(props: DeckHubFiltersProps) {
         >
           {expanded && (
             <div>
-              <h2 className="font-serif text-xl font-semibold">Filters</h2>
-              <p className="mt-1 text-xs text-muted-foreground">Refine published deck results.</p>
+              <h2 className="font-serif text-xl font-semibold"><Trans>Filters</Trans></h2>
+              <p className="mt-1 text-xs text-muted-foreground"><Trans>Refine published deck results.</Trans></p>
             </div>
           )}
           <button

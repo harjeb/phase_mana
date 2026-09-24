@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { DeckHubEntryCard } from "@/components/deck/DeckHubEntryCard";
 import { CollapsibleDeckShelf } from "@/components/play/CollapsibleDeckShelf";
 import { DECK_SHELF_CARD_CLASS, DeckShelfRow } from "@/components/play/DeckShelfRow";
@@ -58,7 +59,7 @@ export function CommunityDeckShelf({
           ))}
         </DeckShelfRow>
       ) : loading ? (
-        <DeckShelfRow label="Community decks">
+        <DeckShelfRow label={t`Community decks`}>
           {Array.from({ length: 10 }, (_, index) => (
             <div
               key={index}

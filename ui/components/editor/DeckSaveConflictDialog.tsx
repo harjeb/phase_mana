@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Copy, Download, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +29,7 @@ export function DeckSaveConflictDialog({
     <Dialog open={conflict !== null} onOpenChange={(open) => !open && !busy && onCancel()}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>This deck changed on another device</DialogTitle>
+          <DialogTitle><Trans>This deck changed on another device</Trans></DialogTitle>
           <DialogDescription>
             Your edits are saved locally. Choose which account version should be kept.
           </DialogDescription>
@@ -48,7 +49,7 @@ export function DeckSaveConflictDialog({
           >
             <Upload className="h-4 w-4 shrink-0" />
             <span>
-              <span className="block font-semibold">Keep my changes</span>
+              <span className="block font-semibold"><Trans>Keep my changes</Trans></span>
               <span className="block text-xs font-normal opacity-80">
                 Save this device’s deck as the next account version.
               </span>
@@ -62,7 +63,7 @@ export function DeckSaveConflictDialog({
           >
             <Download className="h-4 w-4 shrink-0" />
             <span>
-              <span className="block font-semibold">Use the account version</span>
+              <span className="block font-semibold"><Trans>Use the account version</Trans></span>
               <span className="block text-xs font-normal text-muted-foreground">
                 Replace this device’s working deck with the latest account copy.
               </span>
@@ -76,7 +77,7 @@ export function DeckSaveConflictDialog({
           >
             <Copy className="h-4 w-4 shrink-0" />
             <span>
-              <span className="block font-semibold">Save mine as a copy</span>
+              <span className="block font-semibold"><Trans>Save mine as a copy</Trans></span>
               <span className="block text-xs font-normal text-muted-foreground">
                 Keep both decks without overwriting either version.
               </span>

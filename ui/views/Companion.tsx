@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -41,7 +42,7 @@ export default function Companion() {
       <div className="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
         <GameIcon icon="healing" className="size-14 text-muted-foreground" />
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold">Start tracking</h2>
+          <h2 className="text-xl font-semibold"><Trans>Start tracking</Trans></h2>
           <p className="max-w-sm text-sm text-muted-foreground">
             Track life, counters, commander damage and table layout for paper play. One device
             passes around the table.

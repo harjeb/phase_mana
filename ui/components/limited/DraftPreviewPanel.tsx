@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ChevronDown, ChevronUp, Image as ImageIcon } from "lucide-react";
 interface DraftPreviewPanelProps {
   setSlot: (element: HTMLDivElement | null) => void;
@@ -44,7 +45,7 @@ export function DraftPreviewPanel({ setSlot, collapsed, onCollapse }: DraftPrevi
           <div className="flex aspect-[5/7] h-full max-h-[312px] items-center justify-center rounded-xl border-2 border-dashed border-border/60 bg-background/30">
             <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
           </div>
-          <span className="text-xs">Hover a card to preview</span>
+          <span className="text-xs"><Trans>Hover a card to preview</Trans></span>
         </div>
       </div>
     </section>

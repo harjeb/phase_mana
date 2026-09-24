@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -89,7 +90,7 @@ export function JoinPasswordDialog({ room, onClose, onJoin }: JoinPasswordDialog
               className="absolute inset-0 h-full w-full cursor-text opacity-0"
             />
             {password.length === 0 && !focused && (
-              <span className="text-sm text-muted-foreground">Enter password</span>
+              <span className="text-sm text-muted-foreground"><Trans>Enter password</Trans></span>
             )}
             {password.split("").map((_, i) => {
               const isSelected = focused && i >= selection.start && i < selection.end;

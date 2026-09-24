@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { cn } from "@/lib/utils";
 import {
   DEV_PROMPT_ACTION_OVERRIDES,
@@ -54,7 +55,7 @@ export function PromptDevControls() {
         <section className={DEV_SECTION}>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className={DEV_SECTION_HEADING}>Action view</p>
+              <p className={DEV_SECTION_HEADING}><Trans>Action view</Trans></p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Preview battlefield action states. The engine prompt stays untouched.
               </p>
@@ -77,7 +78,7 @@ export function PromptDevControls() {
                 )}
                 onClick={clearOverride}
               >
-                <span className="block">Follow game</span>
+                <span className="block"><Trans>Follow game</Trans></span>
                 <span className="mt-0.5 block text-[10px] font-normal text-muted-foreground">
                   Use the live prompt
                 </span>

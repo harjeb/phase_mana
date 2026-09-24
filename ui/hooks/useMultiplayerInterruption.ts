@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { getPlatform } from "@/platform";
@@ -51,7 +52,7 @@ export function useMultiplayerInterruption(): MultiplayerInterruption {
       }
       concededSlots.current.add(gp.id);
       void platform.game.sendDirective({ playerSlot: gp.id, directive: { type: "concede" } });
-      toast.info(`${gp.name}'s seat was forfeited — conceded.`);
+      toast.info(t`${gp.name}'s seat was forfeited — conceded.`);
     }
   }, [isEngineHost, isMultiplayer, isGameActive, gameOver, roomSeats, gamePlayers]);
   const selfDisconnected = reconnectPhase === "reconnecting";
@@ -84,7 +85,7 @@ export function useMultiplayerInterruption(): MultiplayerInterruption {
         expiredRef.current = true;
         if (selfDisconnected) {
           // Our own socket never came back — nothing left to wait for.
-          toast.error(`Game aborted \u2014 connection could not be restored.`);
+          toast.error(t`Game aborted \u2014 connection could not be restored.`);
           void useGameStore.getState().endGame();
           return;
         }
@@ -95,7 +96,7 @@ export function useMultiplayerInterruption(): MultiplayerInterruption {
         );
         if (room && gone.some((p) => p.username === room.host)) {
           // The engine host itself is gone: the game cannot continue.
-          toast.error(`Game aborted \u2014 the host did not reconnect in time.`);
+          toast.error(t`Game aborted \u2014 the host did not reconnect in time.`);
           void useGameStore.getState().endGame();
         }
       }

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { BoardBackgroundId } from "@/pixi/board/boardBackgrounds";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -236,7 +237,7 @@ export const useServerStore = create<ServerState>()(
               // handle first so disconnect() doesn't close that channel mid-handover.
               tabSession = null;
               await get().disconnect();
-              toast.info(`Signed in from another tab \u2014 this tab was disconnected.`);
+              toast.info(t`Signed in from another tab \u2014 this tab was disconnected.`);
             },
           });
         } catch (e) {
@@ -380,7 +381,7 @@ export const useServerStore = create<ServerState>()(
       async leaveRoom(requireServerLeave = false) {
         const platform = getPlatform();
         if (requireServerLeave) {
-          if (!platform.server) throw new Error("Multiplayer server is unavailable.");
+          if (!platform.server) throw new Error(t`Multiplayer server is unavailable.`);
           await platform.server.leaveRoom();
         }
         teardownDraftHost();
@@ -467,7 +468,7 @@ export const useServerStore = create<ServerState>()(
         const platform = getPlatform();
         if (!platform.server) return;
         await platform.server.inviteToRoom({ username });
-        toast.success(`Invited ${stripUsernameTag(username)} to your table`);
+        toast.success(t`Invited ${stripUsernameTag(username)} to your table`);
       },
       hasRelayFeature(feature) {
         return get().relayFeatures.includes(feature);

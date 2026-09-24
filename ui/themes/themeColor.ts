@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 export function parseThemeColor(value: string): { hex: string; alpha: number } | null {
   const trimmed = value.trim();
   const hexMatch = trimmed.match(/^#?([\da-f]{3}|[\da-f]{4}|[\da-f]{6}|[\da-f]{8})$/i);
@@ -58,7 +59,7 @@ export function withAlpha(value: string, alpha: number): string {
 export function compositeThemeColor(foreground: string, background: string): string {
   const front = parseThemeColor(foreground);
   const back = parseThemeColor(background);
-  if (!front || !back) throw new Error("Cannot composite an invalid theme color");
+  if (!front || !back) throw new Error(t`Cannot composite an invalid theme color`);
   const alpha = front.alpha + back.alpha * (1 - front.alpha);
   const fg = hexToRgb(front.hex);
   const bg = hexToRgb(back.hex);

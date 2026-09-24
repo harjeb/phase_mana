@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useRef } from "react";
 import { Redo2, Undo2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,19 +19,19 @@ export function ThemeEditorToolbar({
     <header className="shrink-0 space-y-2 border-b border-border pb-2">
       <div className="flex items-center gap-2 overflow-x-auto pb-1">
         <Input
-          aria-label="Personal theme name"
-          title="Personal theme name"
+          aria-label={t`Personal theme name`}
+          title={t`Personal theme name`}
           className="h-8 w-40 shrink-0 text-xs"
           value={draft.name}
           maxLength={80}
           onChange={(event) => update((current) => ({ ...current, name: event.target.value }))}
         />
         <select
-          aria-label="Base preset"
+          aria-label={t`Base preset`}
           className="h-8 w-36 shrink-0 rounded-md border border-input bg-background px-2 text-xs"
           value={draft.presetId}
           onChange={(event) => update((current) => ({ ...current, presetId: event.target.value }))}
-          title="Change the inherited palette. Your overrides stay in the draft."
+          title={t`Change the inherited palette. Your overrides stay in the draft.`}
         >
           {THEME_PRESETS.map((preset) => (
             <option key={preset.id} value={preset.id}>
@@ -38,7 +39,7 @@ export function ThemeEditorToolbar({
             </option>
           ))}
         </select>
-        <div className="flex shrink-0 gap-1" aria-label="Draft color mode">
+        <div className="flex shrink-0 gap-1" aria-label={t`Draft color mode`}>
           {(["light", "dark"] as const).map((mode) => (
             <Button
               key={mode}
@@ -81,8 +82,8 @@ export function ThemeEditorToolbar({
         <Button
           size="sm"
           variant="ghost"
-          title="Undo draft change"
-          aria-label="Undo draft change"
+          title={t`Undo draft change`}
+          aria-label={t`Undo draft change`}
           disabled={!editor.canUndo}
           onClick={editor.undo}
         >
@@ -91,8 +92,8 @@ export function ThemeEditorToolbar({
         <Button
           size="sm"
           variant="ghost"
-          title="Redo draft change"
-          aria-label="Redo draft change"
+          title={t`Redo draft change`}
+          aria-label={t`Redo draft change`}
           disabled={!editor.canRedo}
           onClick={editor.redo}
         >

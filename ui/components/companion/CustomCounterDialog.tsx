@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +28,7 @@ export function CustomCounterDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Custom counter</DialogTitle>
+          <DialogTitle><Trans>Custom counter</Trans></DialogTitle>
         </DialogHeader>
         {open && (
           <CustomCounterForm
@@ -56,7 +57,7 @@ function CustomCounterForm({
     <>
       <div className="space-y-3">
         <div className="space-y-1">
-          <Label htmlFor="companion-counter-label">Label</Label>
+          <Label htmlFor="companion-counter-label"><Trans>Label</Trans></Label>
           <Input
             id="companion-counter-label"
             value={label}
@@ -66,7 +67,7 @@ function CustomCounterForm({
           />
         </div>
         <div className="space-y-1">
-          <Label htmlFor="companion-counter-value">Starting value</Label>
+          <Label htmlFor="companion-counter-value"><Trans>Starting value</Trans></Label>
           <Input
             id="companion-counter-value"
             type="number"
@@ -75,7 +76,7 @@ function CustomCounterForm({
           />
         </div>
         <div className="space-y-1">
-          <Label>Icon</Label>
+          <Label><Trans>Icon</Trans></Label>
           <div className="grid grid-cols-8 gap-1">
             {availableIcons.map((key) => (
               <button

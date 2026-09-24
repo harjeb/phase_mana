@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { type MouseEvent } from "react";
 import { ChevronDown, Palette, X } from "lucide-react";
 import { CARD_WIDTH_MAP, DEFAULT_CARD_SIZE } from "./deckBuilder.utils";
@@ -39,7 +40,7 @@ export function TokenSection({
         onClick={() => setOpen((value) => !value)}
       >
         <ChevronDown className={cn("h-4 w-4 transition-transform", !open && "-rotate-90")} />
-        <h3 className="text-base font-semibold">Tokens</h3>
+        <h3 className="text-base font-semibold"><Trans>Tokens</Trans></h3>
         <span className="text-xs text-muted-foreground/70">
           {tokens.length} token{tokens.length !== 1 ? "s" : ""} produced by this deck
         </span>

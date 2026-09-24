@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Modal } from "@/components/game/modals/Modal";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -61,7 +62,7 @@ export function ComboDetailModal({
 
             {produces.length > 0 && (
               <div>
-                <div className="text-sm font-semibold text-muted-foreground mb-1">Produces</div>
+                <div className="text-sm font-semibold text-muted-foreground mb-1"><Trans>Produces</Trans></div>
                 <div className="flex flex-wrap gap-1">
                   {produces.map((name) => (
                     <span
@@ -82,7 +83,7 @@ export function ComboDetailModal({
                 </div>
                 {combo.manaNeeded && (
                   <div className="flex items-center gap-1.5 text-sm mb-1">
-                    <span className="text-muted-foreground">Mana:</span>
+                    <span className="text-muted-foreground"><Trans>Mana:</Trans></span>
                     <ManaSymbols cost={combo.manaNeeded} size="sm" />
                   </div>
                 )}
@@ -98,7 +99,7 @@ export function ComboDetailModal({
             )}
 
             <div>
-              <div className="text-sm font-semibold text-muted-foreground mb-1">Steps</div>
+              <div className="text-sm font-semibold text-muted-foreground mb-1"><Trans>Steps</Trans></div>
               <ol className="space-y-1.5">
                 {steps(combo).map((step, i) => (
                   <li key={i} className="text-sm flex gap-2">

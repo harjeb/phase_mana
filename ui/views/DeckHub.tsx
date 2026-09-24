@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
@@ -49,7 +50,7 @@ export default function DeckHub() {
       {!capabilitiesLoaded && capabilitiesError ? (
         <div className="grid min-h-0 flex-1 place-items-center px-6 text-center">
           <div className="max-w-md">
-            <p className="font-medium">Community could not be reached</p>
+            <p className="font-medium"><Trans>Community could not be reached</Trans></p>
             <p className="mt-1 text-sm text-muted-foreground">{capabilitiesError}</p>
             <Button
               variant="outline"

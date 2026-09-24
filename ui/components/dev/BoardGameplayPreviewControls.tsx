@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Button } from "@/components/ui/button";
 import {
   GAMEPLAY_PREVIEW_ACTIONS,
@@ -34,7 +35,7 @@ export function BoardGameplayPreviewControls({
     <div className="min-w-0 space-y-1">
       <div className="flex flex-wrap items-center gap-1.5">
         <select
-          aria-label="Gameplay action preview"
+          aria-label={t`Gameplay action preview`}
           value={mode}
           onChange={(event) => onModeChange(event.target.value as GameplayPreviewAction)}
           className="h-8 min-w-0 rounded-md border border-input bg-background px-2 text-xs"

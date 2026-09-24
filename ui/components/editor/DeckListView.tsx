@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   forwardRef,
   useState,
@@ -319,8 +320,8 @@ function MoveDestination({
         <Icon className="mr-2 h-3.5 w-3.5" /> {label}
       </ContextMenuSubTrigger>
       <ContextMenuSubContent className="w-36">
-        {onMoveOne && <ContextMenuItem onSelect={onMoveOne}>Move 1</ContextMenuItem>}
-        <ContextMenuItem onSelect={onMoveAll}>Move all ({count})</ContextMenuItem>
+        {onMoveOne && <ContextMenuItem onSelect={onMoveOne}><Trans>Move 1</Trans></ContextMenuItem>}
+        <ContextMenuItem onSelect={onMoveAll}><Trans>Move all ({count})</Trans></ContextMenuItem>
       </ContextMenuSubContent>
     </ContextMenuSub>
   );
@@ -379,7 +380,7 @@ function TagsSubmenu({
             );
           })
         ) : (
-          <div className="px-2 py-1.5 text-xs text-muted-foreground">No tags yet</div>
+          <div className="px-2 py-1.5 text-xs text-muted-foreground"><Trans>No tags yet</Trans></div>
         )}
         {onCreateTag && (
           <>
@@ -727,7 +728,7 @@ function EmptyStackBoard({
         </span>
       </div>
       <div className="border-2 border-dashed border-border/40 rounded-lg py-4 flex items-center justify-center">
-        <p className="text-[10px] text-muted-foreground/40">Drop here</p>
+        <p className="text-[10px] text-muted-foreground/40"><Trans>Drop here</Trans></p>
       </div>
     </div>
   );
@@ -1431,7 +1432,7 @@ function DroppableStackTag({
             </Button>
           </div>
           <div className="border-2 border-dashed border-border/40 rounded-lg flex-1 flex items-center justify-center">
-            <p className="text-[10px] text-muted-foreground/40 text-center">Drop cards here</p>
+            <p className="text-[10px] text-muted-foreground/40 text-center"><Trans>Drop cards here</Trans></p>
           </div>
         </div>
       )}
@@ -2199,8 +2200,8 @@ export function DeckListView({
         {totalCards === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="text-4xl mb-3 opacity-20">🃏</div>
-            <p className="text-sm text-muted-foreground">Drag cards here from the search panel</p>
-            <p className="text-xs text-muted-foreground/60 mt-1">or use the + buttons on hover</p>
+            <p className="text-sm text-muted-foreground"><Trans>Drag cards here from the search panel</Trans></p>
+            <p className="text-xs text-muted-foreground/60 mt-1"><Trans>or use the + buttons on hover</Trans></p>
           </div>
         )}
 
@@ -2316,7 +2317,7 @@ export function DeckListView({
             />
             {!sideboardOpen ? null : sideboardGroups.length === 0 ? (
               <div className="py-3 text-center">
-                <p className="text-xs text-muted-foreground/40">Drop cards here</p>
+                <p className="text-xs text-muted-foreground/40"><Trans>Drop cards here</Trans></p>
               </div>
             ) : viewMode === "list" ? (
               <div className="space-y-0.5 pb-1">
@@ -2427,12 +2428,12 @@ export function DeckListView({
               open={maybeboardOpen}
               onToggle={() => setMaybeboardOpen((value) => !value)}
               extraContent={
-                <span className="text-xs italic text-muted-foreground/40">not in deck</span>
+                <span className="text-xs italic text-muted-foreground/40"><Trans>not in deck</Trans></span>
               }
             />
             {!maybeboardOpen ? null : maybeboardGroups.length === 0 ? (
               <div className="py-3 text-center">
-                <p className="text-xs text-muted-foreground/40">Cards you&apos;re considering</p>
+                <p className="text-xs text-muted-foreground/40"><Trans>Cards you&apos;re considering</Trans></p>
               </div>
             ) : viewMode === "list" ? (
               <div className="space-y-0.5 pb-1">

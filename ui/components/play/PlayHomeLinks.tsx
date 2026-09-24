@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import {
   Github,
   Globe,
@@ -116,19 +117,19 @@ export function PlayHomeLinks() {
             <Button asChild variant="ghost" size="icon-sm" title={`Discord`}>
               <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer">
                 <DiscordIcon className="h-4 w-4" />
-                <span className="sr-only">Discord</span>
+                <span className="sr-only"><Trans>Discord</Trans></span>
               </a>
             </Button>
             <Button asChild variant="ghost" size="icon-sm" title={`GitHub`}>
               <a href={GITHUB_REPO_URL} target="_blank" rel="noreferrer">
                 <Github className="h-4 w-4" />
-                <span className="sr-only">GitHub</span>
+                <span className="sr-only"><Trans>GitHub</Trans></span>
               </a>
             </Button>
             <Button asChild variant="ghost" size="icon-sm" title={`Website`}>
               <a href={WEBSITE_URL} target="_blank" rel="noreferrer">
                 <Globe className="h-4 w-4" />
-                <span className="sr-only">Website</span>
+                <span className="sr-only"><Trans>Website</Trans></span>
               </a>
             </Button>
           </div>

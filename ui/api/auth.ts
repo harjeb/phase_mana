@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { getHubApiUrl } from "@/config/webRuntimeConfig";
 import { platformFetch } from "@/lib/platformFetch";
 import type {
@@ -19,7 +20,7 @@ async function authRequest(path: string, init?: RequestInit, token?: string): Pr
   const response = await platformFetch(`${getHubApiUrl()}${path}`, { ...init, headers });
   if (!response.ok) {
     if (response.status === 429) {
-      throw new Error("Too many attempts — try again in a few minutes.");
+      throw new Error(t`Too many attempts — try again in a few minutes.`);
     }
     const message = await response.text().catch(() => "");
     throw new AuthRequestError(response.status, message || `Request failed (${response.status})`);
@@ -76,7 +77,7 @@ export async function requestMagicLink(email: string): Promise<void> {
     await authRequest("/api/auth/email/request", jsonInit("POST", { email }));
   } catch (error) {
     if (error instanceof AuthRequestError && error.status === 422) {
-      throw new Error("Enter a complete email address, including its domain.");
+      throw new Error(t`Enter a complete email address, including its domain.`);
     }
     throw error;
   }

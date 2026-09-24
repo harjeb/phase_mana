@@ -22,7 +22,8 @@ interface CardImagesStatus {
 export function CardImageLibraryCard() {
   const [status, setStatus] = useState<CardImagesStatus | null>(null);
   const [dir, setDir] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState<null | "browse" | "save">(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -43,22 +44,32 @@ export function CardImageLibraryCard() {
 
   if (!status) return null;
 
-  async function post(path: string, body?: unknown) {
-    setBusy(true);
+  async function post(mode: "browse" | "save", path: string, body?: unknown) {
+    setBusy(mode);
     setError(null);
+    setNotice(null);
     try {
       const response = await fetch(`/card-images-config${path}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body ?? {}),
       });
-      const payload = (await response.json()) as Partial<CardImagesStatus> & { error?: string };
+      const payload = (await response.json()) as Partial<CardImagesStatus> & {
+        error?: string;
+        cancelled?: boolean;
+      };
       if (!response.ok) {
         if (payload.error === "picker_failed") throw new Error(t`Could not open the folder picker. Paste the folder path instead.`);
         if (payload.error === "folder_missing") throw new Error(t`Folder not found. Check the path and try again.`);
         throw new Error(t`Could not save the folder. Check write permissions and try again.`);
       }
       if (payload.dir) setDir(payload.dir);
+      if (mode === "browse") {
+        // The picker opens on the server; the user finishes it there. Never get
+        // stuck on "Working…" just because browse returns no `exists` field.
+        if (!payload.cancelled) setNotice(t`Choose a folder in the dialog that opened.`);
+        return;
+      }
       if (typeof payload.exists === "boolean") {
         setStatus({
           dir: payload.dir ?? dir,
@@ -71,7 +82,8 @@ export function CardImageLibraryCard() {
       }
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
-      setBusy(false);
+    } finally {
+      setBusy(null);
     }
   }
 
@@ -84,31 +96,33 @@ export function CardImageLibraryCard() {
       <div className="flex flex-wrap gap-2">
         <Input
           value={dir}
-          disabled={busy || status.fromEnv}
+          disabled={busy !== null || status.fromEnv}
           onChange={(event) => setDir(event.target.value)}
           placeholder={t`Folder with Forge-named card images`}
           aria-label={t`Card image library`}
           className="min-w-0 flex-1"
         />
-        <Button variant="outline" size="sm" disabled={busy || status.fromEnv} onClick={() => void post("/browse")}>
+        <Button variant="outline" size="sm" disabled={busy !== null || status.fromEnv} onClick={() => void post("browse", "/browse")}>
           {t`Browse…`}
         </Button>
         <Button
           variant="primary"
           size="sm"
-          disabled={busy || status.fromEnv || !dir.trim() || dir === status.dir}
-          onClick={() => void post("", { dir })}
+          disabled={busy !== null || status.fromEnv || !dir.trim() || dir === status.dir}
+          onClick={() => void post("save", "", { dir })}
         >
           {t`Use folder`}
         </Button>
       </div>
       <p role="status" className="text-xs text-muted-foreground">
-        {busy ? t`Working…` : status.fromEnv
-          ? t`Pinned by PHASE_MANA_CARD_IMAGES.`
-          : status.exists
-            ? t`${status.count} card images found.`
-            : t`Folder not found. Cards fall back to Scryfall.`}
+        {busy === "save" ? t`Working…`
+          : status.fromEnv
+            ? t`Pinned by PHASE_MANA_CARD_IMAGES.`
+            : status.exists
+              ? t`${status.count} card images found.`
+              : t`Folder not found. Cards fall back to Scryfall.`}
       </p>
+      {notice && <p role="status" className="text-xs text-muted-foreground">{notice}</p>}
       {error && <p role="alert" className="break-words text-xs text-destructive">{error}</p>}
     </PreferenceCard>
   );

@@ -1,4 +1,5 @@
 /** The negotiation and the fallback, against a fake `RTCPeerConnection`. */
+import { t } from "@lingui/core/macro";
 import { describe, expect, it, vi } from "vitest";
 import {
   WebRtcPlane,
@@ -19,7 +20,7 @@ class FakeChannel {
   peer: FakeChannel | null = null;
 
   send(data: string): void {
-    if (this.readyState !== "open") throw new Error("not open");
+    if (this.readyState !== "open") throw new Error(t`not open`);
     this.sent.push(data);
     queueMicrotask(() => this.peer?.onmessage?.({ data }));
   }
@@ -62,7 +63,7 @@ class FakeConnection {
     this.remoteDescription = d;
   }
   async addIceCandidate(c: unknown) {
-    if (!this.remoteDescription) throw new Error("no remote description");
+    if (!this.remoteDescription) throw new Error(t`no remote description`);
     this.added.push(c);
   }
   async getStats() {
@@ -306,7 +307,7 @@ describe("the send seam", () => {
     plane.freeze();
     channel.readyState = "open";
     channel.send = () => {
-      throw new Error("channel broke");
+      throw new Error(t`channel broke`);
     };
     expect(plane.trySend({ kind: "response" })).toBe(false);
   });

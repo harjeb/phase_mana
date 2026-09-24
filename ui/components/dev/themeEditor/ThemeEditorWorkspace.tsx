@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useState, type ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +22,7 @@ function AppElementPreview() {
           <h2 id="app-element-preview-title" className="text-sm font-semibold">
             App elements
           </h2>
-          <p className="text-[11px] leading-snug text-muted-foreground">Live theme preview</p>
+          <p className="text-[11px] leading-snug text-muted-foreground"><Trans>Live theme preview</Trans></p>
         </header>
 
         <div className="space-y-2">
@@ -47,8 +49,8 @@ function AppElementPreview() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="app-element-preview-input">Input</Label>
-          <Input id="app-element-preview-input" className="w-48" placeholder="Search cards…" />
+          <Label htmlFor="app-element-preview-input"><Trans>Input</Trans></Label>
+          <Input id="app-element-preview-input" className="w-48" placeholder={t`Search cards…`} />
         </div>
 
         <div className="space-y-2">
@@ -72,17 +74,17 @@ function AppElementPreview() {
             Badges
           </div>
           <div className="flex items-center gap-2">
-            <Badge>Default</Badge>
-            <Badge variant="secondary">Secondary</Badge>
-            <Badge variant="destructive">Warning</Badge>
-            <Badge variant="outline">Outline</Badge>
+            <Badge><Trans>Default</Trans></Badge>
+            <Badge variant="secondary"><Trans>Secondary</Trans></Badge>
+            <Badge variant="destructive"><Trans>Warning</Trans></Badge>
+            <Badge variant="outline"><Trans>Outline</Trans></Badge>
           </div>
         </div>
 
         <Card className="w-52 shrink-0 shadow-sm">
           <CardContent className="space-y-1 p-3">
-            <div className="text-sm font-semibold">Card surface</div>
-            <p className="text-xs text-muted-foreground">Foreground and muted copy</p>
+            <div className="text-sm font-semibold"><Trans>Card surface</Trans></div>
+            <p className="text-xs text-muted-foreground"><Trans>Foreground and muted copy</Trans></p>
           </CardContent>
         </Card>
       </div>

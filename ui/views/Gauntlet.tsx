@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -70,7 +72,7 @@ export default function Gauntlet() {
         {lastError ? (
           <p className="text-destructive">{lastError}</p>
         ) : (
-          <p className="text-muted-foreground">Loading gauntlet…</p>
+          <p className="text-muted-foreground"><Trans>Loading gauntlet…</Trans></p>
         )}
       </div>
     );
@@ -117,7 +119,7 @@ export default function Gauntlet() {
       }
       navigate(ROUTES.PLAY);
     } catch (err) {
-      toast.error(`Failed to launch match: ${String(err)}`);
+      toast.error(t`Failed to launch match: ${String(err)}`);
     } finally {
       setLaunchingMatch(false);
     }
@@ -129,17 +131,17 @@ export default function Gauntlet() {
       setMatchDecks(decks);
       setSideboardOpen(true);
     } catch (err) {
-      toast.error(`Failed to load decks: ${String(err)}`);
+      toast.error(t`Failed to load decks: ${String(err)}`);
     }
   };
   const handleSaveSideboard = async (deck: { main: DraftCard[]; sideboard: DraftCard[] }) => {
     if (!gauntletId) return;
     try {
       await updateHumanDeck(gauntletId, deck.main, deck.sideboard);
-      toast.success(`Sideboard updated.`);
+      toast.success(t`Sideboard updated.`);
       setSideboardOpen(false);
     } catch (err) {
-      toast.error(`Failed to save sideboard: ${String(err)}`);
+      toast.error(t`Failed to save sideboard: ${String(err)}`);
     }
   };
   return (
@@ -196,7 +198,7 @@ export default function Gauntlet() {
               </p>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">No opponent — gauntlet finished.</p>
+            <p className="text-sm text-muted-foreground"><Trans>No opponent — gauntlet finished.</Trans></p>
           )}
 
           {pendingMessage && (
@@ -312,7 +314,7 @@ export default function Gauntlet() {
               />
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Loading decks…</p>
+            <p className="text-sm text-muted-foreground"><Trans>Loading decks…</Trans></p>
           )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setSideboardOpen(false)}>

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -93,8 +94,8 @@ export function AvatarCropDialog({ file, onCancel, onConfirm }: AvatarCropDialog
   return (
     <Dialog open={file != null} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="max-w-sm">
-        <DialogTitle>Crop avatar</DialogTitle>
-        <DialogDescription>Drag to position, use the slider to zoom.</DialogDescription>
+        <DialogTitle><Trans>Crop avatar</Trans></DialogTitle>
+        <DialogDescription><Trans>Drag to position, use the slider to zoom.</Trans></DialogDescription>
 
         <div className="flex flex-col items-center gap-4">
           <div

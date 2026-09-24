@@ -13,6 +13,17 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. js-lingui-explicit-id
+#: ui/views/OnlineDraftPanel.tsx:24
+#: ui/views/OnlinePlay.tsx:20
+#: ui/views/Tournaments.tsx:26
+#~ msgid "_-Z5u4"
+#~ msgstr ""
+
+#: ui/components/lobby/CreateGameDialog.tsx:513
+msgid "— Choose —"
+msgstr "选择"
+
 #: ui/components/game/modals/DialogCardGrid.tsx:121
 #: ui/components/game/modals/DialogCardPickerGrid.tsx:281
 msgid ", action available"
@@ -27,6 +38,101 @@ msgstr "，查看"
 msgid ", selected"
 msgstr "，已选择"
 
+#: ui/views/Limited.tsx:916
+msgid "· singleton"
+msgstr "· 单例"
+
+#. placeholder {0}: detail.name
+#: ui/components/deck/HubDeckPreviewDialog.tsx:148
+msgid "\"{0}\" added to your account decks"
+msgstr "已将“{0}”添加到你的账户套牌"
+
+#. placeholder {0}: deck.name
+#. placeholder {0}: empty.name
+#. placeholder {0}: entry.name
+#: ui/components/lobby/CreateGameDialog.tsx:353
+#: ui/components/lobby/DeckVsSelector.tsx:428
+#: ui/hooks/useQuickPlaytest.tsx:42
+msgid "\"{0}\" has no cards"
+msgstr "“{0}”中没有牌"
+
+#. placeholder {0}: detail.title
+#. placeholder {1}: currentFormat.name
+#. placeholder {1}: getFormat(currentFormat)?.name ?? currentFormat
+#. placeholder {1}: selectedFormat.name
+#: ui/components/lobby/CreateGameDialog.tsx:135
+#: ui/components/lobby/CreateGameDialog.tsx:325
+#: ui/components/lobby/DeckVsSelector.tsx:349
+msgid "\"{0}\" is not a {1} deck"
+msgstr "“{0}”不是{1}套牌"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:919
+msgid "\"{0}\" is not a legal commander"
+msgstr "“{0}”不是合法的指挥官"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:911
+msgid "\"{0}\" is not a legal oathbreaker or signature spell — an oathbreaker must be a planeswalker, a signature spell an instant or sorcery"
+msgstr "“{0}”不是合法的誓约者或签名咒语 — 誓约者必须是鹏洛客，签名咒语必须是瞬间或法术"
+
+#. placeholder {0}: title.trim()
+#: ui/components/deck/PublishDeckDialog.tsx:119
+msgid "\"{0}\" published to Community"
+msgstr "“{0}”已发布到社区"
+
+#. placeholder {0}: saved.deck.name
+#: ui/views/DeckEditor.tsx:389
+msgid "\"{0}\" removed from your account"
+msgstr "“{0}”已从你的账户中移除"
+
+#. placeholder {0}: existing[0].identity.name
+#. placeholder {1}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:939
+msgid "\"{0}\" replaced — \"{1}\" must partner with a different card"
+msgstr "已将“{0}”替换 — “{1}”必须与不同的牌结伴"
+
+#. placeholder {0}: existing[0].identity.name
+#: ui/components/editor/DeckBuilder.tsx:932
+msgid "\"{0}\" replaced — it doesn't have a partner ability"
+msgstr "已将“{0}”替换 — 它没有结伴异能"
+
+#. placeholder {0}: existing[0].identity.name
+#: ui/components/editor/DeckBuilder.tsx:929
+msgid "\"{0}\" replaced — neither commander has a partner ability"
+msgstr "已将“{0}”替换 — 两位指挥官都没有结伴异能"
+
+#. placeholder {0}: detail.name
+#: ui/components/deck/HubDeckPreviewDialog.tsx:158
+msgid "\"{0}\" saved to My Decks"
+msgstr "“{0}”已保存到我的套牌"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/DeckBuilder.tsx:935
+msgid "\"{0}\" set as sole commander — it doesn't have a partner ability"
+msgstr "已将“{0}”设为唯一指挥官 — 它没有结伴异能"
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:219
+msgid "\"{deckName}\" removed from Community"
+msgstr "“{deckName}”已从社区移除"
+
+#: ui/views/Tournaments.tsx:119
+msgid "(dropped)"
+msgstr "（已退赛）"
+
+#: ui/views/Winston.tsx:293
+msgid "(empty)"
+msgstr "（空）"
+
+#: ui/views/OnlineDraftPanel.tsx:59
+msgid "(you)"
+msgstr "（你）"
+
+#. placeholder {0}: SCRYFALL_IMAGE_MAX_RETRIES + 1
+#: ui/api/scryfall.ts:433
+msgid "[scryfall-image] failed after {0} attempts: {url} ({reason})"
+msgstr "[scryfall-image] 在 {0} 次尝试后失败：{url}（{reason}）"
+
 #. placeholder {0}: summary.attackerCount
 #. placeholder {1}: summary.blockedCount
 #. placeholder {2}: summary.unblockedCount
@@ -35,7 +141,7 @@ msgid "{0} attackers · {1} blocked · {2} unblocked"
 msgstr "{0} 个进攻者 · {1} 个被阻挡 · {2} 个未阻挡"
 
 #. placeholder {0}: status.count
-#: ui/components/settings/CardImageLibraryCard.tsx:109
+#: ui/components/settings/CardImageLibraryCard.tsx:122
 msgid "{0} card images found."
 msgstr "找到 {0} 张卡图。"
 
@@ -44,10 +150,43 @@ msgstr "找到 {0} 张卡图。"
 msgid "{0} damage"
 msgstr "{0} 点伤害"
 
+#. placeholder {0}: card.identity.name
+#: ui/views/DeckEditor.tsx:554
+msgid "{0} is not eligible for the command zone"
+msgstr "{0} 不符合进入指挥区的条件"
+
+#. placeholder {0}: PROVIDER_LABELS[linked] ?? linked
+#: ui/views/AuthCallback.tsx:51
+msgid "{0} linked to your account"
+msgstr "{0} 已关联到你的账户"
+
 #. placeholder {0}: gameView.battlefield.length
 #: ui/components/game/ManualTabletopControls.tsx:170
 msgid "{0} permanents"
 msgstr "{0} 个永久物"
+
+#. placeholder {0}: PROVIDER_LABELS[provider] ?? provider
+#: ui/components/settings/SignInMethodsCard.tsx:64
+msgid "{0} unlinked"
+msgstr "{0} 已取消关联"
+
+#. placeholder {0}: gp.name
+#: ui/hooks/useMultiplayerInterruption.ts:55
+msgid "{0}'s seat was forfeited — conceded."
+msgstr "{0} 的席位已被判负 — 认输。"
+
+#: ui/hooks/useGameEventListeners.ts:129
+msgid "{actor} foretold a card"
+msgstr "{actor} 预示了一张牌"
+
+#. placeholder {0}: response.status
+#: ui/api/scryfall.ts:115
+msgid "{errorMsg} (HTTP {0})"
+msgstr "{errorMsg}（HTTP {0}）"
+
+#: ui/themes/themeDocument.ts:24
+msgid "{label} must be an object."
+msgstr "{label} 必须是对象。"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:201
 msgid "{selectedCount} selected"
@@ -56,6 +195,11 @@ msgstr "已选择 {selectedCount} 张"
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:130
 msgid "{totalCount} cards"
 msgstr "{totalCount} 张牌"
+
+#. placeholder {0}: response.status
+#: ui/hooks/useSvgMaskUrl.ts:12
+msgid "{url}: HTTP {0}"
+msgstr "{url}：HTTP {0}"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:131
 msgid "{visibleCount} of {totalCount} cards"
@@ -69,9 +213,50 @@ msgstr "↑↓ 选择 · Enter 激活 · 1–9"
 msgid "1 card"
 msgstr "1 张牌"
 
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:24
+msgid "28px"
+msgstr "28px"
+
+#: ui/lib/avatarCrop.ts:37
+#: ui/lib/imageEncode.ts:29
+msgid "2d canvas context unavailable"
+msgstr "2D 画布上下文不可用"
+
+#: ui/pixi/cardPreview/setSymbolCache.ts:15
+msgid "2d canvas unavailable"
+msgstr "2D 画布不可用"
+
+#: ui/pixi/assets/rasterizeSvgTexture.ts:32
+msgid "2d context unavailable"
+msgstr "2D 上下文不可用"
+
 #: ui/components/lobby/PlaytestPlayersDialog.tsx:35
 msgid "4-player pod"
 msgstr "四人对局"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:20
+msgid "48px"
+msgstr "48px"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:16
+msgid "96px"
+msgstr "96px"
+
+#: ui/phase/conspiracies.ts:30
+msgid "A secret card name is required; game was not started."
+msgstr "需要指定秘密牌名；游戏未开始。"
+
+#: ui/views/CasualModes.tsx:177
+msgid "A shared planar deck and the planar die; roll it from the active plane card."
+msgstr "共用的位面牌组和位面骰；从当前位面牌上掷骰。"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:32
+msgid "A tag named \"{nextName}\" already exists"
+msgstr "名为“{nextName}”的标签已存在"
+
+#: ui/components/play/RejoinMatchCard.tsx:145
+msgid "Abandon match?"
+msgstr "放弃对局？"
 
 #: ui/components/layout/navDestinations.ts:73
 msgid "About"
@@ -80,6 +265,10 @@ msgstr "关于"
 #: ui/components/layout/TopBar.tsx:78
 msgid "About Manabrew"
 msgstr "关于 Manabrew"
+
+#: ui/components/companion/PlayerMenu.tsx:118
+msgid "Accent"
+msgstr "强调色"
 
 #: ui/components/AppInitGate.tsx:239
 msgid "Accept and continue"
@@ -94,10 +283,28 @@ msgstr "账户"
 msgid "Account menu"
 msgstr "账户菜单"
 
+#: ui/views/MyCollection.tsx:87
+msgid "Account sync failed. The deletion is preserved locally and will retry."
+msgstr "账户同步失败。删除已在本地保留，稍后会重试。"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:131
+#: ui/views/MyCollection.tsx:78
+msgid "Account sync failed. This change is preserved locally."
+msgstr "账户同步失败。此更改已在本地保留。"
+
 #. placeholder {0}: signedInAccount.handle
 #: ui/components/layout/AccountMenu.tsx:100
 msgid "Account: @{0}"
 msgstr "账户：@{0}"
+
+#. placeholder {0}: error.code
+#: ui/hooks/useGameEventListeners.ts:291
+msgid "Action rejected ({0}) — try again"
+msgstr "操作被拒绝（{0}）— 请重试"
+
+#: ui/components/dev/PromptDevControls.tsx:58
+msgid "Action view"
+msgstr "操作视图"
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:158
 msgid "Activate an ability"
@@ -111,33 +318,203 @@ msgstr "当前回合"
 msgid "Active: "
 msgstr "已生效："
 
+#: ui/components/editor/NewDeckChoiceDialog.tsx:56
+msgid "Add a deck"
+msgstr "添加套牌"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:694
+msgid "Add basic:"
+msgstr "添加基本地："
+
+#: ui/components/companion/AddCounterMenu.tsx:41
+msgid "Add counter"
+msgstr "添加指示物"
+
+#: ui/components/editor/DeckLabelsModal.tsx:101
+msgid "Add Custom Label"
+msgstr "添加自定义标签"
+
+#: ui/views/DeckEditor.tsx:736
+msgid "Add deck"
+msgstr "添加套牌"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:396
+msgid "Add some cards before saving."
+msgstr "保存前请先添加一些牌。"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CardSearch.tsx:841
+msgid "Added {0}"
+msgstr "已添加 {0}"
+
+#: ui/components/editor/useDeckTextImport.ts:202
+msgid "Added {count} cards — couldn't find: {shown}{extra}"
+msgstr "已添加 {count} 张牌 — 找不到：{shown}{extra}"
+
+#: ui/components/editor/useDeckTextImport.ts:210
+msgid "Added {count} cards to this deck"
+msgstr "已向此套牌添加 {count} 张牌"
+
+#: ui/components/editor/CardDetailModal.tsx:508
+msgid "Added {deckCardName}"
+msgstr "已添加 {deckCardName}"
+
+#: ui/components/editor/CombosPanel.tsx:116
+msgid "Added {name}"
+msgstr "已添加 {name}"
+
+#. placeholder {0}: sc.name
+#: ui/components/editor/DeckBuilder.tsx:1789
+msgid "Added {quantity} {0} to {destination}"
+msgstr "已将 {quantity} 张 {0} 添加到 {destination}"
+
+#. placeholder {0}: request.quantity
+#. placeholder {1}: sc.name
+#. placeholder {2}: copyLimit ?? 0
+#: ui/components/editor/DeckBuilder.tsx:1780
+msgid "Added {quantity} of {0} {1}; {formatName} allows {2}"
+msgstr "已添加 {quantity} 张 {0} {1}；{formatName} 允许 {2} 张"
+
+#: ui/components/editor/DeckBuilder.tsx:633
+msgid "Added one copy of {added} cards"
+msgstr "已添加一份 {added} 张牌"
+
+#. placeholder {0}: currentDeck.name
+#: ui/components/editor/CardDetailModal.tsx:175
+msgid "Added to {0}"
+msgstr "已添加到 {0}"
+
+#: ui/components/editor/CardDetailModal.tsx:180
+msgid "Added to {deckName}"
+msgstr "已添加到 {deckName}"
+
+#: ui/views/Limited.tsx:677
+msgid "Advanced"
+msgstr "高级"
+
+#: ui/components/deck/DeckListControls.tsx:109
+msgid "All"
+msgstr "全部"
+
+#: ui/components/deck/DeckListControls.tsx:116
+msgid "All formats"
+msgstr "所有赛制"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:142
 msgid "All types"
 msgstr "所有类型"
+
+#: ui/components/dev/themeEditor/ThemeColorControl.tsx:117
+msgid "Alpha"
+msgstr "透明度"
+
+#: ui/views/CasualModes.tsx:134
+msgid "Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn."
+msgstr "从 Alpha 到堕落帝国的牌，22 张受限，7 张禁用，法术力灼伤。"
+
+#: ui/components/dev/BoardPlayground.tsx:497
+msgid "Any card name"
+msgstr "任意牌名"
+
+#. placeholder {0}: group.heading
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:127
+msgid "App · {0}"
+msgstr "应用 · {0}"
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:105
+msgid "App chrome"
+msgstr "应用外观"
+
+#: ui/views/Settings.tsx:952
+msgid "App Theme"
+msgstr "应用主题"
+
+#: ui/views/Settings.tsx:1088
+msgid "App Theme Colors"
+msgstr "应用主题颜色"
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:111
+msgid "App tokens"
+msgstr "应用令牌"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:165
 msgid "Applies to battlefield cards. Hand, stack and dialog view settings are independent."
 msgstr "仅作用于战场上的牌。手牌、堆叠和对话框的显示设置相互独立。"
 
+#: ui/views/CasualModes.tsx:169
+msgid "Archenemy"
+msgstr "魔王"
+
+#. placeholder {0}: res.status
+#: ui/lib/archidekt.ts:184
+#: ui/lib/archidekt.ts:221
+msgid "Archidekt fetch failed: {0}"
+msgstr "Archidekt 获取失败：{0}"
+
+#. placeholder {0}: res.status
+#: ui/lib/archidekt.ts:142
+msgid "Archidekt search failed: {0}"
+msgstr "Archidekt 搜索失败：{0}"
+
 #: ui/components/game/battlefieldCardStyles.ts:10
 msgid "Art-forward"
 msgstr "画面优先"
+
+#: ui/components/editor/CardSearch.tsx:1229
+msgid "Artist"
+msgstr "画师"
+
+#: ui/components/editor/CardDetailModal.tsx:406
+msgid "Artist:"
+msgstr "画师："
+
+#: ui/components/companion/StatusChips.tsx:35
+msgid "Ascend"
+msgstr "升阶"
+
+#: ui/components/editor/CardSearch.tsx:1338
+msgid "Ascending"
+msgstr "升序"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:353
+msgid "At least"
+msgstr "至少"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:378
+msgid "At most"
+msgstr "至多"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:91
 msgid "Attacker"
 msgstr "进攻者"
 
+#: ui/components/editor/CardSearch.tsx:1337
+msgid "Auto"
+msgstr "自动"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:172
 msgid "Auto-arrange"
 msgstr "自动排列"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:266
+msgid "Auto-detect"
+msgstr "自动检测"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:61
 msgid "Auto-skip optional costs"
 msgstr "自动跳过可选费用"
 
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:150
+msgid "Automatic cover"
+msgstr "自动封面"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:130
 msgid "Autopass"
 msgstr "自动让过"
+
+#: ui/components/lobby/InvitePlayersDialog.tsx:71
+msgid "Available"
+msgstr "可用"
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:74
 msgid "Available actions"
@@ -152,6 +529,10 @@ msgstr "可用操作 · {0}"
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:714
 msgid "Available on current face · {0}"
 msgstr "当前牌面可用 · {0}"
+
+#: ui/views/Tournaments.tsx:65
+msgid "Available tournaments"
+msgstr "可参加的锦标赛"
 
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:90
 msgid "Awaiting first chapter"
@@ -168,6 +549,22 @@ msgstr "等待第一级"
 msgid "Back"
 msgstr "返回"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:383
+msgid "Background color"
+msgstr "背景色"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:68
+msgid "Badge — variants"
+msgstr "徽章 — 变体"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:484
+msgid "Banned cards (one name per line)"
+msgstr "禁用牌（每行一个牌名）"
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:30
+msgid "Base preset"
+msgstr "基础预设"
+
 #: ui/components/game/ManualTabletopControls.tsx:383
 msgid "Battlefield"
 msgstr "战场"
@@ -176,9 +573,26 @@ msgstr "战场"
 msgid "Battlefield arrangement"
 msgstr "战场排列"
 
+#: ui/components/dev/BattlefieldStyleDevControls.tsx:34
 #: ui/components/game/modals/GameSettingsModal.tsx:161
 msgid "Battlefield card style"
 msgstr "战场牌样式"
+
+#: ui/components/dev/GameDevPanel.tsx:134
+msgid "Battlefield lab"
+msgstr "战场实验室"
+
+#: ui/views/CardMockGallery.tsx:181
+msgid "Battlefield size (70×98)"
+msgstr "战场尺寸（70×98）"
+
+#: ui/views/Tournaments.tsx:55
+msgid "Best of one"
+msgstr "单局决胜"
+
+#: ui/views/Tournaments.tsx:55
+msgid "Best of three"
+msgstr "三局两胜"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
 msgid "Black"
@@ -195,6 +609,10 @@ msgstr "蓝"
 #: ui/components/game/modals/GameSettingsModal.tsx:144
 msgid "Board appearance"
 msgstr "牌桌外观"
+
+#: ui/components/dev/BoardDevControls.tsx:111
+msgid "Board guides"
+msgstr "棋盘辅助线"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:119
 msgid "Board hover preview view"
@@ -213,17 +631,116 @@ msgstr "牌桌设置"
 msgid "Booster Draft"
 msgstr "轮抽"
 
+#. placeholder {0}: params.username
+#: ui/platform/web.ts:1336
+msgid "Bot '{0}' is already running."
+msgstr "机器人“{0}”已在运行。"
+
+#. placeholder {0}: payload.reason
+#: ui/views/Lobby.tsx:175
+msgid "Bot couldn't join the table: {0}"
+msgstr "机器人无法加入牌桌：{0}"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
 msgid "Bot player"
 msgstr "机器人玩家"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:94
+#: ui/components/editor/DeckBracketPanel.tsx:31
+msgid "Bracket"
+msgstr "分级"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:12
+msgid "Brand mark"
+msgstr "品牌标志"
+
+#: ui/phase/tournaments.ts:147
+msgid "Broker omitted tournament credentials."
+msgstr "代理未提供锦标赛凭据。"
+
+#: ui/phase/tournaments.ts:93
+msgid "Broker sent data before its handshake."
+msgstr "代理在握手前发送了数据。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:106
 msgid "Browse…"
 msgstr "浏览…"
 
+#: ui/views/OnlineDraftBuilder.tsx:16
+msgid "Build draft deck"
+msgstr "构筑轮抽套牌"
+
+#: ui/views/Settings.tsx:429
+msgid "Built-in"
+msgstr "内置"
+
+#: ui/components/editor/DeckSelectionTray.tsx:74
+msgid "Bulk editor"
+msgstr "批量编辑"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:42
+msgid "Button — variants × sizes"
+msgstr "按钮 — 变体 × 尺寸"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:58
+msgid "Button states"
+msgstr "按钮状态"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:129
+msgid "By color"
+msgstr "按颜色"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:128
+msgid "By format"
+msgstr "按赛制"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:127
+msgid "By source"
+msgstr "按来源"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:130
+msgid "By tag"
+msgstr "按标签"
+
+#: ui/views/Tournaments.tsx:97
+msgid "Bye"
+msgstr "轮空"
+
+#: ui/views/Tournaments.tsx:118
+msgid "Byes"
+msgstr "轮空"
+
+#: ui/views/Settings.tsx:359
+msgid "Cache"
+msgstr "缓存"
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:53
+#: ui/views/Tournaments.tsx:87
 msgid "Cancel"
 msgstr "取消"
+
+#: ui/themes/themeColor.ts:62
+msgid "Cannot composite an invalid theme color"
+msgstr "无法合成无效的主题颜色"
+
+#: ui/platform/web.ts:1260
+msgid "Cannot leave room while disconnected."
+msgstr "断开连接时无法离开房间。"
+
+#: ui/platform/web.ts:1333
+msgid "Cannot spawn bot: not connected to relay."
+msgstr "无法生成机器人：未连接到中继。"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:169
+msgid "Card"
+msgstr "牌"
+
+#: ui/components/dev/CardBadgeDevControls.tsx:189
+msgid "Card appearance"
+msgstr "卡牌外观"
+
+#: ui/components/settings/CardArtDownloadSection.tsx:133
+msgid "Card Art On This Machine"
+msgstr "本机卡图"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:149
 msgid "Card color"
@@ -233,14 +750,34 @@ msgstr "牌色"
 msgid "Card Face Gallery"
 msgstr "牌面展示"
 
+#: ui/components/deck/DeckCardBrowserFilters.tsx:293
+msgid "Card filters"
+msgstr "卡牌筛选"
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:780
 msgid "Card identity and rules are hidden."
 msgstr "牌张信息与规则文字已隐藏。"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:80
-#: ui/components/settings/CardImageLibraryCard.tsx:90
+#: ui/views/Settings.tsx:361
+msgid "Card Image Cache"
+msgstr "卡图缓存"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:92
+#: ui/components/settings/CardImageLibraryCard.tsx:102
 msgid "Card image library"
 msgstr "卡图库目录"
+
+#: ui/components/dev/DevCardLayoutControls.tsx:84
+msgid "Card layouts and previews"
+msgstr "卡牌布局与预览"
+
+#: ui/components/collection/CollectionImportDialog.tsx:395
+msgid "Card name"
+msgstr "牌名"
+
+#: ui/components/editor/DeckChangeSummary.tsx:117
+msgid "Card quantity changes across the open deck."
+msgstr "当前套牌中各牌数量的变化。"
 
 #: ui/components/layout/navDestinations.ts:67
 #: ui/components/layout/TopBar.tsx:36
@@ -252,9 +789,18 @@ msgstr "牌张搜索"
 msgid "Card size · {0}%"
 msgstr "牌张大小 · {0}%"
 
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:39
+msgid "Card sizes (px)"
+msgstr "卡牌尺寸（px）"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:176
 msgid "Card sort order"
 msgstr "牌张排序"
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:34
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:86
+msgid "Card surface"
+msgstr "卡面"
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:19
 #: ui/components/settings/LanguagePreferenceCard.tsx:26
@@ -264,6 +810,18 @@ msgstr "卡牌文本语言"
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:138
 msgid "Card type"
 msgstr "牌张类型"
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:142
+msgid "Card under test"
+msgstr "待测卡牌"
+
+#: ui/api/hub.ts:154
+msgid "Card verification returned an incomplete response"
+msgstr "卡牌验证返回了不完整的响应"
+
+#: ui/stores/useScryfallStore.ts:127
+msgid "cardKey requires setCode+collectorNumber, name, or id"
+msgstr "cardKey 需要 setCode+collectorNumber、name 或 id"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:91
 msgid "Cards and previews"
@@ -284,9 +842,33 @@ msgstr "手牌"
 msgid "Cards in this view"
 msgstr "此视图中的牌"
 
+#: ui/components/editor/DeckListView.tsx:2436
+msgid "Cards you're considering"
+msgstr "你正在考虑的牌"
+
+#: ui/views/CasualModes.tsx:62
+msgid "Casual Modes"
+msgstr "休闲模式"
+
+#: ui/components/auth/HandleDialog.tsx:63
+msgid "Change handle"
+msgstr "修改用户名"
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:34
+msgid "Change the inherited palette. Your overrides stay in the draft."
+msgstr "更改继承的调色板。你的覆盖设置会保留在草稿中。"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:87
 msgid "Changes apply immediately. Card view and front/back face are separate controls."
 msgstr "更改立即生效。牌面视图与正/背面是两个独立的控件。"
+
+#: ui/components/editor/DeckChangeSummary.tsx:116
+msgid "Changes since last save"
+msgstr "自上次保存以来的变更"
+
+#: ui/game/webrtcPlane.test.ts:310
+msgid "channel broke"
+msgstr "通道中断"
 
 #. placeholder {0}: notch.label
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:117
@@ -299,9 +881,39 @@ msgstr "第 {0} 章"
 msgid "Chapter {0} of {1}"
 msgstr "第 {0} 章，共 {1} 章"
 
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:87
+msgid "Checkbox"
+msgstr "复选框"
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:52
+msgid "Choose a card from your graveyard"
+msgstr "从你的坟墓场选择一张牌"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:70
+msgid "Choose a folder in the dialog that opened."
+msgstr "在弹出的对话框中选择一个文件夹。"
+
+#: ui/components/lobby/ChooseFormatDialog.tsx:39
+#: ui/components/lobby/FormatPicker.tsx:13
+#: ui/components/lobby/TableRoom.tsx:85
+msgid "Choose a format"
+msgstr "选择赛制"
+
 #: ui/components/game/modals/AbilityPickerModal.tsx:157
 msgid "Choose an action"
 msgstr "选择一项操作"
+
+#: ui/components/collection/CollectionImportDialog.tsx:265
+msgid "Choose an export file"
+msgstr "选择导出文件"
+
+#: ui/views/OnlineDraftBuilder.tsx:18
+msgid "Choose cards for your main deck. The server retains the remaining pool as your sideboard."
+msgstr "选择加入主牌的牌。服务器会把剩余的牌池作为你的备牌。"
+
+#: ui/components/companion/CommanderPickerDialog.tsx:42
+msgid "Choose commander"
+msgstr "选择指挥官"
 
 #: ui/components/game/PlayModePicker.tsx:6
 msgid "Choose how to play this card"
@@ -311,15 +923,33 @@ msgstr "选择如何打出这张牌"
 msgid "Choose simultaneous trigger order"
 msgstr "选择同时触发式异能的顺序"
 
+#: ui/components/lobby/TablePickerDialog.tsx:51
+msgid "Choose your table"
+msgstr "选择你的桌位"
+
+#: ui/components/limited/LimitedCompareDialog.tsx:58
+msgid "Choose…"
+msgstr "选择…"
+
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
 msgid "CLASS LEVELS"
 msgstr "职业等级"
+
+#: ui/components/editor/DeckBuilder.tsx:2495
+msgid "Clear Deck"
+msgstr "清空套牌"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:96
 msgid "Clear search"
 msgstr "清除搜索"
 
+#: ui/components/editor/DeckBuilder.tsx:604
+msgid "Clipboard does not contain a recognized card list"
+msgstr "剪贴板中没有可识别的牌表"
+
 #: ui/components/KeyboardShortcutsDialog.tsx:88
+#: ui/components/ui/dialog.tsx:41
+#: ui/components/ui/sheet.tsx:56
 msgid "Close"
 msgstr "关闭"
 
@@ -335,27 +965,145 @@ msgstr "关闭对话框"
 msgid "Close right panel"
 msgstr "关闭右侧面板"
 
+#: ui/components/editor/CardSearch.tsx:1087
+msgid "CMC"
+msgstr "总法术力费用"
+
+#: ui/components/editor/CardDetailModal.tsx:375
+msgid "CMC:"
+msgstr "法术力费用："
+
+#: ui/components/auth/SignInFlow.tsx:275
+#: ui/components/auth/SignInFlow.tsx:312
+msgid "Code"
+msgstr "代码"
+
+#: ui/components/limited/DraftStatusBar.tsx:45
+msgid "Cogwork Librarian · choose one more card"
+msgstr "齿轮工图书管理员 · 再选择一张牌"
+
+#: ui/components/companion/DiceMenu.tsx:58
+#: ui/components/companion/DiceTray.tsx:48
+msgid "Coin flip"
+msgstr "掷硬币"
+
+#: ui/stores/useCollectionStore.ts:293
+msgid "Collection account changed before this edit could be applied"
+msgstr "收藏账户在此编辑应用前已更改"
+
+#: ui/stores/useCollectionStore.ts:104
+msgid "Collection account changed before this edit could sync"
+msgstr "收藏账户在此编辑同步前已更改"
+
+#: ui/stores/useCollectionStore.ts:333
+#: ui/stores/useCollectionStore.ts:376
+msgid "Collection account changed before this import could be applied"
+msgstr "收藏账户在此导入应用前已更改"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:169
+msgid "Collection coverage"
+msgstr "收藏覆盖率"
+
+#: ui/views/MyCollection.tsx:85
+msgid "Collection deleted"
+msgstr "收藏已删除"
+
+#: ui/components/collection/CollectionImportDialog.tsx:206
+msgid "Collection import failed"
+msgstr "收藏导入失败"
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:83
+msgid "Collection tracker"
+msgstr "收藏追踪"
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:148
+#: ui/components/editor/CardSearch.tsx:1006
+#: ui/components/editor/PlaymatEditorModal.tsx:433
 #: ui/lib/handOrder.ts:10
 msgid "Color"
 msgstr "颜色"
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:309
+#: ui/components/deck/DeckHubFilterPanel.tsx:171
+msgid "Color identity"
+msgstr "颜色标识"
+
+#: ui/views/Settings.tsx:980
+msgid "Color Preset"
+msgstr "颜色预设"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:73
 #: ui/components/game/panels/MiddleBarDock.tsx:106
 msgid "Combat breakdown"
 msgstr "战斗详情"
 
+#: ui/components/editor/CombosPanel.tsx:127
+msgid "Combos"
+msgstr "组合技"
+
+#: ui/components/editor/CommanderSlots.tsx:217
+msgid "Command zone"
+msgstr "统帅区"
+
+#: ui/components/editor/DeckBuilder.tsx:635
+msgid "Command-zone and special-section cards were not duplicated"
+msgstr "指挥区和特殊区域的牌未被复制"
+
+#: ui/components/lobby/CreateGameDialog.tsx:491
+#: ui/views/Draft.tsx:109
+msgid "Commander"
+msgstr "指挥官"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:144
 msgid "Commander damage by source"
 msgstr "按来源的指挥官伤害"
+
+#: ui/views/CasualModes.tsx:76
+msgid "Commander Draft"
+msgstr "指挥官轮抽"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:154
 msgid "Commander source"
 msgstr "指挥官来源"
 
+#. placeholder {0}: response.status
+#: ui/api/commanderSpellbook.ts:62
+msgid "Commander Spellbook request failed (HTTP {0})"
+msgstr "Commander Spellbook 请求失败（HTTP {0}）"
+
 #: ui/components/layout/navDestinations.ts:57
 #: ui/components/layout/TopBar.tsx:51
+#: ui/components/lobby/CreateGameDialog.tsx:649
 msgid "Community"
 msgstr "社区"
+
+#: ui/components/deck/DeckHubResults.tsx:91
+msgid "Community could not be loaded"
+msgstr "无法加载社区"
+
+#: ui/views/DeckHub.tsx:53
+msgid "Community could not be reached"
+msgstr "无法连接社区"
+
+#: ui/components/play/CommunityDeckShelf.tsx:62
+msgid "Community decks"
+msgstr "社区套牌"
+
+#: ui/components/deck/DeckHubFilterSheet.tsx:39
+msgid "Community filters"
+msgstr "社区筛选"
+
+#: ui/components/limited/LimitedCompareDialog.tsx:37
+msgid "Compare with saved deck"
+msgstr "与已保存的套牌比较"
+
+#: ui/views/AuthCallback.tsx:89
+msgid "Completing sign-in…"
+msgstr "正在完成登录…"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:39
+msgid "Components"
+msgstr "组件"
 
 #: ui/components/game/modals/ConcedeGameModal.tsx:56
 #: ui/components/game/panels/MiddleBarDock.tsx:141
@@ -374,25 +1122,290 @@ msgstr "正在认输…"
 msgid "Concession could not be delivered: {error}. You can retry or cancel."
 msgstr "无法发送认输请求：{error}。你可以重试或取消。"
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:64
+msgid "Configure addition"
+msgstr "配置添加"
+
+#: ui/views/Tournaments.tsx:87
+msgid "Confirm end tournament"
+msgstr "确认结束锦标赛"
+
+#: ui/views/OnlineDraftPanel.tsx:71
+msgid "Confirm pick"
+msgstr "确认选择"
+
+#: ui/views/Tournaments.tsx:37
+msgid "Connect"
+msgstr "连接"
+
+#: ui/views/OnlinePlay.tsx:45
+msgid "Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private."
+msgstr "连接 Phase 服务器。每位玩家提交自己的套牌；服务器运行游戏并保持手牌私密。"
+
+#: ui/platform/tauri.ts:56
+msgid "Connect to a server before hosting a Forge room"
+msgstr "主持 Forge 房间前请先连接到服务器"
+
+#: ui/views/OnlineDraftPanel.tsx:59
+#: ui/views/Tournaments.tsx:39
+msgid "Connected"
+msgstr "已连接"
+
 #: ui/components/AppInitGate.tsx:292
 msgid "Connecting"
 msgstr "连接中"
+
+#: ui/views/Settings.tsx:492
+msgid "Connecting..."
+msgstr "正在连接…"
+
+#: ui/components/play/RejoinMatchCard.tsx:86
+msgid "Connection failed."
+msgstr "连接失败。"
+
+#: ui/phase/online.ts:198
+msgid "Connection lost"
+msgstr "连接已断开"
+
+#: ui/phase/transport.ts:111
+msgid "Conspiracy reveal was rejected"
+msgstr "阴谋揭露被拒绝"
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:47
+msgid "Constant"
+msgstr "常量"
+
+#: ui/views/OnlinePlay.tsx:48
+msgid "Constructed"
+msgstr "构筑"
+
+#: ui/views/Settings.tsx:976
+msgid "Controls app theme preference."
+msgstr "控制应用主题偏好。"
 
 #: ui/components/game/GameLoadingScreen.tsx:88
 msgid "Copied"
 msgstr "已复制"
 
+#: ui/components/editor/DeckBuilder.tsx:1200
+msgid "Copied \"{importedName}\" to My Decks"
+msgstr "已将“{importedName}”复制到我的套牌"
+
+#. placeholder {0}: counts.size
+#. placeholder {1}: counts.size === 1 ? "" : "s"
+#: ui/components/editor/DeckBuilder.tsx:594
+msgid "Copied {0} selected card{1}"
+msgstr "已复制 {0} 张选中的牌{1}"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:234
+msgid "Copied JSON to clipboard."
+msgstr "已将 JSON 复制到剪贴板。"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:365
+msgid "Copies"
+msgstr "份数"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:368
+msgid "Copy limit rule"
+msgstr "同名牌数量限制规则"
+
 #: ui/components/game/GameLoadingScreen.tsx:88
 msgid "Copy logs"
 msgstr "复制日志"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:57
+#: ui/components/collection/CollectionImportDialog.tsx:275
+msgid "Copy rows from a spreadsheet"
+msgstr "从电子表格复制行"
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:125
+msgid "Could not clear the art cache: {0}"
+msgstr "无法清除插画缓存：{0}"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:235
+msgid "Could not copy to the clipboard."
+msgstr "无法复制到剪贴板。"
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:99
+msgid "Could not download art: {0}"
+msgstr "无法下载插画：{0}"
+
+#. placeholder {0}: String(error)
+#: ui/components/settings/CardArtDownloadSection.tsx:113
+msgid "Could not download every card: {0}"
+msgstr "无法下载所有卡牌：{0}"
+
+#. placeholder {0}: deckCard.identity.name
+#. placeholder {0}: token.identity.name
+#: ui/components/editor/DeckBuilder.tsx:861
+#: ui/components/editor/DeckBuilder.tsx:875
+msgid "Could not fetch info for \"{0}\""
+msgstr "无法获取“{0}”的信息"
+
+#. placeholder {0}: scenario.label
+#: ui/components/dev/DevCardLayoutControls.tsx:75
+msgid "Could not load {0}."
+msgstr "无法加载 {0}。"
+
+#: ui/components/editor/BatchPrintingDialog.tsx:40
+msgid "Could not load Magic sets"
+msgstr "无法加载万智牌系列"
+
+#. placeholder {0}: set.name
+#: ui/components/editor/BatchPrintingDialog.tsx:118
+msgid "Could not load printings from {0}"
+msgstr "无法从 {0} 加载版本"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:62
 msgid "Could not open the folder picker. Paste the folder path instead."
 msgstr "无法打开文件夹选择窗口，请直接粘贴文件夹路径。"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:59
+#: ui/components/editor/DeckBuilder.tsx:609
+msgid "Could not read cards from the clipboard"
+msgstr "无法从剪贴板读取卡牌"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/PrintingOptimizerDialog.tsx:205
+msgid "Could not resolve {0}"
+msgstr "无法解析 {0}"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:64
 msgid "Could not save the folder. Check write permissions and try again."
 msgstr "无法保存图库目录，请检查写入权限后重试。"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:87
+msgid "Could not update checkpoints on this device"
+msgstr "无法在此设备上更新检查点"
+
+#. placeholder {0}: response.status
+#: ui/api/assets.ts:48
+msgid "Could not upload the image ({0})"
+msgstr "无法上传图片（{0}）"
+
+#: ui/components/editor/DeckBuilder.tsx:596
+msgid "Could not write selected cards to the clipboard"
+msgstr "无法将选中的卡牌写入剪贴板"
+
+#: ui/components/editor/DeckBuilder.tsx:998
+msgid "Could not write to the clipboard"
+msgstr "无法写入剪贴板"
+
+#: ui/components/editor/CombosPanel.tsx:118
+msgid "Couldn't add {name}"
+msgstr "无法添加 {name}"
+
+#: ui/views/Settings.tsx:236
+msgid "Couldn't clear the image cache"
+msgstr "无法清除图片缓存"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:446
+msgid "Couldn't copy the deck. Try again."
+msgstr "无法复制套牌。请重试。"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:80
+msgid "Couldn't copy the password"
+msgstr "无法复制密码"
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:195
+msgid "Couldn’t copy the share link"
+msgstr "无法复制分享链接"
+
+#: ui/stores/useScryfallStore.ts:588
+msgid "Couldn't find a texture url for: "
+msgstr "找不到以下内容的纹理 URL： "
+
+#: ui/components/editor/PlaymatEditorModal.tsx:156
+msgid "Couldn't load that preset."
+msgstr "无法加载该预设。"
+
+#: ui/components/settings/MyAssetsSection.tsx:113
+msgid "Couldn't load your images."
+msgstr "无法加载你的图片。"
+
+#: ui/App.tsx:76
+msgid "Couldn't load your saved decks — they're left untouched on disk. Please contact the developer."
+msgstr "无法加载你保存的套牌 — 磁盘上的文件未被改动。请联系开发者。"
+
+#: ui/components/play/RejoinMatchCard.tsx:93
+msgid "Couldn't reach the previous match relay."
+msgstr "无法连接到上一场比赛的中继。"
+
+#: ui/components/collection/CollectionImportDialog.tsx:195
+msgid "Couldn't read the clipboard — paste into a file instead"
+msgstr "无法读取剪贴板 — 请改为粘贴到文件中"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:93
+msgid "Couldn't read the clipboard — paste manually instead"
+msgstr "无法读取剪贴板 — 请改为手动粘贴"
+
+#: ui/stores/useAssetStore.ts:162
+msgid "Couldn't remove the previous image from your storage"
+msgstr "无法从你的存储中删除之前的图片"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:424
+msgid "Couldn't save the deck. Try again."
+msgstr "无法保存套牌。请重试。"
+
+#: ui/stores/useAssetStore.ts:174
+msgid "Couldn't upload that image"
+msgstr "无法上传该图片"
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:295
+msgid "Couldn’t verify deck ownership."
+msgstr "无法验证套牌归属。"
+
+#: ui/stores/useScryfallStore.ts:799
+msgid "Couldnt find uris for printing: "
+msgstr "找不到以下版本的 URI： "
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:68
+msgid "Counters — CounterBadge"
+msgstr "指示物 — CounterBadge"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:273
+msgid "Cover"
+msgstr "覆盖"
+
+#: ui/views/Tournaments.tsx:59
+msgid "Create"
+msgstr "创建"
+
+#: ui/views/OnlineDraftPanel.tsx:50
+msgid "Create draft"
+msgstr "创建轮抽"
+
+#: ui/views/OnlinePlay.tsx:56
+msgid "Create room"
+msgstr "创建房间"
+
+#: ui/views/DeckEditor.tsx:1091
+msgid "Create tag"
+msgstr "创建标签"
+
+#: ui/views/Tournaments.tsx:45
+msgid "Create tournament"
+msgstr "创建锦标赛"
+
+#: ui/components/settings/AvatarCropDialog.tsx:97
+msgid "Crop avatar"
+msgstr "裁剪头像"
+
+#: ui/components/collection/CollectionImportDialog.tsx:266
+msgid "CSV, TSV, or text"
+msgstr "CSV、TSV 或文本"
+
+#: ui/api/limitedEdition.ts:107
+msgid "Cube \"{cubeIdOrUrl}\" came back empty"
+msgstr "魔方“{cubeIdOrUrl}”返回为空"
+
+#: ui/views/CasualModes.tsx:90
+msgid "Cube / local pool"
+msgstr "Cube / 本地牌池"
+
+#: ui/components/editor/DeckLabelsModal.tsx:65
+msgid "Current Labels"
+msgstr "当前标签"
 
 #. placeholder {0}: APP_LOCALES[activeLocale].label
 #: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:29
@@ -400,21 +1413,145 @@ msgstr "无法保存图库目录，请检查写入权限后重试。"
 msgid "Currently using {0}"
 msgstr "当前使用 {0}"
 
+#: ui/components/companion/CustomCounterDialog.tsx:31
+msgid "Custom counter"
+msgstr "自定义指示物"
+
+#: ui/components/lobby/DeckVsSelector.tsx:885
+msgid "Custom format player count"
+msgstr "自定义赛制玩家数"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:140
+msgid "Custom formats"
+msgstr "自定义赛制"
+
+#: ui/components/dev/BoardPlayground.tsx:496
+msgid "Custom preview card name"
+msgstr "自定义预览牌名"
+
 #: ui/components/KeyboardShortcutsDialog.tsx:85
 msgid "Customize these in Preferences → Shortcuts."
 msgstr "可在“偏好设置 → 快捷键”中自定义。"
+
+#: ui/components/settings/AccountActionsCard.tsx:110
+msgid "Danger zone"
+msgstr "危险区域"
+
+#: ui/components/settings/AccountActionsCard.tsx:54
+msgid "Data & session"
+msgstr "数据与会话"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:89
 msgid "Debug"
 msgstr "调试"
 
+#: ui/components/editor/DeckBudgetPanel.tsx:108
+msgid "Deck budget"
+msgstr "套牌预算"
+
+#: ui/components/editor/DeckCommandPalette.tsx:49
+msgid "Deck commands"
+msgstr "套牌命令"
+
+#: ui/components/editor/DeckBuilder.tsx:992
+msgid "Deck copied to clipboard"
+msgstr "套牌已复制到剪贴板"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:444
+msgid "Deck copied to clipboard."
+msgstr "套牌已复制到剪贴板。"
+
+#: ui/components/editor/DeckBuilder.tsx:1166
+#: ui/views/DeckEditor.tsx:486
+msgid "Deck deleted"
+msgstr "套牌已删除"
+
 #: ui/components/layout/TopBar.tsx:40
 msgid "Deck Editor"
 msgstr "套牌编辑器"
 
+#: ui/components/editor/DeckGoalsPanel.tsx:84
+msgid "Deck goals"
+msgstr "套牌目标"
+
+#: ui/components/editor/DeckHealthPanel.tsx:63
+msgid "Deck health"
+msgstr "套牌健康度"
+
+#: ui/components/editor/CardDetailModal.tsx:297
+msgid "Deck inspector"
+msgstr "套牌检查器"
+
+#: ui/components/editor/DeckIntentPanel.tsx:42
+msgid "Deck intent"
+msgstr "套牌意图"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:143
+msgid "Deck labels"
+msgstr "套牌标签"
+
+#: ui/components/editor/DeckLabelsModal.tsx:59
+msgid "Deck Labels"
+msgstr "套牌标签"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:279
+#: ui/views/OnlinePlay.tsx:53
+msgid "Deck list"
+msgstr "套牌列表"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:248
+#: ui/components/limited/LimitedDeckBuilder.tsx:550
+msgid "Deck name"
+msgstr "套牌名称"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:390
+msgid "Deck name cannot be empty."
+msgstr "套牌名称不能为空。"
+
+#: ui/components/play/DeckPlayActions.tsx:30
+msgid "Deck not found"
+msgstr "未找到套牌"
+
+#: ui/views/OnlineDraftPanel.tsx:59
+msgid "Deck ready"
+msgstr "套牌已就绪"
+
+#: ui/views/DeckEditor.tsx:505
+msgid "Deck renamed"
+msgstr "套牌已重命名"
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:300
+msgid "Deck section"
+msgstr "套牌分区"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:338
+msgid "Deck size"
+msgstr "套牌数量"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:341
+msgid "Deck size rule"
+msgstr "套牌数量规则"
+
+#: ui/views/OnlineDraftBuilder.tsx:26
+msgid "Deck submitted"
+msgstr "套牌已提交"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:211
 msgid "Decorative animations"
 msgstr "装饰性动画"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
+#: ui/views/Limited.tsx:630
+msgid "Default"
+msgstr "默认"
+
+#: ui/components/editor/CardSearch.tsx:1325
+msgid "Default (CMC)"
+msgstr "默认（法术力费用）"
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:13
+msgid "Default is off to read local card data directly without online requests. When enabled, Chinese card names and rules text are fetched online via MTGCH."
+msgstr "默认关闭，直接读取本地卡牌数据，无需网络请求。开启后，将通过 MTGCH 在线获取中文卡名与规则文本。"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:80
 msgid "Defender life: {defenderLife}"
@@ -424,18 +1561,74 @@ msgstr "防守方生命：{defenderLife}"
 msgid "Defense"
 msgstr "防御"
 
+#: ui/components/settings/DeleteAccountDialog.tsx:56
+msgid "Delete account"
+msgstr "删除账户"
+
+#: ui/components/deck/DeckGridCard.tsx:182
+msgid "Delete Deck"
+msgstr "删除套牌"
+
+#: ui/components/collection/CollectionDeleteDialog.tsx:41
+msgid "Delete entire collection?"
+msgstr "删除整个收藏？"
+
+#: ui/components/settings/MyAssetsSection.tsx:158
+msgid "Delete image"
+msgstr "删除图片"
+
+#: ui/components/editor/CardSearch.tsx:1339
+msgid "Descending"
+msgstr "降序"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:311
+msgid "Description"
+msgstr "描述"
+
 #: ui/components/layout/navDestinations.ts:75
 #: ui/components/layout/TopBar.tsx:81
 msgid "Design System"
 msgstr "设计系统"
 
+#: ui/components/editor/ImportDeckTextDialog.tsx:170
+msgid "Destination"
+msgstr "目标"
+
 #: ui/components/game/panels/RightActionPanel.tsx:100
 msgid "Dev"
 msgstr "开发"
 
+#: ui/components/dev/PromptDialogDevControls.tsx:65
+msgid "Dialogs and screens"
+msgstr "对话框与界面"
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:46
+msgid "Dimensions"
+msgstr "尺寸"
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:14
+msgid "Disabled"
+msgstr "已禁用"
+
+#: ui/views/OnlinePlay.tsx:61
+#: ui/views/Tournaments.tsx:38
+msgid "Disconnect"
+msgstr "断开连接"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:79
+#: ui/phase/onlineDraft.test.ts:40
+#: ui/views/OnlineDraftPanel.tsx:59
+#: ui/views/Tournaments.tsx:39
 msgid "Disconnected"
 msgstr "已断线"
+
+#: ui/phase/online.ts:43
+msgid "Disconnected. Reconnect before responding."
+msgstr "已断开连接。请先重新连接再作答。"
+
+#: ui/components/play/PlayHomeLinks.tsx:120
+msgid "Discord"
+msgstr "Discord"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:247
 msgid "Done"
@@ -449,9 +1642,84 @@ msgstr "下载中…"
 msgid "Downloading… {progress}%"
 msgstr "下载中… {progress}%"
 
+#: ui/views/OnlinePlay.tsx:48
+msgid "Draft"
+msgstr "轮抽"
+
+#. placeholder {0}: currentDeck.name
+#: ui/components/editor/DeckBuilder.tsx:1136
+msgid "Draft \"{0}\" saved"
+msgstr "轮抽“{0}”已保存"
+
+#: ui/views/OnlineDraftPanel.tsx:48
+msgid "Draft code"
+msgstr "轮抽代码"
+
+#: ui/views/OnlineDraftPanel.tsx:55
+msgid "Draft code:"
+msgstr "轮抽代码："
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:42
+msgid "Draft color mode"
+msgstr "草稿配色模式"
+
+#: ui/views/OnlineDraftPanel.tsx:42
+msgid "Draft format"
+msgstr "轮抽赛制"
+
+#: ui/views/OnlineDraftPanel.tsx:40
+msgid "Draft with human players on the server, build from your private pool, and play the pod’s matches."
+msgstr "在服务器上与真人玩家进行轮抽，用你的私有牌池构筑，并进行本桌的对局。"
+
+#: ui/components/editor/DeckListView.tsx:2203
+msgid "Drag cards here from the search panel"
+msgstr "从搜索面板将卡牌拖到此处"
+
+#: ui/components/settings/AvatarCropDialog.tsx:98
+msgid "Drag to position, use the slider to zoom."
+msgstr "拖动以定位，使用滑块缩放。"
+
+#: ui/views/Tournaments.tsx:100
+#: ui/views/Tournaments.tsx:112
+msgid "Draw"
+msgstr "平局"
+
 #: ui/components/game/ManualTabletopControls.tsx:274
 msgid "Draw a card"
 msgstr "抓一张牌"
+
+#: ui/components/editor/DeckListView.tsx:1435
+#: ui/components/editor/DeckListView.tsx:2320
+msgid "Drop cards here"
+msgstr "将卡牌放到此处"
+
+#: ui/views/Tournaments.tsx:89
+msgid "Drop from tournament"
+msgstr "退出锦标赛"
+
+#: ui/components/editor/DeckListView.tsx:731
+msgid "Drop here"
+msgstr "放到此处"
+
+#: ui/views/Tournaments.tsx:93
+msgid "dropped"
+msgstr "已退赛"
+
+#: ui/views/CasualModes.tsx:119
+msgid "Duel Commander"
+msgstr "单挑指挥官"
+
+#: ui/phase/online.ts:100
+msgid "Duplicate server handshake"
+msgstr "重复的服务器握手"
+
+#: ui/components/editor/CardDetailModal.tsx:412
+msgid "EDHREC Rank:"
+msgstr "EDHREC 排名："
+
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:93
+msgid "Edit publication"
+msgstr "编辑发布"
 
 #: ui/components/game/CardRailPreview.tsx:190
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:151
@@ -462,10 +1730,98 @@ msgstr "无法获取效应文本"
 msgid "Eliminated"
 msgstr "已淘汰"
 
+#: ui/components/auth/SignInFlow.tsx:242
+msgid "Email"
+msgstr "邮箱"
+
+#: ui/components/companion/PlayerMenu.tsx:116
+msgid "Empty mana pool"
+msgstr "清空法术力池"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:190
+msgid "Empty seats"
+msgstr "空座"
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:14
+msgid "Enabled"
+msgstr "已启用"
+
+#: ui/views/Tournaments.tsx:86
+msgid "End tournament"
+msgstr "结束锦标赛"
+
+#: ui/api/auth.ts:80
+msgid "Enter a complete email address, including its domain."
+msgstr "请输入完整的电子邮件地址，包括域名。"
+
+#: ui/views/OnlinePlay.tsx:24
+msgid "Enter a deck list with valid card quantities (up to 500 cards)."
+msgstr "请输入牌数有效的牌表（最多 500 张牌）。"
+
+#: ui/lib/guestName.ts:15
+msgid "Enter a name."
+msgstr "请输入名称。"
+
+#: ui/views/OnlineDraftPanel.tsx:28
+msgid "Enter a set code."
+msgstr "请输入系列代码。"
+
+#: ui/phase/tournaments.ts:61
+msgid "Enter a ws:// or wss:// broker URL without credentials or query parameters."
+msgstr "请输入不带凭据或查询参数的 ws:// 或 wss:// 代理 URL。"
+
+#: ui/phase/online.ts:33
+msgid "Enter a ws:// or wss:// server URL without credentials or query parameters."
+msgstr "请输入不带凭据或查询参数的 ws:// 或 wss:// 服务器 URL。"
+
+#: ui/components/lobby/JoinPasswordDialog.tsx:93
+msgid "Enter password"
+msgstr "输入密码"
+
+#: ui/views/OnlineDraftPanel.tsx:27
+msgid "Enter the draft code."
+msgstr "请输入轮抽代码。"
+
+#: ui/views/OnlinePlay.tsx:34
+msgid "Enter the room code."
+msgstr "请输入房间代码。"
+
+#: ui/views/Tournaments.tsx:92
+msgid "Entrants"
+msgstr "参赛者"
+
 #. placeholder {0}: summary.estimatedDamage
 #: ui/components/game/modals/CombatBreakdownModal.tsx:79
 msgid "Estimated unblocked damage: {0}"
 msgstr "预计未被阻挡的伤害：{0}"
+
+#: ui/views/Tournaments.tsx:46
+msgid "Event name"
+msgstr "赛事名称"
+
+#: ui/components/companion/GameSummaryDialog.tsx:68
+msgid "Events"
+msgstr "事件"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:194
+msgid "Exact colors"
+msgstr "精确颜色"
+
+#: ui/components/editor/DeckBuilder.tsx:997
+msgid "Exact printings copied to clipboard"
+msgstr "指定版本已复制到剪贴板"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:354
+msgid "Exactly"
+msgstr "恰好"
+
+#: ui/views/Settings.tsx:618
+msgid "Exile"
+msgstr "放逐"
+
+#: ui/components/companion/FocusExitButton.tsx:64
+msgid "Exit"
+msgstr "退出"
 
 #: ui/components/game/panels/MiddleBarDock.tsx:92
 msgid "Exit full screen"
@@ -480,6 +1836,18 @@ msgstr "退出全屏"
 msgid "Exit tabletop"
 msgstr "退出桌面模式"
 
+#: ui/views/Tournaments.tsx:77
+msgid "Expires"
+msgstr "过期时间"
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:111
+msgid "Explainable replacements"
+msgstr "可解释的替换"
+
+#: ui/components/deck/DeckHubResults.tsx:128
+msgid "Explore all decks"
+msgstr "浏览所有套牌"
+
 #: ui/components/game/modals/DialogCardInspector.tsx:36
 #: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:307
 msgid "Face-down card"
@@ -489,18 +1857,114 @@ msgstr "牌面朝下的牌"
 msgid "Face-down permanent"
 msgstr "牌面朝下的永久物"
 
+#. placeholder {0}: manifestResp.status
+#: ui/workers/game-engine.worker.ts:211
+msgid "Failed to fetch card archive manifest: {0}"
+msgstr "获取卡牌归档清单失败：{0}"
+
+#. placeholder {0}: response.status
+#: ui/workers/game-engine.worker.ts:231
+msgid "Failed to fetch card archive: {0}"
+msgstr "获取卡牌归档失败：{0}"
+
+#. placeholder {0}: indexResponse.status
+#: ui/lib/presetDecks.ts:74
+msgid "Failed to fetch preset deck index: {0}"
+msgstr "获取预设套牌索引失败：{0}"
+
+#: ui/components/editor/PrintPickerModal.tsx:53
+msgid "Failed to fetch printings."
+msgstr "获取版本失败。"
+
+#: ui/game/hostedAiPlay.ts:89
+msgid "Failed to join the local Forge room."
+msgstr "加入本地 Forge 房间失败。"
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:122
+msgid "Failed to launch match: {0}"
+msgstr "启动对局失败：{0}"
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:134
+msgid "Failed to load decks: {0}"
+msgstr "加载套牌失败：{0}"
+
+#. placeholder {0}: response.status
+#: ui/stores/useScryfallStore.ts:286
+msgid "Failed to load token archive: {0}"
+msgstr "加载衍生物归档失败：{0}"
+
+#. placeholder {0}: String(err)
+#: ui/views/Lobby.tsx:251
+msgid "Failed to open sealed pool: {0}"
+msgstr "打开现开牌池失败：{0}"
+
+#. placeholder {0}: String(err)
+#: ui/views/Gauntlet.tsx:144
+msgid "Failed to save sideboard: {0}"
+msgstr "保存备牌失败：{0}"
+
+#. placeholder {0}: String(error)
+#: ui/views/Lobby.tsx:327
+msgid "Failed to set deck: {0}"
+msgstr "设置套牌失败：{0}"
+
+#. placeholder {0}: String(e)
+#. placeholder {0}: result.error
+#: ui/views/Lobby.tsx:375
+#: ui/views/Lobby.tsx:395
+msgid "Failed to start draft: {0}"
+msgstr "开始轮抽失败：{0}"
+
+#. placeholder {0}: String(e)
+#: ui/views/Lobby.tsx:351
+msgid "Failed to start game: {0}"
+msgstr "开始游戏失败：{0}"
+
+#. placeholder {0}: String(e)
+#: ui/views/Lobby.tsx:420
+msgid "Failed to start sealed: {0}"
+msgstr "开始现开失败：{0}"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:116
+msgid "Favorites"
+msgstr "收藏"
+
+#: ui/components/lobby/TableSetupGameCard.tsx:354
+msgid "Fill empty seats with AI bots"
+msgstr "用 AI 机器人补满空位"
+
 #. placeholder {0}: colorLabel(color)
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:159
 msgid "Filter by {0} identity"
 msgstr "按{0}色系筛选"
 
+#: ui/components/limited/LimitedDeckBuilder.tsx:663
+msgid "Filter:"
+msgstr "筛选："
+
+#: ui/components/deck/DeckHubFilters.tsx:49
+#: ui/components/editor/CardSearch.tsx:964
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
 msgid "Filters"
 msgstr "筛选"
 
-#: ui/views/Game.tsx:2533
+#: ui/components/companion/GameSummaryDialog.tsx:41
+msgid "Final scores"
+msgstr "最终比分"
+
+#: ui/components/collection/CollectionImportDialog.tsx:397
+msgid "Finish"
+msgstr "版本类型"
+
+#: ui/views/Game.tsx:2549
 msgid "First Strike Damage"
 msgstr "先制打击伤害"
+
+#: ui/components/editor/CardSearch.tsx:1190
+msgid "Flavor"
+msgstr "风味文字"
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:807
 msgid "Flavor text"
@@ -519,26 +1983,87 @@ msgstr "翻面 (F) — {0}"
 msgid "Flip front · F"
 msgstr "翻到正面 · F"
 
+#: ui/components/companion/PlayerMenu.tsx:102
 #: ui/components/game/panels/PlayerSheetModal.tsx:114
 #: ui/components/game/panels/PlayerSheetModal.tsx:115
 msgid "Floating mana"
 msgstr "浮动法术力"
 
+#: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:124
+msgid "Focus or type here"
+msgstr "在此聚焦或输入"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:180
 msgid "Focused"
 msgstr "聚焦"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:110
+#: ui/components/settings/CardImageLibraryCard.tsx:123
 msgid "Folder not found. Cards fall back to Scryfall."
 msgstr "文件夹不存在，卡图将回退到 Scryfall。"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:58
+#: ui/components/settings/CardImageLibraryCard.tsx:63
 msgid "Folder not found. Check the path and try again."
 msgstr "找不到文件夹，请检查路径后重试。"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:89
+#: ui/components/settings/CardImageLibraryCard.tsx:101
 msgid "Folder with Forge-named card images"
 msgstr "存放 Forge 命名卡图的文件夹"
+
+#: ui/components/dev/PromptDevControls.tsx:81
+msgid "Follow game"
+msgstr "跟随对局"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:87
+msgid "Foreground and muted copy"
+msgstr "前景色与弱化文本"
+
+#: ui/views/Tournaments.tsx:97
+msgid "Forfeit"
+msgstr "认输"
+
+#: ui/platform/web.ts:1218
+msgid "Forge engine is not supported on the web"
+msgstr "Web 端不支持 Forge 引擎"
+
+#: ui/game/hostedAiPlay.ts:71
+msgid "Forge play vs AI requires a multiplayer server."
+msgstr "Forge 对战 AI 需要多人服务器。"
+
+#: ui/game/hostedAiPlay.ts:81
+msgid "Forge play vs AI requires a server username."
+msgstr "Forge 对战 AI 需要服务器用户名。"
+
+#: ui/components/editor/CardSearch.tsx:1212
+#: ui/components/editor/ImportDeckTextDialog.tsx:256
+#: ui/components/lobby/CreateGameDialog.tsx:435
+#: ui/components/lobby/TableRoomSidebar.tsx:89
+#: ui/components/lobby/TableSetupGameCard.tsx:137
+msgid "Format"
+msgstr "赛制"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:99
+msgid "Format badges"
+msgstr "赛制徽章"
+
+#: ui/components/companion/NewSessionDialog.tsx:105
+msgid "Format preset"
+msgstr "赛制预设"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:153
+msgid "Formats"
+msgstr "赛制"
+
+#: ui/views/CasualModes.tsx:162
+msgid "Four-player Commander"
+msgstr "四人指挥官"
+
+#: ui/views/CasualModes.tsx:77
+msgid "Four-seat, two-card picks (CR 903.13), then a four-player Commander game."
+msgstr "四人、每次抓两张（CR 903.13），然后进行四人指挥官游戏。"
+
+#: ui/components/dev/BoardDevControls.tsx:99
+msgid "FPS"
+msgstr "FPS"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:171
 msgid "Free placement"
@@ -547,6 +2072,10 @@ msgstr "自由摆放"
 #: ui/components/game/CardPreview.tsx:465
 msgid "Front"
 msgstr "正面"
+
+#: ui/components/lobby/OpenTableCard.tsx:116
+msgid "Full"
+msgstr "完整"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:131
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:52
@@ -566,6 +2095,52 @@ msgstr "全屏"
 msgid "Fullscreen"
 msgstr "全屏"
 
+#: ui/views/DesignSystem.tsx:20
+msgid "Gallery sections"
+msgstr "图库分区"
+
+#. placeholder {0}: group.heading
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:147
+msgid "Game · {0}"
+msgstr "游戏 · {0}"
+
+#: ui/hooks/useGameEventListeners.ts:425
+msgid "Game aborted — a player did not reconnect."
+msgstr "游戏已中止 — 有玩家未重新连接。"
+
+#: ui/hooks/useMultiplayerInterruption.ts:88
+msgid "Game aborted — connection could not be restored."
+msgstr "游戏已中止 — 无法恢复连接。"
+
+#: ui/hooks/useMultiplayerInterruption.ts:99
+msgid "Game aborted — the host did not reconnect in time."
+msgstr "游戏已中止 — 主持人未及时重新连接。"
+
+#: ui/components/game/GameBoardAccessibility.tsx:127
+#: ui/components/game/GameBoardAccessibility.tsx:138
+msgid "Game board controls"
+msgstr "对局棋盘控件"
+
+#: ui/hooks/useGameEventListeners.ts:112
+msgid "Game could not be resumed — the room did not come back."
+msgstr "无法恢复游戏 — 房间未恢复。"
+
+#: ui/hooks/useGameEventListeners.ts:454
+msgid "Game ended unexpectedly — returning the room to the lobby."
+msgstr "游戏意外结束 — 正在将房间返回大厅。"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:74
+msgid "Game font-size tokens"
+msgstr "对局字号令牌"
+
+#: ui/components/lobby/TableRoom.tsx:77
+msgid "Game in progress"
+msgstr "对局进行中"
+
+#: ui/components/companion/GameLog.tsx:27
+msgid "Game log"
+msgstr "对局日志"
+
 #: ui/components/game/panels/ActionLog.tsx:110
 #: ui/components/game/panels/ActionLog.tsx:117
 msgid "Game Log"
@@ -575,6 +2150,38 @@ msgstr "对局日志"
 msgid "Game starting…"
 msgstr "对局开始中…"
 
+#: ui/components/dev/BoardDevControls.tsx:151
+msgid "Game state"
+msgstr "对局状态"
+
+#: ui/components/companion/GameSummaryDialog.tsx:20
+msgid "Game summary"
+msgstr "对局总结"
+
+#: ui/views/Settings.tsx:1202
+msgid "Game Theme Colors"
+msgstr "对局主题颜色"
+
+#: ui/components/companion/SetupMenu.tsx:135
+msgid "Game title"
+msgstr "对局标题"
+
+#: ui/components/dev/designSystem/sections/ColorSection.tsx:117
+msgid "Game tokens"
+msgstr "对局令牌"
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:38
+msgid "game-icons — GameIcon whitelist"
+msgstr "game-icons — GameIcon 白名单"
+
+#: ui/components/dev/BoardGameplayPreviewControls.tsx:38
+msgid "Gameplay action preview"
+msgstr "对局操作预览"
+
+#: ui/views/OnlineDraftPanel.tsx:80
+msgid "Games"
+msgstr "对局"
+
 #: ui/components/layout/TopBar.tsx:69
 msgid "Gauntlet"
 msgstr "挑战赛"
@@ -583,13 +2190,45 @@ msgstr "挑战赛"
 msgid "Getting started"
 msgstr "新手指引"
 
+#: ui/components/play/PlayHomeLinks.tsx:126
+msgid "GitHub"
+msgstr "GitHub"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:94
+msgid "Give the format a name."
+msgstr "请为该赛制命名。"
+
+#: ui/components/editor/DeckBuilder.tsx:1005
+msgid "Give this deck a name before saving"
+msgstr "保存前请为此套牌命名"
+
 #: ui/components/game/panels/GlobalStateRail.tsx:143
 msgid "Global game state"
 msgstr "全局对局状态"
 
+#: ui/components/dev/BoardDevControls.tsx:173
+msgid "Global mechanics"
+msgstr "全局机制"
+
+#: ui/components/companion/StatusChips.tsx:17
+msgid "Goes first"
+msgstr "先手"
+
+#: ui/views/Settings.tsx:617
+msgid "Graveyard"
+msgstr "坟墓场"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:34
 msgid "Green"
 msgstr "绿"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:648
+msgid "Group by"
+msgstr "分组方式"
+
+#: ui/views/Limited.tsx:643
+msgid "guaranteed slot active"
+msgstr "保证槽位已激活"
 
 #: ui/components/layout/AccountMenu.tsx:124
 msgid "Guest"
@@ -598,6 +2237,20 @@ msgstr "访客"
 #: ui/components/game/modals/GameSettingsModal.tsx:100
 msgid "Hand default view"
 msgstr "手牌默认视图"
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:47
+msgid "Hand-rolled brand SVGs"
+msgstr "手绘品牌 SVG"
+
+#: ui/components/auth/HandleDialog.tsx:70
+#: ui/components/auth/SignInFlow.tsx:346
+msgid "Handle"
+msgstr "用户名"
+
+#. placeholder {0}: updated.handle
+#: ui/components/auth/HandleDialog.tsx:46
+msgid "Handle updated to @{0}"
+msgstr "用户名已更新为 @{0}"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:74
 msgid "Has priority"
@@ -611,9 +2264,35 @@ msgstr "隐藏牌垫"
 msgid "Hide side panel"
 msgstr "隐藏侧边栏"
 
+#: ui/views/Settings.tsx:388
+msgid "Host"
+msgstr "主机"
+
+#: ui/game/hostedAiPlay.ts:40
+#: ui/game/hostedAiPlay.ts:127
+#: ui/game/hostedAiPlay.ts:222
+msgid "Hosted AI play requires a multiplayer server."
+msgstr "主持 AI 对战需要多人服务器。"
+
+#: ui/game/hostedAiPlay.ts:45
+msgid "Hosted AI play requires a server username."
+msgstr "主持 AI 对战需要服务器用户名。"
+
+#: ui/game/hostedAiPlay.ts:177
+msgid "Hosted game started without the local player."
+msgstr "主持的游戏在未包含本地玩家的情况下开始了。"
+
+#: ui/components/lobby/TableSetupHostingCard.tsx:44
+msgid "Hosting"
+msgstr "主持"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:222
 msgid "Hover"
 msgstr "悬停"
+
+#: ui/components/limited/DraftPreviewPanel.tsx:48
+msgid "Hover a card to preview"
+msgstr "悬停卡牌以预览"
 
 #. placeholder {0}: prefs.cardHoverDelayMs
 #: ui/components/game/modals/GameSettingsModal.tsx:230
@@ -624,13 +2303,99 @@ msgstr "悬停延迟 · {0} 毫秒"
 msgid "How many players?"
 msgstr "选择对局人数"
 
+#: ui/components/editor/NewDeckChoiceDialog.tsx:57
+msgid "How would you like to start?"
+msgstr "你想如何开始？"
+
+#. placeholder {0}: r.status
+#. placeholder {0}: res.status
+#. placeholder {0}: response.status
+#: ui/api/limitedEdition.ts:60
+#: ui/api/limitedEdition.ts:65
+#: ui/api/scryfall.ts:383
+#: ui/components/editor/PlaymatEditorModal.tsx:150
+msgid "HTTP {0}"
+msgstr "HTTP {0}"
+
+#. placeholder {0}: response.status
+#: ui/pixi/manaSymbolCache.ts:19
+msgid "HTTP {0} for {url}"
+msgstr "{url} 的 HTTP {0}"
+
+#: ui/components/OnboardingHurray.tsx:56
+msgid "Hurray, you're in!"
+msgstr "太棒了，你已加入！"
+
 #: ui/components/AppInitGate.tsx:229
 msgid "I have read and agree to these terms"
 msgstr "我已阅读并同意这些条款"
 
+#: ui/components/companion/CustomCounterDialog.tsx:79
+msgid "Icon"
+msgstr "图标"
+
+#: ui/components/editor/CardSearch.tsx:1032
+msgid "Identity"
+msgstr "颜色标识"
+
+#: ui/views/Settings.tsx:232
+msgid "Image cache cleared — reloading…"
+msgstr "图片缓存已清除 — 正在重新加载…"
+
+#: ui/stores/useAssetStore.ts:70
+msgid "Image uploads aren't available on this server"
+msgstr "此服务器不支持上传图片"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:29
+msgid "Images & icons"
+msgstr "图片与图标"
+
+#: ui/components/collection/CollectionImportDialog.tsx:452
+msgid "Import behavior"
+msgstr "导入行为"
+
+#: ui/components/collection/CollectionImportDialog.tsx:238
+msgid "Import collection"
+msgstr "导入收藏"
+
+#: ui/components/collection/CollectionImportDialog.tsx:333
+msgid "Import preview"
+msgstr "导入预览"
+
+#. placeholder {0}: imported.label
+#: ui/components/lobby/CustomFormatDialog.tsx:128
+msgid "Imported \"{0}\"."
+msgstr "已导入“{0}”。"
+
+#: ui/components/editor/useDeckTextImport.ts:170
+msgid "Imported \"{deckName}\""
+msgstr "已导入“{deckName}”"
+
+#: ui/components/editor/useDeckTextImport.ts:162
+msgid "Imported \"{deckName}\" — couldn't find: {shown}{extra}"
+msgstr "已导入“{deckName}” — 找不到：{shown}{extra}"
+
+#. placeholder {0}: Object.keys(imported).length
+#: ui/components/collection/CollectionImportDialog.tsx:203
+msgid "Imported {0} collection entries"
+msgstr "已导入 {0} 条收藏记录"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:96
 msgid "In combat"
 msgstr "战斗中"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:195
+msgid "Includes colors"
+msgstr "包含颜色"
+
+#: ui/components/companion/StatusChips.tsx:29
+msgid "Initiative"
+msgstr "主倡"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:79
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:52
+msgid "Input"
+msgstr "输入框"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:39
 msgid "Inspect {name}"
@@ -649,13 +2414,134 @@ msgstr "查看输入方式"
 msgid "Interface language"
 msgstr "界面语言"
 
+#: ui/themes/themeDocument.ts:40
+msgid "Invalid color for {label}.{key}. Use hex or rgb/rgba."
+msgstr "{label}.{key} 的颜色无效。请使用十六进制或 rgb/rgba。"
+
+#: ui/phase/tournaments.ts:159
+msgid "Invalid credential renewal reply."
+msgstr "凭据续期回复无效。"
+
+#: ui/phase/online.ts:117
+msgid "Invalid draft match attachment"
+msgstr "无效的轮抽对局附件"
+
+#: ui/phase/onlineDraft.ts:48
+msgid "Invalid draft seat response"
+msgstr "无效的轮抽席位响应"
+
+#: ui/phase/onlineDraft.ts:39
+msgid "Invalid saved draft seat."
+msgstr "保存的轮抽席位无效。"
+
+#: ui/phase/online.ts:74
+msgid "Invalid saved session."
+msgstr "保存的会话无效。"
+
+#: ui/phase/online.ts:165
+msgid "Invalid session snapshot"
+msgstr "无效的会话快照"
+
+#: ui/phase/online.ts:139
+msgid "Invalid terminal result"
+msgstr "无效的最终结果"
+
+#. placeholder {0}: stripUsernameTag(username)
+#: ui/stores/useServerStore.ts:471
+msgid "Invited {0} to your table"
+msgstr "已邀请 {0} 加入你的牌桌"
+
+#: ui/game/ironsmithRuntime.ts:411
+msgid "Ironsmith game is not initialized"
+msgstr "Ironsmith 游戏未初始化"
+
+#: ui/game/ironsmithRuntime.ts:216
+#: ui/game/ironsmithRuntime.ts:237
+msgid "Ironsmith host relay is not ready yet; try again in a moment."
+msgstr "Ironsmith 主持中继尚未就绪；请稍后重试。"
+
+#: ui/game/ironsmithRuntime.ts:224
+#: ui/game/ironsmithRuntime.ts:244
+msgid "Ironsmith private relay is not ready yet; try again in a moment."
+msgstr "Ironsmith 私有中继尚未就绪；请稍后重试。"
+
+#: ui/game/ironsmithRuntime.ts:564
+msgid "Ironsmith trusted multiplayer requires Web Crypto in a secure context. Use HTTPS, localhost, or a browser that exposes crypto.subtle."
+msgstr "Ironsmith 可信多人游戏需要在安全上下文中使用 Web Crypto。请使用 HTTPS、localhost，或支持 crypto.subtle 的浏览器。"
+
+#: ui/game/ironsmithRuntime.ts:271
+msgid "Ironsmith trusted runtime snapshots are not wired to Manabrew restore yet"
+msgstr "Ironsmith 可信运行时快照尚未接入 Manabrew 恢复功能"
+
+#: ui/game/ironsmithRuntime.ts:416
+msgid "Ironsmith WASM did not return a Manabrew game view"
+msgstr "Ironsmith WASM 未返回 Manabrew 游戏视图"
+
+#: ui/game/ironsmithRuntime.ts:429
+msgid "Ironsmith WASM did not return a public Manabrew game view"
+msgstr "Ironsmith WASM 未返回公开的 Manabrew 游戏视图"
+
+#: ui/components/settings/CardArtDownloadSection.tsx:137
+msgid "is"
+msgstr "是"
+
+#: ui/components/editor/CardSearch.tsx:1304
+msgid "Is"
+msgstr "是"
+
+#: ui/phase/onlineDraft.ts:69
+msgid "Join a draft first."
+msgstr "请先加入一场轮抽。"
+
+#: ui/views/Tournaments.tsx:81
+msgid "Join as player"
+msgstr "以玩家身份加入"
+
+#: ui/views/OnlineDraftPanel.tsx:51
+msgid "Join draft"
+msgstr "加入轮抽"
+
+#: ui/components/DiscordCallout.tsx:21
+msgid "Join our community"
+msgstr "加入我们的社区"
+
+#: ui/views/OnlinePlay.tsx:57
+msgid "Join room"
+msgstr "加入房间"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:52
+msgid "Keep my changes"
+msgstr "保留我的更改"
+
 #: ui/components/KeyboardShortcutsDialog.tsx:36
+#: ui/components/settings/KeybindingsPanel.tsx:52
 msgid "Keyboard shortcuts"
 msgstr "键盘快捷键"
+
+#: ui/components/editor/CardSearch.tsx:1200
+msgid "Keyword"
+msgstr "关键字"
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:192
+msgid "Keyword chips"
+msgstr "关键字标签"
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:733
 msgid "Keywords, costs & counters"
 msgstr "关键字、费用与指示物"
+
+#: ui/components/companion/CustomCounterDialog.tsx:60
+msgid "Label"
+msgstr "标签"
+
+#. placeholder {0}: label.name
+#: ui/components/editor/DeckLabelsModal.tsx:89
+msgid "Label \"{0}\" removed"
+msgstr "标签“{0}”已移除"
+
+#: ui/components/editor/DeckLabelsModal.tsx:51
+msgid "Label \"{trimmed}\" added"
+msgstr "标签“{trimmed}”已添加"
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:20
 msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
@@ -665,6 +2551,19 @@ msgstr "用于卡牌名称、类别行和印刷规则文字的语言。当没有
 msgid "Language for menus, buttons and messages. Untranslated text falls back to English."
 msgstr "用于菜单、按钮和提示信息的语言。未翻译的文本将回退为英文。"
 
+#: ui/components/companion/WinBanner.tsx:35
+msgid "Last standing"
+msgstr "最后存活"
+
+#: ui/components/companion/CompanionBar.tsx:85
+#: ui/components/companion/NewSessionDialog.tsx:177
+msgid "Layout"
+msgstr "布局"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:425
+msgid "LEA, LEB, ARN, …"
+msgstr "LEA、LEB、ARN…"
+
 #: ui/components/game/panels/MiddleBarDock.tsx:141
 msgid "Leave"
 msgstr "离开"
@@ -673,6 +2572,30 @@ msgstr "离开"
 #: ui/components/game/GameLoadingScreen.tsx:129
 msgid "Leave game"
 msgstr "离开对局"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:422
+msgid "Legal sets (comma separated; empty = all sets)"
+msgstr "合法系列（以逗号分隔；留空 = 所有系列）"
+
+#: ui/components/editor/CardDetailModal.tsx:433
+msgid "Legalities"
+msgstr "合法性"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:108
+msgid "Legality"
+msgstr "合法性"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:465
+msgid "Legend rule"
+msgstr "传奇规则"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:467
+msgid "Legend rule scope"
+msgstr "传奇规则范围"
+
+#: ui/components/companion/GameSummaryDialog.tsx:56
+msgid "Length"
+msgstr "时长"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:277
 msgid "Lethal"
@@ -690,6 +2613,7 @@ msgid "Level {0} of {1}"
 msgstr "第 {0} 级，共 {1} 级"
 
 #: ui/components/game/zones/LibraryZoneTile.tsx:34
+#: ui/views/Settings.tsx:616
 msgid "Library"
 msgstr "牌库"
 
@@ -701,6 +2625,14 @@ msgstr "生命"
 #: ui/components/layout/TopBar.tsx:72
 msgid "Life Tracker"
 msgstr "生命计数器"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:403
+msgid "Limited"
+msgstr "限制赛"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:25
+msgid "Live theme preview"
+msgstr "实时主题预览"
 
 #: ui/components/game/GameLoadingScreen.tsx:15
 msgid "Load card images"
@@ -721,6 +2653,47 @@ msgstr "正在加载用于搜索的牌张详情…"
 #: ui/components/AppInitGate.tsx:40
 msgid "Loading decks"
 msgstr "正在加载套牌"
+
+#: ui/views/Gauntlet.tsx:317
+msgid "Loading decks…"
+msgstr "正在加载套牌…"
+
+#: ui/views/Draft.tsx:68
+msgid "Loading draft…"
+msgstr "正在加载轮抽…"
+
+#: ui/views/Gauntlet.tsx:75
+msgid "Loading gauntlet…"
+msgstr "正在加载试炼…"
+
+#: ui/views/DeckEditor.tsx:784
+msgid "Loading published decks…"
+msgstr "正在加载已发布套牌…"
+
+#: ui/views/Sealed.tsx:47
+msgid "Loading sealed pool…"
+msgstr "正在加载现开牌池…"
+
+#: ui/views/Winston.tsx:53
+msgid "Loading Winston draft…"
+msgstr "正在加载温斯顿轮抽…"
+
+#: ui/components/settings/MyAssetsSection.tsx:129
+#: ui/views/Limited.tsx:564
+msgid "Loading…"
+msgstr "正在加载…"
+
+#: ui/components/editor/DeckIntentPanel.tsx:43
+msgid "local analysis"
+msgstr "本地分析"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:96
+msgid "Local checkpoints"
+msgstr "本地检查点"
+
+#: ui/platform/index.ts:32
+msgid "Local Phase supports up to three AI opponents (four players)."
+msgstr "本地 Phase 最多支持三个 AI 对手（四名玩家）。"
 
 #: ui/phase/Launch.tsx:177
 #~ msgid "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
@@ -746,18 +2719,95 @@ msgstr "日志 ({logActivityCount})"
 msgid "Log prompts to console"
 msgstr "将提示输出到控制台"
 
+#: ui/components/dev/DebugLogOverlay.tsx:130
+msgid "logs"
+msgstr "日志"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:310
+msgid "Looks good!"
+msgstr "看起来不错！"
+
 #: ui/pixi/cardPreview/PixiCardRailPreview.ts:80
 msgid "LORE CHAPTERS"
 msgstr "传世章节"
+
+#: ui/views/Tournaments.tsx:113
+msgid "Loser's game wins"
+msgstr "败者胜局"
+
+#: ui/components/editor/CardSearch.tsx:1156
+msgid "loy"
+msgstr "忠诚"
 
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:1132
 msgid "Loyalty"
 msgstr "忠诚"
 
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:20
+msgid "lucide-react — UI chrome"
+msgstr "lucide-react — UI 外观"
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:103
+msgid "Main"
+msgstr "主牌"
+
+#. placeholder {0}: targetMainSize - mainCards.length
+#. placeholder {1}: targetMainSize - mainCards.length === 1 ? "" : "s"
+#: ui/components/limited/LimitedDeckBuilder.tsx:401
+msgid "Main deck needs {0} more card{1}."
+msgstr "主牌需要再添加 {0} 张牌{1}。"
+
+#: ui/views/OnlineDraftBuilder.tsx:17
+msgid "Main deck:"
+msgstr "主牌："
+
+#: ui/components/editor/CardSearch.tsx:1062
+msgid "Mana"
+msgstr "法术力"
+
+#. placeholder {0}: (Object.entries(allocation) as Array<[string, number]>) .filter(([, n]) => n > 0) .map(([k, n]) => `${n} ${k.slice(0, 1)}`) .join(" · ")
+#: ui/components/limited/LimitedDeckBuilder.tsx:330
+msgid "Mana base reset · {0}"
+msgstr "法术力基础已重置 · {0}"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:439
+#: ui/components/lobby/CustomFormatDialog.tsx:447
+msgid "Mana burn"
+msgstr "法术力灼伤"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:441
+msgid "Mana burn policy"
+msgstr "法术力灼伤规则"
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:44
+msgid "Mana consistency"
+msgstr "法术力稳定性"
+
+#: ui/components/editor/DeckStats.tsx:58
+msgid "Mana Curve"
+msgstr "法术力曲线"
+
+#: ui/components/dev/designSystem/sections/IconsSection.tsx:57
+msgid "Mana symbols — ManaSymbols (Scryfall SVG)"
+msgstr "法术力符号 — ManaSymbols（Scryfall SVG）"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:182
 #: ui/lib/handOrder.ts:11
 msgid "Mana value"
 msgstr "法术力值"
+
+#: ui/components/editor/ComboDetailModal.tsx:86
+msgid "Mana:"
+msgstr "法术力："
+
+#: ui/workers/manabot.worker.ts:51
+msgid "Manabot response exceeds the shared buffer capacity."
+msgstr "Manabot 响应超出共享缓冲区容量。"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:69
+#: ui/components/VersionInfo.tsx:33
+msgid "Manabrew"
+msgstr "Manabrew"
 
 #: ui/components/layout/TopBar.tsx:159
 msgid "Manabrew Home"
@@ -767,13 +2817,97 @@ msgstr "Manabrew 主页"
 #~ msgid "ManaBrew's battlefield and prompts, powered by phase-engine and phase-ai."
 #~ msgstr "ManaBrew 的战场与提示，由 phase-engine 和 phase-ai 驱动。"
 
+#: ui/components/editor/DeckTagManagerDialog.tsx:111
+msgid "Manage deck tags"
+msgstr "管理套牌标签"
+
+#: ui/components/settings/MyAssetsSection.tsx:80
+msgid "Manage uploaded assets here"
+msgstr "在此管理上传的资源"
+
 #: ui/lib/handOrder.ts:9
 msgid "Manual"
 msgstr "手动"
 
+#: ui/views/Tournaments.tsx:112
+msgid "Manual match outcome"
+msgstr "手动录入对局结果"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:97
 msgid "Manual preserves your placement; automatic modes arrange new cards."
 msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
+
+#: ui/views/Tournaments.tsx:97
+msgid "Manual result — unverified"
+msgstr "手动结果 —— 未经核实"
+
+#: ui/stores/useGameStore.ts:466
+msgid "Manual room client requires the manual tabletop runtime."
+msgstr "手动房间客户端需要手动桌面运行时。"
+
+#: ui/stores/useGameStore.ts:437
+msgid "Manual room host requires the manual tabletop runtime."
+msgstr "手动房间主机需要手动桌面运行时。"
+
+#: ui/game/manualTabletopApi.ts:243
+msgid "Manual tabletop API expects manual table actions."
+msgstr "手动桌面 API 期望手动桌面操作。"
+
+#: ui/game/manualTabletopApi.ts:247
+msgid "Manual tabletop has no engine to direct."
+msgstr "手动桌面没有可指挥的引擎。"
+
+#: ui/game/manualTabletopApi.ts:239
+msgid "Manual tabletop multiplayer is not implemented yet."
+msgstr "手动桌面多人游戏尚未实现。"
+
+#: ui/game/manualTabletopApi.ts:257
+msgid "Manual tabletop snapshots are not implemented yet."
+msgstr "手动桌面快照尚未实现。"
+
+#: ui/components/play/RejoinMatchCard.tsx:103
+msgid "Match in progress"
+msgstr "对局进行中"
+
+#: ui/views/Tournaments.tsx:54
+msgid "Match structure"
+msgstr "对局结构"
+
+#: ui/views/OnlineDraftPanel.tsx:80
+#: ui/views/Tournaments.tsx:118
+msgid "Matches"
+msgstr "对局"
+
+#. placeholder {0}: copyLimit ?? 0
+#. placeholder {0}: format?.deckRules.maxCopies ?? 0
+#. placeholder {1}: group.card.identity.name
+#. placeholder {1}: sc.name
+#: ui/components/editor/DeckBuilder.tsx:966
+#: ui/components/editor/DeckBuilder.tsx:1758
+msgid "Max {0} copies of \"{1}\" allowed in {formatName}"
+msgstr "{formatName} 中最多允许 {0} 张“{1}”"
+
+#. placeholder {0}: format?.deckRules.maxCopies ?? 0
+#: ui/components/editor/DeckBuilder.tsx:979
+msgid "Max {0} copies of \"{cardName}\" allowed in {formatName}"
+msgstr "{formatName} 中最多允许 {0} 张“{cardName}”"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:327
+msgid "Maximum players"
+msgstr "最大玩家数"
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:105
+msgid "Maybe"
+msgstr "待定"
+
+#. placeholder {0}: zoneCounts.maybe
+#: ui/components/editor/CardDetailModal.tsx:306
+msgid "Maybe {0}"
+msgstr "也许 {0}"
+
+#: ui/components/editor/DeckSelectionTray.tsx:90
+msgid "Maybeboard"
+msgstr "待定板"
 
 #: ui/components/layout/NavSheet.tsx:85
 #: ui/components/layout/NavSheet.tsx:88
@@ -785,6 +2919,30 @@ msgstr "菜单"
 msgid "Mini-frame"
 msgstr "迷你牌框"
 
+#: ui/components/lobby/CustomFormatDialog.tsx:323
+msgid "Minimum players"
+msgstr "最小玩家数"
+
+#: ui/views/OnlineDraftBuilder.tsx:17
+msgid "Minimum:"
+msgstr "最少："
+
+#: ui/components/lobby/CustomFormatDialog.tsx:476
+msgid "Modern"
+msgstr "近代"
+
+#: ui/views/CasualModes.tsx:155
+msgid "Momir"
+msgstr "莫米尔"
+
+#: ui/views/CasualModes.tsx:156
+msgid "Momir's Madness — the engine supplies a snow-basic deck and the random-creature emblem."
+msgstr "Momir 的疯狂 — 引擎会提供一套雪境基本地套牌和随机生物徽记。"
+
+#: ui/components/companion/StatusChips.tsx:23
+msgid "Monarch"
+msgstr "君主"
+
 #: ui/components/layout/NavSheet.tsx:97
 msgid "More"
 msgstr "更多"
@@ -792,6 +2950,14 @@ msgstr "更多"
 #: ui/components/game/modals/GameSettingsModal.tsx:204
 msgid "Movable"
 msgstr "可移动"
+
+#: ui/components/editor/DeckListView.tsx:323
+msgid "Move 1"
+msgstr "移动 1 张"
+
+#: ui/components/editor/DeckListView.tsx:324
+msgid "Move all ({count})"
+msgstr "全部移动（{count}）"
 
 #: ui/components/game/ManualTabletopControls.tsx:423
 #: ui/components/game/ManualTabletopControls.tsx:424
@@ -808,6 +2974,26 @@ msgstr "移放至坟场"
 msgid "Move to hand"
 msgstr "移放至手牌"
 
+#. placeholder {0}: draggedNames.length
+#: ui/views/DeckEditor.tsx:635
+msgid "Moved {0} cards to {dest}"
+msgstr "已将 {0} 张牌移动到 {dest}"
+
+#: ui/views/DeckEditor.tsx:647
+msgid "Moved {cardName} to {dest}"
+msgstr "已将 {cardName} 移动到 {dest}"
+
+#: ui/components/editor/DeckBuilder.tsx:826
+msgid "Moved {moved} {cardName} to {label}"
+msgstr "已将 {moved} {cardName} 移动到 {label}"
+
+#. placeholder {0}: res.status
+#: ui/lib/moxfield.ts:86
+#: ui/lib/moxfield.ts:112
+msgid "Moxfield fetch failed: {0}"
+msgstr "Moxfield 获取失败：{0}"
+
+#: ui/components/GuestNameConflictModal.tsx:92
 #: ui/components/layout/navDestinations.ts:53
 #: ui/components/layout/TopBar.tsx:33
 msgid "Multiplayer"
@@ -817,83 +3003,476 @@ msgstr "多人游戏"
 msgid "Multiplayer Draft"
 msgstr "多人轮抽"
 
+#: ui/stores/useServerStore.ts:384
+msgid "Multiplayer server is unavailable."
+msgstr "多人服务器不可用。"
+
 #: ui/components/layout/navDestinations.ts:62
 #: ui/components/layout/TopBar.tsx:45
+#: ui/views/MyCollection.tsx:99
 msgid "My Collection"
 msgstr "我的收藏"
 
 #: ui/components/layout/navDestinations.ts:54
 #: ui/components/layout/TopBar.tsx:40
+#: ui/components/play/PlayDeckShelf.tsx:124
 msgid "My Decks"
 msgstr "我的套牌"
 
+#: ui/components/deck/DeckHubFilterPanel.tsx:115
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:181
+#: ui/components/lobby/CustomFormatDialog.tsx:296
 msgid "Name"
 msgstr "名称"
+
+#: ui/components/companion/CompanionBar.tsx:65
+#: ui/components/companion/NewSessionDialog.tsx:50
+msgid "New game"
+msgstr "新对局"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:114
+msgid "Newest"
+msgstr "最新"
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:113
 msgid "No actions are currently available for this card."
 msgstr "此牌当前没有可用操作。"
 
+#: ui/game/manualTabletopApi.ts:270
+#: ui/game/manualTabletopApi.ts:289
+msgid "No active manual tabletop game."
+msgstr "没有进行中的手动桌面游戏。"
+
+#: ui/hooks/useQuickPlay.tsx:100
+#: ui/hooks/useQuickPlay.tsx:138
+#: ui/hooks/useQuickPlay.tsx:177
+msgid "No AI deck available for this format — pick one yourself."
+msgstr "此赛制没有可用的 AI 套牌 — 请自行选择一套。"
+
+#: ui/phase/transport.ts:110
+msgid "No authorized conspiracy reveal action"
+msgstr "没有已授权的阴谋揭露操作"
+
 #: ui/components/game/ManualTabletopControls.tsx:337
 msgid "No cards found"
 msgstr "未找到牌张"
+
+#: ui/components/deck/DeckCardBrowser.tsx:533
+msgid "No cards match these filters"
+msgstr "没有符合这些筛选的卡牌"
+
+#: ui/components/editor/CombosPanel.tsx:211
+msgid "No combos detected yet."
+msgstr "尚未检测到组合技。"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:103
 msgid "No current combat assignments."
 msgstr "当前没有战斗分配。"
 
+#: ui/components/lobby/CreateGameDialog.tsx:808
+msgid "No deck selected"
+msgstr "未选择套牌"
+
+#: ui/components/editor/DeckQuickAddOptions.tsx:133
+msgid "No deck tags yet"
+msgstr "尚无套牌标签"
+
+#: ui/components/settings/CardArtDownloadSection.tsx:86
+msgid "No decks to download art for yet."
+msgstr "还没有可下载插画的套牌。"
+
+#: ui/views/Tournaments.tsx:93
+msgid "No entrants yet."
+msgstr "暂无参赛者。"
+
+#: ui/components/companion/GameLog.tsx:31
+msgid "No events yet."
+msgstr "暂无事件。"
+
+#: ui/lib/archidekt.ts:81
+#: ui/lib/moxfield.ts:17
+msgid "No fetch implementation available"
+msgstr "没有可用的 fetch 实现"
+
+#: ui/views/Game.tsx:626
+msgid "No game card to cast: {cardId}"
+msgstr "没有可施放的卡牌：{cardId}"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:126
+msgid "No groups"
+msgstr "不分组"
+
+#: ui/components/editor/CardDetailModal.tsx:258
+#: ui/components/editor/PrintPickerModal.tsx:140
+msgid "No Image"
+msgstr "无图片"
+
+#: ui/components/dev/BattlefieldKeywordDevControls.tsx:245
+msgid "No keyword matches."
+msgstr "没有匹配的关键字。"
+
+#: ui/components/editor/DeckLabelsModal.tsx:67
+msgid "No labels yet"
+msgstr "尚无标签"
+
+#: ui/components/dev/DebugLogOverlay.tsx:180
+msgid "no lines yet"
+msgstr "暂无数据"
+
+#: ui/stores/useGameStore.ts:670
+msgid "No local player is available to concede."
+msgstr "没有可认输的本地玩家。"
+
 #: ui/components/game/panels/ActionLog.tsx:111
 msgid "No log entries yet."
 msgstr "暂无日志条目。"
+
+#: ui/views/Gauntlet.tsx:201
+msgid "No opponent — gauntlet finished."
+msgstr "没有对手 — 试炼结束。"
+
+#: ui/components/editor/CardDetailModal.tsx:425
+msgid "No price data"
+msgstr "无价格数据"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:319
+msgid "No recognizable card entries yet"
+msgstr "尚无可识别的卡牌条目"
+
+#: ui/game/webrtcPlane.test.ts:66
+msgid "no remote description"
+msgstr "没有远程描述"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:244
+msgid "No room for basics — main deck is already at target size."
+msgstr "没有空间放基本地 — 主牌已达到目标数量。"
+
+#: ui/components/editor/CardDetailModal.tsx:464
+msgid "No rulings available."
+msgstr "暂无裁定。"
+
+#: ui/phase/tournaments.ts:154
+#: ui/phase/tournaments.ts:166
+msgid "No saved credential for this role."
+msgstr "此角色没有已保存的凭据。"
+
+#: ui/phase/onlineDraft.ts:37
+msgid "No saved draft seat for this server in this tab."
+msgstr "此标签页中没有此服务器的已保存轮抽席位。"
+
+#: ui/phase/online.ts:72
+msgid "No saved session for this server in this tab."
+msgstr "此标签页中没有此服务器的已保存会话。"
+
+#: ui/game/hostedAiPlay.ts:261
+msgid "No self-hosted room is available for {format}."
+msgstr "{format} 没有可用的自托管房间。"
 
 #: ui/components/KeyboardShortcutsDialog.tsx:78
 msgid "No shortcuts match “{query}”."
 msgstr "没有与“{query}”匹配的快捷键。"
 
+#: ui/components/deck/HubTopDeckSnapshots.tsx:158
+msgid "No snapshot published yet"
+msgstr "尚未发布快照"
+
 #: ui/components/game/panels/SnapshotsPanel.tsx:24
 msgid "No snapshots yet."
 msgstr "暂无快照。"
+
+#: ui/components/editor/DeckListView.tsx:383
+msgid "No tags yet"
+msgstr "尚无标签"
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:122
+msgid "No tokens match this search."
+msgstr "没有符合此搜索的衍生物。"
+
+#: ui/views/Tournaments.tsx:66
+msgid "No tournaments listed."
+msgstr "暂无锦标赛。"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:402
+msgid "None"
+msgstr "无"
+
+#: ui/components/editor/useDeckTextImport.ts:118
+msgid "None of the cards could be found on Scryfall"
+msgstr "在 Scryfall 上找不到任何卡牌"
+
+#. placeholder {0}: opponentCount + 1
+#: ui/components/lobby/DeckVsSelector.tsx:457
+msgid "Not enough distinct decks are available for a {0}-player game."
+msgstr "没有足够的可用套牌进行 {0} 人游戏。"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:253
 msgid "Not gained: "
 msgstr "未获得："
 
+#: ui/components/editor/DeckListView.tsx:2431
+msgid "not in deck"
+msgstr "不在套牌中"
+
+#: ui/game/webrtcPlane.test.ts:23
+msgid "not open"
+msgstr "未开启"
+
+#: ui/views/Limited.tsx:613
+msgid "Not supported"
+msgstr "不支持"
+
+#. placeholder {0}: player.name
+#: ui/components/companion/PlayerNotesDialog.tsx:23
+msgid "Notes — {0}"
+msgstr "备注 — {0}"
+
+#: ui/views/CasualModes.tsx:105
+msgid "Oathbreaker"
+msgstr "破誓者"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:70
 msgid "Off"
 msgstr "关闭"
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:22
+msgid "Off (Local only)"
+msgstr "关闭（仅本地）"
+
+#: ui/views/CasualModes.tsx:133
+msgid "Old School 93/94"
+msgstr "老学派 93/94"
+
+#: ui/views/CasualModes.tsx:141
+msgid "Old School 93/94 plus Fourth Edition through Homelands."
+msgstr "Old School 93/94 外加第四版到家园。"
+
+#: ui/views/CasualModes.tsx:140
+msgid "Old School 95"
+msgstr "老学派 95"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:79
+msgid "Older checkpoints were removed to free device storage"
+msgstr "已删除较旧的检查点以释放设备存储空间"
+
+#: ui/components/companion/SetupMenu.tsx:102
+#: ui/components/companion/SetupMenu.tsx:112
+msgid "on"
+msgstr "开"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:69
 msgid "On"
 msgstr "开启"
 
-#: ui/views/Game.tsx:2535
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:29
+msgid "On (MTGCH)"
+msgstr "开启（MTGCH）"
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:45
+msgid "on the play"
+msgstr "先手"
+
+#: ui/views/CasualModes.tsx:163
+msgid "One human plus three AI at 40 life each; add opponents in the setup screen."
+msgstr "一名人类加三个 AI，各 40 点生命；在设置界面中添加对手。"
+
+#: ui/components/settings/OnlineCardLocalizationCard.tsx:12
+msgid "Online card localization"
+msgstr "在线卡牌本地化"
+
+#: ui/views/OnlineDraftPanel.tsx:39
+msgid "Online draft"
+msgstr "在线轮抽"
+
+#: ui/phase/onlineDraft.ts:30
+msgid "Online draft transport is unavailable."
+msgstr "在线轮抽传输不可用。"
+
+#: ui/views/OnlinePlay.tsx:44
+msgid "Online multiplayer"
+msgstr "在线多人"
+
+#: ui/views/Game.tsx:2551
 msgid "only first & double strikers deal damage now"
 msgstr "现在只有先制打击和连击生物造成伤害"
+
+#: ui/views/Tournaments.tsx:63
+msgid "Open"
+msgstr "公开"
 
 #: ui/components/game/panels/RightActionPanel.tsx:56
 msgid "Open action log with {logActivityCount} entries"
 msgstr "打开包含 {logActivityCount} 条记录的操作日志"
 
+#: ui/components/deck/DeckHubResults.tsx:120
+msgid "Open My Decks"
+msgstr "打开我的套牌"
+
 #: ui/phase/Launch.tsx:196
 #~ msgid "Open the ManaBrew interface"
 #~ msgstr "打开 ManaBrew 界面"
+
+#: ui/components/lobby/TableRoom.tsx:78
+msgid "Opening the game table..."
+msgstr "正在打开对局桌面…"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:177
 msgid "Opponent layout"
 msgstr "对手布局"
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:270
+msgid "Optimize deck printings"
+msgstr "优化套牌版本"
+
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:16
 msgid "Optional yes/no costs"
 msgstr "可选的是/否费用"
+
+#: ui/components/auth/SignInFlow.tsx:238
+msgid "or"
+msgstr "或"
+
+#: ui/views/Limited.tsx:361
+msgid "or load saved pool…"
+msgstr "或加载已保存的牌池…"
+
+#: ui/components/editor/DeckListView.tsx:2204
+msgid "or use the + buttons on hover"
+msgstr "或悬停时使用 + 按钮"
+
+#: ui/components/editor/CardSearch.tsx:1180
+msgid "Oracle"
+msgstr "牌面文字"
+
+#: ui/components/editor/CardDetailModal.tsx:359
+msgid "Oracle Text"
+msgstr "牌面文字"
+
+#: ui/views/Tournaments.tsx:30
+msgid "Organizer"
+msgstr "组织者"
+
+#: ui/views/Tournaments.tsx:42
+msgid "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
+msgstr "组织者与玩家凭据分别保存在此浏览器标签页中、针对该服务器。重新连接即可恢复。请在过期前续期；关闭标签页将失去访问权限。"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:80
+msgid "Outline"
+msgstr "描边"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:181
 msgid "Overview"
 msgstr "总览"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:107
+#: ui/components/collection/CollectionCard.tsx:65
+msgid "Owned"
+msgstr "拥有"
+
+#: ui/views/OnlineDraftPanel.tsx:63
+msgid "Pack"
+msgstr "补充包"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:182
+msgid "Packs"
+msgstr "补充包"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:199
+msgid "Packs per player"
+msgstr "每位玩家补充包数"
+
+#: ui/router.tsx:41
+msgid "Page Not Found"
+msgstr "页面未找到"
+
+#: ui/views/Tournaments.tsx:85
+msgid "Pair next round"
+msgstr "为下一轮配对"
+
+#: ui/views/Tournaments.tsx:51
+msgid "Pairing system"
+msgstr "配对系统"
+
+#: ui/views/Tournaments.tsx:94
+msgid "Pairings and manual results (unverified)"
+msgstr "配对与手动结果（未经核实）"
+
+#: ui/views/Winston.tsx:148
+msgid "Pass the last pile?"
+msgstr "跳过最后一堆？"
+
+#: ui/views/Settings.tsx:407
+msgid "Password"
+msgstr "密码"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:78
+msgid "Password copied to clipboard"
+msgstr "密码已复制到剪贴板"
+
+#: ui/views/CasualModes.tsx:91
+msgid "Paste a CubeCobra id or load a saved pool, then draft or seal it."
+msgstr "粘贴 CubeCobra id 或加载已保存的牌池，然后进行轮抽或现开。"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:174
+msgid "Paste an exported custom format"
+msgstr "粘贴导出的自定义赛制"
+
+#: ui/components/collection/CollectionImportDialog.tsx:274
+msgid "Paste from clipboard"
+msgstr "从剪贴板粘贴"
+
+#: ui/views/CasualModes.tsx:126
+msgid "Pauper Commander"
+msgstr "贫民指挥官"
+
+#: ui/views/Tournaments.tsx:97
+msgid "Pending"
+msgstr "待定"
+
+#: ui/components/dev/BattlefieldChoiceDevControls.tsx:30
+msgid "Persistent choices"
+msgstr "持久化选择"
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:22
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:23
+msgid "Personal theme name"
+msgstr "个人主题名称"
+
+#: ui/views/Tournaments.tsx:36
+msgid "Phase broker URL"
+msgstr "Phase 代理服务器地址"
+
+#: ui/views/OnlineDraftPanel.tsx:63
+msgid "Pick"
+msgstr "选择"
+
+#: ui/components/limited/LimitedCompareDialog.tsx:104
+msgid "Pick a saved deck to see its breakdown."
+msgstr "选择一副已保存的套牌以查看其明细。"
+
+#: ui/views/Limited.tsx:85
+msgid "Pick a set to draft first."
+msgstr "请先选择要轮抽的系列。"
+
+#. placeholder {0}: String(err)
+#: ui/game/draftHost.ts:236
+msgid "pick failed: {0}"
+msgstr "选择失败：{0}"
+
+#: ui/components/lobby/TableRoomSidebar.tsx:186
+#: ui/views/Limited.tsx:718
+msgid "Picks per pass"
+msgstr "每轮传递选牌数"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:120
 msgid "Pinned by PHASE_MANA_CARD_IMAGES."
 msgstr "已由环境变量 PHASE_MANA_CARD_IMAGES 固定。"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:279
+msgid "Placement"
+msgstr "名次"
+
+#: ui/views/CasualModes.tsx:176
+msgid "Planechase"
+msgstr "时空竞逐"
 
 #: ui/components/layout/NavSheet.tsx:93
 msgid "Play"
@@ -907,23 +3486,75 @@ msgstr "开始游戏"
 msgid "Play Deck"
 msgstr "使用此套牌游戏"
 
+#: ui/views/OnlineDraftPanel.tsx:78
+msgid "Play match"
+msgstr "进行对局"
+
 #: ui/components/layout/navDestinations.ts:52
 #: ui/components/layout/TopBar.tsx:24
 #: ui/components/layout/TopBar.tsx:27
 msgid "Play Offline"
 msgstr "离线游戏"
 
+#: ui/components/companion/StatsDialog.tsx:61
+msgid "Play stats"
+msgstr "对局统计"
+
+#: ui/views/OnlineDraftPanel.tsx:80
+#: ui/views/Tournaments.tsx:30
+#: ui/views/Tournaments.tsx:118
+msgid "Player"
+msgstr "玩家"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
 msgid "Player details"
 msgstr "玩家详情"
+
+#: ui/components/dev/PlayerBadgeDevControls.tsx:138
+msgid "Player HUD"
+msgstr "玩家 HUD"
+
+#: ui/views/Tournaments.tsx:81
+msgid "Player name"
+msgstr "玩家名称"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:140
 msgid "Player states"
 msgstr "玩家状态"
 
+#: ui/components/companion/GameSummaryDialog.tsx:64
+#: ui/components/companion/NewSessionDialog.tsx:120
+#: ui/components/companion/SetupMenu.tsx:50
+#: ui/components/lobby/UserList.tsx:238
+#: ui/views/OnlinePlay.tsx:50
+#: ui/views/OnlinePlay.tsx:50
+msgid "Players"
+msgstr "玩家"
+
+#: ui/views/Lobby.tsx:558
+msgid "Players and chat"
+msgstr "玩家与聊天"
+
+#: ui/components/lobby/InvitePlayersDialog.tsx:46
+msgid "Players in the lobby who aren't at a table."
+msgstr "大厅中尚未入座的玩家。"
+
+#: ui/views/Tournaments.tsx:48
+msgid "Players per table"
+msgstr "每桌玩家数"
+
+#: ui/components/lobby/CreateGameDialog.tsx:786
+#: ui/components/lobby/OpenTableCard.tsx:114
+msgid "Playing"
+msgstr "进行中"
+
 #: ui/components/layout/AccountMenu.tsx:126
 msgid "Playing as a guest"
 msgstr "以访客身份游戏"
+
+#: ui/components/settings/GuestNamePicker.tsx:58
+msgid "Playing as a guest."
+msgstr "以访客身份进行。"
 
 #: ui/components/game/panels/MiddleBarDock.tsx:113
 msgid "Playmats"
@@ -933,14 +3564,76 @@ msgstr "牌垫"
 msgid "Playtest"
 msgstr "试打"
 
+#: ui/components/deck/DeckGridCard.tsx:82
+#: ui/components/deck/DeckGridCard.tsx:83
+msgid "Playtest vs AI"
+msgstr "与 AI 试玩"
+
+#: ui/components/lobby/CreateGameDialog.tsx:369
+msgid "Please select a commander"
+msgstr "请选择一位指挥官"
+
+#: ui/components/lobby/CreateGameDialog.tsx:345
+msgid "Please select a deck"
+msgstr "请选择一套套牌"
+
+#: ui/components/lobby/CreateGameDialog.tsx:349
+msgid "Please select a deck for this format"
+msgstr "请为此赛制选择一套套牌"
+
+#: ui/views/OnlineDraftPanel.tsx:46
+msgid "Pod size"
+msgstr "桌位规模"
+
+#: ui/views/Tournaments.tsx:118
+msgid "Points"
+msgstr "积分"
+
+#: ui/views/Tournaments.tsx:74
+msgid "Points: win / draw / loss"
+msgstr "积分：胜 / 平 / 负"
+
+#: ui/views/Limited.tsx:175
+msgid "Pool file must contain a non-empty `pool` array of DraftCards."
+msgstr "牌池文件必须包含非空的 DraftCards `pool` 数组。"
+
+#: ui/views/Settings.tsx:397
+msgid "Port"
+msgstr "端口"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:96
 msgid "Potential lethal combat damage"
 msgstr "潜在致命战斗伤害"
+
+#: ui/components/editor/CardSearch.tsx:1116
+msgid "pow"
+msgstr "力量"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:477
+msgid "Pre-M14 (any controller)"
+msgstr "M14 之前（任意操控者）"
 
 #: ui/components/layout/AccountMenu.tsx:167
 #: ui/components/layout/TopBar.tsx:75
 msgid "Preferences"
 msgstr "偏好设置"
+
+#: ui/views/OnlineDraftPanel.tsx:43
+msgid "Premier (Bo1)"
+msgstr "顶级（单局）"
+
+#. placeholder {0}: preset.commander
+#: ui/lib/presetDecks.ts:143
+msgid "Preset commander missing from cards: {0}"
+msgstr "卡牌中缺少预设指挥官：{0}"
+
+#: ui/components/dev/BoardPlayground.tsx:528
+msgid "Preview viewport"
+msgstr "预览视口"
+
+#: ui/components/editor/CardDetailModal.tsx:418
+msgid "Prices"
+msgstr "价格"
 
 #: ui/components/layout/TopBarNav.tsx:22
 msgid "Primary"
@@ -949,6 +3642,15 @@ msgstr "主导航"
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:104
 msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
 msgstr "将 UI 收到的每个提示（不包括状态更新）连同完整 JSON 打印到开发者控制台。便于报告提示相关问题。"
+
+#: ui/components/collection/CollectionImportDialog.tsx:396
+#: ui/components/editor/ImportDeckTextDialog.tsx:171
+msgid "Printing"
+msgstr "版本"
+
+#: ui/components/editor/DeckChangeSummary.tsx:151
+msgid "printing changed"
+msgstr "版本已更改"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:42
 msgid "Priority"
@@ -962,6 +3664,19 @@ msgstr "优先权与提示"
 msgid "Priority windows"
 msgstr "优先权时点"
 
+#: ui/components/lobby/TableRoomSidebar.tsx:155
+msgid "Privacy"
+msgstr "隐私"
+
+#: ui/components/editor/CardSearch.tsx:1047
+#: ui/components/editor/ComboDetailModal.tsx:65
+msgid "Produces"
+msgstr "产出法术力"
+
+#: ui/components/dev/CardRailDevControls.tsx:139
+msgid "Progress rails"
+msgstr "进度条"
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:756
 msgid "Progression"
 msgstr "进程"
@@ -970,13 +3685,58 @@ msgstr "进程"
 msgid "Prompt and dialog default view"
 msgstr "提示与对话框默认视图"
 
+#: ui/components/dev/promptDialogs/PromptModalPreview.tsx:135
+msgid "Prompt preview"
+msgstr "提示预览"
+
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
 msgid "Prompts"
 msgstr "提示"
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:360
+msgid "Proposal ready"
+msgstr "提议已就绪"
+
+#: ui/components/deck/EditDeckHubEntryDialog.tsx:82
+msgid "Publication details updated"
+msgstr "发布详情已更新"
+
+#: ui/components/deck/PublishDeckDialog.tsx:143
+msgid "Publish to Community"
+msgstr "发布到社区"
+
 #: ui/components/game/ManualTabletopControls.tsx:291
 msgid "Put top library card onto battlefield"
 msgstr "将牌库顶的牌放置到战场"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:168
+msgid "Qty"
+msgstr "数量"
+
+#: ui/components/collection/CollectionImportDialog.tsx:398
+msgid "Quantity"
+msgstr "数量"
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:12
+msgid "Radius"
+msgstr "圆角"
+
+#: ui/views/Tournaments.tsx:118
+msgid "Rank"
+msgstr "排名"
+
+#: ui/components/dev/designSystem/sections/ComponentsSection.tsx:121
+#: ui/components/editor/CardSearch.tsx:1100
+msgid "Rarity"
+msgstr "稀有度"
+
+#: ui/components/editor/CardDetailModal.tsx:396
+msgid "Rarity:"
+msgstr "稀有度："
+
+#: ui/components/lobby/CustomFormatDialog.tsx:462
+msgid "Reach exile"
+msgstr "到达放逐区"
 
 #: ui/components/AppInitGate.tsx:42
 msgid "Ready"
@@ -996,17 +3756,115 @@ msgstr "写实使用印刷画面。规则显示牌张规则和当前对局信息
 msgid "Receive the first game state"
 msgstr "接收初始对局状态"
 
+#: ui/views/Tournaments.tsx:37
+msgid "Reconnect"
+msgstr "重新连接"
+
+#: ui/views/OnlineDraftPanel.tsx:54
+msgid "Reconnect draft seat"
+msgstr "重连轮抽座位"
+
+#: ui/views/OnlinePlay.tsx:58
+msgid "Reconnect saved seat"
+msgstr "重连已保存座位"
+
+#: ui/components/lobby/TableSetupHostingCard.tsx:154
+msgid "Reconnect timeout"
+msgstr "重连超时"
+
+#: ui/phase/tournaments.ts:119
+msgid "Reconnect to the tournament broker first."
+msgstr "请先重新连接到锦标赛代理。"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:32
 msgid "Red"
 msgstr "红"
 
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:95
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:96
+msgid "Redo draft change"
+msgstr "重做草稿更改"
+
+#: ui/components/deck/DeckHubFilters.tsx:50
+msgid "Refine published deck results."
+msgstr "筛选已发布套牌结果。"
+
+#: ui/components/deck/DeckHubFilterSheet.tsx:40
+msgid "Refine the published decks shown in the grid."
+msgstr "筛选网格中展示的已发布套牌。"
+
+#: ui/views/Tournaments.tsx:90
+msgid "Refresh"
+msgstr "刷新"
+
+#: ui/platform/web.ts:1309
+msgid "Relay is not connected; queue the engine report instead."
+msgstr "中继未连接；请改为将引擎报告加入队列。"
+
+#: ui/components/deck/PublishDeckDialog.tsx:90
+msgid "Reload this account deck before publishing it."
+msgstr "发布前请重新加载此账户套牌。"
+
+#: ui/views/DeckEditor.tsx:954
+msgid "Remove account deck"
+msgstr "移除账户套牌"
+
+#: ui/components/dev/themeEditor/ThemeColorControl.tsx:63
+msgid "Remove this override and inherit the base preset color"
+msgstr "移除此覆盖并继承基础预设颜色"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:446
+msgid "Removed"
+msgstr "已移除"
+
+#: ui/components/editor/CardDetailModal.tsx:494
+msgid "Removed one {deckCardName}"
+msgstr "已移除一张 {deckCardName}"
+
+#. placeholder {0}: selectedCards.size
+#: ui/components/editor/DeckBuilder.tsx:646
+msgid "Removed one copy of {0} cards"
+msgstr "已移除一份 {0} 张牌"
+
+#: ui/views/DeckEditor.tsx:919
+msgid "Rename Deck"
+msgstr "重命名套牌"
+
+#: ui/components/dev/BoardDevControls.tsx:92
+msgid "Renderer"
+msgstr "渲染器"
+
+#: ui/views/Tournaments.tsx:77
+msgid "Renew credential"
+msgstr "续期凭据"
+
+#: ui/components/deck/DeckVersionHistoryDialog.tsx:122
+msgid "Replace unsaved changes?"
+msgstr "替换未保存的更改？"
+
+#. placeholder {0}: target.identity.name
+#. placeholder {1}: suggestion.name
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:277
+msgid "Replaced {0} with {1}"
+msgstr "已将 {0} 替换为 {1}"
+
+#: ui/components/companion/SetupMenu.tsx:156
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:196
+#: ui/components/game/SideboardDialog.tsx:54
 msgid "Reset"
 msgstr "重置"
 
 #: ui/components/game/panels/SnapshotsPanel.tsx:51
 msgid "Restore"
 msgstr "恢复"
+
+#: ui/components/editor/DeckBuilder.tsx:2267
+msgid "Restored \"{checkpointName}\""
+msgstr "已恢复“{checkpointName}”"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:491
+msgid "Restricted cards (one name per line)"
+msgstr "受限牌（每行一个牌名）"
 
 #: ui/phase/Launch.tsx:184
 #~ msgid "Resume local game"
@@ -1020,9 +3878,30 @@ msgstr "返回战斗"
 msgid "Right click"
 msgstr "右键"
 
+#: ui/components/companion/StatusChips.tsx:41
+msgid "Ring"
+msgstr "戒指"
+
 #: ui/components/game/CardPreviewOverlay.tsx:222
 msgid "Ring-bearer"
 msgstr "持戒人"
+
+#: ui/views/Limited.tsx:692
+msgid "RNG seed"
+msgstr "随机种子"
+
+#: ui/components/companion/DiceMenu.tsx:50
+#: ui/components/companion/DiceTray.tsx:40
+msgid "Roll"
+msgstr "掷"
+
+#: ui/views/OnlinePlay.tsx:54
+msgid "Room code"
+msgstr "房间代码"
+
+#: ui/game/roomHost.ts:79
+msgid "Room hosting requires a server connection."
+msgstr "主持房间需要服务器连接。"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Rotate card"
@@ -1032,8 +3911,23 @@ msgstr "旋转牌张"
 msgid "Rotate your device"
 msgstr "请旋转设备"
 
+#: ui/views/OnlineDraftPanel.tsx:57
+#: ui/views/Tournaments.tsx:74
+#: ui/views/Tournaments.tsx:96
+msgid "Round"
+msgstr "轮次"
+
+#: ui/views/Tournaments.tsx:58
+msgid "Rounds (blank for automatic)"
+msgstr "轮数（留空自动）"
+
+#: ui/components/collection/CollectionImportDialog.tsx:394
+msgid "Row"
+msgstr "行"
+
 #: ui/components/game/cardPreviewStyles.ts:13
 #: ui/components/game/cardPreviewStyles.ts:23
+#: ui/components/lobby/CreateGameDialog.tsx:465
 msgid "Rules"
 msgstr "规则"
 
@@ -1046,13 +3940,99 @@ msgstr "规则与回合"
 msgid "Rules text"
 msgstr "规则文字"
 
+#: ui/game/runtimeRegistry.ts:23
+msgid "Runtime unavailable: {kind}"
+msgstr "运行时不可用：{kind}"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:206
+msgid "Save deck view"
+msgstr "保存套牌视图"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:80
+msgid "Save mine as a copy"
+msgstr "将我的另存为副本"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:544
+msgid "Save to My Decks"
+msgstr "保存到我的套牌"
+
+#. placeholder {0}: deckToSave.name
+#: ui/components/editor/DeckBuilder.tsx:1046
+msgid "Saved \"{0}\" — {validationError}"
+msgstr "已保存“{0}” — {validationError}"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:105
+msgid "Saved \"{label}\"."
+msgstr "已保存“{label}”。"
+
+#: ui/views/Settings.tsx:222
+msgid "Saved \"{name}\""
+msgstr "已保存“{name}”"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:421
+msgid "Saved \"{name}\" to My Decks."
+msgstr "已将“{name}”保存到我的套牌。"
+
+#: ui/components/limited/LimitedCompareDialog.tsx:52
+msgid "Saved deck"
+msgstr "已保存套牌"
+
+#. placeholder {0}: detail.currentVersionNo
+#: ui/components/editor/DeckBuilder.tsx:1033
+msgid "Saved version {0} to your account"
+msgstr "已将版本 {0} 保存到你的账户"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:148
+msgid "Saved views"
+msgstr "已保存视图"
+
+#: ui/components/limited/LimitedDeckBuilder.tsx:724
+msgid "SB {sideboardCount}"
+msgstr "备牌 {sideboardCount}"
+
+#. placeholder {0}: sc.name
+#. placeholder {0}: scryfallCard.name
+#: ui/lib/scryfall.utils.ts:93
+#: ui/stores/useDeckStore.ts:681
+#: ui/stores/useDeckStore.ts:698
+#: ui/stores/useDeckStore.ts:714
+#: ui/stores/useDeckStore.ts:734
+msgid "Scryfall card has no image uris: {0}"
+msgstr "Scryfall 卡牌没有图片 URI：{0}"
+
+#. placeholder {0}: res.status
+#: ui/lib/scryfallImageSource.ts:99
+msgid "scryfall image {url}: HTTP {0}"
+msgstr "scryfall 图片 {url}：HTTP {0}"
+
+#. placeholder {0}: Math.ceil(retryAfterMs / 1000)
+#: ui/api/scryfall.ts:111
+msgid "Scryfall is rate limited. Try again in {0} seconds."
+msgstr "Scryfall 已限流。请在 {0} 秒后重试。"
+
+#: ui/stores/useScryfallStore.ts:214
+msgid "Scryfall lookup requires a name or id"
+msgstr "Scryfall 查询需要名称或 id"
+
+#: ui/api/scryfall.ts:370
+msgid "Scryfall returned no cards for set {setCode}"
+msgstr "Scryfall 未返回系列 {setCode} 的任何卡牌"
+
 #: ui/components/layout/TopBar.tsx:63
 msgid "Sealed"
 msgstr "现开"
 
+#: ui/game/sealedStart.ts:54
+msgid "sealed config has no pool source"
+msgstr "现开配置没有牌池来源"
+
 #: ui/components/layout/TopBar.tsx:60
 msgid "Sealed Deck Build"
 msgstr "现开套牌构筑"
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:81
+msgid "Search all theme tokens"
+msgstr "搜索所有主题令牌"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:86
 msgid "Search cards"
@@ -1061,6 +4041,18 @@ msgstr "搜索牌张"
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:85
 msgid "Search cards by name, rules, type or mana"
 msgstr "按名称、规则、类型或法术力搜索牌张"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:53
+msgid "Search cards…"
+msgstr "搜索卡牌…"
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:82
+msgid "Search every app and game token"
+msgstr "搜索所有应用与对局令牌"
+
+#: ui/components/editor/DeckCommandPalette.tsx:50
+msgid "Search for an action to run in the deck editor."
+msgstr "搜索要在套牌编辑器中执行的操作。"
 
 #: ui/components/game/ManualTabletopControls.tsx:329
 msgid "Search Scryfall"
@@ -1074,13 +4066,66 @@ msgstr "搜索快捷键…"
 msgid "Searching…"
 msgstr "搜索中…"
 
+#: ui/components/lobby/TableRoomSidebar.tsx:116
+msgid "Seats"
+msgstr "座位"
+
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:78
+msgid "Secondary"
+msgstr "次要"
+
+#: ui/stores/useDeckStore.ts:272
+msgid "Seems like you reached the limit of your browser storage — contact us on Discord for more info."
+msgstr "看来你已用完浏览器存储空间 — 如需更多信息请在 Discord 上联系我们。"
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:114
 msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
 msgstr "选择一个进攻者或阻挡者以查看其写实或规则视图。查看不会改变分配。"
 
+#: ui/components/lobby/TableRoom.tsx:86
+msgid "Select one in Table settings to continue."
+msgstr "在桌面设置中选择一个以继续。"
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:47
 msgid "Sending concession…"
 msgstr "正在发送认输…"
+
+#: ui/views/Settings.tsx:384
+msgid "Server"
+msgstr "服务器"
+
+#: ui/phase/online.ts:155
+msgid "Server omitted the session code"
+msgstr "服务器未提供会话代码"
+
+#: ui/phase/online.ts:111
+msgid "Server sent data before its handshake"
+msgstr "服务器在握手前发送了数据"
+
+#: ui/views/OnlinePlay.tsx:46
+msgid "Server URL"
+msgstr "服务器 URL"
+
+#: ui/components/editor/CardSearch.tsx:1227
+msgid "Set"
+msgstr "系列"
+
+#. placeholder {0}: card.identity.name
+#: ui/views/DeckEditor.tsx:562
+msgid "Set {0} in the command zone"
+msgstr "将 {0} 置于指挥区"
+
+#: ui/views/OnlineDraftPanel.tsx:45
+msgid "Set code"
+msgstr "系列代码"
+
+#: ui/components/editor/CommanderSlots.tsx:218
+msgid "Set your deck identity"
+msgstr "设置你的套牌标识"
+
+#: ui/components/editor/CardDetailModal.tsx:383
+msgid "Set:"
+msgstr "系列："
 
 #: ui/components/game/GameLoadingScreen.tsx:71
 msgid "Setting the table — this usually takes a few seconds."
@@ -1090,9 +4135,21 @@ msgstr "正在布置牌桌 — 通常需要几秒钟。"
 msgid "Setup progress"
 msgstr "设置进度"
 
+#: ui/components/deck/HubDeckPreviewDialog.tsx:193
+msgid "Share link copied — anyone can open and play this deck"
+msgstr "分享链接已复制 — 任何人都可以打开并游玩这套牌"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:302
+msgid "Short label"
+msgstr "短标签"
+
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show back face"
 msgstr "显示背面"
+
+#: ui/components/deck/DeckCardBrowserFilters.tsx:332
+msgid "Show cards"
+msgstr "显示卡牌"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show front face"
@@ -1119,13 +4176,88 @@ msgstr "显示侧边栏"
 msgid "Shuffle library"
 msgstr "洗牌库"
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:104
+msgid "Side"
+msgstr "备牌"
+
+#. placeholder {0}: zoneCounts.side
+#: ui/components/editor/CardDetailModal.tsx:303
+msgid "Side {0}"
+msgstr "备牌 {0}"
+
+#: ui/components/game/SideboardDialog.tsx:36
+#: ui/components/lobby/CustomFormatDialog.tsx:389
+msgid "Sideboard"
+msgstr "备牌"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:461
+msgid "Sideboard only"
+msgstr "仅备牌"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:62
+msgid "Sideboard plans"
+msgstr "备牌计划"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:392
+msgid "Sideboard policy"
+msgstr "备牌规则"
+
+#: ui/views/Gauntlet.tsx:141
+msgid "Sideboard updated."
+msgstr "备牌已更新。"
+
 #: ui/components/layout/AccountMenu.tsx:158
 msgid "Sign in"
 msgstr "登录"
 
+#: ui/components/auth/SignInDialog.tsx:21
+msgid "Sign in to Manabrew"
+msgstr "登录 Manabrew"
+
+#: ui/stores/useAccountDecksStore.ts:59
+msgid "Sign in to use account decks."
+msgstr "登录后即可使用账户套牌。"
+
+#: ui/views/AuthCallback.tsx:80
+msgid "Sign-in failed. Try again."
+msgstr "登录失败。请重试。"
+
+#: ui/components/settings/SignInMethodsCard.tsx:77
+msgid "Sign-in methods"
+msgstr "登录方式"
+
+#: ui/components/auth/SignInFlow.tsx:188
+msgid "Sign-in methods could not be loaded."
+msgstr "无法加载登录方式。"
+
 #: ui/components/layout/AccountMenu.tsx:126
 msgid "Signed in"
 msgstr "已登录"
+
+#. placeholder {0}: account.handle
+#. placeholder {0}: session.account.handle
+#: ui/components/auth/SignInFlow.tsx:93
+#: ui/components/auth/SignInFlow.tsx:154
+#: ui/components/auth/SignInFlow.tsx:167
+#: ui/views/AuthCallback.tsx:75
+msgid "Signed in as @{0}"
+msgstr "已登录为 @{0}"
+
+#: ui/stores/useServerStore.ts:240
+msgid "Signed in from another tab — this tab was disconnected."
+msgstr "已在另一个标签页登录 — 此标签页已断开连接。"
+
+#: ui/views/Tournaments.tsx:52
+msgid "Single elimination"
+msgstr "单败淘汰"
+
+#: ui/views/Limited.tsx:638
+msgid "Single recipe"
+msgstr "单一配方"
+
+#: ui/components/dev/DevSizingControls.tsx:44
+msgid "Size and viewport"
+msgstr "尺寸与视口"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:17
 msgid "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
@@ -1149,13 +4281,50 @@ msgstr "部分牌张详情不可用。可见的名称和对局规则仍可搜索
 msgid "Something went wrong and the game can't continue. Please contact the developer."
 msgstr "出现问题，对局无法继续。请联系开发者。"
 
+#: ui/components/editor/CardSearch.tsx:1319
+msgid "Sort by"
+msgstr "排序方式"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:93
 msgid "Sort hand"
 msgstr "手牌排序"
 
+#. placeholder {0}: SORT_OPTIONS.find((option) => option.value === sortBy)?.label
+#: ui/components/editor/DeckBuilder.tsx:1657
+msgid "Sort: {0}"
+msgstr "排序：{0}"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:135
+msgid "Source"
+msgstr "来源"
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:28
+msgid "Spacing scale"
+msgstr "间距比例"
+
+#: ui/components/companion/StatusChips.tsx:48
+msgid "Speed"
+msgstr "速度"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:26
+msgid "src/assets/manaBrew.png"
+msgstr "src/assets/manaBrew.png"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:106
 msgid "Stack default view"
 msgstr "堆叠默认视图"
+
+#: ui/views/Tournaments.tsx:117
+msgid "Standings from manual reports (unverified)"
+msgstr "基于手动上报的排名（未经核实）"
+
+#: ui/views/OnlineDraftPanel.tsx:61
+msgid "Start draft"
+msgstr "开始轮抽"
+
+#: ui/views/OnlineDraftPanel.tsx:77
+msgid "Start next round"
+msgstr "开始下一轮"
 
 #: ui/components/game/GameLoadingScreen.tsx:14
 msgid "Start the game engine"
@@ -1165,25 +4334,134 @@ msgstr "启动对局引擎"
 #~ msgid "Start the Rust host first. Unsupported engine interactions are reported, never silently skipped. This is not the ManaBrew online service."
 #~ msgstr "请先启动 Rust 主机。不支持的引擎交互会被报告，绝不会被静默跳过。这不是 ManaBrew 在线服务。"
 
+#: ui/views/Companion.tsx:45
+msgid "Start tracking"
+msgstr "开始追踪"
+
+#: ui/workers/game-engine.worker.ts:434
+msgid "start_game handled outside handleCommand"
+msgstr "start_game 在 handleCommand 之外处理"
+
+#: ui/components/lobby/CreateGameDialog.tsx:741
+msgid "Starter Decks"
+msgstr "新手套牌"
+
 #: ui/components/AppInitGate.tsx:36
 msgid "Starting"
 msgstr "正在启动"
 
-#: ui/views/Play.tsx:153
+#: ui/components/companion/NewSessionDialog.tsx:134
+#: ui/components/companion/SetupMenu.tsx:75
+#: ui/components/lobby/CustomFormatDialog.tsx:331
+msgid "Starting life"
+msgstr "起始生命"
+
+#: ui/views/Play.tsx:163
 msgid "Starting multiplayer game…"
 msgstr "正在开始多人游戏…"
+
+#: ui/components/companion/CustomCounterDialog.tsx:70
+msgid "Starting value"
+msgstr "起始值"
+
+#: ui/components/dev/designSystem/sections/AssetsSection.tsx:54
+msgid "Static data files"
+msgstr "静态数据文件"
+
+#: ui/components/editor/CardSearch.tsx:1114
+msgid "Stats"
+msgstr "统计"
+
+#: ui/components/collection/CollectionImportDialog.tsx:399
+msgid "Status"
+msgstr "状态"
+
+#: ui/components/editor/ComboDetailModal.tsx:102
+msgid "Steps"
+msgstr "步骤"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:54
 msgid "Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay."
 msgstr "在每个优先权时点都停下，即使你没有任何可行的响应。关闭时，只能横置产生法术力的时点会在短暂延迟后自动让过。"
 
+#: ui/components/settings/MyAssetsSection.tsx:84
+msgid "Storage"
+msgstr "存储"
+
+#: ui/components/dev/DevStressPresets.tsx:150
+msgid "Stress scenarios"
+msgstr "压力场景"
+
+#: ui/views/OnlineDraftBuilder.tsx:26
+msgid "Submit deck"
+msgstr "提交套牌"
+
+#: ui/views/Tournaments.tsx:114
+msgid "Submit unverified result"
+msgstr "提交未经核实的结果"
+
+#: ui/components/editor/DeckLabelsModal.tsx:134
+msgid "Suggestions"
+msgstr "建议"
+
+#: ui/components/dev/designSystem/sections/SpacingSection.tsx:45
+msgid "Surface"
+msgstr "表面"
+
+#: ui/views/Tournaments.tsx:52
+msgid "Swiss"
+msgstr "瑞士制"
+
+#: ui/components/settings/AccountSection.tsx:28
+msgid "Sync your decks on every device"
+msgstr "在所有设备上同步你的套牌"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:186
 msgid "Table background"
 msgstr "牌桌背景"
 
+#: ui/components/lobby/TableRoomSidebar.tsx:207
+msgid "Table controls"
+msgstr "桌面控件"
+
 #: ui/components/game/ManualTabletopControls.tsx:166
 msgid "Tabletop"
 msgstr "桌面模式"
+
+#. placeholder {0}: newTagInput.trim()
+#: ui/components/editor/DeckBuilder.tsx:1996
+msgid "Tag \"{0}\" added"
+msgstr "标签“{0}”已添加"
+
+#: ui/components/editor/DeckBuilder.tsx:1975
+msgid "Tag \"{tag}\" removed"
+msgstr "标签“{tag}”已移除"
+
+#: ui/components/editor/DeckTagDialog.tsx:57
+msgid "Tag selected cards"
+msgstr "为所选卡牌添加标签"
+
+#. placeholder {0}: newTagInput.trim()
+#: ui/components/editor/CardDetailModal.tsx:186
+msgid "Tagged \"{deckCardName}\" with \"{0}\""
+msgstr "已为“{deckCardName}”添加标签“{0}”"
+
+#: ui/components/editor/CardDetailModal.tsx:612
+msgid "Tagged \"{deckCardName}\" with \"{tag}\""
+msgstr "已为“{deckCardName}”添加标签“{tag}”"
+
+#. placeholder {0}: draggedNames.length
+#: ui/views/DeckEditor.tsx:589
+msgid "Tagged {0} cards with {destTag}"
+msgstr "已为 {0} 张牌添加标签 {destTag}"
+
+#: ui/components/editor/DeckBuilder.tsx:667
+msgid "Tagged cards with \"{tag}\""
+msgstr "已为卡牌添加标签“{tag}”"
+
+#: ui/components/deck/DeckHubFilterPanel.tsx:216
+msgid "Tags"
+msgstr "标签"
 
 #: ui/components/game/GameLoadingScreen.tsx:16
 msgid "Take your seat"
@@ -1198,13 +4476,38 @@ msgstr "横置"
 msgid "Tap: {description}"
 msgstr "横置：{description}"
 
+#: ui/components/dev/BoardPlayground.tsx:513
+msgid "Test action count"
+msgstr "测试操作次数"
+
+#: ui/components/auth/HandleDialog.tsx:51
+#: ui/components/auth/SignInFlow.tsx:158
+msgid "That handle is already taken"
+msgstr "该用户名已被占用"
+
+#: ui/views/Settings.tsx:216
+msgid "That name is reserved for a built-in server"
+msgstr "该名称是为内置服务器保留的"
+
+#: ui/components/editor/DeckBuilder.tsx:1059
+msgid "The account version could not be loaded. Your local copy is still saved."
+msgstr "无法加载账户版本。你的本地副本仍然保留。"
+
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
 msgstr "自动处理器会回答只有唯一合法答案的提示（目标、模式……）以及信息性确认（RevealCards、掷骰）。这些始终自动处理 — 无需开关。下面的列表涵盖你可能希望不再被询问的可选费用。"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:81
+#: ui/components/lobby/TablePickerDialog.tsx:52
+msgid "The felt you'll play this game on."
+msgstr "本局对战使用的桌面。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:93
 msgid "The folder the server reads card scans from. Pick the root that holds the letter folders (a, b, …); cards it does not hold fall back to Scryfall."
 msgstr "服务器读取卡图的目录。请选择包含字母子目录（a、b、…）的根目录；库里没有的牌会回退到 Scryfall。"
+
+#: ui/components/lobby/TableSetupGameCard.tsx:107
+msgid "The game"
+msgstr "对局"
 
 #: ui/components/game/GameFailedScreen.tsx:12
 msgid "The game failed to start"
@@ -1214,52 +4517,329 @@ msgstr "对局启动失败"
 msgid "The host picked this table's background when creating it."
 msgstr "房主在创建时选定了此牌桌的背景。"
 
+#: ui/views/OnlineDraftPanel.tsx:76
+msgid "The match starts when every player has submitted a deck."
+msgstr "当所有玩家都提交套牌后，对局开始。"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:174
+#: ui/components/editor/PrintingOptimizerDialog.tsx:209
+msgid "The open deck changed while printings were being checked"
+msgstr "在检查版本期间，打开的套牌发生了更改"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:230
+msgid "The open deck changed. Build the printing proposal again."
+msgstr "打开的套牌已更改。请重新生成版本建议。"
+
+#: ui/router.tsx:42
+msgid "The page you're looking for doesn't exist."
+msgstr "你查找的页面不存在。"
+
+#: ui/stores/useGameStore.ts:379
+msgid "The previous game is still closing. Try again in a moment."
+msgstr "上一局游戏仍在关闭中。请稍后重试。"
+
+#: ui/views/Lobby.tsx:334
+msgid "The room is full."
+msgstr "房间已满。"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:214
+msgid "The selected policy would not change this deck"
+msgstr "所选策略不会改变此套牌"
+
+#: ui/phase/transport.ts:47
+msgid "The session was left or replaced before this response arrived."
+msgstr "在此响应到达之前，会话已离开或被替换。"
+
+#: ui/views/Settings.tsx:948
+msgid "Theme"
+msgstr "主题"
+
+#: ui/components/dev/themeEditor/ThemeTokenRail.tsx:77
+msgid "Theme controls"
+msgstr "主题控件"
+
 #: ui/components/layout/TopBar.tsx:86
 msgid "Theme Editor"
 msgstr "主题编辑器"
+
+#: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:123
+msgid "Theme input example"
+msgstr "主题输入示例"
+
+#: ui/themes/themeDocument.ts:55
+msgid "Theme mode must be light or dark."
+msgstr "主题模式必须为浅色或深色。"
+
+#: ui/themes/themeDocument.ts:50
+msgid "Theme name must contain 1 to 80 characters."
+msgstr "主题名称必须包含 1 到 80 个字符。"
 
 #: ui/components/game/modals/ConcedeGameModal.tsx:37
 msgid "This app hosts the table. After conceding, stay connected so the remaining players can finish. Leaving later will end their game."
 msgstr "此应用托管牌桌。认输后请保持连接，以便其余玩家完成对局。之后离开会结束他们的对局。"
 
+#: ui/lib/guestName.ts:19
+msgid "This browser can't store an identity (enable local storage)."
+msgstr "此浏览器无法存储身份（请启用本地存储）。"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:74
+msgid "This checkpoint is too large to save on this device"
+msgstr "此检查点太大，无法保存在此设备上"
+
+#: ui/hooks/useQuickPlay.tsx:243
+msgid "This Community deck uses an unsupported format."
+msgstr "此社区套牌使用了不支持的赛制。"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:32
+msgid "This deck changed on another device"
+msgstr "此套牌已在另一台设备上更改"
+
+#: ui/components/deck/HubDeckPreviewDialog.tsx:269
+msgid "This deck could not be loaded"
+msgstr "无法加载此套牌"
+
+#. placeholder {0}: entry.engines[0]
+#. placeholder {0}: preset.engines?.[0] ?? "Ironsmith"
+#: ui/hooks/useQuickPlay.tsx:222
+#: ui/hooks/useQuickPlay.tsx:249
+msgid "This deck is built for the {0} engine — start a table with that engine from Multiplayer."
+msgstr "此套牌是为 {0} 引擎构建的 — 请从多人游戏中使用该引擎开设牌桌。"
+
+#: ui/hooks/useQuickPlay.tsx:90
+msgid "This deck uses an unsupported format."
+msgstr "此套牌使用了不支持的赛制。"
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:82
 msgid "This estimate does not model trample, prevention or replacement effects."
 msgstr "此估算未考虑践踏、防止或替代效应。"
+
+#: ui/platform/index.ts:12
+msgid "This feature is not available in the local Phase backend."
+msgstr "本地 Phase 后端不支持此功能。"
 
 #: ui/components/game/GameLoadingScreen.tsx:70
 msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
 msgstr "这比预期耗时更长。你可以继续等待，或离开并返回大厅。"
 
+#: ui/components/deck/HubTopDeckSnapshots.tsx:138
+msgid "This ranking is unavailable"
+msgstr "此排名不可用"
+
+#: ui/stores/useChatStore.ts:67
+msgid "This relay doesn't support chat"
+msgstr "此中继不支持聊天"
+
+#: ui/views/Lobby.tsx:361
+msgid "This room has no draft config — recreate it as a Draft room."
+msgstr "此房间没有轮抽配置 — 请将其重新创建为轮抽房间。"
+
+#: ui/views/Lobby.tsx:409
+msgid "This room has no sealed config — recreate it as a Sealed room."
+msgstr "此房间没有现开配置 — 请将其重新创建为现开房间。"
+
 #: ui/components/LandscapeGate.tsx:29
 msgid "This screen is designed for landscape play."
 msgstr "此界面专为横屏游戏设计。"
+
+#: ui/phase/online.ts:102
+msgid "This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2)."
+msgstr "此服务器不支持所需的 Phase 多人协议（76 / ManaBrew 2）。"
+
+#: ui/hooks/useQuickPlay.tsx:217
+msgid "This starter deck uses an unsupported format."
+msgstr "此新手套牌使用了不支持的赛制。"
+
+#: ui/components/companion/SetupMenu.tsx:115
+#: ui/components/companion/TurnTimer.tsx:94
+msgid "Timer mode"
+msgstr "计时器模式"
+
+#: ui/views/CasualModes.tsx:112
+msgid "Tiny Leaders"
+msgstr "小小指挥官"
+
+#: ui/components/lobby/ChatPanel.tsx:159
+msgid "to chat in General"
+msgstr "在 General 中聊天"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:80
+msgid "Token"
+msgstr "衍生物"
+
+#: ui/components/editor/TokenSection.tsx:43
+msgid "Tokens"
+msgstr "衍生物"
+
+#: ui/api/auth.ts:23
+msgid "Too many attempts — try again in a few minutes."
+msgstr "尝试次数过多 — 请几分钟后重试。"
+
+#: ui/components/dev/BoardDevControls.tsx:226
+msgid "Tools"
+msgstr "工具"
 
 #: ui/components/layout/TopBar.tsx:48
 msgid "Top Decks"
 msgstr "热门套牌"
 
+#: ui/components/deck/DeckHubTopDeckPreview.tsx:37
+msgid "Top decks right now"
+msgstr "当前热门套牌"
+
+#: ui/components/editor/CardSearch.tsx:1136
+msgid "tou"
+msgstr "防御力"
+
+#: ui/views/Tournaments.tsx:63
+msgid "Tournament code"
+msgstr "锦标赛代码"
+
+#: ui/phase/tournaments.ts:83
+msgid "Tournament management requires lobby protocol 9 or newer."
+msgstr "锦标赛管理需要大厅协议 9 或更高版本。"
+
+#: ui/views/Tournaments.tsx:33
+msgid "Tournament organizer: manual results are unverified. Pairings do not create hosted games, verify decks, or automatically report results. Standings reflect player reports."
+msgstr "锦标赛组织者：手动结果未经核实。配对不会创建托管对局、不会验证套牌，也不会自动上报结果。排名仅反映玩家上报的结果。"
+
+#: ui/views/OnlineDraftPanel.tsx:43
+msgid "Traditional (Bo3)"
+msgstr "传统（三局两胜）"
+
+#: ui/components/companion/GameSummaryDialog.tsx:60
+msgid "Turns"
+msgstr "回合数"
+
+#: ui/components/editor/ManaProbabilityPanel.tsx:49
+msgid "Two or more lands in your opener"
+msgstr "起手有两张或更多地"
+
+#: ui/views/CasualModes.tsx:184
+msgid "Two teams of two share a 30-life total and take their turns together."
+msgstr "两队各两人共享 30 点生命总数，并一起进行回合。"
+
+#: ui/views/CasualModes.tsx:183
+msgid "Two-Headed Giant"
+msgstr "双头巨人"
+
+#: ui/views/CasualModes.tsx:84
+msgid "Two-seat shared-stack pile draft: take a pile or decline it."
+msgstr "双人共享牌堆式轮抽：拿取一堆或放弃。"
+
+#: ui/components/editor/CardDetailModal.tsx:291
+#: ui/components/editor/CardSearch.tsx:1074
+msgid "Type"
+msgstr "类别"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:62
+msgid "Type scale"
+msgstr "字号比例"
+
 #: ui/components/lobby/PlaytestPlayersDialog.tsx:38
-msgid "Unavailable with the local Phase host. Choose 1v1."
-msgstr "本地 Phase 暂不支持四人对局，请选择 1v1。"
+#~ msgid "Unavailable with the local Phase host. Choose 1v1."
+#~ msgstr "本地 Phase 暂不支持四人对局，请选择 1v1。"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:96
 msgid "Unblocked"
 msgstr "未阻挡"
+
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:85
+#: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:86
+msgid "Undo draft change"
+msgstr "撤销草稿更改"
+
+#: ui/themes/themeDocument.ts:38
+msgid "Unknown {label} color: {key}."
+msgstr "未知的 {label} 颜色：{key}。"
+
+#: ui/themes/themeDocument.ts:53
+msgid "Unknown base preset."
+msgstr "未知的基础预设。"
+
+#: ui/workers/game-engine.worker.ts:563
+msgid "Unknown command: {command}"
+msgstr "未知命令：{command}"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:379
+#: ui/components/lobby/CustomFormatDialog.tsx:404
+msgid "Unlimited"
+msgstr "无限"
+
+#: ui/views/DeckEditor.tsx:1120
+#: ui/views/DeckEditor.tsx:1147
+msgid "Unsaved Changes"
+msgstr "未保存的更改"
+
+#: ui/phase/conspiracies.ts:20
+msgid "Unsupported conspiracy preparation response"
+msgstr "不支持的阴谋准备响应"
+
+#: ui/lib/customFormats.ts:143
+msgid "Unsupported custom format storage version; existing data was not overwritten."
+msgstr "不支持的自定义赛制存储版本；现有数据未被覆盖。"
+
+#: ui/lib/customFormats.ts:254
+msgid "Unsupported custom format version."
+msgstr "不支持的自定义赛制版本。"
+
+#: ui/pixi/manaSymbolCache.ts:16
+msgid "unsupported mana symbol: {symbol}"
+msgstr "不支持的法术力符号：{symbol}"
+
+#: ui/lib/customFormats.ts:215
+msgid "Unsupported player count for this custom format."
+msgstr "此自定义赛制不支持该玩家数量。"
+
+#: ui/components/dev/gameplayPromptFixtures.ts:161
+msgid "Unsupported prompt preview: {preview}"
+msgstr "不支持的提示预览：{preview}"
+
+#: ui/themes/themeDocument.ts:48
+msgid "Unsupported theme version. Expected version 1."
+msgstr "不支持的主题版本。预期版本为 1。"
 
 #: ui/components/game/ManualTabletopControls.tsx:397
 #: ui/components/game/ManualTabletopControls.tsx:398
 msgid "Untap"
 msgstr "重置"
 
+#: ui/components/deck/PublishDeckDialog.tsx:188
+msgid "Up to 10 tags, separated by commas."
+msgstr "最多 10 个标签，以逗号分隔。"
+
 #: ui/components/layout/TopBar.tsx:199
 msgid "Update"
 msgstr "更新"
+
+#: ui/components/layout/UpdateCallout.tsx:20
+msgid "Update available"
+msgstr "有可用更新"
+
+#: ui/hooks/useDesktopUpdater.ts:52
+msgid "Update failed to install. You can retry from the home page."
+msgstr "更新安装失败。你可以从主页重试。"
 
 #: ui/components/layout/TopBar.tsx:111
 msgid "Update to {version}"
 msgstr "更新到 {version}"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:102
+#: ui/components/deck/DeckHubResults.tsx:87
+msgid "Updating…"
+msgstr "正在更新…"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:82
+msgid "Usage"
+msgstr "用法"
+
+#: ui/components/lobby/TableSetupGameCard.tsx:214
+msgid "Use a CubeCobra cube instead of a set"
+msgstr "使用 CubeCobra cube 代替系列"
+
+#: ui/views/Settings.tsx:172
+msgid "Use a valid hex or rgb/rgba color."
+msgstr "请使用有效的十六进制或 rgb/rgba 颜色。"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:114
 msgid "Use folder"
 msgstr "使用此文件夹"
 
@@ -1267,15 +4847,47 @@ msgstr "使用此文件夹"
 msgid "Use system language"
 msgstr "跟随系统语言"
 
+#: ui/components/editor/DeckSaveConflictDialog.tsx:66
+msgid "Use the account version"
+msgstr "使用账户版本"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:197
 msgid "Used when a table does not provide its own background, including offline games."
 msgstr "用于牌桌未提供自身背景时，包括离线对局。"
+
+#: ui/components/ui/form.tsx:47
+msgid "useFormField should be used within <FormField>"
+msgstr "useFormField 应在 <FormField> 内使用"
+
+#: ui/components/ui/form.tsx:51
+msgid "useFormField should be used within <FormItem>"
+msgstr "useFormField 应在 <FormItem> 内使用"
+
+#: ui/components/settings/GuestNamePicker.tsx:39
+msgid "Username"
+msgstr "用户名"
+
+#: ui/components/settings/GuestNamePicker.tsx:24
+msgid "Username updated"
+msgstr "用户名已更新"
+
+#: ui/components/dev/designSystem/sections/TypographySection.tsx:81
+msgid "Value"
+msgstr "数值"
 
 #. placeholder {0}: TERMS_AND_CONDITIONS.version
 #. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
 #: ui/components/AppInitGate.tsx:242
 msgid "Version {0} · Updated {1}"
 msgstr "版本 {0} · 更新于 {1}"
+
+#: ui/components/editor/DeckBuilder.tsx:2475
+msgid "Version {versionNo} loaded. Save to create a new version."
+msgstr "已加载版本 {versionNo}。保存以创建新版本。"
+
+#: ui/components/deck/DeckVersionHistoryDialog.tsx:71
+msgid "Version history"
+msgstr "版本历史"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:217
 #: ui/components/game/panels/PlayerSheetModal.tsx:289
@@ -1290,7 +4902,15 @@ msgstr "查看允许看的手牌"
 msgid "View visible cards"
 msgstr "查看可见的牌"
 
-#: ui/views/Play.tsx:154
+#: ui/components/lobby/CreateGameDialog.tsx:788
+msgid "vs"
+msgstr "对"
+
+#: ui/components/lobby/DeckVsSelector.tsx:806
+msgid "VS"
+msgstr "对"
+
+#: ui/views/Play.tsx:164
 msgid "Waiting for game synchronization…"
 msgstr "正在等待游戏同步…"
 
@@ -1298,13 +4918,42 @@ msgstr "正在等待游戏同步…"
 msgid "Waiting for the game to respond…"
 msgstr "正在等待对局响应…"
 
+#: ui/components/lobby/TableRoom.tsx:113
+msgid "Waiting for the host to start."
+msgstr "等待主持人开始。"
+
+#: ui/views/OnlineDraftPanel.tsx:72
+msgid "Waiting for the next pack…"
+msgstr "等待下一个补充包…"
+
+#: ui/phase/onlineDraft.ts:68
+msgid "Waiting for the server to confirm the previous draft action."
+msgstr "正在等待服务器确认上一个轮抽操作。"
+
 #: ui/phase/Launch.tsx:194
 #~ msgid "Want to pick your own decks?"
 #~ msgstr "想自己选卡组？"
 
+#: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:79
+msgid "Warning"
+msgstr "警告"
+
+#: ui/lib/imageEncode.ts:49
+msgid "WebP encoding unsupported"
+msgstr "不支持 WebP 编码"
+
+#: ui/components/play/PlayHomeLinks.tsx:132
+msgid "Website"
+msgstr "网站"
+
 #: ui/components/AppInitGate.tsx:139
 msgid "Welcome to"
 msgstr "欢迎来到"
+
+#. placeholder {0}: updated.handle
+#: ui/components/OnboardingHurray.tsx:30
+msgid "Welcome, @{0}!"
+msgstr "欢迎，@{0}！"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:141
 msgid "When off, simultaneous triggers are ordered automatically."
@@ -1314,13 +4963,34 @@ msgstr "关闭时，同时触发的异能会自动排序。"
 msgid "White"
 msgstr "白"
 
+#: ui/components/companion/StatsDialog.tsx:76
+msgid "Wins by player"
+msgstr "各玩家胜场"
+
 #: ui/components/layout/TopBar.tsx:66
+#: ui/views/CasualModes.tsx:83
 msgid "Winston Draft"
 msgstr "温斯顿轮抽"
 
-#: ui/components/settings/CardImageLibraryCard.tsx:106
+#: ui/components/lobby/CustomFormatDialog.tsx:452
+msgid "Wish scope"
+msgstr "许愿范围"
+
+#: ui/components/lobby/CustomFormatDialog.tsx:450
+msgid "Wishes"
+msgstr "愿望"
+
+#: ui/platform/web.ts:598
+msgid "Worker not initialized"
+msgstr "Worker 未初始化"
+
+#: ui/components/settings/CardImageLibraryCard.tsx:118
 msgid "Working…"
 msgstr "处理中…"
+
+#: ui/components/editor/CardSearch.tsx:1236
+msgid "Year"
+msgstr "年份"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:58
 msgid "You"
@@ -1330,9 +5000,99 @@ msgstr "你"
 msgid "You and one AI opponent. Faster turns, quicker goldfishing."
 msgstr "你与一名 AI 对手对战。"
 
+#: ui/components/lobby/PlaytestPlayersDialog.tsx:38
+msgid "You and three AI opponents at a four-player table."
+msgstr "你与三名 AI 对手进行四人桌对局。"
+
+#: ui/views/CasualModes.tsx:170
+msgid "You at 40 life against the heroes at 20, with the engine-managed scheme deck."
+msgstr "你以 40 点生命对抗 20 点生命的英雄，并使用引擎管理的谋略牌组。"
+
+#: ui/components/settings/SignInMethodsCard.tsx:67
+msgid "You can't unlink your only sign-in method"
+msgstr "你不能取消关联唯一的登录方式"
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:76
+msgid "You conceded"
+msgstr "你已认输"
+
 #: ui/components/game/modals/ConcedeGameModal.tsx:34
 msgid "You forfeit the game. This cannot be undone."
 msgstr "你将放弃本局对局。此操作无法撤销。"
+
+#: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:72
+msgid "You lost"
+msgstr "你输了"
+
+#: ui/components/lobby/TableRoom.tsx:112
+msgid "You're ready"
+msgstr "你已就绪"
+
+#. placeholder {0}: formatBytes(quota.usedBytes)
+#. placeholder {1}: formatBytes(quota.quotaBytes)
+#: ui/stores/useAssetStore.ts:169
+msgid "You've used {0} of your {1} of image storage. Remove an image to free space."
+msgstr "你已使用 {0} / {1} 的图片存储空间。删除一张图片以释放空间。"
+
+#: ui/components/auth/SignInFlow.tsx:247
+msgid "you@example.com"
+msgstr "you@example.com"
+
+#: ui/components/settings/DeleteAccountDialog.tsx:46
+msgid "Your account has been deleted"
+msgstr "你的账户已被删除"
+
+#: ui/components/game/SideboardDialog.tsx:51
+msgid "Your deck does not meet the size requirements."
+msgstr "你的套牌不满足数量要求。"
+
+#: ui/components/lobby/CreateGameDialog.tsx:587
+msgid "Your Decks"
+msgstr "你的套牌"
+
+#: ui/components/play/OwnedDeckShelf.tsx:32
+msgid "Your first deck is waiting to be brewed."
+msgstr "你的第一套牌正等着你去构筑。"
+
+#: ui/hooks/useGameSessionResume.ts:141
+msgid "Your game could not be resumed — the host left mid-game."
+msgstr "无法恢复你的游戏 — 主持人在游戏中途离开了。"
+
+#: ui/views/OnlinePlay.tsx:47
+msgid "Your name"
+msgstr "你的名字"
+
+#: ui/views/OnlineDraftPanel.tsx:73
+msgid "Your pool"
+msgstr "你的牌池"
+
+#: ui/hooks/useGameSessionResume.ts:60
+msgid "Your previous desktop Forge game ended when the app closed."
+msgstr "你之前的桌面 Forge 游戏随应用关闭而结束。"
+
+#: ui/hooks/useGameSessionResume.ts:237
+msgid "Your previous game has ended."
+msgstr "你之前的游戏已结束。"
+
+#: ui/components/lobby/ReportPlayerDialog.tsx:107
+msgid "Your report has been sent."
+msgstr "你的举报已发送。"
+
+#: ui/hooks/useGameEventListeners.ts:103
+msgid "Your seat was forfeited while you were disconnected."
+msgstr "你在断开连接期间席位被判负。"
+
+#: ui/views/Settings.tsx:443
+msgid "Your servers"
+msgstr "你的服务器"
+
+#: ui/components/auth/SignInFlow.tsx:352
+msgid "your-handle"
+msgstr "your-handle"
+
+#: ui/components/OnboardingHurray.tsx:67
+msgid "your-username"
+msgstr "your-username"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:226
 msgid "Zone explorers support persistent tap and keyboard inspection independently."

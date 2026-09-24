@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Modal } from "@/components/game/modals/Modal";
@@ -145,13 +147,13 @@ export function PlaymatEditorModal({
     setFetching(true);
     try {
       const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) throw new Error(t`HTTP ${res.status}`);
       const uploaded = await replaceAsset("playmat", await res.blob(), playmatAssetId);
       if (!uploaded) return;
       setPlaymat(uploaded.url, uploaded.assetId);
       update({ fit: "cover" });
     } catch {
-      toast.error(`Couldn't load that preset.`);
+      toast.error(t`Couldn't load that preset.`);
     } finally {
       setFetching(false);
     }
@@ -268,13 +270,13 @@ export function PlaymatEditorModal({
                   <TooltipContent className="max-w-xs">
                     The playmat fills a wide, landscape area (roughly 5:2). For a crisp result use a
                     landscape image at least ~1600px wide — up to 4096px on the long edge and
-                    3&nbsp;MB are kept. Use <strong>Cover</strong>, then drag and scroll to zoom and
+                    3&nbsp;MB are kept. Use <strong><Trans>Cover</Trans></strong>, then drag and scroll to zoom and
                     frame it.
                   </TooltipContent>
                 </Tooltip>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-muted-foreground">Placement</Label>
+                <Label className="text-xs font-medium text-muted-foreground"><Trans>Placement</Trans></Label>
                 <div className="inline-flex w-full rounded-lg border bg-muted/40 p-1">
                   {(["cover", "fit", "stretch"] as const).map((mode) => (
                     <button
@@ -378,7 +380,7 @@ export function PlaymatEditorModal({
                 onChange={(v) => update({ texture: v / 100 })}
               />
               <div className="space-y-2 rounded-lg border bg-card/40 p-3">
-                <Label className="text-xs font-medium">Background color</Label>
+                <Label className="text-xs font-medium"><Trans>Background color</Trans></Label>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
@@ -428,7 +430,7 @@ export function PlaymatEditorModal({
                 onChange={(v) => update({ borderWidth: v })}
               />
               <div className="space-y-2 rounded-lg border bg-card/40 p-3">
-                <Label className="text-xs font-medium">Color</Label>
+                <Label className="text-xs font-medium"><Trans>Color</Trans></Label>
                 <div className="flex items-center gap-2">
                   <input
                     type="color"

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +37,7 @@ export function DiceTray() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuLabel>Roll</DropdownMenuLabel>
+          <DropdownMenuLabel><Trans>Roll</Trans></DropdownMenuLabel>
           <DropdownMenuSeparator />
           {DICE.map((sides) => (
             <DropdownMenuItem key={sides} onSelect={() => setRoll({ kind: "die", sides })}>
@@ -44,7 +45,7 @@ export function DiceTray() {
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => setRoll({ kind: "coin" })}>Coin flip</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setRoll({ kind: "coin" })}><Trans>Coin flip</Trans></DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       {roll?.kind === "die" && (

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import type { Update } from "@tauri-apps/plugin-updater";
@@ -48,7 +49,7 @@ export async function installDesktopUpdate() {
     await relaunch();
   } catch (err) {
     console.error("[Updater] install failed", err);
-    toast.error(`Update failed to install. You can retry from the home page.`);
+    toast.error(t`Update failed to install. You can retry from the home page.`);
     setFailed();
   } finally {
     installInFlight = false;

@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { ArrowDownToLine, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { installDesktopUpdate } from "@/hooks/useDesktopUpdater";
@@ -16,7 +17,7 @@ export function UpdateCallout() {
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <ArrowDownToLine className="h-4 w-4 shrink-0 text-primary" />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold">Update available</p>
+          <p className="text-sm font-semibold"><Trans>Update available</Trans></p>
           <p className="text-xs text-muted-foreground">Manabrew {version} is ready to install.</p>
         </div>
         <Button

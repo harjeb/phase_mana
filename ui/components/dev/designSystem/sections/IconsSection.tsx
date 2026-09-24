@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import * as LucideIcons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { GameIcon } from "@/components/game/GameIcon";
@@ -16,7 +17,7 @@ export function IconsSection() {
       intro="Chrome uses lucide-react (h-4 w-4, currentColor). Domain glyphs come from the game-icons pack via GameIcon, two hand-rolled brand SVGs, Scryfall mana symbols, and themed counter chips."
     >
       <div className="space-y-4">
-        <Subhead>lucide-react — UI chrome</Subhead>
+        <Subhead><Trans>lucide-react — UI chrome</Trans></Subhead>
         {LUCIDE_GROUPS.map((grp) => (
           <div key={grp.group} className="space-y-2">
             <div className="font-mono text-[11px] text-muted-foreground">{grp.group}</div>
@@ -34,7 +35,7 @@ export function IconsSection() {
         ))}
       </div>
 
-      <Subhead>game-icons — GameIcon whitelist</Subhead>
+      <Subhead><Trans>game-icons — GameIcon whitelist</Trans></Subhead>
       <TileGrid>
         {GAME_ICONS.map((name) => (
           <Tile key={name} label={name}>
@@ -43,7 +44,7 @@ export function IconsSection() {
         ))}
       </TileGrid>
 
-      <Subhead>Hand-rolled brand SVGs</Subhead>
+      <Subhead><Trans>Hand-rolled brand SVGs</Trans></Subhead>
       <TileGrid>
         <Tile label={`DiscordIcon`}>
           <DiscordIcon className="h-6 w-6" />
@@ -53,7 +54,7 @@ export function IconsSection() {
         </Tile>
       </TileGrid>
 
-      <Subhead>Mana symbols — ManaSymbols (Scryfall SVG)</Subhead>
+      <Subhead><Trans>Mana symbols — ManaSymbols (Scryfall SVG)</Trans></Subhead>
       <Panel className="space-y-3">
         {MANA_COSTS.map((m) => (
           <div key={m.label} className="flex items-center gap-3">
@@ -64,7 +65,7 @@ export function IconsSection() {
         ))}
       </Panel>
 
-      <Subhead>Counters — CounterBadge</Subhead>
+      <Subhead><Trans>Counters — CounterBadge</Trans></Subhead>
       <div className="flex flex-wrap gap-2">
         {COUNTER_TYPES.map((type) => (
           <CounterBadge key={type} type={type} count={3} size="md" />

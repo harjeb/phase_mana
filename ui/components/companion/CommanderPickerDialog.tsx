@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Loader2, Search, X } from "lucide-react";
 import { ScryfallImg } from "@/components/ScryfallImg";
@@ -38,7 +39,7 @@ export function CommanderPickerDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle>Choose commander</DialogTitle>
+          <DialogTitle><Trans>Choose commander</Trans></DialogTitle>
         </DialogHeader>
         {open && (
           <CommanderPickerForm

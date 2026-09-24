@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Gauge } from "lucide-react";
 import { ManaSymbols } from "@/components/game/ManaSymbols";
 import { isLand } from "@/lib/mana";
@@ -40,12 +41,12 @@ export function ManaProbabilityPanel({ deck }: { deck: EditorDeck }) {
     <section className={EDITOR_PANEL_CLASS}>
       <div className="flex items-center gap-2">
         <Gauge className="h-4 w-4 text-primary" />
-        <h3 className="text-sm font-semibold">Mana consistency</h3>
-        <span className="text-xs text-muted-foreground">on the play</span>
+        <h3 className="text-sm font-semibold"><Trans>Mana consistency</Trans></h3>
+        <span className="text-xs text-muted-foreground"><Trans>on the play</Trans></span>
       </div>
       <div className="mt-4 grid gap-3 md:grid-cols-[minmax(10rem,0.7fr)_minmax(0,2fr)]">
         <div className={EDITOR_SUBTLE_BLOCK_CLASS}>
-          <p className="text-xs text-muted-foreground">Two or more lands in your opener</p>
+          <p className="text-xs text-muted-foreground"><Trans>Two or more lands in your opener</Trans></p>
           <p className="mt-1 font-mono text-2xl font-semibold tabular-nums">
             {percentage(openingTwoLands)}
           </p>

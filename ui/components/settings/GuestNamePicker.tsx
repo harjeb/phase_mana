@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,7 +21,7 @@ export function GuestNamePicker() {
     setError(null);
     try {
       await reserveGuestName(base);
-      toast.success(`Username updated`);
+      toast.success(t`Username updated`);
     } catch (err) {
       setError(
         isNameClaimedError(err)
@@ -34,7 +36,7 @@ export function GuestNamePicker() {
   }
   return (
     <div className="space-y-2">
-      <Label htmlFor="guest-username">Username</Label>
+      <Label htmlFor="guest-username"><Trans>Username</Trans></Label>
       <div className="flex items-center gap-2">
         <Input
           id="guest-username"
@@ -53,7 +55,7 @@ export function GuestNamePicker() {
         </Button>
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
-      <p className="text-xs text-muted-foreground">Playing as a guest.</p>
+      <p className="text-xs text-muted-foreground"><Trans>Playing as a guest.</Trans></p>
     </div>
   );
 }

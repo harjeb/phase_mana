@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { getPlatform } from "@/platform";
 import type { ClientGameView } from "@/stores/gameStore.types";
 import type { ManualTabletopAction, SeatController } from "./runtime.types";
@@ -75,7 +76,7 @@ export class BroadcastRoomHost {
   private async broadcast(payload: RoomHostPayload): Promise<void> {
     const server = getPlatform().server;
     if (!server) {
-      throw new Error("Room hosting requires a server connection.");
+      throw new Error(t`Room hosting requires a server connection.`);
     }
     await server.sendRoomMessage(
       createRoomRelayEnvelope({

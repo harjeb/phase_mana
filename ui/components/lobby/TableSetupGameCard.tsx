@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Check, ChevronDown, Loader2, Sparkles, Swords, Users, Wand2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -103,7 +104,7 @@ export function TableSetupGameCard({
   }
   return (
     <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-      <h2 className="text-sm font-semibold">The game</h2>
+      <h2 className="text-sm font-semibold"><Trans>The game</Trans></h2>
       <div className="mt-3 space-y-4">
         <div className="flex overflow-hidden rounded-md border">
           <ModeButton
@@ -133,7 +134,7 @@ export function TableSetupGameCard({
 
         {kind === "match" && (
           <div className="space-y-1.5">
-            <Label className="text-xs font-medium">Format</Label>
+            <Label className="text-xs font-medium"><Trans>Format</Trans></Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
@@ -210,7 +211,7 @@ export function TableSetupGameCard({
                 }}
                 className="h-3.5 w-3.5"
               />
-              <span>Use a CubeCobra cube instead of a set</span>
+              <span><Trans>Use a CubeCobra cube instead of a set</Trans></span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
@@ -350,7 +351,7 @@ export function TableSetupGameCard({
                 onChange={(e) => onDraftFillWithBotsChange(e.target.checked)}
                 className="h-3.5 w-3.5"
               />
-              <span>Fill empty seats with AI bots</span>
+              <span><Trans>Fill empty seats with AI bots</Trans></span>
             </label>
           </>
         )}

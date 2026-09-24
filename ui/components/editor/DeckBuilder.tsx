@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useDeckStore } from "@/stores/useDeckStore";
 import { useNavigate } from "react-router-dom";
 import { useAccountDecksStore } from "@/stores/useAccountDecksStore";
@@ -589,9 +591,9 @@ export function DeckBuilder({
       await navigator.clipboard.writeText(
         [...counts].map(([name, count]) => `${count} ${name}`).join("\n"),
       );
-      toast.success(`Copied ${counts.size} selected card${counts.size === 1 ? "" : "s"}`);
+      toast.success(t`Copied ${counts.size} selected card${counts.size === 1 ? "" : "s"}`);
     } catch {
-      toast.error(`Could not write selected cards to the clipboard`);
+      toast.error(t`Could not write selected cards to the clipboard`);
     }
   }
   async function pasteCards() {
@@ -599,12 +601,12 @@ export function DeckBuilder({
     try {
       const entries = parseDeckListText(await navigator.clipboard.readText());
       if (entries.length === 0) {
-        toast.error(`Clipboard does not contain a recognized card list`);
+        toast.error(t`Clipboard does not contain a recognized card list`);
         return;
       }
       await importIntoCurrentDeck(entries, "", undefined, () => undefined);
     } catch {
-      toast.error(`Could not read cards from the clipboard`);
+      toast.error(t`Could not read cards from the clipboard`);
     }
   }
   function addOneEachSelected() {
@@ -628,9 +630,9 @@ export function DeckBuilder({
         added += 1;
       }
     });
-    if (added > 0) toast.success(`Added one copy of ${added} cards`);
+    if (added > 0) toast.success(t`Added one copy of ${added} cards`);
     if (added < selectedCards.size) {
-      toast.warning(`Command-zone and special-section cards were not duplicated`);
+      toast.warning(t`Command-zone and special-section cards were not duplicated`);
     }
   }
   function removeOneEachSelected() {
@@ -641,7 +643,7 @@ export function DeckBuilder({
         }
       }
     });
-    toast.success(`Removed one copy of ${selectedCards.size} cards`);
+    toast.success(t`Removed one copy of ${selectedCards.size} cards`);
   }
   function toggleSelectedFoil() {
     bulkAction(`Toggled foil for ${selectedCards.size} cards`, () => {
@@ -662,7 +664,7 @@ export function DeckBuilder({
       for (const name of selectedCards) tagCard(name, tag);
     });
     clearSelection();
-    toast.success(`Tagged cards with "${tag}"`);
+    toast.success(t`Tagged cards with "${tag}"`);
   };
   const selectedCardTags = (() => {
     if (selectedCards.size === 0 || !currentDeck.cardTags) return [];
@@ -821,7 +823,7 @@ export function DeckBuilder({
     });
     if (moved > 0) {
       const label = destination === "main" ? `main` : `${destination}board`;
-      toast.success(`Moved ${moved} ${cardName} to ${label}`);
+      toast.success(t`Moved ${moved} ${cardName} to ${label}`);
     }
   }
   function handleRemoveOneFromMain(cardName: string) {
@@ -856,7 +858,7 @@ export function DeckBuilder({
         collectorNumber: deckCard.identity.cardNumber,
       })
       .then((sc) => setDetailCard(sc.info))
-      .catch(() => toast.error(`Could not fetch info for "${deckCard.identity.name}"`));
+      .catch(() => toast.error(t`Could not fetch info for "${deckCard.identity.name}"`));
   }
   function handleShowTokenInfo(token: DeckCard) {
     useScryfallStore
@@ -870,7 +872,7 @@ export function DeckBuilder({
         setDetailPrinting(null);
         setDetailCard(sc.info);
       })
-      .catch(() => toast.error(`Could not fetch info for "${token.identity.name}"`));
+      .catch(() => toast.error(t`Could not fetch info for "${token.identity.name}"`));
   }
   function handleRemoveOneFromSide(cardName: string) {
     const source = currentDeck.sideboard.some((card) => card.identity.name === cardName)
@@ -906,7 +908,7 @@ export function DeckBuilder({
     if (currentDeck.format === "oathbreaker") {
       if (!canBeOathbreaker(card) && !canBeSignatureSpell(card)) {
         toast.warning(
-          `"${card.identity.name}" is not a legal oathbreaker or signature spell — an oathbreaker must be a planeswalker, a signature spell an instant or sorcery`,
+          t`"${card.identity.name}" is not a legal oathbreaker or signature spell — an oathbreaker must be a planeswalker, a signature spell an instant or sorcery`,
         );
         return;
       }
@@ -914,7 +916,7 @@ export function DeckBuilder({
       return;
     }
     if (!isCommanderEligible(card)) {
-      toast.warning(`"${card.identity.name}" is not a legal commander`);
+      toast.warning(t`"${card.identity.name}" is not a legal commander`);
       return;
     }
     const existing = currentDeck.commanders ?? [];
@@ -924,17 +926,17 @@ export function DeckBuilder({
       const newHasPartner = canBePartnerCommander(card);
       if (!existingHasPartner && !newHasPartner) {
         toast.info(
-          `"${existing[0].identity.name}" replaced — neither commander has a partner ability`,
+          t`"${existing[0].identity.name}" replaced — neither commander has a partner ability`,
         );
       } else if (!existingHasPartner) {
-        toast.info(`"${existing[0].identity.name}" replaced — it doesn't have a partner ability`);
+        toast.info(t`"${existing[0].identity.name}" replaced — it doesn't have a partner ability`);
       } else if (!newHasPartner) {
         toast.info(
-          `"${card.identity.name}" set as sole commander — it doesn't have a partner ability`,
+          t`"${card.identity.name}" set as sole commander — it doesn't have a partner ability`,
         );
       } else {
         toast.info(
-          `"${existing[0].identity.name}" replaced — "${card.identity.name}" must partner with a different card`,
+          t`"${existing[0].identity.name}" replaced — "${card.identity.name}" must partner with a different card`,
         );
       }
     }
@@ -961,7 +963,7 @@ export function DeckBuilder({
       const format = getFormat(currentDeck.format ?? "standard");
       const formatName = format?.name ?? currentDeck.format ?? `this format`;
       toast.error(
-        `Max ${format?.deckRules.maxCopies ?? 0} copies of "${group.card.identity.name}" allowed in ${formatName}`,
+        t`Max ${format?.deckRules.maxCopies ?? 0} copies of "${group.card.identity.name}" allowed in ${formatName}`,
       );
       return;
     }
@@ -974,7 +976,7 @@ export function DeckBuilder({
       const format = getFormat(currentDeck.format ?? "standard");
       const formatName = format?.name ?? currentDeck.format ?? `this format`;
       toast.error(
-        `Max ${format?.deckRules.maxCopies ?? 0} copies of "${cardName}" allowed in ${formatName}`,
+        t`Max ${format?.deckRules.maxCopies ?? 0} copies of "${cardName}" allowed in ${formatName}`,
       );
       return;
     }
@@ -987,20 +989,20 @@ export function DeckBuilder({
   }
   function handleExport() {
     const text = exportToArena(currentDeck);
-    navigator.clipboard.writeText(text).then(() => toast.success(`Deck copied to clipboard`));
+    navigator.clipboard.writeText(text).then(() => toast.success(t`Deck copied to clipboard`));
   }
   function handleExactExport() {
     navigator.clipboard
       .writeText(exportWithPrintings(currentDeck))
-      .then(() => toast.success(`Exact printings copied to clipboard`))
-      .catch(() => toast.error(`Could not write to the clipboard`));
+      .then(() => toast.success(t`Exact printings copied to clipboard`))
+      .catch(() => toast.error(t`Could not write to the clipboard`));
   }
   async function handleSave(deckOverride?: EditorDeck, quiet = false) {
     if (saveInFlightRef.current) return;
     const sourceDeck = deckOverride ?? currentDeck;
     const normalizedName = sourceDeck.name.trim();
     if (!normalizedName) {
-      toast.error(`Give this deck a name before saving`);
+      toast.error(t`Give this deck a name before saving`);
       return;
     }
     // A full save always clears the draft flag; keeping it here used to leak
@@ -1028,7 +1030,7 @@ export function DeckBuilder({
         if (changedDuringSave) useDeckStore.setState({ currentDeck: latestDeck });
         else rebaseDeckHistory(beforeAccountUpdate, useDeckStore.getState().currentDeck);
         setSyncState("synced");
-        if (!quiet) toast.success(`Saved version ${detail.currentVersionNo} to your account`);
+        if (!quiet) toast.success(t`Saved version ${detail.currentVersionNo} to your account`);
       } else {
         setSyncState("local");
         if (!quiet) showAccountSaveNudge();
@@ -1041,7 +1043,7 @@ export function DeckBuilder({
         );
       } else if (!quiet && !deckValidation.legal) {
         const validationError = deckValidation.errors[0] ?? `deck is not legal in this format`;
-        toast.warning(`Saved "${deckToSave.name}" — ${validationError}`);
+        toast.warning(t`Saved "${deckToSave.name}" — ${validationError}`);
       }
     } catch (error) {
       if (
@@ -1054,7 +1056,7 @@ export function DeckBuilder({
           setSaveConflict(await fetchAccountDeck(accountSavedDeck.accountDeckId));
         } catch {
           setSyncState("failed");
-          toast.error(`The account version could not be loaded. Your local copy is still saved.`);
+          toast.error(t`The account version could not be loaded. Your local copy is still saved.`);
         }
       } else {
         setSyncState("failed");
@@ -1131,7 +1133,7 @@ export function DeckBuilder({
           : `Saved "${currentDeck.name}" as draft — ${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`,
       );
     } else {
-      toast.success(`Draft "${currentDeck.name}" saved`);
+      toast.success(t`Draft "${currentDeck.name}" saved`);
     }
   }
   async function handleDeleteCurrentDeck() {
@@ -1161,7 +1163,7 @@ export function DeckBuilder({
       const snapshot = buildDeckSnapshot(savedDeck);
       setLastSavedDeck(savedDeck);
       setUnsavedState(snapshot, snapshot);
-      toast.success(`Deck deleted`);
+      toast.success(t`Deck deleted`);
       onDeckDeleted?.();
     } catch (error) {
       toast.error(error instanceof Error ? error.message : `Failed to delete deck`);
@@ -1195,7 +1197,7 @@ export function DeckBuilder({
     const importedId = importReadOnlyDeck();
     if (!importedId) return;
     onReadOnlyDeckImported?.(importedId);
-    toast.success(`Copied "${importedName}" to My Decks`);
+    toast.success(t`Copied "${importedName}" to My Decks`);
   }
   const editorCommands: DeckEditorCommand[] = [
     {
@@ -1652,7 +1654,7 @@ export function DeckBuilder({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className="flex shrink-0 items-center gap-1 rounded-md border px-1.5 py-0.5 text-xs text-muted-foreground transition-colors hover:text-foreground">
-                  <span>Sort: {SORT_OPTIONS.find((option) => option.value === sortBy)?.label}</span>
+                  <span><Trans>Sort: {SORT_OPTIONS.find((option) => option.value === sortBy)?.label}</Trans></span>
                   <ChevronDown className="h-2.5 w-2.5 opacity-60" />
                 </button>
               </DropdownMenuTrigger>
@@ -1753,7 +1755,7 @@ export function DeckBuilder({
                   if (quantity === 0) {
                     const formatName = format?.name ?? currentDeck.format ?? `this format`;
                     toast.error(
-                      `Max ${copyLimit ?? 0} copies of "${sc.name}" allowed in ${formatName}`,
+                      t`Max ${copyLimit ?? 0} copies of "${sc.name}" allowed in ${formatName}`,
                     );
                     return false;
                   }
@@ -1775,7 +1777,7 @@ export function DeckBuilder({
                   if (quantity < request.quantity) {
                     const formatName = format?.name ?? currentDeck.format ?? `this format`;
                     toast.warning(
-                      `Added ${quantity} of ${request.quantity} ${sc.name}; ${formatName} allows ${copyLimit ?? 0}`,
+                      t`Added ${quantity} of ${request.quantity} ${sc.name}; ${formatName} allows ${copyLimit ?? 0}`,
                     );
                   } else {
                     const destination =
@@ -1784,7 +1786,7 @@ export function DeckBuilder({
                         : request.destination === "maybe"
                           ? `maybeboard`
                           : `main deck`;
-                    toast.success(`Added ${quantity} ${sc.name} to ${destination}`);
+                    toast.success(t`Added ${quantity} ${sc.name} to ${destination}`);
                   }
                   return true;
                 }}
@@ -1970,7 +1972,7 @@ export function DeckBuilder({
                           className="h-5 w-5 text-destructive shrink-0"
                           onClick={() => {
                             executeDeckEdit(`Remove ${tag} tag`, () => removeCustomTag(tag));
-                            toast.success(`Tag "${tag}" removed`);
+                            toast.success(t`Tag "${tag}" removed`);
                           }}
                         >
                           <X className="h-3 w-3" />
@@ -1991,7 +1993,7 @@ export function DeckBuilder({
                         executeDeckEdit(`Create ${newTagInput.trim()} tag`, () =>
                           addCustomTag(newTagInput.trim()),
                         );
-                        toast.success(`Tag "${newTagInput.trim()}" added`);
+                        toast.success(t`Tag "${newTagInput.trim()}" added`);
                         setNewTagInput("");
                       }
                     }}
@@ -2262,7 +2264,7 @@ export function DeckBuilder({
               useDeckStore.setState({ currentDeck: deck }),
             );
             setCheckpointsOpen(false);
-            toast.success(`Restored "${checkpointName}"`);
+            toast.success(t`Restored "${checkpointName}"`);
           }}
         />
         <SideboardPlansDialog open={sideboardPlansOpen} onOpenChange={setSideboardPlansOpen} />
@@ -2470,7 +2472,7 @@ export function DeckBuilder({
               onRestore={(deck, versionNo) => {
                 useDeckStore.getState().loadDeck(deck);
                 resetDeckHistory();
-                toast.info(`Version ${versionNo} loaded. Save to create a new version.`);
+                toast.info(t`Version ${versionNo} loaded. Save to create a new version.`);
               }}
             />
           )}
@@ -2490,7 +2492,7 @@ export function DeckBuilder({
         {confirmClear && (
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-overlay/50 backdrop-blur-sm">
             <div className="bg-card border rounded-xl shadow-xl p-6 max-w-sm space-y-4">
-              <h3 className="text-lg font-semibold">Clear Deck</h3>
+              <h3 className="text-lg font-semibold"><Trans>Clear Deck</Trans></h3>
               <p className="text-sm text-muted-foreground">
                 Are you sure you want to clear &quot;{currentDeck.name}&quot;? This will remove all
                 cards and delete the saved deck.
