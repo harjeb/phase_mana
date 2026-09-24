@@ -31,16 +31,21 @@ fn load_card_db(path: &Path) -> Result<CardDatabase, String> {
     load.map_err(|e| format!("Cannot load {}: {e}", path.display()))
 }
 
-/// The full MTGJSON download when phase's pipeline has cached one, else the
-/// 87-card fixture that ships with phase. Keeps `npm run server` zero-config
-/// while preferring the real card pool once the cache exists.
+/// The pre-parsed oracle-gen export when phase's pipeline has written one (it
+/// builds in seconds), else the raw MTGJSON download whose Oracle text is
+/// parsed at startup, else the 87-card fixture that ships with phase. Keeps
+/// `npm run server` zero-config while preferring the fastest card pool.
 fn default_card_db() -> PathBuf {
-    let mtgjson =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../phase/data/mtgjson/AtomicCards.json");
+    let data = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../phase/data");
+    let export = data.join("card-data.json");
+    if export.is_file() {
+        return export;
+    }
+    let mtgjson = data.join("mtgjson/AtomicCards.json");
     if mtgjson.is_file() {
         mtgjson
     } else {
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../phase/data/mtgjson/test_fixture.json")
+        data.join("mtgjson/test_fixture.json")
     }
 }
 
