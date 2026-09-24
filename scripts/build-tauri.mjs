@@ -39,7 +39,7 @@ try {
   for (const name of await readdir(path.resolve(root, '../phase'))) {
     if (/^(LICENSE|NOTICE)/.test(name)) await cp(path.resolve(root, '../phase', name), path.join(licenses, `phase-${name}`));
   }
-  await writeFile(path.join(licenses, 'desktop-dependencies.txt'), 'Tauri: MIT OR Apache-2.0; rfd: MIT; reqwest: MIT OR Apache-2.0; Tokio: MIT; serde/serde_json: MIT OR Apache-2.0. See src-tauri/Cargo.lock for exact resolved dependencies. MTGJSON data is downloaded separately from https://mtgjson.com/; Magic card content remains property of its respective owners.\n');
+  await writeFile(path.join(licenses, 'desktop-dependencies.txt'), 'Tauri: MIT OR Apache-2.0; reqwest: MIT OR Apache-2.0; Tokio: MIT; serde/serde_json: MIT OR Apache-2.0. See src-tauri/Cargo.lock for exact resolved dependencies. MTGJSON data is downloaded separately from https://mtgjson.com/; Magic card content remains property of its respective owners.\n');
   if (!args.includes('--stage-only')) {
     // Run npm-installed Tauri CLI directly with Node; avoids Windows .cmd quoting/shell injection.
     const cli = path.join(root, 'node_modules', '@tauri-apps', 'cli', 'tauri.js');

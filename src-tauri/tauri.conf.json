@@ -3,13 +3,13 @@
   "productName": "Phase Mana",
   "version": "0.1.0",
   "identifier": "org.phase-mana.desktop",
-  "build": { "frontendDist": "../app-setup" },
+  "build": { "frontendDist": "../dist" },
   "app": {
-    "withGlobalTauri": true,
-    "windows": [{ "label": "setup", "title": "Phase Mana", "width": 1100, "height": 800, "url": "index.html" }],
+    "withGlobalTauri": false,
+    "windows": [{ "label": "main", "title": "Phase Mana", "width": 1100, "height": 800, "url": "index.html" }],
     "security": {
-      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src ipc: http://ipc.localhost; img-src 'self' data:; object-src 'none'; frame-src 'none'",
-      "capabilities": ["setup"]
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src ipc: http://ipc.localhost; img-src 'self' data:; object-src 'none'; frame-src 'none'",
+      "capabilities": ["boot"]
     }
   },
   "bundle": {

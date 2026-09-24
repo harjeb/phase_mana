@@ -83,10 +83,10 @@ fn trusted(window: &tauri::WebviewWindow) -> Result<(), String> {
     let url = window.url().map_err(|e| e.to_string())?;
     let local = (url.scheme() == "tauri" && url.host_str() == Some("localhost"))
         || (url.scheme() == "http" && url.host_str() == Some("tauri.localhost"));
-    if window.label() == "setup" && local {
+    if window.label() == "main" && local {
         Ok(())
     } else {
-        Err("Setup IPC is restricted to the bundled setup page".into())
+        Err("Desktop boot IPC is restricted to the bundled ManaBrew page".into())
     }
 }
 fn state_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
@@ -129,63 +129,28 @@ fn readiness(line: &str, pid: u32) -> Option<u16> {
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct Progress {
-    message: String,
+    stage: &'static str,
     received: u64,
     total: Option<u64>,
 }
-fn progress(app: &tauri::AppHandle, message: &str, received: u64, total: Option<u64>) {
+fn progress(app: &tauri::AppHandle, stage: &'static str, received: u64, total: Option<u64>) {
     let _ = app.emit_to(
-        "setup",
-        "setup-progress",
+        "main",
+        "desktop-boot-progress",
         Progress {
-            message: message.into(),
+            stage,
             received,
             total,
         },
     );
 }
 
-#[tauri::command]
-async fn saved_database(
-    app: tauri::AppHandle,
-    window: tauri::WebviewWindow,
-) -> Result<Option<String>, String> {
-    trusted(&window)?;
-    let file = state_dir(&app)?.join("desktop.json");
-    if !file.exists() {
-        return Ok(None);
-    }
-    let config: serde_json::Value =
-        serde_json::from_slice(&std::fs::read(file).map_err(|e| e.to_string())?)
-            .map_err(|e| format!("Cannot read saved configuration: {e}"))?;
-    Ok(config["database"].as_str().map(str::to_owned))
-}
-#[tauri::command]
-async fn choose_database(window: tauri::WebviewWindow) -> Result<Option<String>, String> {
-    trusted(&window)?;
-    Ok(rfd::AsyncFileDialog::new()
-        .set_title("Choose AtomicCards.json or pre-parsed card database")
-        .add_filter("JSON database", &["json"])
-        .pick_file()
-        .await
-        .map(|f| f.path().to_string_lossy().into_owned()))
-}
-
-#[tauri::command]
-async fn download_database(
-    app: tauri::AppHandle,
-    window: tauri::WebviewWindow,
-    runtime: tauri::State<'_, Runtime>,
-) -> Result<String, String> {
-    trusted(&window)?;
-    let _guard = runtime
-        .operation
-        .try_lock()
-        .map_err(|_| "An operation is already running")?;
-    let dir = state_dir(&app)?;
-    // MTGJSON's documented current-version endpoint, never a guessed release URL.
+// The only desktop database location is managed by this app. Incomplete files
+// never become the cached database; a failed download can be retried in place.
+async fn download_database(app: &tauri::AppHandle, dir: &Path) -> Result<PathBuf, String> {
     let destination = dir.join("AtomicCards.json");
     let partial = dir.join("AtomicCards.json.partial");
+    progress(app, "connecting", 0, None);
     let result: Result<(), String> = async {
         let client = reqwest::Client::builder()
             .https_only(true)
@@ -201,6 +166,7 @@ async fn download_database(
             .error_for_status()
             .map_err(|e| e.to_string())?;
         let total = response.content_length();
+        progress(app, "downloading", 0, total);
         let mut file = tokio::fs::File::create(&partial)
             .await
             .map_err(|e| e.to_string())?;
@@ -210,13 +176,14 @@ async fn download_database(
             file.write_all(&chunk).await.map_err(|e| e.to_string())?;
             received += chunk.len() as u64;
             if last.elapsed() > Duration::from_millis(200) {
-                progress(&app, "Downloading official MTGJSON…", received, total);
+                progress(app, "downloading", received, total);
                 last = Instant::now();
             }
         }
         file.sync_all().await.map_err(|e| e.to_string())?;
         drop(file);
-        // Validate content before publishing, without loading this large file into memory.
+        progress(app, "downloading", received, total);
+        // Check the transfer before publishing; the server validates the full format.
         let mut head = [0; 4096];
         let n = std::fs::File::open(&partial)
             .and_then(|mut f| f.read(&mut head))
@@ -229,7 +196,6 @@ async fn download_database(
         tokio::fs::rename(&partial, &destination)
             .await
             .map_err(|e| format!("Cannot publish download: {e}"))?;
-        progress(&app, "Download complete", received, total);
         Ok(())
     }
     .await;
@@ -237,23 +203,47 @@ async fn download_database(
         let _ = tokio::fs::remove_file(&partial).await;
     }
     result?;
-    Ok(destination.to_string_lossy().into_owned())
+    Ok(destination)
 }
 
 #[tauri::command]
-async fn start_server(
+async fn boot_desktop(
     app: tauri::AppHandle,
     window: tauri::WebviewWindow,
     runtime: tauri::State<'_, Runtime>,
-    path: String,
 ) -> Result<String, String> {
     trusted(&window)?;
     let _guard = runtime
         .operation
         .try_lock()
-        .map_err(|_| "An operation is already running")?;
-    let db = database(Path::new(&path))?;
+        .map_err(|_| "Desktop startup is already running")?;
     let dir = state_dir(&app)?;
+    progress(&app, "checking", 0, None);
+    let destination = dir.join("AtomicCards.json");
+    let cached = database(&destination).is_ok();
+    let db = if cached {
+        destination.clone()
+    } else {
+        download_database(&app, &dir).await?
+    };
+    let result = launch_server(&app, &window, &runtime, &dir, db).await;
+    // A previously saved file can pass the cheap prefix check but fail the
+    // engine's full parser. Replace only our own cache and try once more.
+    if cached && result.as_ref().is_err_and(|e| e.contains("Cannot load")) {
+        let db = download_database(&app, &dir).await?;
+        return launch_server(&app, &window, &runtime, &dir, db).await;
+    }
+    result
+}
+
+async fn launch_server(
+    app: &tauri::AppHandle,
+    window: &tauri::WebviewWindow,
+    runtime: &Runtime,
+    dir: &Path,
+    db: PathBuf,
+) -> Result<String, String> {
+    let db = database(&db)?;
     runtime.stop();
     let resources = app
         .path()
@@ -290,12 +280,7 @@ async fn start_server(
         use std::os::windows::process::CommandExt;
         command.creation_flags(0x08000000); // CREATE_NO_WINDOW
     }
-    progress(
-        &app,
-        "Loading cards; raw AtomicCards parsing can take several minutes…",
-        0,
-        None,
-    );
+    progress(app, "starting", 0, None);
     let mut child = command.spawn().map_err(|e| {
         format!("Cannot start bundled server: {e}. Run the desktop staging script first.")
     })?;
@@ -308,6 +293,7 @@ async fn start_server(
             return Err(error);
         }
     }
+    progress(app, "loading", 0, None);
     let pid = child.id();
     let stdout = child.stdout.take().unwrap();
     let stderr = child.stderr.take().unwrap();
@@ -377,32 +363,16 @@ async fn start_server(
         }
     };
     let url = format!("http://127.0.0.1:{port}");
-    let complete = (|| -> Result<(), String> {
-        std::fs::write(
-            dir.join("desktop.json"),
-            serde_json::to_vec_pretty(&serde_json::json!({"database": db})).unwrap(),
-        )
-        .map_err(|e| format!("Cannot save database selection: {e}"))?;
-        window
-            .navigate(url.parse::<tauri::Url>().map_err(|e| e.to_string())?)
-            .map_err(|e| e.to_string())?;
-        Ok(())
-    })();
-    if let Err(error) = complete {
+    if let Err(error) = window.navigate(url.parse::<tauri::Url>().map_err(|e| e.to_string())?) {
         runtime.stop();
-        return Err(error);
+        return Err(error.to_string());
     }
     Ok(url)
 }
 fn main() {
     let app = tauri::Builder::default()
         .manage(Runtime::default())
-        .invoke_handler(tauri::generate_handler![
-            saved_database,
-            choose_database,
-            download_database,
-            start_server
-        ])
+        .invoke_handler(tauri::generate_handler![boot_desktop])
         .build(tauri::generate_context!())
         .expect("Cannot initialize Phase Mana desktop");
     app.run(|app, event| {
@@ -432,6 +402,27 @@ mod tests {
             readiness(&line.replace("127.0.0.1:3002", "127.0.0.1:3003"), 42),
             None
         );
+    }
+    #[test]
+    fn downloaded_database_replaces_existing_cache() {
+        let dir =
+            std::env::temp_dir().join(format!("phase-mana-replace-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let destination = dir.join("AtomicCards.json");
+        let partial = dir.join("AtomicCards.json.partial");
+        std::fs::write(&destination, "{\"old\":true}").unwrap();
+        std::fs::write(&partial, "{\"data\":{}}").unwrap();
+        tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()
+            .unwrap()
+            .block_on(tokio::fs::rename(&partial, &destination))
+            .unwrap();
+        assert_eq!(
+            std::fs::read_to_string(destination).unwrap(),
+            "{\"data\":{}}"
+        );
+        std::fs::remove_dir_all(dir).unwrap();
     }
     #[test]
     fn rejects_missing_database() {

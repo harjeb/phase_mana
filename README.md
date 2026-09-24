@@ -68,7 +68,7 @@ npm run app:dev        # stage frontend/server, then start the Tauri development
 npm run test:startup   # port fallback and endpoint discovery tests
 ```
 
-The desktop app uses **Tauri v2**, not Electron. Building requires Tauri's platform prerequisites (on Windows: MSVC C++ tools and WebView2), plus the sibling Phase sources; installed users do not need Node, Git, or Rust. Its setup screen lets you choose `card-data.json` / `AtomicCards.json` or download the official MTGJSON database with progress. Raw MTGJSON takes longer to parse than a pre-parsed export. Runtime data/settings live in the OS application-data directory, not the install directory. The native server serves the bundled frontend and API on loopback ports, each incrementing when occupied; closing the app stops its own server. See [`src-tauri/README.md`](src-tauri/README.md) for prerequisites, staging, security boundaries, and data limitations. A static `dist/` alone is **not** a standalone engine: Web mode still needs the local server and proxy/runtime routes.
+The desktop app uses **Tauri v2**, not Electron. Building requires Tauri's platform prerequisites (on Windows: MSVC C++ tools and WebView2), plus the sibling Phase sources; installed users do not need Node, Git, or Rust. The app opens on ManaBrew's own loading screen, automatically downloads the official MTGJSON `AtomicCards.json` on first launch, and displays transfer progress there; later launches reuse the app-managed database. There is no separate setup screen or file-import picker. Parsing raw MTGJSON may take several minutes after downloading. Runtime data/settings live in the OS application-data directory, not the install directory. The native server serves the bundled frontend and API on loopback ports, each incrementing when occupied; closing the app stops its own server. See [`src-tauri/README.md`](src-tauri/README.md) for prerequisites, staging, security boundaries, and data limitations. A static `dist/` alone is **not** a standalone engine: Web mode still needs the local server and proxy/runtime routes.
 
 ### Features
 
@@ -237,7 +237,7 @@ npm run app:dev        # 准备前端/后端，然后启动 Tauri 开发壳
 npm run test:startup   # 端口递增与后端发现测试
 ```
 
-桌面版使用 **Tauri v2，不是 Electron**。编译机器需安装对应平台的 Tauri 开发依赖（Windows 为 MSVC C++ 工具及 WebView2），并准备同级 Phase 源码；安装包用户不需要 Node、Git 或 Rust。首次设置可选择本地 `card-data.json` / `AtomicCards.json`，或从 MTGJSON 官方下载，显示进度；原始 MTGJSON 启动时解析较慢，预解析导出加载更快。运行数据和配置保存在系统应用数据目录，不写安装目录。原生服务在本机提供打包的前端和 API，两个端口占用均依次 +1；关闭 App 会结束自己的后端进程。详细要求与限制见 [`src-tauri/README.md`](src-tauri/README.md)。单独的静态 `dist/` **不包含可独立运行的引擎**，Web 模式仍需本地服务和代理/资源路由。
+桌面版使用 **Tauri v2，不是 Electron**。编译机器需安装对应平台的 Tauri 开发依赖（Windows 为 MSVC C++ 工具及 WebView2），并准备同级 Phase 源码；安装包用户不需要 Node、Git 或 Rust。App 直接打开 ManaBrew 原有的载入界面，首次启动自动下载 MTGJSON 官方的 `AtomicCards.json`，在载入条中显示下载进度；后续启动复用应用自己的缓存。不再有独立的设置页面和数据库文件导入功能。原始 MTGJSON 下载完成后仍需解析，可能花几分钟。运行数据和配置保存在系统应用数据目录，不写安装目录。原生服务在本机提供打包的前端和 API，两个端口占用均依次 +1；关闭 App 会结束自己的后端进程。详细要求与限制见 [`src-tauri/README.md`](src-tauri/README.md)。单独的静态 `dist/` **不包含可独立运行的引擎**，Web 模式仍需本地服务和代理/资源路由。
 
 ### 功能
 

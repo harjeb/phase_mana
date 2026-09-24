@@ -179,6 +179,14 @@ msgstr ""
 msgid "{actor} foretold a card"
 msgstr ""
 
+#: ui/components/AppInitGate.tsx:82
+msgid "{downloaded} MiB downloaded"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:80
+msgid "{downloaded} of {total} MiB downloaded"
+msgstr ""
+
 #. placeholder {0}: response.status
 #: ui/api/scryfall.ts:115
 msgid "{errorMsg} (HTTP {0})"
@@ -270,7 +278,7 @@ msgstr ""
 msgid "Accent"
 msgstr ""
 
-#: ui/components/AppInitGate.tsx:239
+#: ui/components/AppInitGate.tsx:279
 msgid "Accept and continue"
 msgstr ""
 
@@ -885,6 +893,10 @@ msgstr "Capítulo {0} de {1}"
 msgid "Checkbox"
 msgstr ""
 
+#: ui/components/AppInitGate.tsx:58
+msgid "Checking card data"
+msgstr ""
+
 #: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:52
 msgid "Choose a card from your graveyard"
 msgstr ""
@@ -1151,8 +1163,13 @@ msgstr ""
 msgid "Connected"
 msgstr ""
 
-#: ui/components/AppInitGate.tsx:292
+#: ui/components/AppInitGate.tsx:85
+#: ui/components/AppInitGate.tsx:336
 msgid "Connecting"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:59
+msgid "Connecting to MTGJSON"
 msgstr ""
 
 #: ui/views/Settings.tsx:492
@@ -1632,6 +1649,10 @@ msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:247
 msgid "Done"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:60
+msgid "Downloading card data"
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:108
@@ -2186,7 +2207,7 @@ msgstr ""
 msgid "Gauntlet"
 msgstr ""
 
-#: ui/components/AppInitGate.tsx:253
+#: ui/components/AppInitGate.tsx:293
 msgid "Getting started"
 msgstr ""
 
@@ -2326,7 +2347,7 @@ msgstr ""
 msgid "Hurray, you're in!"
 msgstr ""
 
-#: ui/components/AppInitGate.tsx:229
+#: ui/components/AppInitGate.tsx:269
 msgid "I have read and agree to these terms"
 msgstr ""
 
@@ -2643,6 +2664,7 @@ msgid "Loading"
 msgstr ""
 
 #: ui/components/AppInitGate.tsx:38
+#: ui/components/AppInitGate.tsx:62
 msgid "Loading card data"
 msgstr ""
 
@@ -2691,7 +2713,7 @@ msgstr ""
 msgid "Local checkpoints"
 msgstr ""
 
-#: ui/platform/index.ts:32
+#: ui/platform/index.ts:34
 msgid "Local Phase supports up to three AI opponents (four players)."
 msgstr ""
 
@@ -3622,6 +3644,10 @@ msgstr ""
 msgid "Premier (Bo1)"
 msgstr ""
 
+#: ui/components/AppInitGate.tsx:84
+msgid "Preparing your cards…"
+msgstr ""
+
 #. placeholder {0}: preset.commander
 #: ui/lib/presetDecks.ts:143
 msgid "Preset commander missing from cards: {0}"
@@ -3869,6 +3895,10 @@ msgstr ""
 #: ui/phase/Launch.tsx:184
 #~ msgid "Resume local game"
 #~ msgstr ""
+
+#: ui/components/AppInitGate.tsx:340
+msgid "Retry"
+msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:121
 msgid "Return to combat"
@@ -4356,12 +4386,20 @@ msgstr ""
 msgid "Starting life"
 msgstr ""
 
+#: ui/components/AppInitGate.tsx:61
+msgid "Starting local server"
+msgstr ""
+
 #: ui/views/Play.tsx:163
 msgid "Starting multiplayer game…"
 msgstr ""
 
 #: ui/components/companion/CustomCounterDialog.tsx:70
 msgid "Starting value"
+msgstr ""
+
+#: ui/components/AppInitGate.tsx:56
+msgid "Startup failed"
 msgstr ""
 
 #: ui/components/dev/designSystem/sections/AssetsSection.tsx:54
@@ -4613,7 +4651,7 @@ msgstr ""
 msgid "This estimate does not model trample, prevention or replacement effects."
 msgstr ""
 
-#: ui/platform/index.ts:12
+#: ui/platform/index.ts:14
 msgid "This feature is not available in the local Phase backend."
 msgstr ""
 
@@ -4877,7 +4915,7 @@ msgstr ""
 
 #. placeholder {0}: TERMS_AND_CONDITIONS.version
 #. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
-#: ui/components/AppInitGate.tsx:242
+#: ui/components/AppInitGate.tsx:282
 msgid "Version {0} · Updated {1}"
 msgstr ""
 
@@ -4946,7 +4984,7 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: ui/components/AppInitGate.tsx:139
+#: ui/components/AppInitGate.tsx:179
 msgid "Welcome to"
 msgstr ""
 

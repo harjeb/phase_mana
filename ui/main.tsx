@@ -11,7 +11,6 @@ import "@fontsource/inter/900.css";
 import "@fontsource/cormorant-garamond/600.css";
 import "@fontsource/cormorant-garamond/700.css";
 import "./index.css";
-import App from "./App.tsx";
 import { registerConsoleHooks } from "./lib/consoleHooks";
 import { initAndroidSafeArea } from "./platform/androidSafeArea";
 import { initializeLocalization } from "./i18n/runtime";
@@ -21,7 +20,18 @@ async function start(): Promise<void> {
   registerConsoleHooks();
   await initializeLocalization();
 
-  createRoot(document.getElementById("root")!).render(<App />);
+  const root = createRoot(document.getElementById("root")!);
+  const local = window.location;
+  const desktopBoot = (window as Window & { __TAURI_INTERNALS__?: unknown }).__TAURI_INTERNALS__ !== undefined &&
+    ((local.protocol === "tauri:" && local.hostname === "localhost") ||
+      (local.protocol === "http:" && local.hostname === "tauri.localhost"));
+  if (desktopBoot) {
+    const { DesktopBoot } = await import("./components/DesktopBoot");
+    root.render(<DesktopBoot />);
+  } else {
+    const { default: App } = await import("./App");
+    root.render(<App />);
+  }
 }
 
 void start();

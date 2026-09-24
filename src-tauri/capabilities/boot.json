@@ -1,0 +1,8 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "boot",
+  "description": "Only bundled ManaBrew may receive desktop boot progress. Loopback gameplay has no IPC capability.",
+  "local": true,
+  "windows": ["main"],
+  "permissions": ["core:event:allow-listen", "core:event:allow-unlisten"]
+}

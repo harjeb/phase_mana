@@ -44,6 +44,46 @@ function stageTitle(stage: string): string {
       return t`Loading`;
   }
 }
+export type DesktopBootStage = "checking" | "connecting" | "downloading" | "starting" | "loading";
+export interface DesktopBootStatus {
+  stage: DesktopBootStage;
+  received: number;
+  total: number | null;
+  error: string | null;
+  retry: () => void;
+}
+function desktopTitle(stage: DesktopBootStage, error: string | null): string {
+  if (error) return t`Startup failed`;
+  switch (stage) {
+    case "checking": return t`Checking card data`;
+    case "connecting": return t`Connecting to MTGJSON`;
+    case "downloading": return t`Downloading card data`;
+    case "starting": return t`Starting local server`;
+    case "loading": return t`Loading card data`;
+  }
+}
+function desktopProgress(status: DesktopBootStatus): number {
+  switch (status.stage) {
+    case "checking": return 0;
+    case "connecting": return 0;
+    case "downloading": return status.total ? 100 * Math.min(1, status.received / status.total) : 12;
+    case "starting": return 100;
+    case "loading": return 100;
+  }
+}
+function desktopDetail(status: DesktopBootStatus): string {
+  if (status.error) return status.error;
+  if (status.stage === "downloading") {
+    const downloaded = (status.received / 1048576).toFixed(1);
+    if (status.total) {
+      const total = (status.total / 1048576).toFixed(1);
+      return t`${downloaded} of ${total} MiB downloaded`;
+    }
+    return t`${downloaded} MiB downloaded`;
+  }
+  if (status.stage === "loading") return t`Preparing your cards…`;
+  return t`Connecting`;
+}
 const TERMS_LINK = /((?:github\.com|docs\.manabrew\.app|scryfall\.com)(?:[^\s,)]*[^\s,).])?)/g;
 function linkifyTerms(body: string) {
   return body.split(TERMS_LINK).map((part, index) =>
@@ -64,7 +104,7 @@ function linkifyTerms(body: string) {
 }
 // Prevents reanimating on re-mount
 let hasReleasedOnce = false;
-export function AppInitGate({ children }: { children: ReactNode }) {
+export function AppInitGate({ children, desktopBoot }: { children: ReactNode; desktopBoot?: DesktopBootStatus }) {
   const rawStage = useAppInitStore((s) => s.stage);
   const { accepted: termsAccepted, accept: acceptTerms } = useAcknowledgement(
     TERMS_STORAGE_KEY,
@@ -91,7 +131,7 @@ export function AppInitGate({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(t);
   }, [minHoldPassed]);
   const stage = minHoldPassed ? rawStage : "idle";
-  const target = useMemo(() => STAGE_PROGRESS[stage] ?? 0, [stage]);
+  const target = useMemo(() => desktopBoot ? desktopProgress(desktopBoot) : STAGE_PROGRESS[stage] ?? 0, [stage, desktopBoot]);
   type Phase = "gating" | "releasing" | "done";
   const [phase, setPhase] = useState<Phase>(() => (hasReleasedOnce ? "done" : "gating"));
   const HOLD_MS = 300;
@@ -101,7 +141,7 @@ export function AppInitGate({ children }: { children: ReactNode }) {
   const EXIT_MS = Math.max(GATE_MS, CHILD_DELAY_MS + CHILD_MS); // 1100ms
   const RELEASE_DELAY_MS = BAR_FILL_MS + HOLD_MS;
   useEffect(() => {
-    if (phase === "done") return;
+    if (phase === "done" || desktopBoot) return;
     if (stage !== "ready") return;
     if (!termsAccepted || !onboardingSatisfied) return;
     const release = window.setTimeout(() => setPhase("releasing"), RELEASE_DELAY_MS);
@@ -113,7 +153,7 @@ export function AppInitGate({ children }: { children: ReactNode }) {
       window.clearTimeout(release);
       window.clearTimeout(done);
     };
-  }, [stage, phase, termsAccepted, onboardingSatisfied, RELEASE_DELAY_MS, EXIT_MS]);
+  }, [stage, phase, desktopBoot, termsAccepted, onboardingSatisfied, RELEASE_DELAY_MS, EXIT_MS]);
 
   // The companion is pure UI with no engine dependency, so never block it behind
   // the worker boot — which can't initialise without cross-origin isolation
@@ -128,10 +168,10 @@ export function AppInitGate({ children }: { children: ReactNode }) {
   ) {
     return <>{children}</>;
   }
-  const title = stageTitle(stage);
+  const title = desktopBoot ? desktopTitle(desktopBoot.stage, desktopBoot.error) : stageTitle(stage);
   const pct = Math.round(target);
-  const showTerms = stage === "ready" && !termsAccepted;
-  const showOnboarding = stage === "ready" && termsAccepted && !onboardingSatisfied;
+  const showTerms = !desktopBoot && stage === "ready" && !termsAccepted;
+  const showOnboarding = !desktopBoot && stage === "ready" && termsAccepted && !onboardingSatisfied;
 
   const welcomeHeader = (
     <div className="flex flex-col items-center gap-2 text-center">
@@ -265,9 +305,17 @@ export function AppInitGate({ children }: { children: ReactNode }) {
                 <>
                   {welcomeHeader}
                   <div className="w-full space-y-5">
-                    <div className="flex items-baseline justify-between font-mono text-[0.65rem] uppercase tracking-[0.4em] text-muted-foreground">
-                      <span className="truncate text-foreground/80">{title}</span>
-                      <span className="tabular-nums">{pct.toString().padStart(3, "0")}%</span>
+                    <div className="flex flex-col gap-1 font-mono text-[0.65rem] uppercase text-muted-foreground sm:flex-row sm:items-baseline sm:justify-between">
+                      <span className="min-w-0 break-words text-foreground/80">{title}</span>
+                      <span className="self-end tabular-nums sm:self-auto">
+                        {desktopBoot?.error
+                          ? null
+                          : desktopBoot?.stage === "starting" || desktopBoot?.stage === "loading"
+                            ? t`Working…`
+                            : desktopBoot?.stage === "downloading" && !desktopBoot.total
+                              ? `${(desktopBoot.received / 1048576).toFixed(1)} MiB`
+                              : `${pct.toString().padStart(3, "0")}%`}
+                      </span>
                     </div>
 
                     <div className="relative h-3.5 w-full overflow-hidden rounded-full border border-border/80 bg-muted/40">
@@ -288,9 +336,14 @@ export function AppInitGate({ children }: { children: ReactNode }) {
                       />
                     </div>
 
-                    <p className="text-center font-mono text-[0.6rem] uppercase tracking-[0.45em] text-muted-foreground/80">
-                      {t`Connecting`}
+                    <p role="status" aria-live="polite" className="min-h-5 max-h-[25vh] overflow-auto break-words text-center font-mono text-[0.65rem] text-muted-foreground">
+                      {desktopBoot ? desktopDetail(desktopBoot) : t`Connecting`}
                     </p>
+                    {desktopBoot?.error && (
+                      <Button variant="primary" className="mx-auto flex" onClick={desktopBoot.retry}>
+                        {t`Retry`}
+                      </Button>
+                    )}
                   </div>
                 </>
               )}

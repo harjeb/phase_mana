@@ -1,6 +1,6 @@
 # Phase Mana — Tauri v2 desktop
 
-This shell uses the OS WebView (WebView2 on Windows), **not Electron**. The packaged, dependency-free `../app-setup/index.html` is embedded via `frontendDist`; displaying setup does not run Vite/npm. Gameplay is the built `dist` served by the Rust server on loopback, with same-origin API/card-image routes.
+This shell uses the OS WebView (WebView2 on Windows), **not Electron**. The bundled ManaBrew `../dist` opens immediately on its existing loading screen. It automatically reuses the app-managed `AtomicCards.json` or downloads it from MTGJSON, displaying progress inside ManaBrew's loading bar; failures can be retried there. After the local server reports readiness, the same window navigates to the loopback gateway serving the built `dist` with same-origin API/card-image routes. There is no separate setup page or database import picker.
 
 ## Build and development
 
@@ -12,7 +12,7 @@ node scripts/build-tauri.mjs --dev
 node scripts/build-tauri.mjs
 ```
 
-The script compiles the server **release** binary, discovers Cargo's target directory through metadata, and stages `binaries/phase-mana-server-$TARGET[.exe]`, `resources/web-dist`, optional `resources/draft-pools`, and licenses. `--target TRIPLE` is supported (the matching cross-compilation/toolchain prerequisites remain necessary). Without `--stage-only`, it invokes the npm-installed Tauri CLI using Node and forwards its failure exit status. Additional CLI arguments are passed through. Tauri bundles the sidecar beside the application and copies resources. Tauri CLI development also stages the sidecar through its build script. Do not point `frontendDist` at the gameplay dist or enable remote capabilities.
+The script compiles the server **release** binary, discovers Cargo's target directory through metadata, and stages `binaries/phase-mana-server-$TARGET[.exe]`, `resources/web-dist`, optional `resources/draft-pools`, and licenses. `--target TRIPLE` is supported (the matching cross-compilation/toolchain prerequisites remain necessary). Without `--stage-only`, it invokes the npm-installed Tauri CLI using Node and forwards its failure exit status. Additional CLI arguments are passed through. Tauri bundles the sidecar beside the application and copies resources. Tauri CLI development also stages the sidecar through its build script. The bundled `frontendDist` is the initial loading page only: the loopback gameplay origin never receives Tauri IPC capabilities.
 
 For shell-only checks after staging:
 
@@ -35,17 +35,17 @@ If `harjeb/phase` is private, add an Actions secret **`PHASE_REPO_TOKEN`**: a fi
 
 ## Runtime contract
 
-* The chosen JSON database is passed as `PHASE_CARD_DB`. The server validates its complete format; the shell rejects missing files, directories, non-JSON extensions and obvious non-object content first.
-* `PHASE_MANA_STATE_DIR` is Tauri's OS application-data directory (`org.phase-mana.desktop`); `desktop.json` remembers the successfully loaded database. No write access to the install directory is required.
+* On launch the shell checks its own OS app-data `AtomicCards.json`. If it is missing or invalid, it automatically downloads the official MTGJSON JSON into the same directory. `PHASE_CARD_DB` points at that file; the server performs full database validation. Old `desktop.json` selections are not used. No write access to the install directory is required.
+* `PHASE_MANA_STATE_DIR` is Tauri's OS application-data directory (`org.phase-mana.desktop`).
 * `PHASE_MANA_WEB_ROOT` points to bundled `resources/web-dist`.
 * `PHASE_MANA_PORT=3001` and `PHASE_MANA_CLIENT_PORT=1420` are starting ports; the server independently retries upward when occupied. It binds loopback only. Optional bundled pools use `PHASE_MANA_DRAFT_POOLS`.
 * The server flushes a raw newline-delimited JSON readiness object with `event: "ready"`, numeric `pid`, `port`, `clientPort`, and `address` (API socket address). The shell checks PID, loopback address and valid ports, ignores unrelated stdout, drains stderr, and waits up to **15 minutes**. Only then does Rust navigate to `http://127.0.0.1:clientPort`.
 * The shell retains the actual child process handle and kills/reaps only that child on timeout, failed setup, retry and normal application exit. It never kills by port or process name. On Windows, a private kill-on-close Job Object also terminates the sidecar if the shell crashes or is forcibly terminated (startup fails safely if containment cannot be established). Other platforms provide normal-exit cleanup; forced OS termination is not a graceful exit.
 
-Setup IPC has both a local-only Tauri capability and explicit Rust origin/window checks on **every command**. Remote gameplay receives no capability. It must use the server's own native-picker endpoints, not shell IPC. No shell execution or filesystem Tauri plugins are exposed.
+The single desktop boot IPC command and progress events have a local-only Tauri capability and explicit Rust origin/window checks. The bundled ManaBrew page mounts only its loader until the sidecar is ready; remote loopback gameplay receives no capability. It must use the server's own native-picker endpoints, not shell IPC. No shell execution or filesystem Tauri plugins are exposed.
 
-The optional MTGJSON download uses the official `https://mtgjson.com/api/v5/AtomicCards.json` HTTPS endpoint and HTTPS-only redirects, streams to a `.partial` file with progress, syncs, checks object prefix/content length, and renames on success. Errors delete the partial file and remain visible with retry controls. No checksum is advertised: this provides HTTPS transport integrity, not independent signed/checksum verification. The full database parser remains the final validator. Concurrent download/start operations are rejected.
+The automatic MTGJSON download uses the official `https://mtgjson.com/api/v5/AtomicCards.json` HTTPS endpoint and HTTPS-only redirects, streams to a `.partial` file with progress, syncs, checks object prefix/content length, and renames on success. Errors delete the partial file and remain visible on the ManaBrew loading screen with a retry button. A corrupt cached file which fails the server's parser is downloaded again once. No checksum is advertised: this provides HTTPS transport integrity, not independent signed/checksum verification. Concurrent boot operations are rejected.
 
 ## Licenses / redistribution
 
-The shell is AGPL-3.0-or-later, like the parent project; see `../LICENSE`, `../NOTICE`, and `../THIRD-PARTY-LICENSES.md`. Staging includes those notices and the sibling engine's license/notice files. Tauri and reqwest are MIT OR Apache-2.0; Tokio and rfd are MIT; serde is MIT OR Apache-2.0. `Cargo.lock` records transitive versions. Distributors should include a complete dependency-license audit and corresponding source as required by the parent project's license. No MTGJSON card database is embedded in the installer. MTGJSON terms and card-content ownership apply separately.
+The shell is AGPL-3.0-or-later, like the parent project; see `../LICENSE`, `../NOTICE`, and `../THIRD-PARTY-LICENSES.md`. Staging includes those notices and the sibling engine's license/notice files. Tauri and reqwest are MIT OR Apache-2.0; Tokio is MIT; serde is MIT OR Apache-2.0. `Cargo.lock` records transitive versions. Distributors should include a complete dependency-license audit and corresponding source as required by the parent project's license. No MTGJSON card database is embedded in the installer. MTGJSON terms and card-content ownership apply separately.

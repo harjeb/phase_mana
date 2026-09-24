@@ -179,6 +179,14 @@ msgstr "{0}'s seat was forfeited — conceded."
 msgid "{actor} foretold a card"
 msgstr "{actor} foretold a card"
 
+#: ui/components/AppInitGate.tsx:82
+msgid "{downloaded} MiB downloaded"
+msgstr "{downloaded} MiB downloaded"
+
+#: ui/components/AppInitGate.tsx:80
+msgid "{downloaded} of {total} MiB downloaded"
+msgstr "{downloaded} of {total} MiB downloaded"
+
 #. placeholder {0}: response.status
 #: ui/api/scryfall.ts:115
 msgid "{errorMsg} (HTTP {0})"
@@ -270,7 +278,7 @@ msgstr "About Manabrew"
 msgid "Accent"
 msgstr "Accent"
 
-#: ui/components/AppInitGate.tsx:239
+#: ui/components/AppInitGate.tsx:279
 msgid "Accept and continue"
 msgstr "Accept and continue"
 
@@ -885,6 +893,10 @@ msgstr "Chapter {0} of {1}"
 msgid "Checkbox"
 msgstr "Checkbox"
 
+#: ui/components/AppInitGate.tsx:58
+msgid "Checking card data"
+msgstr "Checking card data"
+
 #: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:52
 msgid "Choose a card from your graveyard"
 msgstr "Choose a card from your graveyard"
@@ -1151,9 +1163,14 @@ msgstr "Connect to a server before hosting a Forge room"
 msgid "Connected"
 msgstr "Connected"
 
-#: ui/components/AppInitGate.tsx:292
+#: ui/components/AppInitGate.tsx:85
+#: ui/components/AppInitGate.tsx:336
 msgid "Connecting"
 msgstr "Connecting"
+
+#: ui/components/AppInitGate.tsx:59
+msgid "Connecting to MTGJSON"
+msgstr "Connecting to MTGJSON"
 
 #: ui/views/Settings.tsx:492
 msgid "Connecting..."
@@ -1633,6 +1650,10 @@ msgstr "Discord"
 #: ui/components/game/modals/GameSettingsModal.tsx:247
 msgid "Done"
 msgstr "Done"
+
+#: ui/components/AppInitGate.tsx:60
+msgid "Downloading card data"
+msgstr "Downloading card data"
 
 #: ui/components/layout/TopBar.tsx:108
 msgid "Downloading…"
@@ -2186,7 +2207,7 @@ msgstr "Games"
 msgid "Gauntlet"
 msgstr "Gauntlet"
 
-#: ui/components/AppInitGate.tsx:253
+#: ui/components/AppInitGate.tsx:293
 msgid "Getting started"
 msgstr "Getting started"
 
@@ -2326,7 +2347,7 @@ msgstr "HTTP {0} for {url}"
 msgid "Hurray, you're in!"
 msgstr "Hurray, you're in!"
 
-#: ui/components/AppInitGate.tsx:229
+#: ui/components/AppInitGate.tsx:269
 msgid "I have read and agree to these terms"
 msgstr "I have read and agree to these terms"
 
@@ -2643,6 +2664,7 @@ msgid "Loading"
 msgstr "Loading"
 
 #: ui/components/AppInitGate.tsx:38
+#: ui/components/AppInitGate.tsx:62
 msgid "Loading card data"
 msgstr "Loading card data"
 
@@ -2691,7 +2713,7 @@ msgstr "local analysis"
 msgid "Local checkpoints"
 msgstr "Local checkpoints"
 
-#: ui/platform/index.ts:32
+#: ui/platform/index.ts:34
 msgid "Local Phase supports up to three AI opponents (four players)."
 msgstr "Local Phase supports up to three AI opponents (four players)."
 
@@ -3622,6 +3644,10 @@ msgstr "Preferences"
 msgid "Premier (Bo1)"
 msgstr "Premier (Bo1)"
 
+#: ui/components/AppInitGate.tsx:84
+msgid "Preparing your cards…"
+msgstr "Preparing your cards…"
+
 #. placeholder {0}: preset.commander
 #: ui/lib/presetDecks.ts:143
 msgid "Preset commander missing from cards: {0}"
@@ -3869,6 +3895,10 @@ msgstr "Restricted cards (one name per line)"
 #: ui/phase/Launch.tsx:184
 #~ msgid "Resume local game"
 #~ msgstr "Resume local game"
+
+#: ui/components/AppInitGate.tsx:340
+msgid "Retry"
+msgstr "Retry"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:121
 msgid "Return to combat"
@@ -4356,6 +4386,10 @@ msgstr "Starting"
 msgid "Starting life"
 msgstr "Starting life"
 
+#: ui/components/AppInitGate.tsx:61
+msgid "Starting local server"
+msgstr "Starting local server"
+
 #: ui/views/Play.tsx:163
 msgid "Starting multiplayer game…"
 msgstr "Starting multiplayer game…"
@@ -4363,6 +4397,10 @@ msgstr "Starting multiplayer game…"
 #: ui/components/companion/CustomCounterDialog.tsx:70
 msgid "Starting value"
 msgstr "Starting value"
+
+#: ui/components/AppInitGate.tsx:56
+msgid "Startup failed"
+msgstr "Startup failed"
 
 #: ui/components/dev/designSystem/sections/AssetsSection.tsx:54
 msgid "Static data files"
@@ -4613,7 +4651,7 @@ msgstr "This deck uses an unsupported format."
 msgid "This estimate does not model trample, prevention or replacement effects."
 msgstr "This estimate does not model trample, prevention or replacement effects."
 
-#: ui/platform/index.ts:12
+#: ui/platform/index.ts:14
 msgid "This feature is not available in the local Phase backend."
 msgstr "This feature is not available in the local Phase backend."
 
@@ -4877,7 +4915,7 @@ msgstr "Value"
 
 #. placeholder {0}: TERMS_AND_CONDITIONS.version
 #. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
-#: ui/components/AppInitGate.tsx:242
+#: ui/components/AppInitGate.tsx:282
 msgid "Version {0} · Updated {1}"
 msgstr "Version {0} · Updated {1}"
 
@@ -4946,7 +4984,7 @@ msgstr "WebP encoding unsupported"
 msgid "Website"
 msgstr "Website"
 
-#: ui/components/AppInitGate.tsx:139
+#: ui/components/AppInitGate.tsx:179
 msgid "Welcome to"
 msgstr "Welcome to"
 
