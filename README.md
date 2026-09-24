@@ -42,8 +42,9 @@ This checkout builds the sibling `../phase` crates through path dependencies. It
 ```sh
 npm install
 
-# one-time: fetch the bulk resources (preset decks, token archive, images)
-scripts/fetch-resources.sh              # uses ../manabrew; override with MANABREW_DIR=/path/to/manabrew
+# one-time: fetch every downloadable data file (or run an individual script below)
+scripts/fetch-all.sh
+scripts/fetch-resources.sh              # just the ManaBrew bulk resources; uses ../manabrew (override with MANABREW_DIR)
 
 # terminal 1 — engine/AI host on 127.0.0.1:3001
 npm run server
@@ -194,8 +195,9 @@ phase-mana 是一个本地对局宿主：用 **phase.rs** 规则引擎和 **Phas
 ```sh
 npm install
 
-# 一次性：拉取批量资源（预设卡组、token 归档、图片）
-scripts/fetch-resources.sh              # 默认用 ../manabrew；可用 MANABREW_DIR=/path/to/manabrew 覆盖
+# 一次性：拉取全部可下载数据（也可只运行下面的单个脚本）
+scripts/fetch-all.sh
+scripts/fetch-resources.sh              # 仅拉取 ManaBrew 批量资源；默认用 ../manabrew（可用 MANABREW_DIR 覆盖）
 
 # 终端 1 — 引擎/AI 宿主，监听 127.0.0.1:3001
 npm run server

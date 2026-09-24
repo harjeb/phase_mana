@@ -63,6 +63,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:server": "cargo test --manifest-path server/Cargo.toml",
     "check:card-images": "node tools/check-card-images.mjs",
+    "download:all": "bash scripts/fetch-all.sh",
     "download:scryfall": "node scripts/download-scryfall.mjs",
     "e2e": "node pm-e2e.mjs",
     "e2e:leave": "node pm-return.mjs"
