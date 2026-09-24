@@ -85,7 +85,7 @@ summary = f'''# Phase 不支持卡牌审计（中文）
 
 ```sh
 cargo run --manifest-path server/Cargo.toml --example audit_cards -- \\
-  /home/jeb/code/phase/data/mtgjson/AtomicCards.json \\
+  ../phase/data/mtgjson/AtomicCards.json \\
   public/preset_decks docs/card-audit.json
 python3 docs/render_card_audit.py
 ```

@@ -11,7 +11,7 @@
 
 ## 数据来源、版本与范围
 
-- 数据库：`/home/jeb/code/phase/data/mtgjson/AtomicCards.json`；加载器 `from_mtgjson`。
+- 数据库：`../phase/data/mtgjson/AtomicCards.json`；加载器 `from_mtgjson`。
 - MTGJSON meta：`{"date": "2026-09-21", "version": "5.3.0+20260921"}`。
 - 数据库 SHA-256：`3bbeaad1a067ef5f85a6b3b66a4b185719b6e087e8e17edf9eea76979e5a7c35`。
 - Phase engine 提交：`8843c6825c297bc8107a38c4f8e13ca6e9daa2dd`；工作树状态：干净。
@@ -41,7 +41,7 @@
 
 ```sh
 cargo run --manifest-path server/Cargo.toml --example audit_cards -- \
-  /home/jeb/code/phase/data/mtgjson/AtomicCards.json \
+  ../phase/data/mtgjson/AtomicCards.json \
   public/preset_decks docs/card-audit.json
 python3 docs/render_card_audit.py
 ```

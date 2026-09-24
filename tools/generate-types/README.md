@@ -3,7 +3,7 @@
 Run from any directory:
 
 ```sh
-/home/jeb/code/phase-mana/tools/generate-types/generate.sh
+tools/generate-types/generate.sh
 ```
 
 Requires Rust/Cargo; defaults to `/root/.cargo/bin/cargo`, falls back to PATH,
@@ -13,7 +13,7 @@ keep dependency resolution reproducible. Build artifacts stay in this workspace'
 
 ## Sources and licenses
 
-Copied from `/home/jeb/code/manabrew`, upstream commit
+Copied from the upstream ManaBrew repository, upstream commit
 `62ff9e720792e49c49d6afc8b98e1e96d826878f`:
 
 - `manabrew-rs/crates/manabrew-protocol`: version **5.11.1**, exact crate copy.
@@ -57,7 +57,7 @@ No DTO shapes were changed locally.
 ## Verification
 
 ```sh
-cd /home/jeb/code/phase-mana/tools/generate-types
+cd tools/generate-types
 /root/.cargo/bin/cargo fmt --all -- --check
 npm exec --yes --package=typescript@5.8.3 -- tsc -p tsconfig.json
 ./generate.sh
