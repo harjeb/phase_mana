@@ -1,7 +1,10 @@
 use engine::database::CardDatabase;
 use phase_mana_server::{router, Host};
-use std::io::Read;
+use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
+
+mod startup;
+mod gateway;
 
 /// `PHASE_CARD_DB` takes either shape the engine reads: a raw MTGJSON
 /// `AtomicCards.json` (`{"meta":…,"data":…}`, its Oracle text parsed at
@@ -60,6 +63,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn serve() -> Result<(), Box<dyn std::error::Error>> {
+    let port = match std::env::var("PHASE_MANA_PORT") {
+        Ok(value) => value.parse::<u16>()?,
+        Err(std::env::VarError::NotPresent) => 3001,
+        Err(error) => return Err(error.into()),
+    };
+    // Reserve the endpoint before potentially minutes of database parsing.
+    let listener = startup::bind(port)?;
+    let address = listener.local_addr()?;
+    let listener = tokio::net::TcpListener::from_std(listener)?;
+    // Reserve the optional client listener before database initialization too.
+    let gateway = match gateway::Config::from_env()? {
+        Some(config) => {
+            let client = startup::bind(config.port)?;
+            let client_port = client.local_addr()?.port();
+            let app = gateway::router(config, client_port, address.port())?;
+            Some((tokio::net::TcpListener::from_std(client)?, app, client_port))
+        }
+        None => None,
+    };
     let path = std::env::var_os("PHASE_CARD_DB")
         .map(PathBuf::from)
         .unwrap_or_else(default_card_db);
@@ -71,14 +93,34 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         path.display(),
         started.elapsed()
     );
-    let port: u16 = std::env::var("PHASE_MANA_PORT")
-        .unwrap_or_else(|_| "3001".into())
-        .parse()?;
-    let listener = tokio::net::TcpListener::bind((std::net::Ipv4Addr::LOCALHOST, port)).await?;
+    let app = router(Host::new(db));
+    let pid = std::process::id();
+    if let Some(endpoint) = std::env::var_os("PHASE_MANA_ENDPOINT_FILE") {
+        startup::publish_endpoint(Path::new(&endpoint), address.port(), pid)?;
+    }
+    // One flushed JSON line is the launcher contract; diagnostics go to stderr.
+    let mut stdout = std::io::stdout().lock();
+    let mut ready = serde_json::json!({
+        "event": "ready", "address": address.to_string(),
+        "port": address.port(), "pid": pid,
+    });
+    if let Some((_, _, client_port)) = &gateway {
+        ready["clientPort"] = serde_json::json!(client_port);
+    }
+    writeln!(stdout, "{ready}")?;
+    stdout.flush()?;
+    drop(stdout);
     eprintln!(
-        "phase-mana API: http://127.0.0.1:{port} (database {})",
+        "phase-mana API: http://{address} (database {})",
         path.display()
     );
-    axum::serve(listener, router(Host::new(db))).await?;
+    if let Some((client, gateway_app, _)) = gateway {
+        tokio::try_join!(
+            async { axum::serve(listener, app).await },
+            async { axum::serve(client, gateway_app).await },
+        )?;
+    } else {
+        axum::serve(listener, app).await?;
+    }
     Ok(())
 }

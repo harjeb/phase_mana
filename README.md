@@ -46,16 +46,29 @@ npm install
 scripts/fetch-all.sh
 scripts/fetch-resources.sh              # just the ManaBrew bulk resources; uses ../manabrew (override with MANABREW_DIR)
 
-# terminal 1 — engine/AI host on 127.0.0.1:3001
-npm run server
+# recommended: starts the backend + Vite, opens the actual UI address
+npm run start:local
 
-# terminal 2 — UI on 127.0.0.1:1420
-npm run dev
+# alternatively, two terminals:
+npm run server   # terminal 1: API starts at 3001, increments if occupied
+npm run dev      # terminal 2: UI starts at 1420, increments if occupied
 ```
 
-Open <http://127.0.0.1:1420>. The first run walks through a terms gate (tick the box) and a nickname step (**Let's brew**) — both work offline; the nickname is stored locally only.
+Use the address printed by Vite (normally <http://127.0.0.1:1420>). `npm run server` records its actual API endpoint in the ignored `.phase-mana/server.json`; Vite reads this automatically, including after a backend restart. `npm run start:local` pins its proxy to its own child instead. Neither launcher kills other applications. The first run walks through a terms gate (tick the box) and a nickname step (**Let's brew**) — both work offline; the nickname is stored locally only.
 
 Bulk resource data is intentionally not committed (preset-deck JSON, `token_archive.json`, the public/UI images). Fetch it once from a ManaBrew checkout before the first run, as shown above.
+
+### Web and Tauri desktop builds
+
+```sh
+npm run build:web      # production frontend -> dist/
+npm run preview        # serves dist + local proxies; run npm run server separately
+npm run build:app      # frontend + Rust server sidecar + Tauri installers
+npm run app:dev        # stage frontend/server, then start the Tauri development shell
+npm run test:startup   # port fallback and endpoint discovery tests
+```
+
+The desktop app uses **Tauri v2**, not Electron. Building requires Tauri's platform prerequisites (on Windows: MSVC C++ tools and WebView2), plus the sibling Phase sources; installed users do not need Node, Git, or Rust. Its setup screen lets you choose `card-data.json` / `AtomicCards.json` or download the official MTGJSON database with progress. Raw MTGJSON takes longer to parse than a pre-parsed export. Runtime data/settings live in the OS application-data directory, not the install directory. The native server serves the bundled frontend and API on loopback ports, each incrementing when occupied; closing the app stops its own server. See [`src-tauri/README.md`](src-tauri/README.md) for prerequisites, staging, security boundaries, and data limitations. A static `dist/` alone is **not** a standalone engine: Web mode still needs the local server and proxy/runtime routes.
 
 ### Features
 
@@ -85,7 +98,10 @@ Both database shapes the engine reads are accepted. Override with `PHASE_CARD_DB
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `PHASE_MANA_PORT` | `3001` | host port |
+| `PHASE_MANA_PORT` | `3001` | first API port to try; increments on address-in-use (up to 100 attempts) |
+| `PHASE_MANA_API_URL` | discovered | explicit loopback API origin for Vite; overrides discovery |
+| `PHASE_MANA_CLIENT_PORT` | `1420` | first native desktop frontend port to try |
+| `PHASE_MANA_STATE_DIR` | mode-dependent | runtime state directory (desktop uses OS application data) |
 | `PHASE_CARD_DB` | see above | engine card database |
 | `PHASE_MANA_CARD_IMAGES` | `card-images` | local card-image library, laid out like Forge's `cardsfolder`: `<letter>/<forge stem>.full.webp`. Misses fall back to Scryfall |
 | `PHASE_MANA_DRAFT_POOLS` | `resources/draft-pools` | booster pools for draft/sealed; override with an absolute path if you run from elsewhere |
@@ -199,16 +215,29 @@ npm install
 scripts/fetch-all.sh
 scripts/fetch-resources.sh              # 仅拉取 ManaBrew 批量资源；默认用 ../manabrew（可用 MANABREW_DIR 覆盖）
 
-# 终端 1 — 引擎/AI 宿主，监听 127.0.0.1:3001
-npm run server
+# 推荐：同时启动后端与 Vite，并打开实际界面地址
+npm run start:local
 
-# 终端 2 — 界面，监听 127.0.0.1:1420
-npm run dev
+# 也可继续使用两个终端：
+npm run server   # 终端 1：API 从 3001 开始，占用则 +1
+npm run dev      # 终端 2：界面从 1420 开始，占用则 +1
 ```
 
-打开 <http://127.0.0.1:1420>。首次运行会经过条款确认（勾选）和昵称步骤（**Let's brew**），两者均可离线完成，昵称只保存在本地。
+打开 Vite 输出的实际地址（通常为 <http://127.0.0.1:1420>）。`npm run server` 把实际 API 端口写到已忽略的 `.phase-mana/server.json`，Vite 自动读取，后端重启换端口也会跟随。`npm run start:local` 则绑定本次启动的后端，避免串到其他实例；不会结束占用端口的其他程序。首次运行会经过条款确认（勾选）和昵称步骤（**Let's brew**），两者均可离线完成，昵称只保存在本地。
 
 批量资源有意不提交（预设卡组 JSON、`token_archive.json`、public/UI 图片）。首次运行前按上面的命令从 ManaBrew 检出拉取一次即可。
+
+### Web 与 Tauri 桌面版构建
+
+```sh
+npm run build:web      # 生产前端 -> dist/
+npm run preview        # 提供 dist、代理与本地资源路由；另起 npm run server
+npm run build:app      # 前端 + Rust 后端 sidecar + Tauri 安装包
+npm run app:dev        # 准备前端/后端，然后启动 Tauri 开发壳
+npm run test:startup   # 端口递增与后端发现测试
+```
+
+桌面版使用 **Tauri v2，不是 Electron**。编译机器需安装对应平台的 Tauri 开发依赖（Windows 为 MSVC C++ 工具及 WebView2），并准备同级 Phase 源码；安装包用户不需要 Node、Git 或 Rust。首次设置可选择本地 `card-data.json` / `AtomicCards.json`，或从 MTGJSON 官方下载，显示进度；原始 MTGJSON 启动时解析较慢，预解析导出加载更快。运行数据和配置保存在系统应用数据目录，不写安装目录。原生服务在本机提供打包的前端和 API，两个端口占用均依次 +1；关闭 App 会结束自己的后端进程。详细要求与限制见 [`src-tauri/README.md`](src-tauri/README.md)。单独的静态 `dist/` **不包含可独立运行的引擎**，Web 模式仍需本地服务和代理/资源路由。
 
 ### 功能
 
@@ -238,7 +267,10 @@ npm run dev
 
 | 变量 | 默认值 | 含义 |
 | --- | --- | --- |
-| `PHASE_MANA_PORT` | `3001` | 宿主端口 |
+| `PHASE_MANA_PORT` | `3001` | API 起始端口；占用则 +1，最多尝试 100 次 |
+| `PHASE_MANA_API_URL` | 自动发现 | Vite 显式连接的本机 API 地址，优先于自动发现 |
+| `PHASE_MANA_CLIENT_PORT` | `1420` | 桌面版原生前端起始端口 |
+| `PHASE_MANA_STATE_DIR` | 按模式选择 | 运行状态目录；桌面版使用系统应用数据目录 |
 | `PHASE_CARD_DB` | 见上 | 引擎卡牌数据库 |
 | `PHASE_MANA_CARD_IMAGES` | `card-images` | 本地卡图库，布局同 Forge 的 `cardsfolder`：`<字母>/<forge stem>.full.webp`；缺失时回退 Scryfall |
 | `PHASE_MANA_DRAFT_POOLS` | `resources/draft-pools` | 轮抽/现开用的补充包池；从其他目录运行时用绝对路径覆盖 |

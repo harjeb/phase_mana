@@ -61,7 +61,9 @@ export function initApp(): Promise<void> {
 
     // `ready` releases the init gate, so it has to survive anything thrown
     // above it — the app degrades without its warm caches, it does not close.
-    try {
+    let finished = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const warmup = async () => {
       postStage("assets");
       await Promise.all([
         initializeForgeRoomAvailability(),
@@ -69,11 +71,21 @@ export function initApp(): Promise<void> {
         prefetchPresetDecks().catch((e) => console.error("[appInit] preset enrichment failed:", e)),
         prefetchTokenArchive().catch((e) => console.error("[appInit] token archive failed:", e)),
       ]);
-      postStage("decks");
+      if (!finished) postStage("decks");
       await prefetchDeckCovers().catch((e) =>
         console.error("[appInit] deck cover prefetch failed:", e),
       );
+    };
+    try {
+      // Remote Scryfall/relay warmups are optional. An offline desktop must
+      // still reach the local game UI, even when a remote request never settles.
+      await Promise.race([
+        warmup().catch((e) => console.error("[appInit] warmup failed:", e)),
+        new Promise<void>((resolve) => { timer = setTimeout(resolve, 15000); }),
+      ]);
     } finally {
+      finished = true;
+      clearTimeout(timer);
       postStage("ready");
     }
   })();

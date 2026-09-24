@@ -1,0 +1,133 @@
+name: Build Windows App
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase_ref:
+        description: 'harjeb/phase branch, tag or SHA (main = latest commit at checkout)'
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-app-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: pwsh
+        working-directory: phase-mana
+    steps:
+      # Sibling layout is required by server/Cargo.toml path dependencies.
+      - name: Check out Phase Mana
+        uses: actions/checkout@v4
+        with:
+          path: phase-mana
+          persist-credentials: false
+
+      - name: Check out modified Phase engine
+        uses: actions/checkout@v4
+        with:
+          repository: harjeb/phase
+          ref: ${{ inputs.phase_ref }}
+          path: phase
+          # Public repository: GITHUB_TOKEN suffices. For a private Phase repo,
+          # define PHASE_REPO_TOKEN with read-only Contents access to that repo.
+          token: ${{ secrets.PHASE_REPO_TOKEN || github.token }}
+          persist-credentials: false
+
+      - name: Check out ManaBrew resource files
+        uses: actions/checkout@v4
+        with:
+          repository: witchesofthehill/manabrew
+          path: manabrew
+          sparse-checkout: |
+            public
+            src/assets
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: phase-mana/package-lock.json
+
+      - name: Install pinned Rust toolchain
+        run: |
+          # rustup reads this project's rust-toolchain.toml (including components).
+          rustup show
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          rustc -Vv
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cargo -V
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Cache Rust build outputs
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            phase-mana/server -> target
+            phase-mana/src-tauri -> target
+          cache-on-failure: true
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Prepare bundled UI resources
+        shell: bash
+        run: bash scripts/fetch-resources.sh
+
+      - name: Test startup and proxy discovery
+        run: npm run test:startup
+
+      - name: Build Web frontend and Tauri EXE / MSI
+        run: npm run build:app
+
+      - name: Record source revisions and toolchain
+        run: |
+          $app = git rev-parse HEAD
+          $phase = git -C ../phase rev-parse HEAD
+          $mana = git -C ../manabrew rev-parse HEAD
+          $info = @{
+            appRepository = '${{ github.repository }}'
+            appCommit = $app
+            phaseRepository = 'harjeb/phase'
+            phaseCommit = $phase
+            resourcesRepository = 'witchesofthehill/manabrew'
+            resourcesCommit = $mana
+            rustc = (rustc -V)
+            node = (node -v)
+            runUrl = '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+            signed = $false
+          }
+          New-Item -ItemType Directory -Force ci-artifacts | Out-Null
+          $info | ConvertTo-Json | Set-Content -Encoding utf8 ci-artifacts/build-info.json
+          $files = Get-ChildItem src-tauri/target/x86_64-pc-windows-msvc/release/bundle -Recurse -File |
+            Where-Object { $_.Extension -in '.exe', '.msi' }
+          if (-not ($files | Where-Object Extension -eq '.exe') -or -not ($files | Where-Object Extension -eq '.msi')) {
+            throw 'Expected both EXE and MSI installers'
+          }
+          $files | Copy-Item -Destination ci-artifacts
+          Get-ChildItem ci-artifacts -File | Where-Object Extension -in '.exe', '.msi' |
+            Get-FileHash -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash.ToLower())  $(Split-Path $_.Path -Leaf)" } |
+            Set-Content -Encoding utf8 ci-artifacts/SHA256SUMS.txt
+          "### Windows installers (unsigned)`n- Phase Mana: $app`n- Phase: $phase`n- ManaBrew resources: $mana`n`nDownload the windows-x64-installers artifact below." |
+            Out-File -Append -Encoding utf8 $env:GITHUB_STEP_SUMMARY
+
+      - name: Upload Windows installers
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-x64-installers-${{ github.run_number }}
+          path: phase-mana/ci-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

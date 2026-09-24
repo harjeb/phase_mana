@@ -13,7 +13,7 @@ import { useGameDevStore } from "@/stores/useGameDevStore";
 import { useDeckStore } from "@/stores/useDeckStore";
 import { lazy, Suspense, useEffect } from "react";
 import { toast } from "sonner";
-import { getPlatformType } from "@/platform";
+import { getPlatformType, usesLocalPhaseServer } from "@/platform";
 import { initApp } from "@/lib/appInit";
 import { isFeatureEnabled } from "@/featureFlags";
 import { isHostedEngineAvailable } from "@/config/webRuntimeConfig";
@@ -33,7 +33,7 @@ function ThemeApplicator({ children }: { children: React.ReactNode }) {
 
 function PlatformRuntimeChecks() {
   useEffect(() => {
-    if (window.location.pathname.startsWith("/companion")) return;
+    if (usesLocalPhaseServer || window.location.pathname.startsWith("/companion")) return;
 
     const isolated = window.crossOriginIsolated;
     const hasSharedArrayBuffer = typeof window.SharedArrayBuffer !== "undefined";

@@ -16,10 +16,15 @@ manabrew-compat = { path = "../../phase/crates/manabrew-compat" }
 # Match phase/Cargo.lock: later 5.x versions changed Rust DTO fields.
 manabrew-protocol = "=5.2.0"
 axum = "0.8"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "net"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "fs", "io-util"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 rand = "0.9"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "stream", "json"] }
+rfd = "0.15"
+percent-encoding = "2"
+mime_guess = "2"
+tokio-util = { version = "0.7", features = ["io"] }
 
 [dev-dependencies]
 engine = { package = "phase-engine", path = "../../phase/crates/engine", features = ["test-support"] }

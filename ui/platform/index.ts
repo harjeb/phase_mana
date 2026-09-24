@@ -7,6 +7,8 @@ export type * from "./types";
 export type { RoomRelayEnvelope, RoomMessagePayload } from "@/types/server";
 export { getClientPlatform } from "./clientPlatform";
 
+// This fork runs the rules engine in a native HTTP sidecar, not SharedArrayBuffer/WASM.
+export const usesLocalPhaseServer = true;
 const events = new EventTarget();
 const unsupported = async (): Promise<never> => {
   throw new Error(t`This feature is not available in the local Phase backend.`);

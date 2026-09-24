@@ -1,3 +1,9 @@
+# Generated local runtime state and desktop artifacts
+.phase-mana/
+src-tauri/binaries/
+src-tauri/resources/web-dist/
+src-tauri/resources/draft-pools/
+
 node_modules/
 dist/
 target/
