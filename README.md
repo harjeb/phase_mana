@@ -134,4 +134,4 @@ tools/generate-types/generate.sh
 
 ## Licensing
 
-`AGPL-3.0-or-later` — see [`LICENSE`](LICENSE). The copied ManaBrew client and the linked `manabrew-compat` crate are AGPL-3.0-or-later, so this whole program is. phase's engine, AI, and core crates are MIT/Apache-2.0; ManaBrew's UI is AGPL-3.0-or-later; the ManaBrew protocol crates (vendored for type generation under `tools/generate-types/`) are GPL-3.0-or-later. Sources: `phase` at commit `8843c68`, `manabrew` at commit `62ff9e7`.
+`AGPL-3.0-or-later` — see [`LICENSE`](LICENSE). The copied ManaBrew client and the linked `manabrew-compat` crate are AGPL-3.0-or-later, so this whole program is. phase's engine, AI, and core crates are MIT/Apache-2.0; ManaBrew's UI is AGPL-3.0-or-later; the ManaBrew protocol crates (vendored for type generation under `tools/generate-types/`) are GPL-3.0-or-later. Sources: `phase` at commit `8843c68`, `manabrew` at commit `62ff9e7`. See [`NOTICE`](NOTICE) and [`THIRD-PARTY-LICENSES.md`](THIRD-PARTY-LICENSES.md) for attribution and full license-text locations.

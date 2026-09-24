@@ -1,0 +1,11 @@
+The React/Pixi client in this directory is copied from ManaBrew
+(https://github.com/witchesofthehill/manabrew, pinned at commit 62ff9e7) and is
+licensed under AGPL-3.0-or-later. Copyright belongs to the ManaBrew authors and
+contributors.
+
+Note: some ManaBrew releases and in-tree files state GPL-3.0-or-later instead.
+Both licenses are copyleft and mutually compatible, and this repository as a
+whole is distributed under AGPL-3.0-or-later.
+
+The full AGPL-3.0 license text is the repository's root LICENSE file. See also
+../NOTICE and ../THIRD-PARTY-LICENSES.md.

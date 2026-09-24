@@ -1,0 +1,28 @@
+phase-mana
+Copyright (C) 2026 phase-mana contributors
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version. See the LICENSE file for the full text.
+
+This product includes software and material developed by third parties. In
+particular:
+
+  * phase.rs — https://github.com/phase-rs/phase
+      - phase-engine, phase-ai, draft-core, draft-wasm: MIT OR Apache-2.0
+      - manabrew-compat: AGPL-3.0-or-later
+      Copyright (c) 2024-2026 phase.rs contributors
+
+  * ManaBrew — https://github.com/witchesofthehill/manabrew
+      - the React/Pixi client copied into ui/: AGPL-3.0-or-later
+      - the protocol crates vendored under tools/generate-types/: GPL-3.0-or-later
+
+  * manabrew-protocol (crates.io) — AGPL-3.0-or-later
+
+  * Forge — https://github.com/Card-Forge/forge
+      GPL-3.0-or-later (referenced by ManaBrew; no Forge source is vendored in
+      this repository)
+
+See THIRD-PARTY-LICENSES.md for details, license-text locations, and the
+compatibility note.
