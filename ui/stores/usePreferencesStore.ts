@@ -4,6 +4,7 @@ import { getServerConnectionDefaults } from "@/config/webRuntimeConfig";
 import { STORAGE_KEYS } from "@/lib/constants";
 import { ensureUsernameTag, hasUsernameTag } from "@/lib/username";
 import type { AiOpponentRef } from "@/lib/aiOpponent";
+import { DEFAULT_AI_DIFFICULTY, type AiDifficultyLabel } from "@/lib/aiDifficulty";
 import type { KnownRelay } from "@/config/knownRelays";
 import type { PlaymatSettings } from "@/protocol/game";
 import type { GameFormat } from "@/types/server";
@@ -74,6 +75,10 @@ export interface PreferencesState {
   setHandOrderMode: (mode: HandOrderMode) => void;
   opponentLayout: "focused" | "overview";
   setOpponentLayout: (layout: "focused" | "overview") => void;
+
+  /** Phase engine difficulty for every AI seat in a local game. */
+  aiDifficulty: AiDifficultyLabel;
+  setAiDifficulty: (difficulty: AiDifficultyLabel) => void;
 
   // One knob for card size: battlefield cards on ALL fields plus the hand
   // fan. 1 = the classic 3-row board; 1.5 = the 2-row fill that is the
@@ -178,6 +183,7 @@ const PERSISTED_PREFERENCE_KEYS = [
   "battlefieldAutoSort",
   "handOrderMode",
   "opponentLayout",
+  "aiDifficulty",
   "cardSizeMultiplier",
   "lockZoneTiles",
   "battlefieldCardStyle",
@@ -361,6 +367,9 @@ export const usePreferencesStore = create<PreferencesState>()(
 
           opponentLayout: "focused",
           setOpponentLayout: (opponentLayout) => set({ opponentLayout }),
+
+          aiDifficulty: DEFAULT_AI_DIFFICULTY,
+          setAiDifficulty: (aiDifficulty) => set({ aiDifficulty }),
 
           cardHoverDelayMs: 350,
           setCardHoverDelayMs: (ms) => set({ cardHoverDelayMs: ms }),

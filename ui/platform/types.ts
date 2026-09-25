@@ -24,6 +24,8 @@ export interface StartGameParams {
   opponentConspiracies?: string[][];
   /** P5: a full custom ruleset from the format editor; overrides `format`. */
   customRules?: unknown;
+  /** Phase engine AI difficulty label for every AI seat; omitted uses the host default. */
+  aiDifficulty?: string;
 }
 
 export interface StartMultiplayerGameParams {

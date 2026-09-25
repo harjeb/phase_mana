@@ -95,7 +95,7 @@ msgstr "已将“{0}”添加到你的账户套牌"
 #. placeholder {0}: empty.name
 #. placeholder {0}: entry.name
 #: ui/components/lobby/CreateGameDialog.tsx:386
-#: ui/components/lobby/DeckVsSelector.tsx:454
+#: ui/components/lobby/DeckVsSelector.tsx:458
 #: ui/hooks/useQuickPlaytest.tsx:42
 msgid "\"{0}\" has no cards"
 msgstr "“{0}”中没有牌"
@@ -106,7 +106,7 @@ msgstr "“{0}”中没有牌"
 #. placeholder {1}: formatName(selectedFormat)
 #: ui/components/lobby/CreateGameDialog.tsx:168
 #: ui/components/lobby/CreateGameDialog.tsx:358
-#: ui/components/lobby/DeckVsSelector.tsx:375
+#: ui/components/lobby/DeckVsSelector.tsx:379
 msgid "\"{0}\" is not a {1} deck"
 msgstr "“{0}”不是{1}套牌"
 
@@ -121,7 +121,7 @@ msgid "\"{0}\" is not a legal oathbreaker or signature spell — an oathbreaker 
 msgstr "“{0}”不是合法的誓约者或签名咒语 — 誓约者必须是鹏洛客，签名咒语必须是瞬间或法术"
 
 #. placeholder {0}: selected.name
-#: ui/components/lobby/DeckVsSelector.tsx:466
+#: ui/components/lobby/DeckVsSelector.tsx:470
 msgid "\"{0}\" is not legal"
 msgstr "“{0}”不符合赛制规则"
 
@@ -405,7 +405,7 @@ msgstr "{cardCount} 张牌"
 msgid "{commanderCount} commander"
 msgstr "{commanderCount} 张统帅"
 
-#: ui/components/lobby/DeckVsSelector.tsx:918
+#: ui/components/lobby/DeckVsSelector.tsx:936
 #: ui/components/lobby/TableRoomSidebar.tsx:155
 msgid "{count} players"
 msgstr "{count} 人"
@@ -558,7 +558,7 @@ msgstr "{totalCount} 张中的 {visibleCount} 张"
 msgid "↑↓ select · Enter activate · 1–9"
 msgstr "↑↓ 选择 · Enter 激活 · 1–9"
 
-#: ui/components/lobby/DeckVsSelector.tsx:583
+#: ui/components/lobby/DeckVsSelector.tsx:587
 msgid "+ Custom"
 msgstr "+ 自定义"
 
@@ -1057,17 +1057,22 @@ msgstr "历险"
 msgid "Aggro"
 msgstr "快攻"
 
-#: ui/components/lobby/DeckVsSelector.tsx:835
+#: ui/components/lobby/DeckVsSelector.tsx:839
 #: ui/components/lobby/TablePickerDialog.tsx:61
 msgid "AI"
 msgstr "AI"
+
+#: ui/components/lobby/DeckVsSelector.tsx:877
+#: ui/components/lobby/DeckVsSelector.tsx:881
+msgid "AI difficulty"
+msgstr "AI 难度"
 
 #: ui/components/editor/CardSearch.tsx:182
 msgid "Alchemy"
 msgstr "炼金"
 
 #: ui/components/deck/DeckListControls.tsx:109
-#: ui/components/lobby/DeckVsSelector.tsx:547
+#: ui/components/lobby/DeckVsSelector.tsx:551
 msgid "All"
 msgstr "全部"
 
@@ -1148,7 +1153,7 @@ msgid "Applies to battlefield cards. Hand, stack and dialog view settings are in
 msgstr "仅作用于战场上的牌。手牌、堆叠和对话框的显示设置相互独立。"
 
 #: ui/components/lobby/CreateGameDialog.tsx:56
-#: ui/components/lobby/DeckVsSelector.tsx:52
+#: ui/components/lobby/DeckVsSelector.tsx:54
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/views/CasualModes.tsx:168
 msgid "Archenemy"
@@ -1863,6 +1868,10 @@ msgstr "休闲"
 msgid "Casual Modes"
 msgstr "休闲模式"
 
+#: ui/lib/aiDifficulty.ts:14
+msgid "cEDH"
+msgstr "cEDH"
+
 #: ui/components/lobby/TableRoomSidebar.tsx:247
 msgid "Change deck"
 msgstr "更换套牌"
@@ -2053,11 +2062,11 @@ msgstr "选择同时触发式异能的顺序"
 msgid "Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views."
 msgstr "选择文本、网格或堆叠视图。对牌排序，按牌张属性或你自己的标签分组，并将有用的组合保存为自定义视图。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:597
+#: ui/components/lobby/DeckVsSelector.tsx:601
 msgid "Choose the AI deck"
 msgstr "选择 AI 套牌"
 
-#: ui/components/lobby/DeckVsSelector.tsx:596
+#: ui/components/lobby/DeckVsSelector.tsx:600
 msgid "Choose the AI deck or fight"
 msgstr "选择 AI 套牌或开始对战"
 
@@ -2069,11 +2078,11 @@ msgstr "选择你想使用的套牌"
 msgid "Choose which face stack cards show when they appear. You can still switch individual cards."
 msgstr "选择堆叠中的卡牌出现时使用的视图。仍可单独切换每张卡牌。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:593
+#: ui/components/lobby/DeckVsSelector.tsx:597
 msgid "Choose your deck"
 msgstr "选择你的套牌"
 
-#: ui/components/lobby/DeckVsSelector.tsx:592
+#: ui/components/lobby/DeckVsSelector.tsx:596
 msgid "Choose your deck or fight"
 msgstr "选择你的套牌或开始对战"
 
@@ -2112,7 +2121,7 @@ msgstr "清除"
 #: ui/components/editor/DeckSelectionTray.tsx:67
 #: ui/components/editor/DeckSelectionTray.tsx:162
 #: ui/components/editor/PlaymatEditorModal.tsx:411
-#: ui/components/lobby/DeckVsSelector.tsx:1007
+#: ui/components/lobby/DeckVsSelector.tsx:1025
 #: ui/views/Limited.tsx:552
 msgid "Clear"
 msgstr "清除"
@@ -2372,7 +2381,7 @@ msgstr "指挥区和特殊区域的牌未被复制"
 #: ui/components/editor/CardSearch.tsx:493
 #: ui/components/lobby/CreateGameDialog.tsx:48
 #: ui/components/lobby/CreateGameDialog.tsx:520
-#: ui/components/lobby/DeckVsSelector.tsx:44
+#: ui/components/lobby/DeckVsSelector.tsx:46
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/Draft.tsx:109
 msgid "Commander"
@@ -2410,8 +2419,8 @@ msgstr "Commander Spellbook 请求失败（HTTP {0}）"
 #: ui/components/lobby/CreateGameDialog.tsx:348
 #: ui/components/lobby/CreateGameDialog.tsx:678
 #: ui/components/lobby/CreateGameDialog.tsx:745
-#: ui/components/lobby/DeckVsSelector.tsx:689
-#: ui/components/lobby/DeckVsSelector.tsx:749
+#: ui/components/lobby/DeckVsSelector.tsx:693
+#: ui/components/lobby/DeckVsSelector.tsx:753
 msgid "Community"
 msgstr "社区"
 
@@ -2563,7 +2572,7 @@ msgstr "连接失败。"
 msgid "Connection lost"
 msgstr "连接已断开"
 
-#: ui/phase/transport.ts:118
+#: ui/phase/transport.ts:120
 msgid "Conspiracy reveal was rejected"
 msgstr "阴谋揭露被拒绝"
 
@@ -2767,7 +2776,7 @@ msgstr "无法设置昵称。"
 msgid "Could not set your username."
 msgstr "无法设置用户名。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:497
+#: ui/components/lobby/DeckVsSelector.tsx:501
 msgid "Could not start the game."
 msgstr "无法开始对局。"
 
@@ -2982,7 +2991,7 @@ msgstr "当前使用 {0}"
 msgid "Custom counter"
 msgstr "自定义指示物"
 
-#: ui/components/lobby/DeckVsSelector.tsx:912
+#: ui/components/lobby/DeckVsSelector.tsx:930
 msgid "Custom format player count"
 msgstr "自定义赛制玩家数"
 
@@ -3437,12 +3446,12 @@ msgid "Downloading… {progress}%"
 msgstr "下载中… {progress}%"
 
 #: ui/components/lobby/CreateGameDialog.tsx:227
-#: ui/components/lobby/DeckVsSelector.tsx:661
+#: ui/components/lobby/DeckVsSelector.tsx:665
 msgid "draft"
 msgstr "轮抽"
 
 #: ui/components/lobby/CreateGameDialog.tsx:59
-#: ui/components/lobby/DeckVsSelector.tsx:55
+#: ui/components/lobby/DeckVsSelector.tsx:57
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/components/lobby/TableRoom.tsx:70
 #: ui/views/OnlinePlay.tsx:150
@@ -3549,7 +3558,7 @@ msgid "Dual Land"
 msgstr "双色地"
 
 #: ui/components/lobby/CreateGameDialog.tsx:51
-#: ui/components/lobby/DeckVsSelector.tsx:47
+#: ui/components/lobby/DeckVsSelector.tsx:49
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:118
 msgid "Duel Commander"
@@ -3578,6 +3587,10 @@ msgstr "每位玩家独立开包并构筑套牌。"
 #: ui/components/lobby/TableSetupGameCard.tsx:271
 msgid "Each player opens their own pool — pools are independent but reproducible from the seed."
 msgstr "每位玩家开启自己的牌池——牌池相互独立，但可通过种子重现。"
+
+#: ui/lib/aiDifficulty.ts:10
+msgid "Easy"
+msgstr "简单"
 
 #: ui/components/editor/CardSearch.tsx:342
 msgid "EDHREC Rank"
@@ -3913,8 +3926,8 @@ msgstr "启动对局失败：{0}"
 
 #: ui/components/lobby/CreateGameDialog.tsx:177
 #: ui/components/lobby/CreateGameDialog.tsx:365
-#: ui/components/lobby/DeckVsSelector.tsx:200
-#: ui/components/lobby/DeckVsSelector.tsx:394
+#: ui/components/lobby/DeckVsSelector.tsx:204
+#: ui/components/lobby/DeckVsSelector.tsx:398
 msgid "Failed to load Community deck"
 msgstr "加载社区套牌失败"
 
@@ -3993,7 +4006,7 @@ msgstr "找地地"
 msgid "Fight"
 msgstr "开战"
 
-#: ui/components/lobby/DeckVsSelector.tsx:888
+#: ui/components/lobby/DeckVsSelector.tsx:906
 msgid "Fight!"
 msgstr "开战！"
 
@@ -4019,16 +4032,16 @@ msgid "Filter colors... (e.g. primary, counter, arrow)"
 msgstr "筛选颜色…（例如 primary、counter、arrow）"
 
 #: ui/components/lobby/CreateGameDialog.tsx:601
-#: ui/components/lobby/DeckVsSelector.tsx:607
+#: ui/components/lobby/DeckVsSelector.tsx:611
 msgid "Filter decks"
 msgstr "筛选套牌"
 
-#: ui/components/lobby/DeckVsSelector.tsx:544
+#: ui/components/lobby/DeckVsSelector.tsx:548
 msgid "Filter decks by format"
 msgstr "按赛制筛选套牌"
 
 #: ui/components/lobby/CreateGameDialog.tsx:602
-#: ui/components/lobby/DeckVsSelector.tsx:608
+#: ui/components/lobby/DeckVsSelector.tsx:612
 msgid "Filter decks..."
 msgstr "筛选套牌……"
 
@@ -4548,6 +4561,10 @@ msgstr "用户名已更新为 @{0}"
 #: ui/components/lobby/ReportPlayerDialog.tsx:37
 msgid "Harassment or bullying"
 msgstr "骚扰或霸凌"
+
+#: ui/lib/aiDifficulty.ts:12
+msgid "Hard"
+msgstr "困难"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:74
 msgid "Has priority"
@@ -5219,7 +5236,7 @@ msgstr "不保存离开"
 
 #: ui/components/editor/CardSearch.tsx:158
 #: ui/components/lobby/CreateGameDialog.tsx:44
-#: ui/components/lobby/DeckVsSelector.tsx:40
+#: ui/components/lobby/DeckVsSelector.tsx:42
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Legacy"
 msgstr "薪传"
@@ -5350,7 +5367,7 @@ msgstr "加载中"
 
 #. placeholder {0}: deck.title
 #: ui/components/lobby/CreateGameDialog.tsx:740
-#: ui/components/lobby/DeckVsSelector.tsx:745
+#: ui/components/lobby/DeckVsSelector.tsx:749
 msgid "Loading {0}…"
 msgstr "正在加载 {0}……"
 
@@ -5642,11 +5659,11 @@ msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
 msgid "Manual result — unverified"
 msgstr "手动结果 —— 未经核实"
 
-#: ui/stores/useGameStore.ts:466
+#: ui/stores/useGameStore.ts:468
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "手动房间客户端需要手动桌面运行时。"
 
-#: ui/stores/useGameStore.ts:437
+#: ui/stores/useGameStore.ts:439
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "手动房间主机需要手动桌面运行时。"
 
@@ -5699,7 +5716,7 @@ msgstr "对局"
 msgid "Matchup notes"
 msgstr "对局笔记"
 
-#: ui/components/lobby/DeckVsSelector.tsx:598
+#: ui/components/lobby/DeckVsSelector.tsx:602
 msgid "Matchup ready"
 msgstr "对阵已就绪"
 
@@ -5751,6 +5768,10 @@ msgstr "也许 {0}"
 #: ui/components/editor/ImportDeckTextDialog.tsx:185
 msgid "Maybeboard"
 msgstr "待定板"
+
+#: ui/lib/aiDifficulty.ts:11
+msgid "Medium"
+msgstr "中等"
 
 #: ui/components/editor/CardSearch.tsx:433
 msgid "Meld"
@@ -5815,13 +5836,13 @@ msgstr "模式双面牌"
 #: ui/components/editor/CardSearch.tsx:268
 #: ui/components/lobby/CreateGameDialog.tsx:43
 #: ui/components/lobby/CustomFormatDialog.tsx:475
-#: ui/components/lobby/DeckVsSelector.tsx:39
+#: ui/components/lobby/DeckVsSelector.tsx:41
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Modern"
 msgstr "近代"
 
 #: ui/components/lobby/CreateGameDialog.tsx:53
-#: ui/components/lobby/DeckVsSelector.tsx:49
+#: ui/components/lobby/DeckVsSelector.tsx:51
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:154
 msgid "Momir"
@@ -6064,7 +6085,7 @@ msgstr "没有进行中的手动桌面游戏。"
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "此赛制没有可用的 AI 套牌 — 请自行选择一套。"
 
-#: ui/phase/transport.ts:117
+#: ui/phase/transport.ts:119
 msgid "No authorized conspiracy reveal action"
 msgstr "没有已授权的阴谋揭露操作"
 
@@ -6105,7 +6126,7 @@ msgstr "尚未检测到组合技。"
 msgid "No Community decks are available."
 msgstr "暂无社区套牌。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:719
+#: ui/components/lobby/DeckVsSelector.tsx:723
 msgid "No Community decks match this format and search."
 msgstr "没有符合此赛制和搜索条件的社区套牌。"
 
@@ -6141,7 +6162,7 @@ msgstr "没有套牌匹配你的筛选器。"
 msgid "No decks to download art for yet."
 msgstr "还没有可下载插画的套牌。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:627
+#: ui/components/lobby/DeckVsSelector.tsx:631
 msgid "No decks yet — build one in <0>My Decks</0>."
 msgstr "还没有套牌——前往<0>我的套牌</0>构筑一套吧。"
 
@@ -6195,7 +6216,7 @@ msgstr "套牌中没有传奇生物——请在下方输入名称。"
 msgid "no lines yet"
 msgstr "暂无数据"
 
-#: ui/stores/useGameStore.ts:670
+#: ui/stores/useGameStore.ts:672
 msgid "No local player is available to concede."
 msgstr "没有可认输的本地玩家。"
 
@@ -6326,7 +6347,7 @@ msgstr "尚未发布快照"
 msgid "No snapshots yet."
 msgstr "暂无快照。"
 
-#: ui/components/lobby/DeckVsSelector.tsx:779
+#: ui/components/lobby/DeckVsSelector.tsx:783
 msgid "No starter decks for this format."
 msgstr "此赛制暂无入门套牌。"
 
@@ -6376,7 +6397,7 @@ msgid "Not all players are ready"
 msgstr "尚有玩家未准备好"
 
 #. placeholder {0}: opponentCount + 1
-#: ui/components/lobby/DeckVsSelector.tsx:483
+#: ui/components/lobby/DeckVsSelector.tsx:487
 msgid "Not enough distinct decks are available for a {0}-player game."
 msgstr "没有足够的可用套牌进行 {0} 人游戏。"
 
@@ -6428,7 +6449,7 @@ msgstr "没有可撤销的操作"
 
 #: ui/components/editor/CardSearch.tsx:194
 #: ui/components/lobby/CreateGameDialog.tsx:49
-#: ui/components/lobby/DeckVsSelector.tsx:45
+#: ui/components/lobby/DeckVsSelector.tsx:47
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/CasualModes.tsx:104
 msgid "Oathbreaker"
@@ -6464,7 +6485,7 @@ msgid "Old"
 msgstr "旧"
 
 #: ui/components/lobby/CreateGameDialog.tsx:54
-#: ui/components/lobby/DeckVsSelector.tsx:50
+#: ui/components/lobby/DeckVsSelector.tsx:52
 #: ui/components/lobby/OpenTableCard.tsx:20
 #: ui/views/CasualModes.tsx:132
 msgid "Old School 93/94"
@@ -6479,7 +6500,7 @@ msgid "Old School 93/94 plus Fourth Edition through Homelands."
 msgstr "Old School 93/94 外加第四版到家园。"
 
 #: ui/components/lobby/CreateGameDialog.tsx:55
-#: ui/components/lobby/DeckVsSelector.tsx:51
+#: ui/components/lobby/DeckVsSelector.tsx:53
 #: ui/components/lobby/OpenTableCard.tsx:20
 #: ui/views/CasualModes.tsx:139
 msgid "Old School 95"
@@ -6916,13 +6937,13 @@ msgstr "粘贴邀请"
 
 #: ui/components/editor/CardSearch.tsx:170
 #: ui/components/lobby/CreateGameDialog.tsx:46
-#: ui/components/lobby/DeckVsSelector.tsx:42
+#: ui/components/lobby/DeckVsSelector.tsx:44
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Pauper"
 msgstr "平民"
 
 #: ui/components/lobby/CreateGameDialog.tsx:52
-#: ui/components/lobby/DeckVsSelector.tsx:48
+#: ui/components/lobby/DeckVsSelector.tsx:50
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:125
 msgid "Pauper Commander"
@@ -6965,7 +6986,7 @@ msgstr "Phase 代理服务器地址"
 msgid "Pick"
 msgstr "选择"
 
-#: ui/components/lobby/DeckVsSelector.tsx:986
+#: ui/components/lobby/DeckVsSelector.tsx:1004
 msgid "pick a deck"
 msgstr "选择套牌"
 
@@ -7018,7 +7039,7 @@ msgstr "已由环境变量 PHASE_MANA_CARD_IMAGES 固定。"
 
 #: ui/components/editor/CardSearch.tsx:150
 #: ui/components/lobby/CreateGameDialog.tsx:42
-#: ui/components/lobby/DeckVsSelector.tsx:38
+#: ui/components/lobby/DeckVsSelector.tsx:40
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Pioneer"
 msgstr "先驱"
@@ -7028,7 +7049,7 @@ msgid "Placement"
 msgstr "名次"
 
 #: ui/components/lobby/CreateGameDialog.tsx:57
-#: ui/components/lobby/DeckVsSelector.tsx:53
+#: ui/components/lobby/DeckVsSelector.tsx:55
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/views/CasualModes.tsx:175
 msgid "Planechase"
@@ -7261,7 +7282,7 @@ msgstr "顶级（单局）"
 
 #: ui/components/editor/CardSearch.tsx:174
 #: ui/components/lobby/CreateGameDialog.tsx:47
-#: ui/components/lobby/DeckVsSelector.tsx:43
+#: ui/components/lobby/DeckVsSelector.tsx:45
 #: ui/components/lobby/OpenTableCard.tsx:17
 msgid "Premodern"
 msgstr "前摩登"
@@ -7479,7 +7500,7 @@ msgstr "随机"
 msgid "Random AI"
 msgstr "随机 AI"
 
-#: ui/components/lobby/DeckVsSelector.tsx:862
+#: ui/components/lobby/DeckVsSelector.tsx:866
 msgid "Random AI deck"
 msgstr "随机 AI 套牌"
 
@@ -7928,8 +7949,8 @@ msgstr "受限牌（每行一个牌名）"
 
 #: ui/components/AppInitGate.tsx:344
 #: ui/components/lobby/CreateGameDialog.tsx:686
-#: ui/components/lobby/DeckVsSelector.tsx:202
-#: ui/components/lobby/DeckVsSelector.tsx:695
+#: ui/components/lobby/DeckVsSelector.tsx:206
+#: ui/components/lobby/DeckVsSelector.tsx:699
 #: ui/components/play/CommunityDeckShelf.tsx:43
 #: ui/components/play/PlayDeckShelf.tsx:142
 #: ui/components/settings/MyAssetsSection.tsx:128
@@ -8279,7 +8300,7 @@ msgstr "Scryfall 未返回系列 {setCode} 的任何卡牌"
 
 #: ui/components/layout/TopBar.tsx:63
 #: ui/components/lobby/CreateGameDialog.tsx:60
-#: ui/components/lobby/DeckVsSelector.tsx:56
+#: ui/components/lobby/DeckVsSelector.tsx:58
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/components/lobby/TableRoom.tsx:72
 #: ui/views/Limited.tsx:250
@@ -8472,7 +8493,7 @@ msgstr "选择不受支持的牌张"
 msgid "Selected:"
 msgstr "已选择："
 
-#: ui/components/lobby/DeckVsSelector.tsx:990
+#: ui/components/lobby/DeckVsSelector.tsx:1008
 msgid "Selecting"
 msgstr "选择中"
 
@@ -8938,7 +8959,7 @@ msgstr "堆叠默认视图"
 
 #: ui/components/editor/CardSearch.tsx:146
 #: ui/components/lobby/CreateGameDialog.tsx:41
-#: ui/components/lobby/DeckVsSelector.tsx:37
+#: ui/components/lobby/DeckVsSelector.tsx:39
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Standard"
 msgstr "标准"
@@ -9029,7 +9050,7 @@ msgid "Starter deck — read only"
 msgstr "新手套牌 — 只读"
 
 #: ui/components/lobby/CreateGameDialog.tsx:770
-#: ui/components/lobby/DeckVsSelector.tsx:775
+#: ui/components/lobby/DeckVsSelector.tsx:779
 #: ui/views/DeckEditor.tsx:822
 msgid "Starter Decks"
 msgstr "新手套牌"
@@ -9067,7 +9088,7 @@ msgid "Starting..."
 msgstr "正在开始…"
 
 #: ui/components/deck/DeckCardPlayButton.tsx:27
-#: ui/components/lobby/DeckVsSelector.tsx:888
+#: ui/components/lobby/DeckVsSelector.tsx:906
 msgid "Starting…"
 msgstr "正在开始……"
 
@@ -9139,7 +9160,7 @@ msgstr "提交套牌"
 msgid "Submit unverified result"
 msgstr "提交未经核实的结果"
 
-#: ui/components/lobby/DeckVsSelector.tsx:997
+#: ui/components/lobby/DeckVsSelector.tsx:1015
 msgid "Suggested"
 msgstr "推荐"
 
@@ -9441,7 +9462,7 @@ msgstr "牌垫会填充一个宽幅的横向区域（约 5:2）。为获得清�
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "预览栏是编辑器共享的牌张检查器。将鼠标悬停在工作区任意位置的牌上，其图片和详情就会显示在那里，不会打断你正在进行的操作。"
 
-#: ui/stores/useGameStore.ts:379
+#: ui/stores/useGameStore.ts:381
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "上一局游戏仍在关闭中。请稍后重试。"
 
@@ -9615,7 +9636,7 @@ msgid "Timer mode"
 msgstr "计时器模式"
 
 #: ui/components/lobby/CreateGameDialog.tsx:50
-#: ui/components/lobby/DeckVsSelector.tsx:46
+#: ui/components/lobby/DeckVsSelector.tsx:48
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:111
 msgid "Tiny Leaders"
@@ -9769,7 +9790,7 @@ msgid "Two teams of two share a 30-life total and take their turns together."
 msgstr "两队各两人共享 30 点生命总数，并一起进行回合。"
 
 #: ui/components/lobby/CreateGameDialog.tsx:58
-#: ui/components/lobby/DeckVsSelector.tsx:54
+#: ui/components/lobby/DeckVsSelector.tsx:56
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/views/CasualModes.tsx:182
 msgid "Two-Headed Giant"
@@ -10069,6 +10090,14 @@ msgstr "版本历史"
 msgid "Vertical framing"
 msgstr "垂直取景"
 
+#: ui/lib/aiDifficulty.ts:9
+msgid "Very Easy"
+msgstr "非常简单"
+
+#: ui/lib/aiDifficulty.ts:13
+msgid "Very Hard"
+msgstr "非常困难"
+
 #: ui/components/editor/DeckLayoutMenu.tsx:152
 #: ui/components/game/panels/PlayerSheetModal.tsx:217
 #: ui/components/game/panels/PlayerSheetModal.tsx:289
@@ -10103,7 +10132,7 @@ msgstr "查看可见的牌"
 
 #: ui/components/editor/CardSearch.tsx:162
 #: ui/components/lobby/CreateGameDialog.tsx:45
-#: ui/components/lobby/DeckVsSelector.tsx:41
+#: ui/components/lobby/DeckVsSelector.tsx:43
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Vintage"
 msgstr "特选"
@@ -10121,7 +10150,7 @@ msgstr "扮装"
 msgid "vs"
 msgstr "对"
 
-#: ui/components/lobby/DeckVsSelector.tsx:833
+#: ui/components/lobby/DeckVsSelector.tsx:837
 msgid "VS"
 msgstr "对"
 
@@ -10254,7 +10283,7 @@ msgstr "年份"
 msgid "You"
 msgstr "你"
 
-#: ui/components/lobby/DeckVsSelector.tsx:817
+#: ui/components/lobby/DeckVsSelector.tsx:821
 msgid "YOU"
 msgstr "你"
 
@@ -10354,7 +10383,7 @@ msgid "Your deck does not meet the size requirements."
 msgstr "你的套牌不满足数量要求。"
 
 #: ui/components/lobby/CreateGameDialog.tsx:616
-#: ui/components/lobby/DeckVsSelector.tsx:623
+#: ui/components/lobby/DeckVsSelector.tsx:627
 msgid "Your Decks"
 msgstr "你的套牌"
 

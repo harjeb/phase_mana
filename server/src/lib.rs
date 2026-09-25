@@ -44,7 +44,7 @@ use manabrew_protocol::prompts::{
 };
 use phase_ai::{
     auto_play::{run_ai_actions, AiActionsStop},
-    config::AiConfig,
+    config::{create_config, AiConfig, AiDifficulty, Platform},
     session::AiSession,
 };
 use rand::{rngs::StdRng, Rng, SeedableRng};
@@ -53,6 +53,8 @@ use serde_json::Value;
 
 pub mod host_process;
 
+#[cfg(test)]
+mod ai_difficulty_tests;
 #[cfg(test)]
 mod commander_tests;
 #[cfg(test)]
@@ -338,6 +340,10 @@ pub struct StartRequest {
     pub ai_conspiracies: Vec<String>,
     pub human_deck: Option<Vec<String>>,
     pub ai_deck: Option<Vec<String>>,
+    /// Difficulty for every AI seat (`VeryEasy` … `CEDH`). Parsed through
+    /// `AiDifficulty::from_label`, so an unknown label falls back to `Medium`
+    /// rather than rejecting the start request.
+    pub difficulty: Option<String>,
     #[serde(default)]
     pub human_sideboard: Vec<String>,
     #[serde(default)]
@@ -387,6 +393,9 @@ struct Session {
     prepared: PreparedManabrewSnapshot,
     snapshot: Snapshot,
     ai_session: Arc<AiSession>,
+    /// Difficulty for every AI seat, resolved once at start and reused for every
+    /// later AI turn in this session.
+    ai_config: AiConfig,
     rng: StdRng,
 }
 
@@ -546,6 +555,10 @@ impl Host {
             }
         }
         let format = request.format.as_deref();
+        let ai_config = create_config(
+            AiDifficulty::from_label(request.difficulty.as_deref().unwrap_or("medium")),
+            Platform::Native,
+        );
         let (human_commanders, human_signature) =
             split_command_slots(&self.db, format, &request.human_commanders);
         let (ai_commanders, ai_signature) =
@@ -608,7 +621,7 @@ impl Host {
         bind_interaction_session(&mut game);
         let ai_session = AiSession::arc_from_game(&game);
         let mut rng = StdRng::seed_from_u64(seed);
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
+        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
         log.attach(&mut snapshot);
@@ -618,6 +631,7 @@ impl Host {
             prepared,
             snapshot: snapshot.clone(),
             ai_session,
+            ai_config,
             rng,
         });
         Ok(snapshot)
@@ -667,7 +681,8 @@ impl Host {
         log.capture(&before, &game, &result.events);
         let mut rng = session.rng.clone();
         let ai_session = Arc::clone(&session.ai_session);
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
+        let ai_config = session.ai_config.clone();
+        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
         log.attach(&mut snapshot);
@@ -677,6 +692,7 @@ impl Host {
             prepared,
             snapshot: snapshot.clone(),
             ai_session,
+            ai_config,
             rng,
         });
         Ok(snapshot)
@@ -714,14 +730,15 @@ impl Host {
         let mut game = session.game.clone();
         let mut rng = session.rng.clone();
         let ai_session = Arc::clone(&session.ai_session);
+        let ai_config = session.ai_config.clone();
         let mut log = session.log.clone();
         let before = game.clone();
         let result = apply(&mut game, HUMAN, action)
             .map_err(|e| bad(format!("Engine rejected response: {e:?}")))?;
         log.capture(&before, &game, &result.events);
-        let mut ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
+        let mut ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
         if let Some((_, skip)) = &skip {
-            ai_actions += self.replay_skip(&mut game, &mut rng, &ai_session, skip, &mut log)?;
+            ai_actions += self.replay_skip(&mut game, &mut rng, &ai_session, &ai_config, skip, &mut log)?;
         }
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
@@ -732,6 +749,7 @@ impl Host {
             prepared,
             snapshot: snapshot.clone(),
             ai_session,
+            ai_config,
             rng,
         });
         Ok(snapshot)
@@ -752,6 +770,7 @@ impl Host {
         game: &mut GameState,
         rng: &mut StdRng,
         ai: &Arc<AiSession>,
+        ai_config: &AiConfig,
         skip: &SkipRequest,
         log: &mut GameLog,
     ) -> Result<usize, HostError> {
@@ -764,7 +783,7 @@ impl Host {
             let result = apply(game, HUMAN, GameAction::PassPriority)
                 .map_err(|e| bad(format!("Engine rejected replayed pass: {e:?}")))?;
             log.capture(&before, game, &result.events);
-            ai_actions += advance_ai(game, rng, ai, log)?;
+            ai_actions += advance_ai(game, rng, ai, ai_config, log)?;
         }
         Ok(ai_actions)
     }
@@ -879,12 +898,13 @@ fn advance_ai(
     game: &mut GameState,
     rng: &mut StdRng,
     session: &Arc<AiSession>,
+    ai_config: &AiConfig,
     log: &mut GameLog,
 ) -> Result<usize, HostError> {
     let players: HashSet<_> = (1..game.players.len()).map(|i| PlayerId(i as u8)).collect();
     let configs: HashMap<_, _> = players
         .iter()
-        .map(|&id| (id, AiConfig::default()))
+        .map(|&id| (id, ai_config.clone()))
         .collect();
     let initial = game.clone();
     let run = run_ai_actions(game, &players, &configs, rng, session);

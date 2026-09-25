@@ -97,6 +97,8 @@ export async function startLocalDeckGame(decks: {
   aiConspiracies?: string[];
   /** P5: a full custom ruleset from the format editor; overrides `format`. */
   customRules?: unknown;
+  /** Phase engine AI difficulty label (`VeryEasy` … `CEDH`) for every AI seat. */
+  difficulty?: string;
   extraOpponents?: { deck: string[]; commanders: string[]; conspiracy?: string[]; sideboard?: string[] }[];
 }): Promise<void> {
   invalidateSnapshotGeneration();

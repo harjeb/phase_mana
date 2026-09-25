@@ -95,7 +95,7 @@ msgstr ""
 #. placeholder {0}: empty.name
 #. placeholder {0}: entry.name
 #: ui/components/lobby/CreateGameDialog.tsx:386
-#: ui/components/lobby/DeckVsSelector.tsx:454
+#: ui/components/lobby/DeckVsSelector.tsx:458
 #: ui/hooks/useQuickPlaytest.tsx:42
 msgid "\"{0}\" has no cards"
 msgstr ""
@@ -106,7 +106,7 @@ msgstr ""
 #. placeholder {1}: formatName(selectedFormat)
 #: ui/components/lobby/CreateGameDialog.tsx:168
 #: ui/components/lobby/CreateGameDialog.tsx:358
-#: ui/components/lobby/DeckVsSelector.tsx:375
+#: ui/components/lobby/DeckVsSelector.tsx:379
 msgid "\"{0}\" is not a {1} deck"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgid "\"{0}\" is not a legal oathbreaker or signature spell — an oathbreaker 
 msgstr ""
 
 #. placeholder {0}: selected.name
-#: ui/components/lobby/DeckVsSelector.tsx:466
+#: ui/components/lobby/DeckVsSelector.tsx:470
 msgid "\"{0}\" is not legal"
 msgstr ""
 
@@ -405,7 +405,7 @@ msgstr ""
 msgid "{commanderCount} commander"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:918
+#: ui/components/lobby/DeckVsSelector.tsx:936
 #: ui/components/lobby/TableRoomSidebar.tsx:155
 msgid "{count} players"
 msgstr ""
@@ -558,7 +558,7 @@ msgstr ""
 msgid "↑↓ select · Enter activate · 1–9"
 msgstr "↑↓ auswählen · Eingabe aktivieren · 1–9"
 
-#: ui/components/lobby/DeckVsSelector.tsx:583
+#: ui/components/lobby/DeckVsSelector.tsx:587
 msgid "+ Custom"
 msgstr ""
 
@@ -1054,9 +1054,14 @@ msgstr ""
 msgid "Aggro"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:835
+#: ui/components/lobby/DeckVsSelector.tsx:839
 #: ui/components/lobby/TablePickerDialog.tsx:61
 msgid "AI"
+msgstr ""
+
+#: ui/components/lobby/DeckVsSelector.tsx:877
+#: ui/components/lobby/DeckVsSelector.tsx:881
+msgid "AI difficulty"
 msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:182
@@ -1064,7 +1069,7 @@ msgid "Alchemy"
 msgstr ""
 
 #: ui/components/deck/DeckListControls.tsx:109
-#: ui/components/lobby/DeckVsSelector.tsx:547
+#: ui/components/lobby/DeckVsSelector.tsx:551
 msgid "All"
 msgstr ""
 
@@ -1145,7 +1150,7 @@ msgid "Applies to battlefield cards. Hand, stack and dialog view settings are in
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:56
-#: ui/components/lobby/DeckVsSelector.tsx:52
+#: ui/components/lobby/DeckVsSelector.tsx:54
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/views/CasualModes.tsx:168
 msgid "Archenemy"
@@ -1860,6 +1865,10 @@ msgstr ""
 msgid "Casual Modes"
 msgstr ""
 
+#: ui/lib/aiDifficulty.ts:14
+msgid "cEDH"
+msgstr ""
+
 #: ui/components/lobby/TableRoomSidebar.tsx:247
 msgid "Change deck"
 msgstr ""
@@ -2050,11 +2059,11 @@ msgstr ""
 msgid "Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:597
+#: ui/components/lobby/DeckVsSelector.tsx:601
 msgid "Choose the AI deck"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:596
+#: ui/components/lobby/DeckVsSelector.tsx:600
 msgid "Choose the AI deck or fight"
 msgstr ""
 
@@ -2066,11 +2075,11 @@ msgstr ""
 msgid "Choose which face stack cards show when they appear. You can still switch individual cards."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:593
+#: ui/components/lobby/DeckVsSelector.tsx:597
 msgid "Choose your deck"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:592
+#: ui/components/lobby/DeckVsSelector.tsx:596
 msgid "Choose your deck or fight"
 msgstr ""
 
@@ -2109,7 +2118,7 @@ msgstr ""
 #: ui/components/editor/DeckSelectionTray.tsx:67
 #: ui/components/editor/DeckSelectionTray.tsx:162
 #: ui/components/editor/PlaymatEditorModal.tsx:411
-#: ui/components/lobby/DeckVsSelector.tsx:1007
+#: ui/components/lobby/DeckVsSelector.tsx:1025
 #: ui/views/Limited.tsx:552
 msgid "Clear"
 msgstr ""
@@ -2369,7 +2378,7 @@ msgstr ""
 #: ui/components/editor/CardSearch.tsx:493
 #: ui/components/lobby/CreateGameDialog.tsx:48
 #: ui/components/lobby/CreateGameDialog.tsx:520
-#: ui/components/lobby/DeckVsSelector.tsx:44
+#: ui/components/lobby/DeckVsSelector.tsx:46
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/Draft.tsx:109
 msgid "Commander"
@@ -2407,8 +2416,8 @@ msgstr ""
 #: ui/components/lobby/CreateGameDialog.tsx:348
 #: ui/components/lobby/CreateGameDialog.tsx:678
 #: ui/components/lobby/CreateGameDialog.tsx:745
-#: ui/components/lobby/DeckVsSelector.tsx:689
-#: ui/components/lobby/DeckVsSelector.tsx:749
+#: ui/components/lobby/DeckVsSelector.tsx:693
+#: ui/components/lobby/DeckVsSelector.tsx:753
 msgid "Community"
 msgstr ""
 
@@ -2560,7 +2569,7 @@ msgstr ""
 msgid "Connection lost"
 msgstr ""
 
-#: ui/phase/transport.ts:118
+#: ui/phase/transport.ts:120
 msgid "Conspiracy reveal was rejected"
 msgstr ""
 
@@ -2764,7 +2773,7 @@ msgstr ""
 msgid "Could not set your username."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:497
+#: ui/components/lobby/DeckVsSelector.tsx:501
 msgid "Could not start the game."
 msgstr ""
 
@@ -2979,7 +2988,7 @@ msgstr ""
 msgid "Custom counter"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:912
+#: ui/components/lobby/DeckVsSelector.tsx:930
 msgid "Custom format player count"
 msgstr ""
 
@@ -3434,12 +3443,12 @@ msgid "Downloading… {progress}%"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:227
-#: ui/components/lobby/DeckVsSelector.tsx:661
+#: ui/components/lobby/DeckVsSelector.tsx:665
 msgid "draft"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:59
-#: ui/components/lobby/DeckVsSelector.tsx:55
+#: ui/components/lobby/DeckVsSelector.tsx:57
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/components/lobby/TableRoom.tsx:70
 #: ui/views/OnlinePlay.tsx:150
@@ -3546,7 +3555,7 @@ msgid "Dual Land"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:51
-#: ui/components/lobby/DeckVsSelector.tsx:47
+#: ui/components/lobby/DeckVsSelector.tsx:49
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:118
 msgid "Duel Commander"
@@ -3574,6 +3583,10 @@ msgstr ""
 
 #: ui/components/lobby/TableSetupGameCard.tsx:271
 msgid "Each player opens their own pool — pools are independent but reproducible from the seed."
+msgstr ""
+
+#: ui/lib/aiDifficulty.ts:10
+msgid "Easy"
 msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:342
@@ -3910,8 +3923,8 @@ msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:177
 #: ui/components/lobby/CreateGameDialog.tsx:365
-#: ui/components/lobby/DeckVsSelector.tsx:200
-#: ui/components/lobby/DeckVsSelector.tsx:394
+#: ui/components/lobby/DeckVsSelector.tsx:204
+#: ui/components/lobby/DeckVsSelector.tsx:398
 msgid "Failed to load Community deck"
 msgstr ""
 
@@ -3990,7 +4003,7 @@ msgstr ""
 msgid "Fight"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:888
+#: ui/components/lobby/DeckVsSelector.tsx:906
 msgid "Fight!"
 msgstr ""
 
@@ -4016,16 +4029,16 @@ msgid "Filter colors... (e.g. primary, counter, arrow)"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:601
-#: ui/components/lobby/DeckVsSelector.tsx:607
+#: ui/components/lobby/DeckVsSelector.tsx:611
 msgid "Filter decks"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:544
+#: ui/components/lobby/DeckVsSelector.tsx:548
 msgid "Filter decks by format"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:602
-#: ui/components/lobby/DeckVsSelector.tsx:608
+#: ui/components/lobby/DeckVsSelector.tsx:612
 msgid "Filter decks..."
 msgstr ""
 
@@ -4544,6 +4557,10 @@ msgstr ""
 
 #: ui/components/lobby/ReportPlayerDialog.tsx:37
 msgid "Harassment or bullying"
+msgstr ""
+
+#: ui/lib/aiDifficulty.ts:12
+msgid "Hard"
 msgstr ""
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:74
@@ -5216,7 +5233,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:158
 #: ui/components/lobby/CreateGameDialog.tsx:44
-#: ui/components/lobby/DeckVsSelector.tsx:40
+#: ui/components/lobby/DeckVsSelector.tsx:42
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Legacy"
 msgstr ""
@@ -5347,7 +5364,7 @@ msgstr ""
 
 #. placeholder {0}: deck.title
 #: ui/components/lobby/CreateGameDialog.tsx:740
-#: ui/components/lobby/DeckVsSelector.tsx:745
+#: ui/components/lobby/DeckVsSelector.tsx:749
 msgid "Loading {0}…"
 msgstr ""
 
@@ -5639,11 +5656,11 @@ msgstr ""
 msgid "Manual result — unverified"
 msgstr ""
 
-#: ui/stores/useGameStore.ts:466
+#: ui/stores/useGameStore.ts:468
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr ""
 
-#: ui/stores/useGameStore.ts:437
+#: ui/stores/useGameStore.ts:439
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr ""
 
@@ -5696,7 +5713,7 @@ msgstr ""
 msgid "Matchup notes"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:598
+#: ui/components/lobby/DeckVsSelector.tsx:602
 msgid "Matchup ready"
 msgstr ""
 
@@ -5747,6 +5764,10 @@ msgstr ""
 #: ui/components/editor/DeckSelectionTray.tsx:91
 #: ui/components/editor/ImportDeckTextDialog.tsx:185
 msgid "Maybeboard"
+msgstr ""
+
+#: ui/lib/aiDifficulty.ts:11
+msgid "Medium"
 msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:433
@@ -5812,13 +5833,13 @@ msgstr ""
 #: ui/components/editor/CardSearch.tsx:268
 #: ui/components/lobby/CreateGameDialog.tsx:43
 #: ui/components/lobby/CustomFormatDialog.tsx:475
-#: ui/components/lobby/DeckVsSelector.tsx:39
+#: ui/components/lobby/DeckVsSelector.tsx:41
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Modern"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:53
-#: ui/components/lobby/DeckVsSelector.tsx:49
+#: ui/components/lobby/DeckVsSelector.tsx:51
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:154
 msgid "Momir"
@@ -6061,7 +6082,7 @@ msgstr ""
 msgid "No AI deck available for this format — pick one yourself."
 msgstr ""
 
-#: ui/phase/transport.ts:117
+#: ui/phase/transport.ts:119
 msgid "No authorized conspiracy reveal action"
 msgstr ""
 
@@ -6102,7 +6123,7 @@ msgstr ""
 msgid "No Community decks are available."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:719
+#: ui/components/lobby/DeckVsSelector.tsx:723
 msgid "No Community decks match this format and search."
 msgstr ""
 
@@ -6138,7 +6159,7 @@ msgstr ""
 msgid "No decks to download art for yet."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:627
+#: ui/components/lobby/DeckVsSelector.tsx:631
 msgid "No decks yet — build one in <0>My Decks</0>."
 msgstr ""
 
@@ -6192,7 +6213,7 @@ msgstr ""
 msgid "no lines yet"
 msgstr ""
 
-#: ui/stores/useGameStore.ts:670
+#: ui/stores/useGameStore.ts:672
 msgid "No local player is available to concede."
 msgstr ""
 
@@ -6323,7 +6344,7 @@ msgstr ""
 msgid "No snapshots yet."
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:779
+#: ui/components/lobby/DeckVsSelector.tsx:783
 msgid "No starter decks for this format."
 msgstr ""
 
@@ -6373,7 +6394,7 @@ msgid "Not all players are ready"
 msgstr ""
 
 #. placeholder {0}: opponentCount + 1
-#: ui/components/lobby/DeckVsSelector.tsx:483
+#: ui/components/lobby/DeckVsSelector.tsx:487
 msgid "Not enough distinct decks are available for a {0}-player game."
 msgstr ""
 
@@ -6425,7 +6446,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:194
 #: ui/components/lobby/CreateGameDialog.tsx:49
-#: ui/components/lobby/DeckVsSelector.tsx:45
+#: ui/components/lobby/DeckVsSelector.tsx:47
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/CasualModes.tsx:104
 msgid "Oathbreaker"
@@ -6461,7 +6482,7 @@ msgid "Old"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:54
-#: ui/components/lobby/DeckVsSelector.tsx:50
+#: ui/components/lobby/DeckVsSelector.tsx:52
 #: ui/components/lobby/OpenTableCard.tsx:20
 #: ui/views/CasualModes.tsx:132
 msgid "Old School 93/94"
@@ -6476,7 +6497,7 @@ msgid "Old School 93/94 plus Fourth Edition through Homelands."
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:55
-#: ui/components/lobby/DeckVsSelector.tsx:51
+#: ui/components/lobby/DeckVsSelector.tsx:53
 #: ui/components/lobby/OpenTableCard.tsx:20
 #: ui/views/CasualModes.tsx:139
 msgid "Old School 95"
@@ -6913,13 +6934,13 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:170
 #: ui/components/lobby/CreateGameDialog.tsx:46
-#: ui/components/lobby/DeckVsSelector.tsx:42
+#: ui/components/lobby/DeckVsSelector.tsx:44
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Pauper"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:52
-#: ui/components/lobby/DeckVsSelector.tsx:48
+#: ui/components/lobby/DeckVsSelector.tsx:50
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:125
 msgid "Pauper Commander"
@@ -6962,7 +6983,7 @@ msgstr ""
 msgid "Pick"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:986
+#: ui/components/lobby/DeckVsSelector.tsx:1004
 msgid "pick a deck"
 msgstr ""
 
@@ -7015,7 +7036,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:150
 #: ui/components/lobby/CreateGameDialog.tsx:42
-#: ui/components/lobby/DeckVsSelector.tsx:38
+#: ui/components/lobby/DeckVsSelector.tsx:40
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Pioneer"
 msgstr ""
@@ -7025,7 +7046,7 @@ msgid "Placement"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:57
-#: ui/components/lobby/DeckVsSelector.tsx:53
+#: ui/components/lobby/DeckVsSelector.tsx:55
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/views/CasualModes.tsx:175
 msgid "Planechase"
@@ -7258,7 +7279,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:174
 #: ui/components/lobby/CreateGameDialog.tsx:47
-#: ui/components/lobby/DeckVsSelector.tsx:43
+#: ui/components/lobby/DeckVsSelector.tsx:45
 #: ui/components/lobby/OpenTableCard.tsx:17
 msgid "Premodern"
 msgstr ""
@@ -7476,7 +7497,7 @@ msgstr ""
 msgid "Random AI"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:862
+#: ui/components/lobby/DeckVsSelector.tsx:866
 msgid "Random AI deck"
 msgstr ""
 
@@ -7925,8 +7946,8 @@ msgstr ""
 
 #: ui/components/AppInitGate.tsx:344
 #: ui/components/lobby/CreateGameDialog.tsx:686
-#: ui/components/lobby/DeckVsSelector.tsx:202
-#: ui/components/lobby/DeckVsSelector.tsx:695
+#: ui/components/lobby/DeckVsSelector.tsx:206
+#: ui/components/lobby/DeckVsSelector.tsx:699
 #: ui/components/play/CommunityDeckShelf.tsx:43
 #: ui/components/play/PlayDeckShelf.tsx:142
 #: ui/components/settings/MyAssetsSection.tsx:128
@@ -8276,7 +8297,7 @@ msgstr ""
 
 #: ui/components/layout/TopBar.tsx:63
 #: ui/components/lobby/CreateGameDialog.tsx:60
-#: ui/components/lobby/DeckVsSelector.tsx:56
+#: ui/components/lobby/DeckVsSelector.tsx:58
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/components/lobby/TableRoom.tsx:72
 #: ui/views/Limited.tsx:250
@@ -8469,7 +8490,7 @@ msgstr ""
 msgid "Selected:"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:990
+#: ui/components/lobby/DeckVsSelector.tsx:1008
 msgid "Selecting"
 msgstr ""
 
@@ -8935,7 +8956,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:146
 #: ui/components/lobby/CreateGameDialog.tsx:41
-#: ui/components/lobby/DeckVsSelector.tsx:37
+#: ui/components/lobby/DeckVsSelector.tsx:39
 #: ui/components/lobby/OpenTableCard.tsx:15
 msgid "Standard"
 msgstr ""
@@ -9026,7 +9047,7 @@ msgid "Starter deck — read only"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:770
-#: ui/components/lobby/DeckVsSelector.tsx:775
+#: ui/components/lobby/DeckVsSelector.tsx:779
 #: ui/views/DeckEditor.tsx:822
 msgid "Starter Decks"
 msgstr ""
@@ -9064,7 +9085,7 @@ msgid "Starting..."
 msgstr ""
 
 #: ui/components/deck/DeckCardPlayButton.tsx:27
-#: ui/components/lobby/DeckVsSelector.tsx:888
+#: ui/components/lobby/DeckVsSelector.tsx:906
 msgid "Starting…"
 msgstr ""
 
@@ -9136,7 +9157,7 @@ msgstr ""
 msgid "Submit unverified result"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:997
+#: ui/components/lobby/DeckVsSelector.tsx:1015
 msgid "Suggested"
 msgstr ""
 
@@ -9438,7 +9459,7 @@ msgstr ""
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr ""
 
-#: ui/stores/useGameStore.ts:379
+#: ui/stores/useGameStore.ts:381
 msgid "The previous game is still closing. Try again in a moment."
 msgstr ""
 
@@ -9612,7 +9633,7 @@ msgid "Timer mode"
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:50
-#: ui/components/lobby/DeckVsSelector.tsx:46
+#: ui/components/lobby/DeckVsSelector.tsx:48
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:111
 msgid "Tiny Leaders"
@@ -9766,7 +9787,7 @@ msgid "Two teams of two share a 30-life total and take their turns together."
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:58
-#: ui/components/lobby/DeckVsSelector.tsx:54
+#: ui/components/lobby/DeckVsSelector.tsx:56
 #: ui/components/lobby/OpenTableCard.tsx:22
 #: ui/views/CasualModes.tsx:182
 msgid "Two-Headed Giant"
@@ -10066,6 +10087,14 @@ msgstr ""
 msgid "Vertical framing"
 msgstr ""
 
+#: ui/lib/aiDifficulty.ts:9
+msgid "Very Easy"
+msgstr ""
+
+#: ui/lib/aiDifficulty.ts:13
+msgid "Very Hard"
+msgstr ""
+
 #: ui/components/editor/DeckLayoutMenu.tsx:152
 #: ui/components/game/panels/PlayerSheetModal.tsx:217
 #: ui/components/game/panels/PlayerSheetModal.tsx:289
@@ -10100,7 +10129,7 @@ msgstr ""
 
 #: ui/components/editor/CardSearch.tsx:162
 #: ui/components/lobby/CreateGameDialog.tsx:45
-#: ui/components/lobby/DeckVsSelector.tsx:41
+#: ui/components/lobby/DeckVsSelector.tsx:43
 #: ui/components/lobby/OpenTableCard.tsx:16
 msgid "Vintage"
 msgstr ""
@@ -10118,7 +10147,7 @@ msgstr ""
 msgid "vs"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:833
+#: ui/components/lobby/DeckVsSelector.tsx:837
 msgid "VS"
 msgstr ""
 
@@ -10251,7 +10280,7 @@ msgstr ""
 msgid "You"
 msgstr ""
 
-#: ui/components/lobby/DeckVsSelector.tsx:817
+#: ui/components/lobby/DeckVsSelector.tsx:821
 msgid "YOU"
 msgstr ""
 
@@ -10351,7 +10380,7 @@ msgid "Your deck does not meet the size requirements."
 msgstr ""
 
 #: ui/components/lobby/CreateGameDialog.tsx:616
-#: ui/components/lobby/DeckVsSelector.tsx:623
+#: ui/components/lobby/DeckVsSelector.tsx:627
 msgid "Your Decks"
 msgstr ""
 

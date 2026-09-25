@@ -25,6 +25,8 @@ import { useAccountDecks } from "@/hooks/useAccountDecks";
 import { useOwnedDecks } from "@/hooks/useOwnedDecks";
 import { useDeckStore } from "@/stores/useDeckStore";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
+import { AI_DIFFICULTIES, type AiDifficultyLabel } from "@/lib/aiDifficulty";
+import { i18n } from "@/i18n/i18n";
 import type { Deck } from "@/protocol/deck";
 import { Check, Loader2, Search, Shuffle, Swords, User, Bot, X } from "lucide-react";
 import { resolveCoverCard } from "@/components/deck/deckCover.utils";
@@ -118,6 +120,8 @@ export function DeckVsSelector({
   const lastAiOpponent = usePreferencesStore((state) => state.lastAiOpponent);
   const boardBackground = usePreferencesStore((state) => state.boardBackgroundId);
   const setBoardBackground = usePreferencesStore((state) => state.setBoardBackgroundId);
+  const aiDifficulty = usePreferencesStore((state) => state.aiDifficulty);
+  const setAiDifficulty = usePreferencesStore((state) => state.setAiDifficulty);
   const rememberedFormatId =
     !preSelectedDeckEntry && lastOfflineFormatId && getFormat(lastOfflineFormatId)
       ? lastOfflineFormatId
@@ -868,6 +872,20 @@ export function DeckVsSelector({
           />
         </div>
         <div className="grid grid-flow-col auto-cols-fr gap-2 sm:flex sm:flex-shrink-0 sm:items-center">
+          <label className="flex h-8 w-full items-center gap-1.5 rounded-md border border-input bg-background px-2 text-xs sm:w-auto">
+            <Bot className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+            <span className="sr-only">{t`AI difficulty`}</span>
+            <select
+              value={aiDifficulty}
+              onChange={(event) => setAiDifficulty(event.target.value as AiDifficultyLabel)}
+              title={t`AI difficulty`}
+              className="h-full cursor-pointer bg-transparent pr-1 text-xs text-foreground outline-none"
+            >
+              {AI_DIFFICULTIES.map((level) => (
+                <option key={level.value} value={level.value}>{i18n._(level.label)}</option>
+              ))}
+            </select>
+          </label>
           <div className="flex h-8 w-full items-center justify-center gap-1.5 rounded-md border border-input bg-background px-3 text-sm sm:w-auto">
             <EngineMark engine="Forge" className="h-3.5 w-3.5" />
             Forge

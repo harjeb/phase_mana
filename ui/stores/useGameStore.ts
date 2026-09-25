@@ -48,6 +48,7 @@ import { withForgeStartTimeout } from "@/game/forgeWasmValidation";
 import { getPlatform } from "@/platform";
 import { applyPrompt } from "./gameStore.constants";
 import { DEFAULT_STARTING_LIFE, useServerStore } from "./useServerStore";
+import { usePreferencesStore } from "./usePreferencesStore";
 import type { ClientCardDto, ClientGameView, GameState } from "./gameStore.types";
 import type { Prompt } from "@/protocol";
 import { promptResponse } from "./promptResponse";
@@ -303,6 +304,7 @@ async function initializeGame({
       conspiracies,
       customRules,
       opponentConspiracies,
+      aiDifficulty: usePreferencesStore.getState().aiDifficulty,
     });
     const result = await (firstForgeStart ? withForgeStartTimeout(start) : start);
     if (!isLaunchCurrent()) {
