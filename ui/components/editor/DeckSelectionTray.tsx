@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ArrowDownToLine,
@@ -56,14 +57,14 @@ export function DeckSelectionTray({
   return (
     <section
       className="absolute bottom-0 left-0 right-0 z-50 border-t border-selection/30 bg-background/95 px-3 pb-[calc(var(--safe-area-inset-bottom)+0.75rem)] pt-2 shadow-lg backdrop-blur sm:px-4 sm:pb-2"
-      aria-label={`Actions for selected cards`}
+      aria-label={t`Actions for selected cards`}
     >
       <div className="mb-2 flex items-center sm:hidden">
         <div className="min-w-0 flex-1 text-sm font-medium text-selection">
           {count} card{count !== 1 ? "s" : ""} selected
         </div>
         <Button size="sm" variant="ghost" className="h-9" onClick={onClear}>
-          Clear
+          <Trans>Clear</Trans>
         </Button>
       </div>
       <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
@@ -76,16 +77,16 @@ export function DeckSelectionTray({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8">
-              <ArrowUpToLine className="mr-1 h-3 w-3" /> Move
+              <ArrowUpToLine className="mr-1 h-3 w-3" /> <Trans>Move</Trans>
               <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onSelect={onMoveToMain}>
-              <ArrowUpToLine className="mr-2 h-3.5 w-3.5" /> Main deck
+              <ArrowUpToLine className="mr-2 h-3.5 w-3.5" /> <Trans>Main deck</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onMoveToSide}>
-              <ArrowDownToLine className="mr-2 h-3.5 w-3.5" /> Sideboard
+              <ArrowDownToLine className="mr-2 h-3.5 w-3.5" /> <Trans>Sideboard</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onMoveToMaybe}><Trans>Maybeboard</Trans></DropdownMenuItem>
           </DropdownMenuContent>
@@ -93,15 +94,15 @@ export function DeckSelectionTray({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8">
-              Quantity <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
+              <Trans>Quantity</Trans> <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onSelect={onAddCopy}>
-              <Plus className="mr-2 h-3.5 w-3.5" /> Add one each
+              <Plus className="mr-2 h-3.5 w-3.5" /> <Trans>Add one each</Trans>
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={onRemoveCopy}>
-              <Minus className="mr-2 h-3.5 w-3.5" /> Remove one each
+              <Minus className="mr-2 h-3.5 w-3.5" /> <Trans>Remove one each</Trans>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -109,7 +110,7 @@ export function DeckSelectionTray({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8">
-                <Bookmark className="mr-1 h-3 w-3" /> Tag
+                <Bookmark className="mr-1 h-3 w-3" /> <Trans>Tag</Trans>
                 <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
               </Button>
             </DropdownMenuTrigger>
@@ -126,7 +127,7 @@ export function DeckSelectionTray({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8">
-                <BookmarkMinus className="mr-1 h-3 w-3" /> Untag
+                <BookmarkMinus className="mr-1 h-3 w-3" /> <Trans>Untag</Trans>
                 <ChevronDown className="ml-1 h-3 w-3 opacity-60" />
               </Button>
             </DropdownMenuTrigger>
@@ -140,13 +141,13 @@ export function DeckSelectionTray({
           </DropdownMenu>
         )}
         <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8" onClick={onPrinting}>
-          <Images className="mr-1 h-3 w-3" /> Printing
+          <Images className="mr-1 h-3 w-3" /> <Trans>Printing</Trans>
         </Button>
         <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8" onClick={onToggleFoil}>
-          <Sparkles className="mr-1 h-3 w-3" /> Foil
+          <Sparkles className="mr-1 h-3 w-3" /> <Trans>Foil</Trans>
         </Button>
         <Button size="sm" variant="outline" className="h-10 shrink-0 sm:h-8" onClick={onCopy}>
-          <ClipboardCopy className="mr-1 h-3 w-3" /> Copy
+          <ClipboardCopy className="mr-1 h-3 w-3" /> <Trans>Copy</Trans>
         </Button>
         <div className="flex-1" />
         <Button
@@ -155,10 +156,10 @@ export function DeckSelectionTray({
           className="h-10 shrink-0 sm:h-8"
           onClick={onRemove}
         >
-          <X className="mr-1 h-3 w-3" /> Remove
+          <X className="mr-1 h-3 w-3" /> <Trans>Remove</Trans>
         </Button>
         <Button size="sm" variant="ghost" className="hidden sm:inline-flex" onClick={onClear}>
-          Clear
+          <Trans>Clear</Trans>
         </Button>
       </div>
     </section>

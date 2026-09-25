@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { AlertTriangle, CheckCircle2, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,7 @@ export function DeckHealthPanel({
   }
   const checks = [
     {
-      label: `Lands`,
+      label: t`Lands`,
       value: landCount,
       target: landTarget,
       healthy: landCount >= landTarget - 2,
@@ -69,13 +70,13 @@ export function DeckHealthPanel({
                   : "bg-warning/15 text-warning",
               )}
             >
-              {issueCount === 0 ? `Balanced` : `${issueCount} to review`}
+              {issueCount === 0 ? t`Balanced` : t`${issueCount} to review`}
             </span>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
             {commanderDeck
-              ? `Engine-derived roles compared with a practical Commander baseline.`
-              : `Engine-derived roles compared with a practical 60-card baseline.`}
+              ? t`Engine-derived roles compared with a practical Commander baseline.`
+              : t`Engine-derived roles compared with a practical 60-card baseline.`}
           </p>
         </div>
         {pending.size > 0 && (
@@ -126,7 +127,7 @@ export function DeckHealthPanel({
           )}
           {checks.some((check) => !check.healthy) && onOpenSearch && (
             <Button size="xs" variant="outline" onClick={onOpenSearch}>
-              <Search className="mr-1.5 h-3.5 w-3.5" /> Add missing pieces
+              <Search className="mr-1.5 h-3.5 w-3.5" /> <Trans>Add missing pieces</Trans>
             </Button>
           )}
           {validationErrors[0] && (

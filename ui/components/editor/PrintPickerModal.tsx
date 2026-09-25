@@ -16,6 +16,7 @@ import { isHorizontalCard } from "@/lib/cardLayout";
 import { HorizontalCardImage } from "@/components/game/HorizontalCardImage";
 import { ScryfallImg } from "@/components/ScryfallImg";
 import { cn } from "@/lib/utils";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import type { DeckCard } from "@/protocol/deck";
 interface PrintPickerModalProps {
   cardName: string | null;
@@ -93,11 +94,11 @@ export function PrintPickerModal({ cardName, onClose, onSelect, token }: PrintPi
                   ? p.card_faces.find((f) => f.name.toLowerCase() === resolvedName.toLowerCase()) ||
                     p.card_faces[0]
                   : null;
-                const imageUrl =
-                  face?.image_uris?.normal ||
-                  face?.image_uris?.large ||
-                  p.image_uris?.normal ||
-                  p.image_uris?.large;
+                const faceUris = withLocalCardArt(
+                  face?.image_uris ?? p.image_uris,
+                  face?.name ?? p.name,
+                );
+                const imageUrl = faceUris?.normal || faceUris?.large;
                 return (
                   <div
                     key={p.id}
@@ -124,14 +125,14 @@ export function PrintPickerModal({ cardName, onClose, onSelect, token }: PrintPi
                         isHorizontalCard({ layout: p.layout, typeLine: p.type_line }) ? (
                           <HorizontalCardImage
                             src={imageUrl}
-                            alt={`${p.set_name} printing`}
+                            alt={t`${p.set_name} printing`}
                             className="absolute inset-0"
                             loading="lazy"
                           />
                         ) : (
                           <ScryfallImg
                             src={imageUrl}
-                            alt={`${p.set_name} printing`}
+                            alt={t`${p.set_name} printing`}
                             className="w-full h-full object-contain"
                             loading="lazy"
                           />

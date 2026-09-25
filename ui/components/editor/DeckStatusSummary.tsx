@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { AlertTriangle, CheckCircle2, CircleDollarSign, LibraryBig, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ export function DeckStatusSummary({
           ) : (
             <CheckCircle2 className="h-3.5 w-3.5" />
           )}
-          {issueCount > 0 ? `${issueCount} to review` : `Deck healthy`}
+          {issueCount > 0 ? t`${issueCount} to review` : t`Deck healthy`}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">

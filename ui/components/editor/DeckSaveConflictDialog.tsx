@@ -31,7 +31,7 @@ export function DeckSaveConflictDialog({
         <DialogHeader>
           <DialogTitle><Trans>This deck changed on another device</Trans></DialogTitle>
           <DialogDescription>
-            Your edits are saved locally. Choose which account version should be kept.
+            <Trans>Your edits are saved locally. Choose which account version should be kept.</Trans>
           </DialogDescription>
         </DialogHeader>
         {conflict && (
@@ -51,7 +51,7 @@ export function DeckSaveConflictDialog({
             <span>
               <span className="block font-semibold"><Trans>Keep my changes</Trans></span>
               <span className="block text-xs font-normal opacity-80">
-                Save this device’s deck as the next account version.
+                <Trans>Save this device’s deck as the next account version.</Trans>
               </span>
             </span>
           </Button>
@@ -65,7 +65,7 @@ export function DeckSaveConflictDialog({
             <span>
               <span className="block font-semibold"><Trans>Use the account version</Trans></span>
               <span className="block text-xs font-normal text-muted-foreground">
-                Replace this device’s working deck with the latest account copy.
+                <Trans>Replace this device’s working deck with the latest account copy.</Trans>
               </span>
             </span>
           </Button>
@@ -79,7 +79,7 @@ export function DeckSaveConflictDialog({
             <span>
               <span className="block font-semibold"><Trans>Save mine as a copy</Trans></span>
               <span className="block text-xs font-normal text-muted-foreground">
-                Keep both decks without overwriting either version.
+                <Trans>Keep both decks without overwriting either version.</Trans>
               </span>
             </span>
           </Button>

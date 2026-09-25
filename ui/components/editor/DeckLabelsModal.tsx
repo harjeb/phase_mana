@@ -11,22 +11,22 @@ import { useDeckStore } from "@/stores/useDeckStore";
 import { useTheme } from "@/hooks/useTheme";
 import { toast } from "sonner";
 const SUGGESTED_LABELS = [
-  { value: "Aggro", label: `Aggro` },
-  { value: "Midrange", label: `Midrange` },
-  { value: "Control", label: `Control` },
-  { value: "Combo", label: `Combo` },
-  { value: "Tempo", label: `Tempo` },
-  { value: "Ramp", label: `Ramp` },
-  { value: "Tokens", label: `Tokens` },
-  { value: "Tribal", label: `Tribal` },
-  { value: "Mill", label: `Mill` },
-  { value: "Burn", label: `Burn` },
-  { value: "Voltron", label: `Voltron` },
-  { value: "Stax", label: `Stax` },
-  { value: "Budget", label: `Budget` },
-  { value: "Competitive", label: `Competitive` },
-  { value: "Casual", label: `Casual` },
-  { value: "Jank", label: `Jank` },
+  { value: "Aggro", label: t`Aggro` },
+  { value: "Midrange", label: t`Midrange` },
+  { value: "Control", label: t`Control` },
+  { value: "Combo", label: t`Combo` },
+  { value: "Tempo", label: t`Tempo` },
+  { value: "Ramp", label: t`Ramp` },
+  { value: "Tokens", label: t`Tokens` },
+  { value: "Tribal", label: t`Tribal` },
+  { value: "Mill", label: t`Mill` },
+  { value: "Burn", label: t`Burn` },
+  { value: "Voltron", label: t`Voltron` },
+  { value: "Stax", label: t`Stax` },
+  { value: "Budget", label: t`Budget` },
+  { value: "Competitive", label: t`Competitive` },
+  { value: "Casual", label: t`Casual` },
+  { value: "Jank", label: t`Jank` },
 ];
 interface DeckLabelsModalProps {
   open: boolean;
@@ -78,7 +78,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
                         saveCurrentDeck();
                       }}
                       className="h-6 w-8 rounded border border-input bg-transparent p-0.5 cursor-pointer"
-                      title={`Pick color`}
+                      title={t`Pick color`}
                     />
                     <button
                       type="button"
@@ -102,7 +102,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
             <div className="flex items-center gap-2">
               <Input
                 className="h-8 text-sm flex-1"
-                placeholder={`Type a label\u2026`}
+                placeholder={t`Type a label\u2026`}
                 value={newLabel}
                 onChange={(e) => setNewLabel(e.target.value)}
                 onKeyDown={(e) => {
@@ -114,7 +114,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
                 value={newLabelColor || defaultLabelColor}
                 onChange={(e) => setNewLabelColor(e.target.value)}
                 className="h-8 w-10 rounded border border-input bg-transparent p-0.5 cursor-pointer"
-                title={`Pick color`}
+                title={t`Pick color`}
               />
               <Button
                 variant="outline"
@@ -124,7 +124,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
                 onClick={() => handleAdd(newLabel, newLabelColor || undefined)}
               >
                 <Plus className="h-3.5 w-3.5" />
-                Add
+                <Trans>Add</Trans>
               </Button>
             </div>
           </div>
@@ -152,7 +152,7 @@ export function DeckLabelsModal({ open, onClose }: DeckLabelsModalProps) {
 
       <Modal.Footer>
         <Button size="sm" variant="ghost" onClick={onClose}>
-          Done
+          <Trans>Done</Trans>
         </Button>
       </Modal.Footer>
     </Modal>

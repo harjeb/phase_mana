@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { AlertTriangle, ChevronDown, Crown, Palette, Plus, X } from "lucide-react";
 import { type PointerEvent as ReactPointerEvent } from "react";
@@ -85,7 +86,7 @@ function CommandZoneCard({
       {unsupported && (
         <div
           className="absolute bottom-1 right-1 z-30 rounded-full bg-warning/90 p-0.5 text-background shadow"
-          title={`Unsupported by the Manabrew and Forge engines`}
+          title={t`Unsupported by the Manabrew and Forge engines`}
         >
           <AlertTriangle className="h-3 w-3" />
         </div>
@@ -99,8 +100,8 @@ function CommandZoneCard({
             <button
               type="button"
               className="rounded-full bg-overlay/70 p-0.5 text-muted-foreground shadow transition-colors hover:text-foreground"
-              title={`Change printing`}
-              aria-label={`Change printing for ${card.identity.name}`}
+              title={t`Change printing`}
+              aria-label={t`Change printing for ${card.identity.name}`}
               onPointerDown={(event) => event.stopPropagation()}
               onClick={(event) => {
                 event.stopPropagation();
@@ -113,7 +114,7 @@ function CommandZoneCard({
           <button
             type="button"
             className="rounded-full bg-overlay/70 p-0.5 text-muted-foreground shadow transition-colors hover:text-destructive"
-            title={`Remove ${card.identity.name} from the command zone`}
+            title={t`Remove ${card.identity.name} from the command zone`}
             onPointerDown={(event) => event.stopPropagation()}
             onClick={(event) => {
               event.stopPropagation();
@@ -270,7 +271,7 @@ export function CommanderSlots({
                   ))
                 ) : (
                   <div className="px-2 py-3 text-xs text-muted-foreground">
-                    Add an eligible card to the deck first.
+                    <Trans>Add an eligible card to the deck first.</Trans>
                   </div>
                 )}
               </DropdownMenuContent>

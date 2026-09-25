@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   forwardRef,
@@ -103,8 +104,8 @@ function CardMenuButton({ className }: { className?: string }) {
         "flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-colors hover:bg-muted hover:text-foreground group-hover:opacity-100 pointer-coarse:opacity-100",
         className,
       )}
-      title={`Card actions`}
-      aria-label={`Card actions`}
+      title={t`Card actions`}
+      aria-label={t`Card actions`}
       onPointerDown={(event) => event.stopPropagation()}
       onClick={openCardContextMenu}
     >
@@ -117,8 +118,8 @@ function CardPrintingButton({ onPickPrint }: { onPickPrint: () => void }) {
     <button
       type="button"
       className="absolute right-1 top-1 z-40 rounded-full bg-overlay/70 p-0.5 text-muted-foreground opacity-0 shadow transition-colors hover:text-foreground group-hover:opacity-100 pointer-coarse:opacity-100"
-      title={`Change printing`}
-      aria-label={`Change printing`}
+      title={t`Change printing`}
+      aria-label={t`Change printing`}
       onPointerDown={(event) => event.stopPropagation()}
       onClick={(event) => {
         event.stopPropagation();
@@ -146,7 +147,7 @@ function CardSelectionButton({
         "absolute bottom-1 left-1 z-40 flex h-7 w-7 items-center justify-center rounded-full border bg-background/90 opacity-0 shadow transition-opacity group-hover:opacity-100 pointer-coarse:h-9 pointer-coarse:w-9 pointer-coarse:opacity-100",
         selected && "border-selection bg-selection text-white opacity-100",
       )}
-      aria-label={selected ? `Deselect ${name}` : `Select ${name}`}
+      aria-label={selected ? t`Deselect ${name}` : t`Select ${name}`}
       aria-pressed={selected}
       onPointerDown={(event) => event.stopPropagation()}
       onClick={(event) => {
@@ -199,7 +200,7 @@ function CardCornerActions({
               ? "bg-commander/90 text-white"
               : "bg-overlay/70 text-muted-foreground opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100",
           )}
-          title={isCommander ? `Remove ${commanderSlot.noun}` : `Set as ${commanderSlot.noun}`}
+          title={isCommander ? t`Remove ${commanderSlot.noun}` : t`Set as ${commanderSlot.noun}`}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => {
             event.stopPropagation();
@@ -218,7 +219,7 @@ function CardCornerActions({
               ? "bg-selection/90 text-selection-foreground"
               : "bg-overlay/70 text-muted-foreground opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100",
           )}
-          title={isCover ? `Remove as deck art cover` : `Set as deck art cover`}
+          title={isCover ? t`Remove as deck art cover` : t`Set as deck art cover`}
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => {
             event.stopPropagation();
@@ -238,7 +239,7 @@ function CardCornerActions({
               : "bg-overlay/70 text-muted-foreground opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100",
           )}
           title={
-            isCoverBack ? `Remove back face as deck art cover` : `Set back face as deck art cover`
+            isCoverBack ? t`Remove back face as deck art cover` : t`Set back face as deck art cover`
           }
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => {
@@ -367,7 +368,7 @@ function TagsSubmenu({
                   <button
                     type="button"
                     className="ml-2 rounded p-0.5 text-destructive hover:bg-muted shrink-0"
-                    title={`Remove "${tag}" from deck`}
+                    title={t`Remove "${tag}" from deck`}
                     onClick={(e) => {
                       e.stopPropagation();
                       onRemoveCustomTag(tag);
@@ -395,7 +396,7 @@ function TagsSubmenu({
               <div>
                 <Input
                   className="h-7 text-xs"
-                  placeholder={`New tag\u2026`}
+                  placeholder={t`New tag\u2026`}
                   value={newTagInput}
                   onChange={(e) => setNewTagInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -462,7 +463,7 @@ export function CardContextMenu({
         {onShowInfo && (
           <>
             <ContextMenuItem onSelect={onShowInfo}>
-              <Info className="mr-2 h-3.5 w-3.5" /> Card info
+              <Info className="mr-2 h-3.5 w-3.5" /> <Trans>Card info</Trans>
             </ContextMenuItem>
             <ContextMenuSeparator />
           </>
@@ -474,7 +475,7 @@ export function CardContextMenu({
               onAddOne();
             }}
           >
-            <Plus className="mr-2 h-3.5 w-3.5" /> Add 1
+            <Plus className="mr-2 h-3.5 w-3.5" /> <Trans>Add 1</Trans>
           </ContextMenuItem>
         )}
         {onRemoveOne && (
@@ -484,7 +485,7 @@ export function CardContextMenu({
               onRemoveOne();
             }}
           >
-            <Minus className="mr-2 h-3.5 w-3.5" /> Remove 1
+            <Minus className="mr-2 h-3.5 w-3.5" /> <Trans>Remove 1</Trans>
           </ContextMenuItem>
         )}
         {onRemoveAll && showAll && (
@@ -524,13 +525,13 @@ export function CardContextMenu({
         {commanderHandler && (
           <ContextMenuItem onSelect={commanderHandler}>
             <GameIcon name={commanderSlot.icon} className="mr-2 h-3.5 w-3.5" />
-            {isCommander ? `Remove ${commanderSlot.noun}` : `Set as ${commanderSlot.noun}`}
+            {isCommander ? t`Remove ${commanderSlot.noun}` : t`Set as ${commanderSlot.noun}`}
           </ContextMenuItem>
         )}
         {onSetCover && (
           <ContextMenuItem onSelect={onSetCover}>
             <GameIcon name="book-cover" className="mr-2 h-3.5 w-3.5" />
-            {isCover ? `Remove deck cover` : `Set as deck cover`}
+            {isCover ? t`Remove deck cover` : t`Set as deck cover`}
           </ContextMenuItem>
         )}
         {onSetCoverBack && (
@@ -540,7 +541,7 @@ export function CardContextMenu({
               className="mr-2 h-3.5 w-3.5"
               style={{ transform: "scaleX(-1)" }}
             />
-            {isCoverBack ? `Remove back face cover` : `Set back face as cover`}
+            {isCoverBack ? t`Remove back face cover` : t`Set back face as cover`}
           </ContextMenuItem>
         )}
         {showTagSubmenu && (
@@ -559,7 +560,7 @@ export function CardContextMenu({
           <>
             <ContextMenuSeparator />
             <ContextMenuItem onSelect={onPickPrint}>
-              <ImageIcon className="mr-2 h-3.5 w-3.5" /> Choose printing…
+              <ImageIcon className="mr-2 h-3.5 w-3.5" /> <Trans>Choose printing…</Trans>
             </ContextMenuItem>
           </>
         )}
@@ -571,7 +572,7 @@ export function CardContextMenu({
                 isFoil ? "text-yellow-300" : "text-muted-foreground",
               )}
             />
-            {isFoil ? `Remove foil` : `Make foil`}
+            {isFoil ? t`Remove foil` : t`Make foil`}
           </ContextMenuItem>
         )}
       </ContextMenuContent>
@@ -644,7 +645,7 @@ function DraggableStackCard({
       data-card-name={name}
       data-card-supported={unsupported ? "false" : undefined}
       data-card-ownership={ownership}
-      aria-label={group.count === 1 ? `${name}, one copy` : `${name}, ${group.count} copies`}
+      aria-label={group.count === 1 ? t`${name}, one copy` : t`${name}, ${group.count} copies`}
       aria-pressed={isSelected}
       onMouseEnter={() => onCardHover(index)}
       onMouseLeave={onCardLeave}
@@ -676,7 +677,7 @@ function DraggableStackCard({
       {unsupported && (
         <div
           className="absolute top-1 right-1 z-30 rounded-full bg-warning/90 p-0.5 text-background shadow"
-          title={`Unsupported by the Manabrew and Forge engines`}
+          title={t`Unsupported by the Manabrew and Forge engines`}
         >
           <AlertTriangle className="h-3 w-3" />
         </div>
@@ -919,7 +920,7 @@ function CardVisual({
       data-card-name={name}
       data-card-supported={unsupported ? "false" : undefined}
       data-card-ownership={ownership}
-      aria-label={group.count === 1 ? `${name}, one copy` : `${name}, ${group.count} copies`}
+      aria-label={group.count === 1 ? t`${name}, one copy` : t`${name}, ${group.count} copies`}
       aria-pressed={isSelected}
       onClick={(e) => handleCardClick(e, name, onSelect, onShowInfo)}
       onKeyDown={(event) => {
@@ -949,7 +950,7 @@ function CardVisual({
       {unsupported && (
         <div
           className="absolute top-1 right-1 z-30 rounded-full bg-warning/90 p-0.5 text-background shadow"
-          title={`Unsupported by the Manabrew and Forge engines`}
+          title={t`Unsupported by the Manabrew and Forge engines`}
         >
           <AlertTriangle className="h-3 w-3" />
         </div>
@@ -1051,7 +1052,7 @@ function CardRow({
       data-card-name={name}
       data-card-supported={unsupported ? "false" : undefined}
       data-card-ownership={ownership}
-      aria-label={group.count === 1 ? `${name}, one copy` : `${name}, ${group.count} copies`}
+      aria-label={group.count === 1 ? t`${name}, one copy` : t`${name}, ${group.count} copies`}
       aria-pressed={isSelected}
       onClick={(e) => {
         e.stopPropagation();
@@ -1091,22 +1092,22 @@ function CardRow({
       {unsupported && (
         <AlertTriangle
           className="h-3 w-3 text-warning shrink-0"
-          aria-label={`Card unsupported by the Manabrew and Forge engines`}
+          aria-label={t`Card unsupported by the Manabrew and Forge engines`}
         />
       )}
       <span
         className={cn("text-sm flex-1 truncate", unsupported && "text-warning")}
-        title={unsupported ? `${name} - unsupported by the Manabrew and Forge engines` : name}
+        title={unsupported ? t`${name} - unsupported by the Manabrew and Forge engines` : name}
       >
         {name}
       </span>
       {isGameChanger && (
-        <Gem className="h-3 w-3 text-pt-lethal shrink-0" aria-label={`Game Changer`} />
+        <Gem className="h-3 w-3 text-pt-lethal shrink-0" aria-label={t`Game Changer`} />
       )}
       {isCombo && (
         <Sparkles
           className="h-3 w-3 text-counter-charge shrink-0"
-          aria-label={`Part of a combo in this deck`}
+          aria-label={t`Part of a combo in this deck`}
         />
       )}
       {group.card.manaCost && (
@@ -1250,7 +1251,7 @@ function CardSection({
         size="icon"
         variant="ghost"
         className="h-5 w-5 text-destructive opacity-0 group-hover:opacity-100 pointer-coarse:opacity-100 transition-opacity shrink-0"
-        title={`Remove "${tag}" tag`}
+        title={t`Remove "${tag}" tag`}
         onClick={onRemoveTag}
       >
         <X className="h-3 w-3" />
@@ -1300,7 +1301,7 @@ function CardSection({
                     size="icon"
                     variant="ghost"
                     className="h-5 w-5 text-muted-foreground/40 opacity-0 group-hover/tag:opacity-100 pointer-coarse:opacity-100 transition-opacity shrink-0"
-                    title={`Remove from this tag`}
+                    title={t`Remove from this tag`}
                     onClick={() => onUntagCard(name)}
                   >
                     <Tag className="h-3 w-3" />
@@ -2168,7 +2169,7 @@ export function DeckListView({
                 boxShadow: "0 4px 16px color-mix(in srgb, var(--selection) 40%, transparent)",
               }}
             >
-              Moving…
+              <Trans>Moving…</Trans>
             </div>
           )}
         </div>
@@ -2574,7 +2575,7 @@ export function DeckListView({
                           size="icon"
                           variant="ghost"
                           className="h-5 w-5 text-destructive shrink-0"
-                          title={`Remove`}
+                          title={t`Remove`}
                           onClick={() => onRemoveFromSide(g.card.identity.name)}
                         >
                           <X className="h-3 w-3" />

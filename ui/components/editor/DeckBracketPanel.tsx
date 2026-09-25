@@ -92,7 +92,7 @@ export function DeckBracketPanel() {
           )}
 
           <p className="text-[10px] text-muted-foreground/50 italic">
-            Estimate covers brackets 2–4. Bracket 1 (casual) and 5 (cEDH) are self-declared.
+            <Trans>Estimate covers brackets 2–4. Bracket 1 (casual) and 5 (cEDH) are self-declared.</Trans>
           </p>
         </div>
       )}

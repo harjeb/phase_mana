@@ -290,7 +290,9 @@ export function ImportDeckTextDialog({
                     setText(e.target.value);
                     setReviewing(false);
                   }}
-                  placeholder={"4 Lightning Bolt\n2 Counterspell\n…"}
+                  placeholder={t`4 Lightning Bolt
+2 Counterspell
+…`}
                   className={cn(
                     "flex min-h-[176px] w-full resize-none rounded-md border bg-transparent px-3 py-2 font-mono text-xs shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
                     valid ? "border-legality-legal/60" : "border-input",

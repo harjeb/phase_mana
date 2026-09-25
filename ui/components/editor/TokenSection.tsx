@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { type MouseEvent } from "react";
 import { ChevronDown, Palette, X } from "lucide-react";
@@ -108,7 +109,7 @@ function TokenGridCard({
           <button
             type="button"
             className="rounded-full p-0.5 shadow bg-overlay/70 text-muted-foreground hover:text-foreground transition-colors"
-            title={`Change printing`}
+            title={t`Change printing`}
             onClick={(e) => {
               e.stopPropagation();
               onPickPrint(token);
@@ -121,7 +122,7 @@ function TokenGridCard({
           <button
             type="button"
             className="rounded-full p-0.5 shadow bg-overlay/70 text-muted-foreground hover:text-destructive transition-colors"
-            title={`Reset printing`}
+            title={t`Reset printing`}
             onClick={(e) => {
               e.stopPropagation();
               onReset(token);

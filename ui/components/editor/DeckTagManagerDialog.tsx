@@ -61,7 +61,7 @@ function TagRow({ tag, first, last }: { tag: string; first: boolean; last: boole
         size="icon-sm"
         variant="ghost"
         disabled={first}
-        title={`Move ${tag} up`}
+        title={t`Move ${tag} up`}
         onClick={() => executeDeckEdit(`Move ${tag} up`, () => reorderCustomTag(tag, -1))}
       >
         <ArrowUp className="h-3.5 w-3.5" />
@@ -70,7 +70,7 @@ function TagRow({ tag, first, last }: { tag: string; first: boolean; last: boole
         size="icon-sm"
         variant="ghost"
         disabled={last}
-        title={`Move ${tag} down`}
+        title={t`Move ${tag} down`}
         onClick={() => executeDeckEdit(`Move ${tag} down`, () => reorderCustomTag(tag, 1))}
       >
         <ArrowDown className="h-3.5 w-3.5" />
@@ -78,7 +78,7 @@ function TagRow({ tag, first, last }: { tag: string; first: boolean; last: boole
       <Button
         size="icon-sm"
         variant="ghost"
-        title={editing ? `Finish renaming` : `Rename ${tag}`}
+        title={editing ? t`Finish renaming` : t`Rename ${tag}`}
         onClick={() => (editing ? finishRename() : setEditing(true))}
       >
         {editing ? <Check className="h-3.5 w-3.5" /> : <Pencil className="h-3.5 w-3.5" />}
@@ -87,7 +87,7 @@ function TagRow({ tag, first, last }: { tag: string; first: boolean; last: boole
         size="icon"
         variant="ghost"
         className="h-7 w-7 text-destructive"
-        title={`Delete ${tag}`}
+        title={t`Delete ${tag}`}
         onClick={() => executeDeckEdit(`Delete ${tag}`, () => removeCustomTag(tag))}
       >
         <Trash2 className="h-3.5 w-3.5" />
@@ -110,7 +110,7 @@ export function DeckTagManagerDialog({
         <DialogHeader>
           <DialogTitle><Trans>Manage deck tags</Trans></DialogTitle>
           <DialogDescription>
-            Rename and order the roles used to organize this deck.
+            <Trans>Rename and order the roles used to organize this deck.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="max-h-80 space-y-2 overflow-y-auto">
@@ -119,7 +119,7 @@ export function DeckTagManagerDialog({
           ))}
           {tags.length === 0 && (
             <p className="py-8 text-center text-sm text-muted-foreground">
-              Select cards and press T to create the first tag.
+              <Trans>Select cards and press T to create the first tag.</Trans>
             </p>
           )}
         </div>

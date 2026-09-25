@@ -76,7 +76,7 @@ export function ManaProbabilityPanel({ deck }: { deck: EditorDeck }) {
           ))}
           {colorRows.length === 0 && (
             <p className="py-3 text-xs text-muted-foreground">
-              Add coloured spells to see source odds.
+              <Trans>Add coloured spells to see source odds.</Trans>
             </p>
           )}
         </div>

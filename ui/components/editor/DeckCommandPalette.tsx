@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
@@ -62,7 +63,7 @@ export function DeckCommandPalette({ open, onOpenChange, commands }: DeckCommand
             }
             value={query}
             className="h-11 pl-9"
-            placeholder={`Type a deck command\u2026`}
+            placeholder={t`Type a deck command\u2026`}
             onChange={(event) => {
               setQuery(event.target.value);
               setActiveIndex(0);
@@ -113,7 +114,7 @@ export function DeckCommandPalette({ open, onOpenChange, commands }: DeckCommand
             ))
           ) : (
             <p className="px-3 py-8 text-center text-sm text-muted-foreground">
-              No matching commands
+              <Trans>No matching commands</Trans>
             </p>
           )}
         </div>

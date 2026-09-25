@@ -58,7 +58,7 @@ function ComboRow({
       </button>
       <span
         className="flex shrink-0 items-center gap-0.5 rounded bg-counter-charge/15 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-counter-charge"
-        title={`${combo.uses.length}-card combo`}
+        title={t`${combo.uses.length}-card combo`}
       >
         <Layers className="h-3 w-3" />
         {combo.uses.length}
@@ -135,7 +135,7 @@ export function CombosPanel() {
           {winCombos.length > 0 && (
             <div className="space-y-2">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-warning/80">
-                Win lines
+                <Trans>Win lines</Trans>
               </span>
               <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                 {winCombos.map((combo) => (
@@ -166,7 +166,7 @@ export function CombosPanel() {
               {otherCombos.length > 0 && (
                 <div className="min-w-0 space-y-2">
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-counter-charge/80">
-                    In your deck
+                    <Trans>In your deck</Trans>
                   </span>
                   <div className="space-y-2">
                     {otherCombos.map((combo) => (
@@ -186,7 +186,7 @@ export function CombosPanel() {
               {suggestions.length > 0 && (
                 <div className="min-w-0 space-y-2">
                   <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
-                    One card away
+                    <Trans>One card away</Trans>
                   </span>
                   <div className="space-y-2">
                     {suggestions.map(({ combo, missing }) => (
@@ -212,7 +212,7 @@ export function CombosPanel() {
           )}
 
           <p className="text-[10px] text-muted-foreground/50">
-            Combo data from Commander Spellbook.
+            <Trans>Combo data from Commander Spellbook.</Trans>
           </p>
         </div>
       </section>

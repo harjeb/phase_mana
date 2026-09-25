@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useScryfallStore } from "@/stores/useScryfallStore";
 import { isLand } from "@/lib/mana";
 import { scryfallToDeckCard } from "@/lib/scryfall.utils";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import { cn } from "@/lib/utils";
 import type { DeckCard } from "@/protocol/deck";
 import { useCardRolesStore } from "@/stores/useCardRolesStore";
@@ -95,7 +96,7 @@ export function ReplacementSuggestionsPanel({
       void useCardRolesStore.getState().ensureAnalyzed(nextSuggestions.map(scryfallToDeckCard));
     } catch (error) {
       if (requestId === requestIdRef.current) {
-        toast.error(error instanceof Error ? error.message : `Could not find replacements`);
+        toast.error(error instanceof Error ? error.message : t`Could not find replacements`);
       }
     } finally {
       if (requestId === requestIdRef.current) setLoading(false);
@@ -110,7 +111,7 @@ export function ReplacementSuggestionsPanel({
           <div>
             <h3 className="text-sm font-semibold"><Trans>Explainable replacements</Trans></h3>
             <p className="text-[10px] text-muted-foreground">
-              Same colour identity, mana value, and primary card type.
+              <Trans>Same colour identity, mana value, and primary card type.</Trans>
             </p>
           </div>
         </div>
@@ -124,13 +125,13 @@ export function ReplacementSuggestionsPanel({
                 setSuggestions([]);
               }}
             />
-            Owned only
+            <Trans>Owned only</Trans>
           </label>
           <div className="relative">
             <input
               type="text"
               role="combobox"
-              aria-label={`Card to replace`}
+              aria-label={t`Card to replace`}
               aria-autocomplete="list"
               aria-expanded={targetMenuOpen}
               aria-controls="replacement-target-suggestions"
@@ -179,7 +180,7 @@ export function ReplacementSuggestionsPanel({
                 className="absolute left-0 top-full z-30 mt-1 max-h-80 min-w-[300px] overflow-y-auto rounded-md border bg-popover shadow-lg"
               >
                 <div className="sticky top-0 z-10 border-b bg-popover px-2 py-1 text-[10px] text-muted-foreground">
-                  Choose a card from your deck to replace
+                  <Trans>Choose a card from your deck to replace</Trans>
                 </div>
                 {filteredCandidates.map((card, index) => (
                   <button
@@ -221,7 +222,7 @@ export function ReplacementSuggestionsPanel({
                 ))}
                 {filteredCandidates.length === 0 && (
                   <p className="px-2 py-3 text-xs text-muted-foreground">
-                    No cards in this deck match your search.
+                    <Trans>No cards in this deck match your search.</Trans>
                   </p>
                 )}
               </div>
@@ -251,7 +252,10 @@ export function ReplacementSuggestionsPanel({
             >
               <ScryfallImg
                 src={
-                  suggestion.image_uris?.normal ?? suggestion.card_faces?.[0]?.image_uris?.normal
+                  withLocalCardArt(
+                    suggestion.image_uris ?? suggestion.card_faces?.[0]?.image_uris,
+                    suggestion.name,
+                  )?.normal
                 }
                 alt={suggestion.name}
                 className="w-full rounded-lg border border-border/50 shadow-sm"
@@ -259,14 +263,14 @@ export function ReplacementSuggestionsPanel({
               />
               <div className="mt-1 text-[10px] text-muted-foreground">
                 {collectionQuantityForName(quantities, suggestion.name) > 0
-                  ? `Same ${target.types[0]?.toLowerCase() ?? `card type`} · MV ${suggestion.cmc} · ${collectionQuantityForName(quantities, suggestion.name)} owned`
-                  : `Same ${target.types[0]?.toLowerCase() ?? `card type`} · MV ${suggestion.cmc} · not owned`}
+                  ? t`Same ${target.types[0]?.toLowerCase() ?? `card type`} · MV ${suggestion.cmc} · ${collectionQuantityForName(quantities, suggestion.name)} owned`
+                  : t`Same ${target.types[0]?.toLowerCase() ?? `card type`} · MV ${suggestion.cmc} · not owned`}
               </div>
               <button
                 type="button"
                 className="absolute right-1 top-1 z-20 rounded-full bg-overlay/80 p-1 text-foreground opacity-0 shadow transition-opacity hover:bg-primary hover:text-primary-foreground group-hover:opacity-100 pointer-coarse:opacity-100"
-                title={`Replace one ${target.identity.name} with ${suggestion.name}`}
-                aria-label={`Replace one ${target.identity.name} with ${suggestion.name}`}
+                title={t`Replace one ${target.identity.name} with ${suggestion.name}`}
+                aria-label={t`Replace one ${target.identity.name} with ${suggestion.name}`}
                 onClick={() => {
                   const tags = deck.cardTags?.[target.identity.name.toLowerCase()] ?? [];
                   executeDeckEdit(`Replace ${target.identity.name} with ${suggestion.name}`, () => {

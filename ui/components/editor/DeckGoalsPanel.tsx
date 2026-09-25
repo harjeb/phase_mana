@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Target } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -52,25 +53,25 @@ export function DeckGoalsPanel() {
   const rows = [
     {
       key: "minLands" as const,
-      label: `Minimum lands`,
+      label: t`Minimum lands`,
       current: lands,
       met: lands >= (goals.minLands ?? 0),
     },
     {
       key: "maxLands" as const,
-      label: `Maximum lands`,
+      label: t`Maximum lands`,
       current: lands,
       met: lands <= (goals.maxLands ?? Infinity),
     },
     {
       key: "maxMissingCards" as const,
-      label: `Maximum missing cards`,
+      label: t`Maximum missing cards`,
       current: missing,
       met: missing <= (goals.maxMissingCards ?? Infinity),
     },
     {
       key: "maxAverageManaValue" as const,
-      label: `Maximum average mana value`,
+      label: t`Maximum average mana value`,
       current: averageManaValue.toFixed(2),
       met: averageManaValue <= (goals.maxAverageManaValue ?? Infinity),
       step: "0.1",
@@ -83,7 +84,7 @@ export function DeckGoalsPanel() {
         <div>
           <h3 className="text-sm font-semibold"><Trans>Deck goals</Trans></h3>
           <p className="text-[10px] text-muted-foreground">
-            Optional targets, separate from legality.
+            <Trans>Optional targets, separate from legality.</Trans>
           </p>
         </div>
       </div>
@@ -105,7 +106,7 @@ export function DeckGoalsPanel() {
               onFocus={goalEdit.begin}
               onChange={(event) => update(row.key, event.target.value)}
               onBlur={goalEdit.commit}
-              placeholder={`Any`}
+              placeholder={t`Any`}
             />
           </label>
         ))}
@@ -138,7 +139,7 @@ export function DeckGoalsPanel() {
                   onFocus={goalEdit.begin}
                   onChange={(event) => updateTagTarget(tag, event.target.value)}
                   onBlur={goalEdit.commit}
-                  placeholder={`Any`}
+                  placeholder={t`Any`}
                 />
               </label>
             );

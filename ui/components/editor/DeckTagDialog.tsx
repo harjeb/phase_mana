@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Check, Plus, Tag } from "lucide-react";
@@ -66,7 +67,7 @@ export function DeckTagDialog({
             autoFocus
             value={query}
             className="pl-9"
-            placeholder={`Ramp, removal, combo\u2026`}
+            placeholder={t`Ramp, removal, combo\u2026`}
             onChange={(event) => setQuery(event.target.value)}
             onKeyDown={(event) => {
               if (event.key !== "Enter") return;

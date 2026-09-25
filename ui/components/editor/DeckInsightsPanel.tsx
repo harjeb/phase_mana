@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useState, type MouseEvent, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,23 +19,23 @@ const SECTIONS: {
 }[] = [
   {
     id: "overview",
-    label: `Overview`,
+    label: t`Overview`,
   },
   {
     id: "mana",
-    label: `Mana`,
+    label: t`Mana`,
   },
   {
     id: "collection",
-    label: `Collection`,
+    label: t`Collection`,
   },
   {
     id: "budget",
-    label: `Budget`,
+    label: t`Budget`,
   },
   {
     id: "replacements",
-    label: `Replacements`,
+    label: t`Replacements`,
   },
 ];
 export function DeckInsightsPanel({
@@ -76,7 +77,7 @@ export function DeckInsightsPanel({
   }
   return (
     <section
-      aria-label={`Deck insights`}
+      aria-label={t`Deck insights`}
       className="min-w-0 overflow-hidden rounded-2xl bg-muted/10 px-4 sm:px-5"
     >
       {SECTIONS.filter(({ id }) =>

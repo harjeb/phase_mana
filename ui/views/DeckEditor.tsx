@@ -389,7 +389,7 @@ export default function DeckEditor() {
       toast.success(t`"${saved.deck.name}" removed from your account`);
       setDeletingAccountDeck(null);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Failed to remove account deck`);
+      toast.error(error instanceof Error ? error.message : t`Failed to remove account deck`);
     } finally {
       setDeletingAccountBusy(false);
     }
@@ -561,7 +561,7 @@ export default function DeckEditor() {
       });
       toast.success(t`Set ${card.identity.name} in the command zone`, {
         action: {
-          label: `Undo`,
+          label: t`Undo`,
           onClick: undoDeckEdit,
         },
       });
@@ -588,7 +588,7 @@ export default function DeckEditor() {
       });
       toast.success(t`Tagged ${draggedNames.length} cards with ${destTag}`, {
         action: {
-          label: `Undo`,
+          label: t`Undo`,
           onClick: undoDeckEdit,
         },
       });
@@ -634,7 +634,7 @@ export default function DeckEditor() {
         });
         toast.success(t`Moved ${draggedNames.length} cards to ${dest}`, {
           action: {
-            label: `Undo`,
+            label: t`Undo`,
             onClick: undoDeckEdit,
           },
         });
@@ -646,7 +646,7 @@ export default function DeckEditor() {
       });
       toast.success(t`Moved ${cardName} to ${dest}`, {
         action: {
-          label: `Undo`,
+          label: t`Undo`,
           onClick: undoDeckEdit,
         },
       });
@@ -681,7 +681,7 @@ export default function DeckEditor() {
             <div className="p-4 sm:px-6 lg:px-8">
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  My decks
+                  <Trans>My decks</Trans>
                 </span>
                 <span className="text-[10px] text-muted-foreground">
                   ({collectionDecks.length})
@@ -694,7 +694,7 @@ export default function DeckEditor() {
                     disabled={accountDecksLoading}
                     onClick={() => void refreshAccountDecks()}
                   >
-                    Refresh
+                    <Trans>Refresh</Trans>
                   </Button>
                 )}
               </div>
@@ -708,7 +708,7 @@ export default function DeckEditor() {
                   collectionDecks.length === 0)) && (
                 <div
                   className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
-                  aria-label={`Loading your decks`}
+                  aria-label={t`Loading your decks`}
                   aria-busy="true"
                 >
                   {Array.from({ length: 5 }, (_, index) => (
@@ -745,7 +745,7 @@ export default function DeckEditor() {
                 <div className={cn("mt-4", filteredCollectionDecks.length > 0 && "border-t pt-4")}>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                      Drafts
+                      <Trans>Drafts</Trans>
                     </span>
                     <span className="text-[10px] text-muted-foreground">
                       ({filteredCollectionDrafts.length})
@@ -761,7 +761,7 @@ export default function DeckEditor() {
                 <div className="mt-4 border-t pt-4">
                   <div className="mb-3 flex items-center gap-2">
                     <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      Published in Community
+                      <Trans>Published in Community</Trans>
                     </span>
                     {!publishedDecksLoading && (
                       <span className="text-[10px] text-muted-foreground">
@@ -777,7 +777,7 @@ export default function DeckEditor() {
                         size="sm"
                         onClick={() => void refreshPublishedDecks()}
                       >
-                        Retry
+                        <Trans>Retry</Trans>
                       </Button>
                     </div>
                   ) : publishedDecksLoading && publishedDecks.length === 0 ? (
@@ -785,10 +785,10 @@ export default function DeckEditor() {
                   ) : publishedDecks.length === 0 ? (
                     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <span>
-                        You haven’t published a deck yet. Use the share action on any deck.
+                        <Trans>You haven’t published a deck yet. Use the share action on any deck.</Trans>
                       </span>
                       <Button variant="outline" size="sm" onClick={() => navigate(ROUTES.HUB)}>
-                        Browse Community
+                        <Trans>Browse Community</Trans>
                       </Button>
                     </div>
                   ) : filteredPublishedDecks.length > 0 ? (
@@ -803,7 +803,7 @@ export default function DeckEditor() {
                     </div>
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      No published decks match your filters.
+                      <Trans>No published decks match your filters.</Trans>
                     </p>
                   )}
                 </div>
@@ -819,7 +819,7 @@ export default function DeckEditor() {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                      Starter Decks
+                      <Trans>Starter Decks</Trans>
                     </span>
                     <span className="text-[10px] text-muted-foreground">
                       ({presetSavedDecks.length})
@@ -856,7 +856,7 @@ export default function DeckEditor() {
                 presetSavedDecks.length === 0 &&
                 collectionDecks.length > 0 && (
                   <p className="col-span-5 pt-6 text-center text-sm text-muted-foreground">
-                    No decks match your filters.
+                    <Trans>No decks match your filters.</Trans>
                   </p>
                 )}
             </div>
@@ -924,12 +924,12 @@ export default function DeckEditor() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") confirmRename();
               }}
-              placeholder={`Deck name`}
+              placeholder={t`Deck name`}
               autoFocus
             />
             <DialogFooter className="gap-2">
               <Button variant="ghost" size="sm" onClick={() => setRenamingId(null)}>
-                Cancel
+                <Trans>Cancel</Trans>
               </Button>
               <Button
                 variant="primary"
@@ -937,7 +937,7 @@ export default function DeckEditor() {
                 onClick={confirmRename}
                 disabled={!renameInput.trim()}
               >
-                Rename
+                <Trans>Rename</Trans>
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -964,7 +964,7 @@ export default function DeckEditor() {
                 disabled={deletingAccountBusy}
                 onClick={() => setDeletingAccountDeck(null)}
               >
-                Keep deck
+                <Trans>Keep deck</Trans>
               </Button>
               <Button
                 variant="destructive"
@@ -972,7 +972,7 @@ export default function DeckEditor() {
                 disabled={deletingAccountBusy}
                 onClick={() => void confirmDeleteAccountDeck()}
               >
-                {deletingAccountBusy ? `Removing\u2026` : `Remove deck`}
+                {deletingAccountBusy ? t`Removing\u2026` : t`Remove deck`}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -1090,13 +1090,13 @@ export default function DeckEditor() {
           <DialogHeader>
             <DialogTitle><Trans>Create tag</Trans></DialogTitle>
             <DialogDescription>
-              Create a reusable tag and add the dropped cards to it.
+              <Trans>Create a reusable tag and add the dropped cards to it.</Trans>
             </DialogDescription>
           </DialogHeader>
           <Input
             autoFocus
             value={newTagName}
-            placeholder={`Ramp, removal, combo\u2026`}
+            placeholder={t`Ramp, removal, combo\u2026`}
             onChange={(event) => setNewTagName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key !== "Enter" || !newTagName.trim()) return;
@@ -1105,10 +1105,10 @@ export default function DeckEditor() {
           />
           <DialogFooter>
             <Button variant="ghost" onClick={() => setNewTagDropOpen(false)}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
             <Button variant="primary" disabled={!newTagName.trim()} onClick={createDroppedTag}>
-              Create tag
+              <Trans>Create tag</Trans>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1119,11 +1119,11 @@ export default function DeckEditor() {
           <div className="bg-card border rounded-xl shadow-xl p-6 max-w-sm space-y-4">
             <h3 className="text-lg font-semibold"><Trans>Unsaved Changes</Trans></h3>
             <p className="text-sm text-muted-foreground">
-              You have unsaved changes to your deck. Do you want to go back without saving?
+              <Trans>You have unsaved changes to your deck. Do you want to go back without saving?</Trans>
             </p>
             <div className="flex justify-end gap-2">
               <Button variant="outline" size="sm" onClick={() => setShowBackConfirm(false)}>
-                Stay
+                <Trans>Stay</Trans>
               </Button>
               <Button
                 variant="destructive"
@@ -1134,7 +1134,7 @@ export default function DeckEditor() {
                   returnToDeckList();
                 }}
               >
-                Leave Without Saving
+                <Trans>Leave Without Saving</Trans>
               </Button>
             </div>
           </div>
@@ -1146,11 +1146,11 @@ export default function DeckEditor() {
           <div className="bg-card border rounded-xl shadow-xl p-6 max-w-sm space-y-4">
             <h3 className="text-lg font-semibold"><Trans>Unsaved Changes</Trans></h3>
             <p className="text-sm text-muted-foreground">
-              You have unsaved changes to your deck. Do you want to leave without saving?
+              <Trans>You have unsaved changes to your deck. Do you want to leave without saving?</Trans>
             </p>
             <div className="flex justify-end gap-2">
               <Button variant="outline" size="sm" onClick={() => blocker.reset()}>
-                Stay
+                <Trans>Stay</Trans>
               </Button>
               <Button
                 variant="destructive"
@@ -1160,7 +1160,7 @@ export default function DeckEditor() {
                   blocker.proceed();
                 }}
               >
-                Leave Without Saving
+                <Trans>Leave Without Saving</Trans>
               </Button>
             </div>
           </div>

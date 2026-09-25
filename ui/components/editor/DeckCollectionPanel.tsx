@@ -168,7 +168,7 @@ export function DeckCollectionPanel({
           <div>
             <h3 className="text-sm font-semibold"><Trans>Collection coverage</Trans></h3>
             <p className="text-[10px] text-muted-foreground">
-              {accountId ? `Synced to your account` : `Saved on this device`}
+              {accountId ? t`Synced to your account` : t`Saved on this device`}
             </p>
           </div>
         </div>
@@ -177,30 +177,30 @@ export function DeckCollectionPanel({
             className={cn("text-xs", missing.length > 0 ? "text-warning" : "text-legality-legal")}
           >
             {loading
-              ? `Syncing\u2026`
+              ? t`Syncing\u2026`
               : missing.length === 0
                 ? otherPrintingCount > 0
                   ? otherPrintingCount === 1
-                    ? `Complete · one other printing`
-                    : `Complete · ${otherPrintingCount} other printings`
-                  : `Deck complete`
-                : `${missing.length} cards missing`}
+                    ? t`Complete · one other printing`
+                    : t`Complete · ${otherPrintingCount} other printings`
+                  : t`Deck complete`
+                : t`${missing.length} cards missing`}
           </span>
           {missing.length > 0 && estimatedTotal > 0 && (
             <span className="text-xs font-mono text-muted-foreground">
               est. {provider === "cardmarket" ? "€" : provider === "cardhoarder" ? "" : "$"}
               {estimatedTotal.toFixed(2)}
-              {provider === "cardhoarder" ? " tix" : ""}
+              {provider === "cardhoarder" ? t` tix` : ""}
             </span>
           )}
           {(missing.length > 0 || otherPrintingCount > 0) && onOptimizeOwnedPrintings && (
             <Button size="xs" variant="ghost" onClick={onOptimizeOwnedPrintings}>
-              <Sparkles className="h-3.5 w-3.5" /> Use owned printings
+              <Sparkles className="h-3.5 w-3.5" /> <Trans>Use owned printings</Trans>
             </Button>
           )}
           {missing.length > 0 && (
             <Button size="xs" variant="ghost" onClick={exportMissing}>
-              <Download className="h-3.5 w-3.5" /> Missing CSV
+              <Download className="h-3.5 w-3.5" /> <Trans>Missing CSV</Trans>
             </Button>
           )}
           <div className="flex overflow-hidden rounded-md border">
@@ -246,14 +246,14 @@ export function DeckCollectionPanel({
                 <span className="min-w-0 flex-1 truncate text-xs">{entry.name}</span>
                 <span className="text-[10px] text-muted-foreground">
                   {ownership.get(key)?.status === "partial"
-                    ? `partially owned · need ${ownership.get(key)?.shortage ?? entry.quantity}`
-                    : `not owned · need ${ownership.get(key)?.shortage ?? entry.quantity}`}
+                    ? t`partially owned · need ${ownership.get(key)?.shortage ?? entry.quantity}`
+                    : t`not owned · need ${ownership.get(key)?.shortage ?? entry.quantity}`}
                 </span>
                 <Input
                   type="number"
                   min="0"
                   className="h-7 w-16 text-right font-mono text-xs"
-                  aria-label={`Owned copies of ${entry.name}`}
+                  aria-label={t`Owned copies of ${entry.name}`}
                   value={collectionQuantityForName(quantities, entry.name)}
                   onChange={(event) =>
                     setOwnedQuantity(key, entry.name, Number(event.target.value))
@@ -263,7 +263,7 @@ export function DeckCollectionPanel({
                   type="button"
                   size="icon-sm"
                   variant={acquisition[key] === "ordered" ? "selected" : "ghost"}
-                  title={`Mark as ordered`}
+                  title={t`Mark as ordered`}
                   aria-pressed={acquisition[key] === "ordered"}
                   onClick={() =>
                     setAcquisitionStatus(
@@ -278,7 +278,7 @@ export function DeckCollectionPanel({
                   type="button"
                   size="icon-sm"
                   variant={acquisition[key] === "proxy" ? "selected" : "ghost"}
-                  title={`Mark as proxied`}
+                  title={t`Mark as proxied`}
                   aria-pressed={acquisition[key] === "proxy"}
                   onClick={() =>
                     setAcquisitionStatus(key, acquisition[key] === "proxy" ? undefined : "proxy")

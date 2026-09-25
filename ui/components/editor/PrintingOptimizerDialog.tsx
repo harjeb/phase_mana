@@ -215,7 +215,7 @@ export function PrintingOptimizerDialog({
       }
     } catch (error) {
       if (!(error instanceof DOMException && error.name === "AbortError")) {
-        toast.error(error instanceof Error ? error.message : `Could not optimize deck printings`);
+        toast.error(error instanceof Error ? error.message : t`Could not optimize deck printings`);
       }
     } finally {
       if (abortControllerRef.current === abortController) {
@@ -243,8 +243,8 @@ export function PrintingOptimizerDialog({
     });
     toast.success(
       changes.length === 1
-        ? `Updated one card printing`
-        : `Updated ${changes.length} card printings`,
+        ? t`Updated one card printing`
+        : t`Updated ${changes.length} card printings`,
     );
     setChanges([]);
     setSkipped([]);
@@ -269,7 +269,7 @@ export function PrintingOptimizerDialog({
         <DialogHeader>
           <DialogTitle><Trans>Optimize deck printings</Trans></DialogTitle>
           <DialogDescription>
-            Choose a policy, review every proposed change, then apply it as one undoable edit.
+            <Trans>Choose a policy, review every proposed change, then apply it as one undoable edit.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-3 sm:grid-cols-3">
@@ -306,7 +306,7 @@ export function PrintingOptimizerDialog({
             <div>
               <p className="text-sm font-medium">Ready to scan {allCards.length} cards</p>
               <p className="text-xs text-muted-foreground">
-                Nothing changes until you review and apply the proposal.
+                <Trans>Nothing changes until you review and apply the proposal.</Trans>
               </p>
             </div>
             <Button
@@ -315,7 +315,7 @@ export function PrintingOptimizerDialog({
               disabled={allCards.length === 0}
               onClick={() => void buildProposal(selectedPolicy)}
             >
-              <Sparkles className="h-4 w-4" /> Build proposal
+              <Sparkles className="h-4 w-4" /> <Trans>Build proposal</Trans>
             </Button>
           </div>
         )}
@@ -323,7 +323,7 @@ export function PrintingOptimizerDialog({
           <div className="space-y-2 rounded-lg border bg-muted/30 p-4">
             <div className="flex items-center justify-between text-sm">
               <span className="flex items-center gap-2 font-medium">
-                <Loader2 className="h-4 w-4 animate-spin" /> Scanning available printings
+                <Loader2 className="h-4 w-4 animate-spin" /> <Trans>Scanning available printings</Trans>
               </span>
               <span className="tabular-nums text-muted-foreground">
                 {Math.round(progress * 100)}%
@@ -336,8 +336,8 @@ export function PrintingOptimizerDialog({
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Large decks can take a moment. Requests are grouped and safely paced through the
-              shared card-data service.
+              <Trans>Large decks can take a moment. Requests are grouped and safely paced through the
+              shared card-data service.</Trans>
             </p>
             <Button
               variant="outline"
@@ -349,7 +349,7 @@ export function PrintingOptimizerDialog({
                 setProgress(0);
               }}
             >
-              Cancel scan
+              <Trans>Cancel scan</Trans>
             </Button>
           </div>
         )}
@@ -360,8 +360,8 @@ export function PrintingOptimizerDialog({
                 <p className="font-medium"><Trans>Proposal ready</Trans></p>
                 <p className="text-xs text-muted-foreground">
                   {changes.length === 1
-                    ? `One copy will change · one undoable edit`
-                    : `${changes.length} copies will change · one undoable edit`}
+                    ? t`One copy will change · one undoable edit`
+                    : t`${changes.length} copies will change · one undoable edit`}
                 </p>
               </div>
               <Button
@@ -372,7 +372,7 @@ export function PrintingOptimizerDialog({
                   setSkipped([]);
                 }}
               >
-                Change goal
+                <Trans>Change goal</Trans>
               </Button>
             </div>
             <div className="max-h-72 overflow-y-auto rounded-lg border divide-y">
@@ -390,7 +390,7 @@ export function PrintingOptimizerDialog({
             </div>
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs text-muted-foreground">
-                Review the exact before and after printing.
+                <Trans>Review the exact before and after printing.</Trans>
               </p>
               <Button variant="primary" className="gap-1" onClick={applyProposal}>
                 <Check className="h-3.5 w-3.5" /> Apply {changes.length} changes
@@ -404,12 +404,12 @@ export function PrintingOptimizerDialog({
               <div className="flex items-center gap-2 text-sm font-medium text-warning">
                 <TriangleAlert className="h-4 w-4" />
                 {skipped.length === 1
-                  ? `Could not convert one copy`
-                  : `Could not convert ${skipped.length} copies`}
+                  ? t`Could not convert one copy`
+                  : t`Could not convert ${skipped.length} copies`}
               </div>
               {changes.length === 0 && (
                 <Button variant="ghost" size="sm" onClick={() => setSkipped([])}>
-                  Change goal
+                  <Trans>Change goal</Trans>
                 </Button>
               )}
             </div>

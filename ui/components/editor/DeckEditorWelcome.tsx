@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import {
   BarChart3,
@@ -25,25 +27,25 @@ const STORAGE_KEY = "manabrew-deck-editor-welcome-v1";
 const STEPS = [
   {
     title: `Add cards quickly`,
-    description: `Quick Add adds the first result in one click. Open Card Search for richer discovery, then use its add controls or drag results directly into your deck.`,
+    description: t`Quick Add adds the first result in one click. Open Card Search for richer discovery, then use its add controls or drag results directly into your deck.`,
     icon: Command,
     tips: ["Option/Alt+A focuses Quick Add", "Option/Alt+S toggles Card Search"],
   },
   {
     title: `Search with Scryfall syntax`,
-    description: `Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more.`,
+    description: t`Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more.`,
     icon: Search,
     tips: ["c:ur t:instant", 'o:"draw a card" mv<=2', "set:mh3 usd<5"],
   },
   {
     title: `Select and move together`,
-    description: `Shift-click ranges, Cmd/Ctrl-click individual cards, then drag or use M, S, and B to move the selection.`,
+    description: t`Shift-click ranges, Cmd/Ctrl-click individual cards, then drag or use M, S, and B to move the selection.`,
     icon: MousePointer2,
     tips: ["Right-click any card for all card actions", "Drag a selection to sections or tags"],
   },
   {
     title: `Organize your way`,
-    description: `Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views.`,
+    description: t`Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views.`,
     icon: Layers,
     tips: [
       "Collapse sections you do not need",
@@ -52,7 +54,7 @@ const STEPS = [
   },
   {
     title: `Use every action in every view`,
-    description: `Text, grid, and stack views expose the same card actions. Adjust quantities, set commanders, change printings and foil treatment, choose the deck cover, move cards, or open full card details.`,
+    description: t`Text, grid, and stack views expose the same card actions. Adjust quantities, set commanders, change printings and foil treatment, choose the deck cover, move cards, or open full card details.`,
     icon: MousePointer2,
     tips: [
       "Right-click a card to open the complete action menu",
@@ -61,7 +63,7 @@ const STEPS = [
   },
   {
     title: `Preview cards from anywhere`,
-    description: `The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing.`,
+    description: t`The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing.`,
     icon: Eye,
     tips: [
       "Works with deck cards, Card Search, replacements, tokens, the command zone, and collection coverage",
@@ -70,7 +72,7 @@ const STEPS = [
   },
   {
     title: `Track cards and printings`,
-    description: `Collection highlights distinguish an exact printing from another printing you own. Hover the ownership pill when you want printing and quantity details without covering the card during normal browsing.`,
+    description: t`Collection highlights distinguish an exact printing from another printing you own. Hover the ownership pill when you want printing and quantity details without covering the card during normal browsing.`,
     icon: LibraryBig,
     tips: [
       "Solid border and check pill: exact printing owned",
@@ -81,7 +83,7 @@ const STEPS = [
   },
   {
     title: `Save deliberately`,
-    description: `Deck edits remain unsaved until you use Save. The editor marks pending changes so you can experiment, undo, or create a local checkpoint before committing a version.`,
+    description: t`Deck edits remain unsaved until you use Save. The editor marks pending changes so you can experiment, undo, or create a local checkpoint before committing a version.`,
     icon: Save,
     tips: [
       "Cmd/Ctrl+S saves the deck",
@@ -91,7 +93,7 @@ const STEPS = [
   },
   {
     title: `Review and refine`,
-    description: `Deck Analysis brings legality, roles, goals, mana, collection coverage, budget, tokens, combos, and replacements together. Every section can be collapsed when you want a quieter workspace.`,
+    description: t`Deck Analysis brings legality, roles, goals, mana, collection coverage, budget, tokens, combos, and replacements together. Every section can be collapsed when you want a quieter workspace.`,
     icon: BarChart3,
     tips: [
       "Hover cards to inspect them in Preview",
@@ -101,7 +103,7 @@ const STEPS = [
   },
   {
     title: `Check engine support`,
-    description: `Validation checks legality and whether every card is supported by both the Manabrew and Forge engines. Warning markers identify unsupported cards and can be filtered or selected together.`,
+    description: t`Validation checks legality and whether every card is supported by both the Manabrew and Forge engines. Warning markers identify unsupported cards and can be filtered or selected together.`,
     icon: ShieldCheck,
     tips: [
       "Collection gaps do not affect online deck legality",
@@ -110,7 +112,7 @@ const STEPS = [
   },
   {
     title: `Work from the keyboard`,
-    description: `Open the command palette with Cmd/Ctrl+Shift+P to find editor actions. Undo, redo, save, search, section navigation, and bulk edits all have shortcuts.`,
+    description: t`Open the command palette with Cmd/Ctrl+Shift+P to find editor actions. Undo, redo, save, search, section navigation, and bulk edits all have shortcuts.`,
     icon: Sparkles,
     tips: [
       "Alt+3 jumps to the next editor section",
@@ -163,7 +165,7 @@ export function DeckEditorWelcome({ readOnly }: { readOnly: boolean }) {
             ))}
           </ul>
         </div>
-        <div className="flex gap-1.5" aria-label={`Step ${step + 1} of ${STEPS.length}`}>
+        <div className="flex gap-1.5" aria-label={t`Step ${step + 1} of ${STEPS.length}`}>
           {STEPS.map((item, index) => (
             <div
               key={item.title}
@@ -175,13 +177,13 @@ export function DeckEditorWelcome({ readOnly }: { readOnly: boolean }) {
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={dismiss}>
-            Skip
+            <Trans>Skip</Trans>
           </Button>
           <Button
             variant="primary"
             onClick={() => (step === STEPS.length - 1 ? dismiss() : setStep(step + 1))}
           >
-            {step === STEPS.length - 1 ? `Start building` : `Next`}
+            {step === STEPS.length - 1 ? t`Start building` : t`Next`}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 /**
  * Shared primitive components for the deck editor views.
  * Extracted to eliminate duplication across DeckListView card components.
@@ -7,6 +8,7 @@ import { ChevronDown, Gem, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { FoilBadge } from "@/components/limited/FoilBadge";
 import { ScryfallImg } from "@/components/ScryfallImg";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import type { OverlayAction } from "./deckEditor.utils";
 import type { DeckCard } from "@/protocol/deck";
 export type { OverlayAction } from "./deckEditor.utils";
@@ -34,10 +36,13 @@ export function CardThumbnail({
   loading?: "eager" | "lazy";
 }) {
   const { name, foil } = card.identity;
+  // Prefer the local card-image library at display time: decks saved before a
+  // library was configured still carry Scryfall CDN urls.
+  const uris = withLocalCardArt(card.uris, name);
   return (
     <div className={cn("relative w-full", foil && "draft-tile-foil")}>
       <ScryfallImg
-        src={card.uris?.[imageSize]}
+        src={uris?.[imageSize]}
         alt={name}
         loading={loading}
         decoding={loading === "lazy" ? "async" : undefined}
@@ -61,7 +66,7 @@ export function CardAnalysisBadges({
       {isGameChanger && (
         <div
           className="rounded-full bg-pt-lethal/90 text-white p-0.5 shadow"
-          title={`Game Changer \u2014 restricted to bracket 3+`}
+          title={t`Game Changer \u2014 restricted to bracket 3+`}
         >
           <Gem className="h-3 w-3" />
         </div>
@@ -69,7 +74,7 @@ export function CardAnalysisBadges({
       {isCombo && (
         <div
           className="rounded-full bg-counter-charge/90 text-white p-0.5 shadow"
-          title={`Part of a combo in this deck`}
+          title={t`Part of a combo in this deck`}
         >
           <Sparkles className="h-3 w-3" />
         </div>

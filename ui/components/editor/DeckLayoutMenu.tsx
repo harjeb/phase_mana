@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, LayoutTemplate, Plus, Trash2 } from "lucide-react";
@@ -141,14 +142,14 @@ export function DeckLayoutMenu({
             variant="outline"
             size="xs"
             className="gap-1"
-            title={compact ? `Saved views` : undefined}
+            title={compact ? t`Saved views` : undefined}
           >
             <LayoutTemplate className="h-3.5 w-3.5" />
             {compact ? (
               <span className="sr-only"><Trans>Saved views</Trans></span>
             ) : (
               <>
-                {activeLayout?.name ?? `View`}
+                {activeLayout?.name ?? t`View`}
                 <ChevronDown className="h-3 w-3 opacity-60" />
               </>
             )}
@@ -158,17 +159,17 @@ export function DeckLayoutMenu({
           <DropdownMenuItem
             onSelect={() => onApply("type", "not-owned", cardSize, "", viewMode, "missing")}
           >
-            Collection gaps
+            <Trans>Collection gaps</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => onApply("custom", "name", cardSize, "", viewMode, "all")}
           >
-            Tags workspace
+            <Trans>Tags workspace</Trans>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => onApply("cmc", "mana-value", cardSize, "", "stack", "all")}
           >
-            Mana review
+            <Trans>Mana review</Trans>
           </DropdownMenuItem>
           {layouts.map((layout) => (
             <DropdownMenuItem
@@ -183,7 +184,7 @@ export function DeckLayoutMenu({
               <button
                 type="button"
                 className="rounded p-1 text-muted-foreground hover:text-destructive"
-                title={`Delete ${layout.name}`}
+                title={t`Delete ${layout.name}`}
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -195,7 +196,7 @@ export function DeckLayoutMenu({
             </DropdownMenuItem>
           ))}
           <DropdownMenuItem onSelect={() => setCreateOpen(true)}>
-            <Plus className="mr-2 h-3.5 w-3.5" /> Save current view
+            <Plus className="mr-2 h-3.5 w-3.5" /> <Trans>Save current view</Trans>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -205,13 +206,13 @@ export function DeckLayoutMenu({
           <DialogHeader>
             <DialogTitle><Trans>Save deck view</Trans></DialogTitle>
             <DialogDescription>
-              Keep the current grouping, sorting, and card size.
+              <Trans>Keep the current grouping, sorting, and card size.</Trans>
             </DialogDescription>
           </DialogHeader>
           <Input
             autoFocus
             value={name}
-            placeholder={`Combo layout`}
+            placeholder={t`Combo layout`}
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") saveLayout();
@@ -219,10 +220,10 @@ export function DeckLayoutMenu({
           />
           <div className="flex justify-end gap-2">
             <Button variant="ghost" onClick={() => setCreateOpen(false)}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
             <Button variant="primary" disabled={!name.trim()} onClick={saveLayout}>
-              Save view
+              <Trans>Save view</Trans>
             </Button>
           </div>
         </DialogContent>

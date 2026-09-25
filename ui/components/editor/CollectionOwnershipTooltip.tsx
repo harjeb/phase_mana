@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Link } from "react-router-dom";
 import { CheckCircle2, ExternalLink, Layers3 } from "lucide-react";
@@ -55,8 +56,8 @@ export function CollectionOwnershipTooltip({
           )}
           aria-label={
             ownership === "exact"
-              ? `Exact printing of ${card.identity.name} owned`
-              : `Another printing of ${card.identity.name} owned`
+              ? t`Exact printing of ${card.identity.name} owned`
+              : t`Another printing of ${card.identity.name} owned`
           }
           onPointerDown={(event) => event.stopPropagation()}
           onClick={(event) => event.stopPropagation()}
@@ -82,7 +83,7 @@ export function CollectionOwnershipTooltip({
           <div className="min-w-0">
             <p className="font-semibold"><Trans>Collection tracker</Trans></p>
             <p className="text-[11px] text-muted-foreground">
-              {ownership === "exact" ? `Exact printing owned` : `Owned in another printing`}
+              {ownership === "exact" ? t`Exact printing owned` : t`Owned in another printing`}
             </p>
           </div>
           <span className="ml-auto font-mono text-xs tabular-nums">
@@ -92,14 +93,14 @@ export function CollectionOwnershipTooltip({
 
         <div className="space-y-1.5">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Needed for deck
+            <Trans>Needed for deck</Trans>
           </p>
           <PrintingRow quantity={summary.required} label={requiredPrinting} exact />
         </div>
 
         <div className="space-y-1.5">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Found in collection
+            <Trans>Found in collection</Trans>
           </p>
           {printings.map((printing, index) => {
             const key = collectionCardKey(
@@ -124,7 +125,7 @@ export function CollectionOwnershipTooltip({
           className="flex items-center justify-center gap-1.5 rounded-md bg-muted/60 px-2 py-1.5 text-[11px] font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           onClick={(event) => event.stopPropagation()}
         >
-          View in My Collection <ExternalLink className="h-3 w-3" />
+          <Trans>View in My Collection</Trans> <ExternalLink className="h-3 w-3" />
         </Link>
       </TooltipContent>
     </Tooltip>
@@ -144,7 +145,7 @@ function PrintingRow({
       <span className="w-5 shrink-0 text-right font-mono text-xs tabular-nums">{quantity}</span>
       <span className="min-w-0 flex-1 truncate text-xs">{label}</span>
       <span className={cn("text-[10px]", exact ? "text-legality-legal" : "text-muted-foreground")}>
-        {exact ? `exact` : `other`}
+        {exact ? t`exact` : t`other`}
       </span>
     </div>
   );

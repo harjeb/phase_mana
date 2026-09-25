@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { t } from "@lingui/core/macro";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loader2, Search } from "lucide-react";
@@ -107,10 +108,10 @@ export function BatchPrintingDialog({
       });
       toast.success(
         matches.length === 0
-          ? `No cards in this deck have a ${set.name} printing`
+          ? t`No cards in this deck have a ${set.name} printing`
           : matches.length === 1
-            ? `Changed one card printing to ${set.name}`
-            : `Changed ${matches.length} card printings to ${set.name}`,
+            ? t`Changed one card printing to ${set.name}`
+            : t`Changed ${matches.length} card printings to ${set.name}`,
       );
       onOpenChange(false);
     } catch {
@@ -132,11 +133,11 @@ export function BatchPrintingDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            {cardNames ? `Change selected printings` : `Change deck printings`}
+            {cardNames ? t`Change selected printings` : t`Change deck printings`}
           </DialogTitle>
           <DialogDescription>
-            Choose a set to update every matching card. Cards without a printing in that set stay
-            unchanged.
+            <Trans>Choose a set to update every matching card. Cards without a printing in that set stay
+            unchanged.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="relative">
@@ -145,7 +146,7 @@ export function BatchPrintingDialog({
             autoFocus
             value={query}
             className="pl-9"
-            placeholder={`Search by set name or code\u2026`}
+            placeholder={t`Search by set name or code\u2026`}
             onChange={(event) => setQuery(event.target.value)}
           />
         </div>

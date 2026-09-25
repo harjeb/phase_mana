@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronDown, X } from "lucide-react";
@@ -105,7 +107,7 @@ export function SetSelect({
             <Input
               ref={inputRef}
               className="h-6 text-xs"
-              placeholder={`Search sets\u2026`}
+              placeholder={t`Search sets\u2026`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -114,7 +116,7 @@ export function SetSelect({
             <div className="py-1">
               {filtered.length === 0 && (
                 <div className="px-3 py-2 text-xs text-muted-foreground text-center">
-                  No sets found
+                  <Trans>No sets found</Trans>
                 </div>
               )}
               {filtered.map((s) => (

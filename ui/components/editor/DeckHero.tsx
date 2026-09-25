@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useRef, useState } from "react";
 import { Check, ChevronDown, ImagePlus, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -78,7 +79,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
         <div className="absolute right-3 top-3 z-10 flex items-center gap-2">
           <button
             type="button"
-            title={`Customize playmat`}
+            title={t`Customize playmat`}
             onClick={() => setEditorOpen(true)}
             className={cn(
               "inline-flex h-8 items-center gap-2 rounded-md border bg-background/60 text-xs font-medium text-muted-foreground backdrop-blur-sm transition-colors hover:bg-background/80 hover:text-foreground",
@@ -89,7 +90,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
               <img
                 src={playmat}
                 crossOrigin="anonymous"
-                alt={`Deck playmat`}
+                alt={t`Deck playmat`}
                 className="h-6 w-10 rounded object-cover"
               />
             ) : playmatColor ? (
@@ -101,7 +102,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
             ) : (
               <ImagePlus className="h-4 w-4" />
             )}
-            <span>{playmat || playmatColor ? `Edit playmat` : `Playmat`}</span>
+            <span>{playmat || playmatColor ? t`Edit playmat` : t`Playmat`}</span>
           </button>
         </div>
       )}
@@ -127,7 +128,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
                 <button
                   type="button"
                   className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border bg-background/60 px-2 py-0.5 text-xs backdrop-blur-sm transition-colors hover:bg-background/80"
-                  title={`Change format`}
+                  title={t`Change format`}
                 >
                   <FormatBadge formatId={currentDeck.format ?? "standard"} />
                   <span className="font-medium">
@@ -182,7 +183,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
           <button
             type="button"
             className="group -ml-1.5 flex w-fit max-w-full items-center gap-2 rounded-md px-1.5 py-0.5 transition-colors hover:bg-background/50"
-            title={`Rename deck`}
+            title={t`Rename deck`}
             onClick={() => {
               cancelNameEditRef.current = false;
               setNameBeforeEdit(currentDeck.name);

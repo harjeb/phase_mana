@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { useDeckStore } from "@/stores/useDeckStore";
@@ -60,7 +61,7 @@ export function DeckStats({ activeBucket = null, onBucketClick }: DeckStatsProps
           {spells.length} spells &middot; {lands.length} lands
         </span>
         {unknown.length > 0 && (
-          <span className="text-xs text-warning" title={`CMC unknown`}>
+          <span className="text-xs text-warning" title={t`CMC unknown`}>
             {unknown.length} ?
           </span>
         )}
@@ -146,7 +147,7 @@ export function DeckStats({ activeBucket = null, onBucketClick }: DeckStatsProps
                       </ul>
                       {onBucketClick && (
                         <p className="mt-1.5 border-t border-border/40 pt-1.5 text-[10px] text-muted-foreground/60">
-                          {isActive ? `Click to clear the filter` : `Click to filter the deck`}
+                          {isActive ? t`Click to clear the filter` : t`Click to filter the deck`}
                         </p>
                       )}
                     </div>
@@ -175,7 +176,7 @@ export function DeckStats({ activeBucket = null, onBucketClick }: DeckStatsProps
         </>
       ) : (
         <p className="text-xs text-muted-foreground italic text-center py-6">
-          {cards.length === 0 ? `No cards in deck.` : `Add non-land cards to see the curve.`}
+          {cards.length === 0 ? t`No cards in deck.` : t`Add non-land cards to see the curve.`}
         </p>
       )}
     </section>

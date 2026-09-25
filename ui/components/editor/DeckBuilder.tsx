@@ -758,22 +758,22 @@ export function DeckBuilder({
       specialSections: [
         {
           id: "attractions",
-          label: `Attractions`,
+          label: t`Attractions`,
           groups: groupZone(currentDeck.attractions ?? [], "special"),
         },
         {
           id: "contraptions",
-          label: `Contraptions`,
+          label: t`Contraptions`,
           groups: groupZone(currentDeck.contraptions ?? [], "special"),
         },
         {
           id: "schemes",
-          label: `Schemes`,
+          label: t`Schemes`,
           groups: groupZone(currentDeck.schemes ?? [], "special"),
         },
         {
           id: "planes",
-          label: `Planes`,
+          label: t`Planes`,
           groups: groupZone(currentDeck.planes ?? [], "special"),
         },
       ].filter((section) => section.groups.length > 0),
@@ -1038,8 +1038,8 @@ export function DeckBuilder({
       if (!quiet && hasUnsupportedCards) {
         toast.warning(
           unsupportedNames.size === 1
-            ? `Saved "${deckToSave.name}" — one card is unsupported by the Manabrew and Forge engines`
-            : `Saved "${deckToSave.name}" — ${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`,
+            ? t`Saved "${deckToSave.name}" — one card is unsupported by the Manabrew and Forge engines`
+            : t`Saved "${deckToSave.name}" — ${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`,
         );
       } else if (!quiet && !deckValidation.legal) {
         const validationError = deckValidation.errors[0] ?? `deck is not legal in this format`;
@@ -1063,8 +1063,8 @@ export function DeckBuilder({
         if (!quiet) {
           toast.error(
             error instanceof Error
-              ? `${error.message} Your local copy is still saved.`
-              : `Account save failed. Your local copy is still saved.`,
+              ? t`${error.message} Your local copy is still saved.`
+              : t`Account save failed. Your local copy is still saved.`,
           );
         }
       }
@@ -1111,11 +1111,11 @@ export function DeckBuilder({
       setSaveConflict(null);
       conflictDeckRef.current = null;
       toast.success(
-        action === "copy" ? `Saved as a separate account deck` : `Deck conflict resolved`,
+        action === "copy" ? t`Saved as a separate account deck` : t`Deck conflict resolved`,
       );
     } catch (error) {
       setSyncState("failed");
-      toast.error(error instanceof Error ? error.message : `Could not resolve the deck conflict`);
+      toast.error(error instanceof Error ? error.message : t`Could not resolve the deck conflict`);
     } finally {
       setIsSaving(false);
     }
@@ -1129,8 +1129,8 @@ export function DeckBuilder({
     if (hasUnsupportedCards) {
       toast.warning(
         unsupportedNames.size === 1
-          ? `Saved "${currentDeck.name}" as draft — one card is unsupported by the Manabrew and Forge engines`
-          : `Saved "${currentDeck.name}" as draft — ${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`,
+          ? t`Saved "${currentDeck.name}" as draft — one card is unsupported by the Manabrew and Forge engines`
+          : t`Saved "${currentDeck.name}" as draft — ${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`,
       );
     } else {
       toast.success(t`Draft "${currentDeck.name}" saved`);
@@ -1166,7 +1166,7 @@ export function DeckBuilder({
       toast.success(t`Deck deleted`);
       onDeckDeleted?.();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Failed to delete deck`);
+      toast.error(error instanceof Error ? error.message : t`Failed to delete deck`);
     } finally {
       setIsDeleting(false);
     }
@@ -1202,138 +1202,138 @@ export function DeckBuilder({
   const editorCommands: DeckEditorCommand[] = [
     {
       id: "save",
-      label: `Save deck`,
+      label: t`Save deck`,
       keywords: ["persist", "version"],
       disabled: isReadOnly || isSaving,
-      disabledReason: isReadOnly ? "Read only" : isSaving ? "Saving" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : isSaving ? t`Saving` : undefined,
       run: () => void handleSave(),
     },
     {
       id: "import",
-      label: `Import a card list`,
+      label: t`Import a card list`,
       keywords: ["paste", "add cards"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => setImportOpen(true),
     },
     {
       id: "undo",
-      label: `Undo last deck edit`,
+      label: t`Undo last deck edit`,
       run: undoDeckEdit,
     },
     {
       id: "redo",
-      label: `Redo last deck edit`,
+      label: t`Redo last deck edit`,
       run: redoDeckEdit,
     },
     {
       id: "view-list",
-      label: `Switch to list view`,
+      label: t`Switch to list view`,
       run: () => setViewMode("list"),
     },
     {
       id: "view-grid",
-      label: `Switch to grid view`,
+      label: t`Switch to grid view`,
       run: () => setViewMode("visual"),
     },
     {
       id: "view-stacks",
-      label: `Switch to stack view`,
+      label: t`Switch to stack view`,
       run: () => setViewMode("stack"),
     },
     {
       id: "next-editor-section",
-      label: `Jump to next editor section`,
+      label: t`Jump to next editor section`,
       keywords: ["cycle", "scroll", "navigate"],
       run: () => jumpToNextEditorSection(),
     },
     {
       id: "collapse-sections",
-      label: `Collapse all deck sections`,
+      label: t`Collapse all deck sections`,
       keywords: ["fold", "close", "hide"],
       run: () => setAllDeckSectionsExpanded(false),
     },
     {
       id: "expand-sections",
-      label: `Expand all deck sections`,
+      label: t`Expand all deck sections`,
       keywords: ["unfold", "open", "show"],
       run: () => setAllDeckSectionsExpanded(true),
     },
     {
       id: "group-type",
-      label: `Group cards by type`,
+      label: t`Group cards by type`,
       run: () => setGroupBy("type"),
     },
     {
       id: "group-mana",
-      label: `Group cards by mana value`,
+      label: t`Group cards by mana value`,
       run: () => setGroupBy("cmc"),
     },
     {
       id: "group-color",
-      label: `Group cards by color`,
+      label: t`Group cards by color`,
       run: () => setGroupBy("color"),
     },
     {
       id: "group-tags",
-      label: `Group cards by custom tags`,
+      label: t`Group cards by custom tags`,
       run: () => setGroupBy("custom"),
     },
     {
       id: "sort-name",
-      label: `Sort cards by name`,
+      label: t`Sort cards by name`,
       run: () => setSortBy("name"),
     },
     {
       id: "sort-mana",
-      label: `Sort cards by mana value`,
+      label: t`Sort cards by mana value`,
       run: () => setSortBy("mana-value"),
     },
     {
       id: "sort-quantity",
-      label: `Sort cards by quantity`,
+      label: t`Sort cards by quantity`,
       run: () => setSortBy("quantity"),
     },
     {
       id: "sort-owned",
-      label: `Sort owned cards first`,
+      label: t`Sort owned cards first`,
       run: () => setSortBy("owned"),
     },
     {
       id: "sort-not-owned",
-      label: `Sort not owned cards first`,
+      label: t`Sort not owned cards first`,
       run: () => setSortBy("not-owned"),
     },
     {
       id: "view-collection-gaps",
-      label: `Show collection gaps`,
+      label: t`Show collection gaps`,
       keywords: ["missing", "owned", "filter"],
       run: () => setCollectionFilter("missing"),
     },
     {
       id: "filter-partial-owned",
-      label: `Show partially owned cards`,
+      label: t`Show partially owned cards`,
       keywords: ["collection", "shortage", "filter"],
       run: () => setCollectionFilter("partial"),
     },
     {
       id: "filter-exact-printings",
-      label: `Show exact printings owned`,
+      label: t`Show exact printings owned`,
       keywords: ["collection", "printing", "filter"],
       run: () => setCollectionFilter("exact"),
     },
     {
       id: "editor-tour",
-      label: `Open deck editor guide`,
+      label: t`Open deck editor guide`,
       keywords: ["help", "learn", "what can I do", "onboarding"],
       run: openDeckEditorWelcome,
     },
     {
       id: "clear-filter",
-      label: `Clear card filters`,
+      label: t`Clear card filters`,
       keywords: ["show all", "reset search"],
       disabled: !deckFilter && cmcFilter === null,
-      disabledReason: !deckFilter && cmcFilter === null ? "No active filters" : undefined,
+      disabledReason: !deckFilter && cmcFilter === null ? t`No active filters` : undefined,
       run: () => {
         setDeckFilter("");
         setCmcFilter(null);
@@ -1341,18 +1341,18 @@ export function DeckBuilder({
     },
     {
       id: "select-all",
-      label: `Select all cards`,
+      label: t`Select all cards`,
       keywords: ["bulk", "multi select"],
       disabled: allDeckCards().length === 0,
-      disabledReason: allDeckCards().length === 0 ? "Deck is empty" : undefined,
+      disabledReason: allDeckCards().length === 0 ? t`Deck is empty` : undefined,
       run: selectAllDeckCards,
     },
     {
       id: "select-filtered",
-      label: `Select cards matching current filters`,
+      label: t`Select cards matching current filters`,
       keywords: ["visible", "search", "bulk"],
       disabled: !deckFilter && cmcFilter === null,
-      disabledReason: !deckFilter && cmcFilter === null ? "No active filters" : undefined,
+      disabledReason: !deckFilter && cmcFilter === null ? t`No active filters` : undefined,
       run: () =>
         selectCards(
           currentDeck.cards
@@ -1363,17 +1363,17 @@ export function DeckBuilder({
     },
     {
       id: "select-unsupported",
-      label: `Select unsupported cards`,
+      label: t`Select unsupported cards`,
       keywords: ["engine", "warning", "bulk"],
       disabled: editableUnsupportedNames.size === 0,
       disabledReason:
-        editableUnsupportedNames.size === 0 ? `No editable unsupported cards` : undefined,
+        editableUnsupportedNames.size === 0 ? t`No editable unsupported cards` : undefined,
       run: () => selectEditableCards(editableUnsupportedNames),
     },
     ...(currentDeck.customTags ?? []).map(
       (tag): DeckEditorCommand => ({
         id: `select-tag-${tag}`,
-        label: `Select cards tagged ${tag}`,
+        label: t`Select cards tagged ${tag}`,
         keywords: ["group", "role", "bulk"],
         run: () =>
           selectEditableCards(
@@ -1385,125 +1385,125 @@ export function DeckBuilder({
     ),
     {
       id: "toggle-search",
-      label: `Toggle card search panel`,
+      label: t`Toggle card search panel`,
       keywords: ["find", "scryfall"],
       disabled: !onToggleSearch,
       run: () => onToggleSearch?.(),
     },
     {
       id: "toggle-preview",
-      label: `Toggle card preview panel`,
+      label: t`Toggle card preview panel`,
       keywords: ["inspector", "details"],
       disabled: !onPreviewCollapsedChange,
       run: () => onPreviewCollapsedChange?.(!(previewCollapsed ?? false)),
     },
     {
       id: "export",
-      label: `Copy deck list`,
+      label: t`Copy deck list`,
       keywords: ["export", "clipboard"],
       run: handleExport,
     },
     {
       id: "export-printings",
-      label: `Copy deck with exact printings`,
+      label: t`Copy deck with exact printings`,
       keywords: ["export", "moxfield", "archidekt", "foil", "sets"],
       run: handleExactExport,
     },
     {
       id: "copy-selection",
-      label: `Copy selected cards`,
+      label: t`Copy selected cards`,
       keywords: ["clipboard", "duplicate"],
       disabled: selectedCards.size === 0,
-      disabledReason: selectedCards.size === 0 ? "No selection" : undefined,
+      disabledReason: selectedCards.size === 0 ? t`No selection` : undefined,
       run: () => void copySelectedCards(),
     },
     {
       id: "paste-cards",
-      label: `Paste cards into deck`,
+      label: t`Paste cards into deck`,
       keywords: ["clipboard", "import"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => void pasteCards(),
     },
     {
       id: "labels",
-      label: `Manage deck labels`,
+      label: t`Manage deck labels`,
       keywords: ["organize", "collection"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => setLabelsOpen(true),
     },
     {
       id: "remove-selection",
-      label: `Remove selected cards`,
+      label: t`Remove selected cards`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: handleRemoveSelected,
     },
     {
       id: "tag-selection",
-      label: `Tag selected cards`,
+      label: t`Tag selected cards`,
       keywords: ["group", "role", "organize"],
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: () => setTagDialogOpen(true),
     },
     {
       id: "move-selection-main",
-      label: `Move selected cards to main deck`,
+      label: t`Move selected cards to main deck`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: handleMoveSelectedToMain,
     },
     {
       id: "move-selection-side",
-      label: `Move selected cards to sideboard`,
+      label: t`Move selected cards to sideboard`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: handleMoveSelectedToSide,
     },
     {
       id: "move-selection-maybe",
-      label: `Move selected cards to maybeboard`,
+      label: t`Move selected cards to maybeboard`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: handleMoveSelectedToMaybe,
     },
     {
       id: "add-selection-copy",
-      label: `Add one copy of each selected card`,
+      label: t`Add one copy of each selected card`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: addOneEachSelected,
     },
     {
       id: "remove-selection-copy",
-      label: `Remove one copy of each selected card`,
+      label: t`Remove one copy of each selected card`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: removeOneEachSelected,
     },
     {
       id: "foil-selection",
-      label: `Toggle foil for selected cards`,
+      label: t`Toggle foil for selected cards`,
       disabled: selectedCards.size === 0 || isReadOnly,
-      disabledReason: selectedCards.size === 0 ? "No selection" : "Read only",
+      disabledReason: selectedCards.size === 0 ? t`No selection` : t`Read only`,
       run: toggleSelectedFoil,
     },
     {
       id: "manage-tags",
-      label: `Manage deck tags`,
+      label: t`Manage deck tags`,
       keywords: ["rename", "reorder", "delete", "groups"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => setTagManagerOpen(true),
     },
     {
       id: "batch-printings",
-      label: `Change deck printings`,
+      label: t`Change deck printings`,
       keywords: ["art", "edition", "set"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => {
         setBatchPrintingSelectionOnly(false);
         setBatchPrintingOpen(true);
@@ -1511,10 +1511,10 @@ export function DeckBuilder({
     },
     {
       id: "optimize-printings",
-      label: `Optimize deck printings`,
+      label: t`Optimize deck printings`,
       keywords: ["owned", "cheapest", "non-foil", "collection", "price"],
       disabled: isReadOnly,
-      disabledReason: isReadOnly ? "Read only" : undefined,
+      disabledReason: isReadOnly ? t`Read only` : undefined,
       run: () => setPrintingOptimizerOpen(true),
     },
   ];
@@ -1522,8 +1522,8 @@ export function DeckBuilder({
     <div className="deck-editor-root flex flex-col h-full w-full relative">
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {selectedCards.size > 0
-          ? `${selectedCards.size} card${selectedCards.size === 1 ? "" : "s"} selected`
-          : `Selection cleared`}
+          ? t`${selectedCards.size} card${selectedCards.size === 1 ? "" : "s"} selected`
+          : t`Selection cleared`}
       </div>
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         <span key={announcement.id}>{announcement.message}</span>
@@ -1532,10 +1532,10 @@ export function DeckBuilder({
         <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-warning/40 bg-warning/10 px-3 py-2">
           <Bookmark className="h-3.5 w-3.5 text-warning shrink-0" />
           <span className="shrink-0 text-xs font-semibold uppercase tracking-wide text-warning">
-            {readOnlySource === "hub" ? `Hub snapshot — read only` : `Starter deck — read only`}
+            {readOnlySource === "hub" ? t`Hub snapshot — read only` : t`Starter deck — read only`}
           </span>
           <span className="hidden min-w-0 flex-1 truncate text-xs text-warning/70 sm:block">
-            Browse the cards below. Editing is locked.
+            <Trans>Browse the cards below. Editing is locked.</Trans>
           </span>
           <div className="ml-auto flex shrink-0 items-center gap-2">
             {hubEnabled && readOnlySource === "preset" && currentDeck.id && (
@@ -1551,7 +1551,7 @@ export function DeckBuilder({
                 }}
               >
                 <LibraryBig className="mr-1 h-3.5 w-3.5" />
-                View in Community
+                <Trans>View in Community</Trans>
               </Button>
             )}
             <Button
@@ -1561,7 +1561,7 @@ export function DeckBuilder({
               onClick={handleImportReadOnlyDeck}
             >
               <Plus className="h-3.5 w-3.5 mr-1" />
-              Copy and edit
+              <Trans>Copy and edit</Trans>
             </Button>
           </div>
         </div>
@@ -1570,7 +1570,7 @@ export function DeckBuilder({
         <div
           ref={editorScrollRef}
           tabIndex={-1}
-          aria-label={`Deck editor workspace`}
+          aria-label={t`Deck editor workspace`}
           className="flex-1 min-w-0 overflow-y-auto overflow-x-hidden"
           onScroll={(event) => setShowBackToTop(event.currentTarget.scrollTop > 120)}
         >
@@ -1594,8 +1594,8 @@ export function DeckBuilder({
               <Input
                 ref={filterInputRef}
                 className="h-6 text-xs pl-6 pr-6 pointer-coarse:h-9 pointer-coarse:text-base"
-                placeholder={`Filter\u2026`}
-                title={`Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate`}
+                placeholder={t`Filter\u2026`}
+                title={t`Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate`}
                 value={deckFilter}
                 onChange={(e) => setDeckFilter(e.target.value)}
               />
@@ -1613,7 +1613,7 @@ export function DeckBuilder({
               <button
                 type="button"
                 className="flex shrink-0 items-center gap-1 rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium text-primary transition-colors hover:bg-primary/25"
-                title={`Clear mana value filter`}
+                title={t`Clear mana value filter`}
                 onClick={() => setCmcFilter(null)}
               >
                 {CMC_BUCKET_LABELS[cmcFilter]} mana
@@ -1624,7 +1624,7 @@ export function DeckBuilder({
               <button
                 type="button"
                 className="flex shrink-0 items-center gap-1 rounded-full bg-primary/15 px-2 py-0.5 text-xs font-medium capitalize text-primary transition-colors hover:bg-primary/25"
-                title={`Clear collection filter`}
+                title={t`Clear collection filter`}
                 onClick={() => setCollectionFilter("all")}
               >
                 Collection: {collectionFilter.replace("-", " ")}
@@ -1727,7 +1727,7 @@ export function DeckBuilder({
                 value={cardSize}
                 onChange={(e) => setCardSize(Number(e.target.value))}
                 className="w-32 h-1 cursor-pointer accent-primary shrink-0"
-                title={`Card size: ${cardSize}`}
+                title={t`Card size: ${cardSize}`}
               />
             )}
             <div className="flex-1 min-w-40">
@@ -1795,16 +1795,16 @@ export function DeckBuilder({
             {!isReadOnly && (
               <span className="shrink-0 text-[11px] text-muted-foreground" aria-live="polite">
                 {isSaving || syncState === "saving"
-                  ? `Saving\u2026`
+                  ? t`Saving\u2026`
                   : hasUnsavedChanges
-                    ? `Unsaved`
+                    ? t`Unsaved`
                     : syncState === "local"
-                      ? `Saved locally`
+                      ? t`Saved locally`
                       : syncState === "synced"
-                        ? `Synced`
+                        ? t`Synced`
                         : syncState === "failed"
-                          ? `Sync failed`
-                          : `Saved`}
+                          ? t`Sync failed`
+                          : t`Saved`}
               </span>
             )}
 
@@ -1818,10 +1818,10 @@ export function DeckBuilder({
                 variant="ghost"
                 disabled
                 className="h-7 shrink-0 gap-1 text-xs text-muted-foreground/60"
-                title={`Make an editable copy to enable saving`}
+                title={t`Make an editable copy to enable saving`}
               >
                 <Save className="h-3.5 w-3.5" />
-                Save
+                <Trans>Save</Trans>
               </Button>
             ) : (
               <Button
@@ -1841,15 +1841,15 @@ export function DeckBuilder({
                 title={
                   hasUnsupportedCards
                     ? unsupportedNames.size === 1
-                      ? `One card is unsupported by the Manabrew and Forge engines`
-                      : `${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`
+                      ? t`One card is unsupported by the Manabrew and Forge engines`
+                      : t`${unsupportedNames.size} cards are unsupported by the Manabrew and Forge engines`
                     : !isDeckLegal
-                      ? `${deckValidation.errors[0] ?? `Deck is not legal in this format`} — saves with a warning`
+                      ? t`${deckValidation.errors[0] ?? `Deck is not legal in this format`} — saves with a warning`
                       : hasUnsavedChanges
-                        ? `Save deck (unsaved changes)`
+                        ? t`Save deck (unsaved changes)`
                         : currentDeck.draft
-                          ? `Save draft as a full deck`
-                          : `Deck saved`
+                          ? t`Save draft as a full deck`
+                          : t`Deck saved`
                 }
                 onClick={() => void handleSave()}
               >
@@ -1858,7 +1858,7 @@ export function DeckBuilder({
                 ) : (
                   <Save className="h-3.5 w-3.5" />
                 )}
-                {isSaving ? `Saving` : `Save`}
+                {isSaving ? t`Saving` : t`Save`}
               </Button>
             )}
 
@@ -1869,41 +1869,41 @@ export function DeckBuilder({
                   variant="ghost"
                   className="h-7 w-7 shrink-0"
                   disabled={isReadOnly}
-                  aria-label={`Deck actions`}
+                  aria-label={t`Deck actions`}
                 >
                   <EllipsisVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem onSelect={() => setCommandPaletteOpen(true)}>
-                  <CommandIcon className="mr-2 h-3.5 w-3.5" /> Command palette
+                  <CommandIcon className="mr-2 h-3.5 w-3.5" /> <Trans>Command palette</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={openDeckEditorWelcome}>
-                  <BookOpen className="mr-2 h-3.5 w-3.5" /> Deck editor guide
+                  <BookOpen className="mr-2 h-3.5 w-3.5" /> <Trans>Deck editor guide</Trans>
                 </DropdownMenuItem>
                 {onToggleSearch && (
                   <DropdownMenuItem onSelect={onToggleSearch}>
-                    <Search className="mr-2 h-3.5 w-3.5" /> Card search
+                    <Search className="mr-2 h-3.5 w-3.5" /> <Trans>Card search</Trans>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem onSelect={() => setAllDeckSectionsExpanded(false)}>
-                  <FoldVertical className="mr-2 h-3.5 w-3.5" /> Collapse all sections
+                  <FoldVertical className="mr-2 h-3.5 w-3.5" /> <Trans>Collapse all sections</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setAllDeckSectionsExpanded(true)}>
-                  <UnfoldVertical className="mr-2 h-3.5 w-3.5" /> Expand all sections
+                  <UnfoldVertical className="mr-2 h-3.5 w-3.5" /> <Trans>Expand all sections</Trans>
                 </DropdownMenuItem>
                 <div className="my-1 border-t" />
                 <DropdownMenuItem onSelect={() => setImportOpen(true)}>
-                  <ListPlus className="mr-2 h-3.5 w-3.5" /> Import list
+                  <ListPlus className="mr-2 h-3.5 w-3.5" /> <Trans>Import list</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={handleExport}
                   disabled={currentDeck.cards.length === 0 && !currentDeck.commanders?.length}
                 >
-                  <ClipboardCopy className="h-3.5 w-3.5 mr-2" /> Export to clipboard
+                  <ClipboardCopy className="h-3.5 w-3.5 mr-2" /> <Trans>Export to clipboard</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={handleExactExport}>
-                  <Images className="mr-2 h-3.5 w-3.5" /> Export exact printings
+                  <Images className="mr-2 h-3.5 w-3.5" /> <Trans>Export exact printings</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
@@ -1911,34 +1911,34 @@ export function DeckBuilder({
                     setBatchPrintingOpen(true);
                   }}
                 >
-                  <Images className="mr-2 h-3.5 w-3.5" /> Change deck printings
+                  <Images className="mr-2 h-3.5 w-3.5" /> <Trans>Change deck printings</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setPrintingOptimizerOpen(true)}>
-                  <Sparkles className="mr-2 h-3.5 w-3.5" /> Optimize deck printings
+                  <Sparkles className="mr-2 h-3.5 w-3.5" /> <Trans>Optimize deck printings</Trans>
                 </DropdownMenuItem>
                 {publishEnabled && (
                   <DropdownMenuItem
                     onSelect={() => setPublishOpen(true)}
                     disabled={currentDeck.cards.length === 0 && !currentDeck.commanders?.length}
                   >
-                    <Share2 className="h-3.5 w-3.5 mr-2" /> Publish to Community
+                    <Share2 className="h-3.5 w-3.5 mr-2" /> <Trans>Publish to Community</Trans>
                   </DropdownMenuItem>
                 )}
                 {accountsEnabled &&
                   accountSavedDeck?.accountDeckId &&
                   accountSavedDeck.accountVersionNo && (
                     <DropdownMenuItem onSelect={() => setHistoryOpen(true)}>
-                      <History className="mr-2 h-3.5 w-3.5" /> Version history
+                      <History className="mr-2 h-3.5 w-3.5" /> <Trans>Version history</Trans>
                     </DropdownMenuItem>
                   )}
                 <DropdownMenuItem onSelect={handleSaveDraft}>
-                  <FileBox className="h-3.5 w-3.5 mr-2" /> Save as draft
+                  <FileBox className="h-3.5 w-3.5 mr-2" /> <Trans>Save as draft</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setCheckpointsOpen(true)}>
-                  <History className="mr-2 h-3.5 w-3.5" /> Local checkpoints
+                  <History className="mr-2 h-3.5 w-3.5" /> <Trans>Local checkpoints</Trans>
                 </DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => setSideboardPlansOpen(true)}>
-                  <ListPlus className="mr-2 h-3.5 w-3.5" /> Sideboard plans
+                  <ListPlus className="mr-2 h-3.5 w-3.5" /> <Trans>Sideboard plans</Trans>
                 </DropdownMenuItem>
                 <div className="border-t my-1" />
                 <DropdownMenuItem onSelect={() => setLabelsOpen(true)}>
@@ -1984,7 +1984,7 @@ export function DeckBuilder({
                 <div className="px-2 py-1.5">
                   <Input
                     className="h-7 text-xs"
-                    placeholder={`New tag\u2026`}
+                    placeholder={t`New tag\u2026`}
                     value={newTagInput}
                     onChange={(e) => setNewTagInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -2005,7 +2005,7 @@ export function DeckBuilder({
                   className="text-destructive"
                   onSelect={() => setConfirmClear(true)}
                 >
-                  <Trash2 className="h-3.5 w-3.5 mr-2" /> Delete deck
+                  <Trash2 className="h-3.5 w-3.5 mr-2" /> <Trans>Delete deck</Trans>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -2200,7 +2200,7 @@ export function DeckBuilder({
                     )}
                   />
                   <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Deck Analysis
+                    <Trans>Deck Analysis</Trans>
                   </span>
                   <div className="h-px flex-1 bg-border/60" />
                 </button>
@@ -2290,8 +2290,8 @@ export function DeckBuilder({
             "absolute bottom-4 right-4 z-50 h-10 w-10 rounded-full border shadow-lg",
             selectedCards.size > 0 && "bottom-20",
           )}
-          title={`Back to top`}
-          aria-label={`Back to top`}
+          title={t`Back to top`}
+          aria-label={t`Back to top`}
           onClick={() => editorScrollRef.current?.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <ArrowUp className="h-4 w-4" />
@@ -2504,7 +2504,7 @@ export function DeckBuilder({
                   disabled={isDeleting}
                   onClick={() => setConfirmClear(false)}
                 >
-                  Cancel
+                  <Trans>Cancel</Trans>
                 </Button>
                 <Button
                   variant="destructive"
@@ -2512,7 +2512,7 @@ export function DeckBuilder({
                   disabled={isDeleting}
                   onClick={() => void handleDeleteCurrentDeck()}
                 >
-                  {isDeleting ? `Deleting\u2026` : `Delete`}
+                  {isDeleting ? t`Deleting\u2026` : t`Delete`}
                 </Button>
               </div>
             </div>

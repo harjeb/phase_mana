@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Loader2, Plus, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -128,7 +129,7 @@ export function DeckQuickAdd({ customTags, onAdd, getCount }: DeckQuickAddProps)
         <Input
           ref={inputRef}
           className="h-7 pl-6 pr-6 text-xs pointer-coarse:h-9 pointer-coarse:text-base"
-          placeholder={`Search card\u2026`}
+          placeholder={t`Search card\u2026`}
           value={value}
           onChange={(event) => handleChange(event.target.value)}
           onFocus={() => results.length > 0 && setIsOpen(true)}
@@ -155,7 +156,7 @@ export function DeckQuickAdd({ customTags, onAdd, getCount }: DeckQuickAddProps)
               type="button"
               className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               onClick={clearSearch}
-              title={`Clear card search`}
+              title={t`Clear card search`}
             >
               <X className="h-3 w-3" />
             </button>

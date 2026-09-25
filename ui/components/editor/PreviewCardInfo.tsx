@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { Bookmark, Gem, Sparkles } from "lucide-react";
 import { CardPreviewDetails } from "@/components/game/CardPreviewDetails";
 import type { PreviewCard } from "@/lib/cardPreview";
@@ -30,12 +31,12 @@ export function PreviewCardInfo({ card }: { card: PreviewCard }) {
         )}
         {isGameChanger && (
           <span className="flex items-center gap-1 rounded-full bg-pt-lethal/15 px-2 py-0.5 text-[10px] font-medium text-pt-lethal">
-            <Gem className="h-3 w-3" /> Game Changer
+            <Gem className="h-3 w-3" /> <Trans>Game Changer</Trans>
           </span>
         )}
         {isCombo && (
           <span className="flex items-center gap-1 rounded-full bg-counter-charge/15 px-2 py-0.5 text-[10px] font-medium text-counter-charge">
-            <Sparkles className="h-3 w-3" /> Combo piece
+            <Sparkles className="h-3 w-3" /> <Trans>Combo piece</Trans>
           </span>
         )}
         {tags.map((tag) => (

@@ -189,13 +189,13 @@ export function PlaymatEditorModal({
               )}
               {dragActive && (
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-md border-2 border-dashed border-primary bg-overlay/50 text-sm font-medium text-primary-foreground">
-                  Drop image to use as playmat
+                  <Trans>Drop image to use as playmat</Trans>
                 </div>
               )}
             </div>
             {settings.fit === "cover" && (
               <p className="text-xs text-muted-foreground">
-                Drag to reposition · scroll or pinch to zoom · drop or paste an image
+                <Trans>Drag to reposition · scroll or pinch to zoom · drop or paste an image</Trans>
               </p>
             )}
             <label className="mt-1 flex cursor-pointer items-center gap-2 text-xs text-muted-foreground">
@@ -203,14 +203,14 @@ export function PlaymatEditorModal({
                 checked={showSampleCards}
                 onCheckedChange={(v) => setShowSampleCards(v === true)}
               />
-              Show sample cards
+              <Trans>Show sample cards</Trans>
             </label>
           </div>
 
           {uploadAvailable && (
             <section className="space-y-2.5">
               <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Background image
+                <Trans>Background image</Trans>
               </Label>
               <input
                 ref={fileInputRef}
@@ -226,7 +226,7 @@ export function PlaymatEditorModal({
                 onClick={() => fileInputRef.current?.click()}
               >
                 <ImagePlus className="h-4 w-4" />
-                {playmat ? `Replace image` : `Upload image`}
+                {playmat ? t`Replace image` : t`Upload image`}
               </Button>
               {PLAYMAT_PRESETS.length > 0 && (
                 <div className="flex gap-2 overflow-x-auto pb-1">
@@ -255,23 +255,23 @@ export function PlaymatEditorModal({
             <section className="space-y-2.5">
               <div className="flex items-center gap-1.5">
                 <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Image
+                  <Trans>Image</Trans>
                 </Label>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
                       className="text-muted-foreground transition-colors hover:text-foreground"
-                      aria-label={`Playmat image tips`}
+                      aria-label={t`Playmat image tips`}
                     >
                       <Info className="size-3.5" />
                     </button>
                   </TooltipTrigger>
                   <TooltipContent className="max-w-xs">
-                    The playmat fills a wide, landscape area (roughly 5:2). For a crisp result use a
+                    <Trans>The playmat fills a wide, landscape area (roughly 5:2). For a crisp result use a
                     landscape image at least ~1600px wide — up to 4096px on the long edge and
-                    3&nbsp;MB are kept. Use <strong><Trans>Cover</Trans></strong>, then drag and scroll to zoom and
-                    frame it.
+                    3 MB are kept. Use</Trans> <strong><Trans>Cover</Trans></strong><Trans>, then drag and scroll to zoom and
+                    frame it.</Trans>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -298,7 +298,7 @@ export function PlaymatEditorModal({
               {settings.fit === "cover" && (
                 <div className="space-y-1.5">
                   <Label className="text-xs font-medium text-muted-foreground">
-                    Vertical framing
+                    <Trans>Vertical framing</Trans>
                   </Label>
                   <div className="inline-flex w-full rounded-lg border bg-muted/40 p-1">
                     {(
@@ -368,7 +368,7 @@ export function PlaymatEditorModal({
 
           <section className="space-y-2.5">
             <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Table
+              <Trans>Table</Trans>
             </Label>
             <div className="grid gap-3 sm:grid-cols-2">
               <SliderControl
@@ -408,7 +408,7 @@ export function PlaymatEditorModal({
                       className="shrink-0 px-2"
                       onClick={() => update({ color: "" })}
                     >
-                      Clear
+                      <Trans>Clear</Trans>
                     </Button>
                   )}
                 </div>
@@ -418,7 +418,7 @@ export function PlaymatEditorModal({
 
           <section className="space-y-2.5">
             <Label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Border
+              <Trans>Border</Trans>
             </Label>
             <div className="grid gap-3 sm:grid-cols-2">
               <SliderControl
@@ -462,10 +462,10 @@ export function PlaymatEditorModal({
           size="sm"
           onClick={resetSettings}
           disabled={isDefaultSettings}
-          title={`Reset all adjustments to their defaults`}
+          title={t`Reset all adjustments to their defaults`}
         >
           <RotateCcw className="h-4 w-4" />
-          Reset
+          <Trans>Reset</Trans>
         </Button>
         {(playmat || settings.color) && (
           <Button
@@ -479,11 +479,11 @@ export function PlaymatEditorModal({
             }}
           >
             <Trash2 className="h-4 w-4" />
-            Remove playmat
+            <Trans>Remove playmat</Trans>
           </Button>
         )}
         <Button variant="ghost" size="sm" className="ml-auto" onClick={onClose}>
-          Done
+          <Trans>Done</Trans>
         </Button>
       </Modal.Footer>
     </Modal>

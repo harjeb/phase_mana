@@ -34,6 +34,10 @@ msgstr " · {0} without local engine data"
 msgid " +{0} more"
 msgstr " +{0} more"
 
+#: ui/components/editor/DeckCollectionPanel.tsx:193
+msgid " tix"
+msgstr " tix"
+
 #: ui/components/lobby/CreateGameDialog.tsx:542
 msgid "— Choose —"
 msgstr "— Choose —"
@@ -68,6 +72,10 @@ msgstr ", not legal"
 #: ui/components/lobby/DeckSelectionCard.tsx:123
 msgid ", selected"
 msgstr ", selected"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:273
+msgid ", then drag and scroll to zoom and frame it."
+msgstr ", then drag and scroll to zoom and frame it."
 
 #. placeholder {0}: info.boosterCovers
 #: ui/views/Limited.tsx:540
@@ -196,6 +204,11 @@ msgstr "[scryfall-image] failed after {0} attempts: {url} ({reason})"
 msgid "{0, plural, one {# table} other {# tables}}"
 msgstr "{0, plural, one {# table} other {# tables}}"
 
+#. placeholder {0}: deckValidation.errors[0] ?? `Deck is not legal in this format`
+#: ui/components/editor/DeckBuilder.tsx:1847
+msgid "{0} — saves with a warning"
+msgstr "{0} — saves with a warning"
+
 #. placeholder {0}: summary.attackerCount
 #. placeholder {1}: summary.blockedCount
 #. placeholder {2}: summary.unblockedCount
@@ -213,12 +226,18 @@ msgstr "{0} card images found."
 msgid "{0} card lines were not recognized and will be skipped."
 msgstr "{0} card lines were not recognized and will be skipped."
 
+#. placeholder {0}: selectedCards.size
+#. placeholder {1}: selectedCards.size === 1 ? "" : "s"
+#: ui/components/editor/DeckBuilder.tsx:1525
+msgid "{0} card{1} selected"
+msgstr "{0} card{1} selected"
+
 #. placeholder {0}: cards.length
 #. placeholder {0}: displayCards.length
 #. placeholder {0}: entry.cardCount
 #: ui/components/deck/DeckGridCard.tsx:173
 #: ui/components/deck/DeckHubEntryCard.tsx:178
-#: ui/components/editor/ImportDeckTextDialog.tsx:338
+#: ui/components/editor/ImportDeckTextDialog.tsx:340
 #: ui/components/lobby/DeckSelectionCard.tsx:241
 #: ui/views/Limited.tsx:538
 msgid "{0} cards"
@@ -229,6 +248,21 @@ msgstr "{0} cards"
 #: ui/components/editor/ImportDeckTextDialog.tsx:159
 msgid "{0} cards · {1} entries"
 msgstr "{0} cards · {1} entries"
+
+#. placeholder {0}: unsupportedNames.size
+#: ui/components/editor/DeckBuilder.tsx:1845
+msgid "{0} cards are unsupported by the Manabrew and Forge engines"
+msgstr "{0} cards are unsupported by the Manabrew and Forge engines"
+
+#. placeholder {0}: missing.length
+#: ui/components/editor/DeckCollectionPanel.tsx:187
+msgid "{0} cards missing"
+msgstr "{0} cards missing"
+
+#. placeholder {0}: changes.length
+#: ui/components/editor/PrintingOptimizerDialog.tsx:364
+msgid "{0} copies will change · one undoable edit"
+msgstr "{0} copies will change · one undoable edit"
 
 #. placeholder {0}: format.label
 #: ui/components/lobby/CustomFormatDialog.tsx:116
@@ -249,6 +283,11 @@ msgstr "{0} deck ready for play."
 #: ui/views/DeckEditor.tsx:554
 msgid "{0} is not eligible for the command zone"
 msgstr "{0} is not eligible for the command zone"
+
+#. placeholder {0}: formatPrice(budget - total)
+#: ui/components/editor/DeckBudgetPanel.tsx:159
+msgid "{0} left"
+msgstr "{0} left"
 
 #. placeholder {0}: PROVIDER_LABELS[linked] ?? linked
 #: ui/views/AuthCallback.tsx:51
@@ -279,10 +318,21 @@ msgstr "{0} of {1} — {2} downloaded."
 msgid "{0} of {1} used"
 msgstr "{0} of {1} used"
 
+#. placeholder {0}: formatPrice(total - budget)
+#: ui/components/editor/DeckBudgetPanel.tsx:158
+msgid "{0} over"
+msgstr "{0} over"
+
 #. placeholder {0}: gameView.battlefield.length
 #: ui/components/game/ManualTabletopControls.tsx:170
 msgid "{0} permanents"
 msgstr "{0} permanents"
+
+#. placeholder {0}: p.set_name
+#: ui/components/editor/PrintPickerModal.tsx:128
+#: ui/components/editor/PrintPickerModal.tsx:135
+msgid "{0} printing"
+msgstr "{0} printing"
 
 #. placeholder {0}: matched.length
 #. placeholder {1}: matched .slice(0, 6) .map((s) => s.code.toUpperCase()) .join(", ")
@@ -297,7 +347,7 @@ msgid "{0} sets · pod {podSize}"
 msgstr "{0} sets · pod {podSize}"
 
 #. placeholder {0}: entries.length
-#: ui/components/editor/ImportDeckTextDialog.tsx:312
+#: ui/components/editor/ImportDeckTextDialog.tsx:314
 msgid "{0} unique"
 msgstr "{0} unique"
 
@@ -310,6 +360,16 @@ msgstr "{0} unlinked"
 #: ui/views/Settings.tsx:1164
 msgid "{0} value"
 msgstr "{0} value"
+
+#. placeholder {0}: error.message
+#: ui/components/editor/DeckBuilder.tsx:1066
+msgid "{0} Your local copy is still saved."
+msgstr "{0} Your local copy is still saved."
+
+#. placeholder {0}: combo.uses.length
+#: ui/components/editor/CombosPanel.tsx:61
+msgid "{0}-card combo"
+msgstr "{0}-card combo"
 
 #. placeholder {0}: gp.name
 #: ui/hooks/useMultiplayerInterruption.ts:55
@@ -341,7 +401,7 @@ msgstr "{actor} foretold a card"
 msgid "{cardCount} cards"
 msgstr "{cardCount} cards"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:309
+#: ui/components/editor/ImportDeckTextDialog.tsx:311
 msgid "{commanderCount} commander"
 msgstr "{commanderCount} commander"
 
@@ -376,6 +436,11 @@ msgstr "{errorMsg} (HTTP {0})"
 msgid "{flashDurationMs}ms"
 msgstr "{flashDurationMs}ms"
 
+#: ui/components/editor/DeckHealthPanel.tsx:73
+#: ui/components/editor/DeckStatusSummary.tsx:43
+msgid "{issueCount} to review"
+msgstr "{issueCount} to review"
+
 #: ui/components/settings/MyAssetsSection.tsx:203
 msgid "{kindLabel} image"
 msgstr "{kindLabel} image"
@@ -388,7 +453,7 @@ msgstr "{label} must be an object."
 msgid "{lands, plural, one {# land} other {# lands}}"
 msgstr "{lands, plural, one {# land} other {# lands}}"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:310
+#: ui/components/editor/ImportDeckTextDialog.tsx:312
 msgid "{mainCount} main"
 msgstr "{mainCount} main"
 
@@ -396,9 +461,13 @@ msgstr "{mainCount} main"
 msgid "{maxPlayers} seats"
 msgstr "{maxPlayers} seats"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:312
+#: ui/components/editor/ImportDeckTextDialog.tsx:314
 msgid "{maybeCount} maybeboard"
 msgstr "{maybeCount} maybeboard"
+
+#: ui/components/editor/DeckListView.tsx:1100
+msgid "{name} - unsupported by the Manabrew and Forge engines"
+msgstr "{name} - unsupported by the Manabrew and Forge engines"
 
 #: ui/components/lobby/TableSeatChip.tsx:84
 msgid "{name} (bot)"
@@ -407,6 +476,19 @@ msgstr "{name} (bot)"
 #: ui/components/lobby/TableSeatChip.tsx:84
 msgid "{name} (table host)"
 msgstr "{name} (table host)"
+
+#. placeholder {0}: group.count
+#: ui/components/editor/DeckListView.tsx:648
+#: ui/components/editor/DeckListView.tsx:923
+#: ui/components/editor/DeckListView.tsx:1055
+msgid "{name}, {0} copies"
+msgstr "{name}, {0} copies"
+
+#: ui/components/editor/DeckListView.tsx:648
+#: ui/components/editor/DeckListView.tsx:923
+#: ui/components/editor/DeckListView.tsx:1055
+msgid "{name}, one copy"
+msgstr "{name}, one copy"
 
 #: ui/components/play/PlayHome.tsx:71
 msgid "{openTables, plural, one {# table open} other {# tables open}} · {onlinePlayers} online"
@@ -433,7 +515,7 @@ msgstr "{seconds}s"
 msgid "{selectedCount} selected"
 msgstr "{selectedCount} selected"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:311
+#: ui/components/editor/ImportDeckTextDialog.tsx:313
 msgid "{sideCount} sideboard"
 msgstr "{sideCount} sideboard"
 
@@ -458,6 +540,10 @@ msgstr "{totalCount} cards"
 #: ui/views/Limited.tsx:576
 msgid "{totalSlots} cards / pack"
 msgstr "{totalSlots} cards / pack"
+
+#: ui/components/editor/DeckBudgetPanel.tsx:164
+msgid "{unavailable} cards unavailable"
+msgstr "{unavailable} cards unavailable"
 
 #. placeholder {0}: response.status
 #: ui/hooks/useSvgMaskUrl.ts:12
@@ -516,6 +602,18 @@ msgstr "100-card singleton, 40 life"
 msgid "100-card singleton, 40 life, an uncommon creature commander, commons only."
 msgstr "100-card singleton, 40 life, an uncommon creature commander, commons only."
 
+#: ui/components/editor/SideboardPlansDialog.tsx:112
+msgid "2 Negate\n"
+"1 Rest in Peace"
+msgstr "2 Negate\n"
+"1 Rest in Peace"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:123
+msgid "2 slow removal\n"
+"1 top-end threat"
+msgstr "2 slow removal\n"
+"1 top-end threat"
+
 #: ui/components/lobby/TableSetupGameCard.tsx:437
 msgid "2-player pile draft from a shared pool. Single-player only for now."
 msgstr "2-player pile draft from a shared pool. Single-player only for now."
@@ -536,6 +634,14 @@ msgstr "2d canvas unavailable"
 #: ui/pixi/assets/rasterizeSvgTexture.ts:32
 msgid "2d context unavailable"
 msgstr "2d context unavailable"
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:293
+msgid "4 Lightning Bolt\n"
+"2 Counterspell\n"
+"…"
+msgstr "4 Lightning Bolt\n"
+"2 Counterspell\n"
+"…"
 
 #: ui/components/lobby/PlaytestPlayersDialog.tsx:35
 msgid "4-player pod"
@@ -727,6 +833,10 @@ msgstr "Account"
 msgid "Account menu"
 msgstr "Account menu"
 
+#: ui/components/editor/DeckBuilder.tsx:1067
+msgid "Account save failed. Your local copy is still saved."
+msgstr "Account save failed. Your local copy is still saved."
+
 #: ui/views/MyCollection.tsx:87
 msgid "Account sync failed. The deletion is preserved locally and will retry."
 msgstr "Account sync failed. The deletion is preserved locally and will retry."
@@ -750,6 +860,10 @@ msgstr "Action rejected ({0}) — try again"
 msgid "Action view"
 msgstr "Action view"
 
+#: ui/components/editor/DeckSelectionTray.tsx:60
+msgid "Actions for selected cards"
+msgstr "Actions for selected cards"
+
 #: ui/components/game/modals/AbilityPickerModal.tsx:158
 msgid "Activate an ability"
 msgstr "Activate an ability"
@@ -770,6 +884,17 @@ msgstr "Active turn"
 msgid "Active: "
 msgstr "Active: "
 
+#: ui/components/editor/CardSearch.tsx:720
+#: ui/components/editor/CardSearch.tsx:801
+#: ui/components/editor/deckEditor.utils.ts:34
+#: ui/components/editor/DeckLabelsModal.tsx:127
+msgid "Add"
+msgstr "Add"
+
+#: ui/components/editor/DeckListView.tsx:478
+msgid "Add 1"
+msgstr "Add 1"
+
 #: ui/components/lobby/TableRoomSidebar.tsx:261
 msgid "Add a bot"
 msgstr "Add a bot"
@@ -777,6 +902,14 @@ msgstr "Add a bot"
 #: ui/components/editor/NewDeckChoiceDialog.tsx:57
 msgid "Add a deck"
 msgstr "Add a deck"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:145
+msgid "Add a matchup to start a sideboard guide."
+msgstr "Add a matchup to start a sideboard guide."
+
+#: ui/components/editor/CommanderSlots.tsx:274
+msgid "Add an eligible card to the deck first."
+msgstr "Add an eligible card to the deck first."
 
 #: ui/components/limited/LimitedDeckBuilder.tsx:694
 msgid "Add basic:"
@@ -790,6 +923,10 @@ msgstr "Add Bot"
 msgid "Add cards from a list"
 msgstr "Add cards from a list"
 
+#: ui/components/editor/ManaProbabilityPanel.tsx:79
+msgid "Add coloured spells to see source odds."
+msgstr "Add coloured spells to see source odds."
+
 #: ui/components/companion/AddCounterMenu.tsx:41
 msgid "Add counter"
 msgstr "Add counter"
@@ -802,13 +939,41 @@ msgstr "Add Custom Label"
 msgid "Add deck"
 msgstr "Add deck"
 
+#: ui/components/editor/DeckHealthPanel.tsx:130
+msgid "Add missing pieces"
+msgstr "Add missing pieces"
+
+#: ui/components/editor/DeckStats.tsx:179
+msgid "Add non-land cards to see the curve."
+msgstr "Add non-land cards to see the curve."
+
+#: ui/components/editor/DeckQuickAddResults.tsx:51
+msgid "Add one {displayName} to main deck"
+msgstr "Add one {displayName} to main deck"
+
+#: ui/components/editor/CardDetailModal.tsx:505
+msgid "Add one copy"
+msgstr "Add one copy"
+
+#: ui/components/editor/DeckBuilder.tsx:1474
+msgid "Add one copy of each selected card"
+msgstr "Add one copy of each selected card"
+
 #: ui/lib/keybindings.ts:186
 msgid "Add one copy of selected cards"
 msgstr "Add one copy of selected cards"
 
+#: ui/components/editor/DeckSelectionTray.tsx:102
+msgid "Add one each"
+msgstr "Add one each"
+
 #: ui/components/limited/LimitedDeckBuilder.tsx:396
 msgid "Add some cards before saving."
 msgstr "Add some cards before saving."
+
+#: ui/components/editor/CardDetailModal.tsx:657
+msgid "Add to Deck"
+msgstr "Add to Deck"
 
 #: ui/components/deck/DeckHubEntryCard.tsx:52
 msgid "Add to favorites"
@@ -885,10 +1050,22 @@ msgstr "Advanced"
 msgid "Advanced connection (room code)"
 msgstr "Advanced connection (room code)"
 
+#: ui/components/editor/CardSearch.tsx:429
+msgid "Adventure"
+msgstr "Adventure"
+
+#: ui/components/editor/DeckLabelsModal.tsx:14
+msgid "Aggro"
+msgstr "Aggro"
+
 #: ui/components/lobby/DeckVsSelector.tsx:835
 #: ui/components/lobby/TablePickerDialog.tsx:61
 msgid "AI"
 msgstr "AI"
+
+#: ui/components/editor/CardSearch.tsx:182
+msgid "Alchemy"
+msgstr "Alchemy"
 
 #: ui/components/deck/DeckListControls.tsx:109
 #: ui/components/lobby/DeckVsSelector.tsx:547
@@ -922,6 +1099,17 @@ msgstr "Already have an account?"
 #: ui/components/settings/AccountSection.tsx:30
 msgid "An account keeps your decks and Community publications yours wherever you play. Playing never requires one."
 msgstr "An account keeps your decks and Community publications yours wherever you play. Playing never requires one."
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:60
+msgid "Another printing of {0} owned"
+msgstr "Another printing of {0} owned"
+
+#: ui/components/editor/CardSearch.tsx:111
+#: ui/components/editor/DeckGoalsPanel.tsx:109
+#: ui/components/editor/DeckGoalsPanel.tsx:142
+msgid "Any"
+msgstr "Any"
 
 #: ui/components/dev/BoardPlayground.tsx:497
 msgid "Any card name"
@@ -983,6 +1171,10 @@ msgstr "Archidekt search failed: {0}"
 msgid "Are you sure you want to delete “{0}”? This action cannot be undone."
 msgstr "Are you sure you want to delete “{0}”? This action cannot be undone."
 
+#: ui/components/editor/CardSearch.tsx:300
+msgid "Arena"
+msgstr "Arena"
+
 #: ui/components/settings/CardArtDownloadSection.tsx:135
 msgid "Art is kept on disk once drawn, so a board does not fetch it twice, and a deliberate download is never dropped when the cache is trimmed for space. Either download also keeps what each card <0>is</0>, which is what a board with no internet needs to know which picture to draw — pictures alone are not enough. Every card additionally keeps every card name, the set list and every ruling, so searching and pasting a decklist work offline too."
 msgstr "Art is kept on disk once drawn, so a board does not fetch it twice, and a deliberate download is never dropped when the cache is trimmed for space. Either download also keeps what each card <0>is</0>, which is what a board with no internet needs to know which picture to draw — pictures alone are not enough. Every card additionally keeps every card name, the set list and every ruling, so searching and pasting a decklist work offline too."
@@ -1000,9 +1192,22 @@ msgstr "Art ready for one image"
 msgid "Art-forward"
 msgstr "Art-forward"
 
+#: ui/components/editor/CardSearch.tsx:101
+msgid "Artifact"
+msgstr "Artifact"
+
+#: ui/components/editor/deckBuilder.utils.ts:110
+msgid "Artifacts"
+msgstr "Artifacts"
+
+#: ui/components/editor/CardSearch.tsx:354
 #: ui/components/editor/CardSearch.tsx:1229
 msgid "Artist"
 msgstr "Artist"
+
+#: ui/components/editor/CardSearch.tsx:1232
+msgid "Artist name…"
+msgstr "Artist name…"
 
 #: ui/components/editor/CardDetailModal.tsx:406
 msgid "Artist:"
@@ -1033,6 +1238,10 @@ msgstr "At most"
 #: ui/components/game/modals/CombatBreakdownModal.tsx:91
 msgid "Attacker"
 msgstr "Attacker"
+
+#: ui/components/editor/DeckBuilder.tsx:761
+msgid "Attractions"
+msgstr "Attractions"
 
 #: ui/components/editor/CardSearch.tsx:1337
 msgid "Auto"
@@ -1096,6 +1305,10 @@ msgstr "Awaiting first chapter"
 msgid "Awaiting first level"
 msgstr "Awaiting first level"
 
+#: ui/components/editor/SideboardPlansDialog.tsx:71
+msgid "Azorius Control"
+msgstr "Azorius Control"
+
 #: ui/components/game/CardPreview.tsx:465
 #: ui/components/game/modals/AbilityPickerModal.tsx:126
 #: ui/components/layout/TopBar.tsx:150
@@ -1104,17 +1317,34 @@ msgstr "Awaiting first level"
 msgid "Back"
 msgstr "Back"
 
+#: ui/components/editor/CardDetailModal.tsx:220
+msgid "Back face"
+msgstr "Back face"
+
 #: ui/components/play/DeckPlayActions.tsx:38
 msgid "Back to Play"
 msgstr "Back to Play"
+
+#: ui/components/editor/DeckBuilder.tsx:2293
+#: ui/components/editor/DeckBuilder.tsx:2294
+msgid "Back to top"
+msgstr "Back to top"
 
 #: ui/components/editor/PlaymatEditorModal.tsx:383
 msgid "Background color"
 msgstr "Background color"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:213
+msgid "Background image"
+msgstr "Background image"
+
 #: ui/components/dev/designSystem/sections/ComponentsSection.tsx:68
 msgid "Badge — variants"
 msgstr "Badge — variants"
+
+#: ui/components/editor/DeckHealthPanel.tsx:73
+msgid "Balanced"
+msgstr "Balanced"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:483
 msgid "Banned cards (one name per line)"
@@ -1158,6 +1388,10 @@ msgstr "Battlefield size (70×98)"
 msgid "Battlefield Zone Column Order"
 msgstr "Battlefield Zone Column Order"
 
+#: ui/components/editor/DeckCheckpointsDialog.tsx:104
+msgid "Before changing the mana base"
+msgstr "Before changing the mana base"
+
 #: ui/views/Tournaments.tsx:55
 msgid "Best of one"
 msgstr "Best of one"
@@ -1166,6 +1400,7 @@ msgstr "Best of one"
 msgid "Best of three"
 msgstr "Best of three"
 
+#: ui/components/editor/CardSearch.tsx:278
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
 msgid "Black"
 msgstr "Black"
@@ -1220,6 +1455,15 @@ msgstr "Booster recipe"
 msgid "Booster variant"
 msgstr "Booster variant"
 
+#: ui/components/editor/CardSearch.tsx:1262
+#: ui/components/editor/PlaymatEditorModal.tsx:421
+msgid "Border"
+msgstr "Border"
+
+#: ui/components/editor/CardSearch.tsx:286
+msgid "Borderless"
+msgstr "Borderless"
+
 #. placeholder {0}: params.username
 #: ui/platform/web.ts:1336
 msgid "Bot '{0}' is already running."
@@ -1246,6 +1490,10 @@ msgstr "Bracket"
 msgid "Brand mark"
 msgstr "Brand mark"
 
+#: ui/components/editor/SideboardPlansDialog.tsx:108
+msgid "Bring in"
+msgstr "Bring in"
+
 #: ui/phase/tournaments.ts:147
 msgid "Broker omitted tournament credentials."
 msgstr "Broker omitted tournament credentials."
@@ -1254,13 +1502,26 @@ msgstr "Broker omitted tournament credentials."
 msgid "Broker sent data before its handshake."
 msgstr "Broker sent data before its handshake."
 
+#: ui/views/DeckEditor.tsx:791
+msgid "Browse Community"
+msgstr "Browse Community"
+
 #: ui/components/play/PlayHome.tsx:169
 msgid "Browse complete decklists, discover popular builds, and save a version to your collection."
 msgstr "Browse complete decklists, discover popular builds, and save a version to your collection."
 
+#: ui/components/editor/DeckBuilder.tsx:1538
+msgid "Browse the cards below. Editing is locked."
+msgstr "Browse the cards below. Editing is locked."
+
 #: ui/components/settings/CardImageLibraryCard.tsx:106
 msgid "Browse…"
 msgstr "Browse…"
+
+#: ui/components/editor/DeckInsightsPanel.tsx:34
+#: ui/components/editor/DeckLabelsModal.tsx:26
+msgid "Budget"
+msgstr "Budget"
 
 #: ui/components/play/OwnedDeckShelf.tsx:39
 #: ui/components/play/PlayDeckShelf.tsx:129
@@ -1303,6 +1564,10 @@ msgstr "Build draft deck"
 msgid "Build from scratch, import a decklist, or start with a preset below."
 msgstr "Build from scratch, import a decklist, or start with a preset below."
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:318
+msgid "Build proposal"
+msgstr "Build proposal"
+
 #. placeholder {0}: name.trim() || t`Imported Deck`
 #: ui/components/editor/ImportDeckTextDialog.tsx:127
 msgid "Building \"{0}\"…"
@@ -1312,9 +1577,13 @@ msgstr "Building \"{0}\"…"
 msgid "Built-in"
 msgstr "Built-in"
 
-#: ui/components/editor/DeckSelectionTray.tsx:74
+#: ui/components/editor/DeckSelectionTray.tsx:75
 msgid "Bulk editor"
 msgstr "Bulk editor"
+
+#: ui/components/editor/DeckLabelsModal.tsx:23
+msgid "Burn"
+msgstr "Burn"
 
 #: ui/components/dev/designSystem/sections/ComponentsSection.tsx:42
 msgid "Button — variants × sizes"
@@ -1362,8 +1631,10 @@ msgid "Cache"
 msgstr "Cache"
 
 #: ui/components/deck/DeckGridCard.tsx:189
+#: ui/components/editor/DeckBuilder.tsx:2507
+#: ui/components/editor/DeckLayoutMenu.tsx:223
 #: ui/components/editor/ImportDeckTextDialog.tsx:213
-#: ui/components/editor/ImportDeckTextDialog.tsx:327
+#: ui/components/editor/ImportDeckTextDialog.tsx:329
 #: ui/components/game/modals/ConcedeGameModal.tsx:53
 #: ui/components/lobby/CreateGameDialog.tsx:842
 #: ui/components/lobby/CustomFormatDialog.tsx:184
@@ -1374,10 +1645,16 @@ msgstr "Cache"
 #: ui/components/settings/AvatarCropDialog.tsx:152
 #: ui/components/settings/DeleteAccountDialog.tsx:83
 #: ui/components/settings/MyAssetsSection.tsx:169
+#: ui/views/DeckEditor.tsx:932
+#: ui/views/DeckEditor.tsx:1108
 #: ui/views/Settings.tsx:521
 #: ui/views/Tournaments.tsx:87
 msgid "Cancel"
 msgstr "Cancel"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:352
+msgid "Cancel scan"
+msgstr "Cancel scan"
 
 #: ui/themes/themeColor.ts:62
 msgid "Cannot composite an invalid theme color"
@@ -1391,9 +1668,22 @@ msgstr "Cannot leave room while disconnected."
 msgid "Cannot spawn bot: not connected to relay."
 msgstr "Cannot spawn bot: not connected to relay."
 
+#: ui/components/editor/DeckCheckpointsDialog.tsx:111
+msgid "Capture"
+msgstr "Capture"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:98
+msgid "Capture an experiment before changing direction. Checkpoints stay on this device."
+msgstr "Capture an experiment before changing direction. Checkpoints stay on this device."
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:167
 msgid "Card"
 msgstr "Card"
+
+#: ui/components/editor/DeckListView.tsx:107
+#: ui/components/editor/DeckListView.tsx:108
+msgid "Card actions"
+msgstr "Card actions"
 
 #: ui/components/dev/CardBadgeDevControls.tsx:189
 msgid "Card appearance"
@@ -1433,6 +1723,10 @@ msgstr "Card Image Cache"
 msgid "Card image library"
 msgstr "Card image library"
 
+#: ui/components/editor/DeckListView.tsx:466
+msgid "Card info"
+msgstr "Card info"
+
 #: ui/components/dev/DevCardLayoutControls.tsx:84
 msgid "Card layouts and previews"
 msgstr "Card layouts and previews"
@@ -1450,6 +1744,7 @@ msgstr "Card Preview Style"
 msgid "Card quantity changes across the open deck."
 msgstr "Card quantity changes across the open deck."
 
+#: ui/components/editor/DeckBuilder.tsx:1886
 #: ui/lib/keybindings.ts:7
 msgid "Card search"
 msgstr "Card search"
@@ -1460,6 +1755,10 @@ msgstr "Card search"
 msgid "Card Search"
 msgstr "Card Search"
 
+#: ui/components/editor/DeckEditorWelcome.tsx:36
+msgid "Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more."
+msgstr "Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more."
+
 #: ui/views/Settings.tsx:629
 msgid "Card Size"
 msgstr "Card Size"
@@ -1468,6 +1767,10 @@ msgstr "Card Size"
 #: ui/components/game/modals/GameSettingsModal.tsx:147
 msgid "Card size · {0}%"
 msgstr "Card size · {0}%"
+
+#: ui/components/editor/DeckBuilder.tsx:1730
+msgid "Card size: {cardSize}"
+msgstr "Card size: {cardSize}"
 
 #: ui/components/dev/designSystem/sections/SpacingSection.tsx:39
 msgid "Card sizes (px)"
@@ -1482,10 +1785,18 @@ msgstr "Card sort order"
 msgid "Card surface"
 msgstr "Card surface"
 
+#: ui/components/editor/CardSearch.tsx:1183
+msgid "Card text contains…"
+msgstr "Card text contains…"
+
 #: ui/components/settings/LanguagePreferenceCard.tsx:19
 #: ui/components/settings/LanguagePreferenceCard.tsx:26
 msgid "Card text language"
 msgstr "Card text language"
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:134
+msgid "Card to replace"
+msgstr "Card to replace"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:138
 msgid "Card type"
@@ -1495,6 +1806,10 @@ msgstr "Card type"
 msgid "Card under test"
 msgstr "Card under test"
 
+#: ui/components/editor/DeckListView.tsx:1095
+msgid "Card unsupported by the Manabrew and Forge engines"
+msgstr "Card unsupported by the Manabrew and Forge engines"
+
 #: ui/api/hub.ts:154
 msgid "Card verification returned an incomplete response"
 msgstr "Card verification returned an incomplete response"
@@ -1503,9 +1818,17 @@ msgstr "Card verification returned an incomplete response"
 msgid "Card-play and turn-start flash duration."
 msgstr "Card-play and turn-start flash duration."
 
+#: ui/components/editor/DeckBudgetPanel.tsx:35
+msgid "Cardhoarder"
+msgstr "Cardhoarder"
+
 #: ui/stores/useScryfallStore.ts:127
 msgid "cardKey requires setCode+collectorNumber, name, or id"
 msgstr "cardKey requires setCode+collectorNumber, name, or id"
+
+#: ui/components/editor/DeckBudgetPanel.tsx:30
+msgid "Cardmarket"
+msgstr "Cardmarket"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:91
 msgid "Cards and previews"
@@ -1526,10 +1849,11 @@ msgstr "Cards in hand"
 msgid "Cards in this view"
 msgstr "Cards in this view"
 
-#: ui/components/editor/DeckListView.tsx:2436
+#: ui/components/editor/DeckListView.tsx:2437
 msgid "Cards you're considering"
 msgstr "Cards you're considering"
 
+#: ui/components/editor/DeckLabelsModal.tsx:28
 #: ui/components/play/OfflinePlayShell.tsx:26
 msgid "Casual"
 msgstr "Casual"
@@ -1544,22 +1868,62 @@ msgstr "Casual Modes"
 msgid "Change deck"
 msgstr "Change deck"
 
+#: ui/components/editor/BatchPrintingDialog.tsx:136
+#: ui/components/editor/DeckBuilder.tsx:1503
+#: ui/components/editor/DeckBuilder.tsx:1914
+msgid "Change deck printings"
+msgstr "Change deck printings"
+
+#: ui/components/editor/DeckHero.tsx:131
 #: ui/components/lobby/TableSetupGameCard.tsx:160
 msgid "Change format"
 msgstr "Change format"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:375
+#: ui/components/editor/PrintingOptimizerDialog.tsx:412
+msgid "Change goal"
+msgstr "Change goal"
 
 #: ui/components/auth/HandleDialog.tsx:63
 #: ui/components/settings/AccountProfileCard.tsx:31
 msgid "Change handle"
 msgstr "Change handle"
 
+#: ui/components/editor/CardDetailModal.tsx:519
+#: ui/components/editor/CommanderSlots.tsx:103
+#: ui/components/editor/DeckListView.tsx:121
+#: ui/components/editor/DeckListView.tsx:122
+#: ui/components/editor/TokenSection.tsx:112
+msgid "Change printing"
+msgstr "Change printing"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CommanderSlots.tsx:104
+msgid "Change printing for {0}"
+msgstr "Change printing for {0}"
+
 #: ui/components/lobby/TableRoomSidebar.tsx:266
 msgid "Change readiness"
 msgstr "Change readiness"
 
+#: ui/components/editor/BatchPrintingDialog.tsx:136
+msgid "Change selected printings"
+msgstr "Change selected printings"
+
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:34
 msgid "Change the inherited palette. Your overrides stay in the draft."
 msgstr "Change the inherited palette. Your overrides stay in the draft."
+
+#. placeholder {0}: matches.length
+#. placeholder {1}: set.name
+#: ui/components/editor/BatchPrintingDialog.tsx:114
+msgid "Changed {0} card printings to {1}"
+msgstr "Changed {0} card printings to {1}"
+
+#. placeholder {0}: set.name
+#: ui/components/editor/BatchPrintingDialog.tsx:113
+msgid "Changed one card printing to {0}"
+msgstr "Changed one card printing to {0}"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:87
 msgid "Changes apply immediately. Card view and front/back face are separate controls."
@@ -1604,6 +1968,10 @@ msgstr "Checking…"
 msgid "Choose \"Copy Plain Text\" and copy it to your clipboard."
 msgstr "Choose \"Copy Plain Text\" and copy it to your clipboard."
 
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:183
+msgid "Choose a card from your deck to replace"
+msgstr "Choose a card from your deck to replace"
+
 #: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:52
 msgid "Choose a card from your graveyard"
 msgstr "Choose a card from your graveyard"
@@ -1634,6 +2002,14 @@ msgstr "Choose a format before starting"
 msgid "Choose a mode"
 msgstr "Choose a mode"
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:272
+msgid "Choose a policy, review every proposed change, then apply it as one undoable edit."
+msgstr "Choose a policy, review every proposed change, then apply it as one undoable edit."
+
+#: ui/components/editor/BatchPrintingDialog.tsx:139
+msgid "Choose a set to update every matching card. Cards without a printing in that set stay unchanged."
+msgstr "Choose a set to update every matching card. Cards without a printing in that set stay unchanged."
+
 #: ui/components/game/modals/AbilityPickerModal.tsx:157
 msgid "Choose an action"
 msgstr "Choose an action"
@@ -1658,13 +2034,25 @@ msgstr "Choose commander"
 msgid "Choose Deck"
 msgstr "Choose Deck"
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:119
+msgid "Choose deck tags"
+msgstr "Choose deck tags"
+
 #: ui/components/game/PlayModePicker.tsx:6
 msgid "Choose how to play this card"
 msgstr "Choose how to play this card"
 
+#: ui/components/editor/DeckListView.tsx:563
+msgid "Choose printing…"
+msgstr "Choose printing…"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:137
 msgid "Choose simultaneous trigger order"
 msgstr "Choose simultaneous trigger order"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:48
+msgid "Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views."
+msgstr "Choose text, grid, or stack view. Sort cards, group by card properties or your own tags, and save useful combinations as custom views."
 
 #: ui/components/lobby/DeckVsSelector.tsx:597
 msgid "Choose the AI deck"
@@ -1722,10 +2110,25 @@ msgstr "CLASS LEVELS"
 msgid "clear"
 msgstr "clear"
 
+#: ui/components/editor/DeckSelectionTray.tsx:67
+#: ui/components/editor/DeckSelectionTray.tsx:162
+#: ui/components/editor/PlaymatEditorModal.tsx:411
 #: ui/components/lobby/DeckVsSelector.tsx:1007
 #: ui/views/Limited.tsx:552
 msgid "Clear"
 msgstr "Clear"
+
+#: ui/components/editor/DeckBuilder.tsx:1333
+msgid "Clear card filters"
+msgstr "Clear card filters"
+
+#: ui/components/editor/DeckQuickAdd.tsx:159
+msgid "Clear card search"
+msgstr "Clear card search"
+
+#: ui/components/editor/DeckBuilder.tsx:1627
+msgid "Clear collection filter"
+msgstr "Clear collection filter"
 
 #: ui/components/editor/DeckBuilder.tsx:2495
 msgid "Clear Deck"
@@ -1734,6 +2137,10 @@ msgstr "Clear Deck"
 #: ui/views/Settings.tsx:377
 msgid "Clear image cache & reload"
 msgstr "Clear image cache & reload"
+
+#: ui/components/editor/DeckBuilder.tsx:1616
+msgid "Clear mana value filter"
+msgstr "Clear mana value filter"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:96
 msgid "Clear search"
@@ -1747,19 +2154,33 @@ msgstr "Clearing…"
 msgid "Click a shortcut, then press the key combination you want."
 msgstr "Click a shortcut, then press the key combination you want."
 
+#: ui/components/editor/DeckQuickAddResults.tsx:30
+msgid "Click or press Enter to add one to the main deck"
+msgstr "Click or press Enter to add one to the main deck"
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:44
 msgid "Click the ••• menu, then Export."
 msgstr "Click the ••• menu, then Export."
+
+#: ui/components/editor/DeckStats.tsx:150
+msgid "Click to clear the filter"
+msgstr "Click to clear the filter"
 
 #: ui/views/Settings.tsx:1184
 #: ui/views/Settings.tsx:1332
 msgid "Click to edit color value"
 msgstr "Click to edit color value"
 
+#: ui/components/editor/DeckStats.tsx:150
+msgid "Click to filter the deck"
+msgstr "Click to filter the deck"
+
 #: ui/components/editor/DeckBuilder.tsx:604
 msgid "Clipboard does not contain a recognized card list"
 msgstr "Clipboard does not contain a recognized card list"
 
+#: ui/components/editor/CardDetailModal.tsx:704
+#: ui/components/editor/ComboDetailModal.tsx:132
 #: ui/components/KeyboardShortcutsDialog.tsx:90
 #: ui/components/ui/dialog.tsx:41
 #: ui/components/ui/sheet.tsx:56
@@ -1778,6 +2199,10 @@ msgstr "Close card preview"
 msgid "Close dialog"
 msgstr "Close dialog"
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:75
+msgid "Close options"
+msgstr "Close options"
+
 #: ui/components/game/panels/RightActionPanel.tsx:109
 msgid "Close right panel"
 msgstr "Close right panel"
@@ -1786,9 +2211,17 @@ msgstr "Close right panel"
 msgid "Close room and stop engine"
 msgstr "Close room and stop engine"
 
+#: ui/components/editor/CardSearch.tsx:941
+msgid "Close search panel"
+msgstr "Close search panel"
+
 #: ui/components/editor/CardSearch.tsx:1087
 msgid "CMC"
 msgstr "CMC"
+
+#: ui/components/editor/DeckStats.tsx:64
+msgid "CMC unknown"
+msgstr "CMC unknown"
 
 #: ui/components/editor/CardDetailModal.tsx:375
 msgid "CMC:"
@@ -1812,9 +2245,18 @@ msgstr "Coin flip"
 msgid "Collapse / expand the stack"
 msgstr "Collapse / expand the stack"
 
+#: ui/components/editor/DeckBuilder.tsx:1252
 #: ui/lib/keybindings.ts:108
 msgid "Collapse all deck sections"
 msgstr "Collapse all deck sections"
+
+#: ui/components/editor/DeckBuilder.tsx:1890
+msgid "Collapse all sections"
+msgstr "Collapse all sections"
+
+#: ui/components/editor/DeckInsightsPanel.tsx:30
+msgid "Collection"
+msgstr "Collection"
 
 #: ui/stores/useCollectionStore.ts:293
 msgid "Collection account changed before this edit could be applied"
@@ -1837,16 +2279,30 @@ msgstr "Collection coverage"
 msgid "Collection deleted"
 msgstr "Collection deleted"
 
+#: ui/components/editor/DeckLayoutMenu.tsx:162
+msgid "Collection gaps"
+msgstr "Collection gaps"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:75
+msgid "Collection highlights distinguish an exact printing from another printing you own. Hover the ownership pill when you want printing and quantity details without covering the card during normal browsing."
+msgstr "Collection highlights distinguish an exact printing from another printing you own. Hover the ownership pill when you want printing and quantity details without covering the card during normal browsing."
+
 #: ui/components/collection/CollectionImportDialog.tsx:206
 msgid "Collection import failed"
 msgstr "Collection import failed"
 
-#: ui/components/editor/CollectionOwnershipTooltip.tsx:83
+#: ui/components/editor/DeckChangeSummary.tsx:122
+msgid "Collection shortage"
+msgstr "Collection shortage"
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:84
 msgid "Collection tracker"
 msgstr "Collection tracker"
 
 #: ui/components/dev/designSystem/sections/ColorSection.tsx:148
+#: ui/components/editor/CardSearch.tsx:330
 #: ui/components/editor/CardSearch.tsx:1006
+#: ui/components/editor/deckBuilder.utils.ts:31
 #: ui/components/editor/PlaymatEditorModal.tsx:433
 #: ui/lib/handOrder.ts:10
 msgid "Color"
@@ -1856,6 +2312,11 @@ msgstr "Color"
 #: ui/components/deck/DeckHubFilterPanel.tsx:171
 msgid "Color identity"
 msgstr "Color identity"
+
+#. placeholder {0}: f.title
+#: ui/components/editor/CardSearch.tsx:1040
+msgid "Color Identity: {0}"
+msgstr "Color Identity: {0}"
 
 #: ui/views/Settings.tsx:983
 msgid "Color Preset"
@@ -1870,6 +2331,23 @@ msgstr "Colorless"
 msgid "Combat breakdown"
 msgstr "Combat breakdown"
 
+#: ui/components/editor/ComboDetailModal.tsx:36
+#: ui/components/editor/DeckLabelsModal.tsx:17
+msgid "Combo"
+msgstr "Combo"
+
+#: ui/components/editor/CombosPanel.tsx:215
+msgid "Combo data from Commander Spellbook."
+msgstr "Combo data from Commander Spellbook."
+
+#: ui/components/editor/DeckLayoutMenu.tsx:215
+msgid "Combo layout"
+msgstr "Combo layout"
+
+#: ui/components/editor/PreviewCardInfo.tsx:39
+msgid "Combo piece"
+msgstr "Combo piece"
+
 #: ui/components/editor/CombosPanel.tsx:127
 msgid "Combos"
 msgstr "Combos"
@@ -1878,7 +2356,11 @@ msgstr "Combos"
 msgid "coming soon"
 msgstr "coming soon"
 
-#: ui/components/editor/CommanderSlots.tsx:217
+#: ui/components/editor/DeckBuilder.tsx:1879
+msgid "Command palette"
+msgstr "Command palette"
+
+#: ui/components/editor/CommanderSlots.tsx:218
 #: ui/components/editor/ImportDeckTextDialog.tsx:181
 msgid "Command zone"
 msgstr "Command zone"
@@ -1887,6 +2369,8 @@ msgstr "Command zone"
 msgid "Command-zone and special-section cards were not duplicated"
 msgstr "Command-zone and special-section cards were not duplicated"
 
+#: ui/components/editor/CardSearch.tsx:166
+#: ui/components/editor/CardSearch.tsx:493
 #: ui/components/lobby/CreateGameDialog.tsx:48
 #: ui/components/lobby/CreateGameDialog.tsx:520
 #: ui/components/lobby/DeckVsSelector.tsx:44
@@ -1908,7 +2392,7 @@ msgstr "Commander Draft"
 msgid "Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets."
 msgstr "Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets."
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:320
+#: ui/components/editor/ImportDeckTextDialog.tsx:322
 msgid "Commander entries fill an empty command zone. If it already has a commander, they are added to the main deck instead."
 msgstr "Commander entries fill an empty command zone. If it already has a commander, they are added to the main deck instead."
 
@@ -1963,6 +2447,18 @@ msgstr "Community filters"
 msgid "Compare with saved deck"
 msgstr "Compare with saved deck"
 
+#: ui/components/editor/DeckLabelsModal.tsx:27
+msgid "Competitive"
+msgstr "Competitive"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:185
+msgid "Complete · {otherPrintingCount} other printings"
+msgstr "Complete · {otherPrintingCount} other printings"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:184
+msgid "Complete · one other printing"
+msgstr "Complete · one other printing"
+
 #: ui/views/AuthCallback.tsx:89
 msgid "Completing sign-in…"
 msgstr "Completing sign-in…"
@@ -1988,7 +2484,7 @@ msgstr "Conceding…"
 msgid "Concession could not be delivered: {error}. You can retry or cancel."
 msgstr "Concession could not be delivered: {error}. You can retry or cancel."
 
-#: ui/components/editor/DeckQuickAddOptions.tsx:64
+#: ui/components/editor/DeckQuickAddOptions.tsx:69
 msgid "Configure addition"
 msgstr "Configure addition"
 
@@ -2085,6 +2581,14 @@ msgstr "Constructed"
 msgid "Constructed formats"
 msgstr "Constructed formats"
 
+#: ui/components/editor/DeckBuilder.tsx:766
+msgid "Contraptions"
+msgstr "Contraptions"
+
+#: ui/components/editor/DeckLabelsModal.tsx:16
+msgid "Control"
+msgstr "Control"
+
 #: ui/views/Settings.tsx:979
 msgid "Controls app theme preference."
 msgstr "Controls app theme preference."
@@ -2116,6 +2620,22 @@ msgstr "Copied JSON to clipboard."
 msgid "Copies"
 msgstr "Copies"
 
+#: ui/components/editor/DeckSelectionTray.tsx:150
+msgid "Copy"
+msgstr "Copy"
+
+#: ui/components/editor/DeckBuilder.tsx:1564
+msgid "Copy and edit"
+msgstr "Copy and edit"
+
+#: ui/components/editor/DeckBuilder.tsx:1402
+msgid "Copy deck list"
+msgstr "Copy deck list"
+
+#: ui/components/editor/DeckBuilder.tsx:1408
+msgid "Copy deck with exact printings"
+msgstr "Copy deck with exact printings"
+
 #: ui/views/OnlinePlay.tsx:170
 msgid "Copy invitation"
 msgstr "Copy invitation"
@@ -2137,6 +2657,7 @@ msgstr "Copy password"
 msgid "Copy rows from a spreadsheet"
 msgstr "Copy rows from a spreadsheet"
 
+#: ui/components/editor/DeckBuilder.tsx:1414
 #: ui/lib/keybindings.ts:138
 msgid "Copy selected cards"
 msgstr "Copy selected cards"
@@ -2149,6 +2670,15 @@ msgstr "Copy your deck as text from Moxfield, then paste it below."
 #: ui/components/settings/CardArtDownloadSection.tsx:125
 msgid "Could not clear the art cache: {0}"
 msgstr "Could not clear the art cache: {0}"
+
+#. placeholder {0}: skipped.length
+#: ui/components/editor/PrintingOptimizerDialog.tsx:408
+msgid "Could not convert {0} copies"
+msgstr "Could not convert {0} copies"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:407
+msgid "Could not convert one copy"
+msgstr "Could not convert one copy"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:234
 msgid "Could not copy to the clipboard."
@@ -2175,17 +2705,21 @@ msgstr "Could not download every card: {0}"
 msgid "Could not fetch info for \"{0}\""
 msgstr "Could not fetch info for \"{0}\""
 
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:99
+msgid "Could not find replacements"
+msgstr "Could not find replacements"
+
 #. placeholder {0}: scenario.label
 #: ui/components/dev/DevCardLayoutControls.tsx:75
 msgid "Could not load {0}."
 msgstr "Could not load {0}."
 
-#: ui/components/editor/BatchPrintingDialog.tsx:40
+#: ui/components/editor/BatchPrintingDialog.tsx:41
 msgid "Could not load Magic sets"
 msgstr "Could not load Magic sets"
 
 #. placeholder {0}: set.name
-#: ui/components/editor/BatchPrintingDialog.tsx:118
+#: ui/components/editor/BatchPrintingDialog.tsx:119
 msgid "Could not load printings from {0}"
 msgstr "Could not load printings from {0}"
 
@@ -2196,6 +2730,10 @@ msgstr "Could not load the editor base from the host: {baseError}"
 #: ui/components/settings/CardImageLibraryCard.tsx:62
 msgid "Could not open the folder picker. Paste the folder path instead."
 msgstr "Could not open the folder picker. Paste the folder path instead."
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:218
+msgid "Could not optimize deck printings"
+msgstr "Could not optimize deck printings"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:130
 msgid "Could not parse that JSON."
@@ -2209,6 +2747,10 @@ msgstr "Could not read cards from the clipboard"
 #: ui/components/editor/PrintingOptimizerDialog.tsx:205
 msgid "Could not resolve {0}"
 msgstr "Could not resolve {0}"
+
+#: ui/components/editor/DeckBuilder.tsx:1118
+msgid "Could not resolve the deck conflict"
+msgstr "Could not resolve the deck conflict"
 
 #: ui/components/settings/CardImageLibraryCard.tsx:64
 msgid "Could not save the folder. Check write permissions and try again."
@@ -2361,6 +2903,10 @@ msgstr "Cover every battlefield style (larger download)"
 msgid "Create"
 msgstr "Create"
 
+#: ui/views/DeckEditor.tsx:1093
+msgid "Create a reusable tag and add the dropped cards to it."
+msgstr "Create a reusable tag and add the dropped cards to it."
+
 #: ui/views/OnlineDraftPanel.tsx:50
 msgid "Create draft"
 msgstr "Create draft"
@@ -2374,6 +2920,7 @@ msgid "Create table"
 msgstr "Create table"
 
 #: ui/views/DeckEditor.tsx:1091
+#: ui/views/DeckEditor.tsx:1111
 msgid "Create tag"
 msgstr "Create tag"
 
@@ -2384,6 +2931,14 @@ msgstr "Create tournament"
 #: ui/components/lobby/TableSetup.tsx:401
 msgid "Creating…"
 msgstr "Creating…"
+
+#: ui/components/editor/CardSearch.tsx:81
+msgid "Creature"
+msgstr "Creature"
+
+#: ui/components/editor/deckBuilder.utils.ts:85
+msgid "Creatures"
+msgstr "Creatures"
 
 #: ui/components/settings/AvatarCropDialog.tsx:98
 msgid "Crop avatar"
@@ -2440,6 +2995,11 @@ msgstr "Custom formats"
 msgid "Custom preview card name"
 msgstr "Custom preview card name"
 
+#: ui/components/editor/deckBuilder.utils.ts:35
+msgid "Custom Tags"
+msgstr "Custom Tags"
+
+#: ui/components/editor/DeckHero.tsx:82
 #: ui/views/Settings.tsx:551
 msgid "Customize playmat"
 msgstr "Customize playmat"
@@ -2504,13 +3064,33 @@ msgstr "Decide the rules of engagement before picking decks."
 msgid "Deck"
 msgstr "Deck"
 
-#: ui/components/editor/DeckBudgetPanel.tsx:108
+#: ui/components/editor/DeckBuilder.tsx:1872
+msgid "Deck actions"
+msgstr "Deck actions"
+
+#: ui/components/editor/DeckBuilder.tsx:2203
+msgid "Deck Analysis"
+msgstr "Deck Analysis"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:96
+msgid "Deck Analysis brings legality, roles, goals, mana, collection coverage, budget, tokens, combos, and replacements together. Every section can be collapsed when you want a quieter workspace."
+msgstr "Deck Analysis brings legality, roles, goals, mana, collection coverage, budget, tokens, combos, and replacements together. Every section can be collapsed when you want a quieter workspace."
+
+#: ui/components/editor/DeckBudgetPanel.tsx:109
 msgid "Deck budget"
 msgstr "Deck budget"
 
-#: ui/components/editor/DeckCommandPalette.tsx:49
+#: ui/components/editor/DeckCommandPalette.tsx:50
 msgid "Deck commands"
 msgstr "Deck commands"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:186
+msgid "Deck complete"
+msgstr "Deck complete"
+
+#: ui/components/editor/DeckBuilder.tsx:1114
+msgid "Deck conflict resolved"
+msgstr "Deck conflict resolved"
 
 #: ui/components/editor/DeckBuilder.tsx:992
 msgid "Deck copied to clipboard"
@@ -2533,13 +3113,33 @@ msgstr "Deck editor"
 msgid "Deck Editor"
 msgstr "Deck Editor"
 
-#: ui/components/editor/DeckGoalsPanel.tsx:84
+#: ui/components/editor/DeckBuilder.tsx:1882
+msgid "Deck editor guide"
+msgstr "Deck editor guide"
+
+#: ui/components/editor/DeckBuilder.tsx:1573
+msgid "Deck editor workspace"
+msgstr "Deck editor workspace"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:86
+msgid "Deck edits remain unsaved until you use Save. The editor marks pending changes so you can experiment, undo, or create a local checkpoint before committing a version."
+msgstr "Deck edits remain unsaved until you use Save. The editor marks pending changes so you can experiment, undo, or create a local checkpoint before committing a version."
+
+#: ui/components/editor/DeckGoalsPanel.tsx:85
 msgid "Deck goals"
 msgstr "Deck goals"
 
-#: ui/components/editor/DeckHealthPanel.tsx:63
+#: ui/components/editor/DeckHealthPanel.tsx:64
 msgid "Deck health"
 msgstr "Deck health"
+
+#: ui/components/editor/DeckStatusSummary.tsx:43
+msgid "Deck healthy"
+msgstr "Deck healthy"
+
+#: ui/components/editor/DeckInsightsPanel.tsx:80
+msgid "Deck insights"
+msgstr "Deck insights"
 
 #: ui/components/editor/CardDetailModal.tsx:297
 msgid "Deck inspector"
@@ -2548,6 +3148,10 @@ msgstr "Deck inspector"
 #: ui/components/editor/DeckIntentPanel.tsx:42
 msgid "Deck intent"
 msgstr "Deck intent"
+
+#: ui/components/editor/DeckBuilder.tsx:1347
+msgid "Deck is empty"
+msgstr "Deck is empty"
 
 #: ui/components/lobby/CreateGameDialog.tsx:398
 msgid "Deck is not legal in this format"
@@ -2568,6 +3172,7 @@ msgstr "Deck list"
 
 #: ui/components/editor/ImportDeckTextDialog.tsx:245
 #: ui/components/limited/LimitedDeckBuilder.tsx:550
+#: ui/views/DeckEditor.tsx:927
 msgid "Deck name"
 msgstr "Deck name"
 
@@ -2579,6 +3184,10 @@ msgstr "Deck name cannot be empty."
 msgid "Deck not found"
 msgstr "Deck not found"
 
+#: ui/components/editor/DeckHero.tsx:93
+msgid "Deck playmat"
+msgstr "Deck playmat"
+
 #: ui/views/OnlineDraftPanel.tsx:59
 msgid "Deck ready"
 msgstr "Deck ready"
@@ -2587,7 +3196,12 @@ msgstr "Deck ready"
 msgid "Deck renamed"
 msgstr "Deck renamed"
 
+#: ui/components/editor/DeckBuilder.tsx:1852
+msgid "Deck saved"
+msgstr "Deck saved"
+
 #: ui/components/deck/DeckCardBrowserFilters.tsx:300
+#: ui/components/editor/DeckQuickAddOptions.tsx:103
 msgid "Deck section"
 msgstr "Deck section"
 
@@ -2656,10 +3270,24 @@ msgstr "Defense"
 #: ui/components/deck/DeckGridCard.tsx:142
 #: ui/components/deck/DeckGridCard.tsx:143
 #: ui/components/deck/DeckGridCard.tsx:199
+#: ui/components/editor/DeckBuilder.tsx:2515
 #: ui/components/lobby/CustomFormatDialog.tsx:250
 #: ui/components/settings/MyAssetsSection.tsx:177
 msgid "Delete"
 msgstr "Delete"
+
+#. placeholder {0}: checkpoint.name
+#. placeholder {0}: layout.name
+#. placeholder {0}: plan.matchup
+#: ui/components/editor/DeckCheckpointsDialog.tsx:145
+#: ui/components/editor/DeckLayoutMenu.tsx:187
+#: ui/components/editor/SideboardPlansDialog.tsx:96
+msgid "Delete {0}"
+msgstr "Delete {0}"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:90
+msgid "Delete {tag}"
+msgstr "Delete {tag}"
 
 #: ui/components/settings/AccountActionsCard.tsx:113
 #: ui/components/settings/AccountActionsCard.tsx:124
@@ -2671,6 +3299,10 @@ msgstr "Delete account"
 #: ui/components/settings/CardArtDownloadSection.tsx:195
 msgid "Delete all"
 msgstr "Delete all"
+
+#: ui/components/editor/DeckBuilder.tsx:2008
+msgid "Delete deck"
+msgstr "Delete deck"
 
 #: ui/components/deck/DeckGridCard.tsx:182
 msgid "Delete Deck"
@@ -2689,6 +3321,7 @@ msgstr "Delete image"
 msgid "Deleted user"
 msgstr "Deleted user"
 
+#: ui/components/editor/DeckBuilder.tsx:2515
 #: ui/components/settings/DeleteAccountDialog.tsx:91
 #: ui/components/settings/MyAssetsSection.tsx:177
 msgid "Deleting…"
@@ -2701,6 +3334,10 @@ msgstr "Descending"
 #: ui/components/lobby/CustomFormatDialog.tsx:310
 msgid "Description"
 msgstr "Description"
+
+#: ui/components/editor/DeckListView.tsx:150
+msgid "Deselect {name}"
+msgstr "Deselect {name}"
 
 #: ui/components/layout/navDestinations.ts:75
 #: ui/components/layout/TopBar.tsx:81
@@ -2723,6 +3360,10 @@ msgstr "DEV"
 #: ui/components/dev/PromptDialogDevControls.tsx:65
 msgid "Dialogs and screens"
 msgstr "Dialogs and screens"
+
+#: ui/components/editor/CardSearch.tsx:473
+msgid "Digital Only"
+msgstr "Digital Only"
 
 #: ui/components/dev/designSystem/sections/SpacingSection.tsx:46
 msgid "Dimensions"
@@ -2759,6 +3400,8 @@ msgstr "Discord"
 msgid "Dismiss update"
 msgstr "Dismiss update"
 
+#: ui/components/editor/DeckLabelsModal.tsx:155
+#: ui/components/editor/PlaymatEditorModal.tsx:486
 #: ui/components/game/modals/GameSettingsModal.tsx:247
 #: ui/components/lobby/ReportPlayerDialog.tsx:120
 msgid "Done"
@@ -2848,7 +3491,11 @@ msgstr "Draft variants"
 msgid "Draft with human players on the server, build from your private pool, and play the pod’s matches."
 msgstr "Draft with human players on the server, build from your private pool, and play the pod’s matches."
 
-#: ui/components/editor/DeckListView.tsx:2203
+#: ui/views/DeckEditor.tsx:748
+msgid "Drafts"
+msgstr "Drafts"
+
+#: ui/components/editor/DeckListView.tsx:2204
 msgid "Drag cards here from the search panel"
 msgstr "Drag cards here from the search panel"
 
@@ -2860,6 +3507,10 @@ msgstr "Drag cards sideways for a custom order, or keep every hand sorted automa
 msgid "Drag to position, use the slider to zoom."
 msgstr "Drag to position, use the slider to zoom."
 
+#: ui/components/editor/PlaymatEditorModal.tsx:198
+msgid "Drag to reposition · scroll or pinch to zoom · drop or paste an image"
+msgstr "Drag to reposition · scroll or pinch to zoom · drop or paste an image"
+
 #: ui/views/Tournaments.tsx:100
 #: ui/views/Tournaments.tsx:112
 msgid "Draw"
@@ -2869,8 +3520,8 @@ msgstr "Draw"
 msgid "Draw a card"
 msgstr "Draw a card"
 
-#: ui/components/editor/DeckListView.tsx:1435
-#: ui/components/editor/DeckListView.tsx:2320
+#: ui/components/editor/DeckListView.tsx:1436
+#: ui/components/editor/DeckListView.tsx:2321
 msgid "Drop cards here"
 msgstr "Drop cards here"
 
@@ -2878,9 +3529,13 @@ msgstr "Drop cards here"
 msgid "Drop from tournament"
 msgstr "Drop from tournament"
 
-#: ui/components/editor/DeckListView.tsx:731
+#: ui/components/editor/DeckListView.tsx:732
 msgid "Drop here"
 msgstr "Drop here"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:192
+msgid "Drop image to use as playmat"
+msgstr "Drop image to use as playmat"
 
 #: ui/views/Tournaments.tsx:93
 msgid "dropped"
@@ -2889,6 +3544,10 @@ msgstr "dropped"
 #: ui/views/Settings.tsx:366
 msgid "Drops Manabrew's in-memory card textures and image object URLs, clears the CacheStorage API, then reloads so every card image is fetched fresh. Use this if battlefield card art fails to appear. For a full browser HTTP cache wipe, use the browser's \"Empty Cache and Hard Reload\" (DevTools open → right-click reload)."
 msgstr "Drops Manabrew's in-memory card textures and image object URLs, clears the CacheStorage API, then reloads so every card image is fetched fresh. Use this if battlefield card art fails to appear. For a full browser HTTP cache wipe, use the browser's \"Empty Cache and Hard Reload\" (DevTools open → right-click reload)."
+
+#: ui/components/editor/CardSearch.tsx:517
+msgid "Dual Land"
+msgstr "Dual Land"
 
 #: ui/components/lobby/CreateGameDialog.tsx:51
 #: ui/components/lobby/DeckVsSelector.tsx:47
@@ -2905,6 +3564,10 @@ msgstr "Duplicate"
 msgid "Duplicate server handshake"
 msgstr "Duplicate server handshake"
 
+#: ui/components/editor/CardSearch.tsx:1203
+msgid "e.g. flying, haste, deathtouch"
+msgstr "e.g. flying, haste, deathtouch"
+
 #: ui/components/OnboardingWelcome.tsx:88
 msgid "e.g. StormCrow"
 msgstr "e.g. StormCrow"
@@ -2916,6 +3579,10 @@ msgstr "Each player opens packs and builds independently."
 #: ui/components/lobby/TableSetupGameCard.tsx:271
 msgid "Each player opens their own pool — pools are independent but reproducible from the seed."
 msgstr "Each player opens their own pool — pools are independent but reproducible from the seed."
+
+#: ui/components/editor/CardSearch.tsx:342
+msgid "EDHREC Rank"
+msgstr "EDHREC Rank"
 
 #: ui/components/editor/CardDetailModal.tsx:412
 msgid "EDHREC Rank:"
@@ -2933,10 +3600,15 @@ msgstr "Edit Deck"
 msgid "Edit list"
 msgstr "Edit list"
 
+#: ui/components/editor/DeckHero.tsx:105
+msgid "Edit playmat"
+msgstr "Edit playmat"
+
 #: ui/components/deck/EditDeckHubEntryDialog.tsx:93
 msgid "Edit publication"
 msgstr "Edit publication"
 
+#: ui/components/editor/CardDetailModal.tsx:674
 #: ui/components/lobby/CreateGameDialog.tsx:212
 msgid "editing"
 msgstr "editing"
@@ -2971,6 +3643,14 @@ msgstr "Empty seats"
 msgid "Enabled"
 msgstr "Enabled"
 
+#: ui/components/editor/CardSearch.tsx:97
+msgid "Enchant."
+msgstr "Enchant."
+
+#: ui/components/editor/deckBuilder.utils.ts:105
+msgid "Enchantments"
+msgstr "Enchantments"
+
 #: ui/views/Tournaments.tsx:86
 msgid "End tournament"
 msgstr "End tournament"
@@ -2979,6 +3659,18 @@ msgstr "End tournament"
 #: ui/components/lobby/TableSetupHostingCard.tsx:155
 msgid "Engine"
 msgstr "Engine"
+
+#: ui/components/editor/DeckHealthPanel.tsx:79
+msgid "Engine-derived roles compared with a practical 60-card baseline."
+msgstr "Engine-derived roles compared with a practical 60-card baseline."
+
+#: ui/components/editor/DeckHealthPanel.tsx:78
+msgid "Engine-derived roles compared with a practical Commander baseline."
+msgstr "Engine-derived roles compared with a practical Commander baseline."
+
+#: ui/components/editor/CardSearch.tsx:1360
+msgid "Enter a card name or select filters to search."
+msgstr "Enter a card name or select filters to search."
 
 #: ui/api/auth.ts:80
 msgid "Enter a complete email address, including its domain."
@@ -3029,6 +3721,14 @@ msgstr "Entrants"
 msgid "Erases your account, sign-in methods, decks, and history. Community publications stay up without your name."
 msgstr "Erases your account, sign-in methods, decks, and history. Community publications stay up without your name."
 
+#: ui/components/editor/CardSearch.tsx:1355
+msgid "Error fetching cards. Please try again."
+msgstr "Error fetching cards. Please try again."
+
+#: ui/components/editor/DeckBracketPanel.tsx:95
+msgid "Estimate covers brackets 2–4. Bracket 1 (casual) and 5 (cEDH) are self-declared."
+msgstr "Estimate covers brackets 2–4. Bracket 1 (casual) and 5 (cEDH) are self-declared."
+
 #. placeholder {0}: summary.estimatedDamage
 #: ui/components/game/modals/CombatBreakdownModal.tsx:79
 msgid "Estimated unblocked damage: {0}"
@@ -3055,9 +3755,26 @@ msgstr "Every card, printing, and ruling at your fingertips."
 msgid "Everyone at the table needs to be ready."
 msgstr "Everyone at the table needs to be ready."
 
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:148
+msgid "exact"
+msgstr "exact"
+
 #: ui/components/deck/DeckHubFilterPanel.tsx:194
 msgid "Exact colors"
 msgstr "Exact colors"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:59
+msgid "Exact printing of {0} owned"
+msgstr "Exact printing of {0} owned"
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:86
+msgid "Exact printing owned"
+msgstr "Exact printing owned"
+
+#: ui/components/editor/CardDetailModal.tsx:319
+msgid "Exact printing owned · {owned} total"
+msgstr "Exact printing owned · {owned} total"
 
 #: ui/components/editor/DeckBuilder.tsx:997
 msgid "Exact printings copied to clipboard"
@@ -3092,9 +3809,14 @@ msgstr "Exit fullscreen"
 msgid "Exit tabletop"
 msgstr "Exit tabletop"
 
+#: ui/components/editor/DeckBuilder.tsx:1258
 #: ui/lib/keybindings.ts:114
 msgid "Expand all deck sections"
 msgstr "Expand all deck sections"
+
+#: ui/components/editor/DeckBuilder.tsx:1893
+msgid "Expand all sections"
+msgstr "Expand all sections"
 
 #: ui/components/lobby/TableSetupHostingCard.tsx:144
 msgid "experimental"
@@ -3104,7 +3826,7 @@ msgstr "experimental"
 msgid "Expires"
 msgstr "Expires"
 
-#: ui/components/editor/ReplacementSuggestionsPanel.tsx:111
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:112
 msgid "Explainable replacements"
 msgstr "Explainable replacements"
 
@@ -3116,6 +3838,10 @@ msgstr "Explore all decks"
 msgid "Explore community decks"
 msgstr "Explore community decks"
 
+#: ui/components/editor/CardSearch.tsx:186
+msgid "Explorer"
+msgstr "Explorer"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:237
 #: ui/components/settings/AccountActionsCard.tsx:69
 msgid "Export"
@@ -3125,6 +3851,10 @@ msgstr "Export"
 msgid "Export deck"
 msgstr "Export deck"
 
+#: ui/components/editor/DeckBuilder.tsx:1906
+msgid "Export exact printings"
+msgstr "Export exact printings"
+
 #: ui/components/settings/AccountActionsCard.tsx:47
 msgid "Export failed"
 msgstr "Export failed"
@@ -3132,6 +3862,10 @@ msgstr "Export failed"
 #: ui/components/settings/AccountActionsCard.tsx:58
 msgid "Export my data"
 msgstr "Export my data"
+
+#: ui/components/editor/DeckBuilder.tsx:1903
+msgid "Export to clipboard"
+msgstr "Export to clipboard"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:36
 #: ui/pixi/cardPreview/rulesCardPreviewPresentation.ts:307
@@ -3145,6 +3879,10 @@ msgstr "Face-down permanent"
 #: ui/views/Lobby.tsx:455
 msgid "Failed to change player count."
 msgstr "Failed to change player count."
+
+#: ui/components/editor/DeckBuilder.tsx:1169
+msgid "Failed to delete deck"
+msgstr "Failed to delete deck"
 
 #. placeholder {0}: manifestResp.status
 #: ui/workers/game-engine.worker.ts:211
@@ -3161,7 +3899,7 @@ msgstr "Failed to fetch card archive: {0}"
 msgid "Failed to fetch preset deck index: {0}"
 msgstr "Failed to fetch preset deck index: {0}"
 
-#: ui/components/editor/PrintPickerModal.tsx:53
+#: ui/components/editor/PrintPickerModal.tsx:54
 msgid "Failed to fetch printings."
 msgstr "Failed to fetch printings."
 
@@ -3200,6 +3938,10 @@ msgstr "Failed to load token archive: {0}"
 #: ui/views/Lobby.tsx:251
 msgid "Failed to open sealed pool: {0}"
 msgstr "Failed to open sealed pool: {0}"
+
+#: ui/views/DeckEditor.tsx:392
+msgid "Failed to remove account deck"
+msgstr "Failed to remove account deck"
 
 #: ui/views/Lobby.tsx:448
 msgid "Failed to remove bot."
@@ -3244,6 +3986,10 @@ msgstr "Favorites"
 msgid "Fetching set…"
 msgstr "Fetching set…"
 
+#: ui/components/editor/CardSearch.tsx:513
+msgid "Fetchland"
+msgstr "Fetchland"
+
 #: ui/components/lobby/TablePickerDialog.tsx:125
 msgid "Fight"
 msgstr "Fight"
@@ -3264,6 +4010,10 @@ msgstr "Fill with bots"
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:159
 msgid "Filter by {0} identity"
 msgstr "Filter by {0} identity"
+
+#: ui/components/editor/DeckBuilder.tsx:1598
+msgid "Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate"
+msgstr "Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate"
 
 #: ui/views/Settings.tsx:1082
 msgid "Filter colors... (e.g. primary, counter, arrow)"
@@ -3291,6 +4041,10 @@ msgstr "Filter shortcuts…"
 msgid "Filter:"
 msgstr "Filter:"
 
+#: ui/components/editor/DeckBuilder.tsx:1597
+msgid "Filter…"
+msgstr "Filter…"
+
 #: ui/components/deck/DeckHubFilters.tsx:49
 #: ui/components/editor/CardSearch.tsx:964
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
@@ -3314,9 +4068,17 @@ msgstr "Finding you a table…"
 msgid "Finish"
 msgstr "Finish"
 
+#: ui/components/editor/DeckTagManagerDialog.tsx:81
+msgid "Finish renaming"
+msgstr "Finish renaming"
+
 #: ui/components/deck/DeckHubEntryCard.tsx:75
 msgid "First place"
 msgstr "First place"
+
+#: ui/components/editor/CardSearch.tsx:505
+msgid "First Print"
+msgstr "First Print"
 
 #: ui/views/Game.tsx:2551
 msgid "First Strike Damage"
@@ -3334,6 +4096,14 @@ msgstr "Flavor"
 msgid "Flavor text"
 msgstr "Flavor text"
 
+#: ui/components/editor/CardSearch.tsx:1193
+msgid "Flavor text contains…"
+msgstr "Flavor text contains…"
+
+#: ui/components/editor/CardSearch.tsx:425
+msgid "Flip"
+msgstr "Flip"
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:837
 msgid "Flip back · F"
 msgstr "Flip back · F"
@@ -3350,6 +4120,16 @@ msgstr "Flip double-faced card (preview / hand)"
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:837
 msgid "Flip front · F"
 msgstr "Flip front · F"
+
+#. placeholder {0}: card.card_faces![1].name
+#: ui/components/editor/CardDetailModal.tsx:530
+msgid "Flip to back: {0}"
+msgstr "Flip to back: {0}"
+
+#. placeholder {0}: card.card_faces![0].name
+#: ui/components/editor/CardDetailModal.tsx:531
+msgid "Flip to front: {0}"
+msgstr "Flip to front: {0}"
 
 #: ui/components/companion/PlayerMenu.tsx:102
 #: ui/components/game/panels/PlayerSheetModal.tsx:114
@@ -3394,6 +4174,9 @@ msgstr "Focused"
 msgid "foil"
 msgstr "foil"
 
+#: ui/components/editor/CardDetailModal.tsx:312
+#: ui/components/editor/CardSearch.tsx:461
+#: ui/components/editor/DeckSelectionTray.tsx:147
 #: ui/views/Limited.tsx:592
 msgid "Foil"
 msgstr "Foil"
@@ -3458,6 +4241,10 @@ msgstr "Format preset"
 msgid "Formats"
 msgstr "Formats"
 
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:103
+msgid "Found in collection"
+msgstr "Found in collection"
+
 #: ui/views/CasualModes.tsx:161
 msgid "Four-player Commander"
 msgstr "Four-player Commander"
@@ -3474,6 +4261,10 @@ msgstr "Four-seat, two-card picks (CR 903.13), then a four-player Commander game
 msgid "FPS"
 msgstr "FPS"
 
+#: ui/components/editor/CardSearch.tsx:1248
+msgid "Frame"
+msgstr "Frame"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:171
 #: ui/views/Settings.tsx:709
 msgid "Free placement"
@@ -3487,9 +4278,17 @@ msgstr "From scratch"
 msgid "Front"
 msgstr "Front"
 
+#: ui/components/editor/CardDetailModal.tsx:220
+msgid "Front face"
+msgstr "Front face"
+
 #: ui/components/lobby/OpenTableCard.tsx:131
 msgid "Full"
 msgstr "Full"
+
+#: ui/components/editor/CardSearch.tsx:481
+msgid "Full Art"
+msgstr "Full Art"
 
 #: ui/components/lobby/TableSetupHostingCard.tsx:93
 msgid "Full card support, hosted in this browser tab. Others join from the lobby."
@@ -3521,10 +4320,15 @@ msgstr "Full screen"
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
+#: ui/components/editor/CardSearch.tsx:272
+msgid "Future"
+msgstr "Future"
+
 #: ui/views/DesignSystem.tsx:20
 msgid "Gallery sections"
 msgstr "Gallery sections"
 
+#: ui/components/editor/CardSearch.tsx:1276
 #: ui/lib/keybindings.ts:8
 msgid "Game"
 msgstr "Game"
@@ -3550,6 +4354,15 @@ msgstr "Game aborted — the host did not reconnect in time."
 #: ui/components/game/GameBoardAccessibility.tsx:138
 msgid "Game board controls"
 msgstr "Game board controls"
+
+#: ui/components/editor/DeckListView.tsx:1105
+#: ui/components/editor/PreviewCardInfo.tsx:34
+msgid "Game Changer"
+msgstr "Game Changer"
+
+#: ui/components/editor/deckEditor.primitives.tsx:69
+msgid "Game Changer — restricted to bracket 3+"
+msgstr "Game Changer — restricted to bracket 3+"
 
 #: ui/hooks/useGameEventListeners.ts:112
 msgid "Game could not be resumed — the room did not come back."
@@ -3663,6 +4476,10 @@ msgstr "Go back"
 msgid "Goes first"
 msgstr "Goes first"
 
+#: ui/components/editor/CardSearch.tsx:290
+msgid "Gold"
+msgstr "Gold"
+
 #: ui/views/Settings.tsx:620
 msgid "Graveyard"
 msgstr "Graveyard"
@@ -3671,9 +4488,29 @@ msgstr "Graveyard"
 msgid "Green"
 msgstr "Green"
 
+#: ui/components/editor/CardSearch.tsx:974
+msgid "Grid view"
+msgstr "Grid view"
+
 #: ui/components/limited/LimitedDeckBuilder.tsx:648
 msgid "Group by"
 msgstr "Group by"
+
+#: ui/components/editor/DeckBuilder.tsx:1274
+msgid "Group cards by color"
+msgstr "Group cards by color"
+
+#: ui/components/editor/DeckBuilder.tsx:1279
+msgid "Group cards by custom tags"
+msgstr "Group cards by custom tags"
+
+#: ui/components/editor/DeckBuilder.tsx:1269
+msgid "Group cards by mana value"
+msgstr "Group cards by mana value"
+
+#: ui/components/editor/DeckBuilder.tsx:1264
+msgid "Group cards by type"
+msgstr "Group cards by type"
 
 #: ui/views/Limited.tsx:641
 msgid "guaranteed slot active"
@@ -3732,6 +4569,10 @@ msgstr "Hide playmat"
 #: ui/components/game/panels/MiddleBarDock.tsx:97
 msgid "Hide side panel"
 msgstr "Hide side panel"
+
+#: ui/components/editor/CardSearch.tsx:178
+msgid "Historic"
+msgstr "Historic"
 
 #: ui/components/lobby/OpenTableSeats.tsx:82
 #: ui/views/Settings.tsx:391
@@ -3816,6 +4657,10 @@ msgstr "HTTP {0}"
 msgid "HTTP {0} for {url}"
 msgstr "HTTP {0} for {url}"
 
+#: ui/components/editor/DeckBuilder.tsx:1535
+msgid "Hub snapshot — read only"
+msgstr "Hub snapshot — read only"
+
 #: ui/components/lobby/TableRoomSidebar.tsx:224
 msgid "Humans only"
 msgstr "Humans only"
@@ -3840,6 +4685,10 @@ msgstr "Identity"
 msgid "Ignore"
 msgstr "Ignore"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:258
+msgid "Image"
+msgstr "Image"
+
 #: ui/views/Settings.tsx:235
 msgid "Image cache cleared — reloading…"
 msgstr "Image cache cleared — reloading…"
@@ -3860,6 +4709,10 @@ msgstr "Images & icons"
 #: ui/components/lobby/TableSetupGameCard.tsx:307
 msgid "Import"
 msgstr "Import"
+
+#: ui/components/editor/DeckBuilder.tsx:1213
+msgid "Import a card list"
+msgstr "Import a card list"
 
 #: ui/components/lobby/TableSetup.tsx:212
 msgid "Import a cube before creating the table."
@@ -3896,6 +4749,10 @@ msgstr "Import from text"
 #: ui/components/lobby/CustomFormatDialog.tsx:166
 msgid "Import JSON"
 msgstr "Import JSON"
+
+#: ui/components/editor/DeckBuilder.tsx:1897
+msgid "Import list"
+msgstr "Import list"
 
 #: ui/components/collection/CollectionImportDialog.tsx:333
 msgid "Import preview"
@@ -3938,6 +4795,10 @@ msgstr "Imported Deck"
 msgid "Importing…"
 msgstr "Importing…"
 
+#: ui/components/editor/CardSearch.tsx:489
+msgid "In Boosters"
+msgstr "In Boosters"
+
 #: ui/components/game/panels/PlayerSheetModal.tsx:96
 msgid "In combat"
 msgstr "In combat"
@@ -3949,6 +4810,10 @@ msgstr "In game"
 #: ui/components/lobby/TableSetupHostingCard.tsx:85
 msgid "in this browser"
 msgstr "in this browser"
+
+#: ui/components/editor/CombosPanel.tsx:169
+msgid "In your deck"
+msgstr "In your deck"
 
 #: ui/components/lobby/TableSetupHostingCard.tsx:114
 msgid "in-browser"
@@ -3974,6 +4839,10 @@ msgstr "Incompatible"
 msgid "Incorrect room password"
 msgstr "Incorrect room password"
 
+#: ui/components/editor/CardSearch.tsx:814
+msgid "Info"
+msgstr "Info"
+
 #: ui/components/companion/StatusChips.tsx:29
 msgid "Initiative"
 msgstr "Initiative"
@@ -3998,6 +4867,14 @@ msgstr "Inspection input"
 #: ui/components/layout/UpdateCallout.tsx:43
 msgid "Install & restart"
 msgstr "Install & restart"
+
+#: ui/components/editor/CardSearch.tsx:89
+msgid "Instant"
+msgstr "Instant"
+
+#: ui/components/editor/deckBuilder.utils.ts:95
+msgid "Instants"
+msgstr "Instants"
 
 #: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:18
 #: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:25
@@ -4148,6 +5025,18 @@ msgstr "Ironsmith WASM hosted by the table creator. Partial card support."
 msgid "Is"
 msgstr "Is"
 
+#: ui/components/editor/DeckValidationPanel.tsx:34
+msgid "issue"
+msgstr "issue"
+
+#: ui/components/editor/DeckValidationPanel.tsx:34
+msgid "issues"
+msgstr "issues"
+
+#: ui/components/editor/DeckLabelsModal.tsx:29
+msgid "Jank"
+msgstr "Jank"
+
 #: ui/components/lobby/JoinPasswordDialog.tsx:128
 #: ui/components/lobby/UserList.tsx:200
 msgid "Join"
@@ -4206,9 +5095,18 @@ msgstr "Join with invitation"
 msgid "Joining…"
 msgstr "Joining…"
 
+#: ui/components/editor/DeckBuilder.tsx:1246
 #: ui/lib/keybindings.ts:120
 msgid "Jump to next editor section"
 msgstr "Jump to next editor section"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:82
+msgid "Keep both decks without overwriting either version."
+msgstr "Keep both decks without overwriting either version."
+
+#: ui/views/DeckEditor.tsx:967
+msgid "Keep deck"
+msgstr "Keep deck"
 
 #: ui/components/editor/DeckSaveConflictDialog.tsx:52
 msgid "Keep my changes"
@@ -4217,6 +5115,14 @@ msgstr "Keep my changes"
 #: ui/components/play/RejoinMatchCard.tsx:159
 msgid "Keep playing"
 msgstr "Keep playing"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:209
+msgid "Keep the current grouping, sorting, and card size."
+msgstr "Keep the current grouping, sorting, and card size."
+
+#: ui/components/editor/SideboardPlansDialog.tsx:65
+msgid "Keep the exact swaps and play-pattern notes you need for each matchup."
+msgstr "Keep the exact swaps and play-pattern notes you need for each matchup."
 
 #: ui/components/KeyboardShortcutsDialog.tsx:38
 #: ui/components/settings/KeybindingsPanel.tsx:54
@@ -4252,6 +5158,19 @@ msgstr "Label \"{trimmed}\" added"
 msgid "LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding."
 msgstr "LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding."
 
+#: ui/components/editor/CardSearch.tsx:85
+msgid "Land"
+msgstr "Land"
+
+#: ui/components/editor/deckBuilder.utils.ts:115
+#: ui/components/editor/DeckHealthPanel.tsx:46
+msgid "Lands"
+msgstr "Lands"
+
+#: ui/components/editor/CardSearch.tsx:1290
+msgid "Lang"
+msgstr "Lang"
+
 #: ui/components/settings/LanguagePreferenceCard.tsx:20
 msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
 msgstr "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
@@ -4259,6 +5178,10 @@ msgstr "Language for card names, type lines and printed rules text. Falls back t
 #: ui/components/settings/InterfaceLanguagePreferenceCard.tsx:19
 msgid "Language for menus, buttons and messages. Untranslated text falls back to English."
 msgstr "Language for menus, buttons and messages. Untranslated text falls back to English."
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:339
+msgid "Large decks can take a moment. Requests are grouped and safely paced through the shared card-data service."
+msgstr "Large decks can take a moment. Requests are grouped and safely paced through the shared card-data service."
 
 #: ui/components/play/OwnedDeckShelf.tsx:52
 msgid "Last played"
@@ -4290,6 +5213,12 @@ msgstr "Leave game"
 msgid "Leave table"
 msgstr "Leave table"
 
+#: ui/views/DeckEditor.tsx:1137
+#: ui/views/DeckEditor.tsx:1163
+msgid "Leave Without Saving"
+msgstr "Leave Without Saving"
+
+#: ui/components/editor/CardSearch.tsx:158
 #: ui/components/lobby/CreateGameDialog.tsx:44
 #: ui/components/lobby/DeckVsSelector.tsx:40
 #: ui/components/lobby/OpenTableCard.tsx:16
@@ -4343,6 +5272,10 @@ msgstr "LEVEL {0}"
 msgid "Level {0} of {1}"
 msgstr "Level {0} of {1}"
 
+#: ui/components/editor/CardSearch.tsx:441
+msgid "Level Up"
+msgstr "Level Up"
+
 #: ui/components/game/zones/LibraryZoneTile.tsx:34
 #: ui/views/Settings.tsx:619
 msgid "Library"
@@ -4367,6 +5300,10 @@ msgstr "Life, poison, and commander damage for paper nights."
 msgid "Light"
 msgstr "Light"
 
+#: ui/components/editor/DeckBudgetPanel.tsx:135
+msgid "Limit"
+msgstr "Limit"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:402
 #: ui/components/lobby/TableSetup.tsx:192
 #: ui/components/lobby/TableSetupGameCard.tsx:133
@@ -4386,6 +5323,10 @@ msgstr "Link {0}"
 #: ui/components/settings/SignInMethodsCard.tsx:52
 msgid "Linking failed"
 msgstr "Linking failed"
+
+#: ui/components/editor/CardSearch.tsx:987
+msgid "List view"
+msgstr "List view"
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:25
 msgid "Live theme preview"
@@ -4467,6 +5408,10 @@ msgstr "Loading sets from Scryfall…"
 msgid "Loading Winston draft…"
 msgstr "Loading Winston draft…"
 
+#: ui/views/DeckEditor.tsx:711
+msgid "Loading your decks"
+msgstr "Loading your decks"
+
 #: ui/components/play/CommunityDeckShelf.tsx:35
 #: ui/components/play/PresetDeckShelf.tsx:27
 #: ui/components/settings/MyAssetsSection.tsx:132
@@ -4482,6 +5427,7 @@ msgstr "local analysis"
 msgid "Local booster information could not be loaded. No substitute recipe will be used."
 msgstr "Local booster information could not be loaded. No substitute recipe will be used."
 
+#: ui/components/editor/DeckBuilder.tsx:1938
 #: ui/components/editor/DeckCheckpointsDialog.tsx:96
 msgid "Local checkpoints"
 msgstr "Local checkpoints"
@@ -4527,7 +5473,7 @@ msgstr "Log prompts to console"
 msgid "logs"
 msgstr "logs"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:307
+#: ui/components/editor/ImportDeckTextDialog.tsx:309
 msgid "Looks good!"
 msgstr "Looks good!"
 
@@ -4556,10 +5502,11 @@ msgstr "lucide-react — UI chrome"
 msgid "Magic cloth"
 msgstr "Magic cloth"
 
-#: ui/components/editor/DeckQuickAddOptions.tsx:103
+#: ui/components/editor/DeckQuickAddOptions.tsx:108
 msgid "Main"
 msgstr "Main"
 
+#: ui/components/editor/DeckSelectionTray.tsx:86
 #: ui/components/editor/ImportDeckTextDialog.tsx:186
 msgid "Main deck"
 msgstr "Main deck"
@@ -4579,7 +5526,17 @@ msgstr "Main deck:"
 msgid "Maintainer"
 msgstr "Maintainer"
 
+#: ui/components/editor/DeckBuilder.tsx:1821
+msgid "Make an editable copy to enable saving"
+msgstr "Make an editable copy to enable saving"
+
+#: ui/components/editor/CardDetailModal.tsx:565
+#: ui/components/editor/DeckListView.tsx:575
+msgid "Make foil"
+msgstr "Make foil"
+
 #: ui/components/editor/CardSearch.tsx:1062
+#: ui/components/editor/DeckInsightsPanel.tsx:26
 msgid "Mana"
 msgstr "Mana"
 
@@ -4601,9 +5558,13 @@ msgstr "Mana burn policy"
 msgid "Mana consistency"
 msgstr "Mana consistency"
 
-#: ui/components/editor/DeckStats.tsx:58
+#: ui/components/editor/DeckStats.tsx:59
 msgid "Mana Curve"
 msgstr "Mana Curve"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:172
+msgid "Mana review"
+msgstr "Mana review"
 
 #: ui/components/dev/designSystem/sections/IconsSection.tsx:57
 msgid "Mana symbols — ManaSymbols (Scryfall SVG)"
@@ -4614,7 +5575,13 @@ msgstr "Mana symbols — ManaSymbols (Scryfall SVG)"
 msgid "Mana value"
 msgstr "Mana value"
 
-#: ui/components/editor/ComboDetailModal.tsx:86
+#: ui/components/editor/CardSearch.tsx:310
+#: ui/components/editor/deckBuilder.utils.ts:27
+#: ui/components/editor/deckBuilder.utils.ts:48
+msgid "Mana Value"
+msgstr "Mana Value"
+
+#: ui/components/editor/ComboDetailModal.tsx:87
 msgid "Mana:"
 msgstr "Mana:"
 
@@ -4647,6 +5614,11 @@ msgstr "Manabrew v{APP_VERSION}"
 msgid "Manabrew's own engine, hosted by the table creator."
 msgstr "Manabrew's own engine, hosted by the table creator."
 
+#: ui/components/editor/DeckBuilder.tsx:1430
+msgid "Manage deck labels"
+msgstr "Manage deck labels"
+
+#: ui/components/editor/DeckBuilder.tsx:1495
 #: ui/components/editor/DeckTagManagerDialog.tsx:111
 msgid "Manage deck tags"
 msgstr "Manage deck tags"
@@ -4695,6 +5667,14 @@ msgstr "Manual tabletop multiplayer is not implemented yet."
 msgid "Manual tabletop snapshots are not implemented yet."
 msgstr "Manual tabletop snapshots are not implemented yet."
 
+#: ui/components/editor/DeckCollectionPanel.tsx:266
+msgid "Mark as ordered"
+msgstr "Mark as ordered"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:281
+msgid "Mark as proxied"
+msgstr "Mark as proxied"
+
 #: ui/components/lobby/TableSetupGameCard.tsx:126
 msgid "Match"
 msgstr "Match"
@@ -4711,6 +5691,14 @@ msgstr "Match structure"
 #: ui/views/Tournaments.tsx:118
 msgid "Matches"
 msgstr "Matches"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:78
+msgid "Matchup"
+msgstr "Matchup"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:131
+msgid "Matchup notes"
+msgstr "Matchup notes"
 
 #: ui/components/lobby/DeckVsSelector.tsx:598
 msgid "Matchup ready"
@@ -4735,11 +5723,23 @@ msgstr "Max {0} copies of \"{1}\" allowed in {formatName}"
 msgid "Max {0} copies of \"{cardName}\" allowed in {formatName}"
 msgstr "Max {0} copies of \"{cardName}\" allowed in {formatName}"
 
+#: ui/components/editor/DeckGoalsPanel.tsx:74
+msgid "Maximum average mana value"
+msgstr "Maximum average mana value"
+
+#: ui/components/editor/DeckGoalsPanel.tsx:62
+msgid "Maximum lands"
+msgstr "Maximum lands"
+
+#: ui/components/editor/DeckGoalsPanel.tsx:68
+msgid "Maximum missing cards"
+msgstr "Maximum missing cards"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:326
 msgid "Maximum players"
 msgstr "Maximum players"
 
-#: ui/components/editor/DeckQuickAddOptions.tsx:105
+#: ui/components/editor/DeckQuickAddOptions.tsx:110
 msgid "Maybe"
 msgstr "Maybe"
 
@@ -4748,10 +5748,14 @@ msgstr "Maybe"
 msgid "Maybe {0}"
 msgstr "Maybe {0}"
 
-#: ui/components/editor/DeckSelectionTray.tsx:90
+#: ui/components/editor/DeckSelectionTray.tsx:91
 #: ui/components/editor/ImportDeckTextDialog.tsx:185
 msgid "Maybeboard"
 msgstr "Maybeboard"
+
+#: ui/components/editor/CardSearch.tsx:433
+msgid "Meld"
+msgstr "Meld"
 
 #: ui/components/settings/AccountProfileCard.tsx:39
 msgid "Member since {memberSince}"
@@ -4775,10 +5779,22 @@ msgstr "Message your table…"
 msgid "Middle"
 msgstr "Middle"
 
+#: ui/components/editor/DeckLabelsModal.tsx:15
+msgid "Midrange"
+msgstr "Midrange"
+
+#: ui/components/editor/DeckLabelsModal.tsx:22
+msgid "Mill"
+msgstr "Mill"
+
 #: ui/components/game/battlefieldCardStyles.ts:11
 #: ui/views/Settings.tsx:768
 msgid "Mini-frame"
 msgstr "Mini-frame"
+
+#: ui/components/editor/DeckGoalsPanel.tsx:56
+msgid "Minimum lands"
+msgstr "Minimum lands"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:322
 msgid "Minimum players"
@@ -4788,6 +5804,16 @@ msgstr "Minimum players"
 msgid "Minimum:"
 msgstr "Minimum:"
 
+#: ui/components/editor/DeckCollectionPanel.tsx:203
+msgid "Missing CSV"
+msgstr "Missing CSV"
+
+#: ui/components/editor/CardSearch.tsx:417
+msgid "Modal DFC"
+msgstr "Modal DFC"
+
+#: ui/components/editor/CardSearch.tsx:154
+#: ui/components/editor/CardSearch.tsx:268
 #: ui/components/lobby/CreateGameDialog.tsx:43
 #: ui/components/lobby/CustomFormatDialog.tsx:475
 #: ui/components/lobby/DeckVsSelector.tsx:39
@@ -4818,6 +5844,14 @@ msgstr "Monarch"
 msgid "More"
 msgstr "More"
 
+#: ui/components/editor/CardSearch.tsx:733
+msgid "More Info"
+msgstr "More Info"
+
+#: ui/components/editor/DeckQuickAddResults.tsx:70
+msgid "More ways to add {displayName}"
+msgstr "More ways to add {displayName}"
+
 #: ui/components/play/PlayHomeLinks.tsx:69
 msgid "More ways to play and tools"
 msgstr "More ways to play and tools"
@@ -4827,22 +5861,37 @@ msgstr "More ways to play and tools"
 msgid "Movable"
 msgstr "Movable"
 
-#: ui/components/editor/DeckListView.tsx:323
+#: ui/components/editor/DeckSelectionTray.tsx:80
+msgid "Move"
+msgstr "Move"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:73
+msgid "Move {tag} down"
+msgstr "Move {tag} down"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:64
+msgid "Move {tag} up"
+msgstr "Move {tag} up"
+
+#: ui/components/editor/DeckListView.tsx:324
 msgid "Move 1"
 msgstr "Move 1"
 
-#: ui/components/editor/DeckListView.tsx:324
+#: ui/components/editor/DeckListView.tsx:325
 msgid "Move all ({count})"
 msgstr "Move all ({count})"
 
+#: ui/components/editor/DeckBuilder.tsx:1453
 #: ui/lib/keybindings.ts:156
 msgid "Move selected cards to main deck"
 msgstr "Move selected cards to main deck"
 
+#: ui/components/editor/DeckBuilder.tsx:1467
 #: ui/lib/keybindings.ts:168
 msgid "Move selected cards to maybeboard"
 msgstr "Move selected cards to maybeboard"
 
+#: ui/components/editor/DeckBuilder.tsx:1460
 #: ui/lib/keybindings.ts:162
 msgid "Move selected cards to sideboard"
 msgstr "Move selected cards to sideboard"
@@ -4875,11 +5924,19 @@ msgstr "Moved {cardName} to {dest}"
 msgid "Moved {moved} {cardName} to {label}"
 msgstr "Moved {moved} {cardName} to {label}"
 
+#: ui/components/editor/DeckListView.tsx:2172
+msgid "Moving…"
+msgstr "Moving…"
+
 #. placeholder {0}: res.status
 #: ui/lib/moxfield.ts:86
 #: ui/lib/moxfield.ts:112
 msgid "Moxfield fetch failed: {0}"
 msgstr "Moxfield fetch failed: {0}"
+
+#: ui/components/editor/CardSearch.tsx:304
+msgid "MTGO"
+msgstr "MTGO"
 
 #: ui/components/GuestNameConflictModal.tsx:92
 #: ui/components/layout/navDestinations.ts:53
@@ -4913,6 +5970,7 @@ msgid "My Collection"
 msgstr "My Collection"
 
 #: ui/components/play/OwnedDeckShelf.tsx:45
+#: ui/views/DeckEditor.tsx:684
 msgid "My decks"
 msgstr "My decks"
 
@@ -4929,6 +5987,8 @@ msgid "My decks ({0}) · ~{1}"
 msgstr "My decks ({0}) · ~{1}"
 
 #: ui/components/deck/DeckHubFilterPanel.tsx:115
+#: ui/components/editor/CardSearch.tsx:314
+#: ui/components/editor/deckBuilder.utils.ts:44
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:181
 #: ui/components/lobby/CustomFormatDialog.tsx:295
 msgid "Name"
@@ -4946,6 +6006,10 @@ msgstr "Navigation"
 msgid "nearby host"
 msgstr "nearby host"
 
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:96
+msgid "Needed for deck"
+msgstr "Needed for deck"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:163
 msgid "New format"
 msgstr "New format"
@@ -4959,9 +6023,19 @@ msgstr "New game"
 msgid "New Game"
 msgstr "New Game"
 
+#: ui/components/editor/CardDetailModal.tsx:625
+#: ui/components/editor/DeckBuilder.tsx:1987
+#: ui/components/editor/DeckListView.tsx:399
+msgid "New tag…"
+msgstr "New tag…"
+
 #: ui/components/deck/DeckHubFilterPanel.tsx:114
 msgid "Newest"
 msgstr "Newest"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:186
+msgid "Next"
+msgstr "Next"
 
 #: ui/lib/keybindings.ts:41
 msgid "Next page"
@@ -4974,6 +6048,11 @@ msgstr "Next preview action"
 #: ui/components/game/modals/AbilityPickerModal.tsx:113
 msgid "No actions are currently available for this card."
 msgstr "No actions are currently available for this card."
+
+#: ui/components/editor/DeckBuilder.tsx:1336
+#: ui/components/editor/DeckBuilder.tsx:1355
+msgid "No active filters"
+msgstr "No active filters"
 
 #: ui/game/manualTabletopApi.ts:270
 #: ui/game/manualTabletopApi.ts:289
@@ -4998,9 +6077,26 @@ msgstr "No card data yet — without it a board with no internet stays blank how
 msgid "No cards found"
 msgstr "No cards found"
 
+#: ui/components/editor/DeckStats.tsx:179
+msgid "No cards in deck."
+msgstr "No cards in deck."
+
+#. placeholder {0}: set.name
+#: ui/components/editor/BatchPrintingDialog.tsx:111
+msgid "No cards in this deck have a {0} printing"
+msgstr "No cards in this deck have a {0} printing"
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:225
+msgid "No cards in this deck match your search."
+msgstr "No cards in this deck match your search."
+
 #: ui/components/deck/DeckCardBrowser.tsx:533
 msgid "No cards match these filters"
 msgstr "No cards match these filters"
+
+#: ui/components/editor/DeckCheckpointsDialog.tsx:154
+msgid "No checkpoints for this deck yet."
+msgstr "No checkpoints for this deck yet."
 
 #: ui/components/editor/CombosPanel.tsx:211
 msgid "No combos detected yet."
@@ -5030,9 +6126,17 @@ msgstr "No deck"
 msgid "No deck selected"
 msgstr "No deck selected"
 
-#: ui/components/editor/DeckQuickAddOptions.tsx:133
+#: ui/components/editor/DeckQuickAddOptions.tsx:138
 msgid "No deck tags yet"
 msgstr "No deck tags yet"
+
+#: ui/components/editor/CardDetailModal.tsx:696
+msgid "No decks available"
+msgstr "No decks available"
+
+#: ui/views/DeckEditor.tsx:859
+msgid "No decks match your filters."
+msgstr "No decks match your filters."
 
 #: ui/components/settings/CardArtDownloadSection.tsx:86
 msgid "No decks to download art for yet."
@@ -5041,6 +6145,10 @@ msgstr "No decks to download art for yet."
 #: ui/components/lobby/DeckVsSelector.tsx:627
 msgid "No decks yet — build one in <0>My Decks</0>."
 msgstr "No decks yet — build one in <0>My Decks</0>."
+
+#: ui/components/editor/DeckBuilder.tsx:1370
+msgid "No editable unsupported cards"
+msgstr "No editable unsupported cards"
 
 #: ui/views/Tournaments.tsx:93
 msgid "No entrants yet."
@@ -5064,7 +6172,7 @@ msgid "No groups"
 msgstr "No groups"
 
 #: ui/components/editor/CardDetailModal.tsx:258
-#: ui/components/editor/PrintPickerModal.tsx:140
+#: ui/components/editor/PrintPickerModal.tsx:141
 msgid "No Image"
 msgstr "No Image"
 
@@ -5095,6 +6203,10 @@ msgstr "No local player is available to concede."
 #: ui/components/game/panels/ActionLog.tsx:111
 msgid "No log entries yet."
 msgstr "No log entries yet."
+
+#: ui/components/editor/DeckCommandPalette.tsx:117
+msgid "No matching commands"
+msgstr "No matching commands"
 
 #: ui/views/Limited.tsx:483
 msgid "No matching local sets"
@@ -5134,7 +6246,11 @@ msgstr "No preset decks match your search."
 msgid "No price data"
 msgstr "No price data"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:316
+#: ui/views/DeckEditor.tsx:806
+msgid "No published decks match your filters."
+msgstr "No published decks match your filters."
+
+#: ui/components/editor/ImportDeckTextDialog.tsx:318
 msgid "No recognizable card entries yet"
 msgstr "No recognizable card entries yet"
 
@@ -5175,9 +6291,25 @@ msgstr "No saved draft seat for this server in this tab."
 msgid "No saved session for this server in this tab."
 msgstr "No saved session for this server in this tab."
 
+#: ui/components/editor/DeckBuilder.tsx:1417
+#: ui/components/editor/DeckBuilder.tsx:1440
+#: ui/components/editor/DeckBuilder.tsx:1448
+#: ui/components/editor/DeckBuilder.tsx:1455
+#: ui/components/editor/DeckBuilder.tsx:1462
+#: ui/components/editor/DeckBuilder.tsx:1469
+#: ui/components/editor/DeckBuilder.tsx:1476
+#: ui/components/editor/DeckBuilder.tsx:1483
+#: ui/components/editor/DeckBuilder.tsx:1490
+msgid "No selection"
+msgstr "No selection"
+
 #: ui/game/hostedAiPlay.ts:261
 msgid "No self-hosted room is available for {format}."
 msgstr "No self-hosted room is available for {format}."
+
+#: ui/components/editor/SetSelect.tsx:119
+msgid "No sets found"
+msgstr "No sets found"
 
 #: ui/components/settings/KeybindingsPanel.tsx:75
 msgid "No shortcuts match “{filter}”."
@@ -5203,7 +6335,7 @@ msgstr "No starter decks for this format."
 msgid "No tables match your search."
 msgstr "No tables match your search."
 
-#: ui/components/editor/DeckListView.tsx:383
+#: ui/components/editor/DeckListView.tsx:384
 msgid "No tags yet"
 msgstr "No tags yet"
 
@@ -5219,6 +6351,15 @@ msgstr "No tournaments listed."
 msgid "Nobody is free right now"
 msgstr "Nobody is free right now"
 
+#: ui/components/editor/CardDetailModal.tsx:312
+msgid "Non-foil"
+msgstr "Non-foil"
+
+#: ui/components/editor/CardSearch.tsx:465
+msgid "Non-Foil"
+msgstr "Non-Foil"
+
+#: ui/components/editor/DeckBudgetPanel.tsx:142
 #: ui/components/lobby/CustomFormatDialog.tsx:401
 #: ui/components/lobby/TablePickerDialog.tsx:23
 #: ui/components/lobby/TablePickerDialog.tsx:112
@@ -5244,13 +6385,26 @@ msgstr "Not enough distinct decks are available for a {0}-player game."
 msgid "Not gained: "
 msgstr "Not gained: "
 
-#: ui/components/editor/DeckListView.tsx:2431
+#: ui/components/editor/CardDetailModal.tsx:322
+msgid "Not in collection"
+msgstr "Not in collection"
+
+#: ui/components/editor/DeckListView.tsx:2432
 msgid "not in deck"
 msgstr "not in deck"
 
 #: ui/game/webrtcPlane.test.ts:23
 msgid "not open"
 msgstr "not open"
+
+#. placeholder {0}: ownership.get(key)?.shortage ?? entry.quantity
+#: ui/components/editor/DeckCollectionPanel.tsx:250
+msgid "not owned · need {0}"
+msgstr "not owned · need {0}"
+
+#: ui/components/editor/deckBuilder.utils.ts:60
+msgid "Not Owned First"
+msgstr "Not Owned First"
 
 #: ui/views/Limited.tsx:611
 msgid "Not supported"
@@ -5261,6 +6415,19 @@ msgstr "Not supported"
 msgid "Notes — {0}"
 msgstr "Notes — {0}"
 
+#: ui/components/editor/PrintingOptimizerDialog.tsx:309
+msgid "Nothing changes until you review and apply the proposal."
+msgstr "Nothing changes until you review and apply the proposal."
+
+#: ui/components/editor/DeckHistoryControls.tsx:27
+msgid "Nothing to redo"
+msgstr "Nothing to redo"
+
+#: ui/components/editor/DeckHistoryControls.tsx:17
+msgid "Nothing to undo"
+msgstr "Nothing to undo"
+
+#: ui/components/editor/CardSearch.tsx:194
 #: ui/components/lobby/CreateGameDialog.tsx:49
 #: ui/components/lobby/DeckVsSelector.tsx:45
 #: ui/components/lobby/OpenTableCard.tsx:17
@@ -5292,6 +6459,10 @@ msgstr "Official table"
 #: ui/components/play/OfflinePlayShell.tsx:36
 msgid "Offline play type"
 msgstr "Offline play type"
+
+#: ui/components/editor/CardSearch.tsx:264
+msgid "Old"
+msgstr "Old"
 
 #: ui/components/lobby/CreateGameDialog.tsx:54
 #: ui/components/lobby/DeckVsSelector.tsx:50
@@ -5364,9 +6535,25 @@ msgstr "On your network · {0}"
 msgid "One archenemy at 40 life against the heroes at 20, with a scheme deck"
 msgstr "One archenemy at 40 life against the heroes at 20, with a scheme deck"
 
+#: ui/components/editor/CombosPanel.tsx:189
+msgid "One card away"
+msgstr "One card away"
+
+#: ui/components/editor/DeckBuilder.tsx:1844
+msgid "One card is unsupported by the Manabrew and Forge engines"
+msgstr "One card is unsupported by the Manabrew and Forge engines"
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:203
 msgid "One card line was not recognized and will be skipped."
 msgstr "One card line was not recognized and will be skipped."
+
+#: ui/components/editor/DeckBudgetPanel.tsx:164
+msgid "One card unavailable"
+msgstr "One card unavailable"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:363
+msgid "One copy will change · one undoable edit"
+msgstr "One copy will change · one undoable edit"
 
 #: ui/views/CasualModes.tsx:162
 msgid "One human plus three AI at 40 life each; add opponents in the setup screen."
@@ -5426,6 +6613,10 @@ msgstr "Open cube import"
 msgid "Open deck command palette"
 msgstr "Open deck command palette"
 
+#: ui/components/editor/DeckBuilder.tsx:1327
+msgid "Open deck editor guide"
+msgstr "Open deck editor guide"
+
 #: ui/components/deck/DeckHubResults.tsx:120
 msgid "Open My Decks"
 msgstr "Open My Decks"
@@ -5445,6 +6636,10 @@ msgstr "Open seat"
 #: ui/components/lobby/TableRoomSidebar.tsx:197
 msgid "Open table"
 msgstr "Open table"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:115
+msgid "Open the command palette with Cmd/Ctrl+Shift+P to find editor actions. Undo, redo, save, search, section navigation, and bulk edits all have shortcuts."
+msgstr "Open the command palette with Cmd/Ctrl+Shift+P to find editor actions. Undo, redo, save, search, section navigation, and bulk edits all have shortcuts."
 
 #: ui/components/OnboardingGuide.tsx:14
 msgid "Open the Deck Editor to build decks from scratch, import existing lists, and fine-tune every card before you sit down at the table."
@@ -5489,6 +6684,8 @@ msgstr "Opponent layout"
 msgid "Opponents"
 msgstr "Opponents"
 
+#: ui/components/editor/DeckBuilder.tsx:1514
+#: ui/components/editor/DeckBuilder.tsx:1917
 #: ui/components/editor/PrintingOptimizerDialog.tsx:270
 msgid "Optimize deck printings"
 msgstr "Optimize deck printings"
@@ -5496,6 +6693,10 @@ msgstr "Optimize deck printings"
 #: ui/views/Limited.tsx:698
 msgid "Optional integer for reproducible opens. Leave blank for random."
 msgstr "Optional integer for reproducible opens. Leave blank for random."
+
+#: ui/components/editor/DeckGoalsPanel.tsx:87
+msgid "Optional targets, separate from legality."
+msgstr "Optional targets, separate from legality."
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:16
 msgid "Optional yes/no costs"
@@ -5509,7 +6710,7 @@ msgstr "or"
 msgid "or load saved pool…"
 msgstr "or load saved pool…"
 
-#: ui/components/editor/DeckListView.tsx:2204
+#: ui/components/editor/DeckListView.tsx:2205
 msgid "or use the + buttons on hover"
 msgstr "or use the + buttons on hover"
 
@@ -5533,6 +6734,11 @@ msgstr "Organizer"
 msgid "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
 msgstr "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
 
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:148
+msgid "other"
+msgstr "other"
+
+#: ui/components/editor/deckBuilder.utils.ts:249
 #: ui/views/Settings.tsx:1239
 msgid "Other"
 msgstr "Other"
@@ -5549,6 +6755,7 @@ msgstr "Outline"
 msgid "Override individual colors from the active preset."
 msgstr "Override individual colors from the active preset."
 
+#: ui/components/editor/DeckInsightsPanel.tsx:22
 #: ui/components/game/modals/GameSettingsModal.tsx:181
 #: ui/views/Settings.tsx:838
 msgid "Overview"
@@ -5557,6 +6764,27 @@ msgstr "Overview"
 #: ui/components/collection/CollectionCard.tsx:65
 msgid "Owned"
 msgstr "Owned"
+
+#. placeholder {0}: entry.name
+#: ui/components/editor/DeckCollectionPanel.tsx:256
+msgid "Owned copies of {0}"
+msgstr "Owned copies of {0}"
+
+#: ui/components/editor/deckBuilder.utils.ts:56
+msgid "Owned First"
+msgstr "Owned First"
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:86
+msgid "Owned in another printing"
+msgstr "Owned in another printing"
+
+#: ui/components/editor/CardDetailModal.tsx:321
+msgid "Owned in another printing · {owned} total"
+msgstr "Owned in another printing · {owned} total"
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:128
+msgid "Owned only"
+msgstr "Owned only"
 
 #: ui/views/OnlineDraftPanel.tsx:63
 msgid "Pack"
@@ -5588,6 +6816,20 @@ msgstr "Pairing system"
 #: ui/views/Tournaments.tsx:94
 msgid "Pairings and manual results (unverified)"
 msgstr "Pairings and manual results (unverified)"
+
+#: ui/components/editor/CardSearch.tsx:296
+msgid "Paper"
+msgstr "Paper"
+
+#: ui/components/editor/deckEditor.primitives.tsx:77
+#: ui/components/editor/DeckListView.tsx:1110
+msgid "Part of a combo in this deck"
+msgstr "Part of a combo in this deck"
+
+#. placeholder {0}: ownership.get(key)?.shortage ?? entry.quantity
+#: ui/components/editor/DeckCollectionPanel.tsx:249
+msgid "partially owned · need {0}"
+msgstr "partially owned · need {0}"
 
 #: ui/lib/keybindings.ts:246
 msgid "Pass priority / confirm"
@@ -5659,6 +6901,7 @@ msgstr "Paste an exported custom format"
 msgid "Paste an invitation code."
 msgstr "Paste an invitation code."
 
+#: ui/components/editor/DeckBuilder.tsx:1422
 #: ui/lib/keybindings.ts:144
 msgid "Paste cards into deck"
 msgstr "Paste cards into deck"
@@ -5672,6 +6915,7 @@ msgstr "Paste from clipboard"
 msgid "Paste invitation"
 msgstr "Paste invitation"
 
+#: ui/components/editor/CardSearch.tsx:170
 #: ui/components/lobby/CreateGameDialog.tsx:46
 #: ui/components/lobby/DeckVsSelector.tsx:42
 #: ui/components/lobby/OpenTableCard.tsx:16
@@ -5693,9 +6937,17 @@ msgstr "Peer to Peer"
 msgid "Pending"
 msgstr "Pending"
 
+#: ui/components/editor/CardSearch.tsx:190
+msgid "Penny"
+msgstr "Penny"
+
 #: ui/components/lobby/TableSetup.tsx:223
 msgid "People with the password can join."
 msgstr "People with the password can join."
+
+#: ui/components/editor/CardSearch.tsx:457
+msgid "Permanent"
+msgstr "Permanent"
 
 #: ui/components/dev/BattlefieldChoiceDevControls.tsx:30
 msgid "Persistent choices"
@@ -5742,6 +6994,11 @@ msgstr "Pick a set to draft first."
 msgid "Pick a theme. We'll merge pools from the most recent draftable sets that match its rotation window and start a normal pod draft against AI seats."
 msgstr "Pick a theme. We'll merge pools from the most recent draftable sets that match its rotation window and start a normal pod draft against AI seats."
 
+#: ui/components/editor/DeckLabelsModal.tsx:81
+#: ui/components/editor/DeckLabelsModal.tsx:117
+msgid "Pick color"
+msgstr "Pick color"
+
 #. placeholder {0}: String(err)
 #: ui/game/draftHost.ts:236
 msgid "pick failed: {0}"
@@ -5760,6 +7017,7 @@ msgstr "Picks per pass"
 msgid "Pinned by PHASE_MANA_CARD_IMAGES."
 msgstr "Pinned by PHASE_MANA_CARD_IMAGES."
 
+#: ui/components/editor/CardSearch.tsx:150
 #: ui/components/lobby/CreateGameDialog.tsx:42
 #: ui/components/lobby/DeckVsSelector.tsx:38
 #: ui/components/lobby/OpenTableCard.tsx:15
@@ -5776,6 +7034,14 @@ msgstr "Placement"
 #: ui/views/CasualModes.tsx:175
 msgid "Planechase"
 msgstr "Planechase"
+
+#: ui/components/editor/DeckBuilder.tsx:776
+msgid "Planes"
+msgstr "Planes"
+
+#: ui/components/editor/deckBuilder.utils.ts:90
+msgid "Planeswalkers"
+msgstr "Planeswalkers"
 
 #: ui/components/deck/DeckCardPlayButton.tsx:27
 #: ui/components/layout/NavSheet.tsx:93
@@ -5894,9 +7160,14 @@ msgstr "Playing as a guest."
 msgid "Playing solo"
 msgstr "Playing solo"
 
+#: ui/components/editor/DeckHero.tsx:105
 #: ui/components/settings/MyAssetsSection.tsx:23
 msgid "Playmat"
 msgstr "Playmat"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:265
+msgid "Playmat image tips"
+msgstr "Playmat image tips"
 
 #: ui/components/game/panels/MiddleBarDock.tsx:113
 msgid "Playmats"
@@ -5966,6 +7237,10 @@ msgstr "Potential lethal combat damage"
 msgid "pow"
 msgstr "pow"
 
+#: ui/components/editor/CardSearch.tsx:334
+msgid "Power"
+msgstr "Power"
+
 #: ui/components/lobby/CreateGameDialog.tsx:772
 msgid "Pre-built themed decks — always legal, great for testing mechanics."
 msgstr "Pre-built themed decks — always legal, great for testing mechanics."
@@ -5985,6 +7260,7 @@ msgstr "Preferences"
 msgid "Premier (Bo1)"
 msgstr "Premier (Bo1)"
 
+#: ui/components/editor/CardSearch.tsx:174
 #: ui/components/lobby/CreateGameDialog.tsx:47
 #: ui/components/lobby/DeckVsSelector.tsx:43
 #: ui/components/lobby/OpenTableCard.tsx:17
@@ -5999,6 +7275,10 @@ msgstr "Preparing your cards…"
 #: ui/views/Limited.tsx:545
 msgid "Prerelease: <0>{0}</0>"
 msgstr "Prerelease: <0>{0}</0>"
+
+#: ui/components/editor/ComboDetailModal.tsx:83
+msgid "Prerequisites"
+msgstr "Prerequisites"
 
 #. placeholder {0}: preset.commander
 #: ui/lib/presetDecks.ts:143
@@ -6034,6 +7314,14 @@ msgstr "Previous page"
 msgid "Previous preview action"
 msgstr "Previous preview action"
 
+#: ui/components/editor/CardSearch.tsx:350
+msgid "Price (EUR)"
+msgstr "Price (EUR)"
+
+#: ui/components/editor/CardSearch.tsx:346
+msgid "Price (USD)"
+msgstr "Price (USD)"
+
 #: ui/components/editor/CardDetailModal.tsx:418
 msgid "Prices"
 msgstr "Prices"
@@ -6055,6 +7343,7 @@ msgid "Printed card shows the full card image. Dynamic view prioritizes current 
 msgstr "Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state."
 
 #: ui/components/collection/CollectionImportDialog.tsx:396
+#: ui/components/editor/DeckSelectionTray.tsx:144
 #: ui/components/editor/ImportDeckTextDialog.tsx:169
 msgid "Printing"
 msgstr "Printing"
@@ -6084,9 +7373,14 @@ msgid "Privacy & data"
 msgstr "Privacy & data"
 
 #: ui/components/editor/CardSearch.tsx:1047
-#: ui/components/editor/ComboDetailModal.tsx:65
+#: ui/components/editor/ComboDetailModal.tsx:66
 msgid "Produces"
 msgstr "Produces"
+
+#. placeholder {0}: f.title
+#: ui/components/editor/CardSearch.tsx:1055
+msgid "Produces {0} mana"
+msgstr "Produces {0} mana"
 
 #: ui/components/dev/CardRailDevControls.tsx:139
 msgid "Progress rails"
@@ -6095,6 +7389,10 @@ msgstr "Progress rails"
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:757
 msgid "Progression"
 msgstr "Progression"
+
+#: ui/components/editor/CardSearch.tsx:469
+msgid "Promo"
+msgstr "Promo"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:112
 msgid "Prompt and dialog default view"
@@ -6113,6 +7411,10 @@ msgstr "Prompts"
 msgid "Proposal ready"
 msgstr "Proposal ready"
 
+#: ui/components/editor/DeckBudgetPanel.tsx:117
+msgid "Provider"
+msgstr "Provider"
+
 #: ui/components/deck/EditDeckHubEntryDialog.tsx:82
 msgid "Publication details updated"
 msgstr "Publication details updated"
@@ -6120,8 +7422,13 @@ msgstr "Publication details updated"
 #: ui/components/deck/DeckGridCard.tsx:106
 #: ui/components/deck/DeckGridCard.tsx:107
 #: ui/components/deck/PublishDeckDialog.tsx:143
+#: ui/components/editor/DeckBuilder.tsx:1924
 msgid "Publish to Community"
 msgstr "Publish to Community"
+
+#: ui/views/DeckEditor.tsx:764
+msgid "Published in Community"
+msgstr "Published in Community"
 
 #: ui/components/lobby/MultiplayerStartPanel.tsx:22
 msgid "Pull up a chair."
@@ -6131,17 +7438,37 @@ msgstr "Pull up a chair."
 msgid "Put top library card onto battlefield"
 msgstr "Put top library card onto battlefield"
 
+#: ui/components/editor/CardSearch.tsx:105
+msgid "PW"
+msgstr "PW"
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:166
 msgid "Qty"
 msgstr "Qty"
 
 #: ui/components/collection/CollectionImportDialog.tsx:398
+#: ui/components/editor/deckBuilder.utils.ts:52
+#: ui/components/editor/DeckQuickAddOptions.tsx:90
+#: ui/components/editor/DeckSelectionTray.tsx:97
 msgid "Quantity"
 msgstr "Quantity"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:30
+msgid "Quick Add adds the first result in one click. Open Card Search for richer discovery, then use its add controls or drag results directly into your deck."
+msgstr "Quick Add adds the first result in one click. Open Card Search for richer discovery, then use its add controls or drag results directly into your deck."
 
 #: ui/components/dev/designSystem/sections/SpacingSection.tsx:12
 msgid "Radius"
 msgstr "Radius"
+
+#: ui/components/editor/DeckLabelsModal.tsx:19
+msgid "Ramp"
+msgstr "Ramp"
+
+#: ui/components/editor/DeckTagDialog.tsx:70
+#: ui/views/DeckEditor.tsx:1099
+msgid "Ramp, removal, combo…"
+msgstr "Ramp, removal, combo…"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:266
 #: ui/components/lobby/TableSetupGameCard.tsx:379
@@ -6162,6 +7489,7 @@ msgid "Rank"
 msgstr "Rank"
 
 #: ui/components/dev/designSystem/sections/ComponentsSection.tsx:121
+#: ui/components/editor/CardSearch.tsx:326
 #: ui/components/editor/CardSearch.tsx:1100
 msgid "Rarity"
 msgstr "Rarity"
@@ -6177,6 +7505,24 @@ msgstr "Reach exile"
 #: ui/views/OnlinePlay.tsx:120
 #~ msgid "Reachable from the internet, because the host advertises a public address."
 #~ msgstr "Reachable from the internet, because the host advertises a public address."
+
+#: ui/components/editor/DeckBuilder.tsx:1208
+#: ui/components/editor/DeckBuilder.tsx:1216
+#: ui/components/editor/DeckBuilder.tsx:1425
+#: ui/components/editor/DeckBuilder.tsx:1433
+#: ui/components/editor/DeckBuilder.tsx:1440
+#: ui/components/editor/DeckBuilder.tsx:1448
+#: ui/components/editor/DeckBuilder.tsx:1455
+#: ui/components/editor/DeckBuilder.tsx:1462
+#: ui/components/editor/DeckBuilder.tsx:1469
+#: ui/components/editor/DeckBuilder.tsx:1476
+#: ui/components/editor/DeckBuilder.tsx:1483
+#: ui/components/editor/DeckBuilder.tsx:1490
+#: ui/components/editor/DeckBuilder.tsx:1498
+#: ui/components/editor/DeckBuilder.tsx:1506
+#: ui/components/editor/DeckBuilder.tsx:1517
+msgid "Read only"
+msgstr "Read only"
 
 #: ui/components/settings/CardArtDownloadSection.tsx:156
 msgid "Reading the cache…"
@@ -6239,6 +7585,11 @@ msgstr "Reconnect to the tournament broker first."
 msgid "Red"
 msgstr "Red"
 
+#. placeholder {0}: history.redoLabel
+#: ui/components/editor/DeckHistoryControls.tsx:27
+msgid "Redo {0}"
+msgstr "Redo {0}"
+
 #: ui/lib/keybindings.ts:95
 msgid "Redo deck edit"
 msgstr "Redo deck edit"
@@ -6247,6 +7598,10 @@ msgstr "Redo deck edit"
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:96
 msgid "Redo draft change"
 msgstr "Redo draft change"
+
+#: ui/components/editor/DeckBuilder.tsx:1226
+msgid "Redo last deck edit"
+msgstr "Redo last deck edit"
 
 #: ui/components/deck/DeckHubFilters.tsx:50
 msgid "Refine published deck results."
@@ -6271,6 +7626,7 @@ msgstr "Refined stone"
 msgid "Refined wood"
 msgstr "Refined wood"
 
+#: ui/views/DeckEditor.tsx:697
 #: ui/views/Tournaments.tsx:90
 msgid "Refresh"
 msgstr "Refresh"
@@ -6287,30 +7643,91 @@ msgstr "Rejoin"
 msgid "Relay is not connected; queue the engine report instead."
 msgstr "Relay is not connected; queue the engine report instead."
 
+#: ui/components/editor/CardSearch.tsx:322
+msgid "Release Date"
+msgstr "Release Date"
+
 #: ui/components/deck/PublishDeckDialog.tsx:90
 msgid "Reload this account deck before publishing it."
 msgstr "Reload this account deck before publishing it."
 
+#: ui/components/editor/deckEditor.utils.ts:48
+#: ui/components/editor/DeckListView.tsx:2578
+#: ui/components/editor/DeckSelectionTray.tsx:159
+msgid "Remove"
+msgstr "Remove"
+
+#: ui/components/editor/DeckListView.tsx:371
+msgid "Remove \"{tag}\" from deck"
+msgstr "Remove \"{tag}\" from deck"
+
+#: ui/components/editor/DeckListView.tsx:1254
+msgid "Remove \"{tag}\" tag"
+msgstr "Remove \"{tag}\" tag"
+
+#. placeholder {0}: commanderSlot.noun
 #. placeholder {0}: relay.name
+#: ui/components/editor/DeckListView.tsx:203
+#: ui/components/editor/DeckListView.tsx:528
 #: ui/views/Settings.tsx:462
 msgid "Remove {0}"
 msgstr "Remove {0}"
+
+#. placeholder {0}: card.identity.name
+#: ui/components/editor/CommanderSlots.tsx:117
+msgid "Remove {0} from the command zone"
+msgstr "Remove {0} from the command zone"
 
 #: ui/components/lobby/TableSeatChip.tsx:138
 msgid "Remove {name}"
 msgstr "Remove {name}"
 
+#: ui/components/editor/DeckListView.tsx:488
+msgid "Remove 1"
+msgstr "Remove 1"
+
 #: ui/views/DeckEditor.tsx:954
 msgid "Remove account deck"
 msgstr "Remove account deck"
+
+#. placeholder {0}: commanderSlot.noun
+#: ui/components/editor/CardDetailModal.tsx:545
+msgid "Remove as {0}"
+msgstr "Remove as {0}"
+
+#: ui/components/editor/DeckListView.tsx:222
+msgid "Remove as deck art cover"
+msgstr "Remove as deck art cover"
 
 #: ui/components/settings/AvatarPicker.tsx:50
 msgid "Remove avatar"
 msgstr "Remove avatar"
 
+#: ui/components/editor/DeckListView.tsx:242
+msgid "Remove back face as deck art cover"
+msgstr "Remove back face as deck art cover"
+
+#: ui/components/editor/DeckListView.tsx:544
+msgid "Remove back face cover"
+msgstr "Remove back face cover"
+
 #: ui/components/lobby/TableSeatChip.tsx:137
 msgid "Remove bot"
 msgstr "Remove bot"
+
+#: ui/views/DeckEditor.tsx:975
+msgid "Remove deck"
+msgstr "Remove deck"
+
+#: ui/components/editor/CardDetailModal.tsx:581
+#: ui/components/editor/DeckListView.tsx:534
+msgid "Remove deck cover"
+msgstr "Remove deck cover"
+
+#: ui/components/editor/CardDetailModal.tsx:565
+#: ui/components/editor/DeckListView.tsx:575
+msgid "Remove foil"
+msgstr "Remove foil"
 
 #: ui/components/deck/DeckHubEntryCard.tsx:52
 msgid "Remove from favorites"
@@ -6320,14 +7737,32 @@ msgstr "Remove from favorites"
 msgid "Remove from this device"
 msgstr "Remove from this device"
 
+#: ui/components/editor/DeckListView.tsx:1304
+msgid "Remove from this tag"
+msgstr "Remove from this tag"
+
+#: ui/components/editor/CardDetailModal.tsx:491
+msgid "Remove one copy"
+msgstr "Remove one copy"
+
+#: ui/components/editor/DeckBuilder.tsx:1481
+msgid "Remove one copy of each selected card"
+msgstr "Remove one copy of each selected card"
+
 #: ui/lib/keybindings.ts:180
 msgid "Remove one copy of selected cards"
 msgstr "Remove one copy of selected cards"
 
+#: ui/components/editor/DeckSelectionTray.tsx:105
+msgid "Remove one each"
+msgstr "Remove one each"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:482
 #: ui/views/Settings.tsx:586
 msgid "Remove playmat"
 msgstr "Remove playmat"
 
+#: ui/components/editor/DeckBuilder.tsx:1438
 #: ui/lib/keybindings.ts:150
 msgid "Remove selected cards"
 msgstr "Remove selected cards"
@@ -6340,6 +7775,11 @@ msgstr "Remove this override and inherit the base preset color"
 msgid "Removed"
 msgstr "Removed"
 
+#. placeholder {0}: commanderSlot.noun
+#: ui/components/editor/CardDetailModal.tsx:552
+msgid "Removed {deckCardName} as {0}"
+msgstr "Removed {deckCardName} as {0}"
+
 #: ui/components/editor/CardDetailModal.tsx:494
 msgid "Removed one {deckCardName}"
 msgstr "Removed one {deckCardName}"
@@ -6349,10 +7789,27 @@ msgstr "Removed one {deckCardName}"
 msgid "Removed one copy of {0} cards"
 msgstr "Removed one copy of {0} cards"
 
+#: ui/views/DeckEditor.tsx:975
+msgid "Removing…"
+msgstr "Removing…"
+
 #: ui/components/deck/DeckGridCard.tsx:130
 #: ui/components/deck/DeckGridCard.tsx:131
+#: ui/views/DeckEditor.tsx:940
 msgid "Rename"
 msgstr "Rename"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:81
+msgid "Rename {tag}"
+msgstr "Rename {tag}"
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:113
+msgid "Rename and order the roles used to organize this deck."
+msgstr "Rename and order the roles used to organize this deck."
+
+#: ui/components/editor/DeckHero.tsx:186
+msgid "Rename deck"
+msgstr "Rename deck"
 
 #: ui/views/DeckEditor.tsx:919
 msgid "Rename Deck"
@@ -6370,9 +7827,21 @@ msgstr "Renew credential"
 msgid "Replace avatar"
 msgstr "Replace avatar"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:229
 #: ui/components/settings/MyAssetsSection.tsx:220
 msgid "Replace image"
 msgstr "Replace image"
+
+#. placeholder {0}: target.identity.name
+#. placeholder {1}: suggestion.name
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:272
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:273
+msgid "Replace one {0} with {1}"
+msgstr "Replace one {0} with {1}"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:68
+msgid "Replace this device’s working deck with the latest account copy."
+msgstr "Replace this device’s working deck with the latest account copy."
 
 #: ui/components/deck/DeckVersionHistoryDialog.tsx:122
 msgid "Replace unsaved changes?"
@@ -6380,9 +7849,13 @@ msgstr "Replace unsaved changes?"
 
 #. placeholder {0}: target.identity.name
 #. placeholder {1}: suggestion.name
-#: ui/components/editor/ReplacementSuggestionsPanel.tsx:277
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:281
 msgid "Replaced {0} with {1}"
 msgstr "Replaced {0} with {1}"
+
+#: ui/components/editor/DeckInsightsPanel.tsx:38
+msgid "Replacements"
+msgstr "Replacements"
 
 #: ui/components/lobby/PlayerCard.tsx:86
 msgid "Report"
@@ -6401,7 +7874,16 @@ msgstr "Report {name}"
 msgid "Report this message"
 msgstr "Report this message"
 
+#: ui/components/editor/CardSearch.tsx:501
+msgid "Reprint"
+msgstr "Reprint"
+
+#: ui/components/editor/CardSearch.tsx:497
+msgid "Reserved List"
+msgstr "Reserved List"
+
 #: ui/components/companion/SetupMenu.tsx:156
+#: ui/components/editor/PlaymatEditorModal.tsx:468
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:196
 #: ui/components/game/SideboardDialog.tsx:54
 msgid "Reset"
@@ -6411,15 +7893,24 @@ msgstr "Reset"
 msgid "Reset all"
 msgstr "Reset all"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:465
+msgid "Reset all adjustments to their defaults"
+msgstr "Reset all adjustments to their defaults"
+
 #: ui/views/Settings.tsx:1104
 #: ui/views/Settings.tsx:1207
 msgid "Reset Colors"
 msgstr "Reset Colors"
 
+#: ui/components/editor/TokenSection.tsx:125
+msgid "Reset printing"
+msgstr "Reset printing"
+
 #: ui/components/settings/KeybindingsPanel.tsx:107
 msgid "Reset to default"
 msgstr "Reset to default"
 
+#: ui/components/editor/DeckCheckpointsDialog.tsx:139
 #: ui/components/game/panels/SnapshotsPanel.tsx:51
 msgid "Restore"
 msgstr "Restore"
@@ -6443,6 +7934,7 @@ msgstr "Restricted cards (one name per line)"
 #: ui/components/play/CommunityDeckShelf.tsx:43
 #: ui/components/play/PlayDeckShelf.tsx:142
 #: ui/components/settings/MyAssetsSection.tsx:128
+#: ui/views/DeckEditor.tsx:780
 msgid "Retry"
 msgstr "Retry"
 
@@ -6454,13 +7946,17 @@ msgstr "Retry connection"
 msgid "Return to combat"
 msgstr "Return to combat"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:337
+#: ui/components/editor/ImportDeckTextDialog.tsx:339
 msgid "Review addition"
 msgstr "Review addition"
 
-#: ui/components/editor/ImportDeckTextDialog.tsx:337
+#: ui/components/editor/ImportDeckTextDialog.tsx:339
 msgid "Review import"
 msgstr "Review import"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:393
+msgid "Review the exact before and after printing."
+msgstr "Review the exact before and after printing."
 
 #: ui/components/game/modals/GameSettingsModal.tsx:223
 msgid "Right click"
@@ -6550,10 +8046,33 @@ msgstr "Rules text"
 msgid "Runtime unavailable: {kind}"
 msgstr "Runtime unavailable: {kind}"
 
+#: ui/components/editor/CardSearch.tsx:437
+msgid "Saga"
+msgstr "Saga"
+
+#. placeholder {0}: target.types[0]?.toLowerCase() ?? `card type`
+#. placeholder {1}: suggestion.cmc
+#. placeholder {2}: collectionQuantityForName(quantities, suggestion.name)
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:266
+msgid "Same {0} · MV {1} · {2} owned"
+msgstr "Same {0} · MV {1} · {2} owned"
+
+#. placeholder {0}: target.types[0]?.toLowerCase() ?? `card type`
+#. placeholder {1}: suggestion.cmc
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:267
+msgid "Same {0} · MV {1} · not owned"
+msgstr "Same {0} · MV {1} · not owned"
+
+#: ui/components/editor/ReplacementSuggestionsPanel.tsx:114
+msgid "Same colour identity, mana value, and primary card type."
+msgstr "Same colour identity, mana value, and primary card type."
+
 #: ui/views/Limited.tsx:711
 msgid "Same seed + same pool → identical packs every open."
 msgstr "Same seed + same pool → identical packs every open."
 
+#: ui/components/editor/DeckBuilder.tsx:1824
+#: ui/components/editor/DeckBuilder.tsx:1861
 #: ui/components/settings/AvatarCropDialog.tsx:155
 #: ui/components/settings/GuestNamePicker.tsx:54
 #: ui/views/Settings.tsx:518
@@ -6564,21 +8083,42 @@ msgstr "Save"
 msgid "Save & Reconnect"
 msgstr "Save & Reconnect"
 
+#: ui/components/editor/DeckBuilder.tsx:1935
+msgid "Save as draft"
+msgstr "Save as draft"
+
 #: ui/views/Settings.tsx:486
 msgid "Save current server…"
 msgstr "Save current server…"
 
+#: ui/components/editor/DeckLayoutMenu.tsx:199
+msgid "Save current view"
+msgstr "Save current view"
+
+#: ui/components/editor/DeckBuilder.tsx:1205
 #: ui/lib/keybindings.ts:77
 msgid "Save deck"
 msgstr "Save deck"
 
-#: ui/components/editor/DeckLayoutMenu.tsx:206
+#: ui/components/editor/DeckBuilder.tsx:1849
+msgid "Save deck (unsaved changes)"
+msgstr "Save deck (unsaved changes)"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:207
 msgid "Save deck view"
 msgstr "Save deck view"
+
+#: ui/components/editor/DeckBuilder.tsx:1851
+msgid "Save draft as a full deck"
+msgstr "Save draft as a full deck"
 
 #: ui/components/editor/DeckSaveConflictDialog.tsx:80
 msgid "Save mine as a copy"
 msgstr "Save mine as a copy"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:54
+msgid "Save this device’s deck as the next account version."
+msgstr "Save this device’s deck as the next account version."
 
 #: ui/components/deck/DeckGridCard.tsx:118
 #: ui/components/deck/DeckGridCard.tsx:119
@@ -6589,10 +8129,40 @@ msgstr "Save to account"
 msgid "Save to My Decks"
 msgstr "Save to My Decks"
 
+#: ui/components/editor/DeckLayoutMenu.tsx:226
+msgid "Save view"
+msgstr "Save view"
+
+#: ui/components/editor/DeckBuilder.tsx:1807
+msgid "Saved"
+msgstr "Saved"
+
+#. placeholder {0}: deckToSave.name
+#. placeholder {1}: unsupportedNames.size
+#: ui/components/editor/DeckBuilder.tsx:1042
+msgid "Saved \"{0}\" — {1} cards are unsupported by the Manabrew and Forge engines"
+msgstr "Saved \"{0}\" — {1} cards are unsupported by the Manabrew and Forge engines"
+
 #. placeholder {0}: deckToSave.name
 #: ui/components/editor/DeckBuilder.tsx:1046
 msgid "Saved \"{0}\" — {validationError}"
 msgstr "Saved \"{0}\" — {validationError}"
+
+#. placeholder {0}: deckToSave.name
+#: ui/components/editor/DeckBuilder.tsx:1041
+msgid "Saved \"{0}\" — one card is unsupported by the Manabrew and Forge engines"
+msgstr "Saved \"{0}\" — one card is unsupported by the Manabrew and Forge engines"
+
+#. placeholder {0}: currentDeck.name
+#. placeholder {1}: unsupportedNames.size
+#: ui/components/editor/DeckBuilder.tsx:1133
+msgid "Saved \"{0}\" as draft — {1} cards are unsupported by the Manabrew and Forge engines"
+msgstr "Saved \"{0}\" as draft — {1} cards are unsupported by the Manabrew and Forge engines"
+
+#. placeholder {0}: currentDeck.name
+#: ui/components/editor/DeckBuilder.tsx:1132
+msgid "Saved \"{0}\" as draft — one card is unsupported by the Manabrew and Forge engines"
+msgstr "Saved \"{0}\" as draft — one card is unsupported by the Manabrew and Forge engines"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:105
 msgid "Saved \"{label}\"."
@@ -6606,9 +8176,21 @@ msgstr "Saved \"{name}\""
 msgid "Saved \"{name}\" to My Decks."
 msgstr "Saved \"{name}\" to My Decks."
 
+#: ui/components/editor/DeckBuilder.tsx:1114
+msgid "Saved as a separate account deck"
+msgstr "Saved as a separate account deck"
+
 #: ui/components/limited/LimitedCompareDialog.tsx:52
 msgid "Saved deck"
 msgstr "Saved deck"
+
+#: ui/components/editor/DeckBuilder.tsx:1802
+msgid "Saved locally"
+msgstr "Saved locally"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:171
+msgid "Saved on this device"
+msgstr "Saved on this device"
 
 #: ui/views/Settings.tsx:428
 msgid "Saved servers"
@@ -6619,7 +8201,8 @@ msgstr "Saved servers"
 msgid "Saved version {0} to your account"
 msgstr "Saved version {0} to your account"
 
-#: ui/components/editor/DeckLayoutMenu.tsx:148
+#: ui/components/editor/DeckLayoutMenu.tsx:145
+#: ui/components/editor/DeckLayoutMenu.tsx:149
 msgid "Saved views"
 msgstr "Saved views"
 
@@ -6627,6 +8210,12 @@ msgstr "Saved views"
 msgid "Saves the current host, port, and password so you can switch back later."
 msgstr "Saves the current host, port, and password so you can switch back later."
 
+#: ui/components/editor/DeckBuilder.tsx:1208
+#: ui/components/editor/DeckBuilder.tsx:1861
+msgid "Saving"
+msgstr "Saving"
+
+#: ui/components/editor/DeckBuilder.tsx:1798
 #: ui/components/OnboardingHurray.tsx:89
 #: ui/components/settings/AvatarCropDialog.tsx:155
 #: ui/components/settings/GuestNamePicker.tsx:54
@@ -6644,6 +8233,14 @@ msgstr "SB {sideboardCount}"
 #: ui/views/Settings.tsx:631
 msgid "Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them."
 msgstr "Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them."
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:326
+msgid "Scanning available printings"
+msgstr "Scanning available printings"
+
+#: ui/components/editor/DeckBuilder.tsx:771
+msgid "Schemes"
+msgstr "Schemes"
 
 #: ui/components/play/DeckShelfRow.tsx:60
 msgid "Scroll {label} left"
@@ -6710,6 +8307,14 @@ msgstr "Sealed templates"
 msgid "Search all theme tokens"
 msgstr "Search all theme tokens"
 
+#: ui/components/editor/BatchPrintingDialog.tsx:149
+msgid "Search by set name or code…"
+msgstr "Search by set name or code…"
+
+#: ui/components/editor/DeckQuickAdd.tsx:132
+msgid "Search card…"
+msgstr "Search card…"
+
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:86
 msgid "Search cards"
 msgstr "Search cards"
@@ -6719,6 +8324,7 @@ msgid "Search cards by name, rules, type or mana"
 msgstr "Search cards by name, rules, type or mana"
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:53
+#: ui/components/editor/CardSearch.tsx:949
 msgid "Search cards…"
 msgstr "Search cards…"
 
@@ -6726,7 +8332,7 @@ msgstr "Search cards…"
 msgid "Search every app and game token"
 msgstr "Search every app and game token"
 
-#: ui/components/editor/DeckCommandPalette.tsx:50
+#: ui/components/editor/DeckCommandPalette.tsx:51
 msgid "Search for an action to run in the deck editor."
 msgstr "Search for an action to run in the deck editor."
 
@@ -6738,6 +8344,10 @@ msgstr "Search players…"
 #: ui/components/game/ManualTabletopControls.tsx:329
 msgid "Search Scryfall"
 msgstr "Search Scryfall"
+
+#: ui/components/editor/SetSelect.tsx:110
+msgid "Search sets…"
+msgstr "Search sets…"
 
 #: ui/components/KeyboardShortcutsDialog.tsx:48
 msgid "Search shortcuts…"
@@ -6799,9 +8409,21 @@ msgstr "seed = {0}"
 msgid "Seems like you reached the limit of your browser storage — contact us on Discord for more info."
 msgstr "Seems like you reached the limit of your browser storage — contact us on Discord for more info."
 
+#: ui/components/editor/DeckListView.tsx:150
+msgid "Select {name}"
+msgstr "Select {name}"
+
+#: ui/components/editor/CardDetailModal.tsx:664
+msgid "Select a deck"
+msgstr "Select a deck"
+
 #: ui/components/lobby/UserList.tsx:19
 msgid "Select a deck before getting ready"
 msgstr "Select a deck before getting ready"
+
+#: ui/components/editor/DeckBuilder.tsx:1344
+msgid "Select all cards"
+msgstr "Select all cards"
 
 #: ui/lib/keybindings.ts:132
 msgid "Select all deck cards"
@@ -6810,6 +8432,18 @@ msgstr "Select all deck cards"
 #: ui/components/game/modals/CombatBreakdownModal.tsx:114
 msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
 msgstr "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
+
+#: ui/components/editor/DeckTagManagerDialog.tsx:122
+msgid "Select cards and press T to create the first tag."
+msgstr "Select cards and press T to create the first tag."
+
+#: ui/components/editor/DeckBuilder.tsx:1352
+msgid "Select cards matching current filters"
+msgstr "Select cards matching current filters"
+
+#: ui/components/editor/DeckBuilder.tsx:1376
+msgid "Select cards tagged {tag}"
+msgstr "Select cards tagged {tag}"
 
 #: ui/components/lobby/CreateGameDialog.tsx:861
 msgid "Select Deck"
@@ -6831,6 +8465,10 @@ msgstr "Select the deck the AI will play in this lobby."
 msgid "Select the deck you will play in this lobby."
 msgstr "Select the deck you will play in this lobby."
 
+#: ui/components/editor/DeckBuilder.tsx:1366
+msgid "Select unsupported cards"
+msgstr "Select unsupported cards"
+
 #: ui/components/lobby/CreateGameDialog.tsx:826
 msgid "Selected:"
 msgstr "Selected:"
@@ -6842,6 +8480,10 @@ msgstr "Selecting"
 #: ui/components/lobby/CreateGameDialog.tsx:857
 msgid "Selecting…"
 msgstr "Selecting…"
+
+#: ui/components/editor/DeckBuilder.tsx:1526
+msgid "Selection cleared"
+msgstr "Selection cleared"
 
 #: ui/components/lobby/ChatPanel.tsx:167
 msgid "Send message"
@@ -6884,6 +8526,7 @@ msgstr "Server sent data before its handshake"
 msgid "Server URL"
 msgstr "Server URL"
 
+#: ui/components/editor/CardSearch.tsx:318
 #: ui/components/editor/CardSearch.tsx:1227
 msgid "Set"
 msgstr "Set"
@@ -6892,6 +8535,35 @@ msgstr "Set"
 #: ui/views/DeckEditor.tsx:562
 msgid "Set {0} in the command zone"
 msgstr "Set {0} in the command zone"
+
+#. placeholder {0}: commanderSlot.noun
+#: ui/components/editor/CardDetailModal.tsx:553
+msgid "Set {deckCardName} as {0}"
+msgstr "Set {deckCardName} as {0}"
+
+#. placeholder {0}: commanderSlot.noun
+#: ui/components/editor/CardDetailModal.tsx:546
+#: ui/components/editor/DeckListView.tsx:203
+#: ui/components/editor/DeckListView.tsx:528
+msgid "Set as {0}"
+msgstr "Set as {0}"
+
+#: ui/components/editor/DeckListView.tsx:222
+msgid "Set as deck art cover"
+msgstr "Set as deck art cover"
+
+#: ui/components/editor/CardDetailModal.tsx:582
+#: ui/components/editor/DeckListView.tsx:534
+msgid "Set as deck cover"
+msgstr "Set as deck cover"
+
+#: ui/components/editor/DeckListView.tsx:544
+msgid "Set back face as cover"
+msgstr "Set back face as cover"
+
+#: ui/components/editor/DeckListView.tsx:242
+msgid "Set back face as deck art cover"
+msgstr "Set back face as deck art cover"
 
 #: ui/views/OnlineDraftPanel.tsx:45
 msgid "Set code"
@@ -6921,7 +8593,7 @@ msgstr "Set up Planechase"
 msgid "Set up Two-Headed Giant"
 msgstr "Set up Two-Headed Giant"
 
-#: ui/components/editor/CommanderSlots.tsx:218
+#: ui/components/editor/CommanderSlots.tsx:219
 msgid "Set your deck identity"
 msgstr "Set your deck identity"
 
@@ -6945,6 +8617,14 @@ msgstr "Setup progress"
 msgid "Share link copied — anyone can open and play this deck"
 msgstr "Share link copied — anyone can open and play this deck"
 
+#: ui/components/editor/DeckEditorWelcome.tsx:42
+msgid "Shift-click ranges, Cmd/Ctrl-click individual cards, then drag or use M, S, and B to move the selection."
+msgstr "Shift-click ranges, Cmd/Ctrl-click individual cards, then drag or use M, S, and B to move the selection."
+
+#: ui/components/editor/CardSearch.tsx:521
+msgid "Shockland"
+msgstr "Shockland"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:301
 msgid "Short label"
 msgstr "Short label"
@@ -6953,25 +8633,51 @@ msgstr "Short label"
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
+#: ui/components/editor/CardDetailModal.tsx:284
+msgid "Show All Printings"
+msgstr "Show All Printings"
+
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show back face"
 msgstr "Show back face"
+
+#. placeholder {0}: card.card_faces![1].name
+#: ui/components/editor/CardDetailModal.tsx:271
+msgid "Show back: {0}"
+msgstr "Show back: {0}"
 
 #: ui/components/deck/DeckCardBrowserFilters.tsx:332
 msgid "Show cards"
 msgstr "Show cards"
 
+#: ui/components/editor/DeckBuilder.tsx:1309
+msgid "Show collection gaps"
+msgstr "Show collection gaps"
+
 #: ui/components/deck/DeckHubEntryCard.tsx:131
 msgid "Show decks by {author}"
 msgstr "Show decks by {author}"
+
+#: ui/components/editor/DeckBuilder.tsx:1321
+msgid "Show exact printings owned"
+msgstr "Show exact printings owned"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show front face"
 msgstr "Show front face"
 
+#. placeholder {0}: card.card_faces![0].name
+#: ui/components/editor/CardDetailModal.tsx:272
+msgid "Show front: {0}"
+msgstr "Show front: {0}"
+
 #: ui/lib/keybindings.ts:198
 msgid "Show keyboard shortcuts"
 msgstr "Show keyboard shortcuts"
+
+#: ui/components/editor/DeckBuilder.tsx:1315
+msgid "Show partially owned cards"
+msgstr "Show partially owned cards"
 
 #: ui/views/Lobby.tsx:479
 msgid "Show players and chat"
@@ -6990,6 +8696,10 @@ msgstr "Show rules"
 msgid "Show rules (R)"
 msgstr "Show rules (R)"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:206
+msgid "Show sample cards"
+msgstr "Show sample cards"
+
 #: ui/components/game/panels/MiddleBarDock.tsx:97
 msgid "Show side panel"
 msgstr "Show side panel"
@@ -6998,7 +8708,7 @@ msgstr "Show side panel"
 msgid "Shuffle library"
 msgstr "Shuffle library"
 
-#: ui/components/editor/DeckQuickAddOptions.tsx:104
+#: ui/components/editor/DeckQuickAddOptions.tsx:109
 msgid "Side"
 msgstr "Side"
 
@@ -7007,6 +8717,7 @@ msgstr "Side"
 msgid "Side {0}"
 msgstr "Side {0}"
 
+#: ui/components/editor/DeckSelectionTray.tsx:89
 #: ui/components/editor/ImportDeckTextDialog.tsx:183
 #: ui/components/game/SideboardDialog.tsx:36
 #: ui/components/lobby/CustomFormatDialog.tsx:388
@@ -7017,7 +8728,8 @@ msgstr "Sideboard"
 msgid "Sideboard only"
 msgstr "Sideboard only"
 
-#: ui/components/editor/SideboardPlansDialog.tsx:62
+#: ui/components/editor/DeckBuilder.tsx:1941
+#: ui/components/editor/SideboardPlansDialog.tsx:63
 msgid "Sideboard plans"
 msgstr "Sideboard plans"
 
@@ -7106,6 +8818,10 @@ msgstr "Singleton (max one copy of each card)"
 msgid "Size and viewport"
 msgstr "Size and viewport"
 
+#: ui/components/editor/DeckEditorWelcome.tsx:180
+msgid "Skip"
+msgstr "Skip"
+
 #: ui/views/Settings.tsx:845
 msgid "Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled."
 msgstr "Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled."
@@ -7140,13 +8856,41 @@ msgstr "Something went wrong"
 msgid "Something went wrong and the game can't continue. Please contact the developer."
 msgstr "Something went wrong and the game can't continue. Please contact the developer."
 
+#: ui/components/editor/deckBuilder.utils.ts:100
+msgid "Sorceries"
+msgstr "Sorceries"
+
+#: ui/components/editor/CardSearch.tsx:93
+msgid "Sorcery"
+msgstr "Sorcery"
+
 #: ui/components/editor/CardSearch.tsx:1319
 msgid "Sort by"
 msgstr "Sort by"
 
+#: ui/components/editor/DeckBuilder.tsx:1289
+msgid "Sort cards by mana value"
+msgstr "Sort cards by mana value"
+
+#: ui/components/editor/DeckBuilder.tsx:1284
+msgid "Sort cards by name"
+msgstr "Sort cards by name"
+
+#: ui/components/editor/DeckBuilder.tsx:1294
+msgid "Sort cards by quantity"
+msgstr "Sort cards by quantity"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:93
 msgid "Sort hand"
 msgstr "Sort hand"
+
+#: ui/components/editor/DeckBuilder.tsx:1304
+msgid "Sort not owned cards first"
+msgstr "Sort not owned cards first"
+
+#: ui/components/editor/DeckBuilder.tsx:1299
+msgid "Sort owned cards first"
+msgstr "Sort owned cards first"
 
 #. placeholder {0}: SORT_OPTIONS.find((option) => option.value === sortBy)?.label
 #: ui/components/editor/DeckBuilder.tsx:1657
@@ -7177,6 +8921,14 @@ msgstr "Special tables"
 msgid "Speed"
 msgstr "Speed"
 
+#: ui/components/editor/CardSearch.tsx:453
+msgid "Spell"
+msgstr "Spell"
+
+#: ui/components/editor/CardSearch.tsx:421
+msgid "Split"
+msgstr "Split"
+
 #: ui/components/dev/designSystem/sections/AssetsSection.tsx:26
 msgid "src/assets/manaBrew.png"
 msgstr "src/assets/manaBrew.png"
@@ -7185,6 +8937,7 @@ msgstr "src/assets/manaBrew.png"
 msgid "Stack default view"
 msgstr "Stack default view"
 
+#: ui/components/editor/CardSearch.tsx:146
 #: ui/components/lobby/CreateGameDialog.tsx:41
 #: ui/components/lobby/DeckVsSelector.tsx:37
 #: ui/components/lobby/OpenTableCard.tsx:15
@@ -7206,6 +8959,10 @@ msgstr "Start a match your way, or open a deck from your collection."
 #: ui/components/OnboardingHurray.tsx:91
 msgid "Start as @{trimmed}"
 msgstr "Start as @{trimmed}"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:186
+msgid "Start building"
+msgstr "Start building"
 
 #: ui/views/Limited.tsx:293
 msgid "Start Commander Draft"
@@ -7268,8 +9025,13 @@ msgstr "Start with an empty deck and add cards yourself."
 msgid "start_game handled outside handleCommand"
 msgstr "start_game handled outside handleCommand"
 
+#: ui/components/editor/DeckBuilder.tsx:1535
+msgid "Starter deck — read only"
+msgstr "Starter deck — read only"
+
 #: ui/components/lobby/CreateGameDialog.tsx:770
 #: ui/components/lobby/DeckVsSelector.tsx:775
+#: ui/views/DeckEditor.tsx:822
 msgid "Starter Decks"
 msgstr "Starter Decks"
 
@@ -7326,7 +9088,22 @@ msgstr "Stats"
 msgid "Status"
 msgstr "Status"
 
-#: ui/components/editor/ComboDetailModal.tsx:102
+#: ui/components/editor/DeckLabelsModal.tsx:25
+msgid "Stax"
+msgstr "Stax"
+
+#: ui/views/DeckEditor.tsx:1126
+#: ui/views/DeckEditor.tsx:1153
+msgid "Stay"
+msgstr "Stay"
+
+#. placeholder {0}: step + 1
+#. placeholder {1}: STEPS.length
+#: ui/components/editor/DeckEditorWelcome.tsx:168
+msgid "Step {0} of {1}"
+msgstr "Step {0} of {1}"
+
+#: ui/components/editor/ComboDetailModal.tsx:103
 msgid "Steps"
 msgstr "Steps"
 
@@ -7371,6 +9148,10 @@ msgstr "Suggested"
 msgid "Suggestions"
 msgstr "Suggestions"
 
+#: ui/components/editor/CardDetailModal.tsx:334
+msgid "Supported by the Manabrew and Forge engines"
+msgstr "Supported by the Manabrew and Forge engines"
+
 #: ui/components/dev/designSystem/sections/SpacingSection.tsx:45
 msgid "Surface"
 msgstr "Surface"
@@ -7379,14 +9160,43 @@ msgstr "Surface"
 msgid "Swiss"
 msgstr "Swiss"
 
+#: ui/components/editor/DeckBuilder.tsx:1236
+msgid "Switch to grid view"
+msgstr "Switch to grid view"
+
+#: ui/components/editor/DeckBuilder.tsx:1231
+msgid "Switch to list view"
+msgstr "Switch to list view"
+
+#: ui/components/editor/DeckBuilder.tsx:1241
+msgid "Switch to stack view"
+msgstr "Switch to stack view"
+
+#: ui/components/editor/DeckBuilder.tsx:1806
+msgid "Sync failed"
+msgstr "Sync failed"
+
 #: ui/components/settings/AccountSection.tsx:28
 msgid "Sync your decks on every device"
 msgstr "Sync your decks on every device"
+
+#: ui/components/editor/DeckBuilder.tsx:1804
+msgid "Synced"
+msgstr "Synced"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:171
+msgid "Synced to your account"
+msgstr "Synced to your account"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:180
+msgid "Syncing…"
+msgstr "Syncing…"
 
 #: ui/views/Settings.tsx:976
 msgid "System"
 msgstr "System"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:371
 #: ui/components/lobby/ChatPanel.tsx:29
 msgid "Table"
 msgstr "Table"
@@ -7416,6 +9226,11 @@ msgstr "Tables from other players"
 msgid "Tabletop"
 msgstr "Tabletop"
 
+#: ui/components/editor/DeckQuickAddOptions.tsx:122
+#: ui/components/editor/DeckSelectionTray.tsx:113
+msgid "Tag"
+msgstr "Tag"
+
 #. placeholder {0}: newTagInput.trim()
 #: ui/components/editor/DeckBuilder.tsx:1996
 msgid "Tag \"{0}\" added"
@@ -7425,7 +9240,8 @@ msgstr "Tag \"{0}\" added"
 msgid "Tag \"{tag}\" removed"
 msgstr "Tag \"{tag}\" removed"
 
-#: ui/components/editor/DeckTagDialog.tsx:57
+#: ui/components/editor/DeckBuilder.tsx:1445
+#: ui/components/editor/DeckTagDialog.tsx:58
 #: ui/lib/keybindings.ts:126
 msgid "Tag selected cards"
 msgstr "Tag selected cards"
@@ -7451,6 +9267,14 @@ msgstr "Tagged cards with \"{tag}\""
 #: ui/components/deck/DeckHubFilterPanel.tsx:216
 msgid "Tags"
 msgstr "Tags"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:167
+msgid "Tags workspace"
+msgstr "Tags workspace"
+
+#: ui/components/editor/SideboardPlansDialog.tsx:119
+msgid "Take out"
+msgstr "Take out"
 
 #. placeholder {0}: seatIndex + 1
 #: ui/components/lobby/TableSeatChip.tsx:67
@@ -7479,6 +9303,14 @@ msgstr "Tap: {description}"
 msgid "Tavern table"
 msgstr "Tavern table"
 
+#: ui/components/editor/DeckBudgetPanel.tsx:25
+msgid "TCGplayer"
+msgstr "TCGplayer"
+
+#: ui/components/editor/DeckLabelsModal.tsx:18
+msgid "Tempo"
+msgstr "Tempo"
+
 #: ui/components/settings/AccountActionsCard.tsx:97
 msgid "Terms"
 msgstr "Terms"
@@ -7486,6 +9318,14 @@ msgstr "Terms"
 #: ui/components/dev/BoardPlayground.tsx:513
 msgid "Test action count"
 msgstr "Test action count"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:57
+msgid "Text, grid, and stack views expose the same card actions. Adjust quantities, set commanders, change printings and foil treatment, choose the deck cover, move cards, or open full card details."
+msgstr "Text, grid, and stack views expose the same card actions. Adjust quantities, set commanders, change printings and foil treatment, choose the deck cover, move cards, or open full card details."
+
+#: ui/components/editor/CardSearch.tsx:477
+msgid "Textless"
+msgstr "Textless"
 
 #: ui/components/lobby/ReportPlayerDialog.tsx:109
 msgid "Thank you"
@@ -7593,6 +9433,14 @@ msgstr "The open deck changed. Build the printing proposal again."
 #: ui/router.tsx:42
 msgid "The page you're looking for doesn't exist."
 msgstr "The page you're looking for doesn't exist."
+
+#: ui/components/editor/PlaymatEditorModal.tsx:271
+msgid "The playmat fills a wide, landscape area (roughly 5:2). For a crisp result use a landscape image at least ~1600px wide — up to 4096px on the long edge and 3 MB are kept. Use"
+msgstr "The playmat fills a wide, landscape area (roughly 5:2). For a crisp result use a landscape image at least ~1600px wide — up to 4096px on the long edge and 3 MB are kept. Use"
+
+#: ui/components/editor/DeckEditorWelcome.tsx:66
+msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
+msgstr "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 
 #: ui/stores/useGameStore.ts:379
 msgid "The previous game is still closing. Try again in a moment."
@@ -7782,6 +9630,10 @@ msgstr "to chat in General"
 msgid "Toggle autopass / full control"
 msgstr "Toggle autopass / full control"
 
+#: ui/components/editor/DeckBuilder.tsx:1395
+msgid "Toggle card preview panel"
+msgstr "Toggle card preview panel"
+
 #: ui/lib/keybindings.ts:216
 msgid "Toggle card rules / printed view"
 msgstr "Toggle card rules / printed view"
@@ -7790,10 +9642,15 @@ msgstr "Toggle card rules / printed view"
 msgid "Toggle card search"
 msgstr "Toggle card search"
 
+#: ui/components/editor/DeckBuilder.tsx:1388
+msgid "Toggle card search panel"
+msgstr "Toggle card search panel"
+
 #: ui/lib/keybindings.ts:276
 msgid "Toggle combat breakdown"
 msgstr "Toggle combat breakdown"
 
+#: ui/components/editor/DeckBuilder.tsx:1488
 #: ui/lib/keybindings.ts:174
 msgid "Toggle foil for selected cards"
 msgstr "Toggle foil for selected cards"
@@ -7811,10 +9668,12 @@ msgid "Toggle the dev panel"
 msgstr "Toggle the dev panel"
 
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:80
+#: ui/components/editor/CardSearch.tsx:449
 msgid "Token"
 msgstr "Token"
 
-#: ui/components/editor/TokenSection.tsx:43
+#: ui/components/editor/DeckLabelsModal.tsx:20
+#: ui/components/editor/TokenSection.tsx:44
 msgid "Tokens"
 msgstr "Tokens"
 
@@ -7846,6 +9705,10 @@ msgstr "Top decks right now"
 msgid "tou"
 msgstr "tou"
 
+#: ui/components/editor/CardSearch.tsx:338
+msgid "Toughness"
+msgstr "Toughness"
+
 #: ui/views/Tournaments.tsx:63
 msgid "Tournament code"
 msgstr "Tournament code"
@@ -7869,6 +9732,14 @@ msgstr "Track the cards you own and import or export your collection."
 #: ui/views/OnlineDraftPanel.tsx:43
 msgid "Traditional (Bo3)"
 msgstr "Traditional (Bo3)"
+
+#: ui/components/editor/CardSearch.tsx:413
+msgid "Transform"
+msgstr "Transform"
+
+#: ui/components/editor/DeckLabelsModal.tsx:21
+msgid "Tribal"
+msgstr "Tribal"
 
 #: ui/components/settings/CardArtDownloadSection.tsx:188
 msgid "Trim unused"
@@ -7915,6 +9786,7 @@ msgstr "Two-seat shared-stack pile draft: take a pile or decline it."
 
 #: ui/components/editor/CardDetailModal.tsx:291
 #: ui/components/editor/CardSearch.tsx:1074
+#: ui/components/editor/deckBuilder.utils.ts:23
 msgid "Type"
 msgstr "Type"
 
@@ -7922,9 +9794,21 @@ msgstr "Type"
 msgid "Type {handle} to confirm"
 msgstr "Type {handle} to confirm"
 
+#: ui/components/editor/DeckCommandPalette.tsx:66
+msgid "Type a deck command…"
+msgstr "Type a deck command…"
+
+#: ui/components/editor/DeckLabelsModal.tsx:105
+msgid "Type a label…"
+msgstr "Type a label…"
+
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:62
 msgid "Type scale"
 msgstr "Type scale"
+
+#: ui/components/editor/CardSearch.tsx:485
+msgid "Un-cards"
+msgstr "Un-cards"
 
 #: ui/components/lobby/PlaytestPlayersDialog.tsx:38
 #~ msgid "Unavailable with the local Phase host. Choose 1v1."
@@ -7938,6 +9822,18 @@ msgstr "Unblocked"
 msgid "Unbound"
 msgstr "Unbound"
 
+#: ui/views/DeckEditor.tsx:564
+#: ui/views/DeckEditor.tsx:591
+#: ui/views/DeckEditor.tsx:637
+#: ui/views/DeckEditor.tsx:649
+msgid "Undo"
+msgstr "Undo"
+
+#. placeholder {0}: history.undoLabel
+#: ui/components/editor/DeckHistoryControls.tsx:17
+msgid "Undo {0}"
+msgstr "Undo {0}"
+
 #: ui/lib/keybindings.ts:89
 msgid "Undo deck edit"
 msgstr "Undo deck edit"
@@ -7946,6 +9842,14 @@ msgstr "Undo deck edit"
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:86
 msgid "Undo draft change"
 msgstr "Undo draft change"
+
+#: ui/components/editor/DeckBuilder.tsx:1221
+msgid "Undo last deck edit"
+msgstr "Undo last deck edit"
+
+#: ui/components/editor/CardSearch.tsx:509
+msgid "Unique Art"
+msgstr "Unique Art"
 
 #: ui/themes/themeDocument.ts:38
 msgid "Unknown {label} color: {key}."
@@ -7972,10 +9876,21 @@ msgstr "Unlink {label}"
 msgid "Unlinking failed"
 msgstr "Unlinking failed"
 
+#: ui/components/editor/DeckBuilder.tsx:1800
+msgid "Unsaved"
+msgstr "Unsaved"
+
 #: ui/views/DeckEditor.tsx:1120
 #: ui/views/DeckEditor.tsx:1147
 msgid "Unsaved Changes"
 msgstr "Unsaved Changes"
+
+#: ui/components/editor/CardDetailModal.tsx:333
+#: ui/components/editor/CommanderSlots.tsx:89
+#: ui/components/editor/DeckListView.tsx:680
+#: ui/components/editor/DeckListView.tsx:953
+msgid "Unsupported by the Manabrew and Forge engines"
+msgstr "Unsupported by the Manabrew and Forge engines"
 
 #: ui/phase/conspiracies.ts:20
 msgid "Unsupported conspiracy preparation response"
@@ -8005,6 +9920,15 @@ msgstr "Unsupported prompt preview: {preview}"
 msgid "Unsupported theme version. Expected version 1."
 msgstr "Unsupported theme version. Expected version 1."
 
+#: ui/components/editor/deckEditor.utils.ts:42
+#: ui/components/editor/DeckSelectionTray.tsx:130
+msgid "Untag"
+msgstr "Untag"
+
+#: ui/components/editor/deckBuilder.utils.ts:349
+msgid "Untagged"
+msgstr "Untagged"
+
 #: ui/components/game/ManualTabletopControls.tsx:397
 #: ui/components/game/ManualTabletopControls.tsx:398
 msgid "Untap"
@@ -8030,6 +9954,15 @@ msgstr "Update failed to install. You can retry from the home page."
 msgid "Update to {version}"
 msgstr "Update to {version}"
 
+#. placeholder {0}: changes.length
+#: ui/components/editor/PrintingOptimizerDialog.tsx:247
+msgid "Updated {0} card printings"
+msgstr "Updated {0} card printings"
+
+#: ui/components/editor/PrintingOptimizerDialog.tsx:246
+msgid "Updated one card printing"
+msgstr "Updated one card printing"
+
 #: ui/components/deck/DeckHubResults.tsx:87
 msgid "Updating…"
 msgstr "Updating…"
@@ -8037,6 +9970,10 @@ msgstr "Updating…"
 #: ui/components/settings/AvatarPicker.tsx:30
 msgid "Upload avatar"
 msgstr "Upload avatar"
+
+#: ui/components/editor/PlaymatEditorModal.tsx:229
+msgid "Upload image"
+msgstr "Upload image"
 
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:82
 msgid "Usage"
@@ -8057,6 +9994,10 @@ msgstr "Use a valid hex or rgb/rgba color."
 #: ui/components/settings/CardImageLibraryCard.tsx:114
 msgid "Use folder"
 msgstr "Use folder"
+
+#: ui/components/editor/DeckCollectionPanel.tsx:198
+msgid "Use owned printings"
+msgstr "Use owned printings"
 
 #: ui/components/settings/LocaleSelect.tsx:22
 msgid "Use system language"
@@ -8098,9 +10039,17 @@ msgstr "Utilities"
 msgid "Validate & save"
 msgstr "Validate & save"
 
+#: ui/components/editor/DeckEditorWelcome.tsx:106
+msgid "Validation checks legality and whether every card is supported by both the Manabrew and Forge engines. Warning markers identify unsupported cards and can be filtered or selected together."
+msgstr "Validation checks legality and whether every card is supported by both the Manabrew and Forge engines. Warning markers identify unsupported cards and can be filtered or selected together."
+
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:81
 msgid "Value"
 msgstr "Value"
+
+#: ui/components/editor/CardSearch.tsx:445
+msgid "Vanilla"
+msgstr "Vanilla"
 
 #. placeholder {0}: TERMS_AND_CONDITIONS.version
 #. placeholder {1}: TERMS_AND_CONDITIONS.lastUpdated
@@ -8113,9 +10062,15 @@ msgid "Version {versionNo} loaded. Save to create a new version."
 msgstr "Version {versionNo} loaded. Save to create a new version."
 
 #: ui/components/deck/DeckVersionHistoryDialog.tsx:71
+#: ui/components/editor/DeckBuilder.tsx:1931
 msgid "Version history"
 msgstr "Version history"
 
+#: ui/components/editor/PlaymatEditorModal.tsx:301
+msgid "Vertical framing"
+msgstr "Vertical framing"
+
+#: ui/components/editor/DeckLayoutMenu.tsx:152
 #: ui/components/game/panels/PlayerSheetModal.tsx:217
 #: ui/components/game/panels/PlayerSheetModal.tsx:289
 msgid "View"
@@ -8127,8 +10082,17 @@ msgstr "View All"
 
 #: ui/components/deck/DeckGridCard.tsx:94
 #: ui/components/deck/DeckGridCard.tsx:95
+#: ui/components/editor/DeckBuilder.tsx:1554
 msgid "View in Community"
 msgstr "View in Community"
+
+#: ui/components/editor/CollectionOwnershipTooltip.tsx:128
+msgid "View in My Collection"
+msgstr "View in My Collection"
+
+#: ui/components/editor/ComboDetailModal.tsx:128
+msgid "View on Commander Spellbook"
+msgstr "View on Commander Spellbook"
 
 #: ui/components/game/panels/PlayerSheetModal.tsx:175
 msgid "View permitted hand cards"
@@ -8138,6 +10102,7 @@ msgstr "View permitted hand cards"
 msgid "View visible cards"
 msgstr "View visible cards"
 
+#: ui/components/editor/CardSearch.tsx:162
 #: ui/components/lobby/CreateGameDialog.tsx:45
 #: ui/components/lobby/DeckVsSelector.tsx:41
 #: ui/components/lobby/OpenTableCard.tsx:16
@@ -8148,6 +10113,10 @@ msgstr "Vintage"
 #: ui/components/lobby/TableSetupTableCard.tsx:36
 msgid "Volcanic stone"
 msgstr "Volcanic stone"
+
+#: ui/components/editor/DeckLabelsModal.tsx:24
+msgid "Voltron"
+msgstr "Voltron"
 
 #: ui/components/lobby/CreateGameDialog.tsx:817
 msgid "vs"
@@ -8223,13 +10192,22 @@ msgstr "Welcome to"
 msgid "Welcome, @{0}!"
 msgstr "Welcome, @{0}!"
 
+#: ui/components/editor/SideboardPlansDialog.tsx:135
+msgid "What matters after boarding?"
+msgstr "What matters after boarding?"
+
 #: ui/components/game/modals/GameSettingsModal.tsx:141
 msgid "When off, simultaneous triggers are ordered automatically."
 msgstr "When off, simultaneous triggers are ordered automatically."
 
+#: ui/components/editor/CardSearch.tsx:282
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:26
 msgid "White"
 msgstr "White"
+
+#: ui/components/editor/CombosPanel.tsx:138
+msgid "Win lines"
+msgstr "Win lines"
 
 #: ui/components/companion/StatsDialog.tsx:76
 msgid "Wins by player"
@@ -8309,6 +10287,18 @@ msgstr "You control when the game begins"
 msgid "You forfeit the game. This cannot be undone."
 msgstr "You forfeit the game. This cannot be undone."
 
+#: ui/views/DeckEditor.tsx:1122
+msgid "You have unsaved changes to your deck. Do you want to go back without saving?"
+msgstr "You have unsaved changes to your deck. Do you want to go back without saving?"
+
+#: ui/views/DeckEditor.tsx:1149
+msgid "You have unsaved changes to your deck. Do you want to leave without saving?"
+msgstr "You have unsaved changes to your deck. Do you want to leave without saving?"
+
+#: ui/views/DeckEditor.tsx:788
+msgid "You haven’t published a deck yet. Use the share action on any deck."
+msgstr "You haven’t published a deck yet. Use the share action on any deck."
+
 #: ui/components/dev/promptDialogs/BattlefieldDialogPreview.tsx:72
 msgid "You lost"
 msgstr "You lost"
@@ -8372,6 +10362,10 @@ msgstr "Your Decks"
 #: ui/views/Settings.tsx:562
 msgid "Your default playmat"
 msgstr "Your default playmat"
+
+#: ui/components/editor/DeckSaveConflictDialog.tsx:34
+msgid "Your edits are saved locally. Choose which account version should be kept."
+msgstr "Your edits are saved locally. Choose which account version should be kept."
 
 #: ui/components/play/OwnedDeckShelf.tsx:33
 msgid "Your first deck is waiting to be brewed."

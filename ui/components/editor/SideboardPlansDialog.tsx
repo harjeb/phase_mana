@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
@@ -61,20 +62,20 @@ export function SideboardPlansDialog({
         <DialogHeader>
           <DialogTitle><Trans>Sideboard plans</Trans></DialogTitle>
           <DialogDescription>
-            Keep the exact swaps and play-pattern notes you need for each matchup.
+            <Trans>Keep the exact swaps and play-pattern notes you need for each matchup.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="flex gap-2">
           <Input
             value={matchup}
-            placeholder={`Azorius Control`}
+            placeholder={t`Azorius Control`}
             onChange={(event) => setMatchup(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") addPlan();
             }}
           />
           <Button variant="outline" disabled={!matchup.trim()} onClick={addPlan}>
-            <Plus className="mr-1.5 h-4 w-4" /> Matchup
+            <Plus className="mr-1.5 h-4 w-4" /> <Trans>Matchup</Trans>
           </Button>
         </div>
         <div className="space-y-3">
@@ -92,7 +93,7 @@ export function SideboardPlansDialog({
                   size="icon"
                   variant="ghost"
                   className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive"
-                  aria-label={`Delete ${plan.matchup}`}
+                  aria-label={t`Delete ${plan.matchup}`}
                   onClick={() =>
                     executeDeckEdit(`Delete sideboard plan`, () =>
                       updatePlans(plans.filter((candidate) => candidate.id !== plan.id)),
@@ -104,22 +105,22 @@ export function SideboardPlansDialog({
               </div>
               <div className="mt-3 grid gap-3 sm:grid-cols-2">
                 <label className="text-xs font-medium">
-                  Bring in
+                  <Trans>Bring in</Trans>
                   <textarea
                     className="mt-1 min-h-24 w-full resize-y rounded-md border bg-background px-3 py-2 text-xs"
                     value={plan.bringIn}
-                    placeholder="2 Negate\n1 Rest in Peace"
+                    placeholder={t`2 Negate\n1 Rest in Peace`}
                     onFocus={planEdit.begin}
                     onChange={(event) => updatePlan(plan.id, { bringIn: event.target.value })}
                     onBlur={planEdit.commit}
                   />
                 </label>
                 <label className="text-xs font-medium">
-                  Take out
+                  <Trans>Take out</Trans>
                   <textarea
                     className="mt-1 min-h-24 w-full resize-y rounded-md border bg-background px-3 py-2 text-xs"
                     value={plan.takeOut}
-                    placeholder={`2 slow removal\n1 top-end threat`}
+                    placeholder={t`2 slow removal\n1 top-end threat`}
                     onFocus={planEdit.begin}
                     onChange={(event) => updatePlan(plan.id, { takeOut: event.target.value })}
                     onBlur={planEdit.commit}
@@ -127,11 +128,11 @@ export function SideboardPlansDialog({
                 </label>
               </div>
               <label className="mt-3 block text-xs font-medium">
-                Matchup notes
+                <Trans>Matchup notes</Trans>
                 <textarea
                   className="mt-1 min-h-16 w-full resize-y rounded-md border bg-background px-3 py-2 text-xs"
                   value={plan.notes}
-                  placeholder={`What matters after boarding?`}
+                  placeholder={t`What matters after boarding?`}
                   onFocus={planEdit.begin}
                   onChange={(event) => updatePlan(plan.id, { notes: event.target.value })}
                   onBlur={planEdit.commit}
@@ -141,7 +142,7 @@ export function SideboardPlansDialog({
           ))}
           {plans.length === 0 && (
             <p className="py-8 text-center text-xs text-muted-foreground">
-              Add a matchup to start a sideboard guide.
+              <Trans>Add a matchup to start a sideboard guide.</Trans>
             </p>
           )}
         </div>

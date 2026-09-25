@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Bookmark, Plus, X } from "lucide-react";
 import { ScryfallImg } from "@/components/ScryfallImg";
@@ -9,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { scryfallDisplayName } from "@/lib/scryfall.utils";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import type { ScryfallCard } from "@/types/scryfall";
 import type { DeckQuickAddRequest } from "./deckQuickAdd.parser";
 interface DeckQuickAddOptionsProps {
@@ -35,7 +37,10 @@ export function DeckQuickAddOptions({
   onAdd,
   onClose,
 }: DeckQuickAddOptionsProps) {
-  const thumbnail = card.image_uris?.small ?? card.card_faces?.[0]?.image_uris?.small;
+  const thumbnail = withLocalCardArt(
+    card.image_uris ?? card.card_faces?.[0]?.image_uris,
+    card.name,
+  )?.small;
   const displayName = scryfallDisplayName(card);
   const availableTags = [...tags, ...customTags].filter(
     (tag, index, all) =>
@@ -67,7 +72,7 @@ export function DeckQuickAddOptions({
           type="button"
           size="icon-sm"
           variant="ghost"
-          title={`Close options`}
+          title={t`Close options`}
           onClick={onClose}
         >
           <X className="h-3 w-3" />
@@ -82,7 +87,7 @@ export function DeckQuickAddOptions({
             max={99}
             value={quantity}
             className="w-8 bg-transparent text-center text-xs font-medium text-foreground outline-none"
-            title={`Quantity`}
+            title={t`Quantity`}
             onChange={(event) =>
               onQuantityChange(Math.max(1, Math.min(99, Number(event.target.value) || 1)))
             }
@@ -95,7 +100,7 @@ export function DeckQuickAddOptions({
         <select
           value={destination}
           className="h-7 shrink-0 rounded border bg-background px-1 text-xs outline-none focus:ring-1 focus:ring-ring"
-          title={`Deck section`}
+          title={t`Deck section`}
           onChange={(event) =>
             onDestinationChange(event.target.value as DeckQuickAddRequest["destination"])
           }
@@ -111,10 +116,10 @@ export function DeckQuickAddOptions({
               size="sm"
               variant="outline"
               className="h-7 shrink-0 gap-1 px-2"
-              title={`Choose deck tags`}
+              title={t`Choose deck tags`}
             >
               <Bookmark className="h-3 w-3" />
-              {tags.length > 0 ? tags.length : `Tag`}
+              {tags.length > 0 ? tags.length : t`Tag`}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="min-w-44">

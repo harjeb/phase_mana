@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Modal } from "@/components/game/modals/Modal";
 import { Button } from "@/components/ui/button";
@@ -32,7 +33,7 @@ export function ComboDetailModal({
       <Modal.Header onClose={onClose}>
         <div className="flex items-center gap-2">
           <Sparkles className="h-4 w-4 text-counter-charge shrink-0" />
-          <h2 className="text-lg font-bold truncate">{produces.join(", ") || `Combo`}</h2>
+          <h2 className="text-lg font-bold truncate">{produces.join(", ") || t`Combo`}</h2>
         </div>
       </Modal.Header>
 
@@ -79,7 +80,7 @@ export function ComboDetailModal({
             {(prereqs.length > 0 || combo.manaNeeded) && (
               <div>
                 <div className="text-sm font-semibold text-muted-foreground mb-1">
-                  Prerequisites
+                  <Trans>Prerequisites</Trans>
                 </div>
                 {combo.manaNeeded && (
                   <div className="flex items-center gap-1.5 text-sm mb-1">
@@ -124,11 +125,11 @@ export function ComboDetailModal({
           >
             <Button size="sm" variant="outline" className="gap-1.5">
               <ExternalLink className="h-3.5 w-3.5" />
-              View on Commander Spellbook
+              <Trans>View on Commander Spellbook</Trans>
             </Button>
           </a>
           <Button size="sm" variant="ghost" onClick={onClose}>
-            Close
+            <Trans>Close</Trans>
           </Button>
         </div>
       </Modal.Footer>

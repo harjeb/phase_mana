@@ -217,7 +217,7 @@ export function CardDetailModal({
             <h2 className="text-lg font-bold truncate">{displayName}</h2>
             {isDoubleFaced && (
               <span className="text-xs text-muted-foreground shrink-0">
-                {faceIndex === 0 ? `Front face` : `Back face`}
+                {faceIndex === 0 ? t`Front face` : t`Back face`}
               </span>
             )}
             {manaCost && <ManaSymbols cost={manaCost} size="sm" className="shrink-0" />}
@@ -268,8 +268,8 @@ export function CardDetailModal({
                     >
                       <RotateCcw className="h-3.5 w-3.5" />
                       {faceIndex === 0
-                        ? `Show back: ${card.card_faces![1].name}`
-                        : `Show front: ${card.card_faces![0].name}`}
+                        ? t`Show back: ${card.card_faces![1].name}`
+                        : t`Show front: ${card.card_faces![0].name}`}
                     </Button>
                   )}
 
@@ -281,7 +281,7 @@ export function CardDetailModal({
                       onClick={() => setShowPrints(true)}
                     >
                       <ImageIcon className="h-3.5 w-3.5" />
-                      Show All Printings
+                      <Trans>Show All Printings</Trans>
                     </Button>
                   )}
                 </div>
@@ -309,17 +309,17 @@ export function CardDetailModal({
                           <Badge variant="outline">Command {zoneCounts.command}</Badge>
                         )}
                         <Badge variant="outline">
-                          {matchingDeckCard.identity.foil ? `Foil` : `Non-foil`}
+                          {matchingDeckCard.identity.foil ? t`Foil` : t`Non-foil`}
                         </Badge>
                       </div>
                       <div className="flex items-center gap-2 text-xs">
                         <LibraryBig className="h-3.5 w-3.5 text-muted-foreground" />
                         <span>
                           {exactOwnership === "exact"
-                            ? `Exact printing owned · ${owned} total`
+                            ? t`Exact printing owned · ${owned} total`
                             : exactOwnership === "other"
-                              ? `Owned in another printing · ${owned} total`
-                              : `Not in collection`}
+                              ? t`Owned in another printing · ${owned} total`
+                              : t`Not in collection`}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-xs">
@@ -330,8 +330,8 @@ export function CardDetailModal({
                         )}
                         <span>
                           {unsupported
-                            ? `Unsupported by the Manabrew and Forge engines`
-                            : `Supported by the Manabrew and Forge engines`}
+                            ? t`Unsupported by the Manabrew and Forge engines`
+                            : t`Supported by the Manabrew and Forge engines`}
                         </span>
                       </div>
                       {!readOnly && appliedTags.length > 0 && (
@@ -488,7 +488,7 @@ export function CardDetailModal({
                   <Button
                     size="icon-sm"
                     variant="ghost"
-                    title={`Remove one copy`}
+                    title={t`Remove one copy`}
                     onClick={() => {
                       deckEditorActions.onRemoveOne(deckCardName);
                       toast.success(t`Removed one ${deckCardName}`);
@@ -502,7 +502,7 @@ export function CardDetailModal({
                   <Button
                     size="icon-sm"
                     variant="ghost"
-                    title={`Add one copy`}
+                    title={t`Add one copy`}
                     onClick={() => {
                       deckEditorActions.onAddOne(deckCardName);
                       toast.success(t`Added ${deckCardName}`);
@@ -516,7 +516,7 @@ export function CardDetailModal({
                   <Button
                     size="icon-sm"
                     variant="ghost"
-                    title={`Change printing`}
+                    title={t`Change printing`}
                     onClick={() => setShowPrints(true)}
                   >
                     <ImageIcon className="h-3.5 w-3.5" />
@@ -527,8 +527,8 @@ export function CardDetailModal({
                       variant="ghost"
                       title={
                         faceIndex === 0
-                          ? `Flip to back: ${card.card_faces![1].name}`
-                          : `Flip to front: ${card.card_faces![0].name}`
+                          ? t`Flip to back: ${card.card_faces![1].name}`
+                          : t`Flip to front: ${card.card_faces![0].name}`
                       }
                       onClick={() => setFaceIndex(faceIndex === 0 ? 1 : 0)}
                     >
@@ -542,15 +542,15 @@ export function CardDetailModal({
                       className={cn("h-7 w-7", deckEditorActions.isCommander && "text-commander")}
                       title={
                         deckEditorActions.isCommander
-                          ? `Remove as ${commanderSlot.noun}`
-                          : `Set as ${commanderSlot.noun}`
+                          ? t`Remove as ${commanderSlot.noun}`
+                          : t`Set as ${commanderSlot.noun}`
                       }
                       onClick={() => {
                         deckEditorActions.onSetCommander(deckCardName);
                         toast.success(
                           deckEditorActions.isCommander
-                            ? `Removed ${deckCardName} as ${commanderSlot.noun}`
-                            : `Set ${deckCardName} as ${commanderSlot.noun}`,
+                            ? t`Removed ${deckCardName} as ${commanderSlot.noun}`
+                            : t`Set ${deckCardName} as ${commanderSlot.noun}`,
                         );
                       }}
                     >
@@ -562,7 +562,7 @@ export function CardDetailModal({
                       size="icon"
                       variant="ghost"
                       className={cn("h-7 w-7", matchingDeckCard?.identity.foil && "text-warning")}
-                      title={matchingDeckCard?.identity.foil ? `Remove foil` : `Make foil`}
+                      title={matchingDeckCard?.identity.foil ? t`Remove foil` : t`Make foil`}
                       onClick={() => deckEditorActions.onToggleFoil?.(deckCardName)}
                     >
                       <Sparkles className="h-3.5 w-3.5" />
@@ -578,8 +578,8 @@ export function CardDetailModal({
                       )}
                       title={
                         currentDeck.coverCardName === deckCardName
-                          ? `Remove deck cover`
-                          : `Set as deck cover`
+                          ? t`Remove deck cover`
+                          : t`Set as deck cover`
                       }
                       onClick={() => deckEditorActions.onSetCover?.(deckCardName, faceIndex)}
                     >
@@ -622,7 +622,7 @@ export function CardDetailModal({
                         <div className="px-2 py-1 flex items-center gap-1">
                           <Input
                             className="h-7 text-xs flex-1"
-                            placeholder={`New tag\u2026`}
+                            placeholder={t`New tag\u2026`}
                             value={newTagInput}
                             onChange={(e) => setNewTagInput(e.target.value)}
                             onKeyDown={(e) => {
@@ -654,14 +654,14 @@ export function CardDetailModal({
                   onClick={() => setShowDeckPicker((v) => !v)}
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  Add to Deck
+                  <Trans>Add to Deck</Trans>
                   <ChevronDown className="h-3 w-3 ml-1" />
                 </Button>
 
                 {showDeckPicker && (
                   <div className="absolute bottom-full left-0 mb-1 w-64 bg-popover border rounded-md shadow-lg py-1 z-10">
                     <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">
-                      Select a deck
+                      <Trans>Select a deck</Trans>
                     </div>
                     {currentDeck.name && (
                       <button
@@ -671,7 +671,7 @@ export function CardDetailModal({
                       >
                         <span className="flex-1 truncate">{currentDeck.name}</span>
                         <Badge variant="outline" className="text-[10px] px-1 py-0 shrink-0">
-                          editing
+                          <Trans>editing</Trans>
                         </Badge>
                       </button>
                     )}
@@ -693,7 +693,7 @@ export function CardDetailModal({
                     </ScrollArea>
                     {savedDecks.length === 0 && !currentDeck.name && (
                       <div className="px-3 py-2 text-sm text-muted-foreground">
-                        No decks available
+                        <Trans>No decks available</Trans>
                       </div>
                     )}
                   </div>
@@ -701,7 +701,7 @@ export function CardDetailModal({
               </div>
             ) : null}
             <Button size="sm" variant="ghost" onClick={onClose}>
-              Close
+              <Trans>Close</Trans>
             </Button>
           </div>
         </Modal.Footer>

@@ -95,20 +95,20 @@ export function DeckCheckpointsDialog({
         <DialogHeader>
           <DialogTitle><Trans>Local checkpoints</Trans></DialogTitle>
           <DialogDescription>
-            Capture an experiment before changing direction. Checkpoints stay on this device.
+            <Trans>Capture an experiment before changing direction. Checkpoints stay on this device.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="flex gap-2">
           <Input
             value={name}
-            placeholder={`Before changing the mana base`}
+            placeholder={t`Before changing the mana base`}
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") saveCheckpoint();
             }}
           />
           <Button variant="outline" onClick={saveCheckpoint}>
-            <Plus className="mr-1.5 h-4 w-4" /> Capture
+            <Plus className="mr-1.5 h-4 w-4" /> <Trans>Capture</Trans>
           </Button>
         </div>
         <div className="max-h-80 space-y-2 overflow-y-auto">
@@ -136,13 +136,13 @@ export function DeckCheckpointsDialog({
                   )
                 }
               >
-                <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> Restore
+                <RotateCcw className="mr-1.5 h-3.5 w-3.5" /> <Trans>Restore</Trans>
               </Button>
               <Button
                 size="icon"
                 variant="ghost"
                 className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                aria-label={`Delete ${checkpoint.name}`}
+                aria-label={t`Delete ${checkpoint.name}`}
                 onClick={() => removeCheckpoint(checkpoint.id)}
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -151,7 +151,7 @@ export function DeckCheckpointsDialog({
           ))}
           {deckCheckpoints.length === 0 && (
             <p className="py-8 text-center text-xs text-muted-foreground">
-              No checkpoints for this deck yet.
+              <Trans>No checkpoints for this deck yet.</Trans>
             </p>
           )}
         </div>

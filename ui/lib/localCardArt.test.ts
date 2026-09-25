@@ -25,4 +25,16 @@ describe("withLocalCardArt", () => {
     const uris = withLocalCardArt({ small: "", normal: "" }, "Grizzly Bears");
     expect(uris?.normal).toBe("/card-images/g/grizzly_bears.full.webp?name=Grizzly%20Bears");
   });
+
+  it("leaves an already-local uri alone so its CDN fallback survives", () => {
+    const local =
+      "/card-images/g/grizzly_bears.full.webp" +
+      "?fallback=https%3A%2F%2Fcards.scryfall.io%2Fnormal%2Fx.jpg";
+    const uris = withLocalCardArt(
+      { small: local, normal: local, large: local, png: local, art_crop: local, border_crop: local },
+      "Grizzly Bears",
+    );
+    expect(uris?.normal).toBe(local);
+    expect(uris?.art_crop).toBe(local);
+  });
 });

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { DeckCard } from "@/protocol/deck";
 import { computeCmc, isLand } from "@/lib/mana";
 export { scryfallToDeckCard } from "@/lib/scryfall.utils";
@@ -19,19 +20,19 @@ export const GROUP_BY_OPTIONS: {
 }[] = [
   {
     value: "type",
-    label: `Type`,
+    label: t`Type`,
   },
   {
     value: "cmc",
-    label: `Mana Value`,
+    label: t`Mana Value`,
   },
   {
     value: "color",
-    label: `Color`,
+    label: t`Color`,
   },
   {
     value: "custom",
-    label: `Custom Tags`,
+    label: t`Custom Tags`,
   },
 ];
 export const SORT_OPTIONS: {
@@ -40,23 +41,23 @@ export const SORT_OPTIONS: {
 }[] = [
   {
     value: "name",
-    label: `Name`,
+    label: t`Name`,
   },
   {
     value: "mana-value",
-    label: `Mana Value`,
+    label: t`Mana Value`,
   },
   {
     value: "quantity",
-    label: `Quantity`,
+    label: t`Quantity`,
   },
   {
     value: "owned",
-    label: `Owned First`,
+    label: t`Owned First`,
   },
   {
     value: "not-owned",
-    label: `Not Owned First`,
+    label: t`Not Owned First`,
   },
 ];
 export interface SectionDefinition {
@@ -81,37 +82,37 @@ export function parseFilterTerms(filter: string): string[] {
 const TYPE_SECTIONS: Record<string, SectionDefinition> = {
   creatures: {
     id: "creatures",
-    label: `Creatures`,
+    label: t`Creatures`,
     filter: (t) => t.includes("Creature"),
   },
   planeswalkers: {
     id: "planeswalkers",
-    label: `Planeswalkers`,
+    label: t`Planeswalkers`,
     filter: (t) => t.includes("Planeswalker") && !t.includes("Creature"),
   },
   instants: {
     id: "instants",
-    label: `Instants`,
+    label: t`Instants`,
     filter: (t) => t.includes("Instant"),
   },
   sorceries: {
     id: "sorceries",
-    label: `Sorceries`,
+    label: t`Sorceries`,
     filter: (t) => t.includes("Sorcery"),
   },
   enchantments: {
     id: "enchantments",
-    label: `Enchantments`,
+    label: t`Enchantments`,
     filter: (t) => t.includes("Enchantment") && !t.includes("Creature"),
   },
   artifacts: {
     id: "artifacts",
-    label: `Artifacts`,
+    label: t`Artifacts`,
     filter: (t) => t.includes("Artifact") && !t.includes("Creature"),
   },
   lands: {
     id: "lands",
-    label: `Lands`,
+    label: t`Lands`,
     filter: (t) => t.includes("Land"),
   },
 };
@@ -245,7 +246,7 @@ export function computeStackColumns(
   if (otherGroups.length > 0)
     cols.push({
       id: "other",
-      label: `Other`,
+      label: t`Other`,
       filter: () => false,
       groups: otherGroups,
     });
@@ -345,7 +346,7 @@ function groupByCustomTags(
   if (untagged.length > 0) {
     result.push({
       id: "untagged",
-      label: `Untagged`,
+      label: t`Untagged`,
       filter: (() => false) as SectionDefinition["filter"],
       groups: untagged,
     });

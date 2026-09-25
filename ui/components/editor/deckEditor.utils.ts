@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { LucideIcon } from "lucide-react";
 import { Plus, Minus, Tag } from "lucide-react";
 import type React from "react";
@@ -30,7 +31,7 @@ export function buildCardActions(
 ): OverlayAction[] {
   const actions: OverlayAction[] = [
     {
-      label: `Add`,
+      label: t`Add`,
       icon: Plus,
       onClick: onAddOne,
       variant: "primary",
@@ -38,13 +39,13 @@ export function buildCardActions(
   ];
   if (onUntag) {
     actions.push({
-      label: `Untag`,
+      label: t`Untag`,
       icon: Tag,
       onClick: onUntag,
     });
   } else {
     actions.push({
-      label: `Remove`,
+      label: t`Remove`,
       icon: Minus,
       onClick: onRemoveOne,
     });

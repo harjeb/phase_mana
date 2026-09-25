@@ -78,37 +78,37 @@ const COLOR_FILTERS = [
 const TYPE_FILTERS = [
   {
     id: "Creature",
-    label: `Creature`,
+    label: t`Creature`,
   },
   {
     id: "Land",
-    label: `Land`,
+    label: t`Land`,
   },
   {
     id: "Instant",
-    label: `Instant`,
+    label: t`Instant`,
   },
   {
     id: "Sorcery",
-    label: `Sorcery`,
+    label: t`Sorcery`,
   },
   {
     id: "Enchantment",
-    label: `Enchant.`,
+    label: t`Enchant.`,
   },
   {
     id: "Artifact",
-    label: `Artifact`,
+    label: t`Artifact`,
   },
   {
     id: "Planeswalker",
-    label: `PW`,
+    label: t`PW`,
   },
 ] as const;
 const CMC_FILTERS = [
   {
     id: "any",
-    label: `Any`,
+    label: t`Any`,
   },
   { id: "0", label: "0" },
   { id: "1", label: "1" },
@@ -143,55 +143,55 @@ const RARITY_FILTERS = [
 const FORMAT_FILTERS = [
   {
     id: "standard",
-    label: `Standard`,
+    label: t`Standard`,
   },
   {
     id: "pioneer",
-    label: `Pioneer`,
+    label: t`Pioneer`,
   },
   {
     id: "modern",
-    label: `Modern`,
+    label: t`Modern`,
   },
   {
     id: "legacy",
-    label: `Legacy`,
+    label: t`Legacy`,
   },
   {
     id: "vintage",
-    label: `Vintage`,
+    label: t`Vintage`,
   },
   {
     id: "commander",
-    label: `Commander`,
+    label: t`Commander`,
   },
   {
     id: "pauper",
-    label: `Pauper`,
+    label: t`Pauper`,
   },
   {
     id: "premodern",
-    label: `Premodern`,
+    label: t`Premodern`,
   },
   {
     id: "historic",
-    label: `Historic`,
+    label: t`Historic`,
   },
   {
     id: "alchemy",
-    label: `Alchemy`,
+    label: t`Alchemy`,
   },
   {
     id: "explorer",
-    label: `Explorer`,
+    label: t`Explorer`,
   },
   {
     id: "penny",
-    label: `Penny`,
+    label: t`Penny`,
   },
   {
     id: "oathbreaker",
-    label: `Oathbreaker`,
+    label: t`Oathbreaker`,
   },
 ] as const;
 const COLOR_IDENTITY_FILTERS = [
@@ -261,97 +261,97 @@ const PRODUCES_FILTERS = [
 const FRAME_FILTERS = [
   {
     id: "old",
-    label: `Old`,
+    label: t`Old`,
   },
   {
     id: "modern",
-    label: `Modern`,
+    label: t`Modern`,
   },
   {
     id: "future",
-    label: `Future`,
+    label: t`Future`,
   },
 ] as const;
 const BORDER_FILTERS = [
   {
     id: "black",
-    label: `Black`,
+    label: t`Black`,
   },
   {
     id: "white",
-    label: `White`,
+    label: t`White`,
   },
   {
     id: "borderless",
-    label: `Borderless`,
+    label: t`Borderless`,
   },
   {
     id: "gold",
-    label: `Gold`,
+    label: t`Gold`,
   },
 ] as const;
 const GAME_FILTERS = [
   {
     id: "paper",
-    label: `Paper`,
+    label: t`Paper`,
   },
   {
     id: "arena",
-    label: `Arena`,
+    label: t`Arena`,
   },
   {
     id: "mtgo",
-    label: `MTGO`,
+    label: t`MTGO`,
   },
 ] as const;
 const SORT_OPTIONS = [
   {
     id: "cmc",
-    label: `Mana Value`,
+    label: t`Mana Value`,
   },
   {
     id: "name",
-    label: `Name`,
+    label: t`Name`,
   },
   {
     id: "set",
-    label: `Set`,
+    label: t`Set`,
   },
   {
     id: "released",
-    label: `Release Date`,
+    label: t`Release Date`,
   },
   {
     id: "rarity",
-    label: `Rarity`,
+    label: t`Rarity`,
   },
   {
     id: "color",
-    label: `Color`,
+    label: t`Color`,
   },
   {
     id: "power",
-    label: `Power`,
+    label: t`Power`,
   },
   {
     id: "toughness",
-    label: `Toughness`,
+    label: t`Toughness`,
   },
   {
     id: "edhrec",
-    label: `EDHREC Rank`,
+    label: t`EDHREC Rank`,
   },
   {
     id: "usd",
-    label: `Price (USD)`,
+    label: t`Price (USD)`,
   },
   {
     id: "eur",
-    label: `Price (EUR)`,
+    label: t`Price (EUR)`,
   },
   {
     id: "artist",
-    label: `Artist`,
+    label: t`Artist`,
   },
 ] as const;
 type CmcId = (typeof CMC_FILTERS)[number]["id"];
@@ -410,115 +410,115 @@ const INITIAL_ADVANCED: AdvancedFilters = {
 const IS_FILTERS = [
   {
     id: "transform",
-    label: `Transform`,
+    label: t`Transform`,
   },
   {
     id: "modal",
-    label: `Modal DFC`,
+    label: t`Modal DFC`,
   },
   {
     id: "split",
-    label: `Split`,
+    label: t`Split`,
   },
   {
     id: "flip",
-    label: `Flip`,
+    label: t`Flip`,
   },
   {
     id: "adventure",
-    label: `Adventure`,
+    label: t`Adventure`,
   },
   {
     id: "meld",
-    label: `Meld`,
+    label: t`Meld`,
   },
   {
     id: "saga",
-    label: `Saga`,
+    label: t`Saga`,
   },
   {
     id: "leveler",
-    label: `Level Up`,
+    label: t`Level Up`,
   },
   {
     id: "vanilla",
-    label: `Vanilla`,
+    label: t`Vanilla`,
   },
   {
     id: "token",
-    label: `Token`,
+    label: t`Token`,
   },
   {
     id: "spell",
-    label: `Spell`,
+    label: t`Spell`,
   },
   {
     id: "permanent",
-    label: `Permanent`,
+    label: t`Permanent`,
   },
   {
     id: "foil",
-    label: `Foil`,
+    label: t`Foil`,
   },
   {
     id: "nonfoil",
-    label: `Non-Foil`,
+    label: t`Non-Foil`,
   },
   {
     id: "promo",
-    label: `Promo`,
+    label: t`Promo`,
   },
   {
     id: "digital",
-    label: `Digital Only`,
+    label: t`Digital Only`,
   },
   {
     id: "textless",
-    label: `Textless`,
+    label: t`Textless`,
   },
   {
     id: "fullart",
-    label: `Full Art`,
+    label: t`Full Art`,
   },
   {
     id: "funny",
-    label: `Un-cards`,
+    label: t`Un-cards`,
   },
   {
     id: "booster",
-    label: `In Boosters`,
+    label: t`In Boosters`,
   },
   {
     id: "commander",
-    label: `Commander`,
+    label: t`Commander`,
   },
   {
     id: "reserved",
-    label: `Reserved List`,
+    label: t`Reserved List`,
   },
   {
     id: "reprint",
-    label: `Reprint`,
+    label: t`Reprint`,
   },
   {
     id: "firstprint",
-    label: `First Print`,
+    label: t`First Print`,
   },
   {
     id: "unique",
-    label: `Unique Art`,
+    label: t`Unique Art`,
   },
   {
     id: "fetchland",
-    label: `Fetchland`,
+    label: t`Fetchland`,
   },
   {
     id: "dualland",
-    label: `Dual Land`,
+    label: t`Dual Land`,
   },
   {
     id: "shockland",
-    label: `Shockland`,
+    label: t`Shockland`,
   },
 ] as const;
 const COMPARISON_OPS = ["=", ">", "<", ">=", "<="] as const;
@@ -717,7 +717,7 @@ function DraggableCardGrid({
             }}
           >
             <Plus className="h-3 w-3" />
-            Add
+            <Trans>Add</Trans>
           </Button>
         )}
         <Button
@@ -730,7 +730,7 @@ function DraggableCardGrid({
           }}
         >
           <Info className="h-3 w-3" />
-          More Info
+          <Trans>More Info</Trans>
         </Button>
       </div>
     </div>
@@ -798,7 +798,7 @@ function DraggableCardRow({
           }}
         >
           <Plus className="h-3 w-3" />
-          Add
+          <Trans>Add</Trans>
         </Button>
       )}
       <Button
@@ -811,7 +811,7 @@ function DraggableCardRow({
         }}
       >
         <Info className="h-3 w-3" />
-        Info
+        <Trans>Info</Trans>
       </Button>
     </div>
   );
@@ -938,7 +938,7 @@ export function CardSearch({
               size="icon"
               variant="ghost"
               className="h-8 w-8 shrink-0"
-              title={`Close search panel`}
+              title={t`Close search panel`}
               onClick={onClose}
             >
               <PanelRightClose className="h-4 w-4" />
@@ -946,7 +946,7 @@ export function CardSearch({
           )}
           <Input
             ref={searchInputRef}
-            placeholder={`Search cards\u2026`}
+            placeholder={t`Search cards\u2026`}
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="flex-1"
@@ -971,7 +971,7 @@ export function CardSearch({
           <div className="flex border rounded-md overflow-hidden shrink-0">
             <button
               type="button"
-              title={`Grid view`}
+              title={t`Grid view`}
               onClick={() => setViewMode("grid")}
               className={cn(
                 "px-2 py-1 text-xs transition-colors",
@@ -984,7 +984,7 @@ export function CardSearch({
             </button>
             <button
               type="button"
-              title={`List view`}
+              title={t`List view`}
               onClick={() => setViewMode("list")}
               className={cn(
                 "px-2 py-1 text-xs transition-colors border-l",
@@ -1037,7 +1037,7 @@ export function CardSearch({
                     symbol={f.id}
                     active={advanced.colorIdentity.has(f.id)}
                     onClick={() => toggleAdvSet("colorIdentity", f.id)}
-                    title={`Color Identity: ${f.title}`}
+                    title={t`Color Identity: ${f.title}`}
                   />
                 ))}
               </div>
@@ -1052,7 +1052,7 @@ export function CardSearch({
                     symbol={f.id}
                     active={advanced.produces.has(f.id)}
                     onClick={() => toggleAdvSet("produces", f.id)}
-                    title={`Produces ${f.title} mana`}
+                    title={t`Produces ${f.title} mana`}
                   />
                 ))}
               </div>
@@ -1180,7 +1180,7 @@ export function CardSearch({
               <FilterLabel><Trans>Oracle</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
-                placeholder={`Card text contains\u2026`}
+                placeholder={t`Card text contains\u2026`}
                 value={advanced.oracleText}
                 onChange={(e) => setAdv("oracleText", e.target.value)}
               />
@@ -1190,7 +1190,7 @@ export function CardSearch({
               <FilterLabel><Trans>Flavor</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
-                placeholder={`Flavor text contains\u2026`}
+                placeholder={t`Flavor text contains\u2026`}
                 value={advanced.flavorText}
                 onChange={(e) => setAdv("flavorText", e.target.value)}
               />
@@ -1200,7 +1200,7 @@ export function CardSearch({
               <FilterLabel><Trans>Keyword</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
-                placeholder={`e.g. flying, haste, deathtouch`}
+                placeholder={t`e.g. flying, haste, deathtouch`}
                 value={advanced.keyword}
                 onChange={(e) => setAdv("keyword", e.target.value)}
               />
@@ -1229,7 +1229,7 @@ export function CardSearch({
               <FilterLabel><Trans>Artist</Trans></FilterLabel>
               <Input
                 className="h-7 text-xs flex-1"
-                placeholder={`Artist name\u2026`}
+                placeholder={t`Artist name\u2026`}
                 value={advanced.artist}
                 onChange={(e) => setAdv("artist", e.target.value)}
               />
@@ -1245,7 +1245,7 @@ export function CardSearch({
             <FilterRow className="flex-wrap gap-3">
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-muted-foreground/60 uppercase shrink-0">
-                  Frame
+                  <Trans>Frame</Trans>
                 </span>
                 {FRAME_FILTERS.map((f) => (
                   <FilterBtn
@@ -1259,7 +1259,7 @@ export function CardSearch({
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-muted-foreground/60 uppercase shrink-0">
-                  Border
+                  <Trans>Border</Trans>
                 </span>
                 {BORDER_FILTERS.map((f) => (
                   <FilterBtn
@@ -1273,7 +1273,7 @@ export function CardSearch({
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-muted-foreground/60 uppercase shrink-0">
-                  Game
+                  <Trans>Game</Trans>
                 </span>
                 {GAME_FILTERS.map((f) => (
                   <FilterBtn
@@ -1287,7 +1287,7 @@ export function CardSearch({
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-muted-foreground/60 uppercase shrink-0">
-                  Lang
+                  <Trans>Lang</Trans>
                 </span>
                 <Input
                   className="h-6 text-xs w-14"
@@ -1352,12 +1352,12 @@ export function CardSearch({
           )}
           {status === "error" && (
             <div className="text-center p-8 text-destructive">
-              Error fetching cards. Please try again.
+              <Trans>Error fetching cards. Please try again.</Trans>
             </div>
           )}
           {!effectiveQuery && (
             <p className="text-center text-sm text-muted-foreground py-12">
-              Enter a card name or select filters to search.
+              <Trans>Enter a card name or select filters to search.</Trans>
             </p>
           )}
 

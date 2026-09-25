@@ -1,7 +1,10 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { MoreHorizontal, Plus } from "lucide-react";
 import { ScryfallImg } from "@/components/ScryfallImg";
 import { cn } from "@/lib/utils";
 import { scryfallDisplayName } from "@/lib/scryfall.utils";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import type { ScryfallCard } from "@/types/scryfall";
 interface DeckQuickAddResultsProps {
   results: ScryfallCard[];
@@ -24,10 +27,13 @@ export function DeckQuickAddResults({
   return (
     <div className="absolute left-0 right-0 top-full z-50 mt-1 max-h-80 min-w-[300px] overflow-y-auto rounded-md border bg-popover shadow-lg">
       <div className="sticky top-0 z-10 border-b bg-popover px-2 py-1 text-[10px] text-muted-foreground">
-        Click or press Enter to add one to the main deck
+        <Trans>Click or press Enter to add one to the main deck</Trans>
       </div>
       {results.map((card, index) => {
-        const thumbnail = card.image_uris?.small ?? card.card_faces?.[0]?.image_uris?.small;
+        const thumbnail = withLocalCardArt(
+          card.image_uris ?? card.card_faces?.[0]?.image_uris,
+          card.name,
+        )?.small;
         const displayName = scryfallDisplayName(card);
         return (
           <div
@@ -42,7 +48,7 @@ export function DeckQuickAddResults({
             <button
               type="button"
               className="flex min-w-0 flex-1 items-center gap-2 px-2 py-1 text-left"
-              title={`Add one ${displayName} to main deck`}
+              title={t`Add one ${displayName} to main deck`}
               onClick={() => onQuickAdd(card)}
             >
               {thumbnail && (
@@ -61,7 +67,7 @@ export function DeckQuickAddResults({
             <button
               type="button"
               className="mr-1 flex h-8 w-8 shrink-0 items-center justify-center rounded text-muted-foreground hover:bg-background hover:text-foreground"
-              title={`More ways to add ${displayName}`}
+              title={t`More ways to add ${displayName}`}
               onClick={() => onOptions(card)}
             >
               <MoreHorizontal className="h-3.5 w-3.5" />

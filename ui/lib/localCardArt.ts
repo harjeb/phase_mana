@@ -58,7 +58,10 @@ export function withLocalCardArt(
   if (!uris) return uris;
   const next = { ...uris };
   for (const variant of SCAN_VARIANTS) {
-    next[variant] = scanUrl(name, uris[variant]) ?? uris[variant];
+    // Already pointing at the pack — leave it, so re-applying at display time
+    // cannot overwrite the CDN fallback with a local path.
+    if (next[variant]?.startsWith(LOCAL_CARD_ART_ROUTE)) continue;
+    next[variant] = scanUrl(name, next[variant]) ?? next[variant];
   }
   return next;
 }

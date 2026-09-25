@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { CircleDollarSign } from "lucide-react";
@@ -21,17 +22,17 @@ const PRICE_PROVIDERS: Record<
   }
 > = {
   tcgplayer: {
-    label: `TCGplayer`,
+    label: t`TCGplayer`,
     unit: "$",
     getPrice: (prices, foil) => (foil ? prices.usd_foil : prices.usd),
   },
   cardmarket: {
-    label: `Cardmarket`,
+    label: t`Cardmarket`,
     unit: "€",
     getPrice: (prices, foil) => (foil ? prices.eur_foil : prices.eur),
   },
   cardhoarder: {
-    label: `Cardhoarder`,
+    label: t`Cardhoarder`,
     unit: "",
     suffix: " tix",
     getPrice: (prices) => prices.tix,
@@ -113,7 +114,7 @@ export function DeckBudgetPanel() {
         </div>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            Provider
+            <Trans>Provider</Trans>
             <select
               value={provider}
               className="h-8 rounded-md border bg-background px-2 text-xs"
@@ -131,14 +132,14 @@ export function DeckBudgetPanel() {
             </select>
           </label>
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
-            Limit
+            <Trans>Limit</Trans>
             <Input
               type="number"
               min="0"
               step="5"
               className="h-8 w-24 text-right font-mono"
               value={budget ?? ""}
-              placeholder={`None`}
+              placeholder={t`None`}
               onFocus={budgetEdit.begin}
               onChange={(event) => {
                 const value = event.target.value ? Number(event.target.value) : undefined;
@@ -154,13 +155,13 @@ export function DeckBudgetPanel() {
             {budget !== undefined && (
               <p className="text-[10px] text-muted-foreground">
                 {overBudget
-                  ? `${formatPrice(total - budget)} over`
-                  : `${formatPrice(budget - total)} left`}
+                  ? t`${formatPrice(total - budget)} over`
+                  : t`${formatPrice(budget - total)} left`}
               </p>
             )}
             {unavailable > 0 && (
               <p className="text-[10px] text-muted-foreground">
-                {unavailable === 1 ? `One card unavailable` : `${unavailable} cards unavailable`}
+                {unavailable === 1 ? t`One card unavailable` : t`${unavailable} cards unavailable`}
               </p>
             )}
           </div>
