@@ -25,13 +25,57 @@ fn is_raw_mtgjson(path: &Path) -> bool {
         })
 }
 
-fn load_card_db(path: &Path) -> Result<CardDatabase, String> {
-    let load = if is_raw_mtgjson(path) {
-        CardDatabase::from_mtgjson(path)
-    } else {
-        CardDatabase::from_export(path)
-    };
-    load.map_err(|e| format!("Cannot load {}: {e}", path.display()))
+/// Where the pre-parsed export of `source` is cached: the app state directory
+/// when one is configured (the desktop always passes it), otherwise beside the
+/// source file — which is where phase's own `gen-card-data.sh` puts it.
+fn export_cache_path(source: &Path) -> PathBuf {
+    let dir = std::env::var_os("PHASE_MANA_STATE_DIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| source.parent().unwrap_or(Path::new(".")).to_path_buf());
+    dir.join("card-data.json")
+}
+
+/// A cached export is only trusted when it is at least as new as the file it was
+/// parsed from, so a re-downloaded `AtomicCards.json` is re-parsed instead of
+/// being shadowed by the previous release's cache.
+fn usable_export_cache(source: &Path) -> Option<PathBuf> {
+    let cache = export_cache_path(source);
+    let cached_at = cache.metadata().ok()?.modified().ok()?;
+    let parsed_at = source.metadata().ok()?.modified().ok()?;
+    (cached_at >= parsed_at).then_some(cache)
+}
+
+/// Raw MTGJSON needs its Oracle text parsed at startup — minutes of work for the
+/// full card pool, against seconds to re-read the export of that same parse. Pay
+/// for the parse once per install and cache it. Returns the database and the file
+/// it actually came from, so the startup log names the real source.
+fn load_card_db(path: &Path) -> Result<(CardDatabase, PathBuf), String> {
+    if !is_raw_mtgjson(path) {
+        let db = CardDatabase::from_export(path)
+            .map_err(|e| format!("Cannot load {}: {e}", path.display()))?;
+        return Ok((db, path.to_path_buf()));
+    }
+    if let Some(cache) = usable_export_cache(path) {
+        if let Ok(db) = CardDatabase::from_export(&cache) {
+            return Ok((db, cache));
+        }
+        // An unreadable cache is worth replacing, not failing on.
+        let _ = std::fs::remove_file(&cache);
+    }
+    let db = CardDatabase::from_mtgjson(path)
+        .map_err(|e| format!("Cannot load {}: {e}", path.display()))?;
+    let cache = export_cache_path(path);
+    if let Err(error) = write_export_cache(&db, &cache) {
+        eprintln!("phase-mana: cannot cache the parsed card database: {error}");
+    }
+    Ok((db, path.to_path_buf()))
+}
+
+fn write_export_cache(db: &CardDatabase, cache: &Path) -> std::io::Result<()> {
+    // Write beside the target and rename, so a half-written cache is never read.
+    let partial = cache.with_extension("json.partial");
+    std::fs::write(&partial, db.export_json())?;
+    std::fs::rename(&partial, cache)
 }
 
 /// The pre-parsed oracle-gen export when phase's pipeline has written one (it
@@ -86,11 +130,12 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .map(PathBuf::from)
         .unwrap_or_else(default_card_db);
     let started = std::time::Instant::now();
-    let db = load_card_db(&path).map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
+    let (db, loaded_from) =
+        load_card_db(&path).map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
     eprintln!(
         "loaded {} cards from {} in {:?}",
         db.card_count(),
-        path.display(),
+        loaded_from.display(),
         started.elapsed()
     );
     let app = router(Host::new(db));
