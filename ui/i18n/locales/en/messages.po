@@ -400,6 +400,10 @@ msgstr "Added to {deckName}"
 msgid "Advanced"
 msgstr "Advanced"
 
+#: ui/views/OnlinePlay.tsx:188
+msgid "Advanced connection (room code)"
+msgstr "Advanced connection (room code)"
+
 #: ui/components/deck/DeckListControls.tsx:109
 msgid "All"
 msgstr "All"
@@ -977,6 +981,10 @@ msgstr "Close dialog"
 msgid "Close right panel"
 msgstr "Close right panel"
 
+#: ui/views/OnlinePlay.tsx:171
+msgid "Close room and stop engine"
+msgstr "Close room and stop engine"
+
 #: ui/components/editor/CardSearch.tsx:1087
 msgid "CMC"
 msgstr "CMC"
@@ -1150,7 +1158,7 @@ msgstr "Confirm pick"
 msgid "Connect"
 msgstr "Connect"
 
-#: ui/views/OnlinePlay.tsx:45
+#: ui/views/OnlinePlay.tsx:147
 msgid "Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private."
 msgstr "Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private."
 
@@ -1180,7 +1188,7 @@ msgstr "Connecting..."
 msgid "Connection failed."
 msgstr "Connection failed."
 
-#: ui/phase/online.ts:198
+#: ui/phase/online.ts:241
 msgid "Connection lost"
 msgstr "Connection lost"
 
@@ -1192,7 +1200,7 @@ msgstr "Conspiracy reveal was rejected"
 msgid "Constant"
 msgstr "Constant"
 
-#: ui/views/OnlinePlay.tsx:48
+#: ui/views/OnlinePlay.tsx:150
 msgid "Constructed"
 msgstr "Constructed"
 
@@ -1221,6 +1229,10 @@ msgstr "Copied JSON to clipboard."
 #: ui/components/lobby/CustomFormatDialog.tsx:365
 msgid "Copies"
 msgstr "Copies"
+
+#: ui/views/OnlinePlay.tsx:170
+msgid "Copy invitation"
+msgstr "Copy invitation"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:368
 msgid "Copy limit rule"
@@ -1290,6 +1302,10 @@ msgstr "Could not resolve {0}"
 #: ui/components/settings/CardImageLibraryCard.tsx:64
 msgid "Could not save the folder. Check write permissions and try again."
 msgstr "Could not save the folder. Check write permissions and try again."
+
+#: ui/views/OnlinePlay.tsx:27
+#~ msgid "Could not start the multiplayer host."
+#~ msgstr "Could not start the multiplayer host."
 
 #: ui/components/editor/DeckCheckpointsDialog.tsx:87
 msgid "Could not update checkpoints on this device"
@@ -1392,7 +1408,7 @@ msgstr "Create"
 msgid "Create draft"
 msgstr "Create draft"
 
-#: ui/views/OnlinePlay.tsx:56
+#: ui/views/OnlinePlay.tsx:191
 msgid "Create room"
 msgstr "Create room"
 
@@ -1512,7 +1528,7 @@ msgid "Deck Labels"
 msgstr "Deck Labels"
 
 #: ui/components/editor/ImportDeckTextDialog.tsx:279
-#: ui/views/OnlinePlay.tsx:53
+#: ui/views/OnlinePlay.tsx:155
 msgid "Deck list"
 msgstr "Deck list"
 
@@ -1627,7 +1643,7 @@ msgstr "Dimensions"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: ui/views/OnlinePlay.tsx:61
+#: ui/views/OnlinePlay.tsx:197
 #: ui/views/Tournaments.tsx:38
 msgid "Disconnect"
 msgstr "Disconnect"
@@ -1639,7 +1655,7 @@ msgstr "Disconnect"
 msgid "Disconnected"
 msgstr "Disconnected"
 
-#: ui/phase/online.ts:43
+#: ui/phase/online.ts:53
 msgid "Disconnected. Reconnect before responding."
 msgstr "Disconnected. Reconnect before responding."
 
@@ -1663,7 +1679,7 @@ msgstr "Downloading…"
 msgid "Downloading… {progress}%"
 msgstr "Downloading… {progress}%"
 
-#: ui/views/OnlinePlay.tsx:48
+#: ui/views/OnlinePlay.tsx:150
 msgid "Draft"
 msgstr "Draft"
 
@@ -1730,7 +1746,7 @@ msgstr "dropped"
 msgid "Duel Commander"
 msgstr "Duel Commander"
 
-#: ui/phase/online.ts:100
+#: ui/phase/online.ts:132
 msgid "Duplicate server handshake"
 msgstr "Duplicate server handshake"
 
@@ -1775,7 +1791,7 @@ msgstr "End tournament"
 msgid "Enter a complete email address, including its domain."
 msgstr "Enter a complete email address, including its domain."
 
-#: ui/views/OnlinePlay.tsx:24
+#: ui/views/OnlinePlay.tsx:61
 msgid "Enter a deck list with valid card quantities (up to 500 cards)."
 msgstr "Enter a deck list with valid card quantities (up to 500 cards)."
 
@@ -1791,7 +1807,7 @@ msgstr "Enter a set code."
 msgid "Enter a ws:// or wss:// broker URL without credentials or query parameters."
 msgstr "Enter a ws:// or wss:// broker URL without credentials or query parameters."
 
-#: ui/phase/online.ts:33
+#: ui/phase/endpoint.ts:16
 msgid "Enter a ws:// or wss:// server URL without credentials or query parameters."
 msgstr "Enter a ws:// or wss:// server URL without credentials or query parameters."
 
@@ -1803,7 +1819,7 @@ msgstr "Enter password"
 msgid "Enter the draft code."
 msgstr "Enter the draft code."
 
-#: ui/views/OnlinePlay.tsx:34
+#: ui/views/OnlinePlay.tsx:130
 msgid "Enter the room code."
 msgstr "Enter the room code."
 
@@ -2289,6 +2305,14 @@ msgstr "Hide side panel"
 msgid "Host"
 msgstr "Host"
 
+#: ui/views/OnlinePlay.tsx:158
+msgid "Host a room"
+msgstr "Host a room"
+
+#: ui/views/OnlinePlay.tsx:161
+msgid "Host and create invitation"
+msgstr "Host and create invitation"
+
 #: ui/game/hostedAiPlay.ts:40
 #: ui/game/hostedAiPlay.ts:127
 #: ui/game/hostedAiPlay.ts:222
@@ -2443,7 +2467,7 @@ msgstr "Invalid color for {label}.{key}. Use hex or rgb/rgba."
 msgid "Invalid credential renewal reply."
 msgstr "Invalid credential renewal reply."
 
-#: ui/phase/online.ts:117
+#: ui/phase/online.ts:155
 msgid "Invalid draft match attachment"
 msgstr "Invalid draft match attachment"
 
@@ -2455,17 +2479,54 @@ msgstr "Invalid draft seat response"
 msgid "Invalid saved draft seat."
 msgstr "Invalid saved draft seat."
 
-#: ui/phase/online.ts:74
+#: ui/phase/online.ts:103
 msgid "Invalid saved session."
 msgstr "Invalid saved session."
 
-#: ui/phase/online.ts:165
+#: ui/phase/online.ts:194
+msgid "Invalid session credentials"
+msgstr "Invalid session credentials"
+
+#: ui/phase/online.ts:206
 msgid "Invalid session snapshot"
 msgstr "Invalid session snapshot"
 
-#: ui/phase/online.ts:139
+#: ui/phase/online.ts:177
 msgid "Invalid terminal result"
 msgstr "Invalid terminal result"
+
+#: ui/phase/invite.ts:68
+#: ui/phase/invite.ts:112
+msgid "Invitation code is damaged."
+msgstr "Invitation code is damaged."
+
+#: ui/phase/invite.ts:106
+msgid "Invitation code is empty."
+msgstr "Invitation code is empty."
+
+#: ui/phase/invite.ts:62
+msgid "Invitation code is not valid base64url."
+msgstr "Invitation code is not valid base64url."
+
+#: ui/phase/invite.ts:82
+msgid "Invitation has no valid room code."
+msgstr "Invitation has no valid room code."
+
+#: ui/phase/invite.ts:83
+msgid "Invitation is missing its room password."
+msgstr "Invitation is missing its room password."
+
+#: ui/phase/invite.ts:81
+msgid "Invitation is missing its server address."
+msgstr "Invitation is missing its server address."
+
+#: ui/phase/invite.ts:78
+msgid "Invitation is not an object."
+msgstr "Invitation is not an object."
+
+#: ui/phase/invite.ts:84
+msgid "Invitation password is too long."
+msgstr "Invitation password is too long."
 
 #. placeholder {0}: stripUsernameTag(username)
 #: ui/stores/useServerStore.ts:471
@@ -2526,9 +2587,21 @@ msgstr "Join draft"
 msgid "Join our community"
 msgstr "Join our community"
 
-#: ui/views/OnlinePlay.tsx:57
+#: ui/views/OnlinePlay.tsx:192
 msgid "Join room"
 msgstr "Join room"
+
+#: ui/views/OnlinePlay.tsx:178
+msgid "Join with an invitation"
+msgstr "Join with an invitation"
+
+#: ui/views/OnlinePlay.tsx:183
+msgid "Join with invitation"
+msgstr "Join with invitation"
+
+#: ui/views/OnlinePlay.tsx:183
+msgid "Joining…"
+msgstr "Joining…"
 
 #: ui/components/editor/DeckSaveConflictDialog.tsx:52
 msgid "Keep my changes"
@@ -2563,6 +2636,10 @@ msgstr "Label \"{0}\" removed"
 #: ui/components/editor/DeckLabelsModal.tsx:51
 msgid "Label \"{trimmed}\" added"
 msgstr "Label \"{trimmed}\" added"
+
+#: ui/views/OnlinePlay.tsx:144
+msgid "LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding."
+msgstr "LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding."
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:20
 msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
@@ -3182,7 +3259,7 @@ msgstr "No saved credential for this role."
 msgid "No saved draft seat for this server in this tab."
 msgstr "No saved draft seat for this server in this tab."
 
-#: ui/phase/online.ts:72
+#: ui/phase/online.ts:101
 msgid "No saved session for this server in this tab."
 msgstr "No saved session for this server in this tab."
 
@@ -3309,7 +3386,7 @@ msgstr "Online draft"
 msgid "Online draft transport is unavailable."
 msgstr "Online draft transport is unavailable."
 
-#: ui/views/OnlinePlay.tsx:44
+#: ui/views/OnlinePlay.tsx:146
 msgid "Online multiplayer"
 msgstr "Online multiplayer"
 
@@ -3437,9 +3514,19 @@ msgstr "Paste a CubeCobra id or load a saved pool, then draft or seal it."
 msgid "Paste an exported custom format"
 msgstr "Paste an exported custom format"
 
+#: ui/phase/invite.ts:100
+#: ui/phase/invite.ts:102
+msgid "Paste an invitation code."
+msgstr "Paste an invitation code."
+
 #: ui/components/collection/CollectionImportDialog.tsx:274
 msgid "Paste from clipboard"
 msgstr "Paste from clipboard"
+
+#: ui/views/OnlinePlay.tsx:179
+#: ui/views/OnlinePlay.tsx:180
+msgid "Paste invitation"
+msgstr "Paste invitation"
 
 #: ui/views/CasualModes.tsx:126
 msgid "Pauper Commander"
@@ -3548,8 +3635,8 @@ msgstr "Player states"
 #: ui/components/companion/NewSessionDialog.tsx:120
 #: ui/components/companion/SetupMenu.tsx:50
 #: ui/components/lobby/UserList.tsx:238
-#: ui/views/OnlinePlay.tsx:50
-#: ui/views/OnlinePlay.tsx:50
+#: ui/views/OnlinePlay.tsx:152
+#: ui/views/OnlinePlay.tsx:152
 msgid "Players"
 msgstr "Players"
 
@@ -3764,6 +3851,10 @@ msgstr "Rarity:"
 msgid "Reach exile"
 msgstr "Reach exile"
 
+#: ui/views/OnlinePlay.tsx:120
+#~ msgid "Reachable from the internet, because the host advertises a public address."
+#~ msgstr "Reachable from the internet, because the host advertises a public address."
+
 #: ui/components/AppInitGate.tsx:42
 msgid "Ready"
 msgstr "Ready"
@@ -3790,7 +3881,7 @@ msgstr "Reconnect"
 msgid "Reconnect draft seat"
 msgstr "Reconnect draft seat"
 
-#: ui/views/OnlinePlay.tsx:58
+#: ui/views/OnlinePlay.tsx:196
 msgid "Reconnect saved seat"
 msgstr "Reconnect saved seat"
 
@@ -3925,13 +4016,18 @@ msgstr "RNG seed"
 msgid "Roll"
 msgstr "Roll"
 
-#: ui/views/OnlinePlay.tsx:54
+#: ui/views/OnlinePlay.tsx:189
 msgid "Room code"
 msgstr "Room code"
 
 #: ui/game/roomHost.ts:79
 msgid "Room hosting requires a server connection."
 msgstr "Room hosting requires a server connection."
+
+#: ui/views/OnlinePlay.tsx:164
+#: ui/views/OnlinePlay.tsx:165
+msgid "Room invitation"
+msgstr "Room invitation"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Rotate card"
@@ -4124,15 +4220,15 @@ msgstr "Sending concession…"
 msgid "Server"
 msgstr "Server"
 
-#: ui/phase/online.ts:155
-msgid "Server omitted the session code"
-msgstr "Server omitted the session code"
+#: ui/phase/online.ts:186
+#~ msgid "Server omitted the session code"
+#~ msgstr "Server omitted the session code"
 
-#: ui/phase/online.ts:111
+#: ui/phase/online.ts:149
 msgid "Server sent data before its handshake"
 msgstr "Server sent data before its handshake"
 
-#: ui/views/OnlinePlay.tsx:46
+#: ui/views/OnlinePlay.tsx:148
 msgid "Server URL"
 msgstr "Server URL"
 
@@ -4394,6 +4490,10 @@ msgstr "Starting local server"
 msgid "Starting multiplayer game…"
 msgstr "Starting multiplayer game…"
 
+#: ui/views/OnlinePlay.tsx:161
+msgid "Starting the engine…"
+msgstr "Starting the engine…"
+
 #: ui/components/companion/CustomCounterDialog.tsx:70
 msgid "Starting value"
 msgstr "Starting value"
@@ -4523,6 +4623,14 @@ msgstr "Test action count"
 msgid "That handle is already taken"
 msgstr "That handle is already taken"
 
+#: ui/phase/invite.ts:104
+msgid "That is not an invitation code."
+msgstr "That is not an invitation code."
+
+#: ui/phase/invite.ts:103
+msgid "That is too long to be an invitation code."
+msgstr "That is too long to be an invitation code."
+
 #: ui/views/Settings.tsx:216
 msgid "That name is reserved for a built-in server"
 msgstr "That name is reserved for a built-in server"
@@ -4547,13 +4655,25 @@ msgstr "The folder the server reads card scans from. Pick the root that holds th
 msgid "The game"
 msgstr "The game"
 
+#: ui/views/OnlinePlay.tsx:159
+msgid "The game engine runs on this machine. Share the invitation; nobody has to type an address."
+msgstr "The game engine runs on this machine. Share the invitation; nobody has to type an address."
+
 #: ui/components/game/GameFailedScreen.tsx:12
 msgid "The game failed to start"
 msgstr "The game failed to start"
 
+#: ui/views/OnlinePlay.tsx:141
+msgid "The host advertises this public address. Internet reachability has not been verified; the tunnel or port forwarding must remain available."
+msgstr "The host advertises this public address. Internet reachability has not been verified; the tunnel or port forwarding must remain available."
+
 #: ui/components/game/modals/GameSettingsModal.tsx:196
 msgid "The host picked this table's background when creating it."
 msgstr "The host picked this table's background when creating it."
+
+#: ui/phase/host.ts:24
+msgid "The host request failed."
+msgstr "The host request failed."
 
 #: ui/views/OnlineDraftPanel.tsx:76
 msgid "The match starts when every player has submitted a deck."
@@ -4655,6 +4775,22 @@ msgstr "This estimate does not model trample, prevention or replacement effects.
 msgid "This feature is not available in the local Phase backend."
 msgstr "This feature is not available in the local Phase backend."
 
+#: ui/phase/invite.ts:144
+msgid "This HTTPS page may block an insecure ws:// connection. Use a secure wss:// tunnel or open the host's HTTP page on your local network."
+msgstr "This HTTPS page may block an insecure ws:// connection. Use a secure wss:// tunnel or open the host's HTTP page on your local network."
+
+#: ui/phase/online.ts:96
+msgid "This HTTPS page requires a secure WSS invitation. Open the local HTTP app for LAN play, or configure a TLS tunnel."
+msgstr "This HTTPS page requires a secure WSS invitation. Open the local HTTP app for LAN play, or configure a TLS tunnel."
+
+#: ui/phase/invite.ts:80
+msgid "This invitation was made by a newer version."
+msgstr "This invitation was made by a newer version."
+
+#: ui/views/OnlinePlay.tsx:143
+msgid "This invitation works only on this machine. Enable LAN hosting or configure a public address to invite another computer."
+msgstr "This invitation works only on this machine. Enable LAN hosting or configure a public address to invite another computer."
+
 #: ui/components/game/GameLoadingScreen.tsx:70
 msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
 msgstr "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."
@@ -4679,7 +4815,7 @@ msgstr "This room has no sealed config — recreate it as a Sealed room."
 msgid "This screen is designed for landscape play."
 msgstr "This screen is designed for landscape play."
 
-#: ui/phase/online.ts:102
+#: ui/phase/online.ts:134
 msgid "This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2)."
 msgstr "This server does not support the required Phase multiplayer protocol (76 / ManaBrew 2)."
 
@@ -5096,7 +5232,7 @@ msgstr "Your first deck is waiting to be brewed."
 msgid "Your game could not be resumed — the host left mid-game."
 msgstr "Your game could not be resumed — the host left mid-game."
 
-#: ui/views/OnlinePlay.tsx:47
+#: ui/views/OnlinePlay.tsx:149
 msgid "Your name"
 msgstr "Your name"
 

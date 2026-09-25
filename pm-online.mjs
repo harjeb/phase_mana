@@ -1,5 +1,14 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+const ADVANCED = 'Advanced connection (room code)';
+// The server address and room code moved behind an advanced disclosure; a
+// closed <details> hides its controls from Playwright just as it hides them
+// from a player, so open it before reaching for them.
+async function openAdvanced(page) {
+  // The room code and the manual create/join buttons live behind it; the
+  // server address stays visible because the draft panel needs it too.
+  if (!(await page.getByLabel('Room code').isVisible())) await page.getByText(ADVANCED, { exact: true }).click();
+}
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
 const server = process.env.PHASE_ONLINE_URL || 'ws://127.0.0.1:9374/ws';
 try {
@@ -27,6 +36,7 @@ try {
         localStorage.setItem('manabrew.onboarding', JSON.stringify({ version: '1.0', acceptedAt: new Date().toISOString() }));
       });
       await page.goto('http://127.0.0.1:1420/#/play/online');
+      await openAdvanced(page);
       await page.getByLabel('Server URL').fill(server);
       await page.getByLabel('Deck list').fill('60 Plains');
     }
@@ -52,6 +62,7 @@ try {
     }
     // Refresh keeps only the server-scoped seat token, then recovers the real game.
     await pages[1].reload();
+    await openAdvanced(pages[1]);
     await pages[1].getByLabel('Server URL').fill(server);
     await pages[1].getByRole('button', { name: 'Reconnect saved seat', exact: true }).click();
     await pages[1].waitForFunction(() => window.__pm?.getState().isGameActive);
@@ -87,6 +98,7 @@ try {
     for (const page of pages) assert.equal(await page.evaluate(() => window.__pmFinalView.winnerId), `player-${count - 1}`);
     // A retired room remains recoverable after the live socket and board are gone.
     await pages[1].goto('http://127.0.0.1:1420/?terminal-recovery=1#/play/online');
+    await openAdvanced(pages[1]);
     await pages[1].getByLabel('Server URL').fill(server);
     await pages[1].getByRole('button', { name: 'Reconnect saved seat', exact: true }).click();
     await pages[1].getByRole('status').filter({ hasText: `Game over — Player ${count} won.` }).waitFor();

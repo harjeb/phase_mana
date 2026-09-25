@@ -95,10 +95,13 @@ const platform: IPlatformApi = {
     // (it owns the single session), but an answer still in flight must not
     // repopulate the state the store just cleared.
     endGame: async () => {
-      const { closeOnline } = await import("@/phase/online");
+      const { isOnlineSession, onlineStatus, closeOnline } = await import("@/phase/online");
+      const { hostedRoom, stopHostedRoom } = await import("@/phase/host");
+      const ownsHost = isOnlineSession() && hostedRoom()?.endpoint === onlineStatus().endpoint;
       closeOnline();
       const { invalidateSnapshotGeneration } = await import("@/phase/transport");
       invalidateSnapshotGeneration();
+      if (ownsHost) await stopHostedRoom();
     },
     restoreSnapshot: unsupported,
     getPrompt: async () => {

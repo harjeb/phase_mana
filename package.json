@@ -68,6 +68,7 @@
     "build": "npm run check && vite build",
     "check": "tsc -p tsconfig.app.json --noEmit",
     "extract": "node tools/lingui-extract.mjs",
+    "host:build": "node scripts/build-host.mjs",
     "server": "node scripts/start-local.mjs --server-only",
     "preview": "vite preview --host 127.0.0.1",
     "test:server": "cargo test --manifest-path server/Cargo.toml",
@@ -75,7 +76,10 @@
     "download:all": "bash scripts/fetch-all.sh",
     "download:scryfall": "node scripts/download-scryfall.mjs",
     "e2e": "node pm-e2e.mjs",
-    "e2e:leave": "node pm-return.mjs"
+    "e2e:leave": "node pm-return.mjs",
+    "e2e:online": "node pm-online.mjs",
+    "e2e:host": "node pm-host.mjs",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@iconify-json/game-icons": "^1.2.3",

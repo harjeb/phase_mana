@@ -1,5 +1,7 @@
 import { CombatBreakdownModal } from "@/components/game/modals/CombatBreakdownModal";
 import { t } from "@lingui/core/macro";
+import { hostedRoom } from "@/phase/host";
+import { isOnlineSession, onlineStatus } from "@/phase/online";
 import { locateVisibleZone, visibleZoneCards, zoneLocationKey } from "@/lib/zoneView";
 import { isForgeWasmActive } from "@/lib/forgeWasm";
 import { useGameStore } from "@/stores/useGameStore";
@@ -1137,7 +1139,7 @@ export default function Game({ exitTo }: GameProps = {}) {
     [gameView?.players, me?.id],
   );
   const iAmEliminated = selfConceded || (me != null && me.status !== "playing");
-  const ownsEngine = isHost || hostingForgeRoom;
+  const ownsEngine = isHost || hostingForgeRoom || (isOnlineSession() && hostedRoom()?.endpoint === onlineStatus().endpoint);
   const gameContinuesWithoutMe = opponents.filter((p) => p.status === "playing").length >= 2;
   const handleConcede = useCallback(() => setConcedeModalOpen(true), []);
   const handleConcedeConfirm = useCallback(async () => {

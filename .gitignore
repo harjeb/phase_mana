@@ -5,6 +5,7 @@ src-tauri/resources/web-dist/
 src-tauri/resources/draft-pools/
 
 node_modules/
+.phase-host/
 dist/
 target/
 core.*

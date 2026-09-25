@@ -3,7 +3,7 @@ vi.mock("sonner", () => ({ toast: { error: vi.fn() } }));
 vi.mock("./transport", () => ({ acceptSnapshot: vi.fn(), invalidateSnapshotGeneration: vi.fn() }));
 vi.mock("@/stores/useGameStore", () => ({ useGameStore: { setState: vi.fn(), getState: () => ({ gameView: { turn: 1 } }) } }));
 import { acceptSnapshot } from "./transport";
-import { closeOnline, connectOnline, normalizeServer, onlineStatus, respondOnline } from "./online";
+import { closeOnline, connectOnline, createPrivateRoom, joinPrivateRoom, latestOnlineEndpoint, normalizeServer, onlineStatus, respondOnline } from "./online";
 import { onlineDraftStatus } from "./onlineDraft";
 class Socket {
   static OPEN = 1;
@@ -116,6 +116,55 @@ it("routes responses through the authoritative socket and ignores older revision
   socket.receive("ManabrewResponseAccepted", { request_id: requestId, state_revision: 4 });
   await pending;
   expect(acceptSnapshot).toHaveBeenLastCalledWith(expect.objectContaining({ state: { gameView: { gameOver: true } } }));
+});
+it("takes the advertised public URL as the shareable address", () => {
+  connectOnline("ws://localhost:9374", { type: "CreateGame", data: {} });
+  const socket = Socket.instances[0];
+  expect(onlineStatus().publicUrl).toBeNull();
+  socket.receive("ServerHello", { ...hello, public_url: "https://x.ngrok-free.app" });
+  expect(onlineStatus().publicUrl).toBe("https://x.ngrok-free.app");
+  connectOnline("ws://localhost:9374", { type: "CreateGame", data: {} });
+  Socket.instances[1].receive("ServerHello", hello);
+  expect(onlineStatus().publicUrl).toBeNull();
+});
+it("opens a private room with a generated password and returns both halves of an invite", async () => {
+  const room = createPrivateRoom("ws://localhost:9374", { deck: { main_deck: ["Plains"] }, displayName: "Host", players: 4 });
+  const socket = Socket.instances[0];
+  socket.receive("ServerHello", hello);
+  const request = socket.sent.at(-1)?.data as { password: string; public: boolean; player_count: number };
+  expect(socket.sent.at(-1)?.type).toBe("CreateGameWithSettings");
+  expect(request.public).toBe(false);
+  expect(request.player_count).toBe(4);
+  expect(request.password).toMatch(/^[A-Za-z0-9_-]{22}$/);
+  socket.receive("GameCreated", credentials);
+  expect(await room).toEqual({ gameCode: "ABC123", password: request.password });
+});
+it("fails the host's room request when the server refuses it", async () => {
+  const room = createPrivateRoom("ws://localhost:9374", { deck: {}, displayName: "Host", players: 2 });
+  Socket.instances[0].receive("ServerHello", hello);
+  Socket.instances[0].receive("Error", { message: "max games reached" });
+  await expect(room).rejects.toThrow("max games reached");
+});
+it("confirms an invited seat while still waiting for remaining players", async () => {
+  const joined = joinPrivateRoom("wss://x.ngrok-free.app/ws", { deck: { main_deck: ["Plains"] }, displayName: "Guest", gameCode: "ABC123", password: "secret" });
+  const socket = Socket.instances[0];
+  socket.receive("ServerHello", hello);
+  expect(socket.sent.at(-1)).toEqual({ type: "JoinGameWithPassword", data: { game_code: "ABC123", password: "secret", display_name: "Guest", deck: { main_deck: ["Plains"] } } });
+  let settled = false;
+  void joined.then(() => { settled = true; });
+  socket.receive("GameStarted", credentials);
+  await Promise.resolve();
+  expect(settled).toBe(false);
+  socket.receive("SessionAttached", credentials);
+  await joined;
+  expect(latestOnlineEndpoint()).toBe("wss://x.ngrok-free.app/ws");
+  expect(acceptSnapshot).not.toHaveBeenCalled();
+});
+it("surfaces a rejected room password instead of hanging", async () => {
+  const joined = joinPrivateRoom("wss://x.ngrok-free.app/ws", { deck: {}, displayName: "Guest", gameCode: "ABC123", password: "wrong" });
+  Socket.instances[0].receive("ServerHello", hello);
+  Socket.instances[0].receive("Error", { message: "Wrong password" });
+  await expect(joined).rejects.toThrow("Wrong password");
 });
 it("waits for the accepted action's projection when its acknowledgement arrives first", async () => {
   connectOnline("ws://localhost:9374", { type: "CreateGame", data: {} });

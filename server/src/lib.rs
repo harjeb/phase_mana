@@ -5,8 +5,9 @@ use std::{
 };
 
 use axum::{
-    extract::State,
-    http::StatusCode,
+    extract::{Request, State},
+    http::{header, HeaderMap, Method, StatusCode, Uri},
+    middleware::{self, Next},
     response::{IntoResponse, Response},
     routing::{get, post},
     Json, Router,
@@ -49,6 +50,8 @@ use phase_ai::{
 use rand::{rngs::StdRng, Rng, SeedableRng};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+
+pub mod host_process;
 
 #[cfg(test)]
 mod commander_tests;
@@ -139,6 +142,174 @@ fn bad(message: impl Into<String>) -> HostError {
 }
 fn internal(message: impl Into<String>) -> HostError {
     HostError(StatusCode::UNPROCESSABLE_ENTITY, message.into())
+}
+
+/// Start the multiplayer host engine, or return the one already running.
+///
+/// Blocking on purpose (`spawn_blocking`): startup waits for the engine to load
+/// its card database, which is seconds at best and minutes for a raw MTGJSON
+/// pool. Holding a reactor thread for that would stall every other request.
+async fn host_start() -> Result<Json<host_process::HostInfo>, HostError> {
+    tokio::task::spawn_blocking(host_process::start)
+        .await
+        .map_err(|e| internal(format!("Host task failed: {e}")))?
+        .map(Json)
+        .map_err(internal)
+}
+async fn host_stop() -> Result<Json<serde_json::Value>, HostError> {
+    tokio::task::spawn_blocking(host_process::stop)
+        .await
+        .map_err(|e| internal(format!("Host task failed: {e}")))?
+        .map_err(internal)?;
+    Ok(Json(serde_json::json!({"running": false})))
+}
+async fn host_status() -> Result<Json<serde_json::Value>, HostError> {
+    let host = tokio::task::spawn_blocking(host_process::status)
+        .await
+        .map_err(|e| internal(format!("Host task failed: {e}")))?;
+    Ok(Json(serde_json::json!({"host": host})))
+}
+
+fn validate_host_request(method: &Method, headers: &HeaderMap) -> Result<(), HostError> {
+    let forbidden = |message: &str| HostError(StatusCode::FORBIDDEN, message.to_string());
+    if method != Method::GET && method != Method::HEAD
+        && (headers.get_all("x-phase-host").iter().count() != 1
+            || headers.get("x-phase-host").and_then(|h| h.to_str().ok()) != Some("1"))
+    {
+        return Err(forbidden("Host mutations require X-Phase-Host: 1"));
+    }
+    let local_host = headers.get(header::HOST).and_then(|h| h.to_str().ok())
+        .and_then(|h| h.parse::<axum::http::uri::Authority>().ok())
+        .is_some_and(|h| matches!(h.host(), "localhost" | "127.0.0.1" | "[::1]") && !h.as_str().contains('@'));
+    if !local_host || headers.get_all(header::HOST).iter().count() != 1 {
+        return Err(forbidden("Host control is available only through a loopback Host"));
+    }
+    let origins = headers.get_all(header::ORIGIN);
+    let mut origins = origins.iter();
+    let Some(origin) = origins.next() else { return Ok(()) };
+    if origins.next().is_some() {
+        return Err(forbidden("Multiple Origin headers are not allowed"));
+    }
+    let origin = origin.to_str().ok().and_then(|s| s.parse::<Uri>().ok())
+        .ok_or_else(|| forbidden("Invalid host control Origin"))?;
+    let scheme = origin.scheme_str().filter(|s| matches!(*s, "http" | "https"))
+        .ok_or_else(|| forbidden("Host control Origin must use HTTP or HTTPS"))?;
+    if origin.path_and_query().is_some_and(|path| path.as_str() != "/") {
+        return Err(forbidden("Invalid host control Origin"));
+    }
+    let authority = origin.authority().filter(|a| !a.as_str().contains('@'))
+        .ok_or_else(|| forbidden("Invalid host control Origin"))?;
+    if headers.get_all(header::HOST).iter().count() != 1 {
+        return Err(forbidden("Host control requires one Host header"));
+    }
+    let host = headers.get(header::HOST).and_then(|h| h.to_str().ok())
+        .and_then(|h| h.parse::<axum::http::uri::Authority>().ok())
+        .filter(|h| !h.as_str().contains('@'))
+        .ok_or_else(|| forbidden("Invalid Host header"))?;
+    let default_port = if scheme == "https" { 443 } else { 80 };
+    let origin_port = authority.port_u16().unwrap_or(default_port);
+    let api_port = host.port_u16().unwrap_or(default_port);
+    let same_host = authority.host().eq_ignore_ascii_case(host.host()) && origin_port == api_port;
+    let local_ui = matches!(authority.host(), "localhost" | "127.0.0.1")
+        && (origin_port == 1420 || origin_port == api_port);
+    if !same_host && !local_ui {
+        return Err(forbidden("Foreign Origin cannot control the host process"));
+    }
+    Ok(())
+}
+
+async fn host_control_guard(request: Request, next: Next) -> Result<Response, HostError> {
+    validate_host_request(request.method(), request.headers())?;
+    Ok(next.run(request).await)
+}
+
+fn host_control_router() -> Router {
+    Router::new()
+        .route("/api/host/start", post(host_start))
+        .route("/api/host/stop", post(host_stop))
+        .route("/api/host/status", get(host_status))
+        .route_layer(middleware::from_fn(host_control_guard))
+}
+
+#[cfg(test)]
+mod host_control_tests {
+    use super::*;
+
+    fn headers(origin: Option<&str>, marker: bool) -> HeaderMap {
+        let mut headers = HeaderMap::new();
+        headers.insert(header::HOST, "127.0.0.1:7432".parse().unwrap());
+        if let Some(origin) = origin {
+            headers.insert(header::ORIGIN, origin.parse().unwrap());
+        }
+        if marker {
+            headers.insert("x-phase-host", "1".parse().unwrap());
+        }
+        headers
+    }
+
+    #[test]
+    fn host_control_accepts_same_host_and_local_ui() {
+        for origin in [None, Some("http://127.0.0.1:7432"), Some("http://localhost:7432"),
+            Some("http://localhost:1420"), Some("http://127.0.0.1:1420")] {
+            assert!(validate_host_request(&Method::POST, &headers(origin, true)).is_ok(), "{origin:?}");
+        }
+        let mut proxied = headers(Some("https://play.example.com"), true);
+        proxied.insert(header::HOST, "play.example.com".parse().unwrap());
+        assert!(validate_host_request(&Method::POST, &proxied).is_err());
+    }
+
+    #[test]
+    fn host_control_rejects_foreign_null_and_malformed_origins() {
+        for origin in ["https://evil.example", "null", "http://localhost:9999",
+            "http://127.0.0.1.evil.example:1420", "http://user@127.0.0.1:7432",
+            "http://127.0.0.1:7432/path", "ftp://127.0.0.1:7432",
+            "http://127.0.0.1:7432 http://evil.example"] {
+            for method in [Method::GET, Method::POST] {
+                assert_eq!(validate_host_request(&method, &headers(Some(origin), true)).unwrap_err().0,
+                    StatusCode::FORBIDDEN, "{origin}");
+            }
+        }
+    }
+
+    #[test]
+    fn host_control_mutations_always_require_custom_header() {
+        for origin in [None, Some("http://127.0.0.1:7432")] {
+            assert!(validate_host_request(&Method::POST, &headers(origin, false)).is_err());
+            assert!(validate_host_request(&Method::GET, &headers(origin, false)).is_ok());
+        }
+        let mut invalid = headers(None, true);
+        invalid.insert("x-phase-host", "0".parse().unwrap());
+        assert!(validate_host_request(&Method::POST, &invalid).is_err());
+        let mut duplicate = headers(Some("http://localhost:1420"), true);
+        duplicate.append(header::ORIGIN, "https://evil.example".parse().unwrap());
+        assert!(validate_host_request(&Method::POST, &duplicate).is_err());
+    }
+
+    #[tokio::test]
+    async fn host_control_middleware_guards_all_routes() {
+        let app = host_control_router();
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let address = listener.local_addr().unwrap();
+        let server = tokio::spawn(async move {
+            axum::serve(listener, app.into_make_service()).await.unwrap();
+        });
+        tokio::task::spawn_blocking(move || {
+            use std::io::{Read, Write};
+            for (method, path, extra) in [
+                ("POST", "start", ""),
+                ("POST", "stop", ""),
+                ("GET", "status", "Origin: https://evil.example\r\n"),
+            ] {
+                let mut stream = std::net::TcpStream::connect(address).unwrap();
+                stream.set_read_timeout(Some(std::time::Duration::from_secs(5))).unwrap();
+                write!(stream, "{method} /api/host/{path} HTTP/1.1\r\nHost: {address}\r\n{extra}Content-Length: 0\r\nConnection: close\r\n\r\n").unwrap();
+                let mut response = String::new();
+                stream.read_to_string(&mut response).unwrap();
+                assert!(response.starts_with("HTTP/1.1 403"), "{response}");
+            }
+        }).await.unwrap();
+        server.abort();
+    }
 }
 
 #[derive(Default, Deserialize)]
@@ -756,6 +927,7 @@ pub fn router(host: Host) -> Router {
         .route("/api/conspiracy/prepare", post(prepare_conspiracies))
         .route("/api/conspiracy/reveal", post(reveal_conspiracy))
         .with_state(Arc::new(Mutex::new(host)))
+        .merge(host_control_router())
 }
 
 // Search is CPU-bound: never hold up the Tokio reactor with the AI loop.
