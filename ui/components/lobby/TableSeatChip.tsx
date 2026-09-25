@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { CSSProperties } from "react";
 import { Bot, Crown, Plus, User, X } from "lucide-react";
 import { usePlayerAvatar } from "@/hooks/usePlayerAvatar";
@@ -43,8 +44,8 @@ export function TableSeatChip({
       return (
         <div
           role="img"
-          title={`Open seat`}
-          aria-label={`Seat ${seatIndex + 1}: open`}
+          title={t`Open seat`}
+          aria-label={t`Seat ${seatIndex + 1}: open`}
           style={style}
           className={cn(
             "flex h-9 w-9 items-center justify-center rounded-full border border-dashed border-border/70 bg-card text-muted-foreground/40",
@@ -62,8 +63,8 @@ export function TableSeatChip({
     return (
       <button
         type="button"
-        title={`Take this seat`}
-        aria-label={`Take seat ${seatIndex + 1}`}
+        title={t`Take this seat`}
+        aria-label={t`Take seat ${seatIndex + 1}`}
         onClick={onTakeSeat}
         style={style}
         className={cn(
@@ -80,13 +81,13 @@ export function TableSeatChip({
     );
   }
   const name = stripUsernameTag(player.username);
-  const label = player.is_bot ? `${name} (bot)` : isHost ? `${name} (table host)` : name;
+  const label = player.is_bot ? t`${name} (bot)` : isHost ? t`${name} (table host)` : name;
   const accessibleLabel = statusLabel ? `${label}, ${statusLabel}` : label;
   return (
     <div
       role="group"
       title={label}
-      aria-label={`Seat ${seatIndex + 1}: ${accessibleLabel}`}
+      aria-label={t`Seat ${seatIndex + 1}: ${accessibleLabel}`}
       style={style}
       className={cn("flex flex-col items-center gap-0.5", className)}
     >
@@ -133,8 +134,8 @@ export function TableSeatChip({
         {onRemove && (
           <button
             type="button"
-            title={`Remove bot`}
-            aria-label={`Remove ${name}`}
+            title={t`Remove bot`}
+            aria-label={t`Remove ${name}`}
             onClick={(event) => {
               event.stopPropagation();
               onRemove();

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
@@ -43,7 +44,7 @@ export function AccountActionsCard() {
       link.click();
       URL.revokeObjectURL(url);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : `Export failed`);
+      toast.error(err instanceof Error ? err.message : t`Export failed`);
     } finally {
       setBusy(false);
     }
@@ -54,8 +55,8 @@ export function AccountActionsCard() {
         <Label><Trans>Data &amp; session</Trans></Label>
         <div className="divide-y divide-border/70">
           <ActionRow
-            title={`Export my data`}
-            description={`Download your account, decks, and history as JSON.`}
+            title={t`Export my data`}
+            description={t`Download your account, decks, and history as JSON.`}
             action={
               <Button
                 variant="outline"
@@ -65,13 +66,13 @@ export function AccountActionsCard() {
                 onClick={() => void handleExport()}
               >
                 <Download />
-                Export
+                <Trans>Export</Trans>
               </Button>
             }
           />
           <ActionRow
-            title={`Sign out`}
-            description={`Sign out of Manabrew on this device.`}
+            title={t`Sign out`}
+            description={t`Sign out of Manabrew on this device.`}
             action={
               <Button
                 variant="outline"
@@ -81,7 +82,7 @@ export function AccountActionsCard() {
                 onClick={() => void signOut()}
               >
                 <LogOut />
-                Sign out
+                <Trans>Sign out</Trans>
               </Button>
             }
           />
@@ -93,7 +94,7 @@ export function AccountActionsCard() {
             target="_blank"
             rel="noreferrer"
           >
-            Terms
+            <Trans>Terms</Trans>
           </a>
           {" · "}
           <a
@@ -102,15 +103,15 @@ export function AccountActionsCard() {
             target="_blank"
             rel="noreferrer"
           >
-            Privacy &amp; data
+            <Trans>Privacy &amp; data</Trans>
           </a>
         </p>
       </section>
       <section className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 sm:p-5 space-y-1">
         <Label className="text-destructive"><Trans>Danger zone</Trans></Label>
         <ActionRow
-          title={`Delete account`}
-          description={`Erases your account, sign-in methods, decks, and history. Community publications stay up without your name.`}
+          title={t`Delete account`}
+          description={t`Erases your account, sign-in methods, decks, and history. Community publications stay up without your name.`}
           action={
             <Button
               variant="destructive"
@@ -120,7 +121,7 @@ export function AccountActionsCard() {
               onClick={() => setDeleteOpen(true)}
             >
               <Trash2 />
-              Delete account
+              <Trans>Delete account</Trans>
             </Button>
           }
         />

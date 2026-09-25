@@ -14,7 +14,6 @@ import type { AuthIdentity } from "@/api/authTypes";
 const PROVIDER_LABELS: Record<string, string> = {
   github: `GitHub`,
   discord: `Discord`,
-  email: `Email`,
 };
 function providerIcon(provider: string) {
   if (provider === "github") return <Github className="h-4 w-4" />;
@@ -25,6 +24,7 @@ interface SignInMethodsCardProps {
   identities: AuthIdentity[];
 }
 export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
+  const providerLabels: Record<string, string> = { ...PROVIDER_LABELS, email: t`Email` };
   const refresh = useAuthStore((s) => s.refresh);
   const [busy, setBusy] = useState(false);
   const linkedProviders = new Set(identities.map((identity) => identity.provider));
@@ -49,7 +49,7 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
         window.location.assign(url);
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : `Linking failed`);
+      toast.error(err instanceof Error ? err.message : t`Linking failed`);
     } finally {
       setBusy(false);
     }
@@ -61,12 +61,12 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
     try {
       await unlinkIdentity(token, provider);
       await refresh();
-      toast.success(t`${PROVIDER_LABELS[provider] ?? provider} unlinked`);
+      toast.success(t`${providerLabels[provider] ?? provider} unlinked`);
     } catch (err) {
       if (err instanceof AuthRequestError && err.status === 409) {
         toast.error(t`You can't unlink your only sign-in method`);
       } else {
-        toast.error(err instanceof Error ? err.message : `Unlinking failed`);
+        toast.error(err instanceof Error ? err.message : t`Unlinking failed`);
       }
     } finally {
       setBusy(false);
@@ -77,7 +77,7 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
       <Label><Trans>Sign-in methods</Trans></Label>
       <div className="space-y-2">
         {identities.map((identity) => {
-          const label = PROVIDER_LABELS[identity.provider] ?? identity.provider;
+          const label = providerLabels[identity.provider] ?? identity.provider;
           return (
             <div
               key={`${identity.provider}-${identity.email ?? ""}`}
@@ -96,7 +96,7 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
                 variant="ghost"
                 size="icon"
                 className="size-8 shrink-0 text-muted-foreground hover:text-destructive"
-                title={`Unlink ${label}`}
+                title={t`Unlink ${label}`}
                 disabled={busy || identities.length <= 1}
                 onClick={() => void handleUnlink(identity.provider)}
               >
@@ -117,7 +117,7 @@ export function SignInMethodsCard({ identities }: SignInMethodsCardProps) {
               onClick={() => void handleLink(provider)}
             >
               {providerIcon(provider)}
-              Link {PROVIDER_LABELS[provider]}
+              <Trans>Link {PROVIDER_LABELS[provider]}</Trans>
             </Button>
           ))}
         </div>

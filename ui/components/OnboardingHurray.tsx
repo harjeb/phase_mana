@@ -1,5 +1,4 @@
-import { Trans } from "@lingui/react/macro";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import { toast } from "sonner";
 import { PartyPopper, Sparkles } from "lucide-react";
@@ -12,6 +11,7 @@ const HANDLE_MIN_LENGTH = 3;
 const HANDLE_MAX_LENGTH = 24;
 
 export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLingui();
   const setAccount = useAuthStore((s) => s.setAccount);
   const [handle, setHandle] = useState("");
   const [busy, setBusy] = useState(false);
@@ -32,10 +32,10 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
     } catch (err) {
       setError(
         err instanceof AuthRequestError && err.status === 409
-          ? "That username is already taken."
+          ? t`That username is already taken.`
           : err instanceof Error
             ? err.message
-            : "Could not set your username.",
+            : t`Could not set your username.`,
       );
     } finally {
       setBusy(false);
@@ -55,7 +55,7 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
       <div className="space-y-1 text-center">
         <h3 className="text-lg font-semibold text-foreground"><Trans>Hurray, you're in!</Trans></h3>
         <p className="text-sm text-muted-foreground">
-          Claim your username, others won't be able to steal it!
+          <Trans>Claim your username, others won't be able to steal it!</Trans>
         </p>
       </div>
 
@@ -86,10 +86,10 @@ export function OnboardingHurray({ onComplete }: { onComplete: () => void }) {
         className="w-full max-w-xs"
       >
         {busy
-          ? "Saving…"
+          ? t`Saving…`
           : trimmed.length >= HANDLE_MIN_LENGTH
-            ? `Start as @${trimmed}`
-            : "Claim your username"}
+            ? t`Start as @${trimmed}`
+            : t`Claim your username`}
       </Button>
     </div>
   );

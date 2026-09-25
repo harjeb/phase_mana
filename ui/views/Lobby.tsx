@@ -50,7 +50,7 @@ function awaitGameStartedAck(roomId: string): Promise<void> {
     const cleanup = () => unsubs.forEach((fn) => fn());
     const timeout = setTimeout(() => {
       cleanup();
-      reject(new Error("server did not acknowledge StartGame in time"));
+      reject(new Error(t`Server did not acknowledge the game start in time.`));
     }, START_GAME_ACK_TIMEOUT_MS);
     unsubs.push(
       events.on<GameStartedPayload>("server:game_started", (payload) => {
@@ -138,8 +138,8 @@ export default function Lobby() {
   const lanTried = useRef(false);
   const lanDetail = lanTarget
     ? lanTarget.hosting
-      ? "Hosting on your network"
-      : `On your network · ${lanTarget.name ?? "nearby host"}`
+      ? t`Hosting on your network`
+      : t`On your network · ${lanTarget.name ?? t`nearby host`}`
     : undefined;
   const [settingUp, setSettingUp] = useState(false);
   const [creatingLabel, setCreatingLabel] = useState<string | null>(null);
@@ -437,7 +437,7 @@ export default function Lobby() {
       });
       setMySpawnedBots((prev) => [...prev, botName]);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Failed to spawn bot.`);
+      toast.error(error instanceof Error ? error.message : t`Failed to spawn bot.`);
     }
   }
   async function handleRemoveBot(botName: string) {
@@ -445,14 +445,14 @@ export default function Lobby() {
       await getPlatform().server!.removeAiBot(botName);
       setMySpawnedBots((prev) => prev.filter((u) => u !== botName));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Failed to remove bot.`);
+      toast.error(error instanceof Error ? error.message : t`Failed to remove bot.`);
     }
   }
   async function handleSetMaxPlayers(maxPlayers: number) {
     try {
       await setMaxPlayers(maxPlayers);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Failed to change player count.`);
+      toast.error(error instanceof Error ? error.message : t`Failed to change player count.`);
     }
   }
   return (
@@ -462,12 +462,12 @@ export default function Lobby() {
           <div className="flex shrink-0 flex-wrap items-center justify-end gap-2 px-4 py-2 sm:px-6 lg:px-8">
             {!connected && error && (
               <Button size="sm" variant="outline" onClick={() => connectPreferred(relayUsername())}>
-                Retry connection
+                <Trans>Retry connection</Trans>
               </Button>
             )}
             {!connected && !connecting && (
               <Button size="sm" variant="ghost" onClick={() => navigate(ROUTES.SETTINGS)}>
-                <Settings /> Multiplayer settings
+                <Settings /> <Trans>Multiplayer settings</Trans>
               </Button>
             )}
             {myUsername && (
@@ -476,9 +476,9 @@ export default function Lobby() {
                 variant="ghost"
                 className="md:hidden"
                 onClick={() => setPlayersDrawerOpen(true)}
-                title={`Show players and chat`}
+                title={t`Show players and chat`}
               >
-                <Users /> {chatEnabled ? `Players & chat` : `Players`}
+                <Users /> {chatEnabled ? t`Players & chat` : t`Players`}
                 <span
                   className={cn(
                     "rounded-full px-1.5 py-0.5 text-[10px]",

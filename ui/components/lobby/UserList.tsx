@@ -1,4 +1,6 @@
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { msg } from "@lingui/core/macro";
+import type { MessageDescriptor } from "@lingui/core";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +15,21 @@ import type { LocalGameKind, PlayerInfo, RoomInfo, ServerErrorCode } from "@/typ
 import { cn } from "@/lib/utils";
 import { stripUsernameTag } from "@/lib/username";
 import { toast } from "sonner";
+const errorMessages: Record<string, MessageDescriptor> = {
+  "Select a deck before getting ready": msg`Select a deck before getting ready`,
+  "Not all players are ready": msg`Not all players are ready`,
+  "Only the host can do that": msg`Only the host can do that`,
+  "Room is full": msg`Room is full`,
+  "Incorrect room password": msg`Incorrect room password`,
+  "You're already in a room": msg`You're already in a room`,
+  "Choose a format before starting": msg`Choose a format before starting`,
+  "Draft config is invalid": msg`Draft config is invalid`,
+  "That player is no longer online": msg`That player is no longer online`,
+  "That player is in a game": msg`That player is in a game`,
+  "That message can't be sent": msg`That message can't be sent`,
+  "You're sending too many messages": msg`You're sending too many messages`,
+  "Sign in to chat in General": msg`Sign in to chat in General`,
+};
 export type ConnectionState = "connected" | "connecting" | "disconnected";
 interface UserListProps {
   players: PlayerInfo[];
@@ -31,35 +48,35 @@ const CONNECTION_STATUS: Record<
   {
     dot: string;
     text: string;
-    label: string;
+    label: MessageDescriptor;
     Icon: typeof Wifi;
   }
 > = {
   connected: {
     dot: "bg-success",
     text: "text-success",
-    label: `Connected`,
+    label: msg`Connected`,
     Icon: Wifi,
   },
   connecting: {
     dot: "bg-format-badge-amber",
     text: "text-muted-foreground",
-    label: `Connecting\u2026`,
+    label: msg`Connecting…`,
     Icon: Loader2,
   },
   disconnected: {
     dot: "bg-destructive",
     text: "text-destructive",
-    label: `Disconnected`,
+    label: msg`Disconnected`,
     Icon: WifiOff,
   },
 };
-const LOCAL_GAME_LABEL: Record<LocalGameKind, string> = {
-  Singleplayer: `Playing solo`,
+const LOCAL_GAME_LABEL: Record<LocalGameKind, MessageDescriptor> = {
+  Singleplayer: msg`Playing solo`,
 };
-function playerStatus(room: RoomInfo | undefined, localGame?: LocalGameKind): string {
-  if (!room) return localGame ? LOCAL_GAME_LABEL[localGame] : "Available";
-  return room.status === "InGame" ? "In game" : "At a table";
+function playerStatus(room: RoomInfo | undefined, localGame?: LocalGameKind): MessageDescriptor {
+  if (!room) return localGame ? LOCAL_GAME_LABEL[localGame] : msg`Available`;
+  return room.status === "InGame" ? msg`In game` : msg`At a table`;
 }
 // The relay should never surface one username twice, but a stale disconnected
 // session can briefly linger alongside a live reconnect; collapse them here,
@@ -85,6 +102,7 @@ export function UserList({
   onJoinRoom,
   invitesEnabled = false,
 }: UserListProps) {
+  const { t, i18n } = useLingui();
   const [joiningRoomId, setJoiningRoomId] = useState<string | null>(null);
   const invited = useInviteStore((s) => s.sent);
   const sendInvite = useInviteStore((s) => s.send);
@@ -131,7 +149,7 @@ export function UserList({
       if (password) throw error;
       const code = error instanceof Error ? error.message : "";
       const message = USER_FACING_ERROR_MESSAGES[code as ServerErrorCode];
-      toast.error(message ?? `Couldn't join the table.`);
+      toast.error(message ? (errorMessages[message] ? i18n._(errorMessages[message]) : t`Couldn't join the table.`) : t`Couldn't join the table.`);
     } finally {
       setJoiningRoomId(null);
     }
@@ -163,11 +181,11 @@ export function UserList({
         <status.Icon
           className={cn("h-2.5 w-3.5", connectionState === "connecting" && "animate-spin")}
         />
-        {connectionDetail ?? status.label}
+        {connectionDetail ?? i18n._(status.label)}
       </span>
     ) : (
       <span className="text-[10px] text-muted-foreground" title={room?.room_name}>
-        {playerStatus(room, player.local_game)}
+        {i18n._(playerStatus(room, player.local_game))}
       </span>
     );
     const action = joinable ? (
@@ -177,9 +195,9 @@ export function UserList({
         className={PLAYER_ROW_ACTION_CLASS}
         disabled={joiningRoomId === room.room_id}
         onClick={() => requestJoin(room)}
-        title={`Join ${room.room_name}`}
+        title={t`Join ${room.room_name}`}
       >
-        {joiningRoomId === room.room_id ? `Joining\u2026` : `Join`}
+        {joiningRoomId === room.room_id ? t`Joining…` : t`Join`}
       </Button>
     ) : invitable ? (
       <Button
@@ -188,10 +206,10 @@ export function UserList({
         className={PLAYER_ROW_ACTION_CLASS}
         disabled={invited.has(player.username)}
         onClick={() => void sendInvite(player.username)}
-        title={`Invite to your table`}
+        title={t`Invite to your table`}
       >
         <UserPlus className="h-3 w-3" />
-        {invited.has(player.username) ? `Invited` : `Invite`}
+        {invited.has(player.username) ? t`Invited` : t`Invite`}
       </Button>
     ) : null;
     return (
@@ -233,7 +251,7 @@ export function UserList({
               )}
             />
           </TooltipTrigger>
-          <TooltipContent>{status.label}</TooltipContent>
+          <TooltipContent>{i18n._(status.label)}</TooltipContent>
         </Tooltip>
         <h3 className="font-semibold text-sm"><Trans>Players</Trans></h3>
         <span className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-full">
@@ -246,7 +264,7 @@ export function UserList({
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={`Search players\u2026`}
+            placeholder={t`Search players…`}
             className="h-8 pl-8 text-sm"
           />
         </div>
@@ -262,18 +280,18 @@ export function UserList({
               },
               true,
             )}
-          {renderSection("Playing", playing.length, playing)}
-          {renderSection("At a table", atTable.length, atTable)}
-          {renderSection("Available", available.length, available)}
+          {renderSection(t`Playing`, playing.length, playing)}
+          {renderSection(t`At a table`, atTable.length, atTable)}
+          {renderSection(t`Available`, available.length, available)}
 
           {!myUsername && others.length === 0 && (
             <p className="text-xs text-muted-foreground italic text-center py-6">
-              No players online
+              <Trans>No players online</Trans>
             </p>
           )}
           {myUsername && filteredOthers.length === 0 && normalizedSearch !== "" && (
             <p className="text-xs text-muted-foreground italic text-center py-6">
-              No players match “{search.trim()}”
+              <Trans>No players match “{search.trim()}”</Trans>
             </p>
           )}
         </div>

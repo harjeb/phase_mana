@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { DeckGridCard } from "@/components/deck/DeckGridCard";
 import { CollapsibleDeckShelf } from "@/components/play/CollapsibleDeckShelf";
 import { DECK_SHELF_CARD_CLASS, DeckShelfRow } from "@/components/play/DeckShelfRow";
@@ -22,13 +23,13 @@ export function PresetDeckShelf({
 }: PresetDeckShelfProps) {
   return (
     <CollapsibleDeckShelf
-      title={`Preset decks`}
-      count={loaded ? decks.length : "Loading…"}
+      title={t`Preset decks`}
+      count={loaded ? decks.length : t`Loading…`}
       open={open}
       onOpenChange={onOpenChange}
     >
       {decks.length > 0 ? (
-        <DeckShelfRow label={`Preset decks`}>
+        <DeckShelfRow label={t`Preset decks`}>
           {decks.map((preset) => {
             const presetId = preset.id ?? preset.name;
             return (
@@ -37,7 +38,7 @@ export function PresetDeckShelf({
                   deck={{ id: presetId, deck: preset, savedAt: 0 }}
                   onOpen={() => onOpenDeck(preset)}
                   onPlay={() => onPlayDeck(preset)}
-                  badge="Official preset"
+                  badge={t`Official preset`}
                   engines={preset.engines}
                   playing={pendingDeckId === presetId}
                   playDisabled={pendingDeckId !== null}
@@ -49,7 +50,7 @@ export function PresetDeckShelf({
         </DeckShelfRow>
       ) : (
         <p className="px-2 text-xs italic text-muted-foreground">
-          {loaded ? `No preset decks are available.` : `Loading preset decks\u2026`}
+          {loaded ? t`No preset decks are available.` : t`Loading preset decks…`}
         </p>
       )}
     </CollapsibleDeckShelf>

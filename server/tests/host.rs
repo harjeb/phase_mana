@@ -42,12 +42,21 @@ fn start_and_snapshot() {
         "phase-ai must answer AI's opening decision"
     );
     assert_eq!(started.human_player_id, "player-0");
+    assert!(!started.log_session_id.is_empty());
+    assert!(started.game_log.iter().any(|row| row.message == "Game started"));
+    assert!(started.game_log.iter().all(|row| row.timestamp_ms > 0));
+    assert!(!serde_json::to_string(&started.game_log).unwrap().contains("Grizzly Bears"), "opening private cards must not leak");
+    assert_eq!(serde_json::to_value(&host.state().unwrap().game_log).unwrap(), serde_json::to_value(&started.game_log).unwrap());
     assert!(started.state["gameView"].is_object());
     assert_eq!(host.state().unwrap().prompt, started.prompt);
     let next = host
         .respond(keep(prompt_id(&started)))
         .expect("human keeps");
     assert_ne!(prompt_id(&started), prompt_id(&next));
+    assert_eq!(started.log_session_id, next.log_session_id);
+    assert!(next.game_log.last().unwrap().seq > started.game_log.last().unwrap().seq);
+    assert!(next.game_log.windows(2).all(|rows| rows[1].seq == rows[0].seq + 1));
+    assert_eq!(serde_json::to_value(&host.state().unwrap().game_log).unwrap(), serde_json::to_value(&next.game_log).unwrap());
     assert!(
         host.respond(keep(prompt_id(&started))).is_err(),
         "replay rejected"
@@ -80,6 +89,10 @@ fn drive_turns() {
         ai_actions += current.ai_actions;
     }
     assert!(ai_actions > 0, "AI must make decisions beyond mulligan");
+    assert!(current.game_log.iter().any(|row| row.turn >= 2));
+    assert!(current.game_log.iter().any(|row| row.message.contains("plays") || row.message.contains("casts")), "real AI public actions must be logged");
+    assert!(current.game_log.len() <= 200);
+    assert!(current.game_log.windows(2).all(|rows| rows[1].seq == rows[0].seq + 1));
     assert!(current.state["gameView"]["turn"].as_u64().unwrap() >= 3);
 }
 
@@ -93,6 +106,8 @@ fn stale_prompts() {
     let old = host.start(StartRequest::default()).unwrap();
     let current = host.start(StartRequest::default()).unwrap();
     assert_ne!(prompt_id(&old), prompt_id(&current));
+    assert_ne!(old.log_session_id, current.log_session_id);
+    assert_eq!(current.game_log.first().unwrap().seq, 1);
     assert!(host.respond(keep(prompt_id(&old))).is_err());
     assert!(host.respond(keep(0)).is_err());
     assert_eq!(host.state().unwrap().prompt, current.prompt);

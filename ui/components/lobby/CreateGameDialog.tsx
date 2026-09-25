@@ -1,4 +1,5 @@
-import { t } from "@lingui/core/macro";
+import { msg, t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { useState, useEffect, useRef } from "react";
 import { usePresetDecks } from "@/stores/usePresetDecksStore";
@@ -36,6 +37,29 @@ import { getDeckFingerprint } from "@/lib/decks";
 import { useHubDeckSearch } from "@/hooks/useHubDeckSearch";
 import { useHubStore } from "@/stores/useHubStore";
 import type { DeckHubEntryDetail, DeckHubEntrySummary } from "@/api/hubTypes";
+const formatLabels = {
+  standard: [msg`Standard`, msg`60+ cards, max 4 copies, 20 life, rotating sets`],
+  pioneer: [msg`Pioneer`, msg`60+ cards, max 4 copies, 20 life, Return to Ravnica forward`],
+  modern: [msg`Modern`, msg`60+ cards, max 4 copies, 20 life, 8th Edition forward`],
+  legacy: [msg`Legacy`, msg`60+ cards, max 4 copies, 20 life, all sets, banned list`],
+  vintage: [msg`Vintage`, msg`60+ cards, max 4 copies, 20 life, all sets, restricted list`],
+  pauper: [msg`Pauper`, msg`60+ cards, max 4 copies, 20 life, commons only`],
+  premodern: [msg`Premodern`, msg`60+ cards, max 4 copies, Fourth Edition through Scourge`],
+  commander: [msg`Commander`, msg`100 cards, singleton, 40 life, requires commander`],
+  oathbreaker: [msg`Oathbreaker`, msg`60 cards, singleton, 20 life, planeswalker + signature spell`],
+  tiny_leaders: [msg`Tiny Leaders`, msg`50 cards, singleton, 20 life, legendary commander with mana value 3 or less`],
+  duel_commander: [msg`Duel Commander`, msg`100 cards, singleton, 30 life, 1v1 commander`],
+  pauper_commander: [msg`Pauper Commander`, msg`100 cards, singleton, 40 life, uncommon creature commander, commons only`],
+  momir: [msg`Momir`, msg`Momir's Madness — the engine supplies the 60-card snow-basic deck and random-creature emblem`],
+  old_school_93_94: [msg`Old School 93/94`, msg`Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn`],
+  old_school_95: [msg`Old School 95`, msg`Old School 93/94 plus Fourth Edition through Homelands, mana burn`],
+  archenemy: [msg`Archenemy`, msg`One archenemy at 40 life against the heroes at 20, with a scheme deck`],
+  planechase: [msg`Planechase`, msg`60-card decks, 20 life, a shared planar deck and the planar die`],
+  two_headed_giant: [msg`Two-Headed Giant`, msg`Two teams of two share a 30-life total and take their turns together`],
+  draft: [msg`Draft`, msg`40+ cards, no copy limit, 20 life`],
+  sealed: [msg`Sealed`, msg`40+ cards, no copy limit, 20 life`],
+};
+
 interface CreateGameDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -64,6 +88,15 @@ export function CreateGameDialog({
   target = "player",
   onStart,
 }: CreateGameDialogProps) {
+  const { i18n } = useLingui();
+  const formatName = (format: GameFormat) => {
+    const labels = formatLabels[format.id as keyof typeof formatLabels];
+    return labels ? i18n._(labels[0]) : format.name;
+  };
+  const formatDescription = (format: GameFormat) => {
+    const labels = formatLabels[format.id as keyof typeof formatLabels];
+    return labels ? i18n._(labels[1]) : format.description;
+  };
   const currentDeck = useDeckStore((state) => state.currentDeck);
   const ownedDecks = useOwnedDecks();
   const accountDeckDetails = useAccountDecksStore((state) => state.details);
@@ -132,7 +165,7 @@ export function CreateGameDialog({
         const formatId = detail.deck.format ?? detail.format ?? "standard";
         if (formatId !== selectedFormat.id) {
           restoredHubDeckRef.current = null;
-          toast.error(t`"${detail.title}" is not a ${selectedFormat.name} deck`);
+          toast.error(t`"${detail.title}" is not a ${formatName(selectedFormat)} deck`);
           return;
         }
         setLoadedHubDecks((current) => ({ ...current, [detail.id]: detail }));
@@ -141,7 +174,7 @@ export function CreateGameDialog({
       .catch((err) => {
         if (hubSelectionRequestIdRef.current !== requestId) return;
         restoredHubDeckRef.current = null;
-        toast.error(err instanceof Error ? err.message : `Failed to load Community deck`);
+        toast.error(err instanceof Error ? err.message : t`Failed to load Community deck`);
       })
       .finally(() => {
         if (hubSelectionRequestIdRef.current === requestId) setLoadingHubDeckId(null);
@@ -176,7 +209,7 @@ export function CreateGameDialog({
         {
           id: "current",
           name: currentDeck.name,
-          badge: "editing",
+          badge: t`editing`,
           labels: currentDeck.labels,
           sourceDeck: currentDeck,
           isPreset: false as const,
@@ -191,7 +224,7 @@ export function CreateGameDialog({
     ...distinctSavedDecks.map((s) => ({
       id: s.id,
       name: s.deck.name,
-      badge: (s.deck.draft ? "draft" : null) as string | null,
+      badge: (s.deck.draft ? t`draft` : null) as string | null,
       labels: s.deck.labels,
       sourceDeck: s.deck,
       isPreset: false as const,
@@ -218,7 +251,7 @@ export function CreateGameDialog({
     name: detail.title,
     desc: detail.summary,
     color: detail.colors,
-    badge: "Community",
+    badge: t`Community`,
     sourceDeck: detail.deck,
     isPreset: false as const,
     cover: resolveCoverCard(detail.deck),
@@ -312,7 +345,7 @@ export function CreateGameDialog({
         name: detail.title,
         desc: detail.summary,
         color: detail.colors,
-        badge: "Community",
+        badge: t`Community`,
         sourceDeck: detail.deck,
         isPreset: false as const,
         cover: resolveCoverCard(detail.deck),
@@ -322,14 +355,14 @@ export function CreateGameDialog({
       };
       const currentFormat = selectedFormatRef.current;
       if (entry.formatId !== currentFormat.id) {
-        toast.error(t`"${detail.title}" is not a ${currentFormat.name} deck`);
+        toast.error(t`"${detail.title}" is not a ${formatName(currentFormat)} deck`);
         return;
       }
       setSelectedDeck(entry.id);
       if (activate) handleCreate(entry, entry.commanderName);
     } catch (err) {
       if (hubSelectionRequestIdRef.current !== requestId) return;
-      toast.error(err instanceof Error ? err.message : `Failed to load Community deck`);
+      toast.error(err instanceof Error ? err.message : t`Failed to load Community deck`);
     } finally {
       if (hubSelectionRequestIdRef.current === requestId) setLoadingHubDeckId(null);
     }
@@ -362,7 +395,7 @@ export function CreateGameDialog({
           selectedFormat,
         );
     if (!validation.legal && !allowIllegalDecks) {
-      toast.warning(validation.errors[0] ?? `Deck is not legal in this format`);
+      toast.warning(validation.errors[0] ?? t`Deck is not legal in this format`);
       return;
     }
     if (needsCommander && !(commander || entry.commanderName)) {
@@ -417,14 +450,14 @@ export function CreateGameDialog({
       >
         <div className="px-6 py-4 border-b">
           <DialogTitle className="text-lg font-semibold">
-            {target === "bot" ? `Choose Bot Deck` : isLobbyMode ? `Choose Deck` : `New Game`}
+            {target === "bot" ? t`Choose Bot Deck` : isLobbyMode ? t`Choose Deck` : t`New Game`}
           </DialogTitle>
           <p className="text-sm text-muted-foreground mt-0.5">
             {target === "bot"
-              ? `Select the deck the AI will play in this lobby.`
+              ? t`Select the deck the AI will play in this lobby.`
               : isLobbyMode
-                ? `Select the deck you will play in this lobby.`
-                : `Pick a deck and battle a random AI opponent`}
+                ? t`Select the deck you will play in this lobby.`
+                : t`Pick a deck and battle a random AI opponent`}
           </p>
         </div>
 
@@ -452,9 +485,9 @@ export function CreateGameDialog({
                       <div className="mb-1">
                         <FormatBadge formatId={format.id} />
                       </div>
-                      <p className="font-medium text-xs">{format.name}</p>
+                      <p className="font-medium text-xs">{formatName(format)}</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5 leading-tight">
-                        {format.description}
+                        {formatDescription(format)}
                       </p>
                     </button>
                   ))}
@@ -465,24 +498,20 @@ export function CreateGameDialog({
                 <SectionLabel><Trans>Rules</Trans></SectionLabel>
                 <div className="mt-2 space-y-1.5">
                   <RulePill
-                    label={`Deck`}
+                    label={t`Deck`}
                     value={
-                      selectedFormat.deckRules.minDeckSize +
-                      (selectedFormat.deckRules.maxDeckSize
-                        ? `–${selectedFormat.deckRules.maxDeckSize}`
-                        : "+") +
-                      " cards"
+                      t`${selectedFormat.deckRules.minDeckSize}${selectedFormat.deckRules.maxDeckSize ? `–${selectedFormat.deckRules.maxDeckSize}` : "+"} cards`
                     }
                   />
                   <RulePill
-                    label={`Copies`}
+                    label={t`Copies`}
                     value={
                       selectedFormat.deckRules.maxCopies === 1
-                        ? "Singleton"
-                        : `Max ${selectedFormat.deckRules.maxCopies}`
+                        ? t`Singleton`
+                        : t`Max ${selectedFormat.deckRules.maxCopies}`
                     }
                   />
-                  <RulePill label={`Life`} value={`${selectedFormat.deckRules.startingLife}`} />
+                  <RulePill label={t`Life`} value={`${selectedFormat.deckRules.startingLife}`} />
                 </div>
               </div>
 
@@ -501,7 +530,7 @@ export function CreateGameDialog({
                       <>
                         {legendaryCreatures.length === 0 && (
                           <p className="text-[10px] text-muted-foreground italic">
-                            No legendaries in deck — type a name below.
+                            <Trans>No legendaries in deck — type a name below.</Trans>
                           </p>
                         )}
                         {legendaryCreatures.length > 0 ? (
@@ -520,7 +549,7 @@ export function CreateGameDialog({
                         ) : (
                           <input
                             className="w-full rounded border border-border bg-background px-2 py-1.5 text-xs pointer-coarse:text-base"
-                            placeholder={`Card name`}
+                            placeholder={t`Card name`}
                             value={selectedCommander}
                             onChange={(event) => setSelectedCommander(event.target.value)}
                             autoComplete="off"
@@ -537,9 +566,9 @@ export function CreateGameDialog({
 
               <div>
                 <SectionLabel>
-                  Opponents
+                  <Trans>Opponents</Trans>
                   <span className="ml-1 text-[9px] font-mono text-warning bg-warning/10 px-1 rounded">
-                    DEV
+                    <Trans>DEV</Trans>
                   </span>
                 </SectionLabel>
                 <div className="mt-2 flex gap-1">
@@ -555,7 +584,7 @@ export function CreateGameDialog({
                           : "border-border hover:bg-muted/60",
                       )}
                     >
-                      {count - 1}v1
+                      <Trans>{count - 1}v1</Trans>
                     </button>
                   ))}
                 </div>
@@ -569,8 +598,8 @@ export function CreateGameDialog({
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
                 <input
                   type="text"
-                  aria-label={`Filter decks`}
-                  placeholder={`Filter decks...`}
+                  aria-label={t`Filter decks`}
+                  placeholder={t`Filter decks...`}
                   value={deckSearch}
                   onChange={(e) => setDeckSearch(e.target.value)}
                   className="w-full pl-8 pr-3 py-1.5 rounded-md border bg-background text-sm pointer-coarse:h-10 pointer-coarse:text-base focus:outline-none focus:ring-1 focus:ring-primary"
@@ -586,13 +615,13 @@ export function CreateGameDialog({
               <div className="p-4 pt-2">
                 <SectionLabel><Trans>Your Decks</Trans></SectionLabel>
                 <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
-                  Decks you've built in the editor.
+                  <Trans>Decks you've built in the editor.</Trans>
                 </p>
                 {filteredUserDecks.length === 0 ? (
                   <p className="text-xs text-muted-foreground italic">
                     {searchLower
-                      ? `No saved decks match your search.`
-                      : `No saved decks. Build one in the Deck Editor.`}
+                      ? t`No saved decks match your search.`
+                      : t`No saved decks. Build one in the Deck Editor.`}
                   </p>
                 ) : (
                   <div
@@ -648,13 +677,13 @@ export function CreateGameDialog({
                   <div className="p-4">
                     <SectionLabel><Trans>Community</Trans></SectionLabel>
                     <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
-                      Community decks are downloaded when selected.
+                      <Trans>Community decks are downloaded when selected.</Trans>
                     </p>
                     {hubDecks.error ? (
                       <div className="flex flex-wrap items-center gap-2 text-xs text-destructive">
                         <span className="min-w-0 break-words">{hubDecks.error}</span>
                         <Button variant="outline" size="sm" onClick={hubDecks.retry}>
-                          Retry
+                          <Trans>Retry</Trans>
                         </Button>
                       </div>
                     ) : hubDecks.loading && hubSearchResults.length === 0 ? (
@@ -678,7 +707,7 @@ export function CreateGameDialog({
                       </div>
                     ) : hubSearchResults.length === 0 ? (
                       <p className="text-xs text-muted-foreground italic">
-                        No Community decks match your search.
+                        <Trans>No Community decks match your search.</Trans>
                       </p>
                     ) : (
                       <div
@@ -708,12 +737,12 @@ export function CreateGameDialog({
                             <DeckSelectionCard
                               key={deck.id}
                               name={
-                                loadingHubDeckId === deck.id ? `Loading ${deck.title}…` : deck.title
+                                loadingHubDeckId === deck.id ? t`Loading ${deck.title}…` : deck.title
                               }
                               color={deck.colors}
                               author={deck.author}
                               cardCount={deck.cardCount + deck.commanders.length}
-                              badge="Community"
+                              badge={t`Community`}
                               cards={[]}
                               cover={undefined}
                               coverImageUrl={deck.coverImageUrl}
@@ -740,11 +769,11 @@ export function CreateGameDialog({
               <div className="p-4">
                 <SectionLabel><Trans>Starter Decks</Trans></SectionLabel>
                 <p className="text-[11px] text-muted-foreground mt-0.5 mb-3">
-                  Pre-built themed decks — always legal, great for testing mechanics.
+                  <Trans>Pre-built themed decks — always legal, great for testing mechanics.</Trans>
                 </p>
                 {filteredPresetEntries.length === 0 ? (
                   <p className="text-xs text-muted-foreground italic">
-                    No preset decks match your search.
+                    <Trans>No preset decks match your search.</Trans>
                   </p>
                 ) : (
                   <div
@@ -788,19 +817,19 @@ export function CreateGameDialog({
                 <span className="text-muted-foreground shrink-0"><Trans>vs</Trans></span>
                 <span className="inline-flex items-center gap-1 text-muted-foreground shrink-0">
                   <Shuffle className="h-3 w-3" />
-                  Random AI
+                  <Trans>Random AI</Trans>
                 </span>
               </>
             ) : selectedDeckEntry ? (
               <div className="min-w-0">
                 <span className="block truncate text-sm text-muted-foreground">
-                  Selected:{" "}
+                  <Trans>Selected:</Trans>{" "}
                   <span className="font-medium text-foreground">{selectedDeckEntry.name}</span>
                 </span>
                 {!selectedDeckValidation.legal && (
                   <span className="block truncate text-xs text-warning">
                     {selectedDeckValidation.errors[0] ??
-                      `This deck is not legal in the room format.`}
+                      t`This deck is not legal in the room format.`}
                   </span>
                 )}
               </div>
@@ -810,7 +839,7 @@ export function CreateGameDialog({
           </div>
           <div className="flex gap-2 shrink-0">
             <Button variant="ghost" size="sm" onClick={() => handleOpenChange(false)}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
             <Button
               variant="primary"
@@ -825,12 +854,12 @@ export function CreateGameDialog({
                 !isLobbyMode && <Swords className="h-3.5 w-3.5" />
               )}
               {starting
-                ? `Selecting\u2026`
+                ? t`Selecting…`
                 : target === "bot"
-                  ? `Add Bot`
+                  ? t`Add Bot`
                   : isLobbyMode
-                    ? `Select Deck`
-                    : `Play`}
+                    ? t`Select Deck`
+                    : t`Play`}
             </Button>
           </div>
         </div>

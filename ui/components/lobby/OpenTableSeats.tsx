@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { CSSProperties, ReactNode } from "react";
 import { TableSeatChip } from "@/components/lobby/TableSeatChip";
 import { stripUsernameTag } from "@/lib/username";
@@ -50,7 +51,7 @@ export function OpenTableSeats({
   return (
     <div
       role="group"
-      aria-label={`Table seats: ${players.length} of ${maxPlayers} occupied`}
+      aria-label={t`Table seats: ${players.length} of ${maxPlayers} occupied`}
       className={cn("relative mx-auto aspect-[8/5] w-full max-w-64", className)}
     >
       <div
@@ -78,14 +79,14 @@ export function OpenTableSeats({
         const statusLabel =
           showSeatLabels && player
             ? isControllerSeat
-              ? `Host`
+              ? t`Host`
               : openFormat
                 ? player.ready
-                  ? `Ready`
-                  : `Waiting`
+                  ? t`Ready`
+                  : t`Waiting`
                 : player.ready
-                  ? `Ready`
-                  : (player.selected_deck_name ?? `No deck`)
+                  ? t`Ready`
+                  : (player.selected_deck_name ?? t`No deck`)
             : undefined;
         return (
           <TableSeatChip

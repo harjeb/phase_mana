@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/core/macro";
+import { i18n } from "@/i18n/i18n";
 import { Trans } from "@lingui/react/macro";
 import {
   Github,
@@ -34,15 +36,15 @@ const UTILITY_ROW_CLASS =
 const TOOLS = [
   {
     to: ROUTES.SEARCH,
-    label: `Card Search`,
-    desc: "Every card, printing, and ruling at your fingertips.",
+    label: msg`Card Search`,
+    desc: msg`Every card, printing, and ruling at your fingertips.`,
     icon: Search,
     tone: "blue",
   },
   {
     to: ROUTES.COMPANION,
-    label: `Life Tracker`,
-    desc: "Life, poison, and commander damage for paper nights.",
+    label: msg`Life Tracker`,
+    desc: msg`Life, poison, and commander damage for paper nights.`,
     icon: HeartPulse,
     tone: "rose",
   },
@@ -54,8 +56,8 @@ export function PlayHomeLinks() {
       ? [
           {
             to: ROUTES.MY_COLLECTION,
-            label: `My Collection`,
-            desc: "Track the cards you own and import or export your collection.",
+            label: msg`My Collection`,
+            desc: msg`Track the cards you own and import or export your collection.`,
             icon: PackageOpen,
             tone: "amber",
           },
@@ -64,14 +66,14 @@ export function PlayHomeLinks() {
       : TOOLS;
   return (
     <>
-      <section aria-label={`More ways to play and tools`}>
+      <section aria-label={t`More ways to play and tools`}>
         <div className={cn("grid gap-4", TOOL_GRID_BY_COUNT[tools.length] ?? "sm:grid-cols-3")}>
           {tools.map(({ to, label, desc, icon, tone }, index) => (
             <FeatureTile
               key={to}
               to={to}
-              label={label}
-              desc={desc}
+              label={i18n._(label)}
+              desc={i18n._(desc)}
               icon={icon}
               tone={tone}
               className={cn(
@@ -83,27 +85,27 @@ export function PlayHomeLinks() {
       </section>
 
       <section
-        aria-label={`Utilities`}
+        aria-label={t`Utilities`}
         className="overflow-hidden rounded-xl border border-border/60 bg-background/60 backdrop-blur-md"
       >
         <ul className="divide-y divide-border/50 pb-1">
           <li>
             <Link to={ROUTES.SETTINGS} className={UTILITY_ROW_CLASS}>
               <Settings className="h-4 w-4 shrink-0 text-muted-foreground" />
-              Preferences
+              <Trans>Preferences</Trans>
             </Link>
           </li>
           <li>
             <Link to={ROUTES.ABOUT} className={UTILITY_ROW_CLASS}>
               <Info className="h-4 w-4 shrink-0 text-muted-foreground" />
-              About Manabrew
+              <Trans>About Manabrew</Trans>
             </Link>
           </li>
           {DESIGN_SYSTEM_ENABLED && (
             <li>
               <Link to={ROUTES.DESIGN_SYSTEM} className={UTILITY_ROW_CLASS}>
                 <Palette className="h-4 w-4 shrink-0 text-muted-foreground" />
-                Design System
+                <Trans>Design System</Trans>
               </Link>
             </li>
           )}
@@ -112,21 +114,21 @@ export function PlayHomeLinks() {
 
       <footer className="flex flex-col gap-3 border-t border-border/50 pt-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="text-xs text-muted-foreground">Manabrew v{APP_VERSION}</span>
+          <span className="text-xs text-muted-foreground"><Trans>Manabrew v{APP_VERSION}</Trans></span>
           <div className="flex items-center gap-1">
-            <Button asChild variant="ghost" size="icon-sm" title={`Discord`}>
+            <Button asChild variant="ghost" size="icon-sm" title={t`Discord`}>
               <a href={DISCORD_INVITE_URL} target="_blank" rel="noreferrer">
                 <DiscordIcon className="h-4 w-4" />
                 <span className="sr-only"><Trans>Discord</Trans></span>
               </a>
             </Button>
-            <Button asChild variant="ghost" size="icon-sm" title={`GitHub`}>
+            <Button asChild variant="ghost" size="icon-sm" title={t`GitHub`}>
               <a href={GITHUB_REPO_URL} target="_blank" rel="noreferrer">
                 <Github className="h-4 w-4" />
                 <span className="sr-only"><Trans>GitHub</Trans></span>
               </a>
             </Button>
-            <Button asChild variant="ghost" size="icon-sm" title={`Website`}>
+            <Button asChild variant="ghost" size="icon-sm" title={t`Website`}>
               <a href={WEBSITE_URL} target="_blank" rel="noreferrer">
                 <Globe className="h-4 w-4" />
                 <span className="sr-only"><Trans>Website</Trans></span>

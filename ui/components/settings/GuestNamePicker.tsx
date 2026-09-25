@@ -25,10 +25,10 @@ export function GuestNamePicker() {
     } catch (err) {
       setError(
         isNameClaimedError(err)
-          ? "That name is already claimed. Pick another."
+          ? t`That name is already claimed. Pick another.`
           : err instanceof Error
             ? err.message
-            : "Could not update username",
+            : t`Could not update username`,
       );
     } finally {
       setBusy(false);
@@ -48,10 +48,10 @@ export function GuestNamePicker() {
           onKeyDown={(e) => {
             if (e.key === "Enter" && dirty) void save();
           }}
-          placeholder={`Player1`}
+          placeholder={t`Player1`}
         />
         <Button variant="primary" size="sm" disabled={busy || !dirty} onClick={() => void save()}>
-          {busy ? `Saving\u2026` : `Save`}
+          {busy ? t`Saving…` : t`Save`}
         </Button>
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}

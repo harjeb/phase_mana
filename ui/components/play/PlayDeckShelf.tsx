@@ -126,11 +126,11 @@ export function PlayDeckShelf({
           {ownedDecks.length > 0 && (
             <Button variant="outline" size="sm" onClick={() => setChoiceOpen(true)}>
               <Plus className="h-4 w-4" />
-              Build / Import
+              <Trans>Build / Import</Trans>
             </Button>
           )}
           <Button variant="ghost" size="sm" onClick={() => navigate(ROUTES.DECK_EDITOR)}>
-            View All
+            <Trans>View All</Trans>
           </Button>
         </div>
       </div>
@@ -139,7 +139,7 @@ export function PlayDeckShelf({
         <div className="mb-4 flex flex-wrap items-center gap-2 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-2 text-xs text-destructive">
           <span className="min-w-0 flex-1">{accountDecksError}</span>
           <Button variant="outline" size="sm" onClick={() => void refreshAccountDecks()}>
-            Retry
+            <Trans>Retry</Trans>
           </Button>
         </div>
       )}

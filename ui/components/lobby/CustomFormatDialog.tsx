@@ -104,7 +104,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
       setDraft(null);
       toast.success(t`Saved "${label}".`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not save the format.");
+      toast.error(error instanceof Error ? error.message : t`Could not save the format.`);
     }
   }, [draft, formats]);
 
@@ -113,7 +113,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
       setDraft({
         ...format,
         key: newCustomFormatKey(`${format.label} copy`, formats),
-        label: `${format.label} copy`,
+        label: t`${format.label} copy`,
       });
     },
     [formats],
@@ -127,7 +127,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
       setShowImport(false);
       toast.success(t`Imported "${imported.label}".`);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not parse that JSON.");
+      toast.error(error instanceof Error ? error.message : t`Could not parse that JSON.`);
     }
   }, [importText, formats]);
 
@@ -139,8 +139,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
         <DialogHeader>
           <DialogTitle><Trans>Custom formats</Trans></DialogTitle>
           <DialogDescription>
-            Build a ruleset from the engine&apos;s structural and legacy axes. Saved formats are
-            checked by the host before they can be played.
+            <Trans>Build a ruleset from the engine&apos;s structural and legacy axes. Saved formats are checked by the host before they can be played.</Trans>
           </DialogDescription>
         </DialogHeader>
 
@@ -155,16 +154,16 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
           <div className="flex max-h-[60dvh] flex-col gap-3 overflow-y-auto">
             {baseError ? (
               <p className="text-sm text-destructive">
-                Could not load the editor base from the host: {baseError}
+                <Trans>Could not load the editor base from the host: {baseError}</Trans>
               </p>
             ) : null}
 
             <div className="flex flex-wrap gap-2">
               <Button variant="primary" size="sm" onClick={startNew} disabled={!base}>
-                New format
+                <Trans>New format</Trans>
               </Button>
               <Button variant="outline" size="sm" onClick={() => setShowImport((s) => !s)}>
-                Import JSON
+                <Trans>Import JSON</Trans>
               </Button>
             </div>
 
@@ -179,10 +178,10 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
                 />
                 <div className="flex gap-2">
                   <Button variant="primary" size="sm" onClick={runImport} disabled={!importText.trim()}>
-                    Import
+                    <Trans>Import</Trans>
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => setShowImport(false)}>
-                    Cancel
+                    <Trans>Cancel</Trans>
                   </Button>
                 </div>
               </div>
@@ -190,7 +189,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
 
             {sorted.length === 0 ? (
               <p className="py-6 text-center text-sm text-muted-foreground">
-                No saved custom formats yet.
+                <Trans>No saved custom formats yet.</Trans>
               </p>
             ) : (
               <ul className="flex flex-col gap-2">
@@ -213,17 +212,17 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
                             onOpenChange(false);
                             onPlay(format);
                           } catch (error) {
-                            toast.error(error instanceof Error ? error.message : "Could not validate the format.");
+                            toast.error(error instanceof Error ? error.message : t`Could not validate the format.`);
                           }
                         }}
                       >
-                        Play
+                        <Trans>Play</Trans>
                       </Button>
                       <Button variant="outline" size="xs" onClick={() => setDraft({ ...format })}>
-                        Edit
+                        <Trans>Edit</Trans>
                       </Button>
                       <Button variant="outline" size="xs" onClick={() => duplicate(format)}>
-                        Duplicate
+                        <Trans>Duplicate</Trans>
                       </Button>
                       <Button
                         variant="outline"
@@ -235,7 +234,7 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
                             .catch(() => toast.error(t`Could not copy to the clipboard.`));
                         }}
                       >
-                        Export
+                        <Trans>Export</Trans>
                       </Button>
                       <Button
                         variant="destructive-quiet"
@@ -244,11 +243,11 @@ export function CustomFormatDialog({ open, onOpenChange, onPlay }: CustomFormatD
                           try {
                             setFormats(deleteCustomFormat(format.key));
                           } catch (error) {
-                            toast.error(error instanceof Error ? error.message : "Could not delete the format.");
+                            toast.error(error instanceof Error ? error.message : t`Could not delete the format.`);
                           }
                         }}
                       >
-                        Delete
+                        <Trans>Delete</Trans>
                       </Button>
                     </div>
                   </li>
@@ -317,7 +316,7 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
 
       <section className="flex flex-col gap-3 rounded-md border border-border/70 p-3">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Structure
+          <Trans>Structure</Trans>
         </h3>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Field label={t`Minimum players`}>
@@ -417,12 +416,12 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
             checked={structural.singleton}
             onCheckedChange={(checked) => setStructural({ singleton: checked === true })}
           />
-          Singleton (max one copy of each card)
+          <Trans>Singleton (max one copy of each card)</Trans>
         </label>
         <Field label={t`Legal sets (comma separated; empty = all sets)`}>
           <Input
             defaultValue={(legality.legal_sets ?? []).join(", ")}
-            placeholder={t`LEA, LEB, ARN, …`}
+            placeholder="LEA, LEB, ARN, …"
             onBlur={(event) => {
               const list = splitList(event.target.value);
               setLegality({ legal_sets: list.length ? list : null });
@@ -433,7 +432,7 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
 
       <section className="flex flex-col gap-3 rounded-md border border-border/70 p-3">
         <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Legacy axes
+          <Trans>Legacy axes</Trans>
         </h3>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <Field label={t`Mana burn`}>
@@ -499,10 +498,10 @@ function CustomFormatEditor({ draft, onChange, onCancel, onSave }: CustomFormatE
 
       <div className="flex justify-end gap-2">
         <Button variant="ghost" size="sm" onClick={onCancel}>
-          Cancel
+          <Trans>Cancel</Trans>
         </Button>
         <Button variant="primary" size="sm" onClick={onSave}>
-          Validate &amp; save
+          <Trans>Validate &amp; save</Trans>
         </Button>
       </div>
     </div>

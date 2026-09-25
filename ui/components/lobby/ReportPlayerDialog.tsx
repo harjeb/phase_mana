@@ -1,3 +1,6 @@
+import { msg, t } from "@lingui/core/macro";
+import type { MessageDescriptor } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Flag, ShieldCheck } from "lucide-react";
@@ -27,27 +30,27 @@ interface ReportPlayerDialogProps {
 }
 const REASONS: Array<{
   value: ChatReportReason;
-  label: string;
+  label: MessageDescriptor;
 }> = [
   {
     value: "harassment",
-    label: `Harassment or bullying`,
+    label: msg`Harassment or bullying`,
   },
   {
     value: "hate",
-    label: `Hate speech`,
+    label: msg`Hate speech`,
   },
   {
     value: "inappropriate_content",
-    label: `Inappropriate name or content`,
+    label: msg`Inappropriate name or content`,
   },
   {
     value: "spam",
-    label: `Spam`,
+    label: msg`Spam`,
   },
   {
     value: "other",
-    label: `Something else`,
+    label: msg`Something else`,
   },
 ];
 const DETAILS_MAX_CHARS = 500;
@@ -61,6 +64,7 @@ function toReportMessage(entry: ChatEntry, roomId: string | undefined): ChatRepo
   };
 }
 export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps) {
+  const { i18n } = useLingui();
   const [reason, setReason] = useState<ChatReportReason | null>(null);
   const [details, setDetails] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -93,7 +97,7 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
       setSent(true);
     } catch (error) {
       setSubmitting(false);
-      toast.error(error instanceof Error ? error.message : `Couldn't send the report.`);
+      toast.error(error instanceof Error ? error.message : t`Couldn't send the report.`);
     }
   }
   if (sent) {
@@ -102,19 +106,18 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
         <DialogContent className="max-w-sm">
           <DialogTitle className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-success" />
-            Thank you
+            <Trans>Thank you</Trans>
           </DialogTitle>
           <DialogDescription><Trans>Your report has been sent.</Trans></DialogDescription>
           <p className="text-sm text-foreground/90">
-            Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at
-            this promptly and take action where it is warranted.
+            <Trans>Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at this promptly and take action where it is warranted.</Trans>
           </p>
           <p className="text-sm text-muted-foreground">
-            You won&apos;t hear back about the outcome, but every report is read by a person.
+            <Trans>You won&apos;t hear back about the outcome, but every report is read by a person.</Trans>
           </p>
           <DialogFooter>
             <Button variant="ghost" onClick={close}>
-              Done
+              <Trans>Done</Trans>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -126,11 +129,10 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
       <DialogContent className="max-w-sm">
         <DialogTitle className="flex items-center gap-2">
           <Flag className="h-4 w-4" />
-          Report {player ? stripUsernameTag(player.username) : ""}
+          <Trans>Report {player ? stripUsernameTag(player.username) : ""}</Trans>
         </DialogTitle>
         <DialogDescription>
-          We take reports extremely seriously. Please do not proceed unless there is a clear
-          violation of Terms of Service.
+          <Trans>We take reports extremely seriously. Please do not proceed unless there is a clear violation of Terms of Service.</Trans>
         </DialogDescription>
         <div className="space-y-1">
           {REASONS.map((option) => (
@@ -149,13 +151,13 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
                 onChange={() => setReason(option.value)}
                 className="accent-selection"
               />
-              {option.label}
+              {i18n._(option.label)}
             </label>
           ))}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="report-details" className="text-xs text-muted-foreground">
-            Anything else? (optional)
+            <Trans>Anything else? (optional)</Trans>
           </Label>
           <textarea
             id="report-details"
@@ -168,10 +170,10 @@ export function ReportPlayerDialog({ player, onClose }: ReportPlayerDialogProps)
         </div>
         <DialogFooter>
           <Button variant="ghost" onClick={close}>
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
           <Button variant="primary" disabled={!reason || submitting} onClick={() => void submit()}>
-            {submitting ? `Sending…` : `Send report`}
+            {submitting ? t`Sending…` : t`Send report`}
           </Button>
         </DialogFooter>
       </DialogContent>

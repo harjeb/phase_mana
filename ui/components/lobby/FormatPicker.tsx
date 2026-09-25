@@ -12,7 +12,7 @@ export function FormatPicker({ formats = GAME_FORMATS, onSelect }: FormatPickerP
         <header className="mb-10 text-center">
           <h2 className="font-serif text-4xl font-light tracking-wide"><Trans>Choose a format</Trans></h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Decide the rules of engagement before picking decks.
+            <Trans>Decide the rules of engagement before picking decks.</Trans>
           </p>
           <div
             aria-hidden

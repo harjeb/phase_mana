@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -141,17 +142,17 @@ export function AvatarCropDialog({ file, onCancel, onConfirm }: AvatarCropDialog
             step={0.01}
             value={zoom}
             onChange={(e) => onZoomChange(Number(e.target.value))}
-            aria-label={`Zoom`}
+            aria-label={t`Zoom`}
             className="w-full accent-primary"
           />
         </div>
 
         <DialogFooter>
           <Button variant="ghost" onClick={onCancel} disabled={saving}>
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
           <Button variant="primary" onClick={() => void confirm()} disabled={!imageSize || saving}>
-            {saving ? `Saving…` : `Save`}
+            {saving ? t`Saving…` : t`Save`}
           </Button>
         </DialogFooter>
       </DialogContent>

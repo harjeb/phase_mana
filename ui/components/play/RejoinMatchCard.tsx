@@ -103,8 +103,8 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
           <p className="font-medium"><Trans>Match in progress</Trans></p>
           <p className="truncate text-sm text-muted-foreground">
             {currentRoom?.room_id === session.roomId
-              ? `You're still seated at ${currentRoom.room_name}.`
-              : `You're still seated in an online match.`}
+              ? t`You're still seated at ${currentRoom.room_name}.`
+              : t`You're still seated in an online match.`}
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
@@ -119,7 +119,7 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
             }}
           >
             <X className="h-3.5 w-3.5" />
-            Abandon match
+            <Trans>Abandon match</Trans>
           </Button>
           <Button
             variant="primary"
@@ -129,7 +129,7 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
             onClick={() => navigate(ROUTES.LOBBY)}
           >
             <Swords className="h-3.5 w-3.5" />
-            Rejoin
+            <Trans>Rejoin</Trans>
           </Button>
         </div>
       </section>
@@ -145,8 +145,8 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
             <DialogTitle><Trans>Abandon match?</Trans></DialogTitle>
             <DialogDescription>
               {abandonFailed
-                ? `The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out.`
-                : `You will leave your seat and will not be able to rejoin this match.`}
+                ? t`The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out.`
+                : t`You will leave your seat and will not be able to rejoin this match.`}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
@@ -156,7 +156,7 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
               disabled={abandoning}
               onClick={() => setConfirmAbandon(false)}
             >
-              Keep playing
+              <Trans>Keep playing</Trans>
             </Button>
             <Button
               variant="destructive"
@@ -169,10 +169,10 @@ export function RejoinMatchCard({ session, onAbandoned }: RejoinMatchCardProps) 
             >
               {abandoning && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               {abandoning
-                ? `Abandoning\u2026`
+                ? t`Abandoning…`
                 : abandonFailed
-                  ? `Remove from this device`
-                  : `Abandon match`}
+                  ? t`Remove from this device`
+                  : t`Abandon match`}
             </Button>
           </DialogFooter>
         </DialogContent>

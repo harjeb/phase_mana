@@ -31,6 +31,32 @@ import { resolveCoverCard } from "@/components/deck/deckCover.utils";
 import { useHubDeckSearch } from "@/hooks/useHubDeckSearch";
 import { useHubStore } from "@/stores/useHubStore";
 import type { DeckHubEntrySummary } from "@/api/hubTypes";
+// Translate display names only; format IDs and user-provided names remain unchanged.
+function formatDisplayName(name: string): string {
+  switch (name) {
+    case "Standard": return t`Standard`;
+    case "Pioneer": return t`Pioneer`;
+    case "Modern": return t`Modern`;
+    case "Legacy": return t`Legacy`;
+    case "Vintage": return t`Vintage`;
+    case "Pauper": return t`Pauper`;
+    case "Premodern": return t`Premodern`;
+    case "Commander": return t`Commander`;
+    case "Oathbreaker": return t`Oathbreaker`;
+    case "Tiny Leaders": return t`Tiny Leaders`;
+    case "Duel Commander": return t`Duel Commander`;
+    case "Pauper Commander": return t`Pauper Commander`;
+    case "Momir": return t`Momir`;
+    case "Old School 93/94": return t`Old School 93/94`;
+    case "Old School 95": return t`Old School 95`;
+    case "Archenemy": return t`Archenemy`;
+    case "Planechase": return t`Planechase`;
+    case "Two-Headed Giant": return t`Two-Headed Giant`;
+    case "Draft": return t`Draft`;
+    case "Sealed": return t`Sealed`;
+    default: return name;
+  }
+}
 interface SelectedDeck {
   id: string;
   sourceId: string;
@@ -171,9 +197,9 @@ export function DeckVsSelector({
       .catch((err) => {
         if (hubSelectionRequestIdRef.current !== requestId) return;
         restoredHubDeckRef.current = null;
-        toast.error(err instanceof Error ? err.message : `Failed to load Community deck`, {
+        toast.error(err instanceof Error ? err.message : t`Failed to load Community deck`, {
           action: {
-            label: `Retry`,
+            label: t`Retry`,
             onClick: () => setHubRestoreAttempt((attempt) => attempt + 1),
           },
         });
@@ -346,7 +372,7 @@ export function DeckVsSelector({
       const currentFormat = selectedFormatRef.current;
       if (currentFormat && !currentFormat.startsWith("custom:") && formatId !== currentFormat) {
         toast.error(
-          t`"${detail.title}" is not a ${getFormat(currentFormat)?.name ?? currentFormat} deck`,
+          t`"${detail.title}" is not a ${formatDisplayName(getFormat(currentFormat)?.name ?? currentFormat)} deck`,
         );
         return;
       }
@@ -365,7 +391,7 @@ export function DeckVsSelector({
       );
     } catch (err) {
       if (hubSelectionRequestIdRef.current !== requestId) return;
-      toast.error(err instanceof Error ? err.message : `Failed to load Community deck`);
+      toast.error(err instanceof Error ? err.message : t`Failed to load Community deck`);
     } finally {
       if (hubSelectionRequestIdRef.current === requestId) setLoadingHubDeckId(null);
     }
@@ -437,7 +463,7 @@ export function DeckVsSelector({
         format,
       );
       if (!validation.legal) {
-        toast.warning(validation.errors[0] ?? `"${selected.name}" is not legal`);
+        toast.warning(validation.errors[0] ?? t`"${selected.name}" is not legal`);
         return;
       }
     }
@@ -468,7 +494,7 @@ export function DeckVsSelector({
       customFormat?.rules,
       );
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not start the game.");
+      toast.error(error instanceof Error ? error.message : t`Could not start the game.`);
       setStarting(false);
       return;
     }
@@ -515,10 +541,10 @@ export function DeckVsSelector({
       <div className="flex flex-shrink-0 items-center gap-3 border-b bg-muted/5 px-4 py-2 sm:px-6 lg:px-8">
         <div
           role="group"
-          aria-label={`Filter decks by format`}
+          aria-label={t`Filter decks by format`}
           className="-mx-1 flex min-w-0 flex-1 gap-1.5 overflow-x-auto px-1 py-1 no-scrollbar"
         >
-          {[{ id: null, name: "All" }, ...GAME_FORMATS].map((format) => (
+          {[{ id: null, name: t`All` }, ...GAME_FORMATS].map((format) => (
             <button
               key={format.id ?? "all"}
               type="button"
@@ -531,7 +557,7 @@ export function DeckVsSelector({
                   : "border-border/70 text-muted-foreground hover:border-border hover:text-foreground",
               )}
             >
-              {format.name}
+              {formatDisplayName(format.name)}
             </button>
           ))}
           {customFormat ? (
@@ -554,7 +580,7 @@ export function DeckVsSelector({
             onClick={() => setCustomFormatOpen(true)}
             className="shrink-0 rounded-full border border-dashed border-border/70 px-2.5 py-1 text-[11px] font-medium text-muted-foreground transition-colors motion-reduce:transition-none hover:border-border hover:text-foreground pointer-coarse:min-h-10 pointer-coarse:px-3"
           >
-            + Custom
+            <Trans>+ Custom</Trans>
           </button>
         </div>
         <p
@@ -563,13 +589,13 @@ export function DeckVsSelector({
         >
           {pickingSide === "player"
             ? isReady
-              ? `Choose your deck or fight`
-              : `Choose your deck`
+              ? t`Choose your deck or fight`
+              : t`Choose your deck`
             : pickingSide === "opponent"
               ? isReady
-                ? `Choose the AI deck or fight`
-                : `Choose the AI deck`
-              : `Matchup ready`}
+                ? t`Choose the AI deck or fight`
+                : t`Choose the AI deck`
+              : t`Matchup ready`}
         </p>
       </div>
 
@@ -578,8 +604,8 @@ export function DeckVsSelector({
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
           <input
             type="text"
-            aria-label={`Filter decks`}
-            placeholder={`Filter decks...`}
+            aria-label={t`Filter decks`}
+            placeholder={t`Filter decks...`}
             value={deckSearch}
             onChange={(e) => setDeckSearch(e.target.value)}
             className="w-full pl-8 pr-3 py-1.5 rounded-md border bg-background text-sm pointer-coarse:h-10 pointer-coarse:text-base focus:outline-none focus:ring-1 focus:ring-primary"
@@ -594,18 +620,19 @@ export function DeckVsSelector({
       <div className="flex-1 space-y-6 overflow-y-auto px-4 pb-4 sm:px-6 lg:px-8">
         <div>
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold pt-2 pb-1">
-            Your Decks
+            <Trans>Your Decks</Trans>
           </p>
           {filteredUserDecks.length === 0 ? (
             <p className="text-xs text-muted-foreground italic py-2">
-              No decks yet — build one in{" "}
-              <Link
-                to={ROUTES.DECK_EDITOR}
-                className="text-primary underline-offset-2 hover:underline not-italic"
-              >
-                My Decks
-              </Link>
-              .
+              <Trans>
+                No decks yet — build one in{" "}
+                <Link
+                  to={ROUTES.DECK_EDITOR}
+                  className="text-primary underline-offset-2 hover:underline not-italic"
+                >
+                  My Decks
+                </Link>.
+              </Trans>
             </p>
           ) : (
             <div
@@ -631,7 +658,7 @@ export function DeckVsSelector({
                     key={entry.id}
                     name={entry.name}
                     color={entry.color}
-                    badge={entry.sourceDeck?.draft ? "draft" : undefined}
+                    badge={entry.sourceDeck?.draft ? t`draft` : undefined}
                     cards={displayCards}
                     cover={cover}
                     isLegal={validation.legal}
@@ -659,13 +686,13 @@ export function DeckVsSelector({
             hubDeckEntries.length > 0) && (
             <div>
               <p className="pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Community
+                <Trans>Community</Trans>
               </p>
               {hubDecks.error ? (
                 <div className="flex flex-wrap items-center gap-2 py-2 text-xs text-destructive">
                   <span className="min-w-0 break-words">{hubDecks.error}</span>
                   <Button variant="outline" size="sm" onClick={hubDecks.retry}>
-                    Retry
+                    <Trans>Retry</Trans>
                   </Button>
                 </div>
               ) : hubDecks.loading && hubDeckEntries.length === 0 ? (
@@ -689,7 +716,7 @@ export function DeckVsSelector({
                 </div>
               ) : hubDeckEntries.length === 0 ? (
                 <p className="py-2 text-xs italic text-muted-foreground">
-                  No Community decks match this format and search.
+                  <Trans>No Community decks match this format and search.</Trans>
                 </p>
               ) : (
                 <div
@@ -715,11 +742,11 @@ export function DeckVsSelector({
                     return (
                       <DeckSelectionCard
                         key={deck.id}
-                        name={loadingHubDeckId === deck.id ? `Loading ${deck.title}…` : deck.title}
+                        name={loadingHubDeckId === deck.id ? t`Loading ${deck.title}…` : deck.title}
                         color={deck.colors}
                         author={deck.author}
                         cardCount={deck.cardCount + deck.commanders.length}
-                        badge="Community"
+                        badge={t`Community`}
                         cards={[]}
                         cover={undefined}
                         coverImageUrl={deck.coverImageUrl}
@@ -745,11 +772,11 @@ export function DeckVsSelector({
 
         <div>
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold pb-1">
-            Starter Decks
+            <Trans>Starter Decks</Trans>
           </p>
           {filteredDecks.length === 0 ? (
             <p className="text-xs text-muted-foreground italic py-2">
-              No starter decks for this format.
+              <Trans>No starter decks for this format.</Trans>
             </p>
           ) : (
             <div
@@ -787,7 +814,7 @@ export function DeckVsSelector({
       <div className="grid flex-shrink-0 gap-2 border-t bg-muted/10 px-4 py-2 sm:flex sm:items-center sm:justify-between sm:gap-3 sm:px-6 sm:py-3 lg:px-8">
         <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:flex sm:gap-2">
           <DeckSlot
-            label={`YOU`}
+            label={t`YOU`}
             icon={<User className="h-3 w-3" />}
             deck={playerDeck}
             sideColor="var(--player-colors-self)"
@@ -805,7 +832,7 @@ export function DeckVsSelector({
           />
           <span className="text-xs font-bold tracking-wider text-muted-foreground/60"><Trans>VS</Trans></span>
           <DeckSlot
-            label={`AI`}
+            label={t`AI`}
             icon={<Bot className="h-3 w-3" />}
             deck={opponentDeck}
             sideColor="var(--player-colors-opponent1)"
@@ -832,7 +859,7 @@ export function DeckVsSelector({
                     handleRandomOpponent();
                   }}
                   className="inline-flex w-8 shrink-0 items-center justify-center gap-0.5 rounded-r-md text-[10px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground pointer-coarse:w-10"
-                  title={`Random AI deck`}
+                  title={t`Random AI deck`}
                 >
                   <Shuffle className="h-3 w-3" />
                 </button>
@@ -858,7 +885,7 @@ export function DeckVsSelector({
             ) : (
               <Swords className="h-3.5 w-3.5" />
             )}
-            {starting ? `Starting\u2026` : `Fight!`}
+            {starting ? t`Starting…` : t`Fight!`}
           </Button>
         </div>
       </div>
@@ -879,7 +906,7 @@ export function DeckVsSelector({
         centerContent={
           selectedFormat ? (
             <span className="font-serif text-lg font-light text-foreground/90">
-              {customFormat?.label ?? getFormat(selectedFormat)?.name ?? selectedFormat}
+              {customFormat?.label ?? formatDisplayName(getFormat(selectedFormat)?.name ?? selectedFormat)}
               {customFormat ? (
                 <select
                   aria-label={t`Custom format player count`}
@@ -888,7 +915,7 @@ export function DeckVsSelector({
                   onChange={(event) => setCustomPlayerCount(Number(event.target.value))}
                 >
                   {[2, 3, 4].filter((count) => count >= customFormat.rules.structural.min_players && count <= customFormat.rules.structural.max_players)
-                    .map((count) => <option key={count} value={count}>{count} players</option>)}
+                    .map((count) => <option key={count} value={count}><Trans>{count} players</Trans></option>)}
                 </select>
               ) : null}
             </span>
@@ -956,18 +983,18 @@ function DeckSlot({
             deck ? "font-medium text-foreground/90" : "italic text-muted-foreground",
           )}
         >
-          {deck?.name ?? `pick a deck`}
+          {deck?.name ?? t`pick a deck`}
         </span>
         {isActive ? (
           <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide text-primary">
-            Selecting
+            <Trans>Selecting</Trans>
           </span>
         ) : isConfirmed ? (
           <Check className="h-3 w-3 shrink-0 text-primary" />
         ) : (
           deck && (
             <span className="shrink-0 text-[9px] font-semibold uppercase tracking-wide text-muted-foreground">
-              Suggested
+              <Trans>Suggested</Trans>
             </span>
           )
         )}
@@ -977,7 +1004,7 @@ function DeckSlot({
           type="button"
           onClick={onClear}
           className="inline-flex w-8 shrink-0 items-center justify-center rounded-r-md text-muted-foreground transition-colors hover:bg-muted/60 hover:text-destructive pointer-coarse:w-10"
-          title={`Clear`}
+          title={t`Clear`}
         >
           <X className="h-2.5 w-2.5" />
         </button>

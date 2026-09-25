@@ -3,12 +3,16 @@ import { toast } from "sonner";
 import type { Prompt, StateUpdate } from "@/protocol";
 import { applyPrompt, applyState } from "@/stores/gameStore.constants";
 import { useGameStore } from "@/stores/useGameStore";
+import { normalizeGameLogPayload } from "@/types/gameLog";
 
 interface Snapshot {
   state: StateUpdate;
   prompt: Prompt | null;
   humanPlayerId: string;
   aiActions: number;
+  /** Authoritative, bounded public history. Optional for older/online hosts. */
+  gameLog?: unknown[];
+  logSessionId?: string;
 }
 
 /**
@@ -63,6 +67,9 @@ export function acceptSnapshot(snapshot: Snapshot): void {
     myPlayerSlot: snapshot.humanPlayerId, currentPrompt: null,
     isWaitingForResponse: false, relinquishedPriority: false,
     isPrefetchingCards: false,
+    // Replace rather than append: /state and reconnects replay the same history.
+    // A new session (or a legacy host without logs) must not retain old entries.
+    gameLog: (snapshot.gameLog ?? []).slice(-200).map(normalizeGameLogPayload),
   });
   applyState(snapshot.state.gameView, "phase", setState, getState);
   if (snapshot.prompt) applyPrompt(snapshot.prompt, "phase", setState, getState);

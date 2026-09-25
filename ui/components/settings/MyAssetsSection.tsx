@@ -1,3 +1,6 @@
+import { msg, t } from "@lingui/core/macro";
+import type { MessageDescriptor } from "@lingui/core";
+import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { ImageUp, Trash2 } from "lucide-react";
@@ -15,9 +18,9 @@ import type { AccountAsset, AssetKind } from "@/api/hubTypes";
 import { formatBytes, useAssetStore, useAssetsAvailable } from "@/stores/useAssetStore";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { cn } from "@/lib/utils";
-const KIND_LABELS: Record<AssetKind, string> = {
-  avatar: `Avatar`,
-  playmat: `Playmat`,
+const KIND_LABELS: Record<AssetKind, MessageDescriptor> = {
+  avatar: msg`Avatar`,
+  playmat: msg`Playmat`,
 };
 export function MyAssetsSection() {
   const assets = useAssetStore((s) => s.assets);
@@ -84,14 +87,14 @@ export function MyAssetsSection() {
             <Label><Trans>Storage</Trans></Label>
             {loaded && (
               <span className="text-xs text-muted-foreground">
-                {formatBytes(usedBytes)} of {formatBytes(quotaBytes)} used
+                <Trans>{formatBytes(usedBytes)} of {formatBytes(quotaBytes)} used</Trans>
               </span>
             )}
           </div>
           {loaded && (
             <div
               role="progressbar"
-              aria-label={`Image storage used`}
+              aria-label={t`Image storage used`}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={usedPercent}
@@ -122,14 +125,14 @@ export function MyAssetsSection() {
                   .catch(() => setLoadError(true));
               }}
             >
-              Retry
+              <Trans>Retry</Trans>
             </Button>
           </div>
         ) : !loaded ? (
           <p className="text-sm text-muted-foreground"><Trans>Loading…</Trans></p>
         ) : assets.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            No images yet. Upload an avatar or a playmat and it will show up here.
+            <Trans>No images yet. Upload an avatar or a playmat and it will show up here.</Trans>
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -157,13 +160,13 @@ export function MyAssetsSection() {
           <DialogHeader>
             <DialogTitle><Trans>Delete image</Trans></DialogTitle>
             <DialogDescription>
-              This permanently removes the image from your storage and frees its space. If it&apos;s
-              your current avatar or a deck&apos;s playmat, that falls back to the default.
+              <Trans>This permanently removes the image from your storage and frees its space. If it&apos;s
+              your current avatar or a deck&apos;s playmat, that falls back to the default.</Trans>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2">
             <Button variant="ghost" size="sm" disabled={busy} onClick={() => setDeleting(null)}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
             <Button
               variant="destructive"
@@ -171,7 +174,7 @@ export function MyAssetsSection() {
               disabled={busy}
               onClick={() => void handleDelete()}
             >
-              {busy ? `Deleting\u2026` : `Delete`}
+              {busy ? t`Deleting…` : t`Delete`}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -190,12 +193,14 @@ function AssetTile({
   onReplace: () => void;
   onDelete: () => void;
 }) {
+  const { i18n } = useLingui();
+  const kindLabel = i18n._(KIND_LABELS[asset.kind]);
   return (
     <div className="flex overflow-hidden rounded-lg border bg-card/60 transition-colors hover:border-primary/40">
       <div className="h-[72px] w-[72px] shrink-0 bg-muted">
         <img
           src={asset.url}
-          alt={`${KIND_LABELS[asset.kind]} image`}
+          alt={t`${kindLabel} image`}
           crossOrigin="anonymous"
           loading="lazy"
           className="size-full object-cover"
@@ -204,7 +209,7 @@ function AssetTile({
       <div className="flex min-w-0 flex-1 items-center gap-1 px-3">
         <div className="min-w-0 flex-1 space-y-1">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">{KIND_LABELS[asset.kind]}</span>
+            <span className="text-sm font-medium">{kindLabel}</span>
           </div>
           <p className="text-xs text-muted-foreground">{formatBytes(asset.byteSize)}</p>
         </div>
@@ -212,7 +217,7 @@ function AssetTile({
           variant="ghost"
           size="icon"
           className="h-7 w-7 shrink-0"
-          title={`Replace image`}
+          title={t`Replace image`}
           disabled={busy}
           onClick={onReplace}
         >
@@ -222,7 +227,7 @@ function AssetTile({
           variant="ghost"
           size="icon"
           className="h-7 w-7 shrink-0 text-destructive hover:text-destructive"
-          title={`Delete image`}
+          title={t`Delete image`}
           disabled={busy}
           onClick={onDelete}
         >

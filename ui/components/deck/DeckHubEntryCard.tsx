@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Award, Crown, Heart, Layers, Medal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeckCardSurface } from "@/components/deck/DeckCardSurface";
@@ -47,7 +49,7 @@ export function DeckHubEntryCard({
       size="sm"
       variant="secondary"
       className="h-8 gap-1 bg-background/90 px-2 shadow-sm backdrop-blur-sm"
-      aria-label={entry.favorited ? `Remove from favorites` : `Add to favorites`}
+      aria-label={entry.favorited ? t`Remove from favorites` : t`Add to favorites`}
       aria-pressed={entry.favorited}
       aria-busy={favoritePending}
       disabled={favoritePending}
@@ -70,11 +72,11 @@ export function DeckHubEntryCard({
       role={rank <= 3 ? "img" : undefined}
       aria-label={
         rank === 1
-          ? `First place`
+          ? t`First place`
           : rank === 2
-            ? `Second place`
+            ? t`Second place`
             : rank === 3
-              ? `Third place`
+              ? t`Third place`
               : undefined
       }
     >
@@ -94,7 +96,7 @@ export function DeckHubEntryCard({
       {rankMarker}
       {entry.sourceKind === "preset" && (
         <span className="shrink-0 whitespace-nowrap rounded-full border bg-background/90 px-2 py-1 text-[10px] font-medium backdrop-blur-sm">
-          Official preset
+          <Trans>Official preset</Trans>
         </span>
       )}
       {variant !== "list" && discoveryTags.length > 0 && (
@@ -119,17 +121,17 @@ export function DeckHubEntryCard({
   ) : (
     labels
   );
-  const authorName = author ?? `Deleted user`;
+  const authorName = author ?? t`Deleted user`;
   return (
     <DeckCardSurface
       onOpen={onOpen}
       title={entry.title}
-      subtitle={`by ${authorName}`}
+      subtitle={t`by ${authorName}`}
       onSubtitleClick={author && onAuthorClick ? () => onAuthorClick(author) : undefined}
-      subtitleAriaLabel={author ? `Show decks by ${author}` : undefined}
+      subtitleAriaLabel={author ? t`Show decks by ${author}` : undefined}
       description={entry.summary}
       supportingText={reason}
-      ariaLabel={`Open ${entry.title} by ${authorName}`}
+      ariaLabel={t`Open ${entry.title} by ${authorName}`}
       variant={variant}
       cover={
         entry.coverImageUrl ? (
@@ -164,7 +166,7 @@ export function DeckHubEntryCard({
               key={engine}
               className="rounded-full border border-border/70 bg-background/80 px-1.5 py-0.5 text-[9px] font-medium text-foreground backdrop-blur-sm"
             >
-              {engine} engine
+              <Trans>{engine} engine</Trans>
             </span>
           ))}
           <span
@@ -173,7 +175,7 @@ export function DeckHubEntryCard({
               variant === "list" && "text-muted-foreground",
             )}
           >
-            {entry.cardCount} cards
+            <Trans>{entry.cardCount} cards</Trans>
           </span>
         </>
       }

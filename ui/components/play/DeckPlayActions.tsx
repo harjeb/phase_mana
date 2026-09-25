@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ArrowLeft, Bot, Loader2, Pencil, Users } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -17,7 +18,7 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
   const { resolved: accountDecksResolved } = useAccountDecks();
   if (!savedDeck && !accountDecksResolved) {
     return (
-      <div className="flex h-full items-center justify-center" aria-label={`Loading deck`}>
+      <div className="flex h-full items-center justify-center" aria-label={t`Loading deck`}>
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
@@ -29,12 +30,12 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
           <div className="w-full max-w-md rounded-2xl border border-border/70 bg-card/90 p-6 text-center shadow-xl backdrop-blur-md">
             <h2 className="font-serif text-3xl font-light"><Trans>Deck not found</Trans></h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              This saved deck may have been renamed or removed.
+              <Trans>This saved deck may have been renamed or removed.</Trans>
             </p>
             <Button asChild variant="outline" className="mt-5">
               <Link to={ROUTES.PLAY}>
                 <ArrowLeft className="h-4 w-4" />
-                Back to Play
+                <Trans>Back to Play</Trans>
               </Link>
             </Button>
           </div>
@@ -64,13 +65,13 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
             <div className="flex min-w-0 flex-col justify-center p-5 sm:p-8 lg:p-10">
               <div className="flex flex-wrap items-center gap-2">
                 <FormatBadge formatId={formatId} />
-                <span className="text-xs text-muted-foreground">{cardCount} cards</span>
+                <span className="text-xs text-muted-foreground"><Trans>{cardCount} cards</Trans></span>
               </div>
               <h2 className="mt-3 break-words font-serif text-4xl font-light leading-none tracking-tight sm:text-5xl">
                 {deck.name}
               </h2>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {format?.description ?? `${format?.name ?? formatId} deck ready for play.`}
+                {format?.description ?? t`${format?.name ?? formatId} deck ready for play.`}
               </p>
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
@@ -80,13 +81,13 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
                     state={{ preSelectedDeckId: savedDeck.id }}
                   >
                     <Bot className="h-5 w-5" />
-                    Play Offline
+                    <Trans>Play Offline</Trans>
                   </Link>
                 </Button>
                 <Button size="lg" variant="secondary" asChild className="w-full justify-start">
                   <Link to={ROUTES.LOBBY} state={{ preferredSavedDeckId: savedDeck.id }}>
                     <Users className="h-5 w-5" />
-                    Multiplayer
+                    <Trans>Multiplayer</Trans>
                   </Link>
                 </Button>
                 <Button
@@ -103,7 +104,7 @@ export function DeckPlayActions({ savedDeckId }: DeckPlayActionsProps) {
                     state={{ deckEditorFromList: true }}
                   >
                     <Pencil className="h-5 w-5" />
-                    Edit Deck
+                    <Trans>Edit Deck</Trans>
                   </Link>
                 </Button>
               </div>

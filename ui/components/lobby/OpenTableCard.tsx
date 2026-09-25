@@ -1,4 +1,6 @@
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { msg } from "@lingui/core/macro";
+import type { MessageDescriptor } from "@lingui/core";
 import { BadgeCheck, LockKeyhole, UserRoundPlus, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,6 +11,16 @@ import { stripUsernameTag } from "@/lib/username";
 import { cn } from "@/lib/utils";
 import { PROTOCOL_VERSION } from "@/protocol";
 import type { RoomInfo } from "@/types/server";
+const formatLabels: Record<string, MessageDescriptor> = {
+  Standard: msg`Standard`, Pioneer: msg`Pioneer`, Modern: msg`Modern`,
+  Legacy: msg`Legacy`, Vintage: msg`Vintage`, Pauper: msg`Pauper`,
+  Premodern: msg`Premodern`, Commander: msg`Commander`, Oathbreaker: msg`Oathbreaker`,
+  "Tiny Leaders": msg`Tiny Leaders`, "Duel Commander": msg`Duel Commander`,
+  "Pauper Commander": msg`Pauper Commander`, Momir: msg`Momir`,
+  "Old School 93/94": msg`Old School 93/94`, "Old School 95": msg`Old School 95`,
+  Archenemy: msg`Archenemy`, Planechase: msg`Planechase`,
+  "Two-Headed Giant": msg`Two-Headed Giant`, Draft: msg`Draft`, Sealed: msg`Sealed`,
+};
 interface OpenTableCardProps {
   room: RoomInfo;
   currentRoomId: string | null;
@@ -16,12 +28,15 @@ interface OpenTableCardProps {
   onJoin: (room: RoomInfo) => void;
 }
 export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTableCardProps) {
+  const { t, i18n } = useLingui();
+  const hostName = stripUsernameTag(room.host);
   const isMyRoom = room.room_id === currentRoomId;
   const isCompatible = room.protocol_version === PROTOCOL_VERSION;
   const isFull = room.players.length >= room.max_players;
   const canJoin = isCompatible && currentRoomId == null && room.status === "Lobby" && !isFull;
   const format = getFormat(room.format.toLowerCase());
-  const modeLabel = format?.name ?? room.format;
+  const formatName = format?.name ?? room.format;
+  const modeLabel = formatLabels[formatName] ? i18n._(formatLabels[formatName]) : formatName;
   const limitedLabel = room.draft_config
     ? (room.draft_config.cube_name ?? room.draft_config.set_code)
     : room.sealed_config
@@ -44,8 +59,8 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
         {room.official && (
           <span
             role="img"
-            aria-label={`Official table`}
-            title={`Official table`}
+            aria-label={t`Official table`}
+            title={t`Official table`}
             className="inline-flex shrink-0"
           >
             <BadgeCheck aria-hidden="true" className="h-4 w-4 text-primary" />
@@ -54,8 +69,8 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
         {room.password_protected && (
           <span
             role="img"
-            aria-label={`Password-protected table`}
-            title={`Password-protected table`}
+            aria-label={t`Password-protected table`}
+            title={t`Password-protected table`}
             className="inline-flex shrink-0"
           >
             <LockKeyhole aria-hidden="true" className="h-3.5 w-3.5 text-format-badge-amber" />
@@ -63,13 +78,13 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
         )}
         {!isCompatible && (
           <span className="inline-flex items-center rounded bg-format-badge-rose/15 px-2 py-0.5 text-xs font-semibold leading-tight text-format-badge-rose">
-            Incompatible
+            <Trans>Incompatible</Trans>
           </span>
         )}
       </div>
       {/* Rendered even with no host so the seat ring lines up across the row. */}
       <p className="-mt-1.5 truncate text-[11px] text-muted-foreground">
-        {showHost ? `Hosted by ${stripUsernameTag(room.host)}` : " "}
+        {showHost ? t`Hosted by ${hostName}` : " "}
       </p>
 
       <OpenTableSeats
@@ -92,11 +107,11 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
       <div className="mt-auto flex items-center justify-between gap-2 pt-1">
         <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <Users aria-hidden="true" className="h-3.5 w-3.5" />
-          {room.players.length}/{room.max_players} seated
+          <Trans>{room.players.length}/{room.max_players} seated</Trans>
         </span>
         {isMyRoom ? (
           <Badge variant="secondary" className="text-[10px]">
-            Seated
+            <Trans>Seated</Trans>
           </Badge>
         ) : canJoin ? (
           <Button
@@ -108,7 +123,7 @@ export function OpenTableCard({ room, currentRoomId, joining, onJoin }: OpenTabl
             onClick={() => onJoin(room)}
           >
             <UserRoundPlus aria-hidden="true" className="h-3.5 w-3.5" />
-            {joining ? `Joining\u2026` : `Join table`}
+            {joining ? t`Joining…` : t`Join table`}
           </Button>
         ) : room.status === "InGame" ? (
           <span className="text-xs text-muted-foreground"><Trans>Playing</Trans></span>

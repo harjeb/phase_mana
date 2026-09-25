@@ -45,7 +45,7 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
       onOpenChange(false);
       toast.success(t`Your account has been deleted`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t`Something went wrong`);
       setBusy(false);
     }
   }
@@ -55,13 +55,13 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
         <DialogHeader>
           <DialogTitle><Trans>Delete account</Trans></DialogTitle>
           <DialogDescription>
-            This erases your account, sign-in methods, saved decks and version history. Decks you
+            <Trans>This erases your account, sign-in methods, saved decks and version history. Decks you
             published to Community stay up without your name on them. This cannot be undone — export
-            your data first if you want a copy.
+            your data first if you want a copy.</Trans>
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="delete-account-confirm">Type {handle} to confirm</Label>
+          <Label htmlFor="delete-account-confirm"><Trans>Type {handle} to confirm</Trans></Label>
           <Input
             id="delete-account-confirm"
             value={confirmation}
@@ -80,7 +80,7 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
             disabled={busy}
             onClick={() => handleOpenChange(false)}
           >
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
           <Button
             variant="destructive"
@@ -88,7 +88,7 @@ export function DeleteAccountDialog({ open, onOpenChange }: DeleteAccountDialogP
             disabled={busy || !confirmed}
             onClick={() => void handleDelete()}
           >
-            {busy ? `Deleting\u2026` : `Delete account`}
+            {busy ? t`Deleting…` : t`Delete account`}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -26,7 +28,7 @@ export function AccountProfileCard({ account, identities }: AccountProfileCardPr
               variant="ghost"
               size="icon"
               className="size-7 shrink-0"
-              title={`Change handle`}
+              title={t`Change handle`}
               onClick={() => setHandleOpen(true)}
             >
               <Pencil className="h-3.5 w-3.5" />
@@ -34,11 +36,11 @@ export function AccountProfileCard({ account, identities }: AccountProfileCardPr
           </div>
           <div className="space-y-0.5 text-xs text-muted-foreground">
             {email && <p className="truncate">{email}</p>}
-            <p>Member since {memberSince}</p>
+            <p><Trans>Member since {memberSince}</Trans></p>
           </div>
           {account.handlePending && (
             <p className="text-xs text-warning">
-              This handle was generated for you — pick your own.
+              <Trans>This handle was generated for you — pick your own.</Trans>
             </p>
           )}
         </div>

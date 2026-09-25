@@ -158,13 +158,13 @@ export function useDeckTextImport() {
       onProgress(1);
       if (notFound.length > 0) {
         const shown = notFound.slice(0, 3).join(", ");
-        const extra = notFound.length > 3 ? ` +${notFound.length - 3} more` : "";
+        const extra = notFound.length > 3 ? t` +${notFound.length - 3} more` : "";
         toast.warning(t`Imported "${deckName}" — couldn't find: ${shown}${extra}`);
       } else if (substitutedPrintings.length > 0) {
         toast.warning(
           substitutedPrintings.length === 1
-            ? `Imported "${deckName}" with one default printing substitution`
-            : `Imported "${deckName}" with ${substitutedPrintings.length} default printing substitutions`,
+            ? t`Imported "${deckName}" with one default printing substitution`
+            : t`Imported "${deckName}" with ${substitutedPrintings.length} default printing substitutions`,
         );
       } else {
         toast.success(t`Imported "${deckName}"`);
@@ -187,7 +187,7 @@ export function useDeckTextImportIntoCurrent() {
       if (useDeckStore.getState().editorSessionId !== startingSessionId) {
         return false;
       }
-      executeDeckEdit(`Import card list`, () =>
+      executeDeckEdit(t`Import card list`, () =>
         useDeckStore.getState().mergeIntoCurrentDeck(result),
       );
       onProgress(1);
@@ -198,13 +198,13 @@ export function useDeckTextImportIntoCurrent() {
         result.commanders.length;
       if (result.notFound.length > 0) {
         const shown = result.notFound.slice(0, 3).join(", ");
-        const extra = result.notFound.length > 3 ? ` +${result.notFound.length - 3} more` : "";
+        const extra = result.notFound.length > 3 ? t` +${result.notFound.length - 3} more` : "";
         toast.warning(t`Added ${count} cards — couldn't find: ${shown}${extra}`);
       } else if (result.substitutedPrintings.length > 0) {
         toast.warning(
           result.substitutedPrintings.length === 1
-            ? `Added ${count} cards with one default printing substitution`
-            : `Added ${count} cards with ${result.substitutedPrintings.length} default printing substitutions`,
+            ? t`Added ${count} cards with one default printing substitution`
+            : t`Added ${count} cards with ${result.substitutedPrintings.length} default printing substitutions`,
         );
       } else {
         toast.success(t`Added ${count} cards to this deck`);

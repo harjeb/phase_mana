@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { type ReactNode } from "react";
 import {
@@ -16,6 +18,22 @@ import {
 } from "@/pixi/board/boardBackgrounds";
 import { cn } from "@/lib/utils";
 import type { RoomPlayerInfo } from "@/types/server";
+
+const BACKGROUND_LABELS = {
+  none: msg`None`,
+  dark_oak: msg`Dark oak`,
+  dark_stone: msg`Dark stone`,
+  dark_table: msg`Dark table`,
+  dark_wood: msg`Dark wood`,
+  glacier: msg`Glacier`,
+  magic_cloth: msg`Magic cloth`,
+  refined_redwood: msg`Refined redwood`,
+  refined_stone: msg`Refined stone`,
+  refined_wood: msg`Refined wood`,
+  stone_slate: msg`Stone slate`,
+  tavern_table: msg`Tavern table`,
+  volcanic_stone: msg`Volcanic stone`,
+};
 
 const SEATS: RoomPlayerInfo[] = [
   { username: "You", ready: true, connected: true },
@@ -39,6 +57,8 @@ export function TablePickerDialog({
   onCancel,
   centerContent,
 }: TablePickerDialogProps) {
+  const { i18n } = useLingui();
+  const seats = SEATS.map((seat) => ({ ...seat, username: seat.is_bot ? t`AI` : t`You` }));
   return (
     <Dialog
       open={open}
@@ -54,10 +74,10 @@ export function TablePickerDialog({
         <div className="grid gap-4 sm:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
           <div className="flex items-center justify-center sm:pr-2">
             <OpenTableSeats
-              players={SEATS}
+              players={seats}
               maxPlayers={2}
               showSeatLabels
-              youUsername="You"
+              youUsername={t`You`}
               size="card"
               className="w-full max-w-none"
               backgroundUrl={boardBackgroundUrl(background)}
@@ -71,7 +91,7 @@ export function TablePickerDialog({
                 <button
                   key={option.id}
                   type="button"
-                  title={option.label}
+                  title={i18n._(BACKGROUND_LABELS[option.id])}
                   onClick={() => onBackgroundChange(option.id)}
                   className={cn(
                     "overflow-hidden rounded-md border text-left transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
@@ -89,7 +109,7 @@ export function TablePickerDialog({
                     />
                   ) : (
                     <span className="flex aspect-[16/9] w-full items-center justify-center bg-canvas-background text-[10px] text-muted-foreground">
-                      None
+                      <Trans>None</Trans>
                     </span>
                   )}
                 </button>
@@ -99,10 +119,10 @@ export function TablePickerDialog({
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onCancel}>
-            Back
+            <Trans>Back</Trans>
           </Button>
           <Button variant="primary" onClick={onStart}>
-            Fight
+            <Trans>Fight</Trans>
           </Button>
         </div>
       </DialogContent>

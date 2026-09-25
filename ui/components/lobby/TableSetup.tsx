@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, LockKeyhole, Swords } from "lucide-react";
@@ -10,7 +12,10 @@ import { OpenTableSeats } from "@/components/lobby/OpenTableSeats";
 import { TableSetupGameCard } from "@/components/lobby/TableSetupGameCard";
 import { TableSetupHostingCard } from "@/components/lobby/TableSetupHostingCard";
 import { TableSetupTableCard } from "@/components/lobby/TableSetupTableCard";
-import { boardBackgroundUrl, type BoardBackgroundId } from "@/pixi/board/boardBackgrounds";
+import {
+  boardBackgroundUrl,
+  type BoardBackgroundId,
+} from "@/pixi/board/boardBackgrounds";
 import { TableCreatingSplash } from "@/components/lobby/TableCreatingSplash";
 import {
   CREATE_SPLASH_MIN_MS,
@@ -28,7 +33,10 @@ import { useForgeRoomAvailabilityStore } from "@/stores/useForgeRoomAvailability
 import { getPlatformType } from "@/platform";
 import { claimHostedTable } from "@/game/hostedAiPlay";
 import { isFeatureEnabled } from "@/featureFlags";
-import { forgeWasmNeedsValidation, useForgeWasmHostingEnabled } from "@/lib/forgeWasm";
+import {
+  forgeWasmNeedsValidation,
+  useForgeWasmHostingEnabled,
+} from "@/lib/forgeWasm";
 import { validateForgeWasm } from "@/game/forgeWasmValidation";
 import { cn } from "@/lib/utils";
 import { IRONSMITH_WASM_AVAILABLE } from "@/game/ironsmithWasmAvailable";
@@ -46,17 +54,30 @@ interface TableSetupProps {
   onClose: () => void;
   onCreatingChange: (label: string | null) => void;
 }
-export function TableSetup({ username, onClose, onCreatingChange }: TableSetupProps) {
+export function TableSetup({
+  username,
+  onClose,
+  onCreatingChange,
+}: TableSetupProps) {
   const { connected, createRoom } = useServerStore();
   const isTauri = getPlatformType() === "tauri";
-  const forgeRoomAvailable = useForgeRoomAvailabilityStore((state) => state.available);
-  const ironsmithOptedIn = usePreferencesStore((s) => s.ironsmithRuntimeEnabled);
+  const forgeRoomAvailable = useForgeRoomAvailabilityStore(
+    (state) => state.available,
+  );
+  const ironsmithOptedIn = usePreferencesStore(
+    (s) => s.ironsmithRuntimeEnabled,
+  );
   const ironsmithEnabled =
-    isFeatureEnabled("ironsmithRuntime") && IRONSMITH_WASM_AVAILABLE && ironsmithOptedIn;
+    isFeatureEnabled("ironsmithRuntime") &&
+    IRONSMITH_WASM_AVAILABLE &&
+    ironsmithOptedIn;
   const forgeWasm = useForgeWasmHostingEnabled();
   const hostedNode = !isTauri && !forgeWasm;
-  const canHostForge = (isTauri && forgeRoomAvailable) || forgeWasm || hostedNode;
-  const [engine, setEngine] = useState<EngineKind>(canHostForge ? "Forge" : "Manabrew");
+  const canHostForge =
+    (isTauri && forgeRoomAvailable) || forgeWasm || hostedNode;
+  const [engine, setEngine] = useState<EngineKind>(
+    canHostForge ? "Forge" : "Manabrew",
+  );
   const [kind, setKind] = useState<RoomKind>(
     () => usePreferencesStore.getState().lastRoomSetup?.kind ?? "match",
   );
@@ -66,7 +87,9 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
   const [format, setFormat] = useState<GameFormat>(
     () => usePreferencesStore.getState().lastRoomSetup?.format ?? "Commander",
   );
-  const [matchPlayersOverride, setMatchPlayersOverride] = useState<number | null>(() => {
+  const [matchPlayersOverride, setMatchPlayersOverride] = useState<
+    number | null
+  >(() => {
     const last = usePreferencesStore.getState().lastRoomSetup;
     return last?.kind === "match" ? last.players : null;
   });
@@ -76,7 +99,9 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
   });
   const [roomName, setRoomName] = useState("");
   const [roomPassword, setRoomPassword] = useState("");
-  const [reconnectTimeoutS, setReconnectTimeoutS] = useState<number>(DEFAULT_RECONNECT_TIMEOUT_S);
+  const [reconnectTimeoutS, setReconnectTimeoutS] = useState<number>(
+    DEFAULT_RECONNECT_TIMEOUT_S,
+  );
   const [draftSet, setDraftSet] = useState("");
   const [draftRounds, setDraftRounds] = useState(3);
   const [draftPicksPerPass, setDraftPicksPerPass] = useState(1);
@@ -86,7 +111,9 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
   const [sealedNumBoosters, setSealedNumBoosters] = useState(6);
   const [sealedSeed, setSealedSeed] = useState("");
   const [sealedUseCube, setSealedUseCube] = useState(false);
-  const [importedCube, setImportedCube] = useState<CubeImportResult | null>(null);
+  const [importedCube, setImportedCube] = useState<CubeImportResult | null>(
+    null,
+  );
   const [creating, setCreating] = useState(false);
   const [creatingLabel, setCreatingLabel] = useState<string | null>(null);
   const showSplash = (label: string | null) => {
@@ -113,8 +140,15 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
   const draftableSets = useMemo(
     () =>
       [...(allSets ?? [])]
-        .filter((s) => DRAFTABLE_SET_TYPES.has(s.set_type) && !s.digital && s.card_count > 0)
-        .sort((a, b) => (b.released_at ?? "").localeCompare(a.released_at ?? "")),
+        .filter(
+          (s) =>
+            DRAFTABLE_SET_TYPES.has(s.set_type) &&
+            !s.digital &&
+            s.card_count > 0,
+        )
+        .sort((a, b) =>
+          (b.released_at ?? "").localeCompare(a.released_at ?? ""),
+        ),
     [allSets],
   );
   const isBoosterDraft = kind === "limited" && limitedKind === "draft";
@@ -122,27 +156,40 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
   const isSealed = kind === "limited" && limitedKind === "sealed";
   const showPicker = isBoosterDraft || (isSealed && !sealedUseCube);
   const pickerSet = isSealed ? sealedSet : draftSet;
-  const pickerUnsupported = isSealed ? sealedPool.unsupported : draftPool.unsupported;
-  const pickerPrefetching = isSealed ? sealedPool.prefetching : draftPool.prefetching;
+  const pickerUnsupported = isSealed
+    ? sealedPool.unsupported
+    : draftPool.unsupported;
+  const pickerPrefetching = isSealed
+    ? sealedPool.prefetching
+    : draftPool.prefetching;
   const pickerOnSelect = isSealed ? setSealedSet : setDraftSet;
   const limitedKindEnabled =
-    kind !== "limited" || (LIMITED_KINDS.find((k) => k.value === limitedKind)?.enabled ?? false);
+    kind !== "limited" ||
+    (LIMITED_KINDS.find((k) => k.value === limitedKind)?.enabled ?? false);
   const draftConfigReady =
     (!isBoosterDraft || (!!draftSet && draftPool.unsupported !== draftSet)) &&
     (!isCube || !!importedCube) &&
     (!isSealed ||
-      (sealedUseCube ? !!importedCube : !!sealedSet && sealedPool.unsupported !== sealedSet));
+      (sealedUseCube
+        ? !!importedCube
+        : !!sealedSet && sealedPool.unsupported !== sealedSet));
   const canSubmit = connected && limitedKindEnabled && draftConfigReady;
-  const playerOptions = kind === "limited" ? PLAYER_OPTIONS_LIMITED : PLAYER_OPTIONS_MATCH;
+  const playerOptions =
+    kind === "limited" ? PLAYER_OPTIONS_LIMITED : PLAYER_OPTIONS_MATCH;
   const matchPlayers = matchPlayersOverride ?? defaultMatchPlayers(format);
   const maxPlayers = kind === "limited" ? limitedPlayers : matchPlayers;
-  const handleMaxPlayersChange = kind === "limited" ? setLimitedPlayers : setMatchPlayersOverride;
-  const defaultName = `${username ?? `Player`}'s Table`;
+  const handleMaxPlayersChange =
+    kind === "limited" ? setLimitedPlayers : setMatchPlayersOverride;
+  const playerName = username ?? t`Player`;
+  const defaultName = t`${playerName}'s Table`;
   const submittedEngine: EngineKind =
-    kind === "match" && (engine !== "Forge" || canHostForge) ? engine : "Manabrew";
+    kind === "match" && (engine !== "Forge" || canHostForge)
+      ? engine
+      : "Manabrew";
   const modeLabel =
     kind === "limited"
-      ? (LIMITED_KINDS.find((k) => k.value === limitedKind)?.label ?? `Limited`)
+      ? (LIMITED_KINDS.find((k) => k.value === limitedKind)?.label ??
+        t`Limited`)
       : format;
   const poolLabel = isBoosterDraft
     ? draftSet
@@ -156,30 +203,37 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
           : null
         : null;
   const disabledReason = !connected
-    ? "Connect to multiplayer to open a table."
+    ? t`Connect to multiplayer to open a table.`
     : !limitedKindEnabled
-      ? "That limited mode isn't wired for multiplayer yet."
+      ? t`That limited mode isn't wired for multiplayer yet.`
       : isBoosterDraft && (!draftSet || draftPool.unsupported === draftSet)
-        ? "Pick a set for the draft below."
+        ? t`Pick a set for the draft below.`
         : (isCube || (isSealed && sealedUseCube)) && !importedCube
-          ? "Import a cube before creating the table."
-          : isSealed && !sealedUseCube && (!sealedSet || sealedPool.unsupported === sealedSet)
-            ? "Pick a set for sealed below."
+          ? t`Import a cube before creating the table.`
+          : isSealed &&
+              !sealedUseCube &&
+              (!sealedSet || sealedPool.unsupported === sealedSet)
+            ? t`Pick a set for sealed below.`
             : null;
   const onNode = submittedEngine === "Forge" && hostedNode;
-  const splashLabel = onNode ? `Finding you a table\u2026` : `Setting the table\u2026`;
+  const splashLabel = onNode ? t`Finding you a table…` : t`Setting the table…`;
   const openTableHint = onNode
-    ? `A Manabrew node hosts this table, under its own name. Anyone in the lobby can take a seat.`
+    ? t`A Manabrew node hosts this table, under its own name. Anyone in the lobby can take a seat.`
     : roomPassword.trim()
-      ? `People with the password can join.`
-      : `Anyone in the lobby can take a seat.`;
-  const hostUsername = username ?? "You";
-  const hostPlayer: RoomPlayerInfo = { username: hostUsername, ready: true, connected: true };
+      ? t`People with the password can join.`
+      : t`Anyone in the lobby can take a seat.`;
+  const hostUsername = username ?? t`You`;
+  const hostPlayer: RoomPlayerInfo = {
+    username: hostUsername,
+    ready: true,
+    connected: true,
+  };
   async function handleCreate() {
     if (!canSubmit) return;
     setCreating(true);
-    const checking = submittedEngine === "Forge" && forgeWasm && forgeWasmNeedsValidation();
-    showSplash(checking ? "Checking browser engine support\u2026" : splashLabel);
+    const checking =
+      submittedEngine === "Forge" && forgeWasm && forgeWasmNeedsValidation();
+    showSplash(checking ? t`Checking browser engine support…` : splashLabel);
     let splashUntil = Date.now() + CREATE_SPLASH_MIN_MS;
     try {
       const submittedFormat: GameFormat = kind === "limited" ? "Any" : format;
@@ -210,7 +264,7 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
       let useNode = onNode;
       if (checking) {
         useNode = !(await validateForgeWasm());
-        showSplash(useNode ? "Finding you a table\u2026" : splashLabel);
+        showSplash(useNode ? t`Finding you a table…` : splashLabel);
         splashUntil = Date.now() + CREATE_SPLASH_MIN_MS;
       }
       if (useNode) {
@@ -235,10 +289,14 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
         format,
         players: kind === "limited" ? limitedPlayers : matchPlayersOverride,
       });
-      await new Promise((resolve) => setTimeout(resolve, splashUntil - Date.now()));
+      await new Promise((resolve) =>
+        setTimeout(resolve, splashUntil - Date.now()),
+      );
       onClose();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : `Couldn't create the table.`);
+      toast.error(
+        error instanceof Error ? error.message : t`Couldn't create the table.`,
+      );
     } finally {
       setCreating(false);
       showSplash(null);
@@ -253,10 +311,15 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
       <div className="flex min-h-full flex-col gap-5">
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_20rem]">
           <section className="flex flex-col overflow-hidden rounded-2xl border border-primary/30 bg-card/85 shadow-xl backdrop-blur-md">
-            <div className={cn("border-b border-border/60 px-5 py-4", onNode && "hidden")}>
+            <div
+              className={cn(
+                "border-b border-border/60 px-5 py-4",
+                onNode && "hidden",
+              )}
+            >
               <input
                 id="table-name"
-                aria-label={`Table name`}
+                aria-label={t`Table name`}
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}
@@ -268,23 +331,26 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
               <div className="mt-3 flex max-w-64 items-center gap-1.5">
                 {roomPassword.trim() && (
                   <LockKeyhole
-                    aria-label={`Password protected`}
+                    aria-label={t`Password protected`}
                     className="h-3 w-3 shrink-0 text-muted-foreground"
                   />
                 )}
                 <input
-                  aria-label={`Password (optional)`}
+                  aria-label={t`Password (optional)`}
                   type="text"
                   value={roomPassword}
                   onChange={(e) => setRoomPassword(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-                  placeholder={`Password (optional)`}
+                  placeholder={t`Password (optional)`}
                   autoComplete="off"
                   className="w-full bg-transparent text-xs text-foreground/80 outline-none placeholder:text-foreground/80"
                 />
               </div>
             </div>
-            <TableSetupTableCard background={background} onBackgroundChange={chooseBackground} />
+            <TableSetupTableCard
+              background={background}
+              onBackgroundChange={chooseBackground}
+            />
             <div className="flex flex-1 items-center justify-center p-3 sm:p-4">
               <OpenTableSeats
                 players={[hostPlayer]}
@@ -300,8 +366,11 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
                       {modeLabel}
                     </span>
                     <span className="flex flex-wrap items-center justify-center gap-1 text-[11px] text-muted-foreground sm:text-xs">
-                      <EngineMark engine={submittedEngine} className="h-3 w-3" />
-                      {[submittedEngine, poolLabel, `${maxPlayers} seats`]
+                      <EngineMark
+                        engine={submittedEngine}
+                        className="h-3 w-3"
+                      />
+                      {[submittedEngine, poolLabel, t`${maxPlayers} seats`]
                         .filter(Boolean)
                         .join(" · ")}
                     </span>
@@ -315,7 +384,7 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
               </p>
               <div className="flex shrink-0 gap-2">
                 <Button variant="ghost" onClick={onClose}>
-                  Cancel
+                  <Trans>Cancel</Trans>
                 </Button>
                 <Button
                   variant="primary"
@@ -329,7 +398,7 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
                   ) : (
                     <Swords className="h-4 w-4" />
                   )}
-                  {creating ? `Creating\u2026` : `Create table`}
+                  {creating ? t`Creating…` : t`Create table`}
                 </Button>
               </div>
             </div>
@@ -385,7 +454,8 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
           <div className="space-y-2">
             {draftableSets.length === 0 ? (
               <p className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Loader2 className="h-3 w-3 animate-spin" /> Loading sets from Scryfall…
+                <Loader2 className="h-3 w-3 animate-spin" />{" "}
+                <Trans>Loading sets from Scryfall…</Trans>
               </p>
             ) : (
               <SetPicker
@@ -398,8 +468,10 @@ export function TableSetup({ username, onClose, onCreatingChange }: TableSetupPr
             )}
             {!!pickerSet && pickerUnsupported === pickerSet && (
               <p className="text-[11px] text-destructive">
-                Your game data doesn't include {pickerSet.toUpperCase()}. Update the app to use this
-                set.
+                <Trans>
+                  Your game data doesn't include {pickerSet.toUpperCase()}.
+                  Update the app to use this set.
+                </Trans>
               </p>
             )}
           </div>

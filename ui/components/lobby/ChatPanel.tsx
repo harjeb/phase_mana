@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,16 +19,14 @@ interface ChatPanelProps {
   disabled?: boolean;
   className?: string;
 }
-const SCOPE_LABEL: Record<ChatScope, string> = {
-  Room: `Table`,
-  Lobby: `General`,
-};
 export function ChatPanel({
   currentRoom,
   currentUsername,
   disabled = false,
   className,
 }: ChatPanelProps) {
+  const { t } = useLingui();
+  const scopeLabels: Record<ChatScope, string> = { Room: t`Table`, Lobby: t`General` };
   const lobby = useChatStore((s) => s.lobby);
   const room = useChatStore((s) => s.room);
   const unread = useChatStore((s) => s.unread);
@@ -76,7 +74,7 @@ export function ChatPanel({
             : "text-muted-foreground hover:text-foreground",
         )}
       >
-        {SCOPE_LABEL[tab]}
+        {scopeLabels[tab]}
         {count > 0 && tab !== scope && (
           <span className="rounded-full bg-primary px-1.5 text-[10px] text-primary-foreground">
             {count}
@@ -95,7 +93,7 @@ export function ChatPanel({
           </>
         ) : (
           <span className="px-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            General
+            <Trans>General</Trans>
           </span>
         )}
       </div>
@@ -103,7 +101,7 @@ export function ChatPanel({
         <div className="space-y-2">
           {entries.length === 0 && (
             <p className="py-4 text-center text-sm italic text-muted-foreground">
-              {scope === "Room" ? `Say hello to your table.` : `No messages yet.`}
+              {scope === "Room" ? t`Say hello to your table.` : t`No messages yet.`}
             </p>
           )}
           {entries.map((entry, index) => {
@@ -140,7 +138,7 @@ export function ChatPanel({
           <Input
             className="h-9 text-sm pointer-coarse:h-10 pointer-coarse:text-base"
             placeholder={
-              locked ? "" : scope === "Room" ? `Message your table…` : `Message everyone…`
+              locked ? "" : scope === "Room" ? t`Message your table…` : t`Message everyone…`
             }
             value={input}
             maxLength={CHAT_MESSAGE_MAX_CHARS}
@@ -154,7 +152,7 @@ export function ChatPanel({
                 onClick={() => showSignIn()}
                 className="pointer-events-auto font-medium text-primary hover:underline"
               >
-                Sign in
+                <Trans>Sign in</Trans>
               </button>
               <span className="ml-1"><Trans>to chat in General</Trans></span>
             </span>
@@ -166,7 +164,7 @@ export function ChatPanel({
           size="icon"
           className="h-9 w-9 shrink-0"
           disabled={disabled || locked || !input.trim()}
-          aria-label={`Send message`}
+          aria-label={t`Send message`}
         >
           <Send className="h-4 w-4" />
         </Button>

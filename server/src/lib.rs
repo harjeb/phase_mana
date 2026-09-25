@@ -61,6 +61,12 @@ mod custom_format_tests;
 mod conspiracy_tests;
 #[cfg(test)]
 mod table_tests;
+#[cfg(test)]
+mod game_log_tests;
+
+mod game_log;
+use game_log::GameLog;
+pub use game_log::LogRow;
 
 const HUMAN: PlayerId = PlayerId(0);
 
@@ -371,9 +377,12 @@ pub struct Snapshot {
     pub prompt: Value,
     pub human_player_id: String,
     pub ai_actions: usize,
+    pub log_session_id: String,
+    pub game_log: Vec<LogRow>,
 }
 
 struct Session {
+    log: GameLog,
     game: GameState,
     prepared: PreparedManabrewSnapshot,
     snapshot: Snapshot,
@@ -592,14 +601,19 @@ impl Host {
             load_deck_with_conspiracy_choices(&mut game, &payload, &request.conspiracy_choices, &self.db)
                 .map_err(bad)?;
         }
-        start_game(&mut game);
+        let mut log = GameLog::new();
+        let before = game.clone();
+        let result = start_game(&mut game);
+        log.capture(&before, &game, &result.events);
         bind_interaction_session(&mut game);
         let ai_session = AiSession::arc_from_game(&game);
         let mut rng = StdRng::seed_from_u64(seed);
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session)?;
+        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
         let id = self.reserve_prompt()?;
-        let (prepared, snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        log.attach(&mut snapshot);
         self.session = Some(Session {
+            log,
             game,
             prepared,
             snapshot: snapshot.clone(),
@@ -646,14 +660,19 @@ impl Host {
                 "No face-down conspiracy '{card_id}' for the human player"
             )));
         }
-        apply(&mut game, HUMAN, GameAction::TurnFaceUp { object_id: target, x: 0 })
+        let mut log = session.log.clone();
+        let before = game.clone();
+        let result = apply(&mut game, HUMAN, GameAction::TurnFaceUp { object_id: target, x: 0 })
             .map_err(|error| bad(format!("Conspiracy reveal rejected: {error:?}")))?;
+        log.capture(&before, &game, &result.events);
         let mut rng = session.rng.clone();
         let ai_session = Arc::clone(&session.ai_session);
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session)?;
+        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
         let id = self.reserve_prompt()?;
-        let (prepared, snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        log.attach(&mut snapshot);
         self.session = Some(Session {
+            log,
             game,
             prepared,
             snapshot: snapshot.clone(),
@@ -695,15 +714,20 @@ impl Host {
         let mut game = session.game.clone();
         let mut rng = session.rng.clone();
         let ai_session = Arc::clone(&session.ai_session);
-        apply(&mut game, HUMAN, action)
+        let mut log = session.log.clone();
+        let before = game.clone();
+        let result = apply(&mut game, HUMAN, action)
             .map_err(|e| bad(format!("Engine rejected response: {e:?}")))?;
-        let mut ai_actions = advance_ai(&mut game, &mut rng, &ai_session)?;
+        log.capture(&before, &game, &result.events);
+        let mut ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &mut log)?;
         if let Some((_, skip)) = &skip {
-            ai_actions += self.replay_skip(&mut game, &mut rng, &ai_session, skip)?;
+            ai_actions += self.replay_skip(&mut game, &mut rng, &ai_session, skip, &mut log)?;
         }
         let id = self.reserve_prompt()?;
-        let (prepared, snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
+        log.attach(&mut snapshot);
         self.session = Some(Session {
+            log,
             game,
             prepared,
             snapshot: snapshot.clone(),
@@ -729,15 +753,18 @@ impl Host {
         rng: &mut StdRng,
         ai: &Arc<AiSession>,
         skip: &SkipRequest,
+        log: &mut GameLog,
     ) -> Result<usize, HostError> {
         let mut ai_actions = 0;
         for _ in 0..MAX_SKIP_PASSES {
             if !human_holds_priority(game) || self.skip_reached(game, skip)? {
                 break;
             }
-            apply(game, HUMAN, GameAction::PassPriority)
+            let before = game.clone();
+            let result = apply(game, HUMAN, GameAction::PassPriority)
                 .map_err(|e| bad(format!("Engine rejected replayed pass: {e:?}")))?;
-            ai_actions += advance_ai(game, rng, ai)?;
+            log.capture(&before, game, &result.events);
+            ai_actions += advance_ai(game, rng, ai, log)?;
         }
         Ok(ai_actions)
     }
@@ -852,13 +879,20 @@ fn advance_ai(
     game: &mut GameState,
     rng: &mut StdRng,
     session: &Arc<AiSession>,
+    log: &mut GameLog,
 ) -> Result<usize, HostError> {
     let players: HashSet<_> = (1..game.players.len()).map(|i| PlayerId(i as u8)).collect();
     let configs: HashMap<_, _> = players
         .iter()
         .map(|&id| (id, AiConfig::default()))
         .collect();
+    let initial = game.clone();
     let run = run_ai_actions(game, &players, &configs, rng, session);
+    let mut before = &initial;
+    for result in &run.results {
+        log.capture(before, &result.state, &result.events);
+        before = &result.state;
+    }
     match run.stop {
         AiActionsStop::NoEligibleAiActor => Ok(run.results.len()),
         stop => Err(internal(format!(
@@ -902,6 +936,8 @@ fn snapshot(
         prompt: serde_json::to_value(prompt).map_err(|e| internal(e.to_string()))?,
         human_player_id: manabrew_compat::encode_player_id(HUMAN),
         ai_actions,
+        log_session_id: String::new(),
+        game_log: Vec::new(),
     };
     Ok((prepared, snapshot))
 }

@@ -1,3 +1,5 @@
+import { msg, t } from "@lingui/core/macro";
+import { i18n } from "@/i18n/i18n";
 import type { ReactNode } from "react";
 import { Boxes, Shuffle, Swords } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
@@ -9,20 +11,20 @@ interface OfflinePlayShellProps {
 const TABS = [
   {
     to: ROUTES.PLAY_OFFLINE_CONSTRUCTED,
-    label: `Constructed`,
-    hint: `Deck vs AI`,
+    label: msg`Constructed`,
+    hint: msg`Deck vs AI`,
     icon: Swords,
   },
   {
     to: ROUTES.PLAY_OFFLINE_LIMITED,
-    label: `Limited`,
-    hint: `Draft & sealed`,
+    label: msg`Limited`,
+    hint: msg`Draft & sealed`,
     icon: Boxes,
   },
   {
     to: ROUTES.PLAY_OFFLINE_CASUAL,
-    label: `Casual`,
-    hint: `Special modes`,
+    label: msg`Casual`,
+    hint: msg`Special modes`,
     icon: Shuffle,
   },
 ];
@@ -31,7 +33,7 @@ export function OfflinePlayShell({ children }: OfflinePlayShellProps) {
   return (
     <div className="relative h-full min-h-0 overflow-hidden">
       <div className="relative z-10 flex h-full min-h-0 flex-col">
-        <nav aria-label={`Offline play type`} className="shrink-0 px-4 pt-4 sm:px-6 lg:px-8">
+        <nav aria-label={t`Offline play type`} className="shrink-0 px-4 pt-4 sm:px-6 lg:px-8">
           <div className="mx-auto grid w-full max-w-2xl grid-cols-3 rounded-2xl border border-border/70 bg-background/80 p-1.5 shadow-xl backdrop-blur-md">
             {TABS.map(({ to, label, hint, icon: Icon }) => {
               const active = location.pathname === to;
@@ -59,9 +61,9 @@ export function OfflinePlayShell({ children }: OfflinePlayShellProps) {
                     <Icon className="h-4 w-4" />
                   </span>
                   <span className="min-w-0 text-left">
-                    <span className="block truncate text-sm font-semibold">{label}</span>
+                    <span className="block truncate text-sm font-semibold">{i18n._(label)}</span>
                     <span className="hidden truncate text-[11px] text-muted-foreground sm:block">
-                      {hint}
+                      {i18n._(hint)}
                     </span>
                   </span>
                 </Link>

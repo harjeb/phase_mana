@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { boardBackgroundUrl } from "@/pixi/board/boardBackgrounds";
 import { Shield, Swords } from "lucide-react";
@@ -66,9 +67,9 @@ export function TableRoom({
   const openSeats = room.max_players - room.players.length;
   const requiredPlayers = Math.max(0, minReady - room.players.length);
   const modeLabel = room.draft_config
-    ? (room.draft_config.cube_name ?? room.draft_config.set_code ?? `Draft`)
+    ? (room.draft_config.cube_name ?? room.draft_config.set_code ?? t`Draft`)
     : room.sealed_config
-      ? (room.sealed_config.cube_name ?? room.sealed_config.set_code ?? `Sealed`)
+      ? (room.sealed_config.cube_name ?? room.sealed_config.set_code ?? t`Sealed`)
       : room.format;
   function renderPrimaryAction() {
     if (room.status !== "Lobby") {
@@ -90,7 +91,7 @@ export function TableRoom({
     if (needsDeck) {
       return (
         <Button variant="primary" size="lg" onClick={onOpenDeckDialog} className="w-full sm:w-auto">
-          <Shield /> Choose a deck
+          <Shield /> <Trans>Choose a deck</Trans>
         </Button>
       );
     }
@@ -102,7 +103,7 @@ export function TableRoom({
           onClick={() => onSetReady(true)}
           className="w-full sm:w-auto"
         >
-          Ready up
+          <Trans>Ready up</Trans>
         </Button>
       );
     }
@@ -124,7 +125,7 @@ export function TableRoom({
             disabled={startingLimited}
             className="w-full sm:w-auto"
           >
-            <Swords /> {startingLimited ? `Starting...` : `Start draft`}
+            <Swords /> {startingLimited ? t`Starting...` : t`Start draft`}
           </Button>
         );
       }
@@ -137,7 +138,7 @@ export function TableRoom({
             disabled={startingLimited}
             className="w-full sm:w-auto"
           >
-            <Swords /> {startingLimited ? `Starting...` : `Start sealed`}
+            <Swords /> {startingLimited ? t`Starting...` : t`Start sealed`}
           </Button>
         );
       }
@@ -149,19 +150,19 @@ export function TableRoom({
           disabled={startingGame}
           className="w-full sm:w-auto"
         >
-          <Swords /> {startingGame ? `Starting...` : `Start game`}
+          <Swords /> {startingGame ? t`Starting...` : t`Start game`}
         </Button>
       );
     }
     return (
       <div className="rounded-lg border border-border/60 bg-muted/30 px-4 py-2.5 text-center sm:text-right">
         <p className="text-sm font-medium">
-          {requiredPlayers > 0 ? `Waiting for ${requiredPlayers} more` : `Waiting for players`}
+          {requiredPlayers > 0 ? t`Waiting for ${requiredPlayers} more` : t`Waiting for players`}
         </p>
         <p className="text-xs text-muted-foreground">
           {requiredPlayers > 0
-            ? `Your table is open for others to join.`
-            : `Everyone at the table needs to be ready.`}
+            ? t`Your table is open for others to join.`
+            : t`Everyone at the table needs to be ready.`}
         </p>
       </div>
     );
@@ -188,7 +189,7 @@ export function TableRoom({
                     {modeLabel}
                   </span>
                   <span className="text-xs font-medium text-muted-foreground sm:text-sm">
-                    {readyCount}/{room.players.length} ready
+                    <Trans>{readyCount}/{room.players.length} ready</Trans>
                   </span>
                 </span>
               }
@@ -197,16 +198,16 @@ export function TableRoom({
           <div className="flex flex-col gap-4 border-t border-border/60 bg-background/60 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
             <div className="min-w-0">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Your seat
+                <Trans>Your seat</Trans>
               </p>
               <p className="mt-1 truncate text-sm font-medium">
                 {isController
-                  ? `You control when the game begins`
+                  ? t`You control when the game begins`
                   : isOpenFormat
                     ? myPlayer?.ready
-                      ? `Ready to play`
-                      : `Confirm when you're ready`
-                    : (myPlayer?.selected_deck_name ?? `Choose the deck you want to play`)}
+                      ? t`Ready to play`
+                      : t`Confirm when you're ready`
+                    : (myPlayer?.selected_deck_name ?? t`Choose the deck you want to play`)}
               </p>
             </div>
             {renderPrimaryAction()}

@@ -12,7 +12,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { DEFAULT_IMPORT_NAME } from "@/lib/constants";
 import { GAME_FORMATS } from "@/lib/formats";
 import { cn } from "@/lib/utils";
 import {
@@ -33,11 +32,6 @@ interface ImportDeckTextDialogProps {
     onProgress: (fraction: number) => void,
   ) => Promise<boolean | void>;
 }
-const GUIDE_STEPS = [
-  `Open your deck on Moxfield.`,
-  `Click the ••• menu, then Export.`,
-  `Choose "Copy Plain Text" and copy it to your clipboard.`,
-];
 const IMPORT_FORMATS = GAME_FORMATS.filter((format) => format.id !== "oathbreaker");
 export function ImportDeckTextDialog({
   open,
@@ -45,6 +39,11 @@ export function ImportDeckTextDialog({
   onImport,
   mode = "create",
 }: ImportDeckTextDialogProps) {
+  const guideSteps = [
+    t`Open your deck on Moxfield.`,
+    t`Click the ••• menu, then Export.`,
+    t`Choose "Copy Plain Text" and copy it to your clipboard.`,
+  ];
   const [text, setText] = useState("");
   const [customName, setCustomName] = useState<string | null>(null);
   const [formatId, setFormatId] = useState<DeckFormat | "">("");
@@ -102,7 +101,7 @@ export function ImportDeckTextDialog({
       if (applied !== false) close();
       else setImporting(false);
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : `Import failed`);
+      toast.error(e instanceof Error ? e.message : t`Import failed`);
       setImporting(false);
     }
   }, [valid, importing, entries, name, formatId, onImport, close]);
@@ -120,15 +119,15 @@ export function ImportDeckTextDialog({
     >
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{mode === "add" ? `Add cards from a list` : `Import a deck`}</DialogTitle>
+          <DialogTitle>{mode === "add" ? t`Add cards from a list` : t`Import a deck`}</DialogTitle>
           <DialogDescription>
             {importing
               ? mode === "add"
-                ? `Adding cards to this deck\u2026`
-                : `Building "${name.trim() || DEFAULT_IMPORT_NAME}"…`
+                ? t`Adding cards to this deck…`
+                : t`Building "${name.trim() || t`Imported Deck`}"…`
               : mode === "add"
-                ? `Paste a deck list to merge its cards into this deck.`
-                : `Copy your deck as text from Moxfield, then paste it below.`}
+                ? t`Paste a deck list to merge its cards into this deck.`
+                : t`Copy your deck as text from Moxfield, then paste it below.`}
           </DialogDescription>
         </DialogHeader>
 
@@ -154,11 +153,10 @@ export function ImportDeckTextDialog({
                   className="gap-1"
                   onClick={() => setReviewing(false)}
                 >
-                  <ArrowLeft className="h-3.5 w-3.5" /> Edit list
+                  <ArrowLeft className="h-3.5 w-3.5" /> <Trans>Edit list</Trans>
                 </Button>
                 <span className="text-xs text-muted-foreground">
-                  {mainCount + sideCount + maybeCount + commanderCount} cards · {entries.length}{" "}
-                  entries
+                  <Trans>{mainCount + sideCount + maybeCount + commanderCount} cards · {entries.length} entries</Trans>
                 </span>
               </div>
               <div className="max-h-[45dvh] overflow-y-auto rounded-lg border">
@@ -180,19 +178,19 @@ export function ImportDeckTextDialog({
                         <td className="px-3 py-2 font-medium">{entry.name}</td>
                         <td className="px-3 py-2 text-muted-foreground">
                           {isDetectedCommander(entry)
-                            ? `Command zone`
+                            ? t`Command zone`
                             : entry.side
-                              ? `Sideboard`
+                              ? t`Sideboard`
                               : entry.maybe
-                                ? `Maybeboard`
-                                : `Main deck`}
+                                ? t`Maybeboard`
+                                : t`Main deck`}
                         </td>
                         <td className="px-3 py-2 text-muted-foreground">
                           {entry.setCode
-                            ? `${entry.setCode.toUpperCase()}${entry.collectorNumber ? ` #${entry.collectorNumber}` : ""}${entry.foil ? ` · foil` : ""}`
+                            ? `${entry.setCode.toUpperCase()}${entry.collectorNumber ? ` #${entry.collectorNumber}` : ""}${entry.foil ? ` · ${t`foil`}` : ""}`
                             : entry.foil
-                              ? `Foil · default printing`
-                              : `Default printing`}
+                              ? t`Foil · default printing`
+                              : t`Default printing`}
                         </td>
                       </tr>
                     ))}
@@ -202,18 +200,17 @@ export function ImportDeckTextDialog({
               {unrecognizedLines.length > 0 && (
                 <div className="rounded-md border border-warning/40 bg-warning/10 px-3 py-2 text-xs text-warning">
                   {unrecognizedLines.length === 1
-                    ? `One card line was not recognized and will be skipped.`
-                    : `${unrecognizedLines.length} card lines were not recognized and will be skipped.`}
+                    ? t`One card line was not recognized and will be skipped.`
+                    : t`${unrecognizedLines.length} card lines were not recognized and will be skipped.`}
                 </div>
               )}
               <p className="text-xs text-muted-foreground">
-                Exact set, collector number, and foil finish are preserved when supplied.
-                Unavailable printings are reported after verification.
+                <Trans>Exact set, collector number, and foil finish are preserved when supplied. Unavailable printings are reported after verification.</Trans>
               </p>
             </div>
             <div className="flex items-center justify-end gap-2 border-t pt-2">
               <Button variant="ghost" size="sm" onClick={close}>
-                Cancel
+                <Trans>Cancel</Trans>
               </Button>
               <Button
                 variant="primary"
@@ -222,7 +219,7 @@ export function ImportDeckTextDialog({
                 onClick={() => void handleImportClick()}
               >
                 <Download className="h-3.5 w-3.5" />
-                {mode === "add" ? `Confirm addition` : `Confirm import`}
+                {mode === "add" ? t`Confirm addition` : t`Confirm import`}
               </Button>
             </div>
           </>
@@ -231,7 +228,7 @@ export function ImportDeckTextDialog({
             <div className="space-y-4">
               {mode === "create" && (
                 <ol className="space-y-1.5">
-                  {GUIDE_STEPS.map((label, i) => (
+                  {guideSteps.map((label, i) => (
                     <li key={label} className="flex items-start gap-2.5">
                       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[11px] font-semibold text-primary">
                         {i + 1}
@@ -249,7 +246,7 @@ export function ImportDeckTextDialog({
                     <Input
                       value={name}
                       onChange={(e) => setCustomName(e.target.value)}
-                      placeholder={DEFAULT_IMPORT_NAME}
+                      placeholder={t`Imported Deck`}
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -283,7 +280,7 @@ export function ImportDeckTextDialog({
                     className="h-6 gap-1 px-2 text-xs"
                     onClick={pasteFromClipboard}
                   >
-                    <ClipboardPaste className="h-3 w-3" /> Paste
+                    <ClipboardPaste className="h-3 w-3" /> <Trans>Paste</Trans>
                   </Button>
                 </div>
                 <textarea
@@ -309,10 +306,10 @@ export function ImportDeckTextDialog({
                   <CheckCircle2 className="h-4 w-4 shrink-0" />
                   <span className="text-sm font-medium"><Trans>Looks good!</Trans></span>
                   <span className="text-xs text-muted-foreground">
-                    {commanderCount > 0 ? `${commanderCount} commander · ` : ""}
-                    {mainCount} main
-                    {sideCount > 0 ? ` · ${sideCount} sideboard` : ""}
-                    {maybeCount > 0 ? ` · ${maybeCount} maybeboard` : ""} · {entries.length} unique
+                    {commanderCount > 0 ? <>{t`${commanderCount} commander`} · </> : null}
+                    {t`${mainCount} main`}
+                    {sideCount > 0 ? <> · {t`${sideCount} sideboard`}</> : null}
+                    {maybeCount > 0 ? <> · {t`${maybeCount} maybeboard`}</> : null} · {t`${entries.length} unique`}
                   </span>
                 </div>
               ) : dirty ? (
@@ -320,15 +317,14 @@ export function ImportDeckTextDialog({
               ) : null}
               {mode === "add" && commanderCount > 0 && (
                 <p className="text-xs text-muted-foreground">
-                  Commander entries fill an empty command zone. If it already has a commander, they
-                  are added to the main deck instead.
+                  <Trans>Commander entries fill an empty command zone. If it already has a commander, they are added to the main deck instead.</Trans>
                 </p>
               )}
             </div>
 
             <div className="flex items-center justify-end gap-2 pt-2 border-t">
               <Button variant="ghost" size="sm" onClick={close}>
-                Cancel
+                <Trans>Cancel</Trans>
               </Button>
               <Button
                 variant="primary"
@@ -338,8 +334,8 @@ export function ImportDeckTextDialog({
                 className={cn("gap-1 transition-all", valid && "ring-2 ring-primary/40")}
               >
                 <Download className="h-3.5 w-3.5" />
-                {mode === "add" ? `Review addition` : `Review import`}
-                {valid ? ` ${mainCount + sideCount + maybeCount + commanderCount} cards` : ""}
+                {mode === "add" ? t`Review addition` : t`Review import`}
+                {valid ? <> {t`${mainCount + sideCount + maybeCount + commanderCount} cards`}</> : null}
               </Button>
             </div>
           </>

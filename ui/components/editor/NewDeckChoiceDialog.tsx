@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import type { ComponentType } from "react";
 import { ClipboardPaste, Sparkles } from "lucide-react";
@@ -59,14 +60,14 @@ export function NewDeckChoiceDialog({
         <div className="grid gap-3 sm:grid-cols-2">
           <ChoiceCard
             icon={ClipboardPaste}
-            title={`Import from text`}
-            desc="Paste a decklist copied from Moxfield or elsewhere."
+            title={t`Import from text`}
+            desc={t`Paste a decklist copied from Moxfield or elsewhere.`}
             onClick={onImport}
           />
           <ChoiceCard
             icon={Sparkles}
-            title={`From scratch`}
-            desc="Start with an empty deck and add cards yourself."
+            title={t`From scratch`}
+            desc={t`Start with an empty deck and add cards yourself.`}
             onClick={onFromScratch}
           />
         </div>

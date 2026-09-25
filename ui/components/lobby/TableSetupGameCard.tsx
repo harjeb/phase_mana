@@ -1,6 +1,15 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
-import { Check, ChevronDown, Loader2, Sparkles, Swords, Users, Wand2 } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  Loader2,
+  Sparkles,
+  Swords,
+  Users,
+  Wand2,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -104,7 +113,9 @@ export function TableSetupGameCard({
   }
   return (
     <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-      <h2 className="text-sm font-semibold"><Trans>The game</Trans></h2>
+      <h2 className="text-sm font-semibold">
+        <Trans>The game</Trans>
+      </h2>
       <div className="mt-3 space-y-4">
         <div className="flex overflow-hidden rounded-md border">
           <ModeButton
@@ -112,10 +123,14 @@ export function TableSetupGameCard({
             bordered={false}
             onClick={() => onKindChange("match")}
           >
-            <Swords className="h-3.5 w-3.5" /> Match
+            <Swords className="h-3.5 w-3.5" /> <Trans>Match</Trans>
           </ModeButton>
-          <ModeButton active={kind === "limited"} bordered onClick={() => onKindChange("limited")}>
-            <Sparkles className="h-3.5 w-3.5" /> Limited
+          <ModeButton
+            active={kind === "limited"}
+            bordered
+            onClick={() => onKindChange("limited")}
+          >
+            <Sparkles className="h-3.5 w-3.5" /> <Trans>Limited</Trans>
           </ModeButton>
         </div>
 
@@ -134,13 +149,15 @@ export function TableSetupGameCard({
 
         {kind === "match" && (
           <div className="space-y-1.5">
-            <Label className="text-xs font-medium"><Trans>Format</Trans></Label>
+            <Label className="text-xs font-medium">
+              <Trans>Format</Trans>
+            </Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
                   id="room-format"
-                  title={`Change format`}
+                  title={t`Change format`}
                   className="inline-flex w-full cursor-pointer items-center gap-1.5 rounded-full border bg-background/60 px-2 py-1 text-xs backdrop-blur-sm transition-colors hover:bg-background/80"
                 >
                   <FormatBadge formatId={format.toLowerCase()} />
@@ -170,14 +187,14 @@ export function TableSetupGameCard({
               </DropdownMenuContent>
             </DropdownMenu>
             <p className="text-xs text-muted-foreground">
-              {FORMATS.find((option) => option.value === format)?.description}
+              {formatDescription(format)}
             </p>
           </div>
         )}
 
         <div className="space-y-1.5">
           <Label className="text-xs font-medium">
-            {kind === "limited" ? `Pod size` : `Players`}
+            {kind === "limited" ? t`Pod size` : t`Players`}
           </Label>
           <div className="flex items-center gap-2">
             {playerOptions.map((n) => (
@@ -211,12 +228,17 @@ export function TableSetupGameCard({
                 }}
                 className="h-3.5 w-3.5"
               />
-              <span><Trans>Use a CubeCobra cube instead of a set</Trans></span>
+              <span>
+                <Trans>Use a CubeCobra cube instead of a set</Trans>
+              </span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label htmlFor="sealed-boosters" className="text-xs font-medium">
-                  Packs per player
+                <Label
+                  htmlFor="sealed-boosters"
+                  className="text-xs font-medium"
+                >
+                  <Trans>Packs per player</Trans>
                 </Label>
                 <Input
                   id="sealed-boosters"
@@ -233,7 +255,7 @@ export function TableSetupGameCard({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="sealed-seed" className="text-xs font-medium">
-                  Seed
+                  <Trans>Seed</Trans>
                 </Label>
                 <Input
                   id="sealed-seed"
@@ -241,13 +263,15 @@ export function TableSetupGameCard({
                   inputMode="numeric"
                   value={sealedSeed}
                   onChange={(e) => onSealedSeedChange(e.target.value)}
-                  placeholder={`random`}
+                  placeholder={t`random`}
                 />
               </div>
             </div>
             <p className="text-[10px] text-muted-foreground">
-              Each player opens their own pool — pools are independent but reproducible from the
-              seed.
+              <Trans>
+                Each player opens their own pool — pools are independent but
+                reproducible from the seed.
+              </Trans>
             </p>
           </>
         )}
@@ -255,7 +279,7 @@ export function TableSetupGameCard({
         {(isCube || (isSealed && sealedUseCube)) && (
           <div className="space-y-1.5">
             <Label htmlFor="cube-input" className="text-xs font-medium">
-              Cube
+              <Trans>Cube</Trans>
             </Label>
             <div className="flex items-center gap-2">
               <Input
@@ -263,7 +287,7 @@ export function TableSetupGameCard({
                 type="text"
                 value={cubeInput}
                 onChange={(e) => setCubeInput(e.target.value)}
-                placeholder={`cubeid or cubecobra.com/\u2026`}
+                placeholder={t`cubeid or cubecobra.com/…`}
                 className="h-9 flex-1 text-sm pointer-coarse:text-base"
                 disabled={importingCube}
               />
@@ -280,15 +304,20 @@ export function TableSetupGameCard({
                 ) : (
                   <Wand2 className="h-3.5 w-3.5" />
                 )}
-                {importingCube ? `Importing\u2026` : `Import`}
+                {importingCube ? t`Importing…` : t`Import`}
               </Button>
             </div>
             {importedCube && (
               <p className="text-[11px] text-muted-foreground">
-                Loaded: <span className="text-foreground/90">{importedCube.name}</span> —{" "}
-                {importedCube.cardCount} cards
+                <Trans>
+                  Loaded:{" "}
+                  <span className="text-foreground/90">
+                    {importedCube.name}
+                  </span>{" "}
+                  — {importedCube.cardCount} cards
+                </Trans>
                 {importedCube.rejectedCardCount > 0 &&
-                  ` · ${importedCube.rejectedCardCount} without local engine data`}
+                  t` · ${importedCube.rejectedCardCount} without local engine data`}
               </p>
             )}
             {cubeImportError && !importedCube && !importingCube && (
@@ -302,7 +331,7 @@ export function TableSetupGameCard({
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="draft-rounds" className="text-xs font-medium">
-                  Rounds
+                  <Trans>Rounds</Trans>
                 </Label>
                 <Input
                   id="draft-rounds"
@@ -311,13 +340,18 @@ export function TableSetupGameCard({
                   max={6}
                   value={draftRounds}
                   onChange={(e) =>
-                    onDraftRoundsChange(Math.max(1, Math.min(6, Number(e.target.value) || 3)))
+                    onDraftRoundsChange(
+                      Math.max(1, Math.min(6, Number(e.target.value) || 3)),
+                    )
                   }
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="draft-picks-per-pass" className="text-xs font-medium">
-                  Picks / pass
+                <Label
+                  htmlFor="draft-picks-per-pass"
+                  className="text-xs font-medium"
+                >
+                  <Trans>Picks / pass</Trans>
                 </Label>
                 <Input
                   id="draft-picks-per-pass"
@@ -326,13 +360,15 @@ export function TableSetupGameCard({
                   max={4}
                   value={draftPicksPerPass}
                   onChange={(e) =>
-                    onDraftPicksPerPassChange(Math.max(1, Math.min(4, Number(e.target.value) || 1)))
+                    onDraftPicksPerPassChange(
+                      Math.max(1, Math.min(4, Number(e.target.value) || 1)),
+                    )
                   }
                 />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="draft-seed" className="text-xs font-medium">
-                  Seed
+                  <Trans>Seed</Trans>
                 </Label>
                 <Input
                   id="draft-seed"
@@ -340,7 +376,7 @@ export function TableSetupGameCard({
                   inputMode="numeric"
                   value={draftSeed}
                   onChange={(e) => onDraftSeedChange(e.target.value)}
-                  placeholder={`random`}
+                  placeholder={t`random`}
                 />
               </div>
             </div>
@@ -351,13 +387,57 @@ export function TableSetupGameCard({
                 onChange={(e) => onDraftFillWithBotsChange(e.target.checked)}
                 className="h-3.5 w-3.5"
               />
-              <span><Trans>Fill empty seats with AI bots</Trans></span>
+              <span>
+                <Trans>Fill empty seats with AI bots</Trans>
+              </span>
             </label>
           </>
         )}
       </div>
     </section>
   );
+}
+function formatDescription(format: GameFormat) {
+  switch (format) {
+    case "Standard":
+      return t`60-card constructed, rotating sets`;
+    case "Pioneer":
+      return t`60-card, Return to Ravnica forward`;
+    case "Modern":
+      return t`60-card, 8th Edition forward`;
+    case "Legacy":
+      return t`60-card, all sets, banned list`;
+    case "Vintage":
+      return t`60-card, all sets, restricted list`;
+    case "Pauper":
+      return t`60-card, commons only`;
+    case "Premodern":
+      return t`60-card, Fourth Edition through Scourge`;
+    case "Commander":
+      return t`100-card singleton, 40 life`;
+    case "Brawl":
+      return t`60-card singleton, 25 life`;
+    case "Oathbreaker":
+      return t`60-card singleton, planeswalker cmdr`;
+    case "Draft":
+      return t`40-card decks built from a draft`;
+    case "Sealed":
+      return t`40-card decks built from a sealed pool`;
+    default:
+      return "";
+  }
+}
+function limitedDescription(kind: LimitedKind) {
+  switch (kind) {
+    case "draft":
+      return t`Pod draft — pass packs around the table.`;
+    case "sealed":
+      return t`Each player opens packs and builds independently.`;
+    case "winston":
+      return t`2-player pile draft from a shared pool. Single-player only for now.`;
+    case "cube":
+      return t`Pod draft from a CubeCobra cube.`;
+  }
 }
 function ModeButton({
   active,
@@ -410,17 +490,21 @@ function LimitedKindCard({
         <Icon
           className={cn(
             "h-4 w-4",
-            selected && meta.enabled ? "text-selection" : "text-muted-foreground",
+            selected && meta.enabled
+              ? "text-selection"
+              : "text-muted-foreground",
           )}
         />
         <span className="text-sm font-medium">{meta.label}</span>
         {!meta.enabled && (
           <Badge variant="secondary" className="text-[9px]">
-            coming soon
+            <Trans>coming soon</Trans>
           </Badge>
         )}
       </span>
-      <span className="text-[11px] leading-snug text-muted-foreground">{meta.description}</span>
+      <span className="text-[11px] leading-snug text-muted-foreground">
+        {limitedDescription(meta.value)}
+      </span>
     </button>
   );
 }

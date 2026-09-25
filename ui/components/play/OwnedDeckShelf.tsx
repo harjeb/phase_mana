@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { LibraryBig, Plus } from "lucide-react";
 import { DeckGridCard } from "@/components/deck/DeckGridCard";
@@ -31,24 +32,24 @@ export function OwnedDeckShelf({
         <LibraryBig className="mb-3 h-7 w-7 text-secondary" />
         <p className="font-medium"><Trans>Your first deck is waiting to be brewed.</Trans></p>
         <p className="mt-1 text-sm text-muted-foreground">
-          Build from scratch, import a decklist, or start with a preset below.
+          <Trans>Build from scratch, import a decklist, or start with a preset below.</Trans>
         </p>
         <Button size="sm" variant="primary" className="mt-4" onClick={onAddDeck}>
           <Plus className="h-4 w-4" />
-          Build / Import
+          <Trans>Build / Import</Trans>
         </Button>
       </div>
     );
   }
   return (
-    <DeckShelfRow label={`My decks`}>
+    <DeckShelfRow label={t`My decks`}>
       {decks.map((deck) => {
         const presetKey = presetKeyByDeckId[deck.id];
         return (
           <div key={deck.id} className={cn(DECK_SHELF_CARD_CLASS, "relative")}>
             {deck.id === lastPlayedDeckId && (
               <span className="absolute right-1.5 top-1.5 z-20 rounded bg-background/90 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-primary shadow-sm backdrop-blur-sm">
-                Last played
+                <Trans>Last played</Trans>
               </span>
             )}
             <DeckGridCard
@@ -56,7 +57,7 @@ export function OwnedDeckShelf({
               onOpen={() => onOpenDeck(deck)}
               onPlay={() => onPlayDeck(deck)}
               onViewInHub={presetKey ? () => onViewPreset(presetKey) : undefined}
-              badge={presetKey ? "Preset copy" : undefined}
+              badge={presetKey ? t`Preset copy` : undefined}
               playing={pendingDeckId === deck.id}
               playDisabled={pendingDeckId !== null}
               readOnly

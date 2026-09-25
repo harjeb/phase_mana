@@ -1,3 +1,7 @@
+import { msg } from "@lingui/core/macro";
+import type { MessageDescriptor } from "@lingui/core";
+import { useLingui } from "@lingui/react";
+import { Trans } from "@lingui/react/macro";
 import { useState, type ReactNode } from "react";
 import { Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,8 +18,8 @@ import { useHubAvailable } from "@/hooks/useHubAvailable";
 import { cn } from "@/lib/utils";
 import { stripUsernameTag } from "@/lib/username";
 import type { PlayerInfo } from "@/types/server";
-const QUALIFICATION_LABEL: Record<string, string> = {
-  maintainer: `Maintainer`,
+const QUALIFICATION_LABEL: Record<string, MessageDescriptor> = {
+  maintainer: msg`Maintainer`,
 };
 interface PlayerCardProps {
   player: PlayerInfo;
@@ -25,6 +29,7 @@ interface PlayerCardProps {
   children: ReactNode;
 }
 export function PlayerCard({ player, status, action, side = "left", children }: PlayerCardProps) {
+  const { i18n } = useLingui();
   const name = stripUsernameTag(player.username);
   const tag = player.username.slice(name.length);
   const qualification = player.qualification ? QUALIFICATION_LABEL[player.qualification] : null;
@@ -64,7 +69,7 @@ export function PlayerCard({ player, status, action, side = "left", children }: 
             </div>
             {tag && <p className="text-xs text-muted-foreground">{tag}</p>}
             {qualification && (
-              <p className="mt-1 text-xs font-medium text-format-badge-amber">{qualification}</p>
+              <p className="mt-1 text-xs font-medium text-format-badge-amber">{i18n._(qualification)}</p>
             )}
             <div className="mt-3 border-t pt-3 text-xs text-muted-foreground">{status}</div>
             {(action || canReport) && (
@@ -78,7 +83,7 @@ export function PlayerCard({ player, status, action, side = "left", children }: 
                     className="h-7 px-2 text-xs text-muted-foreground hover:text-destructive"
                     onClick={() => setReporting(true)}
                   >
-                    <Flag className="h-3.5 w-3.5" /> Report
+                    <Flag className="h-3.5 w-3.5" /> <Trans>Report</Trans>
                   </Button>
                 )}
                 {action}

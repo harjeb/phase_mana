@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Search, UserPlus } from "lucide-react";
@@ -41,7 +42,7 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
       <DialogContent className="max-w-sm">
         <DialogTitle className="flex items-center gap-2">
           <UserPlus className="h-4 w-4" />
-          Invite players
+          <Trans>Invite players</Trans>
         </DialogTitle>
         <DialogDescription><Trans>Players in the lobby who aren't at a table.</Trans></DialogDescription>
         <div className="relative">
@@ -49,7 +50,7 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={`Search players\u2026`}
+            placeholder={t`Search players…`}
             className="h-8 pl-8 text-sm"
             autoFocus
           />
@@ -58,7 +59,7 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
           <div className="space-y-0.5 pr-2">
             {candidates.length === 0 && (
               <p className="py-6 text-center text-xs italic text-muted-foreground">
-                {query ? `No players match “${search.trim()}”` : `Nobody is free right now`}
+                {query ? t`No players match “${search.trim()}”` : t`Nobody is free right now`}
               </p>
             )}
             {candidates.map((player) => {
@@ -76,10 +77,10 @@ export function InvitePlayersDialog({ open, onClose }: InvitePlayersDialogProps)
                       className={PLAYER_ROW_ACTION_CLASS}
                       disabled={sent}
                       onClick={() => void invite(player.username)}
-                      title={`Invite to your table`}
+                      title={t`Invite to your table`}
                     >
                       <UserPlus className="h-3 w-3" />
-                      {sent ? `Invited` : `Invite`}
+                      {sent ? t`Invited` : t`Invite`}
                     </Button>
                   }
                 />

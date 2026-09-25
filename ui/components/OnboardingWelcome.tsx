@@ -1,3 +1,4 @@
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ export const ONBOARDING_GUIDE_VERSION = "1.0";
 const NICKNAME_MIN_LENGTH = 2;
 const NICKNAME_MAX_LENGTH = 24;
 export function OnboardingWelcome({ onComplete }: { onComplete: () => void }) {
+  const { t } = useLingui();
   const [step, setStep] = useState<Step>(() =>
     useAuthStore.getState().account?.handlePending ? "hurray" : "nickname",
   );
@@ -36,10 +38,10 @@ export function OnboardingWelcome({ onComplete }: { onComplete: () => void }) {
     } catch (err) {
       setError(
         isNameClaimedError(err)
-          ? "That name is already claimed. Pick another."
+          ? t`That name is already claimed. Pick another.`
           : err instanceof Error
             ? err.message
-            : "Could not set your name.",
+            : t`Could not set your name.`,
       );
     } finally {
       setBusy(false);
@@ -60,7 +62,7 @@ export function OnboardingWelcome({ onComplete }: { onComplete: () => void }) {
           }
         />
         <Button variant="ghost" size="sm" className="w-full" onClick={() => setStep("nickname")}>
-          Use a nickname instead
+          <Trans>Use a nickname instead</Trans>
         </Button>
       </div>
     );
@@ -73,17 +75,17 @@ export function OnboardingWelcome({ onComplete }: { onComplete: () => void }) {
           htmlFor="onboarding-nickname"
           className="block text-center text-sm font-semibold text-foreground"
         >
-          Choose your nickname
+          <Trans>Choose your nickname</Trans>
         </label>
         <p className="text-center text-xs text-muted-foreground">
-          Other players will see this name when you connect to a server.
+          <Trans>Other players will see this name when you connect to a server.</Trans>
         </p>
         <Input
           id="onboarding-nickname"
           autoFocus
           value={nickname}
           maxLength={NICKNAME_MAX_LENGTH}
-          placeholder={`e.g. StormCrow`}
+          placeholder={t`e.g. StormCrow`}
           onChange={(event) => {
             setNickname(event.target.value);
             if (error) setError(null);
@@ -103,17 +105,17 @@ export function OnboardingWelcome({ onComplete }: { onComplete: () => void }) {
           onClick={() => void confirm()}
           className="w-full max-w-xs"
         >
-          {busy ? "Checking…" : "Let's brew"}
+          {busy ? t`Checking…` : t`Let's brew`}
         </Button>
         {isFeatureEnabled("accounts") && (
           <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            <Trans>Already have an account?</Trans>{" "}
             <button
               type="button"
               className="font-medium text-primary underline-offset-2 hover:underline"
               onClick={() => setStep("signin")}
             >
-              Sign in
+              <Trans>Sign in</Trans>
             </button>
           </p>
         )}

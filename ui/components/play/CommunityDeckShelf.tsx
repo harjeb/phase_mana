@@ -31,8 +31,8 @@ export function CommunityDeckShelf({
   );
   return (
     <CollapsibleDeckShelf
-      title={`Community decks`}
-      count={loading ? "Loading…" : decks.length}
+      title={t`Community decks`}
+      count={loading ? t`Loading…` : decks.length}
       open={open}
       onOpenChange={onOpenChange}
     >
@@ -40,11 +40,11 @@ export function CommunityDeckShelf({
         <div className="flex items-center gap-2 px-2 text-xs text-destructive">
           <span className="min-w-0 flex-1">{error}</span>
           <Button variant="outline" size="sm" onClick={retry}>
-            Retry
+            {t`Retry`}
           </Button>
         </div>
       ) : decks.length > 0 ? (
-        <DeckShelfRow label={`Community decks`}>
+        <DeckShelfRow label={t`Community decks`}>
           {decks.map((entry) => (
             <div key={entry.id} className={DECK_SHELF_CARD_CLASS}>
               <DeckHubEntryCard
@@ -72,7 +72,7 @@ export function CommunityDeckShelf({
         </DeckShelfRow>
       ) : (
         <p className="px-2 text-xs italic text-muted-foreground">
-          No Community decks are available.
+          {t`No Community decks are available.`}
         </p>
       )}
     </CollapsibleDeckShelf>

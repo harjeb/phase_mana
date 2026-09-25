@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useRef, useState } from "react";
 import { Camera, CircleUserRound, X } from "lucide-react";
 import { useAssetsAvailable, useAssetStore } from "@/stores/useAssetStore";
@@ -26,14 +27,14 @@ export function AvatarPicker() {
         type="button"
         disabled={busy || !available}
         onClick={() => inputRef.current?.click()}
-        title={avatarSrc ? `Replace avatar` : `Upload avatar`}
+        title={avatarSrc ? t`Replace avatar` : t`Upload avatar`}
         className="relative flex size-20 shrink-0 items-center justify-center rounded-full border bg-muted motion-safe:transition-[border-color,box-shadow] hover:border-primary/40 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {avatarSrc ? (
           <img
             src={avatarSrc}
             crossOrigin="anonymous"
-            alt={`Your avatar`}
+            alt={t`Your avatar`}
             className="size-full rounded-full object-cover"
           />
         ) : (
@@ -46,7 +47,7 @@ export function AvatarPicker() {
       {avatarSrc && (
         <button
           type="button"
-          title={`Remove avatar`}
+          title={t`Remove avatar`}
           disabled={busy}
           onClick={() => void clearAvatar()}
           className="absolute -top-0.5 -right-0.5 flex size-6 items-center justify-center rounded-full border bg-background text-muted-foreground shadow-sm motion-safe:transition-opacity opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto pointer-coarse:opacity-100 pointer-coarse:pointer-events-auto hover:border-destructive hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring before:absolute before:-inset-2.5 before:content-['']"

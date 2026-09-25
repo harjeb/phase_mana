@@ -90,9 +90,9 @@ export function CardArtDownloadSection() {
       await keepRecordsFor([...new Set(decks.flatMap((saved) => deckCardNames(saved.deck)))]);
       const downloaded = result.fetched + result.alreadyCached;
       const summary =
-        downloaded === 1 ? `Art ready for one image` : `Art ready for ${downloaded} images`;
+        downloaded === 1 ? t`Art ready for one image` : t`Art ready for ${downloaded} images`;
       toast.success(
-        result.failed > 0 ? `${summary}, ${result.failed} could not be fetched` : summary,
+        result.failed > 0 ? t`${summary}, ${result.failed} could not be fetched` : summary,
       );
       refresh();
     } catch (error) {
@@ -106,8 +106,8 @@ export function CardArtDownloadSection() {
     setProgress(null);
     try {
       const result = await downloadAllCardArt(variants);
-      const summary = `Downloaded ${result.fetched}, already had ${result.alreadyCached}`;
-      toast.success(result.failed > 0 ? `${summary}, ${result.failed} failed` : summary);
+      const summary = t`Downloaded ${result.fetched}, already had ${result.alreadyCached}`;
+      toast.success(result.failed > 0 ? t`${summary}, ${result.failed} failed` : summary);
       refresh();
     } catch (error) {
       toast.error(t`Could not download every card: ${String(error)}`);
@@ -132,15 +132,15 @@ export function CardArtDownloadSection() {
     <div className="rounded-lg border bg-card/40 p-4 space-y-3 max-w-xl">
       <Label><Trans>Card Art On This Machine</Trans></Label>
       <p className="text-xs text-muted-foreground">
-        Art is kept on disk once drawn, so a board does not fetch it twice, and a deliberate
+        <Trans>Art is kept on disk once drawn, so a board does not fetch it twice, and a deliberate
         download is never dropped when the cache is trimmed for space. Either download also keeps
-        what each card <em><Trans>is</Trans></em>, which is what a board with no internet needs to know which
+        what each card <em>is</em>, which is what a board with no internet needs to know which
         picture to draw — pictures alone are not enough. Every card additionally keeps every card
-        name, the set list and every ruling, so searching and pasting a decklist work offline too.
+        name, the set list and every ruling, so searching and pasting a decklist work offline too.</Trans>
       </p>
       <p className="text-xs text-muted-foreground">
-        Downloading for the <strong>{style}</strong> battlefield style. That style draws{" "}
-        {variants.join(", ")}, so art downloaded for one style does not cover another.
+        <Trans>Downloading for the <strong>{style}</strong> battlefield style. That style draws{" "}
+        {variants.join(", ")}, so art downloaded for one style does not cover another.</Trans>
       </p>
       <label className="flex items-center gap-2 text-xs text-muted-foreground">
         <input
@@ -148,32 +148,32 @@ export function CardArtDownloadSection() {
           checked={everyStyle}
           onChange={(event) => setEveryStyle(event.target.checked)}
         />
-        Cover every battlefield style (larger download)
+        <Trans>Cover every battlefield style (larger download)</Trans>
       </label>
       <p className="text-xs text-muted-foreground">
         {stats
-          ? `On disk: ${stats.files} image${stats.files === 1 ? "" : "s"}, ${formatBytes(stats.bytes)} — ${stats.pinnedFiles} of them downloaded on purpose (${formatBytes(stats.pinnedBytes)}).`
-          : `Reading the cache\u2026`}
+          ? t`On disk: ${stats.files} images, ${formatBytes(stats.bytes)} — ${stats.pinnedFiles} of them downloaded on purpose (${formatBytes(stats.pinnedBytes)}).`
+          : t`Reading the cache…`}
       </p>
       <p className="text-xs text-muted-foreground">
         {cards > 0
-          ? `Card data: ${cards.toLocaleString()} cards, so this machine can play and host those offline.`
-          : `No card data yet — without it a board with no internet stays blank however much art is cached.`}
+          ? t`Card data: ${cards.toLocaleString()} cards, so this machine can play and host those offline.`
+          : t`No card data yet — without it a board with no internet stays blank however much art is cached.`}
       </p>
       {progress && (
         <p className="text-xs text-muted-foreground">
-          {progress.done} of {progress.total} — {formatBytes(progress.bytes)} downloaded.
+          <Trans>{progress.done} of {progress.total} — {formatBytes(progress.bytes)} downloaded.</Trans>
         </p>
       )}
       <div className="flex flex-wrap gap-2">
         <Button variant="primary" onClick={() => void downloadDecks()} disabled={busy !== null}>
           {busy === "decks"
-            ? `Downloading\u2026`
-            : `My decks (${decks.length}) · ~${formatBytes(estimateBytes(variants, deckCards.size))}`}
+            ? t`Downloading…`
+            : t`My decks (${decks.length}) · ~${formatBytes(estimateBytes(variants, deckCards.size))}`}
         </Button>
         {busy === "all" ? (
           <Button variant="outline" onClick={() => void cancelCardArtDownload()}>
-            Stop
+            <Trans>Stop</Trans>
           </Button>
         ) : (
           <Button
@@ -181,18 +181,18 @@ export function CardArtDownloadSection() {
             onClick={() => void downloadEverything()}
             disabled={busy !== null}
           >
-            {`Every card · ~${formatBytes(estimateBytes(variants, ALL_CARDS_ESTIMATE))}`}
+            {t`Every card · ~${formatBytes(estimateBytes(variants, ALL_CARDS_ESTIMATE))}`}
           </Button>
         )}
         <Button variant="outline" onClick={() => void clear(false)} disabled={busy !== null}>
-          Trim unused
+          <Trans>Trim unused</Trans>
         </Button>
         <Button
           variant="destructive-quiet"
           onClick={() => void clear(true)}
           disabled={busy !== null}
         >
-          Delete all
+          <Trans>Delete all</Trans>
         </Button>
       </div>
     </div>

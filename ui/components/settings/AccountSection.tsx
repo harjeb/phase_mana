@@ -27,8 +27,8 @@ export function AccountSection() {
               <div className="space-y-1">
                 <p className="text-sm font-medium"><Trans>Sync your decks on every device</Trans></p>
                 <p className="text-sm text-muted-foreground">
-                  An account keeps your decks and Community publications yours wherever you play.
-                  Playing never requires one.
+                  <Trans>An account keeps your decks and Community publications yours wherever you play.
+                  Playing never requires one.</Trans>
                 </p>
               </div>
               <Button
@@ -36,7 +36,7 @@ export function AccountSection() {
                 className="shrink-0 self-start sm:self-center"
                 onClick={() => showSignIn()}
               >
-                Sign in
+                <Trans>Sign in</Trans>
               </Button>
             </div>
           </div>

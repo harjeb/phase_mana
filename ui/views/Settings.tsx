@@ -1,5 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -109,6 +110,8 @@ const FLASH_MIN = 200;
 const FLASH_MAX = 2000;
 const FLASH_STEP = 100;
 export default function Settings() {
+  // Subscribe to locale changes so translated props and option labels update immediately.
+  useLingui();
   const isGameActive = useGameStore((s) => s.isGameActive);
   const assetsTabAvailable = useAssetsAvailable();
   const prefs = usePreferencesStore();
@@ -254,7 +257,7 @@ export default function Settings() {
                   : "border-transparent text-muted-foreground hover:text-foreground")
               }
             >
-              Account
+              <Trans>Account</Trans>
             </button>
           )}
           {assetsTabAvailable && (
@@ -268,7 +271,7 @@ export default function Settings() {
                   : "border-transparent text-muted-foreground hover:text-foreground")
               }
             >
-              My assets
+              <Trans>My assets</Trans>
             </button>
           )}
           <button
@@ -281,7 +284,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Preferences
+            <Trans>Preferences</Trans>
           </button>
           <button
             type="button"
@@ -293,7 +296,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Theme
+            <Trans>Theme</Trans>
           </button>
           <button
             type="button"
@@ -305,7 +308,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Prompts
+            <Trans>Prompts</Trans>
           </button>
           <button
             type="button"
@@ -317,7 +320,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Shortcuts
+            <Trans>Shortcuts</Trans>
           </button>
           <button
             type="button"
@@ -329,7 +332,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Server
+            <Trans>Server</Trans>
           </button>
           <button
             type="button"
@@ -341,7 +344,7 @@ export default function Settings() {
                 : "border-transparent text-muted-foreground hover:text-foreground")
             }
           >
-            Cache
+            <Trans>Cache</Trans>
           </button>
         </div>
       </section>
@@ -360,18 +363,18 @@ export default function Settings() {
           <div className="rounded-lg border bg-card/40 p-4 space-y-3 max-w-xl">
             <Label><Trans>Card Image Cache</Trans></Label>
             <p className="text-xs text-muted-foreground">
-              Drops Manabrew&apos;s in-memory card textures and image object URLs, clears the
+              <Trans>Drops Manabrew&apos;s in-memory card textures and image object URLs, clears the
               CacheStorage API, then reloads so every card image is fetched fresh. Use this if
               battlefield card art fails to appear. For a full browser HTTP cache wipe, use the
               browser&apos;s &quot;Empty Cache and Hard Reload&quot; (DevTools open → right-click
-              reload).
+              reload).</Trans>
             </p>
             <Button
               variant="destructive"
               onClick={() => void handleClearImageCache()}
               disabled={clearingCache}
             >
-              {clearingCache ? `Clearing\u2026` : `Clear image cache & reload`}
+              {clearingCache ? t`Clearing\u2026` : t`Clear image cache & reload`}
             </Button>
           </div>
         </section>
@@ -416,13 +419,13 @@ export default function Settings() {
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Button variant="primary" onClick={handleSave} disabled={!hasChanges && !server.error}>
-              Save & Reconnect
+              <Trans>Save & Reconnect</Trans>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline">
                   <Server className="h-4 w-4" />
-                  Saved servers
+                  <Trans>Saved servers</Trans>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="min-w-56">
@@ -456,7 +459,7 @@ export default function Settings() {
                         </div>
                         <button
                           type="button"
-                          aria-label={`Remove ${relay.name}`}
+                          aria-label={t`Remove ${relay.name}`}
                           className="shrink-0 rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                           onPointerDown={(e) => e.stopPropagation()}
                           onClick={(e) => {
@@ -480,12 +483,12 @@ export default function Settings() {
                 setSavingServer((v) => !v);
               }}
             >
-              Save current server…
+              <Trans>Save current server…</Trans>
             </Button>
             {server.connected && (
               <span className="text-xs text-success flex items-center gap-1">
                 <span className="h-2 w-2 rounded-full bg-success" />
-                Connected as {server.username}
+                <Trans>Connected as {server.username}</Trans>
               </span>
             )}
             {server.connecting && (
@@ -503,7 +506,7 @@ export default function Settings() {
                   if (e.key === "Enter") saveCurrentServer();
                   if (e.key === "Escape") setSavingServer(false);
                 }}
-                placeholder={`Name this server`}
+                placeholder={t`Name this server`}
                 className="max-w-xs"
               />
               <Button
@@ -512,19 +515,19 @@ export default function Settings() {
                 onClick={saveCurrentServer}
                 disabled={!newServerName.trim()}
               >
-                Save
+                <Trans>Save</Trans>
               </Button>
               <Button size="sm" variant="ghost" onClick={() => setSavingServer(false)}>
-                Cancel
+                <Trans>Cancel</Trans>
               </Button>
               <span className="text-xs text-muted-foreground">
-                Saves the current host, port, and password so you can switch back later.
+                <Trans>Saves the current host, port, and password so you can switch back later.</Trans>
               </span>
             </div>
           )}
           <p className="text-xs text-muted-foreground">
-            Server connection settings. Saving will disconnect and reconnect with the new
-            credentials.
+            <Trans>Server connection settings. Saving will disconnect and reconnect with the new
+            credentials.</Trans>
           </p>
         </section>
       )}
@@ -538,14 +541,14 @@ export default function Settings() {
             <CardImageLibraryCard />
 
             <PreferenceCard
-              title={`Default Playmat`}
-              description={`Used in games when the deck you're playing has no custom playmat of its own.`}
+              title={t`Default Playmat`}
+              description={t`Used in games when the deck you're playing has no custom playmat of its own.`}
             >
               <div className="group relative">
                 <button
                   type="button"
                   onClick={() => setPlaymatEditorOpen(true)}
-                  title={hasDefaultPlaymat ? `Customize playmat` : `Set playmat`}
+                  title={hasDefaultPlaymat ? t`Customize playmat` : t`Set playmat`}
                   className={cn(
                     "flex aspect-video w-full items-center justify-center overflow-hidden rounded-lg border bg-muted",
                     "motion-safe:transition-[border-color,box-shadow] hover:border-primary/40 hover:shadow-sm",
@@ -556,7 +559,7 @@ export default function Settings() {
                   {defaultPlaymat ? (
                     <img
                       src={defaultPlaymat}
-                      alt={`Your default playmat`}
+                      alt={t`Your default playmat`}
                       crossOrigin="anonymous"
                       className="size-full object-cover"
                     />
@@ -580,7 +583,7 @@ export default function Settings() {
                 {hasDefaultPlaymat && (
                   <button
                     type="button"
-                    title={`Remove playmat`}
+                    title={t`Remove playmat`}
                     onClick={() => {
                       void useAssetStore.getState().remove(prefs.defaultPlaymatAssetId);
                       prefs.setDefaultPlaymatAssetId(undefined);
@@ -595,11 +598,11 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Battlefield Zone Column Order`}
-              description={`Controls placement of Library / Graveyard / Exile in the in-field zone column.`}
+              title={t`Battlefield Zone Column Order`}
+              description={t`Controls placement of Library / Graveyard / Exile in the in-field zone column.`}
             >
               <div className="grid grid-cols-3 gap-2">
-                {(["Top", "Middle", "Bottom"] as const).map((slot, index) => (
+                {([t`Top`, t`Middle`, t`Bottom`] as const).map((slot, index) => (
                   <div key={slot} className="space-y-1">
                     <Label
                       htmlFor={`zone-order-${index}`}
@@ -623,9 +626,9 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Card Size`}
+              title={t`Card Size`}
               value={`${Math.round(prefs.cardSizeMultiplier * 100)}%`}
-              description={`Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them.`}
+              description={t`Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them.`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 space-y-3">
@@ -676,8 +679,8 @@ export default function Settings() {
               </div>
             </PreferenceCard>
             <PreferenceCard
-              title={`Hand Ordering`}
-              description={`Drag cards sideways for a custom order, or keep every hand sorted automatically by color or mana value.`}
+              title={t`Hand Ordering`}
+              description={t`Drag cards sideways for a custom order, or keep every hand sorted automatically by color or mana value.`}
             >
               <div className="flex flex-wrap gap-2">
                 {handOrderOptions().map((option) => (
@@ -694,8 +697,8 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Battlefield Layout`}
-              description={`"Free placement" lets you drag cards anywhere. "Auto-arrange" keeps the battlefield tidy in rows (creatures, then others, then lands) and ignores manual placement.`}
+              title={t`Battlefield Layout`}
+              description={t`"Free placement" lets you drag cards anywhere. "Auto-arrange" keeps the battlefield tidy in rows (creatures, then others, then lands) and ignores manual placement.`}
             >
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -703,21 +706,21 @@ export default function Settings() {
                   size="sm"
                   onClick={() => prefs.setBattlefieldAutoSort(false)}
                 >
-                  Free placement
+                  <Trans>Free placement</Trans>
                 </Button>
                 <Button
                   variant={prefs.battlefieldAutoSort ? "selected" : "outline"}
                   size="sm"
                   onClick={() => prefs.setBattlefieldAutoSort(true)}
                 >
-                  Auto-arrange
+                  <Trans>Auto-arrange</Trans>
                 </Button>
               </div>
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Zone Piles`}
-              description={`"Locked" keeps the deck, graveyard, exile, and command piles fixed on the battlefield so a drag can't move them. Tapping to open still works.`}
+              title={t`Zone Piles`}
+              description={t`"Locked" keeps the deck, graveyard, exile, and command piles fixed on the battlefield so a drag can't move them. Tapping to open still works.`}
             >
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -725,21 +728,21 @@ export default function Settings() {
                   size="sm"
                   onClick={() => prefs.setLockZoneTiles(false)}
                 >
-                  Movable
+                  <Trans>Movable</Trans>
                 </Button>
                 <Button
                   variant={prefs.lockZoneTiles ? "selected" : "outline"}
                   size="sm"
                   onClick={() => prefs.setLockZoneTiles(true)}
                 >
-                  Locked
+                  <Trans>Locked</Trans>
                 </Button>
               </div>
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Battlefield Card Style`}
-              description={`"Realistic" uses the full printed card image. "Art-forward" shows the art with a crisp name/type overlay. "Mini-frame" frames the art with name and type bars. This setting only affects battlefield cards.`}
+              title={t`Battlefield Card Style`}
+              description={t`"Realistic" uses the full printed card image. "Art-forward" shows the art with a crisp name/type overlay. "Mini-frame" frames the art with name and type bars. This setting only affects battlefield cards.`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 flex flex-wrap content-start gap-2">
@@ -748,21 +751,21 @@ export default function Settings() {
                     size="sm"
                     onClick={() => prefs.setBattlefieldCardStyle("realistic")}
                   >
-                    Realistic
+                    <Trans>Realistic</Trans>
                   </Button>
                   <Button
                     variant={prefs.battlefieldCardStyle === "art" ? "selected" : "outline"}
                     size="sm"
                     onClick={() => prefs.setBattlefieldCardStyle("art")}
                   >
-                    Art-forward
+                    <Trans>Art-forward</Trans>
                   </Button>
                   <Button
                     variant={prefs.battlefieldCardStyle === "frame" ? "selected" : "outline"}
                     size="sm"
                     onClick={() => prefs.setBattlefieldCardStyle("frame")}
                   >
-                    Mini-frame
+                    <Trans>Mini-frame</Trans>
                   </Button>
                 </div>
                 <BattlefieldStylePreview style={prefs.battlefieldCardStyle} />
@@ -770,8 +773,8 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`In-game Animations`}
-              description={`Decorative board effects \u2014 creature entrance stomp + dust, stat and damage pops, glow pulses. Turn these off to save performance on weaker hardware; the board still works (cards move, state indicators and damage numbers stay).`}
+              title={t`In-game Animations`}
+              description={t`Decorative board effects \u2014 creature entrance stomp + dust, stat and damage pops, glow pulses. Turn these off to save performance on weaker hardware; the board still works (cards move, state indicators and damage numbers stay).`}
             >
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -779,22 +782,22 @@ export default function Settings() {
                   size="sm"
                   onClick={() => prefs.setInGameAnimations(true)}
                 >
-                  On
+                  <Trans>On</Trans>
                 </Button>
                 <Button
                   variant={!prefs.inGameAnimations ? "selected" : "outline"}
                   size="sm"
                   onClick={() => prefs.setInGameAnimations(false)}
                 >
-                  Off
+                  <Trans>Off</Trans>
                 </Button>
               </div>
             </PreferenceCard>
 
             {isFeatureEnabled("ironsmithRuntime") && IRONSMITH_WASM_AVAILABLE && (
               <PreferenceCard
-                title={`Ironsmith engine (experimental)`}
-                description={`Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough \u2014 off by default. Leave this off unless you're testing Ironsmith.`}
+                title={t`Ironsmith engine (experimental)`}
+                description={t`Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough \u2014 off by default. Leave this off unless you're testing Ironsmith.`}
               >
                 <div className="flex flex-wrap gap-2">
                   <Button
@@ -802,22 +805,22 @@ export default function Settings() {
                     size="sm"
                     onClick={() => prefs.setIronsmithRuntimeEnabled(true)}
                   >
-                    On
+                    <Trans>On</Trans>
                   </Button>
                   <Button
                     variant={!prefs.ironsmithRuntimeEnabled ? "selected" : "outline"}
                     size="sm"
                     onClick={() => prefs.setIronsmithRuntimeEnabled(false)}
                   >
-                    Off
+                    <Trans>Off</Trans>
                   </Button>
                 </div>
               </PreferenceCard>
             )}
 
             <PreferenceCard
-              title={`Opponent layout`}
-              description={`Focus on one opponent, or keep every opponent field equally visible.`}
+              title={t`Opponent layout`}
+              description={t`Focus on one opponent, or keep every opponent field equally visible.`}
             >
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -825,21 +828,21 @@ export default function Settings() {
                   size="sm"
                   onClick={() => prefs.setOpponentLayout("focused")}
                 >
-                  Focused
+                  <Trans>Focused</Trans>
                 </Button>
                 <Button
                   variant={prefs.opponentLayout === "overview" ? "selected" : "outline"}
                   size="sm"
                   onClick={() => prefs.setOpponentLayout("overview")}
                 >
-                  Overview
+                  <Trans>Overview</Trans>
                 </Button>
               </div>
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Peer to Peer`}
-              description={`Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled.`}
+              title={t`Peer to Peer`}
+              description={t`Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled.`}
             >
               <div className="flex flex-wrap gap-2">
                 <Button
@@ -847,21 +850,21 @@ export default function Settings() {
                   size="sm"
                   onClick={() => prefs.setDirectTransport(true)}
                 >
-                  On
+                  <Trans>On</Trans>
                 </Button>
                 <Button
                   variant={!prefs.directTransport ? "selected" : "outline"}
                   size="sm"
                   onClick={() => prefs.setDirectTransport(false)}
                 >
-                  Off
+                  <Trans>Off</Trans>
                 </Button>
               </div>
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Hand Card Style`}
-              description={`Printed card shows the card image. Dynamic view uses the card's current rules and game state; each card can still be switched.`}
+              title={t`Hand Card Style`}
+              description={t`Printed card shows the card image. Dynamic view uses the card's current rules and game state; each card can still be switched.`}
             >
               <div className="flex flex-wrap gap-2">
                 {inlineCardStyleOptions().map((option) => (
@@ -878,8 +881,8 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Default Stack Card View`}
-              description={`Choose which face stack cards show when they appear. You can still switch individual cards.`}
+              title={t`Default Stack Card View`}
+              description={t`Choose which face stack cards show when they appear. You can still switch individual cards.`}
             >
               <div className="flex flex-wrap gap-2">
                 {inlineCardStyleOptions().map((option) => (
@@ -896,8 +899,8 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Card Preview Style`}
-              description={`Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state.`}
+              title={t`Card Preview Style`}
+              description={t`Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state.`}
             >
               <div className="flex flex-wrap gap-2">
                 {inGameCardPreviewStyleOptions().map((option) => (
@@ -914,9 +917,9 @@ export default function Settings() {
             </PreferenceCard>
 
             <PreferenceCard
-              title={`Flash duration`}
-              value={`${flashDurationMs}ms`}
-              description={`Card-play and turn-start flash duration.`}
+              title={t`Flash duration`}
+              value={t`${flashDurationMs}ms`}
+              description={t`Card-play and turn-start flash duration.`}
             >
               <input
                 type="range"
@@ -932,7 +935,7 @@ export default function Settings() {
           {playmatEditorOpen && (
             <PlaymatEditorModal
               onClose={() => setPlaymatEditorOpen(false)}
-              title={`Default Playmat`}
+              title={t`Default Playmat`}
               playmat={defaultPlaymat}
               storedSettings={prefs.defaultPlaymatSettings}
               playmatAssetId={prefs.defaultPlaymatAssetId}
@@ -956,21 +959,21 @@ export default function Settings() {
                   size="sm"
                   onClick={() => setTheme("light")}
                 >
-                  Light
+                  <Trans>Light</Trans>
                 </Button>
                 <Button
                   variant={theme === "dark" ? "selected" : "outline"}
                   size="sm"
                   onClick={() => setTheme("dark")}
                 >
-                  Dark
+                  <Trans>Dark</Trans>
                 </Button>
                 <Button
                   variant={theme === "system" ? "selected" : "outline"}
                   size="sm"
                   onClick={() => setTheme("system")}
                 >
-                  System
+                  <Trans>System</Trans>
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground"><Trans>Controls app theme preference.</Trans></p>
@@ -1005,7 +1008,7 @@ export default function Settings() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium">{active?.name ?? "Select preset"}</div>
+                        <div className="text-sm font-medium">{active?.name ?? t`Select preset`}</div>
                       </div>
                       <svg
                         className="h-4 w-4 text-muted-foreground shrink-0"
@@ -1058,7 +1061,7 @@ export default function Settings() {
                             </div>
                             {prefs.appThemePreset === preset.id && (
                               <div className="text-[10px] text-primary font-medium shrink-0">
-                                Active
+                                <Trans>Active</Trans>
                               </div>
                             )}
                           </button>
@@ -1069,14 +1072,14 @@ export default function Settings() {
                 );
               })()}
               <p className="text-xs text-muted-foreground">
-                Choose a color preset. Works with both light and dark modes.
+                <Trans>Choose a color preset. Works with both light and dark modes.</Trans>
               </p>
             </div>
           </div>
 
           <div className="pt-2">
             <Input
-              placeholder={`Filter colors... (e.g. primary, counter, arrow)`}
+              placeholder={t`Filter colors... (e.g. primary, counter, arrow)`}
               value={themeColorFilter}
               onChange={(e) => setThemeColorFilter(e.target.value)}
               className="max-w-sm"
@@ -1098,7 +1101,7 @@ export default function Settings() {
                   ).length === 0
                 }
               >
-                Reset Colors
+                <Trans>Reset Colors</Trans>
               </Button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -1158,7 +1161,7 @@ export default function Settings() {
                               {editingThemeColorPath === `app.${key}` ? (
                                 <input
                                   autoFocus
-                                  aria-label={`${APP_THEME_COLOR_LABELS[key]} value`}
+                                  aria-label={t`${APP_THEME_COLOR_LABELS[key]} value`}
                                   value={editingThemeColorValue}
                                   onChange={(e) => setEditingThemeColorValue(e.target.value)}
                                   onBlur={() => commitThemeColorEdit(`app.${key}`, presetValue)}
@@ -1178,7 +1181,7 @@ export default function Settings() {
                                   type="button"
                                   className="flex-1 min-w-0 text-right text-[11px] font-mono text-muted-foreground hover:text-foreground underline-offset-2 hover:underline truncate"
                                   onClick={() => beginThemeColorEdit(`app.${key}`, activeValue)}
-                                  title={`Click to edit color value`}
+                                  title={t`Click to edit color value`}
                                 >
                                   {activeValue}
                                 </button>
@@ -1193,7 +1196,7 @@ export default function Settings() {
               })}
             </div>
             <p className="text-xs text-muted-foreground">
-              Override individual colors from the active preset.
+              <Trans>Override individual colors from the active preset.</Trans>
             </p>
           </div>
 
@@ -1201,7 +1204,7 @@ export default function Settings() {
             <div className="flex items-center justify-between gap-2">
               <Label><Trans>Game Theme Colors</Trans></Label>
               <Button size="sm" variant="outline" onClick={prefs.resetGameThemeColorOverrides}>
-                Reset Colors
+                <Trans>Reset Colors</Trans>
               </Button>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -1233,9 +1236,9 @@ export default function Settings() {
                 const miscKeys = allPaths.filter((p) => !grouped.has(p));
                 if (miscKeys.length > 0) {
                   groups.push({
-                    heading: `Other`,
+                    heading: t`Other`,
                     get description() {
-                      return `Tokens not covered by the groups above.`;
+                      return t`Tokens not covered by the groups above.`;
                     },
                     keys: miscKeys,
                   });
@@ -1326,7 +1329,7 @@ export default function Settings() {
                                     type="button"
                                     className="flex-1 min-w-0 text-right text-[11px] font-mono text-muted-foreground hover:text-foreground underline-offset-2 hover:underline truncate"
                                     onClick={() => beginThemeColorEdit(path, activeColor)}
-                                    title={`Click to edit color value`}
+                                    title={t`Click to edit color value`}
                                   >
                                     {activeColor}
                                   </button>
@@ -1341,7 +1344,7 @@ export default function Settings() {
               })()}
             </div>
             <p className="text-xs text-muted-foreground">
-              Generated from game theme keys. Defaults come from the active preset.
+              <Trans>Generated from game theme keys. Defaults come from the active preset.</Trans>
             </p>
           </div>
         </section>

@@ -1,3 +1,5 @@
+import { t, plural } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,7 +82,7 @@ export function TablesList({
     } catch (error) {
       const code = error instanceof Error ? error.message : "";
       const message = USER_FACING_ERROR_MESSAGES[code as ServerErrorCode];
-      toast.error(message ?? `Couldn't join the table.`);
+      toast.error(message ?? t`Couldn't join the table.`);
     } finally {
       setJoiningRoomId(null);
     }
@@ -161,10 +163,10 @@ export function TablesList({
           <section className="space-y-3">
             <div>
               <h2 className="font-serif text-3xl font-light sm:text-4xl">
-                Tables from other players
+                <Trans>Tables from other players</Trans>
               </h2>
               <p className="ml-2 mt-2 text-xs text-muted-foreground">
-                Join a table that is already waiting for players.
+                <Trans>Join a table that is already waiting for players.</Trans>
               </p>
             </div>
 
@@ -174,8 +176,8 @@ export function TablesList({
                 <Input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  aria-label={`Search tables`}
-                  placeholder={`Search tables\u2026`}
+                  aria-label={t`Search tables`}
+                  placeholder={t`Search tables…`}
                   className="h-8 pl-8 text-sm pointer-coarse:h-10 pointer-coarse:text-base"
                 />
               </div>
@@ -183,7 +185,7 @@ export function TablesList({
                 variant="outline"
                 onClick={onRefresh}
                 disabled={refreshDisabled || refreshing}
-                title={`Refresh tables`}
+                title={t`Refresh tables`}
                 className="h-8 w-8 shrink-0 pointer-coarse:h-10 pointer-coarse:w-10"
               >
                 <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} />
@@ -191,7 +193,7 @@ export function TablesList({
             </div>
 
             <p className="ml-2 text-xs text-muted-foreground">
-              {visibleRooms.length} {visibleRooms.length === 1 ? `table` : `tables`}
+              {plural(visibleRooms.length, { one: "# table", other: "# tables" })}
             </p>
 
             {visibleRooms.length > 0 ? (
@@ -209,8 +211,8 @@ export function TablesList({
             ) : (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 {hasTables
-                  ? `No tables match your search.`
-                  : `No player tables waiting. Set one up above.`}
+                  ? t`No tables match your search.`
+                  : t`No player tables waiting. Set one up above.`}
               </p>
             )}
           </section>

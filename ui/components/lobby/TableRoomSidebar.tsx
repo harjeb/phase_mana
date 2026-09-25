@@ -1,7 +1,16 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
-import { Bot, Check, ChevronDown, Copy, LockKeyhole, LogOut, Shield, UserPlus } from "lucide-react";
+import {
+  Bot,
+  Check,
+  ChevronDown,
+  Copy,
+  LockKeyhole,
+  LogOut,
+  Shield,
+  UserPlus,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { InvitePlayersDialog } from "@/components/lobby/InvitePlayersDialog";
@@ -66,7 +75,9 @@ export function TableRoomSidebar({
 }: TableRoomSidebarProps) {
   const [copiedPassword, setCopiedPassword] = useState(false);
   const [inviting, setInviting] = useState(false);
-  const invitesEnabled = useServerStore((s) => s.relayFeatures.includes(RELAY_FEATURE.RoomInvites));
+  const invitesEnabled = useServerStore((s) =>
+    s.relayFeatures.includes(RELAY_FEATURE.RoomInvites),
+  );
   const inLobby = room.status === "Lobby";
   const allowsMultiplayer = MULTIPLAYER_FORMATS.includes(room.format);
   async function copyPassword() {
@@ -83,10 +94,14 @@ export function TableRoomSidebar({
   return (
     <aside className="grid content-start gap-4 sm:grid-cols-2 xl:grid-cols-1">
       <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-        <h2 className="truncate font-serif text-xl font-light">{room.room_name}</h2>
+        <h2 className="truncate font-serif text-xl font-light">
+          {room.room_name}
+        </h2>
         <dl className="mt-3 space-y-3 text-sm">
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground"><Trans>Format</Trans></dt>
+            <dt className="text-muted-foreground">
+              <Trans>Format</Trans>
+            </dt>
             <dd>
               {inLobby && isController && !isLimitedRoom && onSetFormat ? (
                 <DropdownMenu>
@@ -113,7 +128,9 @@ export function TableRoomSidebar({
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground"><Trans>Seats</Trans></dt>
+            <dt className="text-muted-foreground">
+              <Trans>Seats</Trans>
+            </dt>
             <dd>
               {inLobby && isController && !isLimitedRoom && onSetMaxPlayers ? (
                 <DropdownMenu>
@@ -135,10 +152,10 @@ export function TableRoomSidebar({
                             count < room.players.length
                           }
                         >
-                          {count} players
+                          <Trans>{count} players</Trans>
                           {blockedByFormat && (
                             <span className="ml-2 text-xs text-muted-foreground">
-                              (Not available in "{room.format}")
+                              <Trans>(Not available in "{room.format}")</Trans>
                             </span>
                           )}
                         </DropdownMenuItem>
@@ -152,19 +169,24 @@ export function TableRoomSidebar({
             </dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="text-muted-foreground"><Trans>Privacy</Trans></dt>
+            <dt className="text-muted-foreground">
+              <Trans>Privacy</Trans>
+            </dt>
             <dd className="flex items-center gap-1.5">
               {room.password_protected ? (
                 <>
-                  <LockKeyhole aria-hidden="true" className="h-3.5 w-3.5 text-format-badge-amber" />
-                  Password protected
+                  <LockKeyhole
+                    aria-hidden="true"
+                    className="h-3.5 w-3.5 text-format-badge-amber"
+                  />
+                  <Trans>Password protected</Trans>
                   {roomPassword && (
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={copyPassword}
-                      title={`Copy password`}
-                      aria-label={`Copy password`}
+                      title={t`Copy password`}
+                      aria-label={t`Copy password`}
                       className="-my-1 h-7 w-7"
                     >
                       {copiedPassword ? <Check /> : <Copy />}
@@ -172,31 +194,43 @@ export function TableRoomSidebar({
                   )}
                 </>
               ) : (
-                `Open table`
+                t`Open table`
               )}
             </dd>
           </div>
           {room.draft_config && (
             <>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground"><Trans>Packs</Trans></dt>
+                <dt className="text-muted-foreground">
+                  <Trans>Packs</Trans>
+                </dt>
                 <dd className="font-medium">{room.draft_config.rounds}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground"><Trans>Picks per pass</Trans></dt>
-                <dd className="font-medium">{room.draft_config.picks_per_pass}</dd>
+                <dt className="text-muted-foreground">
+                  <Trans>Picks per pass</Trans>
+                </dt>
+                <dd className="font-medium">
+                  {room.draft_config.picks_per_pass}
+                </dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="text-muted-foreground"><Trans>Empty seats</Trans></dt>
+                <dt className="text-muted-foreground">
+                  <Trans>Empty seats</Trans>
+                </dt>
                 <dd className="text-right font-medium">
-                  {room.draft_config.fill_with_bots ? `Fill with bots` : `Humans only`}
+                  {room.draft_config.fill_with_bots
+                    ? t`Fill with bots`
+                    : t`Humans only`}
                 </dd>
               </div>
             </>
           )}
           {room.sealed_config && (
             <div className="flex items-center justify-between gap-3">
-              <dt className="text-muted-foreground"><Trans>Packs per player</Trans></dt>
+              <dt className="text-muted-foreground">
+                <Trans>Packs per player</Trans>
+              </dt>
               <dd className="font-medium">{room.sealed_config.num_boosters}</dd>
             </div>
           )}
@@ -204,26 +238,32 @@ export function TableRoomSidebar({
       </section>
 
       <section className="rounded-xl border bg-card/85 p-4 backdrop-blur-md">
-        <h2 className="text-sm font-semibold"><Trans>Table controls</Trans></h2>
+        <h2 className="text-sm font-semibold">
+          <Trans>Table controls</Trans>
+        </h2>
         <div className="mt-3 grid gap-2">
           {inLobby && !isOpenFormat && !needsDeck && (
             <Button variant="outline" onClick={onOpenDeckDialog}>
-              <Shield /> Change deck
+              <Shield /> <Trans>Change deck</Trans>
             </Button>
           )}
           {inLobby && openSeats > 0 && invitesEnabled && (
             <Button variant="outline" onClick={() => setInviting(true)}>
-              <UserPlus /> Invite players
+              <UserPlus /> <Trans>Invite players</Trans>
             </Button>
           )}
-          {inLobby && isController && openSeats > 0 && !isOpenFormat && onAddBot && (
-            <Button variant="outline" onClick={onAddBot}>
-              <Bot /> Add a bot
-            </Button>
-          )}
+          {inLobby &&
+            isController &&
+            openSeats > 0 &&
+            !isOpenFormat &&
+            onAddBot && (
+              <Button variant="outline" onClick={onAddBot}>
+                <Bot /> <Trans>Add a bot</Trans>
+              </Button>
+            )}
           {inLobby && !isController && myPlayerReady && (
             <Button variant="outline" onClick={() => onSetReady(false)}>
-              Change readiness
+              <Trans>Change readiness</Trans>
             </Button>
           )}
           <Button
@@ -231,7 +271,7 @@ export function TableRoomSidebar({
             onClick={onLeaveRoom}
             className="text-muted-foreground hover:text-destructive"
           >
-            <LogOut /> Leave table
+            <LogOut /> <Trans>Leave table</Trans>
           </Button>
         </div>
       </section>

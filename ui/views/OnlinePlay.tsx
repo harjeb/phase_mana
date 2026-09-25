@@ -31,7 +31,7 @@ export default function OnlinePlay() {
   const state = useSyncExternalStore(subscribeOnline, onlineStatus);
   const [mode, setMode] = useState<"constructed" | "draft">("constructed");
   const [endpoint, setEndpoint] = useState(state.endpoint || latestOnlineEndpoint() || "ws://127.0.0.1:9374/ws");
-  const [name, setName] = useState("Player");
+  const [name, setName] = useState(() => t`Player`);
   const [code, setCode] = useState("");
   const [players, setPlayers] = useState(2);
   const [deck, setDeck] = useState("");
@@ -83,7 +83,7 @@ export default function OnlinePlay() {
     saveHostedRoom({ endpoint: host.endpoint, code: "" });
     setEndpoint(host.endpoint);
     try {
-      const room = await createPrivateRoom(host.endpoint, { deck: payload, displayName: name.trim() || "Player", players });
+      const room = await createPrivateRoom(host.endpoint, { deck: payload, displayName: name.trim() || t`Player`, players });
       const share = inviteEndpoint(onlineStatus().publicUrl, host.lanEndpoints[0] ?? host.endpoint);
       const saved = { endpoint: host.endpoint, code: encodeInvite({ endpoint: share.endpoint, gameCode: room.gameCode, password: room.password }), scope: share.scope };
       saveHostedRoom(saved);
@@ -105,7 +105,7 @@ export default function OnlinePlay() {
     setCode(parsed.gameCode);
     setEndpoint(parsed.endpoint);
     await joinPrivateRoom(parsed.endpoint, {
-      deck: payload, displayName: name.trim() || "Player", gameCode: parsed.gameCode, password: parsed.password,
+      deck: payload, displayName: name.trim() || t`Player`, gameCode: parsed.gameCode, password: parsed.password,
     });
   });
 
@@ -123,14 +123,14 @@ export default function OnlinePlay() {
       if (kind === "reconnect") return connectOnline(endpoint, "reconnect");
       const data = deckPayload();
       if (kind === "create") connectOnline(endpoint, { type: "CreateGameWithSettings", data: {
-        deck: data, display_name: name.trim() || "Player", public: false, password: null,
+        deck: data, display_name: name.trim() || t`Player`, public: false, password: null,
         timer_seconds: null, player_count: players,
       } });
       else {
         if (!code.trim()) throw new Error(t`Enter the room code.`);
         connectOnline(endpoint, { type: "JoinGameWithPassword", data: {
           game_code: code.trim().toUpperCase(), deck: data,
-          display_name: name.trim() || "Player", password: null,
+          display_name: name.trim() || t`Player`, password: null,
         } });
       }
     } catch (cause) { setError(cause instanceof Error ? cause.message : String(cause)); }
@@ -195,7 +195,7 @@ export default function OnlinePlay() {
     </>}
     <Button variant="outline" onClick={() => connect("reconnect")} disabled={!!busy}><Trans>Reconnect saved seat</Trans></Button>
     <Button variant="outline" onClick={closeOnline}><Trans>Disconnect</Trans></Button>
-    {state.code && <p>Room code: <strong>{state.code}</strong></p>}
+    {state.code && <p><Trans>Room code: <strong>{state.code}</strong></Trans></p>}
     <p role="status">{state.message}</p>
     {error && <p role="alert" className="text-destructive">{error}</p>}
   </section>;

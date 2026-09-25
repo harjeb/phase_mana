@@ -8,6 +8,10 @@ export interface GameLogEntry {
   message: string;
   entryType: GameLogEntryType;
   timestampMs: number;
+  /** Phase history position and engine turn/phase, when supplied by the host. */
+  seq?: number;
+  turn?: number;
+  phase?: string;
   playerId?: string;
   cardId?: string;
   sourceCardId?: string;
@@ -33,6 +37,9 @@ export function normalizeGameLogPayload(payload: unknown): GameLogEntry {
       message,
       entryType,
       timestampMs,
+      seq: typeof obj.seq === "number" ? obj.seq : undefined,
+      turn: typeof obj.turn === "number" ? obj.turn : undefined,
+      phase: typeof obj.phase === "string" ? obj.phase : undefined,
       playerId: typeof obj.playerId === "string" ? obj.playerId : undefined,
       cardId: typeof obj.cardId === "string" ? obj.cardId : undefined,
       sourceCardId: typeof obj.sourceCardId === "string" ? obj.sourceCardId : undefined,

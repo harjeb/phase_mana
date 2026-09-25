@@ -1,3 +1,5 @@
+import { msg, plural, t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { LibraryBig, Shuffle, Swords, Trophy, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UpdateCallout } from "@/components/layout/UpdateCallout";
@@ -17,34 +19,35 @@ import { useServerStore } from "@/stores/useServerStore";
 const MODES = [
   {
     to: ROUTES.PLAY_OFFLINE_CONSTRUCTED,
-    label: `Play Offline`,
-    desc: "Choose your decks and play against the AI at your own pace.",
+    label: msg`Play Offline`,
+    desc: msg`Choose your decks and play against the AI at your own pace.`,
     icon: Swords,
     tone: "primary",
   },
   {
     to: "/play/online",
-    label: `Multiplayer`,
-    desc: "Join an open table or create a room for your group.",
+    label: msg`Multiplayer`,
+    desc: msg`Join an open table or create a room for your group.`,
     icon: Users,
     tone: "secondary",
   },
   {
     to: "/play/tournaments",
-    label: `Tournaments`,
-    desc: "Organize pairings, report results and follow standings.",
+    label: msg`Tournaments`,
+    desc: msg`Organize pairings, report results and follow standings.`,
     icon: Trophy,
     tone: "secondary",
   },
   {
     to: ROUTES.PLAY_OFFLINE_CASUAL,
-    label: `Casual Modes`,
-    desc: "Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets.",
+    label: msg`Casual Modes`,
+    desc: msg`Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets.`,
     icon: Shuffle,
     tone: "amber",
   },
 ];
 export function PlayHome() {
+  const { i18n } = useLingui();
   const { quickPlay, quickPlayPreset, quickPlayCommunity, pendingDeckId, playersDialog } =
     useQuickPlay();
   const [resumeSession, setResumeSession] = useState(peekActiveGameSession);
@@ -62,9 +65,10 @@ export function PlayHome() {
     s.status === "signedIn" ? (s.account?.handle ?? null) : null,
   );
   const openTables = rooms.filter((room) => room.status === "Lobby").length;
+  const onlinePlayers = players.length;
   const lobbyTeaser =
     connected && (openTables > 0 || players.length > 0)
-      ? `${openTables} ${openTables === 1 ? "table" : "tables"} open · ${players.length} online`
+      ? t`${plural(openTables, { one: "# table open", other: "# tables open" })} · ${onlinePlayers} online`
       : null;
   const communityEnabled = isFeatureEnabled("deckHub");
   useEffect(() => {
@@ -97,10 +101,10 @@ export function PlayHome() {
         <div className="flex min-h-full w-full flex-col gap-6 px-4 py-6 sm:gap-7 sm:px-6 sm:py-9 lg:px-8">
           <header className="max-w-xl sm:pt-2">
             <h1 className="font-serif text-3xl font-light tracking-[0.02em] text-foreground sm:text-4xl">
-              Ready to play?
+              <Trans>Ready to play?</Trans>
             </h1>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Start a match your way, or open a deck from your collection.
+              <Trans>Start a match your way, or open a deck from your collection.</Trans>
             </p>
           </header>
 
@@ -116,13 +120,13 @@ export function PlayHome() {
               resumePending && "hidden",
             )}
           >
-            <section aria-label={`Play modes`} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <section aria-label={t`Play modes`} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {MODES.map(({ to, label, desc, icon, tone }) => (
                 <FeatureTile
                   key={to}
                   to={to}
-                  label={label}
-                  desc={desc}
+                  label={i18n._(label)}
+                  desc={i18n._(desc)}
                   icon={icon}
                   tone={tone}
                   size="lg"
@@ -161,8 +165,8 @@ export function PlayHome() {
             >
               <FeatureTile
                 to={ROUTES.HUB}
-                label={`Explore community decks`}
-                desc="Browse complete decklists, discover popular builds, and save a version to your collection."
+                label={t`Explore community decks`}
+                desc={t`Browse complete decklists, discover popular builds, and save a version to your collection.`}
                 icon={LibraryBig}
                 tone="community"
                 size="sm"

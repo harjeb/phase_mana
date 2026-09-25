@@ -1,3 +1,4 @@
+import { useLingui } from "@lingui/react/macro";
 import { Flag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlayerAvatar } from "@/components/lobby/PlayerAvatar";
@@ -22,6 +23,7 @@ function formatTime(sentAtMs: number): string {
   });
 }
 export function ChatMessageRow({ entry, mine, player, continued, onReport }: ChatMessageRowProps) {
+  const { t } = useLingui();
   if (entry.system) {
     return <p className="py-0.5 text-center text-sm italic text-muted-foreground">{entry.text}</p>;
   }
@@ -49,7 +51,7 @@ export function ChatMessageRow({ entry, mine, player, continued, onReport }: Cha
           player={player}
           status={
             <span>
-              {player.room_id ? `At a table` : player.local_game ? `Playing solo` : `Available`}
+              {player.room_id ? t`At a table` : player.local_game ? t`Playing solo` : t`Available`}
             </span>
           }
           side="left"
@@ -88,8 +90,8 @@ export function ChatMessageRow({ entry, mine, player, continued, onReport }: Cha
           variant="ghost"
           className="h-6 w-6 shrink-0 self-center text-muted-foreground opacity-0 hover:text-destructive group-hover:opacity-100 focus-visible:opacity-100"
           onClick={() => onReport(entry)}
-          aria-label={`Report ${name}`}
-          title={`Report this message`}
+          aria-label={t`Report ${name}`}
+          title={t`Report this message`}
         >
           <Flag className="h-3 w-3" />
         </Button>

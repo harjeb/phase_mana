@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Loader2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 interface DeckCardPlayButtonProps {
@@ -23,7 +24,7 @@ export function DeckCardPlayButton({
       ) : (
         <Play className="h-3.5 w-3.5" />
       )}
-      {playing ? `Starting\u2026` : `Play`}
+      {playing ? t`Starting…` : t`Play`}
     </Button>
   );
 }

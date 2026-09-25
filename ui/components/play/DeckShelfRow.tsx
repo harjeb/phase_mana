@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,7 +57,7 @@ export function DeckShelfRow({ label, children }: DeckShelfRowProps) {
         <Button
           size="icon"
           variant="secondary"
-          aria-label={`Scroll ${label} left`}
+          aria-label={t`Scroll ${label} left`}
           onClick={() => scrollByPage(-1)}
           className="absolute -left-2 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 rounded-full shadow-lg sm:inline-flex"
         >
@@ -67,7 +68,7 @@ export function DeckShelfRow({ label, children }: DeckShelfRowProps) {
         <Button
           size="icon"
           variant="secondary"
-          aria-label={`Scroll ${label} right`}
+          aria-label={t`Scroll ${label} right`}
           onClick={() => scrollByPage(1)}
           className="absolute -right-2 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 rounded-full shadow-lg sm:inline-flex"
         >

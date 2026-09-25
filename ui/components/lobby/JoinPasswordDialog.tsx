@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -45,8 +46,8 @@ export function JoinPasswordDialog({ room, onClose, onJoin }: JoinPasswordDialog
       setPassword("");
       setError(
         e instanceof Error && e.message === JOIN_REJECTED_INCORRECT_PASSWORD
-          ? "Wrong password"
-          : "Couldn't join — try again",
+          ? t`Wrong password`
+          : t`Couldn't join — try again`,
       );
       inputRef.current?.focus();
     } finally {
@@ -58,9 +59,9 @@ export function JoinPasswordDialog({ room, onClose, onJoin }: JoinPasswordDialog
       <DialogContent className="max-w-sm">
         <DialogTitle className="flex items-center gap-2">
           <Lock className="h-4 w-4" />
-          Password-Protected Table
+          <Trans>Password-Protected Table</Trans>
         </DialogTitle>
-        <DialogDescription>Enter the password to join {room?.room_name}.</DialogDescription>
+        <DialogDescription><Trans>Enter the password to join {room?.room_name}.</Trans></DialogDescription>
 
         <div className="space-y-1.5">
           <div
@@ -86,7 +87,7 @@ export function JoinPasswordDialog({ room, onClose, onJoin }: JoinPasswordDialog
               onKeyDown={(e) => {
                 if (e.key === "Enter") void submit();
               }}
-              aria-label={`Password`}
+              aria-label={t`Password`}
               className="absolute inset-0 h-full w-full cursor-text opacity-0"
             />
             {password.length === 0 && !focused && (
@@ -117,14 +118,14 @@ export function JoinPasswordDialog({ room, onClose, onJoin }: JoinPasswordDialog
 
         <DialogFooter>
           <Button variant="ghost" onClick={close} disabled={submitting}>
-            Cancel
+            <Trans>Cancel</Trans>
           </Button>
           <Button
             variant="primary"
             onClick={() => void submit()}
             disabled={password.length === 0 || submitting}
           >
-            {submitting ? `Joining…` : `Join`}
+            {submitting ? t`Joining…` : t`Join`}
           </Button>
         </DialogFooter>
       </DialogContent>

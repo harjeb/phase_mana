@@ -1,0 +1,21 @@
+{
+  "<0>{name}</0> <1>invited you to {0}</1>": "<0>{name}</0><1>邀请你参加{0}</1>",
+  "a {0} game": "一场{0}对局",
+  "a {pool} draft": "一场 {pool} 轮抽",
+  "a {pool} sealed game": "一场 {pool} 现开对局",
+  "a draft": "一场轮抽",
+  "a game": "一场对局",
+  "a sealed game": "一场现开对局",
+  "Ignore": "忽略",
+  "Invite": "邀请",
+  "Invite players": "邀请玩家",
+  "Invite to your table": "邀请加入你的牌桌",
+  "Invited": "已邀请",
+  "Join table": "加入牌桌",
+  "Maintainer": "维护者",
+  "No players match “{0}”": "没有符合“{0}”的玩家",
+  "Nobody is free right now": "目前没有空闲玩家",
+  "Password-protected table": "需要密码的牌桌",
+  "Report": "举报",
+  "Search players…": "搜索玩家…"
+}

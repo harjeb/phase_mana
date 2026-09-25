@@ -125,9 +125,10 @@ export function ActionLog({
           .reverse()
           .map((entry, i) => {
             const style = getStyleForType(entry.entryType, entry.message);
+            const turn = entry.turn;
             return (
               <div
-                key={i}
+                key={entry.seq != null ? `seq-${entry.seq}` : i}
                 className={cn(
                   "py-1 border-b border-border/40 last:border-b-0",
                   entry.entryType === "warning" && "text-warning font-semibold",
@@ -156,6 +157,11 @@ export function ActionLog({
                   <span className="text-[10px] text-muted-foreground/80">
                     {formatTs(entry.timestampMs)}
                   </span>
+                  {turn != null && (
+                    <span className="text-[10px] text-muted-foreground/80">
+                      {t`Turn ${turn}`}
+                    </span>
+                  )}
                   {entry.playerId && (
                     <span className="text-[10px] text-muted-foreground/80">
                       {resolvePlayerName(entry.playerId)}

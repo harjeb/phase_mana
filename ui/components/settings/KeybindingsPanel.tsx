@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { RotateCcw, Search } from "lucide-react";
@@ -51,11 +52,11 @@ export function KeybindingsPanel() {
         <div>
           <h2 className="text-lg font-semibold"><Trans>Keyboard shortcuts</Trans></h2>
           <p className="text-xs text-muted-foreground">
-            Click a shortcut, then press the key combination you want.
+            <Trans>Click a shortcut, then press the key combination you want.</Trans>
           </p>
         </div>
         <Button size="sm" variant="ghost" onClick={resetAll}>
-          Reset all
+          <Trans>Reset all</Trans>
         </Button>
       </div>
 
@@ -64,13 +65,13 @@ export function KeybindingsPanel() {
         <Input
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          placeholder={`Filter shortcuts\u2026`}
+          placeholder={t`Filter shortcuts…`}
           className="pl-8"
         />
       </div>
 
       {categories.length === 0 && (
-        <p className="text-sm text-muted-foreground">No shortcuts match “{filter}”.</p>
+        <p className="text-sm text-muted-foreground"><Trans>No shortcuts match “{filter}”.</Trans></p>
       )}
 
       {categories.map((category) => (
@@ -96,13 +97,13 @@ export function KeybindingsPanel() {
                         style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
                         onClick={() => setCapturingId(isCapturing ? null : b.id)}
                       >
-                        {isCapturing ? `Press keys…` : combo ? formatCombo(combo) : `Unbound`}
+                        {isCapturing ? t`Press keys…` : combo ? formatCombo(combo) : t`Unbound`}
                       </Button>
                       {isCustom && (
                         <Button
                           size="icon-sm"
                           variant="ghost"
-                          title={`Reset to default`}
+                          title={t`Reset to default`}
                           onClick={() => resetBinding(b.id)}
                         >
                           <RotateCcw className="h-3.5 w-3.5" />

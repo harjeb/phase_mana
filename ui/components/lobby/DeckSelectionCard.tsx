@@ -1,3 +1,5 @@
+import { t, plural } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { AlertCircle, Bot, Check, User } from "lucide-react";
 import { DeckCardSurface } from "@/components/deck/DeckCardSurface";
 import { DeckLabelBadge } from "@/components/deck/DeckLabelBadge";
@@ -47,14 +49,14 @@ function getDeckTypeBreakdown(
     types?: string[];
   }[],
 ): string {
-  if (cards.length === 0) return "Empty deck";
+  if (cards.length === 0) return t`Empty deck`;
   const creatures = cards.filter((card) => card.types?.includes("Creature")).length;
   const lands = cards.filter((card) => card.types?.includes("Land")).length;
   const spells = cards.length - creatures - lands;
   const parts: string[] = [];
-  if (creatures > 0) parts.push(`${creatures} creature${creatures === 1 ? "" : "s"}`);
-  if (spells > 0) parts.push(`${spells} spell${spells === 1 ? "" : "s"}`);
-  if (lands > 0) parts.push(`${lands} land${lands === 1 ? "" : "s"}`);
+  if (creatures > 0) parts.push(plural(creatures, { one: "# creature", other: "# creatures" }));
+  if (spells > 0) parts.push(plural(spells, { one: "# spell", other: "# spells" }));
+  if (lands > 0) parts.push(plural(lands, { one: "# land", other: "# lands" }));
   return parts.join(" · ");
 }
 export function DeckSelectionCard({
@@ -102,7 +104,7 @@ export function DeckSelectionCard({
   const titleColorClass = getDeckNameColorClass(cards, isPreset || isHub ? color : undefined);
   const breakdown = isHub
     ? author
-      ? `by ${author}`
+      ? t`by ${author}`
       : desc
     : isPreset
       ? desc
@@ -112,13 +114,13 @@ export function DeckSelectionCard({
   const hasVsSide = isPlayerDeck || isOpponentDeck;
   const assignment =
     isPlayerDeck && isOpponentDeck
-      ? ", assigned to you and the AI"
+      ? t`, assigned to you and the AI`
       : isPlayerDeck
-        ? ", assigned to you"
+        ? t`, assigned to you`
         : isOpponentDeck
-          ? ", assigned to the AI"
+          ? t`, assigned to the AI`
           : isSelected
-            ? ", selected"
+            ? t`, selected`
             : "";
   // Derive side-specific inline styles from theme CSS vars
   const sideStyle: React.CSSProperties | undefined = hasVsSide
@@ -138,7 +140,7 @@ export function DeckSelectionCard({
   return (
     <DeckCardSurface
       title={name}
-      ariaLabel={`${name}${assignment}${isLegal ? "" : ", not legal"}`}
+      ariaLabel={`${name}${assignment}${isLegal ? "" : t`, not legal`}`}
       onOpen={onSelect}
       onDoubleClick={() => {
         if (!isTouch) onActivate?.();
@@ -222,7 +224,7 @@ export function DeckSelectionCard({
                     cover ? "text-text-on-tinted/85" : "text-muted-foreground",
                   )}
                 >
-                  Colorless
+                  <Trans>Colorless</Trans>
                 </span>
               ) : null}
             </>
@@ -233,10 +235,10 @@ export function DeckSelectionCard({
           {!dense && (
             <span className="text-[10px] text-text-on-tinted/85">
               {isHub
-                ? `Community · ${cardCount ?? cards.length} cards`
+                ? t`Community · ${cardCount ?? cards.length} cards`
                 : isPreset
-                  ? `Preset deck`
-                  : `${cards.length} cards`}
+                  ? t`Preset deck`
+                  : t`${cards.length} cards`}
             </span>
           )}
           {badge && (
