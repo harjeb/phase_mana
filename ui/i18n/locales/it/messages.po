@@ -754,6 +754,10 @@ msgstr ""
 msgid "Activate an ability"
 msgstr ""
 
+#: ui/lib/keybindings.ts:234
+msgid "Activate focused preview action"
+msgstr ""
+
 #: ui/views/Settings.tsx:1064
 msgid "Active"
 msgstr ""
@@ -796,6 +800,10 @@ msgstr ""
 
 #: ui/views/DeckEditor.tsx:736
 msgid "Add deck"
+msgstr ""
+
+#: ui/lib/keybindings.ts:186
+msgid "Add one copy of selected cards"
 msgstr ""
 
 #: ui/components/limited/LimitedDeckBuilder.tsx:396
@@ -1117,6 +1125,7 @@ msgid "Base preset"
 msgstr ""
 
 #: ui/components/game/ManualTabletopControls.tsx:383
+#: ui/lib/keybindings.ts:9
 msgid "Battlefield"
 msgstr ""
 
@@ -1441,6 +1450,10 @@ msgstr ""
 msgid "Card quantity changes across the open deck."
 msgstr ""
 
+#: ui/lib/keybindings.ts:7
+msgid "Card search"
+msgstr ""
+
 #: ui/components/layout/navDestinations.ts:67
 #: ui/components/layout/TopBar.tsx:36
 #: ui/components/play/PlayHomeLinks.tsx:39
@@ -1730,7 +1743,7 @@ msgstr ""
 msgid "Clearing…"
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:55
+#: ui/components/settings/KeybindingsPanel.tsx:56
 msgid "Click a shortcut, then press the key combination you want."
 msgstr ""
 
@@ -1747,7 +1760,7 @@ msgstr ""
 msgid "Clipboard does not contain a recognized card list"
 msgstr ""
 
-#: ui/components/KeyboardShortcutsDialog.tsx:88
+#: ui/components/KeyboardShortcutsDialog.tsx:90
 #: ui/components/ui/dialog.tsx:41
 #: ui/components/ui/sheet.tsx:56
 msgid "Close"
@@ -1755,6 +1768,10 @@ msgstr ""
 
 #: ui/components/game/modals/Modal.tsx:231
 msgid "Close (Esc)"
+msgstr ""
+
+#: ui/lib/keybindings.ts:240
+msgid "Close card preview"
 msgstr ""
 
 #: ui/components/game/modals/Modal.tsx:232
@@ -1789,6 +1806,14 @@ msgstr ""
 #: ui/components/companion/DiceMenu.tsx:58
 #: ui/components/companion/DiceTray.tsx:48
 msgid "Coin flip"
+msgstr ""
+
+#: ui/lib/keybindings.ts:258
+msgid "Collapse / expand the stack"
+msgstr ""
+
+#: ui/lib/keybindings.ts:108
+msgid "Collapse all deck sections"
 msgstr ""
 
 #: ui/stores/useCollectionStore.ts:293
@@ -2112,6 +2137,10 @@ msgstr ""
 msgid "Copy rows from a spreadsheet"
 msgstr ""
 
+#: ui/lib/keybindings.ts:138
+msgid "Copy selected cards"
+msgstr ""
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:130
 msgid "Copy your deck as text from Moxfield, then paste it below."
 msgstr ""
@@ -2312,7 +2341,7 @@ msgstr ""
 msgid "Couldn’t verify deck ownership."
 msgstr ""
 
-#: ui/stores/useScryfallStore.ts:800
+#: ui/stores/useScryfallStore.ts:799
 msgid "Couldnt find uris for printing: "
 msgstr ""
 
@@ -2415,12 +2444,16 @@ msgstr ""
 msgid "Customize playmat"
 msgstr ""
 
-#: ui/components/KeyboardShortcutsDialog.tsx:85
+#: ui/components/KeyboardShortcutsDialog.tsx:87
 msgid "Customize these in Preferences → Shortcuts."
 msgstr ""
 
 #: ui/components/OnboardingGuide.tsx:12
 msgid "Customize your deck"
+msgstr ""
+
+#: ui/lib/keybindings.ts:288
+msgid "Cycle hand order"
 msgstr ""
 
 #: ui/components/settings/AccountActionsCard.tsx:111
@@ -2490,6 +2523,10 @@ msgstr ""
 #: ui/components/editor/DeckBuilder.tsx:1166
 #: ui/views/DeckEditor.tsx:486
 msgid "Deck deleted"
+msgstr ""
+
+#: ui/lib/keybindings.ts:5
+msgid "Deck editor"
 msgstr ""
 
 #: ui/components/layout/TopBar.tsx:40
@@ -3055,6 +3092,10 @@ msgstr ""
 msgid "Exit tabletop"
 msgstr ""
 
+#: ui/lib/keybindings.ts:114
+msgid "Expand all deck sections"
+msgstr ""
+
 #: ui/components/lobby/TableSetupHostingCard.tsx:144
 msgid "experimental"
 msgstr ""
@@ -3078,6 +3119,10 @@ msgstr ""
 #: ui/components/lobby/CustomFormatDialog.tsx:237
 #: ui/components/settings/AccountActionsCard.tsx:69
 msgid "Export"
+msgstr ""
+
+#: ui/lib/keybindings.ts:83
+msgid "Export deck"
 msgstr ""
 
 #: ui/components/settings/AccountActionsCard.tsx:47
@@ -3238,7 +3283,7 @@ msgstr ""
 msgid "Filter decks..."
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:68
+#: ui/components/settings/KeybindingsPanel.tsx:69
 msgid "Filter shortcuts…"
 msgstr ""
 
@@ -3298,6 +3343,10 @@ msgstr "Mostra il retro · F"
 msgid "Flip card (F) — {0}"
 msgstr ""
 
+#: ui/lib/keybindings.ts:210
+msgid "Flip double-faced card (preview / hand)"
+msgstr ""
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:837
 msgid "Flip front · F"
 msgstr "Mostra il fronte · F"
@@ -3308,12 +3357,32 @@ msgstr "Mostra il fronte · F"
 msgid "Floating mana"
 msgstr ""
 
+#: ui/lib/keybindings.ts:294
+msgid "Focus next opponent field"
+msgstr ""
+
 #: ui/views/Settings.tsx:823
 msgid "Focus on one opponent, or keep every opponent field equally visible."
 msgstr ""
 
 #: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:124
 msgid "Focus or type here"
+msgstr ""
+
+#: ui/lib/keybindings.ts:300
+msgid "Focus previous opponent field"
+msgstr ""
+
+#: ui/lib/keybindings.ts:59
+msgid "Focus quick-add card"
+msgstr ""
+
+#: ui/lib/keybindings.ts:204
+msgid "Focus search"
+msgstr ""
+
+#: ui/lib/keybindings.ts:53
+msgid "Focus the card filter"
 msgstr ""
 
 #: ui/components/game/modals/GameSettingsModal.tsx:180
@@ -3456,6 +3525,10 @@ msgstr ""
 msgid "Gallery sections"
 msgstr ""
 
+#: ui/lib/keybindings.ts:8
+msgid "Game"
+msgstr ""
+
 #. placeholder {0}: group.heading
 #: ui/components/dev/themeEditor/ThemeTokenRail.tsx:147
 msgid "Game · {0}"
@@ -3582,6 +3655,10 @@ msgstr ""
 msgid "Global mechanics"
 msgstr ""
 
+#: ui/lib/keybindings.ts:47
+msgid "Go back"
+msgstr ""
+
 #: ui/components/companion/StatusChips.tsx:17
 msgid "Goes first"
 msgstr ""
@@ -3642,6 +3719,10 @@ msgstr ""
 
 #: ui/components/lobby/ReportPlayerDialog.tsx:41
 msgid "Hate speech"
+msgstr ""
+
+#: ui/lib/keybindings.ts:6
+msgid "Help"
 msgstr ""
 
 #: ui/components/game/panels/MiddleBarDock.tsx:116
@@ -4125,6 +4206,10 @@ msgstr ""
 msgid "Joining…"
 msgstr ""
 
+#: ui/lib/keybindings.ts:120
+msgid "Jump to next editor section"
+msgstr ""
+
 #: ui/components/editor/DeckSaveConflictDialog.tsx:52
 msgid "Keep my changes"
 msgstr ""
@@ -4133,8 +4218,8 @@ msgstr ""
 msgid "Keep playing"
 msgstr ""
 
-#: ui/components/KeyboardShortcutsDialog.tsx:36
-#: ui/components/settings/KeybindingsPanel.tsx:53
+#: ui/components/KeyboardShortcutsDialog.tsx:38
+#: ui/components/settings/KeybindingsPanel.tsx:54
 msgid "Keyboard shortcuts"
 msgstr ""
 
@@ -4750,6 +4835,18 @@ msgstr ""
 msgid "Move all ({count})"
 msgstr ""
 
+#: ui/lib/keybindings.ts:156
+msgid "Move selected cards to main deck"
+msgstr ""
+
+#: ui/lib/keybindings.ts:168
+msgid "Move selected cards to maybeboard"
+msgstr ""
+
+#: ui/lib/keybindings.ts:162
+msgid "Move selected cards to sideboard"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:423
 #: ui/components/game/ManualTabletopControls.tsx:424
 msgid "Move to exile"
@@ -4841,6 +4938,10 @@ msgstr ""
 msgid "Name this server"
 msgstr ""
 
+#: ui/lib/keybindings.ts:4
+msgid "Navigation"
+msgstr ""
+
 #: ui/views/Lobby.tsx:142
 msgid "nearby host"
 msgstr ""
@@ -4860,6 +4961,14 @@ msgstr ""
 
 #: ui/components/deck/DeckHubFilterPanel.tsx:114
 msgid "Newest"
+msgstr ""
+
+#: ui/lib/keybindings.ts:41
+msgid "Next page"
+msgstr ""
+
+#: ui/lib/keybindings.ts:228
+msgid "Next preview action"
 msgstr ""
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:113
@@ -5070,11 +5179,11 @@ msgstr ""
 msgid "No self-hosted room is available for {format}."
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:74
+#: ui/components/settings/KeybindingsPanel.tsx:75
 msgid "No shortcuts match “{filter}”."
 msgstr ""
 
-#: ui/components/KeyboardShortcutsDialog.tsx:78
+#: ui/components/KeyboardShortcutsDialog.tsx:80
 msgid "No shortcuts match “{query}”."
 msgstr ""
 
@@ -5313,12 +5422,20 @@ msgstr ""
 msgid "Open cube import"
 msgstr ""
 
+#: ui/lib/keybindings.ts:101
+msgid "Open deck command palette"
+msgstr ""
+
 #: ui/components/deck/DeckHubResults.tsx:120
 msgid "Open My Decks"
 msgstr ""
 
 #: ui/views/Limited.tsx:251
 msgid "Open packs, build a 40-card deck, run an AI gauntlet."
+msgstr ""
+
+#: ui/lib/keybindings.ts:192
+msgid "Open preferences / board settings"
 msgstr ""
 
 #: ui/components/lobby/TableSeatChip.tsx:47
@@ -5343,6 +5460,14 @@ msgstr ""
 
 #: ui/components/editor/ImportDeckTextDialog.tsx:43
 msgid "Open your deck on Moxfield."
+msgstr ""
+
+#: ui/lib/keybindings.ts:270
+msgid "Open your exile"
+msgstr ""
+
+#: ui/lib/keybindings.ts:264
+msgid "Open your graveyard"
 msgstr ""
 
 #: ui/views/Limited.tsx:252
@@ -5464,8 +5589,16 @@ msgstr ""
 msgid "Pairings and manual results (unverified)"
 msgstr ""
 
+#: ui/lib/keybindings.ts:246
+msgid "Pass priority / confirm"
+msgstr ""
+
 #: ui/views/Winston.tsx:148
 msgid "Pass the last pile?"
+msgstr ""
+
+#: ui/lib/keybindings.ts:252
+msgid "Pass until end of turn / resolve stack"
 msgstr ""
 
 #: ui/components/lobby/JoinPasswordDialog.tsx:90
@@ -5524,6 +5657,10 @@ msgstr ""
 #: ui/phase/invite.ts:100
 #: ui/phase/invite.ts:102
 msgid "Paste an invitation code."
+msgstr ""
+
+#: ui/lib/keybindings.ts:144
+msgid "Paste cards into deck"
 msgstr ""
 
 #: ui/components/collection/CollectionImportDialog.tsx:274
@@ -5881,12 +6018,20 @@ msgstr ""
 msgid "Preset decks"
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:100
+#: ui/components/settings/KeybindingsPanel.tsx:101
 msgid "Press keys…"
 msgstr ""
 
 #: ui/components/dev/BoardPlayground.tsx:528
 msgid "Preview viewport"
+msgstr ""
+
+#: ui/lib/keybindings.ts:35
+msgid "Previous page"
+msgstr ""
+
+#: ui/lib/keybindings.ts:222
+msgid "Previous preview action"
 msgstr ""
 
 #: ui/components/editor/CardDetailModal.tsx:418
@@ -6094,6 +6239,10 @@ msgstr ""
 msgid "Red"
 msgstr ""
 
+#: ui/lib/keybindings.ts:95
+msgid "Redo deck edit"
+msgstr ""
+
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:95
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:96
 msgid "Redo draft change"
@@ -6171,8 +6320,16 @@ msgstr ""
 msgid "Remove from this device"
 msgstr ""
 
+#: ui/lib/keybindings.ts:180
+msgid "Remove one copy of selected cards"
+msgstr ""
+
 #: ui/views/Settings.tsx:586
 msgid "Remove playmat"
+msgstr ""
+
+#: ui/lib/keybindings.ts:150
+msgid "Remove selected cards"
 msgstr ""
 
 #: ui/components/dev/themeEditor/ThemeColorControl.tsx:63
@@ -6250,7 +6407,7 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:59
+#: ui/components/settings/KeybindingsPanel.tsx:60
 msgid "Reset all"
 msgstr ""
 
@@ -6259,7 +6416,7 @@ msgstr ""
 msgid "Reset Colors"
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:106
+#: ui/components/settings/KeybindingsPanel.tsx:107
 msgid "Reset to default"
 msgstr ""
 
@@ -6409,6 +6566,10 @@ msgstr ""
 
 #: ui/views/Settings.tsx:486
 msgid "Save current server…"
+msgstr ""
+
+#: ui/lib/keybindings.ts:77
+msgid "Save deck"
 msgstr ""
 
 #: ui/components/editor/DeckLayoutMenu.tsx:206
@@ -6578,7 +6739,7 @@ msgstr ""
 msgid "Search Scryfall"
 msgstr ""
 
-#: ui/components/KeyboardShortcutsDialog.tsx:46
+#: ui/components/KeyboardShortcutsDialog.tsx:48
 msgid "Search shortcuts…"
 msgstr ""
 
@@ -6640,6 +6801,10 @@ msgstr ""
 
 #: ui/components/lobby/UserList.tsx:19
 msgid "Select a deck before getting ready"
+msgstr ""
+
+#: ui/lib/keybindings.ts:132
+msgid "Select all deck cards"
 msgstr ""
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:114
@@ -6802,6 +6967,10 @@ msgstr ""
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show front face"
+msgstr ""
+
+#: ui/lib/keybindings.ts:198
+msgid "Show keyboard shortcuts"
 msgstr ""
 
 #: ui/views/Lobby.tsx:479
@@ -7257,6 +7426,7 @@ msgid "Tag \"{tag}\" removed"
 msgstr ""
 
 #: ui/components/editor/DeckTagDialog.tsx:57
+#: ui/lib/keybindings.ts:126
 msgid "Tag selected cards"
 msgstr ""
 
@@ -7608,6 +7778,38 @@ msgstr ""
 msgid "to chat in General"
 msgstr ""
 
+#: ui/lib/keybindings.ts:282
+msgid "Toggle autopass / full control"
+msgstr ""
+
+#: ui/lib/keybindings.ts:216
+msgid "Toggle card rules / printed view"
+msgstr ""
+
+#: ui/lib/keybindings.ts:65
+msgid "Toggle card search"
+msgstr ""
+
+#: ui/lib/keybindings.ts:276
+msgid "Toggle combat breakdown"
+msgstr ""
+
+#: ui/lib/keybindings.ts:174
+msgid "Toggle foil for selected cards"
+msgstr ""
+
+#: ui/lib/keybindings.ts:317
+msgid "Toggle fullscreen"
+msgstr ""
+
+#: ui/lib/keybindings.ts:71
+msgid "Toggle preview panel"
+msgstr ""
+
+#: ui/lib/keybindings.ts:308
+msgid "Toggle the dev panel"
+msgstr ""
+
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:80
 msgid "Token"
 msgstr ""
@@ -7732,8 +7934,12 @@ msgstr ""
 msgid "Unblocked"
 msgstr ""
 
-#: ui/components/settings/KeybindingsPanel.tsx:100
+#: ui/components/settings/KeybindingsPanel.tsx:101
 msgid "Unbound"
+msgstr ""
+
+#: ui/lib/keybindings.ts:89
+msgid "Undo deck edit"
 msgstr ""
 
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:85

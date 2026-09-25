@@ -754,6 +754,10 @@ msgstr "操作视图"
 msgid "Activate an ability"
 msgstr "启动异能"
 
+#: ui/lib/keybindings.ts:234
+msgid "Activate focused preview action"
+msgstr "执行聚焦的预览操作"
+
 #: ui/views/Settings.tsx:1064
 msgid "Active"
 msgstr "当前使用"
@@ -797,6 +801,10 @@ msgstr "添加自定义标签"
 #: ui/views/DeckEditor.tsx:736
 msgid "Add deck"
 msgstr "添加套牌"
+
+#: ui/lib/keybindings.ts:186
+msgid "Add one copy of selected cards"
+msgstr "为所选牌张添加一张"
 
 #: ui/components/limited/LimitedDeckBuilder.tsx:396
 msgid "Add some cards before saving."
@@ -1117,6 +1125,7 @@ msgid "Base preset"
 msgstr "基础预设"
 
 #: ui/components/game/ManualTabletopControls.tsx:383
+#: ui/lib/keybindings.ts:9
 msgid "Battlefield"
 msgstr "战场"
 
@@ -1441,6 +1450,10 @@ msgstr "卡牌预览样式"
 msgid "Card quantity changes across the open deck."
 msgstr "当前套牌中各牌数量的变化。"
 
+#: ui/lib/keybindings.ts:7
+msgid "Card search"
+msgstr "牌张搜索"
+
 #: ui/components/layout/navDestinations.ts:67
 #: ui/components/layout/TopBar.tsx:36
 #: ui/components/play/PlayHomeLinks.tsx:39
@@ -1730,7 +1743,7 @@ msgstr "清除搜索"
 msgid "Clearing…"
 msgstr "正在清除…"
 
-#: ui/components/settings/KeybindingsPanel.tsx:55
+#: ui/components/settings/KeybindingsPanel.tsx:56
 msgid "Click a shortcut, then press the key combination you want."
 msgstr "点击快捷键，然后按下你想使用的组合键。"
 
@@ -1747,7 +1760,7 @@ msgstr "点击编辑颜色值"
 msgid "Clipboard does not contain a recognized card list"
 msgstr "剪贴板中没有可识别的牌表"
 
-#: ui/components/KeyboardShortcutsDialog.tsx:88
+#: ui/components/KeyboardShortcutsDialog.tsx:90
 #: ui/components/ui/dialog.tsx:41
 #: ui/components/ui/sheet.tsx:56
 msgid "Close"
@@ -1756,6 +1769,10 @@ msgstr "关闭"
 #: ui/components/game/modals/Modal.tsx:231
 msgid "Close (Esc)"
 msgstr "关闭 (Esc)"
+
+#: ui/lib/keybindings.ts:240
+msgid "Close card preview"
+msgstr "关闭牌张预览"
 
 #: ui/components/game/modals/Modal.tsx:232
 msgid "Close dialog"
@@ -1790,6 +1807,14 @@ msgstr "齿轮工图书管理员 · 再选择一张牌"
 #: ui/components/companion/DiceTray.tsx:48
 msgid "Coin flip"
 msgstr "掷硬币"
+
+#: ui/lib/keybindings.ts:258
+msgid "Collapse / expand the stack"
+msgstr "折叠 / 展开堆叠"
+
+#: ui/lib/keybindings.ts:108
+msgid "Collapse all deck sections"
+msgstr "折叠所有套牌分区"
 
 #: ui/stores/useCollectionStore.ts:293
 msgid "Collection account changed before this edit could be applied"
@@ -2112,6 +2137,10 @@ msgstr "复制密码"
 msgid "Copy rows from a spreadsheet"
 msgstr "从电子表格复制行"
 
+#: ui/lib/keybindings.ts:138
+msgid "Copy selected cards"
+msgstr "复制所选牌张"
+
 #: ui/components/editor/ImportDeckTextDialog.tsx:130
 msgid "Copy your deck as text from Moxfield, then paste it below."
 msgstr "从 Moxfield 将套牌复制为文本，然后粘贴到下方。"
@@ -2312,7 +2341,7 @@ msgstr "无法上传该图片"
 msgid "Couldn’t verify deck ownership."
 msgstr "无法验证套牌归属。"
 
-#: ui/stores/useScryfallStore.ts:800
+#: ui/stores/useScryfallStore.ts:799
 msgid "Couldnt find uris for printing: "
 msgstr "找不到以下版本的 URI： "
 
@@ -2415,13 +2444,17 @@ msgstr "自定义预览牌名"
 msgid "Customize playmat"
 msgstr "自定义牌垫"
 
-#: ui/components/KeyboardShortcutsDialog.tsx:85
+#: ui/components/KeyboardShortcutsDialog.tsx:87
 msgid "Customize these in Preferences → Shortcuts."
 msgstr "可在“偏好设置 → 快捷键”中自定义。"
 
 #: ui/components/OnboardingGuide.tsx:12
 msgid "Customize your deck"
 msgstr "定制你的套牌"
+
+#: ui/lib/keybindings.ts:288
+msgid "Cycle hand order"
+msgstr "循环切换手牌顺序"
 
 #: ui/components/settings/AccountActionsCard.tsx:111
 msgid "Danger zone"
@@ -2491,6 +2524,10 @@ msgstr "套牌已复制到剪贴板。"
 #: ui/views/DeckEditor.tsx:486
 msgid "Deck deleted"
 msgstr "套牌已删除"
+
+#: ui/lib/keybindings.ts:5
+msgid "Deck editor"
+msgstr "套牌编辑器"
 
 #: ui/components/layout/TopBar.tsx:40
 msgid "Deck Editor"
@@ -3055,6 +3092,10 @@ msgstr "退出全屏"
 msgid "Exit tabletop"
 msgstr "退出桌面模式"
 
+#: ui/lib/keybindings.ts:114
+msgid "Expand all deck sections"
+msgstr "展开所有套牌分区"
+
 #: ui/components/lobby/TableSetupHostingCard.tsx:144
 msgid "experimental"
 msgstr "实验性"
@@ -3079,6 +3120,10 @@ msgstr "探索社区套牌"
 #: ui/components/settings/AccountActionsCard.tsx:69
 msgid "Export"
 msgstr "导出"
+
+#: ui/lib/keybindings.ts:83
+msgid "Export deck"
+msgstr "导出套牌"
 
 #: ui/components/settings/AccountActionsCard.tsx:47
 msgid "Export failed"
@@ -3238,7 +3283,7 @@ msgstr "按赛制筛选套牌"
 msgid "Filter decks..."
 msgstr "筛选套牌……"
 
-#: ui/components/settings/KeybindingsPanel.tsx:68
+#: ui/components/settings/KeybindingsPanel.tsx:69
 msgid "Filter shortcuts…"
 msgstr "筛选快捷键…"
 
@@ -3298,6 +3343,10 @@ msgstr "翻到背面 · F"
 msgid "Flip card (F) — {0}"
 msgstr "翻面 (F) — {0}"
 
+#: ui/lib/keybindings.ts:210
+msgid "Flip double-faced card (preview / hand)"
+msgstr "翻面双面牌（预览 / 手牌）"
+
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:837
 msgid "Flip front · F"
 msgstr "翻到正面 · F"
@@ -3308,6 +3357,10 @@ msgstr "翻到正面 · F"
 msgid "Floating mana"
 msgstr "浮动法术力"
 
+#: ui/lib/keybindings.ts:294
+msgid "Focus next opponent field"
+msgstr "聚焦下一位对手的场地"
+
 #: ui/views/Settings.tsx:823
 msgid "Focus on one opponent, or keep every opponent field equally visible."
 msgstr "聚焦一位对手，或让所有对手的战场均等显示。"
@@ -3315,6 +3368,22 @@ msgstr "聚焦一位对手，或让所有对手的战场均等显示。"
 #: ui/components/dev/themeEditor/ThemeContrastPreview.tsx:124
 msgid "Focus or type here"
 msgstr "在此聚焦或输入"
+
+#: ui/lib/keybindings.ts:300
+msgid "Focus previous opponent field"
+msgstr "聚焦上一位对手的场地"
+
+#: ui/lib/keybindings.ts:59
+msgid "Focus quick-add card"
+msgstr "聚焦快速添加牌张"
+
+#: ui/lib/keybindings.ts:204
+msgid "Focus search"
+msgstr "聚焦搜索"
+
+#: ui/lib/keybindings.ts:53
+msgid "Focus the card filter"
+msgstr "聚焦牌张筛选器"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:180
 #: ui/views/Settings.tsx:831
@@ -3456,6 +3525,10 @@ msgstr "全屏"
 msgid "Gallery sections"
 msgstr "图库分区"
 
+#: ui/lib/keybindings.ts:8
+msgid "Game"
+msgstr "游戏"
+
 #. placeholder {0}: group.heading
 #: ui/components/dev/themeEditor/ThemeTokenRail.tsx:147
 msgid "Game · {0}"
@@ -3582,6 +3655,10 @@ msgstr "全局对局状态"
 msgid "Global mechanics"
 msgstr "全局机制"
 
+#: ui/lib/keybindings.ts:47
+msgid "Go back"
+msgstr "返回"
+
 #: ui/components/companion/StatusChips.tsx:17
 msgid "Goes first"
 msgstr "先手"
@@ -3643,6 +3720,10 @@ msgstr "拥有优先权"
 #: ui/components/lobby/ReportPlayerDialog.tsx:41
 msgid "Hate speech"
 msgstr "仇恨言论"
+
+#: ui/lib/keybindings.ts:6
+msgid "Help"
+msgstr "帮助"
 
 #: ui/components/game/panels/MiddleBarDock.tsx:116
 msgid "Hide playmat"
@@ -4125,6 +4206,10 @@ msgstr "使用邀请加入"
 msgid "Joining…"
 msgstr "正在加入…"
 
+#: ui/lib/keybindings.ts:120
+msgid "Jump to next editor section"
+msgstr "跳转到下一个编辑器分区"
+
 #: ui/components/editor/DeckSaveConflictDialog.tsx:52
 msgid "Keep my changes"
 msgstr "保留我的更改"
@@ -4133,8 +4218,8 @@ msgstr "保留我的更改"
 msgid "Keep playing"
 msgstr "继续游戏"
 
-#: ui/components/KeyboardShortcutsDialog.tsx:36
-#: ui/components/settings/KeybindingsPanel.tsx:53
+#: ui/components/KeyboardShortcutsDialog.tsx:38
+#: ui/components/settings/KeybindingsPanel.tsx:54
 msgid "Keyboard shortcuts"
 msgstr "键盘快捷键"
 
@@ -4750,6 +4835,18 @@ msgstr "移动 1 张"
 msgid "Move all ({count})"
 msgstr "全部移动（{count}）"
 
+#: ui/lib/keybindings.ts:156
+msgid "Move selected cards to main deck"
+msgstr "将所选牌张移入主牌"
+
+#: ui/lib/keybindings.ts:168
+msgid "Move selected cards to maybeboard"
+msgstr "将所选牌张移入待定板"
+
+#: ui/lib/keybindings.ts:162
+msgid "Move selected cards to sideboard"
+msgstr "将所选牌张移入备牌"
+
 #: ui/components/game/ManualTabletopControls.tsx:423
 #: ui/components/game/ManualTabletopControls.tsx:424
 msgid "Move to exile"
@@ -4841,6 +4938,10 @@ msgstr "名称"
 msgid "Name this server"
 msgstr "为此服务器命名"
 
+#: ui/lib/keybindings.ts:4
+msgid "Navigation"
+msgstr "导航"
+
 #: ui/views/Lobby.tsx:142
 msgid "nearby host"
 msgstr "附近的主机"
@@ -4861,6 +4962,14 @@ msgstr "新游戏"
 #: ui/components/deck/DeckHubFilterPanel.tsx:114
 msgid "Newest"
 msgstr "最新"
+
+#: ui/lib/keybindings.ts:41
+msgid "Next page"
+msgstr "下一页"
+
+#: ui/lib/keybindings.ts:228
+msgid "Next preview action"
+msgstr "下一个预览操作"
 
 #: ui/components/game/modals/AbilityPickerModal.tsx:113
 msgid "No actions are currently available for this card."
@@ -5070,11 +5179,11 @@ msgstr "此标签页中没有此服务器的已保存会话。"
 msgid "No self-hosted room is available for {format}."
 msgstr "{format} 没有可用的自托管房间。"
 
-#: ui/components/settings/KeybindingsPanel.tsx:74
+#: ui/components/settings/KeybindingsPanel.tsx:75
 msgid "No shortcuts match “{filter}”."
 msgstr "没有与“{filter}”匹配的快捷键。"
 
-#: ui/components/KeyboardShortcutsDialog.tsx:78
+#: ui/components/KeyboardShortcutsDialog.tsx:80
 msgid "No shortcuts match “{query}”."
 msgstr "没有与“{query}”匹配的快捷键。"
 
@@ -5313,6 +5422,10 @@ msgstr "进入指挥官轮抽"
 msgid "Open cube import"
 msgstr "导入 Cube 牌池"
 
+#: ui/lib/keybindings.ts:101
+msgid "Open deck command palette"
+msgstr "打开套牌命令面板"
+
 #: ui/components/deck/DeckHubResults.tsx:120
 msgid "Open My Decks"
 msgstr "打开我的套牌"
@@ -5320,6 +5433,10 @@ msgstr "打开我的套牌"
 #: ui/views/Limited.tsx:251
 msgid "Open packs, build a 40-card deck, run an AI gauntlet."
 msgstr "打开补充包，构筑一副 40 张牌的套牌，连续挑战 AI。"
+
+#: ui/lib/keybindings.ts:192
+msgid "Open preferences / board settings"
+msgstr "打开偏好设置 / 牌桌设置"
 
 #: ui/components/lobby/TableSeatChip.tsx:47
 msgid "Open seat"
@@ -5344,6 +5461,14 @@ msgstr "进入温斯顿轮抽"
 #: ui/components/editor/ImportDeckTextDialog.tsx:43
 msgid "Open your deck on Moxfield."
 msgstr "在 Moxfield 上打开你的套牌。"
+
+#: ui/lib/keybindings.ts:270
+msgid "Open your exile"
+msgstr "打开你的放逐区"
+
+#: ui/lib/keybindings.ts:264
+msgid "Open your graveyard"
+msgstr "打开你的坟墓场"
 
 #: ui/views/Limited.tsx:252
 #: ui/views/Limited.tsx:270
@@ -5464,9 +5589,17 @@ msgstr "配对系统"
 msgid "Pairings and manual results (unverified)"
 msgstr "配对与手动结果（未经核实）"
 
+#: ui/lib/keybindings.ts:246
+msgid "Pass priority / confirm"
+msgstr "让过优先权 / 确认"
+
 #: ui/views/Winston.tsx:148
 msgid "Pass the last pile?"
 msgstr "跳过最后一堆？"
+
+#: ui/lib/keybindings.ts:252
+msgid "Pass until end of turn / resolve stack"
+msgstr "让过至回合结束 / 结算堆叠"
 
 #: ui/components/lobby/JoinPasswordDialog.tsx:90
 #: ui/views/Settings.tsx:410
@@ -5525,6 +5658,10 @@ msgstr "粘贴导出的自定义赛制"
 #: ui/phase/invite.ts:102
 msgid "Paste an invitation code."
 msgstr "请粘贴邀请码。"
+
+#: ui/lib/keybindings.ts:144
+msgid "Paste cards into deck"
+msgstr "将牌张粘贴到套牌"
 
 #: ui/components/collection/CollectionImportDialog.tsx:274
 msgid "Paste from clipboard"
@@ -5881,13 +6018,21 @@ msgstr "预设套牌"
 msgid "Preset decks"
 msgstr "预设套牌"
 
-#: ui/components/settings/KeybindingsPanel.tsx:100
+#: ui/components/settings/KeybindingsPanel.tsx:101
 msgid "Press keys…"
 msgstr "请按键…"
 
 #: ui/components/dev/BoardPlayground.tsx:528
 msgid "Preview viewport"
 msgstr "预览视口"
+
+#: ui/lib/keybindings.ts:35
+msgid "Previous page"
+msgstr "上一页"
+
+#: ui/lib/keybindings.ts:222
+msgid "Previous preview action"
+msgstr "上一个预览操作"
 
 #: ui/components/editor/CardDetailModal.tsx:418
 msgid "Prices"
@@ -6094,6 +6239,10 @@ msgstr "请先重新连接到锦标赛代理。"
 msgid "Red"
 msgstr "红"
 
+#: ui/lib/keybindings.ts:95
+msgid "Redo deck edit"
+msgstr "重做套牌编辑"
+
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:95
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:96
 msgid "Redo draft change"
@@ -6171,9 +6320,17 @@ msgstr "取消收藏"
 msgid "Remove from this device"
 msgstr "从此设备移除"
 
+#: ui/lib/keybindings.ts:180
+msgid "Remove one copy of selected cards"
+msgstr "移除所选牌张中的一张"
+
 #: ui/views/Settings.tsx:586
 msgid "Remove playmat"
 msgstr "移除牌垫"
+
+#: ui/lib/keybindings.ts:150
+msgid "Remove selected cards"
+msgstr "移除所选牌张"
 
 #: ui/components/dev/themeEditor/ThemeColorControl.tsx:63
 msgid "Remove this override and inherit the base preset color"
@@ -6250,7 +6407,7 @@ msgstr "举报此消息"
 msgid "Reset"
 msgstr "重置"
 
-#: ui/components/settings/KeybindingsPanel.tsx:59
+#: ui/components/settings/KeybindingsPanel.tsx:60
 msgid "Reset all"
 msgstr "全部重置"
 
@@ -6259,7 +6416,7 @@ msgstr "全部重置"
 msgid "Reset Colors"
 msgstr "重置颜色"
 
-#: ui/components/settings/KeybindingsPanel.tsx:106
+#: ui/components/settings/KeybindingsPanel.tsx:107
 msgid "Reset to default"
 msgstr "恢复默认"
 
@@ -6410,6 +6567,10 @@ msgstr "保存并重新连接"
 #: ui/views/Settings.tsx:486
 msgid "Save current server…"
 msgstr "保存当前服务器…"
+
+#: ui/lib/keybindings.ts:77
+msgid "Save deck"
+msgstr "保存套牌"
 
 #: ui/components/editor/DeckLayoutMenu.tsx:206
 msgid "Save deck view"
@@ -6578,7 +6739,7 @@ msgstr "搜索玩家…"
 msgid "Search Scryfall"
 msgstr "搜索 Scryfall"
 
-#: ui/components/KeyboardShortcutsDialog.tsx:46
+#: ui/components/KeyboardShortcutsDialog.tsx:48
 msgid "Search shortcuts…"
 msgstr "搜索快捷键…"
 
@@ -6641,6 +6802,10 @@ msgstr "看来你已用完浏览器存储空间 — 如需更多信息请在 Dis
 #: ui/components/lobby/UserList.tsx:19
 msgid "Select a deck before getting ready"
 msgstr "准备前请选择套牌"
+
+#: ui/lib/keybindings.ts:132
+msgid "Select all deck cards"
+msgstr "全选套牌中的牌张"
 
 #: ui/components/game/modals/CombatBreakdownModal.tsx:114
 msgid "Select an attacker or blocker to inspect its realistic or rules view. Inspection does not change assignments."
@@ -6803,6 +6968,10 @@ msgstr "查看 {author} 的套牌"
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Show front face"
 msgstr "显示正面"
+
+#: ui/lib/keybindings.ts:198
+msgid "Show keyboard shortcuts"
+msgstr "显示键盘快捷键"
 
 #: ui/views/Lobby.tsx:479
 msgid "Show players and chat"
@@ -7257,6 +7426,7 @@ msgid "Tag \"{tag}\" removed"
 msgstr "标签“{tag}”已移除"
 
 #: ui/components/editor/DeckTagDialog.tsx:57
+#: ui/lib/keybindings.ts:126
 msgid "Tag selected cards"
 msgstr "为所选卡牌添加标签"
 
@@ -7608,6 +7778,38 @@ msgstr "小小指挥官"
 msgid "to chat in General"
 msgstr "在 General 中聊天"
 
+#: ui/lib/keybindings.ts:282
+msgid "Toggle autopass / full control"
+msgstr "切换自动让过 / 完全操控"
+
+#: ui/lib/keybindings.ts:216
+msgid "Toggle card rules / printed view"
+msgstr "切换牌张规则 / 印刷视图"
+
+#: ui/lib/keybindings.ts:65
+msgid "Toggle card search"
+msgstr "切换牌张搜索"
+
+#: ui/lib/keybindings.ts:276
+msgid "Toggle combat breakdown"
+msgstr "切换战斗明细"
+
+#: ui/lib/keybindings.ts:174
+msgid "Toggle foil for selected cards"
+msgstr "切换所选牌张的闪卡状态"
+
+#: ui/lib/keybindings.ts:317
+msgid "Toggle fullscreen"
+msgstr "切换全屏"
+
+#: ui/lib/keybindings.ts:71
+msgid "Toggle preview panel"
+msgstr "切换预览面板"
+
+#: ui/lib/keybindings.ts:308
+msgid "Toggle the dev panel"
+msgstr "切换开发者面板"
+
 #: ui/components/dev/designSystem/sections/TypographySection.tsx:80
 msgid "Token"
 msgstr "衍生物"
@@ -7732,9 +7934,13 @@ msgstr "字号比例"
 msgid "Unblocked"
 msgstr "未阻挡"
 
-#: ui/components/settings/KeybindingsPanel.tsx:100
+#: ui/components/settings/KeybindingsPanel.tsx:101
 msgid "Unbound"
 msgstr "未绑定"
+
+#: ui/lib/keybindings.ts:89
+msgid "Undo deck edit"
+msgstr "撤销套牌编辑"
 
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:85
 #: ui/components/dev/themeEditor/ThemeEditorToolbar.tsx:86

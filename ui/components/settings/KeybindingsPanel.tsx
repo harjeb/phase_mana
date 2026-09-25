@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { KEYBINDINGS, comboFromEvent, formatCombo } from "@/lib/keybindings";
+import { i18n } from "@/i18n/i18n";
 import { useKeybindingsStore, resolveCombo } from "@/stores/useKeybindingsStore";
 export function KeybindingsPanel() {
   const overrides = useKeybindingsStore((s) => s.overrides);
@@ -39,8 +40,8 @@ export function KeybindingsPanel() {
       const combo = resolveCombo(b.id, overrides);
       const comboText = combo ? formatCombo(combo).toLowerCase() : "";
       return (
-        b.label.toLowerCase().includes(q) ||
-        b.category.toLowerCase().includes(q) ||
+        i18n._(b.label).toLowerCase().includes(q) ||
+        i18n._(b.category).toLowerCase().includes(q) ||
         comboText.includes(q)
       );
     });
@@ -75,9 +76,9 @@ export function KeybindingsPanel() {
       )}
 
       {categories.map((category) => (
-        <div key={category} className="space-y-2">
+        <div key={category.id} className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            {category}
+            {i18n._(category)}
           </h3>
           <div className="divide-y rounded-md border">
             {filtered
@@ -88,7 +89,7 @@ export function KeybindingsPanel() {
                 const isCustom = !!overrides[b.id];
                 return (
                   <div key={b.id} className="flex items-center justify-between gap-3 px-3 py-2">
-                    <span className="text-sm">{b.label}</span>
+                    <span className="text-sm">{i18n._(b.label)}</span>
                     <div className="flex items-center gap-1.5">
                       <Button
                         size="sm"

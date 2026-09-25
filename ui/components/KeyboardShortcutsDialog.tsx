@@ -5,6 +5,7 @@ import { Search } from "lucide-react";
 import { Modal } from "@/components/game/modals/Modal";
 import { Input } from "@/components/ui/input";
 import { KEYBINDINGS, formatCombo } from "@/lib/keybindings";
+import { i18n } from "@/i18n/i18n";
 import { useKeybindingsStore, resolveCombo } from "@/stores/useKeybindingsStore";
 export function KeyboardShortcutsDialog({
   open,
@@ -20,7 +21,8 @@ export function KeyboardShortcutsDialog({
     if (!term) return KEYBINDINGS;
     return KEYBINDINGS.filter(
       (binding) =>
-        binding.label.toLowerCase().includes(term) || binding.category.toLowerCase().includes(term),
+        i18n._(binding.label).toLowerCase().includes(term) ||
+        i18n._(binding.category).toLowerCase().includes(term),
     );
   }, [query]);
   const categories = [...new Set(filtered.map((binding) => binding.category))];
@@ -49,9 +51,9 @@ export function KeyboardShortcutsDialog({
         </div>
         <div className="max-h-[60dvh] space-y-4 overflow-y-auto pr-1">
           {categories.map((category) => (
-            <div key={category} className="space-y-1.5">
+            <div key={category.id} className="space-y-1.5">
               <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {category}
+                {i18n._(category)}
               </h3>
               <div className="space-y-1">
                 {filtered
@@ -60,7 +62,7 @@ export function KeyboardShortcutsDialog({
                     const combo = resolveCombo(b.id, overrides);
                     return (
                       <div key={b.id} className="flex items-center justify-between gap-3 text-sm">
-                        <span>{b.label}</span>
+                        <span>{i18n._(b.label)}</span>
                         <kbd
                           className="rounded border bg-muted px-1.5 py-0.5 text-xs"
                           style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
