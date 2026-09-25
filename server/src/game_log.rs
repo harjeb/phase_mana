@@ -5,7 +5,7 @@ use engine::{
     game::log::resolve_log_entries,
     types::{
         events::GameEvent,
-        log::{LogCategory, LogImportance, LogSegment, LogVisibility},
+        log::{GameLogEntry, LogCategory, LogImportance, LogSegment, LogVisibility},
         phase::Phase,
     },
 };
@@ -30,6 +30,10 @@ pub(crate) struct GameLog {
     pub id: String,
     next_seq: u64,
     pub rows: Vec<LogRow>,
+    /// The unfiltered engine-authored entries the LLM opponent prompt reads
+    /// from. Kept alongside the transport projection so both come from the same
+    /// `resolve_log_entries` pass.
+    history: Vec<GameLogEntry>,
 }
 fn now_ms() -> u64 {
     SystemTime::now()
@@ -49,11 +53,17 @@ impl GameLog {
             ),
             next_seq: 1,
             rows: Vec::new(),
+            history: Vec::new(),
         }
+    }
+    /// Engine-authored history, oldest first. Callers window it themselves.
+    pub fn history(&self) -> &[GameLogEntry] {
+        &self.history
     }
     pub fn capture(&mut self, before: &GameState, after: &GameState, events: &[GameEvent]) {
         let timestamp_ms = now_ms();
         for entry in resolve_log_entries(events, before, after) {
+            self.history.push(entry.clone());
             if entry.presentation.visibility != LogVisibility::Public
                 || entry.presentation.importance == LogImportance::Diagnostic
                 || entry.category == LogCategory::Debug
@@ -95,6 +105,9 @@ impl GameLog {
         }
         if self.rows.len() > 200 {
             self.rows.drain(..self.rows.len() - 200);
+        }
+        if self.history.len() > 400 {
+            self.history.drain(..self.history.len() - 400);
         }
     }
     pub fn attach(&self, snapshot: &mut Snapshot) {

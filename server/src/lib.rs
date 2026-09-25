@@ -67,7 +67,9 @@ mod table_tests;
 mod game_log_tests;
 
 mod game_log;
+mod llm_seat;
 use game_log::GameLog;
+pub use llm_seat::{LlmSeat, LlmSeatSettings};
 pub use game_log::LogRow;
 
 const HUMAN: PlayerId = PlayerId(0);
@@ -344,6 +346,9 @@ pub struct StartRequest {
     /// `AiDifficulty::from_label`, so an unknown label falls back to `Medium`
     /// rather than rejecting the start request.
     pub difficulty: Option<String>,
+    /// Optional LLM opponent. Absent or disabled keeps the built-in AI.
+    #[serde(default)]
+    pub llm: Option<LlmSeatSettings>,
     #[serde(default)]
     pub human_sideboard: Vec<String>,
     #[serde(default)]
@@ -396,6 +401,9 @@ struct Session {
     /// Difficulty for every AI seat, resolved once at start and reused for every
     /// later AI turn in this session.
     ai_config: AiConfig,
+    /// LLM opponent seat, or `None` for the built-in AI. Shared by `Arc` so the
+    /// failure streak survives the per-response session rebuild.
+    llm: Option<Arc<LlmSeat>>,
     rng: StdRng,
 }
 
@@ -559,6 +567,11 @@ impl Host {
             AiDifficulty::from_label(request.difficulty.as_deref().unwrap_or("medium")),
             Platform::Native,
         );
+        let llm = request
+            .llm
+            .as_ref()
+            .and_then(LlmSeatSettings::resolve)
+            .map(|endpoint| Arc::new(LlmSeat::new(endpoint)));
         let (human_commanders, human_signature) =
             split_command_slots(&self.db, format, &request.human_commanders);
         let (ai_commanders, ai_signature) =
@@ -621,7 +634,15 @@ impl Host {
         bind_interaction_session(&mut game);
         let ai_session = AiSession::arc_from_game(&game);
         let mut rng = StdRng::seed_from_u64(seed);
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
+        let ai_actions = advance_ai(
+            &mut game,
+            &mut rng,
+            &ai_session,
+            &ai_config,
+            llm.as_deref(),
+            &self.db,
+            &mut log,
+        )?;
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
         log.attach(&mut snapshot);
@@ -632,6 +653,7 @@ impl Host {
             snapshot: snapshot.clone(),
             ai_session,
             ai_config,
+            llm,
             rng,
         });
         Ok(snapshot)
@@ -682,7 +704,16 @@ impl Host {
         let mut rng = session.rng.clone();
         let ai_session = Arc::clone(&session.ai_session);
         let ai_config = session.ai_config.clone();
-        let ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
+        let llm = session.llm.clone();
+        let ai_actions = advance_ai(
+            &mut game,
+            &mut rng,
+            &ai_session,
+            &ai_config,
+            llm.as_deref(),
+            &self.db,
+            &mut log,
+        )?;
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
         log.attach(&mut snapshot);
@@ -693,6 +724,7 @@ impl Host {
             snapshot: snapshot.clone(),
             ai_session,
             ai_config,
+            llm,
             rng,
         });
         Ok(snapshot)
@@ -736,9 +768,27 @@ impl Host {
         let result = apply(&mut game, HUMAN, action)
             .map_err(|e| bad(format!("Engine rejected response: {e:?}")))?;
         log.capture(&before, &game, &result.events);
-        let mut ai_actions = advance_ai(&mut game, &mut rng, &ai_session, &ai_config, &mut log)?;
+        let llm = session.llm.clone();
+        let mut ai_actions = advance_ai(
+            &mut game,
+            &mut rng,
+            &ai_session,
+            &ai_config,
+            llm.as_deref(),
+            &self.db,
+            &mut log,
+        )?;
         if let Some((_, skip)) = &skip {
-            ai_actions += self.replay_skip(&mut game, &mut rng, &ai_session, &ai_config, skip, &mut log)?;
+            ai_actions += self.replay_skip(
+                &mut game,
+                &mut rng,
+                &ai_session,
+                &ai_config,
+                llm.as_deref(),
+                &self.db,
+                skip,
+                &mut log,
+            )?;
         }
         let id = self.reserve_prompt()?;
         let (prepared, mut snapshot) = snapshot(&game, &self.db, id, ai_actions)?;
@@ -750,6 +800,7 @@ impl Host {
             snapshot: snapshot.clone(),
             ai_session,
             ai_config,
+            llm,
             rng,
         });
         Ok(snapshot)
@@ -766,11 +817,13 @@ impl Host {
     /// them. A pass the engine rejects aborts the replay rather than being
     /// skipped over.
     fn replay_skip(
-        &mut self,
+        &self,
         game: &mut GameState,
         rng: &mut StdRng,
         ai: &Arc<AiSession>,
         ai_config: &AiConfig,
+        llm: Option<&LlmSeat>,
+        db: &CardDatabase,
         skip: &SkipRequest,
         log: &mut GameLog,
     ) -> Result<usize, HostError> {
@@ -783,7 +836,7 @@ impl Host {
             let result = apply(game, HUMAN, GameAction::PassPriority)
                 .map_err(|e| bad(format!("Engine rejected replayed pass: {e:?}")))?;
             log.capture(&before, game, &result.events);
-            ai_actions += advance_ai(game, rng, ai, ai_config, log)?;
+            ai_actions += advance_ai(game, rng, ai, ai_config, llm, db, log)?;
         }
         Ok(ai_actions)
     }
@@ -899,9 +952,16 @@ fn advance_ai(
     rng: &mut StdRng,
     session: &Arc<AiSession>,
     ai_config: &AiConfig,
+    llm: Option<&LlmSeat>,
+    db: &CardDatabase,
     log: &mut GameLog,
 ) -> Result<usize, HostError> {
     let players: HashSet<_> = (1..game.players.len()).map(|i| PlayerId(i as u8)).collect();
+    if let Some(llm) = llm {
+        return Ok(llm_seat::run_llm_ai_actions(
+            game, &players, ai_config, rng, session, llm, db, log,
+        ));
+    }
     let configs: HashMap<_, _> = players
         .iter()
         .map(|&id| (id, ai_config.clone()))

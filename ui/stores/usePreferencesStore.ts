@@ -5,6 +5,7 @@ import { STORAGE_KEYS } from "@/lib/constants";
 import { ensureUsernameTag, hasUsernameTag } from "@/lib/username";
 import type { AiOpponentRef } from "@/lib/aiOpponent";
 import { DEFAULT_AI_DIFFICULTY, type AiDifficultyLabel } from "@/lib/aiDifficulty";
+import { DEFAULT_LLM_SEAT, type LlmSeatPreferences } from "@/lib/llmSeat";
 import type { KnownRelay } from "@/config/knownRelays";
 import type { PlaymatSettings } from "@/protocol/game";
 import type { GameFormat } from "@/types/server";
@@ -79,6 +80,10 @@ export interface PreferencesState {
   /** Phase engine difficulty for every AI seat in a local game. */
   aiDifficulty: AiDifficultyLabel;
   setAiDifficulty: (difficulty: AiDifficultyLabel) => void;
+
+  /** Optional OpenAI-compatible endpoint that plays the AI seats. */
+  llmSeat: LlmSeatPreferences;
+  setLlmSeat: (patch: Partial<LlmSeatPreferences>) => void;
 
   // One knob for card size: battlefield cards on ALL fields plus the hand
   // fan. 1 = the classic 3-row board; 1.5 = the 2-row fill that is the
@@ -184,6 +189,7 @@ const PERSISTED_PREFERENCE_KEYS = [
   "handOrderMode",
   "opponentLayout",
   "aiDifficulty",
+  "llmSeat",
   "cardSizeMultiplier",
   "lockZoneTiles",
   "battlefieldCardStyle",
@@ -230,6 +236,13 @@ function pickPersistedPreferences(persistedState: unknown): Partial<PreferencesS
     }
   } else {
     delete next.appThemeColorOverrides;
+  }
+  // Merge a persisted LLM seat over the defaults, so a profile written before a
+  // field existed (or a partial object) does not drop the missing keys.
+  if (next.llmSeat && typeof next.llmSeat === "object" && !Array.isArray(next.llmSeat)) {
+    next.llmSeat = { ...DEFAULT_LLM_SEAT, ...(next.llmSeat as Partial<LlmSeatPreferences>) };
+  } else {
+    delete next.llmSeat;
   }
   // Treat a persisted empty username as "unset" so the auto-generated default
   // wins on rehydrate. Without this, users who once had the empty default
@@ -370,6 +383,10 @@ export const usePreferencesStore = create<PreferencesState>()(
 
           aiDifficulty: DEFAULT_AI_DIFFICULTY,
           setAiDifficulty: (aiDifficulty) => set({ aiDifficulty }),
+
+          llmSeat: DEFAULT_LLM_SEAT,
+          setLlmSeat: (patch) =>
+            set((state) => ({ llmSeat: { ...state.llmSeat, ...patch } })),
 
           cardHoverDelayMs: 350,
           setCardHoverDelayMs: (ms) => set({ cardHoverDelayMs: ms }),

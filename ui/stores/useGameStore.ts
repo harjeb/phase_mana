@@ -49,6 +49,7 @@ import { getPlatform } from "@/platform";
 import { applyPrompt } from "./gameStore.constants";
 import { DEFAULT_STARTING_LIFE, useServerStore } from "./useServerStore";
 import { usePreferencesStore } from "./usePreferencesStore";
+import { llmSeatRequest } from "@/lib/llmSeat";
 import type { ClientCardDto, ClientGameView, GameState } from "./gameStore.types";
 import type { Prompt } from "@/protocol";
 import { promptResponse } from "./promptResponse";
@@ -305,6 +306,7 @@ async function initializeGame({
       customRules,
       opponentConspiracies,
       aiDifficulty: usePreferencesStore.getState().aiDifficulty,
+      llm: llmSeatRequest(usePreferencesStore.getState().llmSeat),
     });
     const result = await (firstForgeStart ? withForgeStartTimeout(start) : start);
     if (!isLaunchCurrent()) {

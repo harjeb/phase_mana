@@ -165,15 +165,15 @@ msgstr "已将“{0}”设为唯一指挥官 — 它没有结伴异能"
 msgid "\"{deckName}\" removed from Community"
 msgstr "“{deckName}”已从社区移除"
 
-#: ui/views/Settings.tsx:701
+#: ui/views/Settings.tsx:716
 msgid "\"Free placement\" lets you drag cards anywhere. \"Auto-arrange\" keeps the battlefield tidy in rows (creatures, then others, then lands) and ignores manual placement."
 msgstr "“自由摆放”允许你将卡牌拖到任意位置。“自动排列”会将战场按行整理（依次为生物、其他永久物、地），不保留手动摆放的位置。"
 
-#: ui/views/Settings.tsx:723
+#: ui/views/Settings.tsx:738
 msgid "\"Locked\" keeps the deck, graveyard, exile, and command piles fixed on the battlefield so a drag can't move them. Tapping to open still works."
 msgstr "“锁定”会固定战场上的牌库、坟墓场、放逐区和统帅区牌堆，防止拖动时移动它们。仍可点击打开。"
 
-#: ui/views/Settings.tsx:745
+#: ui/views/Settings.tsx:760
 msgid "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 msgstr "“写实”使用完整的印刷卡牌图像。“画面优先”显示插画，并叠加清晰的名称和类别。“迷你牌框”在插画周围添加名称栏和类别栏。此设置仅影响战场上的卡牌。"
 
@@ -357,7 +357,7 @@ msgid "{0} unlinked"
 msgstr "{0} 已取消关联"
 
 #. placeholder {0}: APP_THEME_COLOR_LABELS[key]
-#: ui/views/Settings.tsx:1164
+#: ui/views/Settings.tsx:1179
 msgid "{0} value"
 msgstr "{0}的值"
 
@@ -432,7 +432,7 @@ msgstr "{engine} 引擎"
 msgid "{errorMsg} (HTTP {0})"
 msgstr "{errorMsg}（HTTP {0}）"
 
-#: ui/views/Settings.tsx:921
+#: ui/views/Settings.tsx:936
 msgid "{flashDurationMs}ms"
 msgstr "{flashDurationMs}毫秒"
 
@@ -824,7 +824,7 @@ msgstr "接受并继续"
 
 #: ui/components/layout/AccountMenu.tsx:101
 #: ui/components/layout/AccountMenu.tsx:148
-#: ui/views/Settings.tsx:260
+#: ui/views/Settings.tsx:261
 msgid "Account"
 msgstr "账户"
 
@@ -871,7 +871,7 @@ msgstr "启动异能"
 msgid "Activate focused preview action"
 msgstr "执行聚焦的预览操作"
 
-#: ui/views/Settings.tsx:1064
+#: ui/views/Settings.tsx:1079
 msgid "Active"
 msgstr "当前使用"
 
@@ -1037,7 +1037,7 @@ msgstr "已添加到 {deckName}"
 msgid "Adding cards to this deck…"
 msgstr "正在向此套牌添加卡牌…"
 
-#: ui/views/Settings.tsx:800
+#: ui/views/Settings.tsx:815
 msgid "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 msgstr "在创建房间选项中添加实验性的 Ironsmith 可信引擎。目前仅支持部分卡牌，对局可能不够稳定，默认关闭。除非你正在测试 Ironsmith，否则请保持关闭。"
 
@@ -1066,6 +1066,10 @@ msgstr "AI"
 #: ui/components/lobby/DeckVsSelector.tsx:881
 msgid "AI difficulty"
 msgstr "AI 难度"
+
+#: ui/views/Settings.tsx:336
+msgid "AI opponent"
+msgstr "AI 对手"
 
 #: ui/components/editor/CardSearch.tsx:182
 msgid "Alchemy"
@@ -1127,6 +1131,10 @@ msgstr "大厅中的任何人都可以入座。"
 msgid "Anything else? (optional)"
 msgstr "还有其他信息吗？（可选）"
 
+#: ui/components/settings/LlmOpponentCard.tsx:70
+msgid "API key"
+msgstr "API 密钥"
+
 #. placeholder {0}: group.heading
 #: ui/components/dev/themeEditor/ThemeTokenRail.tsx:127
 msgid "App · {0}"
@@ -1136,11 +1144,11 @@ msgstr "应用 · {0}"
 msgid "App chrome"
 msgstr "应用外观"
 
-#: ui/views/Settings.tsx:955
+#: ui/views/Settings.tsx:970
 msgid "App Theme"
 msgstr "应用主题"
 
-#: ui/views/Settings.tsx:1091
+#: ui/views/Settings.tsx:1106
 msgid "App Theme Colors"
 msgstr "应用主题颜色"
 
@@ -1192,7 +1200,7 @@ msgid "Art ready for one image"
 msgstr "已准备好 1 张卡图"
 
 #: ui/components/game/battlefieldCardStyles.ts:10
-#: ui/views/Settings.tsx:761
+#: ui/views/Settings.tsx:776
 msgid "Art-forward"
 msgstr "画面优先"
 
@@ -1252,7 +1260,7 @@ msgid "Auto"
 msgstr "自动"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:172
-#: ui/views/Settings.tsx:716
+#: ui/views/Settings.tsx:731
 msgid "Auto-arrange"
 msgstr "自动排列"
 
@@ -1358,6 +1366,10 @@ msgstr "禁用牌（每行一个牌名）"
 msgid "Base preset"
 msgstr "基础预设"
 
+#: ui/components/settings/LlmOpponentCard.tsx:50
+msgid "Base URL"
+msgstr "基础 URL"
+
 #: ui/components/game/ManualTabletopControls.tsx:383
 #: ui/lib/keybindings.ts:9
 msgid "Battlefield"
@@ -1372,7 +1384,7 @@ msgstr "战场排列"
 msgid "Battlefield card style"
 msgstr "战场牌样式"
 
-#: ui/views/Settings.tsx:744
+#: ui/views/Settings.tsx:759
 msgid "Battlefield Card Style"
 msgstr "战场卡牌样式"
 
@@ -1380,7 +1392,7 @@ msgstr "战场卡牌样式"
 msgid "Battlefield lab"
 msgstr "战场实验室"
 
-#: ui/views/Settings.tsx:700
+#: ui/views/Settings.tsx:715
 msgid "Battlefield Layout"
 msgstr "战场布局"
 
@@ -1388,7 +1400,7 @@ msgstr "战场布局"
 msgid "Battlefield size (70×98)"
 msgstr "战场尺寸（70×98）"
 
-#: ui/views/Settings.tsx:601
+#: ui/views/Settings.tsx:616
 msgid "Battlefield Zone Column Order"
 msgstr "战场区域栏顺序"
 
@@ -1482,7 +1494,7 @@ msgstr "机器人无法加入牌桌：{0}"
 msgid "Bot player"
 msgstr "机器人玩家"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Bottom"
 msgstr "底部"
 
@@ -1577,7 +1589,7 @@ msgstr "生成建议"
 msgid "Building \"{0}\"…"
 msgstr "正在构建“{0}”…"
 
-#: ui/views/Settings.tsx:432
+#: ui/views/Settings.tsx:447
 msgid "Built-in"
 msgstr "内置"
 
@@ -1629,8 +1641,8 @@ msgstr "轮空"
 msgid "Byes"
 msgstr "轮空"
 
-#: ui/views/Settings.tsx:347
-#: ui/views/Settings.tsx:362
+#: ui/views/Settings.tsx:360
+#: ui/views/Settings.tsx:377
 msgid "Cache"
 msgstr "缓存"
 
@@ -1651,7 +1663,7 @@ msgstr "缓存"
 #: ui/components/settings/MyAssetsSection.tsx:169
 #: ui/views/DeckEditor.tsx:932
 #: ui/views/DeckEditor.tsx:1108
-#: ui/views/Settings.tsx:521
+#: ui/views/Settings.tsx:536
 #: ui/views/Tournaments.tsx:87
 msgid "Cancel"
 msgstr "取消"
@@ -1718,7 +1730,7 @@ msgstr "卡牌筛选"
 msgid "Card identity and rules are hidden."
 msgstr "牌张信息与规则文字已隐藏。"
 
-#: ui/views/Settings.tsx:364
+#: ui/views/Settings.tsx:379
 msgid "Card Image Cache"
 msgstr "卡图缓存"
 
@@ -1740,7 +1752,7 @@ msgstr "卡牌布局与预览"
 msgid "Card name"
 msgstr "牌名"
 
-#: ui/views/Settings.tsx:902
+#: ui/views/Settings.tsx:917
 msgid "Card Preview Style"
 msgstr "卡牌预览样式"
 
@@ -1763,7 +1775,7 @@ msgstr "牌张搜索"
 msgid "Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more."
 msgstr "牌张搜索接受普通牌名和 Scryfall 筛选器。组合筛选器可按颜色、类型、规则文本、系列、价格等缩小结果范围。"
 
-#: ui/views/Settings.tsx:629
+#: ui/views/Settings.tsx:644
 msgid "Card Size"
 msgstr "卡牌大小"
 
@@ -1818,7 +1830,7 @@ msgstr "牌张不受 Manabrew 和 Forge 引擎支持"
 msgid "Card verification returned an incomplete response"
 msgstr "卡牌验证返回了不完整的响应"
 
-#: ui/views/Settings.tsx:922
+#: ui/views/Settings.tsx:937
 msgid "Card-play and turn-start flash duration."
 msgstr "出牌和回合开始时的闪光持续时间。"
 
@@ -1984,7 +1996,7 @@ msgstr "从你的套牌中选择一张要替换的牌"
 msgid "Choose a card from your graveyard"
 msgstr "从你的坟墓场选择一张牌"
 
-#: ui/views/Settings.tsx:1075
+#: ui/views/Settings.tsx:1090
 msgid "Choose a color preset. Works with both light and dark modes."
 msgstr "选择配色预设，同时适用于浅色和深色模式。"
 
@@ -2074,7 +2086,7 @@ msgstr "选择 AI 套牌或开始对战"
 msgid "Choose the deck you want to play"
 msgstr "选择你想使用的套牌"
 
-#: ui/views/Settings.tsx:885
+#: ui/views/Settings.tsx:900
 msgid "Choose which face stack cards show when they appear. You can still switch individual cards."
 msgstr "选择堆叠中的卡牌出现时使用的视图。仍可单独切换每张卡牌。"
 
@@ -2142,7 +2154,7 @@ msgstr "清除收藏筛选器"
 msgid "Clear Deck"
 msgstr "清空套牌"
 
-#: ui/views/Settings.tsx:377
+#: ui/views/Settings.tsx:392
 msgid "Clear image cache & reload"
 msgstr "清除图像缓存并重新加载"
 
@@ -2154,7 +2166,7 @@ msgstr "清除法术力值筛选器"
 msgid "Clear search"
 msgstr "清除搜索"
 
-#: ui/views/Settings.tsx:377
+#: ui/views/Settings.tsx:392
 msgid "Clearing…"
 msgstr "正在清除…"
 
@@ -2174,8 +2186,8 @@ msgstr "点击 ••• 菜单，然后选择 Export（导出）。"
 msgid "Click to clear the filter"
 msgstr "点击清除筛选器"
 
-#: ui/views/Settings.tsx:1184
-#: ui/views/Settings.tsx:1332
+#: ui/views/Settings.tsx:1199
+#: ui/views/Settings.tsx:1347
 msgid "Click to edit color value"
 msgstr "点击编辑颜色值"
 
@@ -2326,7 +2338,7 @@ msgstr "颜色标识"
 msgid "Color Identity: {0}"
 msgstr "颜色标识：{0}"
 
-#: ui/views/Settings.tsx:983
+#: ui/views/Settings.tsx:998
 msgid "Color Preset"
 msgstr "颜色预设"
 
@@ -2543,7 +2555,7 @@ msgid "Connected"
 msgstr "已连接"
 
 #. placeholder {0}: server.username
-#: ui/views/Settings.tsx:491
+#: ui/views/Settings.tsx:506
 msgid "Connected as {0}"
 msgstr "已以 {0} 的身份连接"
 
@@ -2556,7 +2568,7 @@ msgstr "连接中"
 msgid "Connecting to MTGJSON"
 msgstr "正在连接 MTGJSON"
 
-#: ui/views/Settings.tsx:495
+#: ui/views/Settings.tsx:510
 msgid "Connecting..."
 msgstr "正在连接…"
 
@@ -2572,7 +2584,7 @@ msgstr "连接失败。"
 msgid "Connection lost"
 msgstr "连接已断开"
 
-#: ui/phase/transport.ts:120
+#: ui/phase/transport.ts:122
 msgid "Conspiracy reveal was rejected"
 msgstr "阴谋揭露被拒绝"
 
@@ -2597,11 +2609,11 @@ msgstr "机关"
 msgid "Control"
 msgstr "控制"
 
-#: ui/views/Settings.tsx:979
+#: ui/views/Settings.tsx:994
 msgid "Controls app theme preference."
 msgstr "控制应用主题偏好。"
 
-#: ui/views/Settings.tsx:602
+#: ui/views/Settings.tsx:617
 msgid "Controls placement of Library / Graveyard / Exile in the in-field zone column."
 msgstr "设置战场区域栏中牌库、坟墓场和放逐区的排列位置。"
 
@@ -2813,7 +2825,7 @@ msgstr "无法写入剪贴板"
 msgid "Couldn't add {name}"
 msgstr "无法添加 {name}"
 
-#: ui/views/Settings.tsx:239
+#: ui/views/Settings.tsx:240
 msgid "Couldn't clear the image cache"
 msgstr "无法清除图片缓存"
 
@@ -3008,7 +3020,7 @@ msgid "Custom Tags"
 msgstr "自定义标签"
 
 #: ui/components/editor/DeckHero.tsx:82
-#: ui/views/Settings.tsx:551
+#: ui/views/Settings.tsx:566
 msgid "Customize playmat"
 msgstr "自定义牌垫"
 
@@ -3028,7 +3040,7 @@ msgstr "循环切换手牌顺序"
 msgid "Danger zone"
 msgstr "危险区域"
 
-#: ui/views/Settings.tsx:969
+#: ui/views/Settings.tsx:984
 msgid "Dark"
 msgstr "深色"
 
@@ -3237,11 +3249,12 @@ msgstr "你在编辑器中构建的套牌。"
 msgid "Decorative animations"
 msgstr "装饰性动画"
 
-#: ui/views/Settings.tsx:777
+#: ui/views/Settings.tsx:792
 msgid "Decorative board effects — creature entrance stomp + dust, stat and damage pops, glow pulses. Turn these off to save performance on weaker hardware; the board still works (cards move, state indicators and damage numbers stay)."
 msgstr "战场装饰特效，包括生物进场时的震动和扬尘、数值与伤害弹出效果，以及光效脉冲。硬件性能较弱时可关闭以提升性能；战场仍能正常使用（卡牌移动、状态指示和伤害数字会保留）。"
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
+#: ui/components/settings/LlmOpponentCard.tsx:105
 #: ui/views/Limited.tsx:628
 msgid "Default"
 msgstr "默认"
@@ -3254,8 +3267,8 @@ msgstr "默认（法术力费用）"
 msgid "Default is off to read local card data directly without online requests. When enabled, Chinese card names and rules text are fetched online via MTGCH."
 msgstr "默认关闭，直接读取本地卡牌数据，无需网络请求。开启后，将通过 MTGCH 在线获取中文卡名与规则文本。"
 
-#: ui/views/Settings.tsx:544
-#: ui/views/Settings.tsx:938
+#: ui/views/Settings.tsx:559
+#: ui/views/Settings.tsx:953
 msgid "Default Playmat"
 msgstr "默认牌垫"
 
@@ -3263,7 +3276,7 @@ msgstr "默认牌垫"
 msgid "Default printing"
 msgstr "默认印刷版本"
 
-#: ui/views/Settings.tsx:884
+#: ui/views/Settings.tsx:899
 msgid "Default Stack Card View"
 msgstr "堆叠卡牌默认视图"
 
@@ -3507,7 +3520,7 @@ msgstr "草稿"
 msgid "Drag cards here from the search panel"
 msgstr "从搜索面板将卡牌拖到此处"
 
-#: ui/views/Settings.tsx:683
+#: ui/views/Settings.tsx:698
 msgid "Drag cards sideways for a custom order, or keep every hand sorted automatically by color or mana value."
 msgstr "横向拖动卡牌来自定义顺序，或始终按颜色或法术力值自动排列手牌。"
 
@@ -3549,7 +3562,7 @@ msgstr "拖入图片以用作牌垫"
 msgid "dropped"
 msgstr "已退赛"
 
-#: ui/views/Settings.tsx:366
+#: ui/views/Settings.tsx:381
 msgid "Drops Manabrew's in-memory card textures and image object URLs, clears the CacheStorage API, then reloads so every card image is fetched fresh. Use this if battlefield card art fails to appear. For a full browser HTTP cache wipe, use the browser's \"Empty Cache and Hard Reload\" (DevTools open → right-click reload)."
 msgstr "清除 Manabrew 内存中的卡牌纹理和图像对象 URL，清空 CacheStorage 缓存，然后重新加载以获取所有卡牌图像。如果战场上的卡图无法显示，可使用此功能。若要彻底清除浏览器的 HTTP 缓存，请使用浏览器的“清空缓存并硬性重新加载”（打开开发者工具 → 右键点击重新加载按钮）。"
 
@@ -3575,6 +3588,10 @@ msgstr "重复的服务器握手"
 #: ui/components/editor/CardSearch.tsx:1203
 msgid "e.g. flying, haste, deathtouch"
 msgstr "例如 flying、haste、deathtouch"
+
+#: ui/components/settings/LlmOpponentCard.tsx:56
+msgid "e.g. http://localhost:11434/v1 or https://api.openai.com/v1"
+msgstr "例如 http://localhost:11434/v1 或 https://api.openai.com/v1"
 
 #: ui/components/OnboardingWelcome.tsx:88
 msgid "e.g. StormCrow"
@@ -3679,6 +3696,10 @@ msgstr "引擎推导的定位，与实用的 60 张牌基准相比。"
 #: ui/components/editor/DeckHealthPanel.tsx:78
 msgid "Engine-derived roles compared with a practical Commander baseline."
 msgstr "引擎推导的定位，与实用的指挥官基准相比。"
+
+#: ui/components/settings/LlmOpponentCard.tsx:115
+msgid "Enter a base URL and a model to turn LLM mode on; until then the built-in AI plays."
+msgstr "填写基础 URL 和模型才能开启 LLM 模式；在此之前由内置 AI 对战。"
 
 #: ui/components/editor/CardSearch.tsx:1360
 msgid "Enter a card name or select filters to search."
@@ -3800,7 +3821,7 @@ msgstr "如提供了系列、收藏编号和闪卡信息，将保留这些信息
 msgid "Exactly"
 msgstr "恰好"
 
-#: ui/views/Settings.tsx:621
+#: ui/views/Settings.tsx:636
 msgid "Exile"
 msgstr "放逐"
 
@@ -4027,7 +4048,7 @@ msgstr "按{0}色系筛选"
 msgid "Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate"
 msgstr "按名称筛选，或使用 tag:、type:、color:、section:、mv>=、is:owned、is:missing、is:partial、is:foil、is:combo，以及 - 表示排除"
 
-#: ui/views/Settings.tsx:1082
+#: ui/views/Settings.tsx:1097
 msgid "Filter colors... (e.g. primary, counter, arrow)"
 msgstr "筛选颜色…（例如 primary、counter、arrow）"
 
@@ -4096,7 +4117,7 @@ msgstr "首次印刷"
 msgid "First Strike Damage"
 msgstr "先制打击伤害"
 
-#: ui/views/Settings.tsx:920
+#: ui/views/Settings.tsx:935
 msgid "Flash duration"
 msgstr "闪光时长"
 
@@ -4153,7 +4174,7 @@ msgstr "浮动法术力"
 msgid "Focus next opponent field"
 msgstr "聚焦下一位对手的场地"
 
-#: ui/views/Settings.tsx:823
+#: ui/views/Settings.tsx:838
 msgid "Focus on one opponent, or keep every opponent field equally visible."
 msgstr "聚焦一位对手，或让所有对手的战场均等显示。"
 
@@ -4178,7 +4199,7 @@ msgid "Focus the card filter"
 msgstr "聚焦牌张筛选器"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:180
-#: ui/views/Settings.tsx:831
+#: ui/views/Settings.tsx:846
 msgid "Focused"
 msgstr "聚焦"
 
@@ -4278,7 +4299,7 @@ msgid "Frame"
 msgstr "边框样式"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:171
-#: ui/views/Settings.tsx:709
+#: ui/views/Settings.tsx:724
 msgid "Free placement"
 msgstr "自由摆放"
 
@@ -4413,7 +4434,7 @@ msgstr "对局状态"
 msgid "Game summary"
 msgstr "对局总结"
 
-#: ui/views/Settings.tsx:1205
+#: ui/views/Settings.tsx:1220
 msgid "Game Theme Colors"
 msgstr "对局主题颜色"
 
@@ -4446,7 +4467,7 @@ msgstr "挑战赛"
 msgid "General"
 msgstr "公共频道"
 
-#: ui/views/Settings.tsx:1347
+#: ui/views/Settings.tsx:1362
 msgid "Generated from game theme keys. Defaults come from the active preset."
 msgstr "根据游戏主题键生成。默认值来自当前预设。"
 
@@ -4492,7 +4513,7 @@ msgstr "先手"
 msgid "Gold"
 msgstr "多色"
 
-#: ui/views/Settings.tsx:620
+#: ui/views/Settings.tsx:635
 msgid "Graveyard"
 msgstr "坟墓场"
 
@@ -4532,7 +4553,7 @@ msgstr "保证槽位已激活"
 msgid "Guest"
 msgstr "访客"
 
-#: ui/views/Settings.tsx:866
+#: ui/views/Settings.tsx:881
 msgid "Hand Card Style"
 msgstr "手牌样式"
 
@@ -4540,7 +4561,7 @@ msgstr "手牌样式"
 msgid "Hand default view"
 msgstr "手牌默认视图"
 
-#: ui/views/Settings.tsx:682
+#: ui/views/Settings.tsx:697
 msgid "Hand Ordering"
 msgstr "手牌排序"
 
@@ -4591,7 +4612,7 @@ msgid "Historic"
 msgstr "史迹"
 
 #: ui/components/lobby/OpenTableSeats.tsx:82
-#: ui/views/Settings.tsx:391
+#: ui/views/Settings.tsx:406
 msgid "Host"
 msgstr "主机"
 
@@ -4705,7 +4726,7 @@ msgstr "忽略"
 msgid "Image"
 msgstr "图片"
 
-#: ui/views/Settings.tsx:235
+#: ui/views/Settings.tsx:236
 msgid "Image cache cleared — reloading…"
 msgstr "图片缓存已清除 — 正在重新加载…"
 
@@ -4835,7 +4856,7 @@ msgstr "在你的套牌中"
 msgid "in-browser"
 msgstr "浏览器内"
 
-#: ui/views/Settings.tsx:776
+#: ui/views/Settings.tsx:791
 msgid "In-game Animations"
 msgstr "对局动画"
 
@@ -4991,7 +5012,7 @@ msgstr "已邀请"
 msgid "Invited {0} to your table"
 msgstr "已邀请 {0} 加入你的牌桌"
 
-#: ui/views/Settings.tsx:799
+#: ui/views/Settings.tsx:814
 msgid "Ironsmith engine (experimental)"
 msgstr "Ironsmith 引擎（实验性）"
 
@@ -5220,6 +5241,10 @@ msgstr "布局"
 msgid "Leave"
 msgstr "离开"
 
+#: ui/components/settings/LlmOpponentCard.tsx:77
+msgid "Leave empty for a local server"
+msgstr "本地服务器可留空"
+
 #: ui/components/game/GameFailedScreen.tsx:18
 #: ui/components/game/GameLoadingScreen.tsx:129
 msgid "Leave game"
@@ -5293,7 +5318,7 @@ msgid "Level Up"
 msgstr "升级"
 
 #: ui/components/game/zones/LibraryZoneTile.tsx:34
-#: ui/views/Settings.tsx:619
+#: ui/views/Settings.tsx:634
 msgid "Library"
 msgstr "牌库"
 
@@ -5312,7 +5337,7 @@ msgstr "生命计数器"
 msgid "Life, poison, and commander damage for paper nights."
 msgstr "为实体牌对战记录生命、中毒指示物与指挥官伤害。"
 
-#: ui/views/Settings.tsx:962
+#: ui/views/Settings.tsx:977
 msgid "Light"
 msgstr "浅色"
 
@@ -5465,7 +5490,7 @@ msgstr "本地游戏支持使用六包补充包的现开赛，以及对抗 AI、
 #~ msgstr "本地双人对战演示。双方均使用服务器上的休闲“森林 / 灰棕熊”套牌。AI 会通过 Phase 的合法操作、优先权、战斗和选择进行游戏。"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:205
-#: ui/views/Settings.tsx:738
+#: ui/views/Settings.tsx:753
 msgid "Locked"
 msgstr "锁定"
 
@@ -5659,11 +5684,11 @@ msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
 msgid "Manual result — unverified"
 msgstr "手动结果 —— 未经核实"
 
-#: ui/stores/useGameStore.ts:468
+#: ui/stores/useGameStore.ts:470
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "手动房间客户端需要手动桌面运行时。"
 
-#: ui/stores/useGameStore.ts:439
+#: ui/stores/useGameStore.ts:441
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "手动房间主机需要手动桌面运行时。"
 
@@ -5795,7 +5820,7 @@ msgstr "向所有人发送消息…"
 msgid "Message your table…"
 msgstr "向同桌玩家发送消息…"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Middle"
 msgstr "中部"
 
@@ -5808,7 +5833,7 @@ msgid "Mill"
 msgstr "磨牌"
 
 #: ui/components/game/battlefieldCardStyles.ts:11
-#: ui/views/Settings.tsx:768
+#: ui/views/Settings.tsx:783
 msgid "Mini-frame"
 msgstr "迷你牌框"
 
@@ -5831,6 +5856,14 @@ msgstr "缺失牌张 CSV"
 #: ui/components/editor/CardSearch.tsx:417
 msgid "Modal DFC"
 msgstr "模式双面牌"
+
+#: ui/components/settings/LlmOpponentCard.tsx:85
+msgid "Model"
+msgstr "模型"
+
+#: ui/components/settings/LlmOpponentCard.tsx:91
+msgid "Model id, e.g. gpt-4o or llama3.1:8b"
+msgstr "模型 ID，例如 gpt-4o 或 llama3.1:8b"
 
 #: ui/components/editor/CardSearch.tsx:154
 #: ui/components/editor/CardSearch.tsx:268
@@ -5877,7 +5910,7 @@ msgid "More ways to play and tools"
 msgstr "更多玩法与工具"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:204
-#: ui/views/Settings.tsx:731
+#: ui/views/Settings.tsx:746
 msgid "Movable"
 msgstr "可移动"
 
@@ -5978,7 +6011,7 @@ msgstr "多人服务器不可用。"
 msgid "Multiplayer settings"
 msgstr "多人游戏设置"
 
-#: ui/views/Settings.tsx:274
+#: ui/views/Settings.tsx:275
 msgid "My assets"
 msgstr "我的素材"
 
@@ -6014,7 +6047,7 @@ msgstr "我的套牌（{0}）· 约 {1}"
 msgid "Name"
 msgstr "名称"
 
-#: ui/views/Settings.tsx:509
+#: ui/views/Settings.tsx:524
 msgid "Name this server"
 msgstr "为此服务器命名"
 
@@ -6085,7 +6118,7 @@ msgstr "没有进行中的手动桌面游戏。"
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "此赛制没有可用的 AI 套牌 — 请自行选择一套。"
 
-#: ui/phase/transport.ts:119
+#: ui/phase/transport.ts:121
 msgid "No authorized conspiracy reveal action"
 msgstr "没有已授权的阴谋揭露操作"
 
@@ -6216,7 +6249,7 @@ msgstr "套牌中没有传奇生物——请在下方输入名称。"
 msgid "no lines yet"
 msgstr "暂无数据"
 
-#: ui/stores/useGameStore.ts:672
+#: ui/stores/useGameStore.ts:674
 msgid "No local player is available to concede."
 msgstr "没有可认输的本地玩家。"
 
@@ -6456,9 +6489,9 @@ msgid "Oathbreaker"
 msgstr "破誓者"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:70
-#: ui/views/Settings.tsx:792
-#: ui/views/Settings.tsx:815
-#: ui/views/Settings.tsx:860
+#: ui/views/Settings.tsx:807
+#: ui/views/Settings.tsx:830
+#: ui/views/Settings.tsx:875
 msgid "Off"
 msgstr "关闭"
 
@@ -6475,6 +6508,10 @@ msgstr "官方预设"
 #: ui/components/lobby/OpenTableCard.tsx:63
 msgid "Official table"
 msgstr "官方牌桌"
+
+#: ui/components/settings/LlmOpponentCard.tsx:37
+msgid "Offline games play their AI seats through an OpenAI-compatible endpoint instead of the built-in engine AI. Difficulty still applies: it sets the model's persona and how much of the game it is shown. If a request fails, that decision falls back to the built-in AI."
+msgstr "离线对局中，AI 座位改由 OpenAI 兼容接口驱动，而不用内置引擎 AI。难度依然生效：它决定模型的人格设定以及能看到多少对局信息。某次请求失败时，该决策会回退到内置 AI。"
 
 #: ui/components/play/OfflinePlayShell.tsx:36
 msgid "Offline play type"
@@ -6516,9 +6553,9 @@ msgid "on"
 msgstr "开"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:69
-#: ui/views/Settings.tsx:785
-#: ui/views/Settings.tsx:808
-#: ui/views/Settings.tsx:853
+#: ui/views/Settings.tsx:800
+#: ui/views/Settings.tsx:823
+#: ui/views/Settings.tsx:868
 msgid "On"
 msgstr "开启"
 
@@ -6696,7 +6733,7 @@ msgid "Opening the game table..."
 msgstr "正在打开对局桌面…"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:177
-#: ui/views/Settings.tsx:822
+#: ui/views/Settings.tsx:837
 msgid "Opponent layout"
 msgstr "对手布局"
 
@@ -6759,7 +6796,7 @@ msgid "other"
 msgstr "其他"
 
 #: ui/components/editor/deckBuilder.utils.ts:249
-#: ui/views/Settings.tsx:1239
+#: ui/views/Settings.tsx:1254
 msgid "Other"
 msgstr "其他"
 
@@ -6771,13 +6808,13 @@ msgstr "连接服务器后，其他玩家将看到这个名字。"
 msgid "Outline"
 msgstr "描边"
 
-#: ui/views/Settings.tsx:1199
+#: ui/views/Settings.tsx:1214
 msgid "Override individual colors from the active preset."
 msgstr "覆盖当前预设中的单个颜色。"
 
 #: ui/components/editor/DeckInsightsPanel.tsx:22
 #: ui/components/game/modals/GameSettingsModal.tsx:181
-#: ui/views/Settings.tsx:838
+#: ui/views/Settings.tsx:853
 msgid "Overview"
 msgstr "总览"
 
@@ -6864,7 +6901,7 @@ msgid "Pass until end of turn / resolve stack"
 msgstr "让过至回合结束 / 结算堆叠"
 
 #: ui/components/lobby/JoinPasswordDialog.tsx:90
-#: ui/views/Settings.tsx:410
+#: ui/views/Settings.tsx:425
 msgid "Password"
 msgstr "密码"
 
@@ -6949,7 +6986,7 @@ msgstr "平民"
 msgid "Pauper Commander"
 msgstr "贫民指挥官"
 
-#: ui/views/Settings.tsx:844
+#: ui/views/Settings.tsx:859
 msgid "Peer to Peer"
 msgstr "点对点连接"
 
@@ -7245,7 +7282,7 @@ msgstr "积分：胜 / 平 / 负"
 msgid "Pool file must contain a non-empty `pool` array of DraftCards."
 msgstr "牌池文件必须包含非空的 DraftCards `pool` 数组。"
 
-#: ui/views/Settings.tsx:400
+#: ui/views/Settings.tsx:415
 msgid "Port"
 msgstr "端口"
 
@@ -7272,7 +7309,7 @@ msgstr "M14 之前（任意操控者）"
 #: ui/components/layout/AccountMenu.tsx:167
 #: ui/components/layout/TopBar.tsx:75
 #: ui/components/play/PlayHomeLinks.tsx:95
-#: ui/views/Settings.tsx:287
+#: ui/views/Settings.tsx:288
 msgid "Preferences"
 msgstr "偏好设置"
 
@@ -7354,11 +7391,11 @@ msgstr "主导航"
 msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
 msgstr "将 UI 收到的每个提示（不包括状态更新）连同完整 JSON 打印到开发者控制台。便于报告提示相关问题。"
 
-#: ui/views/Settings.tsx:867
+#: ui/views/Settings.tsx:882
 msgid "Printed card shows the card image. Dynamic view uses the card's current rules and game state; each card can still be switched."
 msgstr "印刷卡面显示卡牌图像。动态视图使用卡牌当前的规则和对局状态；仍可单独切换每张卡牌的视图。"
 
-#: ui/views/Settings.tsx:903
+#: ui/views/Settings.tsx:918
 msgid "Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state."
 msgstr "印刷卡面显示完整的卡牌图像。动态视图优先显示当前规则、动作、费用、指示物及其他对局状态。"
 
@@ -7423,7 +7460,7 @@ msgid "Prompt preview"
 msgstr "提示预览"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
-#: ui/views/Settings.tsx:311
+#: ui/views/Settings.tsx:312
 msgid "Prompts"
 msgstr "提示"
 
@@ -7569,7 +7606,7 @@ msgstr "准备"
 #: ui/components/game/battlefieldCardStyles.ts:9
 #: ui/components/game/cardPreviewStyles.ts:12
 #: ui/components/game/cardPreviewStyles.ts:22
-#: ui/views/Settings.tsx:754
+#: ui/views/Settings.tsx:769
 msgid "Realistic"
 msgstr "写实"
 
@@ -7689,7 +7726,7 @@ msgstr "移除“{tag}”标签"
 #. placeholder {0}: relay.name
 #: ui/components/editor/DeckListView.tsx:203
 #: ui/components/editor/DeckListView.tsx:528
-#: ui/views/Settings.tsx:462
+#: ui/views/Settings.tsx:477
 msgid "Remove {0}"
 msgstr "移除 {0}"
 
@@ -7778,7 +7815,7 @@ msgid "Remove one each"
 msgstr "每张移除一张"
 
 #: ui/components/editor/PlaymatEditorModal.tsx:482
-#: ui/views/Settings.tsx:586
+#: ui/views/Settings.tsx:601
 msgid "Remove playmat"
 msgstr "移除牌垫"
 
@@ -7917,8 +7954,8 @@ msgstr "全部重置"
 msgid "Reset all adjustments to their defaults"
 msgstr "将所有调整重置为默认值"
 
-#: ui/views/Settings.tsx:1104
-#: ui/views/Settings.tsx:1207
+#: ui/views/Settings.tsx:1119
+#: ui/views/Settings.tsx:1222
 msgid "Reset Colors"
 msgstr "重置颜色"
 
@@ -8095,11 +8132,11 @@ msgstr "相同种子 + 相同牌池 → 每次开包结果相同。"
 #: ui/components/editor/DeckBuilder.tsx:1861
 #: ui/components/settings/AvatarCropDialog.tsx:155
 #: ui/components/settings/GuestNamePicker.tsx:54
-#: ui/views/Settings.tsx:518
+#: ui/views/Settings.tsx:533
 msgid "Save"
 msgstr "保存"
 
-#: ui/views/Settings.tsx:422
+#: ui/views/Settings.tsx:437
 msgid "Save & Reconnect"
 msgstr "保存并重新连接"
 
@@ -8107,7 +8144,7 @@ msgstr "保存并重新连接"
 msgid "Save as draft"
 msgstr "保存为草稿"
 
-#: ui/views/Settings.tsx:486
+#: ui/views/Settings.tsx:501
 msgid "Save current server…"
 msgstr "保存当前服务器…"
 
@@ -8188,7 +8225,7 @@ msgstr "已将“{0}”保存为草稿 — 有一张牌不受 Manabrew 和 Forge
 msgid "Saved \"{label}\"."
 msgstr "已保存“{label}”。"
 
-#: ui/views/Settings.tsx:225
+#: ui/views/Settings.tsx:226
 msgid "Saved \"{name}\""
 msgstr "已保存“{name}”"
 
@@ -8212,7 +8249,7 @@ msgstr "已保存到本地"
 msgid "Saved on this device"
 msgstr "已保存在此设备"
 
-#: ui/views/Settings.tsx:428
+#: ui/views/Settings.tsx:443
 msgid "Saved servers"
 msgstr "已保存的服务器"
 
@@ -8226,7 +8263,7 @@ msgstr "已将版本 {0} 保存到你的账户"
 msgid "Saved views"
 msgstr "已保存视图"
 
-#: ui/views/Settings.tsx:524
+#: ui/views/Settings.tsx:539
 msgid "Saves the current host, port, and password so you can switch back later."
 msgstr "保存当前主机、端口和密码，方便以后切换回来。"
 
@@ -8250,7 +8287,7 @@ msgstr "向同桌玩家打个招呼吧。"
 msgid "SB {sideboardCount}"
 msgstr "备牌 {sideboardCount}"
 
-#: ui/views/Settings.tsx:631
+#: ui/views/Settings.tsx:646
 msgid "Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them."
 msgstr "调整所有战场卡牌和扇形手牌的大小。100% 对应经典的三行战场布局；战场卡牌最多放大到两行铺满的大小，以保持操作空间，而手牌仍可继续放大。"
 
@@ -8473,7 +8510,7 @@ msgstr "选择套牌"
 msgid "Select one in Table settings to continue."
 msgstr "在桌面设置中选择一个以继续。"
 
-#: ui/views/Settings.tsx:1011
+#: ui/views/Settings.tsx:1026
 msgid "Select preset"
 msgstr "选择预设"
 
@@ -8521,12 +8558,12 @@ msgstr "正在发送认输…"
 msgid "Sending…"
 msgstr "正在发送…"
 
-#: ui/views/Settings.tsx:335
-#: ui/views/Settings.tsx:387
+#: ui/views/Settings.tsx:348
+#: ui/views/Settings.tsx:402
 msgid "Server"
 msgstr "服务器"
 
-#: ui/views/Settings.tsx:529
+#: ui/views/Settings.tsx:544
 msgid "Server connection settings. Saving will disconnect and reconnect with the new credentials."
 msgstr "服务器连接设置。保存后将断开连接，并使用新的凭据重新连接。"
 
@@ -8589,7 +8626,7 @@ msgstr "将背面设为套牌插画封面"
 msgid "Set code"
 msgstr "系列代码"
 
-#: ui/views/Settings.tsx:551
+#: ui/views/Settings.tsx:566
 msgid "Set playmat"
 msgstr "设置牌垫"
 
@@ -8649,7 +8686,7 @@ msgstr "电震地"
 msgid "Short label"
 msgstr "短标签"
 
-#: ui/views/Settings.tsx:323
+#: ui/views/Settings.tsx:324
 msgid "Shortcuts"
 msgstr "快捷键"
 
@@ -8842,7 +8879,7 @@ msgstr "尺寸与视口"
 msgid "Skip"
 msgstr "跳过"
 
-#: ui/views/Settings.tsx:845
+#: ui/views/Settings.tsx:860
 msgid "Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled."
 msgstr "绕过 Manabrew 服务器，直接连接同桌的其他玩家。这会向与你对局的玩家公开你的 IP 地址，且仅在对局中的所有玩家都启用此功能时生效。"
 
@@ -9212,7 +9249,7 @@ msgstr "已同步到你的账户"
 msgid "Syncing…"
 msgstr "正在同步…"
 
-#: ui/views/Settings.tsx:976
+#: ui/views/Settings.tsx:991
 msgid "System"
 msgstr "跟随系统"
 
@@ -9327,6 +9364,10 @@ msgstr "酒馆桌面"
 msgid "TCGplayer"
 msgstr "TCGplayer"
 
+#: ui/components/settings/LlmOpponentCard.tsx:99
+msgid "Temperature"
+msgstr "温度"
+
 #: ui/components/editor/DeckLabelsModal.tsx:18
 msgid "Tempo"
 msgstr "节奏"
@@ -9377,7 +9418,7 @@ msgstr "无法发送该消息"
 msgid "That name is already claimed. Pick another."
 msgstr "这个名字已被注册，请换一个。"
 
-#: ui/views/Settings.tsx:219
+#: ui/views/Settings.tsx:220
 msgid "That name is reserved for a built-in server"
 msgstr "该名称是为内置服务器保留的"
 
@@ -9396,6 +9437,10 @@ msgstr "这个用户名已被占用。"
 #: ui/components/editor/DeckBuilder.tsx:1059
 msgid "The account version could not be loaded. Your local copy is still saved."
 msgstr "无法加载账户版本。你的本地副本仍然保留。"
+
+#: ui/components/settings/LlmOpponentCard.tsx:61
+msgid "The API root, in OpenAI format. A full endpoint pasted from your provider's docs is normalized to its root."
+msgstr "OpenAI 格式的 API 根地址。从服务商文档里复制的完整接口地址会被规范化为其根地址。"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
@@ -9462,7 +9507,7 @@ msgstr "牌垫会填充一个宽幅的横向区域（约 5:2）。为获得清�
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "预览栏是编辑器共享的牌张检查器。将鼠标悬停在工作区任意位置的牌上，其图片和详情就会显示在那里，不会打断你正在进行的操作。"
 
-#: ui/stores/useGameStore.ts:381
+#: ui/stores/useGameStore.ts:383
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "上一局游戏仍在关闭中。请稍后重试。"
 
@@ -9482,8 +9527,8 @@ msgstr "所选策略不会改变此套牌"
 msgid "The session was left or replaced before this response arrived."
 msgstr "在此响应到达之前，会话已离开或被替换。"
 
-#: ui/views/Settings.tsx:299
-#: ui/views/Settings.tsx:951
+#: ui/views/Settings.tsx:300
+#: ui/views/Settings.tsx:966
 msgid "Theme"
 msgstr "主题"
 
@@ -9697,7 +9742,7 @@ msgstr "衍生物"
 msgid "Tokens"
 msgstr "衍生物"
 
-#: ui/views/Settings.tsx:1241
+#: ui/views/Settings.tsx:1256
 msgid "Tokens not covered by the groups above."
 msgstr "上述分组未涵盖的主题变量。"
 
@@ -9709,7 +9754,7 @@ msgstr "尝试次数过多 — 请几分钟后重试。"
 msgid "Tools"
 msgstr "工具"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Top"
 msgstr "顶部"
 
@@ -10007,9 +10052,13 @@ msgstr "使用 CubeCobra cube 代替系列"
 msgid "Use a nickname instead"
 msgstr "改用昵称进入"
 
-#: ui/views/Settings.tsx:175
+#: ui/views/Settings.tsx:176
 msgid "Use a valid hex or rgb/rgba color."
 msgstr "请使用有效的十六进制或 rgb/rgba 颜色。"
+
+#: ui/components/settings/LlmOpponentCard.tsx:34
+msgid "Use an LLM as the AI opponent"
+msgstr "使用 LLM 作为 AI 对手"
 
 #: ui/components/settings/CardImageLibraryCard.tsx:114
 msgid "Use folder"
@@ -10027,7 +10076,7 @@ msgstr "跟随系统语言"
 msgid "Use the account version"
 msgstr "使用账户版本"
 
-#: ui/views/Settings.tsx:545
+#: ui/views/Settings.tsx:560
 msgid "Used in games when the deck you're playing has no custom playmat of its own."
 msgstr "当你使用的套牌没有专属的自定义牌垫时，对局中将使用此牌垫。"
 
@@ -10387,7 +10436,7 @@ msgstr "你的套牌不满足数量要求。"
 msgid "Your Decks"
 msgstr "你的套牌"
 
-#: ui/views/Settings.tsx:562
+#: ui/views/Settings.tsx:577
 msgid "Your default playmat"
 msgstr "你的默认牌垫"
 
@@ -10411,6 +10460,10 @@ msgstr "你的游戏数据不包含 {0}。请更新应用以使用此系列。"
 #: ui/components/lobby/ReportPlayerDialog.tsx:113
 msgid "Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at this promptly and take action where it is warranted."
 msgstr "你的帮助对维护 Manabrew 的安全环境十分重要。维护者会尽快审查，并在必要时采取措施。"
+
+#: ui/components/settings/LlmOpponentCard.tsx:121
+msgid "Your key is kept in this browser's local preferences and used only by the local game host on your machine. Turn this off to return every game to the built-in AI."
+msgstr "密钥保存在此浏览器的本地偏好设置中，仅由你机器上的本地对局主进程使用。关闭此项即可让所有对局恢复使用内置 AI。"
 
 #: ui/views/OnlinePlay.tsx:149
 msgid "Your name"
@@ -10440,7 +10493,7 @@ msgstr "你的座位"
 msgid "Your seat was forfeited while you were disconnected."
 msgstr "你在断开连接期间席位被判负。"
 
-#: ui/views/Settings.tsx:446
+#: ui/views/Settings.tsx:461
 msgid "Your servers"
 msgstr "你的服务器"
 
@@ -10468,7 +10521,7 @@ msgstr "区域顺序"
 msgid "Zone piles"
 msgstr "区域牌堆"
 
-#: ui/views/Settings.tsx:722
+#: ui/views/Settings.tsx:737
 msgid "Zone Piles"
 msgstr "区域牌堆"
 

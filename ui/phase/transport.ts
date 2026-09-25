@@ -99,6 +99,8 @@ export async function startLocalDeckGame(decks: {
   customRules?: unknown;
   /** Phase engine AI difficulty label (`VeryEasy` … `CEDH`) for every AI seat. */
   difficulty?: string;
+  /** Optional OpenAI-compatible endpoint that plays the AI seats. */
+  llm?: import("@/lib/llmSeat").LlmSeatRequest;
   extraOpponents?: { deck: string[]; commanders: string[]; conspiracy?: string[]; sideboard?: string[] }[];
 }): Promise<void> {
   invalidateSnapshotGeneration();

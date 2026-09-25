@@ -1295,6 +1295,7 @@ dependencies = [
  "percent-encoding",
  "phase-ai",
  "phase-engine",
+ "phase-llm",
  "rand 0.9.5",
  "rand_chacha",
  "reqwest",

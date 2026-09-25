@@ -26,6 +26,7 @@ import { useGameStore } from "@/stores/useGameStore";
 import { useScryfallStore } from "@/stores/useScryfallStore";
 import { PromptPreferencesPanel } from "@/components/prompts/internal/PromptPreferencesPanel";
 import { KeybindingsPanel } from "@/components/settings/KeybindingsPanel";
+import { LlmOpponentCard } from "@/components/settings/LlmOpponentCard";
 import { AccountSection } from "@/components/settings/AccountSection";
 import { MyAssetsSection } from "@/components/settings/MyAssetsSection";
 import { CardArtDownloadSection } from "@/components/settings/CardArtDownloadSection";
@@ -120,7 +121,7 @@ export default function Settings() {
   const { theme, setTheme, resolvedTheme } = useColorMode();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<
-    "server" | "preferences" | "theme" | "prompts" | "keybindings" | "cache" | "account" | "assets"
+    "server" | "preferences" | "theme" | "prompts" | "keybindings" | "ai" | "cache" | "account" | "assets"
   >(() =>
     location.state?.settingsTab === "account" && isFeatureEnabled("accounts")
       ? "account"
@@ -324,6 +325,18 @@ export default function Settings() {
           </button>
           <button
             type="button"
+            onClick={() => setActiveTab("ai")}
+            className={
+              "pb-2 text-sm font-medium transition-colors border-b-2 shrink-0 whitespace-nowrap " +
+              (activeTab === "ai"
+                ? "border-primary text-foreground"
+                : "border-transparent text-muted-foreground hover:text-foreground")
+            }
+          >
+            <Trans>AI opponent</Trans>
+          </button>
+          <button
+            type="button"
             onClick={() => setActiveTab("server")}
             className={
               "pb-2 text-sm font-medium transition-colors border-b-2 shrink-0 whitespace-nowrap " +
@@ -354,6 +367,8 @@ export default function Settings() {
       {activeTab === "assets" && <MyAssetsSection />}
 
       {activeTab === "keybindings" && <KeybindingsPanel />}
+
+      {activeTab === "ai" && <LlmOpponentCard />}
 
       {activeTab === "cache" && <CardArtDownloadSection />}
 

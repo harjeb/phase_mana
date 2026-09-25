@@ -11,6 +11,7 @@ engine = { package = "phase-engine", path = "../../phase/crates/engine" }
 phase-ai = { path = "../../phase/crates/phase-ai" }
 draft-core = { path = "../../phase/crates/draft-core" }
 draft-wasm = { path = "../../phase/crates/draft-wasm" }
+phase-llm = { path = "../../phase/crates/phase-llm" }
 rand_chacha = "0.9"
 manabrew-compat = { path = "../../phase/crates/manabrew-compat" }
 # Match phase/Cargo.lock: later 5.x versions changed Rust DTO fields.

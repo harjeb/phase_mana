@@ -165,15 +165,15 @@ msgstr "\"{0}\" set as sole commander — it doesn't have a partner ability"
 msgid "\"{deckName}\" removed from Community"
 msgstr "\"{deckName}\" removed from Community"
 
-#: ui/views/Settings.tsx:701
+#: ui/views/Settings.tsx:716
 msgid "\"Free placement\" lets you drag cards anywhere. \"Auto-arrange\" keeps the battlefield tidy in rows (creatures, then others, then lands) and ignores manual placement."
 msgstr "\"Free placement\" lets you drag cards anywhere. \"Auto-arrange\" keeps the battlefield tidy in rows (creatures, then others, then lands) and ignores manual placement."
 
-#: ui/views/Settings.tsx:723
+#: ui/views/Settings.tsx:738
 msgid "\"Locked\" keeps the deck, graveyard, exile, and command piles fixed on the battlefield so a drag can't move them. Tapping to open still works."
 msgstr "\"Locked\" keeps the deck, graveyard, exile, and command piles fixed on the battlefield so a drag can't move them. Tapping to open still works."
 
-#: ui/views/Settings.tsx:745
+#: ui/views/Settings.tsx:760
 msgid "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 msgstr "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 
@@ -357,7 +357,7 @@ msgid "{0} unlinked"
 msgstr "{0} unlinked"
 
 #. placeholder {0}: APP_THEME_COLOR_LABELS[key]
-#: ui/views/Settings.tsx:1164
+#: ui/views/Settings.tsx:1179
 msgid "{0} value"
 msgstr "{0} value"
 
@@ -432,7 +432,7 @@ msgstr "{engine} engine"
 msgid "{errorMsg} (HTTP {0})"
 msgstr "{errorMsg} (HTTP {0})"
 
-#: ui/views/Settings.tsx:921
+#: ui/views/Settings.tsx:936
 msgid "{flashDurationMs}ms"
 msgstr "{flashDurationMs}ms"
 
@@ -825,7 +825,7 @@ msgstr "Accept and continue"
 
 #: ui/components/layout/AccountMenu.tsx:101
 #: ui/components/layout/AccountMenu.tsx:148
-#: ui/views/Settings.tsx:260
+#: ui/views/Settings.tsx:261
 msgid "Account"
 msgstr "Account"
 
@@ -872,7 +872,7 @@ msgstr "Activate an ability"
 msgid "Activate focused preview action"
 msgstr "Activate focused preview action"
 
-#: ui/views/Settings.tsx:1064
+#: ui/views/Settings.tsx:1079
 msgid "Active"
 msgstr "Active"
 
@@ -1038,7 +1038,7 @@ msgstr "Added to {deckName}"
 msgid "Adding cards to this deck…"
 msgstr "Adding cards to this deck…"
 
-#: ui/views/Settings.tsx:800
+#: ui/views/Settings.tsx:815
 msgid "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 msgstr "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 
@@ -1067,6 +1067,10 @@ msgstr "AI"
 #: ui/components/lobby/DeckVsSelector.tsx:881
 msgid "AI difficulty"
 msgstr "AI difficulty"
+
+#: ui/views/Settings.tsx:336
+msgid "AI opponent"
+msgstr "AI opponent"
 
 #: ui/components/editor/CardSearch.tsx:182
 msgid "Alchemy"
@@ -1128,6 +1132,10 @@ msgstr "Anyone in the lobby can take a seat."
 msgid "Anything else? (optional)"
 msgstr "Anything else? (optional)"
 
+#: ui/components/settings/LlmOpponentCard.tsx:70
+msgid "API key"
+msgstr "API key"
+
 #. placeholder {0}: group.heading
 #: ui/components/dev/themeEditor/ThemeTokenRail.tsx:127
 msgid "App · {0}"
@@ -1137,11 +1145,11 @@ msgstr "App · {0}"
 msgid "App chrome"
 msgstr "App chrome"
 
-#: ui/views/Settings.tsx:955
+#: ui/views/Settings.tsx:970
 msgid "App Theme"
 msgstr "App Theme"
 
-#: ui/views/Settings.tsx:1091
+#: ui/views/Settings.tsx:1106
 msgid "App Theme Colors"
 msgstr "App Theme Colors"
 
@@ -1193,7 +1201,7 @@ msgid "Art ready for one image"
 msgstr "Art ready for one image"
 
 #: ui/components/game/battlefieldCardStyles.ts:10
-#: ui/views/Settings.tsx:761
+#: ui/views/Settings.tsx:776
 msgid "Art-forward"
 msgstr "Art-forward"
 
@@ -1253,7 +1261,7 @@ msgid "Auto"
 msgstr "Auto"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:172
-#: ui/views/Settings.tsx:716
+#: ui/views/Settings.tsx:731
 msgid "Auto-arrange"
 msgstr "Auto-arrange"
 
@@ -1359,6 +1367,10 @@ msgstr "Banned cards (one name per line)"
 msgid "Base preset"
 msgstr "Base preset"
 
+#: ui/components/settings/LlmOpponentCard.tsx:50
+msgid "Base URL"
+msgstr "Base URL"
+
 #: ui/components/game/ManualTabletopControls.tsx:383
 #: ui/lib/keybindings.ts:9
 msgid "Battlefield"
@@ -1373,7 +1385,7 @@ msgstr "Battlefield arrangement"
 msgid "Battlefield card style"
 msgstr "Battlefield card style"
 
-#: ui/views/Settings.tsx:744
+#: ui/views/Settings.tsx:759
 msgid "Battlefield Card Style"
 msgstr "Battlefield Card Style"
 
@@ -1381,7 +1393,7 @@ msgstr "Battlefield Card Style"
 msgid "Battlefield lab"
 msgstr "Battlefield lab"
 
-#: ui/views/Settings.tsx:700
+#: ui/views/Settings.tsx:715
 msgid "Battlefield Layout"
 msgstr "Battlefield Layout"
 
@@ -1389,7 +1401,7 @@ msgstr "Battlefield Layout"
 msgid "Battlefield size (70×98)"
 msgstr "Battlefield size (70×98)"
 
-#: ui/views/Settings.tsx:601
+#: ui/views/Settings.tsx:616
 msgid "Battlefield Zone Column Order"
 msgstr "Battlefield Zone Column Order"
 
@@ -1483,7 +1495,7 @@ msgstr "Bot couldn't join the table: {0}"
 msgid "Bot player"
 msgstr "Bot player"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Bottom"
 msgstr "Bottom"
 
@@ -1578,7 +1590,7 @@ msgstr "Build proposal"
 msgid "Building \"{0}\"…"
 msgstr "Building \"{0}\"…"
 
-#: ui/views/Settings.tsx:432
+#: ui/views/Settings.tsx:447
 msgid "Built-in"
 msgstr "Built-in"
 
@@ -1630,8 +1642,8 @@ msgstr "Bye"
 msgid "Byes"
 msgstr "Byes"
 
-#: ui/views/Settings.tsx:347
-#: ui/views/Settings.tsx:362
+#: ui/views/Settings.tsx:360
+#: ui/views/Settings.tsx:377
 msgid "Cache"
 msgstr "Cache"
 
@@ -1652,7 +1664,7 @@ msgstr "Cache"
 #: ui/components/settings/MyAssetsSection.tsx:169
 #: ui/views/DeckEditor.tsx:932
 #: ui/views/DeckEditor.tsx:1108
-#: ui/views/Settings.tsx:521
+#: ui/views/Settings.tsx:536
 #: ui/views/Tournaments.tsx:87
 msgid "Cancel"
 msgstr "Cancel"
@@ -1719,7 +1731,7 @@ msgstr "Card filters"
 msgid "Card identity and rules are hidden."
 msgstr "Card identity and rules are hidden."
 
-#: ui/views/Settings.tsx:364
+#: ui/views/Settings.tsx:379
 msgid "Card Image Cache"
 msgstr "Card Image Cache"
 
@@ -1741,7 +1753,7 @@ msgstr "Card layouts and previews"
 msgid "Card name"
 msgstr "Card name"
 
-#: ui/views/Settings.tsx:902
+#: ui/views/Settings.tsx:917
 msgid "Card Preview Style"
 msgstr "Card Preview Style"
 
@@ -1764,7 +1776,7 @@ msgstr "Card Search"
 msgid "Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more."
 msgstr "Card Search accepts normal card names and Scryfall filters. Combine filters to narrow results by color, type, rules text, set, price, and more."
 
-#: ui/views/Settings.tsx:629
+#: ui/views/Settings.tsx:644
 msgid "Card Size"
 msgstr "Card Size"
 
@@ -1819,7 +1831,7 @@ msgstr "Card unsupported by the Manabrew and Forge engines"
 msgid "Card verification returned an incomplete response"
 msgstr "Card verification returned an incomplete response"
 
-#: ui/views/Settings.tsx:922
+#: ui/views/Settings.tsx:937
 msgid "Card-play and turn-start flash duration."
 msgstr "Card-play and turn-start flash duration."
 
@@ -1985,7 +1997,7 @@ msgstr "Choose a card from your deck to replace"
 msgid "Choose a card from your graveyard"
 msgstr "Choose a card from your graveyard"
 
-#: ui/views/Settings.tsx:1075
+#: ui/views/Settings.tsx:1090
 msgid "Choose a color preset. Works with both light and dark modes."
 msgstr "Choose a color preset. Works with both light and dark modes."
 
@@ -2075,7 +2087,7 @@ msgstr "Choose the AI deck or fight"
 msgid "Choose the deck you want to play"
 msgstr "Choose the deck you want to play"
 
-#: ui/views/Settings.tsx:885
+#: ui/views/Settings.tsx:900
 msgid "Choose which face stack cards show when they appear. You can still switch individual cards."
 msgstr "Choose which face stack cards show when they appear. You can still switch individual cards."
 
@@ -2143,7 +2155,7 @@ msgstr "Clear collection filter"
 msgid "Clear Deck"
 msgstr "Clear Deck"
 
-#: ui/views/Settings.tsx:377
+#: ui/views/Settings.tsx:392
 msgid "Clear image cache & reload"
 msgstr "Clear image cache & reload"
 
@@ -2155,7 +2167,7 @@ msgstr "Clear mana value filter"
 msgid "Clear search"
 msgstr "Clear search"
 
-#: ui/views/Settings.tsx:377
+#: ui/views/Settings.tsx:392
 msgid "Clearing…"
 msgstr "Clearing…"
 
@@ -2175,8 +2187,8 @@ msgstr "Click the ••• menu, then Export."
 msgid "Click to clear the filter"
 msgstr "Click to clear the filter"
 
-#: ui/views/Settings.tsx:1184
-#: ui/views/Settings.tsx:1332
+#: ui/views/Settings.tsx:1199
+#: ui/views/Settings.tsx:1347
 msgid "Click to edit color value"
 msgstr "Click to edit color value"
 
@@ -2327,7 +2339,7 @@ msgstr "Color identity"
 msgid "Color Identity: {0}"
 msgstr "Color Identity: {0}"
 
-#: ui/views/Settings.tsx:983
+#: ui/views/Settings.tsx:998
 msgid "Color Preset"
 msgstr "Color Preset"
 
@@ -2544,7 +2556,7 @@ msgid "Connected"
 msgstr "Connected"
 
 #. placeholder {0}: server.username
-#: ui/views/Settings.tsx:491
+#: ui/views/Settings.tsx:506
 msgid "Connected as {0}"
 msgstr "Connected as {0}"
 
@@ -2557,7 +2569,7 @@ msgstr "Connecting"
 msgid "Connecting to MTGJSON"
 msgstr "Connecting to MTGJSON"
 
-#: ui/views/Settings.tsx:495
+#: ui/views/Settings.tsx:510
 msgid "Connecting..."
 msgstr "Connecting..."
 
@@ -2573,7 +2585,7 @@ msgstr "Connection failed."
 msgid "Connection lost"
 msgstr "Connection lost"
 
-#: ui/phase/transport.ts:120
+#: ui/phase/transport.ts:122
 msgid "Conspiracy reveal was rejected"
 msgstr "Conspiracy reveal was rejected"
 
@@ -2598,11 +2610,11 @@ msgstr "Contraptions"
 msgid "Control"
 msgstr "Control"
 
-#: ui/views/Settings.tsx:979
+#: ui/views/Settings.tsx:994
 msgid "Controls app theme preference."
 msgstr "Controls app theme preference."
 
-#: ui/views/Settings.tsx:602
+#: ui/views/Settings.tsx:617
 msgid "Controls placement of Library / Graveyard / Exile in the in-field zone column."
 msgstr "Controls placement of Library / Graveyard / Exile in the in-field zone column."
 
@@ -2814,7 +2826,7 @@ msgstr "Could not write to the clipboard"
 msgid "Couldn't add {name}"
 msgstr "Couldn't add {name}"
 
-#: ui/views/Settings.tsx:239
+#: ui/views/Settings.tsx:240
 msgid "Couldn't clear the image cache"
 msgstr "Couldn't clear the image cache"
 
@@ -3009,7 +3021,7 @@ msgid "Custom Tags"
 msgstr "Custom Tags"
 
 #: ui/components/editor/DeckHero.tsx:82
-#: ui/views/Settings.tsx:551
+#: ui/views/Settings.tsx:566
 msgid "Customize playmat"
 msgstr "Customize playmat"
 
@@ -3029,7 +3041,7 @@ msgstr "Cycle hand order"
 msgid "Danger zone"
 msgstr "Danger zone"
 
-#: ui/views/Settings.tsx:969
+#: ui/views/Settings.tsx:984
 msgid "Dark"
 msgstr "Dark"
 
@@ -3238,11 +3250,12 @@ msgstr "Decks you've built in the editor."
 msgid "Decorative animations"
 msgstr "Decorative animations"
 
-#: ui/views/Settings.tsx:777
+#: ui/views/Settings.tsx:792
 msgid "Decorative board effects — creature entrance stomp + dust, stat and damage pops, glow pulses. Turn these off to save performance on weaker hardware; the board still works (cards move, state indicators and damage numbers stay)."
 msgstr "Decorative board effects — creature entrance stomp + dust, stat and damage pops, glow pulses. Turn these off to save performance on weaker hardware; the board still works (cards move, state indicators and damage numbers stay)."
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
+#: ui/components/settings/LlmOpponentCard.tsx:105
 #: ui/views/Limited.tsx:628
 msgid "Default"
 msgstr "Default"
@@ -3255,8 +3268,8 @@ msgstr "Default (CMC)"
 msgid "Default is off to read local card data directly without online requests. When enabled, Chinese card names and rules text are fetched online via MTGCH."
 msgstr "Default is off to read local card data directly without online requests. When enabled, Chinese card names and rules text are fetched online via MTGCH."
 
-#: ui/views/Settings.tsx:544
-#: ui/views/Settings.tsx:938
+#: ui/views/Settings.tsx:559
+#: ui/views/Settings.tsx:953
 msgid "Default Playmat"
 msgstr "Default Playmat"
 
@@ -3264,7 +3277,7 @@ msgstr "Default Playmat"
 msgid "Default printing"
 msgstr "Default printing"
 
-#: ui/views/Settings.tsx:884
+#: ui/views/Settings.tsx:899
 msgid "Default Stack Card View"
 msgstr "Default Stack Card View"
 
@@ -3508,7 +3521,7 @@ msgstr "Drafts"
 msgid "Drag cards here from the search panel"
 msgstr "Drag cards here from the search panel"
 
-#: ui/views/Settings.tsx:683
+#: ui/views/Settings.tsx:698
 msgid "Drag cards sideways for a custom order, or keep every hand sorted automatically by color or mana value."
 msgstr "Drag cards sideways for a custom order, or keep every hand sorted automatically by color or mana value."
 
@@ -3550,7 +3563,7 @@ msgstr "Drop image to use as playmat"
 msgid "dropped"
 msgstr "dropped"
 
-#: ui/views/Settings.tsx:366
+#: ui/views/Settings.tsx:381
 msgid "Drops Manabrew's in-memory card textures and image object URLs, clears the CacheStorage API, then reloads so every card image is fetched fresh. Use this if battlefield card art fails to appear. For a full browser HTTP cache wipe, use the browser's \"Empty Cache and Hard Reload\" (DevTools open → right-click reload)."
 msgstr "Drops Manabrew's in-memory card textures and image object URLs, clears the CacheStorage API, then reloads so every card image is fetched fresh. Use this if battlefield card art fails to appear. For a full browser HTTP cache wipe, use the browser's \"Empty Cache and Hard Reload\" (DevTools open → right-click reload)."
 
@@ -3576,6 +3589,10 @@ msgstr "Duplicate server handshake"
 #: ui/components/editor/CardSearch.tsx:1203
 msgid "e.g. flying, haste, deathtouch"
 msgstr "e.g. flying, haste, deathtouch"
+
+#: ui/components/settings/LlmOpponentCard.tsx:56
+msgid "e.g. http://localhost:11434/v1 or https://api.openai.com/v1"
+msgstr "e.g. http://localhost:11434/v1 or https://api.openai.com/v1"
 
 #: ui/components/OnboardingWelcome.tsx:88
 msgid "e.g. StormCrow"
@@ -3680,6 +3697,10 @@ msgstr "Engine-derived roles compared with a practical 60-card baseline."
 #: ui/components/editor/DeckHealthPanel.tsx:78
 msgid "Engine-derived roles compared with a practical Commander baseline."
 msgstr "Engine-derived roles compared with a practical Commander baseline."
+
+#: ui/components/settings/LlmOpponentCard.tsx:115
+msgid "Enter a base URL and a model to turn LLM mode on; until then the built-in AI plays."
+msgstr "Enter a base URL and a model to turn LLM mode on; until then the built-in AI plays."
 
 #: ui/components/editor/CardSearch.tsx:1360
 msgid "Enter a card name or select filters to search."
@@ -3801,7 +3822,7 @@ msgstr "Exact set, collector number, and foil finish are preserved when supplied
 msgid "Exactly"
 msgstr "Exactly"
 
-#: ui/views/Settings.tsx:621
+#: ui/views/Settings.tsx:636
 msgid "Exile"
 msgstr "Exile"
 
@@ -4028,7 +4049,7 @@ msgstr "Filter by {0} identity"
 msgid "Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate"
 msgstr "Filter by name or use tag:, type:, color:, section:, mv>=, is:owned, is:missing, is:partial, is:foil, is:combo, and - to negate"
 
-#: ui/views/Settings.tsx:1082
+#: ui/views/Settings.tsx:1097
 msgid "Filter colors... (e.g. primary, counter, arrow)"
 msgstr "Filter colors... (e.g. primary, counter, arrow)"
 
@@ -4097,7 +4118,7 @@ msgstr "First Print"
 msgid "First Strike Damage"
 msgstr "First Strike Damage"
 
-#: ui/views/Settings.tsx:920
+#: ui/views/Settings.tsx:935
 msgid "Flash duration"
 msgstr "Flash duration"
 
@@ -4154,7 +4175,7 @@ msgstr "Floating mana"
 msgid "Focus next opponent field"
 msgstr "Focus next opponent field"
 
-#: ui/views/Settings.tsx:823
+#: ui/views/Settings.tsx:838
 msgid "Focus on one opponent, or keep every opponent field equally visible."
 msgstr "Focus on one opponent, or keep every opponent field equally visible."
 
@@ -4179,7 +4200,7 @@ msgid "Focus the card filter"
 msgstr "Focus the card filter"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:180
-#: ui/views/Settings.tsx:831
+#: ui/views/Settings.tsx:846
 msgid "Focused"
 msgstr "Focused"
 
@@ -4279,7 +4300,7 @@ msgid "Frame"
 msgstr "Frame"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:171
-#: ui/views/Settings.tsx:709
+#: ui/views/Settings.tsx:724
 msgid "Free placement"
 msgstr "Free placement"
 
@@ -4414,7 +4435,7 @@ msgstr "Game state"
 msgid "Game summary"
 msgstr "Game summary"
 
-#: ui/views/Settings.tsx:1205
+#: ui/views/Settings.tsx:1220
 msgid "Game Theme Colors"
 msgstr "Game Theme Colors"
 
@@ -4447,7 +4468,7 @@ msgstr "Gauntlet"
 msgid "General"
 msgstr "General"
 
-#: ui/views/Settings.tsx:1347
+#: ui/views/Settings.tsx:1362
 msgid "Generated from game theme keys. Defaults come from the active preset."
 msgstr "Generated from game theme keys. Defaults come from the active preset."
 
@@ -4493,7 +4514,7 @@ msgstr "Goes first"
 msgid "Gold"
 msgstr "Gold"
 
-#: ui/views/Settings.tsx:620
+#: ui/views/Settings.tsx:635
 msgid "Graveyard"
 msgstr "Graveyard"
 
@@ -4533,7 +4554,7 @@ msgstr "guaranteed slot active"
 msgid "Guest"
 msgstr "Guest"
 
-#: ui/views/Settings.tsx:866
+#: ui/views/Settings.tsx:881
 msgid "Hand Card Style"
 msgstr "Hand Card Style"
 
@@ -4541,7 +4562,7 @@ msgstr "Hand Card Style"
 msgid "Hand default view"
 msgstr "Hand default view"
 
-#: ui/views/Settings.tsx:682
+#: ui/views/Settings.tsx:697
 msgid "Hand Ordering"
 msgstr "Hand Ordering"
 
@@ -4592,7 +4613,7 @@ msgid "Historic"
 msgstr "Historic"
 
 #: ui/components/lobby/OpenTableSeats.tsx:82
-#: ui/views/Settings.tsx:391
+#: ui/views/Settings.tsx:406
 msgid "Host"
 msgstr "Host"
 
@@ -4706,7 +4727,7 @@ msgstr "Ignore"
 msgid "Image"
 msgstr "Image"
 
-#: ui/views/Settings.tsx:235
+#: ui/views/Settings.tsx:236
 msgid "Image cache cleared — reloading…"
 msgstr "Image cache cleared — reloading…"
 
@@ -4836,7 +4857,7 @@ msgstr "In your deck"
 msgid "in-browser"
 msgstr "in-browser"
 
-#: ui/views/Settings.tsx:776
+#: ui/views/Settings.tsx:791
 msgid "In-game Animations"
 msgstr "In-game Animations"
 
@@ -4992,7 +5013,7 @@ msgstr "Invited"
 msgid "Invited {0} to your table"
 msgstr "Invited {0} to your table"
 
-#: ui/views/Settings.tsx:799
+#: ui/views/Settings.tsx:814
 msgid "Ironsmith engine (experimental)"
 msgstr "Ironsmith engine (experimental)"
 
@@ -5221,6 +5242,10 @@ msgstr "Layout"
 msgid "Leave"
 msgstr "Leave"
 
+#: ui/components/settings/LlmOpponentCard.tsx:77
+msgid "Leave empty for a local server"
+msgstr "Leave empty for a local server"
+
 #: ui/components/game/GameFailedScreen.tsx:18
 #: ui/components/game/GameLoadingScreen.tsx:129
 msgid "Leave game"
@@ -5294,7 +5319,7 @@ msgid "Level Up"
 msgstr "Level Up"
 
 #: ui/components/game/zones/LibraryZoneTile.tsx:34
-#: ui/views/Settings.tsx:619
+#: ui/views/Settings.tsx:634
 msgid "Library"
 msgstr "Library"
 
@@ -5313,7 +5338,7 @@ msgstr "Life Tracker"
 msgid "Life, poison, and commander damage for paper nights."
 msgstr "Life, poison, and commander damage for paper nights."
 
-#: ui/views/Settings.tsx:962
+#: ui/views/Settings.tsx:977
 msgid "Light"
 msgstr "Light"
 
@@ -5466,7 +5491,7 @@ msgstr "Local play supports six-pack Sealed and three-pack Booster Draft against
 #~ msgstr "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
 
 #: ui/components/game/modals/GameSettingsModal.tsx:205
-#: ui/views/Settings.tsx:738
+#: ui/views/Settings.tsx:753
 msgid "Locked"
 msgstr "Locked"
 
@@ -5660,11 +5685,11 @@ msgstr "Manual preserves your placement; automatic modes arrange new cards."
 msgid "Manual result — unverified"
 msgstr "Manual result — unverified"
 
-#: ui/stores/useGameStore.ts:468
+#: ui/stores/useGameStore.ts:470
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "Manual room client requires the manual tabletop runtime."
 
-#: ui/stores/useGameStore.ts:439
+#: ui/stores/useGameStore.ts:441
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "Manual room host requires the manual tabletop runtime."
 
@@ -5796,7 +5821,7 @@ msgstr "Message everyone…"
 msgid "Message your table…"
 msgstr "Message your table…"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Middle"
 msgstr "Middle"
 
@@ -5809,7 +5834,7 @@ msgid "Mill"
 msgstr "Mill"
 
 #: ui/components/game/battlefieldCardStyles.ts:11
-#: ui/views/Settings.tsx:768
+#: ui/views/Settings.tsx:783
 msgid "Mini-frame"
 msgstr "Mini-frame"
 
@@ -5832,6 +5857,14 @@ msgstr "Missing CSV"
 #: ui/components/editor/CardSearch.tsx:417
 msgid "Modal DFC"
 msgstr "Modal DFC"
+
+#: ui/components/settings/LlmOpponentCard.tsx:85
+msgid "Model"
+msgstr "Model"
+
+#: ui/components/settings/LlmOpponentCard.tsx:91
+msgid "Model id, e.g. gpt-4o or llama3.1:8b"
+msgstr "Model id, e.g. gpt-4o or llama3.1:8b"
 
 #: ui/components/editor/CardSearch.tsx:154
 #: ui/components/editor/CardSearch.tsx:268
@@ -5878,7 +5911,7 @@ msgid "More ways to play and tools"
 msgstr "More ways to play and tools"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:204
-#: ui/views/Settings.tsx:731
+#: ui/views/Settings.tsx:746
 msgid "Movable"
 msgstr "Movable"
 
@@ -5979,7 +6012,7 @@ msgstr "Multiplayer server is unavailable."
 msgid "Multiplayer settings"
 msgstr "Multiplayer settings"
 
-#: ui/views/Settings.tsx:274
+#: ui/views/Settings.tsx:275
 msgid "My assets"
 msgstr "My assets"
 
@@ -6015,7 +6048,7 @@ msgstr "My decks ({0}) · ~{1}"
 msgid "Name"
 msgstr "Name"
 
-#: ui/views/Settings.tsx:509
+#: ui/views/Settings.tsx:524
 msgid "Name this server"
 msgstr "Name this server"
 
@@ -6086,7 +6119,7 @@ msgstr "No active manual tabletop game."
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "No AI deck available for this format — pick one yourself."
 
-#: ui/phase/transport.ts:119
+#: ui/phase/transport.ts:121
 msgid "No authorized conspiracy reveal action"
 msgstr "No authorized conspiracy reveal action"
 
@@ -6217,7 +6250,7 @@ msgstr "No legendaries in deck — type a name below."
 msgid "no lines yet"
 msgstr "no lines yet"
 
-#: ui/stores/useGameStore.ts:672
+#: ui/stores/useGameStore.ts:674
 msgid "No local player is available to concede."
 msgstr "No local player is available to concede."
 
@@ -6457,9 +6490,9 @@ msgid "Oathbreaker"
 msgstr "Oathbreaker"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:70
-#: ui/views/Settings.tsx:792
-#: ui/views/Settings.tsx:815
-#: ui/views/Settings.tsx:860
+#: ui/views/Settings.tsx:807
+#: ui/views/Settings.tsx:830
+#: ui/views/Settings.tsx:875
 msgid "Off"
 msgstr "Off"
 
@@ -6476,6 +6509,10 @@ msgstr "Official preset"
 #: ui/components/lobby/OpenTableCard.tsx:63
 msgid "Official table"
 msgstr "Official table"
+
+#: ui/components/settings/LlmOpponentCard.tsx:37
+msgid "Offline games play their AI seats through an OpenAI-compatible endpoint instead of the built-in engine AI. Difficulty still applies: it sets the model's persona and how much of the game it is shown. If a request fails, that decision falls back to the built-in AI."
+msgstr "Offline games play their AI seats through an OpenAI-compatible endpoint instead of the built-in engine AI. Difficulty still applies: it sets the model's persona and how much of the game it is shown. If a request fails, that decision falls back to the built-in AI."
 
 #: ui/components/play/OfflinePlayShell.tsx:36
 msgid "Offline play type"
@@ -6517,9 +6554,9 @@ msgid "on"
 msgstr "on"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:69
-#: ui/views/Settings.tsx:785
-#: ui/views/Settings.tsx:808
-#: ui/views/Settings.tsx:853
+#: ui/views/Settings.tsx:800
+#: ui/views/Settings.tsx:823
+#: ui/views/Settings.tsx:868
 msgid "On"
 msgstr "On"
 
@@ -6697,7 +6734,7 @@ msgid "Opening the game table..."
 msgstr "Opening the game table..."
 
 #: ui/components/game/modals/GameSettingsModal.tsx:177
-#: ui/views/Settings.tsx:822
+#: ui/views/Settings.tsx:837
 msgid "Opponent layout"
 msgstr "Opponent layout"
 
@@ -6760,7 +6797,7 @@ msgid "other"
 msgstr "other"
 
 #: ui/components/editor/deckBuilder.utils.ts:249
-#: ui/views/Settings.tsx:1239
+#: ui/views/Settings.tsx:1254
 msgid "Other"
 msgstr "Other"
 
@@ -6772,13 +6809,13 @@ msgstr "Other players will see this name when you connect to a server."
 msgid "Outline"
 msgstr "Outline"
 
-#: ui/views/Settings.tsx:1199
+#: ui/views/Settings.tsx:1214
 msgid "Override individual colors from the active preset."
 msgstr "Override individual colors from the active preset."
 
 #: ui/components/editor/DeckInsightsPanel.tsx:22
 #: ui/components/game/modals/GameSettingsModal.tsx:181
-#: ui/views/Settings.tsx:838
+#: ui/views/Settings.tsx:853
 msgid "Overview"
 msgstr "Overview"
 
@@ -6865,7 +6902,7 @@ msgid "Pass until end of turn / resolve stack"
 msgstr "Pass until end of turn / resolve stack"
 
 #: ui/components/lobby/JoinPasswordDialog.tsx:90
-#: ui/views/Settings.tsx:410
+#: ui/views/Settings.tsx:425
 msgid "Password"
 msgstr "Password"
 
@@ -6950,7 +6987,7 @@ msgstr "Pauper"
 msgid "Pauper Commander"
 msgstr "Pauper Commander"
 
-#: ui/views/Settings.tsx:844
+#: ui/views/Settings.tsx:859
 msgid "Peer to Peer"
 msgstr "Peer to Peer"
 
@@ -7246,7 +7283,7 @@ msgstr "Points: win / draw / loss"
 msgid "Pool file must contain a non-empty `pool` array of DraftCards."
 msgstr "Pool file must contain a non-empty `pool` array of DraftCards."
 
-#: ui/views/Settings.tsx:400
+#: ui/views/Settings.tsx:415
 msgid "Port"
 msgstr "Port"
 
@@ -7273,7 +7310,7 @@ msgstr "Pre-M14 (any controller)"
 #: ui/components/layout/AccountMenu.tsx:167
 #: ui/components/layout/TopBar.tsx:75
 #: ui/components/play/PlayHomeLinks.tsx:95
-#: ui/views/Settings.tsx:287
+#: ui/views/Settings.tsx:288
 msgid "Preferences"
 msgstr "Preferences"
 
@@ -7355,11 +7392,11 @@ msgstr "Primary"
 msgid "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
 msgstr "Print every prompt the UI receives (not state updates) to the dev console, including the full JSON. Useful for reporting prompt issues."
 
-#: ui/views/Settings.tsx:867
+#: ui/views/Settings.tsx:882
 msgid "Printed card shows the card image. Dynamic view uses the card's current rules and game state; each card can still be switched."
 msgstr "Printed card shows the card image. Dynamic view uses the card's current rules and game state; each card can still be switched."
 
-#: ui/views/Settings.tsx:903
+#: ui/views/Settings.tsx:918
 msgid "Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state."
 msgstr "Printed card shows the full card image. Dynamic view prioritizes current rules, actions, costs, counters, and other game state."
 
@@ -7424,7 +7461,7 @@ msgid "Prompt preview"
 msgstr "Prompt preview"
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:35
-#: ui/views/Settings.tsx:311
+#: ui/views/Settings.tsx:312
 msgid "Prompts"
 msgstr "Prompts"
 
@@ -7570,7 +7607,7 @@ msgstr "Ready up"
 #: ui/components/game/battlefieldCardStyles.ts:9
 #: ui/components/game/cardPreviewStyles.ts:12
 #: ui/components/game/cardPreviewStyles.ts:22
-#: ui/views/Settings.tsx:754
+#: ui/views/Settings.tsx:769
 msgid "Realistic"
 msgstr "Realistic"
 
@@ -7690,7 +7727,7 @@ msgstr "Remove \"{tag}\" tag"
 #. placeholder {0}: relay.name
 #: ui/components/editor/DeckListView.tsx:203
 #: ui/components/editor/DeckListView.tsx:528
-#: ui/views/Settings.tsx:462
+#: ui/views/Settings.tsx:477
 msgid "Remove {0}"
 msgstr "Remove {0}"
 
@@ -7779,7 +7816,7 @@ msgid "Remove one each"
 msgstr "Remove one each"
 
 #: ui/components/editor/PlaymatEditorModal.tsx:482
-#: ui/views/Settings.tsx:586
+#: ui/views/Settings.tsx:601
 msgid "Remove playmat"
 msgstr "Remove playmat"
 
@@ -7918,8 +7955,8 @@ msgstr "Reset all"
 msgid "Reset all adjustments to their defaults"
 msgstr "Reset all adjustments to their defaults"
 
-#: ui/views/Settings.tsx:1104
-#: ui/views/Settings.tsx:1207
+#: ui/views/Settings.tsx:1119
+#: ui/views/Settings.tsx:1222
 msgid "Reset Colors"
 msgstr "Reset Colors"
 
@@ -8096,11 +8133,11 @@ msgstr "Same seed + same pool → identical packs every open."
 #: ui/components/editor/DeckBuilder.tsx:1861
 #: ui/components/settings/AvatarCropDialog.tsx:155
 #: ui/components/settings/GuestNamePicker.tsx:54
-#: ui/views/Settings.tsx:518
+#: ui/views/Settings.tsx:533
 msgid "Save"
 msgstr "Save"
 
-#: ui/views/Settings.tsx:422
+#: ui/views/Settings.tsx:437
 msgid "Save & Reconnect"
 msgstr "Save & Reconnect"
 
@@ -8108,7 +8145,7 @@ msgstr "Save & Reconnect"
 msgid "Save as draft"
 msgstr "Save as draft"
 
-#: ui/views/Settings.tsx:486
+#: ui/views/Settings.tsx:501
 msgid "Save current server…"
 msgstr "Save current server…"
 
@@ -8189,7 +8226,7 @@ msgstr "Saved \"{0}\" as draft — one card is unsupported by the Manabrew and F
 msgid "Saved \"{label}\"."
 msgstr "Saved \"{label}\"."
 
-#: ui/views/Settings.tsx:225
+#: ui/views/Settings.tsx:226
 msgid "Saved \"{name}\""
 msgstr "Saved \"{name}\""
 
@@ -8213,7 +8250,7 @@ msgstr "Saved locally"
 msgid "Saved on this device"
 msgstr "Saved on this device"
 
-#: ui/views/Settings.tsx:428
+#: ui/views/Settings.tsx:443
 msgid "Saved servers"
 msgstr "Saved servers"
 
@@ -8227,7 +8264,7 @@ msgstr "Saved version {0} to your account"
 msgid "Saved views"
 msgstr "Saved views"
 
-#: ui/views/Settings.tsx:524
+#: ui/views/Settings.tsx:539
 msgid "Saves the current host, port, and password so you can switch back later."
 msgstr "Saves the current host, port, and password so you can switch back later."
 
@@ -8251,7 +8288,7 @@ msgstr "Say hello to your table."
 msgid "SB {sideboardCount}"
 msgstr "SB {sideboardCount}"
 
-#: ui/views/Settings.tsx:631
+#: ui/views/Settings.tsx:646
 msgid "Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them."
 msgstr "Scales cards on every battlefield and your hand fan. 100% is the classic 3-row board; battlefield cards cap at a 2-row fill so the board stays playable, while the hand keeps growing past them."
 
@@ -8474,7 +8511,7 @@ msgstr "Select Deck"
 msgid "Select one in Table settings to continue."
 msgstr "Select one in Table settings to continue."
 
-#: ui/views/Settings.tsx:1011
+#: ui/views/Settings.tsx:1026
 msgid "Select preset"
 msgstr "Select preset"
 
@@ -8522,12 +8559,12 @@ msgstr "Sending concession…"
 msgid "Sending…"
 msgstr "Sending…"
 
-#: ui/views/Settings.tsx:335
-#: ui/views/Settings.tsx:387
+#: ui/views/Settings.tsx:348
+#: ui/views/Settings.tsx:402
 msgid "Server"
 msgstr "Server"
 
-#: ui/views/Settings.tsx:529
+#: ui/views/Settings.tsx:544
 msgid "Server connection settings. Saving will disconnect and reconnect with the new credentials."
 msgstr "Server connection settings. Saving will disconnect and reconnect with the new credentials."
 
@@ -8590,7 +8627,7 @@ msgstr "Set back face as deck art cover"
 msgid "Set code"
 msgstr "Set code"
 
-#: ui/views/Settings.tsx:551
+#: ui/views/Settings.tsx:566
 msgid "Set playmat"
 msgstr "Set playmat"
 
@@ -8650,7 +8687,7 @@ msgstr "Shockland"
 msgid "Short label"
 msgstr "Short label"
 
-#: ui/views/Settings.tsx:323
+#: ui/views/Settings.tsx:324
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
@@ -8843,7 +8880,7 @@ msgstr "Size and viewport"
 msgid "Skip"
 msgstr "Skip"
 
-#: ui/views/Settings.tsx:845
+#: ui/views/Settings.tsx:860
 msgid "Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled."
 msgstr "Skip manabrew servers and connect directly to the other players at the table. This shares your IP address with the people you play with, and only activates if every player in the game has it enabled."
 
@@ -9213,7 +9250,7 @@ msgstr "Synced to your account"
 msgid "Syncing…"
 msgstr "Syncing…"
 
-#: ui/views/Settings.tsx:976
+#: ui/views/Settings.tsx:991
 msgid "System"
 msgstr "System"
 
@@ -9328,6 +9365,10 @@ msgstr "Tavern table"
 msgid "TCGplayer"
 msgstr "TCGplayer"
 
+#: ui/components/settings/LlmOpponentCard.tsx:99
+msgid "Temperature"
+msgstr "Temperature"
+
 #: ui/components/editor/DeckLabelsModal.tsx:18
 msgid "Tempo"
 msgstr "Tempo"
@@ -9378,7 +9419,7 @@ msgstr "That message can't be sent"
 msgid "That name is already claimed. Pick another."
 msgstr "That name is already claimed. Pick another."
 
-#: ui/views/Settings.tsx:219
+#: ui/views/Settings.tsx:220
 msgid "That name is reserved for a built-in server"
 msgstr "That name is reserved for a built-in server"
 
@@ -9397,6 +9438,10 @@ msgstr "That username is already taken."
 #: ui/components/editor/DeckBuilder.tsx:1059
 msgid "The account version could not be loaded. Your local copy is still saved."
 msgstr "The account version could not be loaded. Your local copy is still saved."
+
+#: ui/components/settings/LlmOpponentCard.tsx:61
+msgid "The API root, in OpenAI format. A full endpoint pasted from your provider's docs is normalized to its root."
+msgstr "The API root, in OpenAI format. A full endpoint pasted from your provider's docs is normalized to its root."
 
 #: ui/components/prompts/internal/PromptPreferencesPanel.tsx:37
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
@@ -9463,7 +9508,7 @@ msgstr "The playmat fills a wide, landscape area (roughly 5:2). For a crisp resu
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 
-#: ui/stores/useGameStore.ts:381
+#: ui/stores/useGameStore.ts:383
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "The previous game is still closing. Try again in a moment."
 
@@ -9483,8 +9528,8 @@ msgstr "The selected policy would not change this deck"
 msgid "The session was left or replaced before this response arrived."
 msgstr "The session was left or replaced before this response arrived."
 
-#: ui/views/Settings.tsx:299
-#: ui/views/Settings.tsx:951
+#: ui/views/Settings.tsx:300
+#: ui/views/Settings.tsx:966
 msgid "Theme"
 msgstr "Theme"
 
@@ -9698,7 +9743,7 @@ msgstr "Token"
 msgid "Tokens"
 msgstr "Tokens"
 
-#: ui/views/Settings.tsx:1241
+#: ui/views/Settings.tsx:1256
 msgid "Tokens not covered by the groups above."
 msgstr "Tokens not covered by the groups above."
 
@@ -9710,7 +9755,7 @@ msgstr "Too many attempts — try again in a few minutes."
 msgid "Tools"
 msgstr "Tools"
 
-#: ui/views/Settings.tsx:605
+#: ui/views/Settings.tsx:620
 msgid "Top"
 msgstr "Top"
 
@@ -10008,9 +10053,13 @@ msgstr "Use a CubeCobra cube instead of a set"
 msgid "Use a nickname instead"
 msgstr "Use a nickname instead"
 
-#: ui/views/Settings.tsx:175
+#: ui/views/Settings.tsx:176
 msgid "Use a valid hex or rgb/rgba color."
 msgstr "Use a valid hex or rgb/rgba color."
+
+#: ui/components/settings/LlmOpponentCard.tsx:34
+msgid "Use an LLM as the AI opponent"
+msgstr "Use an LLM as the AI opponent"
 
 #: ui/components/settings/CardImageLibraryCard.tsx:114
 msgid "Use folder"
@@ -10028,7 +10077,7 @@ msgstr "Use system language"
 msgid "Use the account version"
 msgstr "Use the account version"
 
-#: ui/views/Settings.tsx:545
+#: ui/views/Settings.tsx:560
 msgid "Used in games when the deck you're playing has no custom playmat of its own."
 msgstr "Used in games when the deck you're playing has no custom playmat of its own."
 
@@ -10388,7 +10437,7 @@ msgstr "Your deck does not meet the size requirements."
 msgid "Your Decks"
 msgstr "Your Decks"
 
-#: ui/views/Settings.tsx:562
+#: ui/views/Settings.tsx:577
 msgid "Your default playmat"
 msgstr "Your default playmat"
 
@@ -10412,6 +10461,10 @@ msgstr "Your game data doesn't include {0}. Update the app to use this set."
 #: ui/components/lobby/ReportPlayerDialog.tsx:113
 msgid "Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at this promptly and take action where it is warranted."
 msgstr "Your help is valuable in keeping Manabrew safe for everyone. A maintainer will look at this promptly and take action where it is warranted."
+
+#: ui/components/settings/LlmOpponentCard.tsx:121
+msgid "Your key is kept in this browser's local preferences and used only by the local game host on your machine. Turn this off to return every game to the built-in AI."
+msgstr "Your key is kept in this browser's local preferences and used only by the local game host on your machine. Turn this off to return every game to the built-in AI."
 
 #: ui/views/OnlinePlay.tsx:149
 msgid "Your name"
@@ -10441,7 +10494,7 @@ msgstr "Your seat"
 msgid "Your seat was forfeited while you were disconnected."
 msgstr "Your seat was forfeited while you were disconnected."
 
-#: ui/views/Settings.tsx:446
+#: ui/views/Settings.tsx:461
 msgid "Your servers"
 msgstr "Your servers"
 
@@ -10469,7 +10522,7 @@ msgstr "Zone order"
 msgid "Zone piles"
 msgstr "Zone piles"
 
-#: ui/views/Settings.tsx:722
+#: ui/views/Settings.tsx:737
 msgid "Zone Piles"
 msgstr "Zone Piles"
 

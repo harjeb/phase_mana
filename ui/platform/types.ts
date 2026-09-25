@@ -10,6 +10,7 @@ import type {
   LocalGameKind,
 } from "@/types/server";
 import type { Deck } from "@/protocol/deck";
+import type { LlmSeatRequest } from "@/lib/llmSeat";
 import type { DirectiveInput, Prompt, PromptOutput, ResumeRoomRequest } from "@/protocol";
 
 export interface StartGameParams {
@@ -26,6 +27,8 @@ export interface StartGameParams {
   customRules?: unknown;
   /** Phase engine AI difficulty label for every AI seat; omitted uses the host default. */
   aiDifficulty?: string;
+  /** Optional OpenAI-compatible endpoint that plays the AI seats. */
+  llm?: LlmSeatRequest;
 }
 
 export interface StartMultiplayerGameParams {
