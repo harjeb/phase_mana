@@ -1,3 +1,5 @@
+import { translateKeyword } from "@/i18n/cardKeywords";
+
 const KEYWORD_LABEL_MAX_LEN = 14;
 
 export function isVisibleBattlefieldKeyword(keyword: string): boolean {
@@ -12,7 +14,7 @@ export function battlefieldKeywords(
   if (!keywords || keywords.length === 0) return { shown: [], hidden: 0 };
   const labels = keywords
     .filter(isVisibleBattlefieldKeyword)
-    .map((keyword) => keyword.split(":")[0]!.trim());
+    .map((keyword) => translateKeyword(keyword.split(":")[0]!.trim()));
   const unique = [...new Set(labels)];
   return { shown: unique.slice(0, max), hidden: Math.max(0, unique.length - max) };
 }

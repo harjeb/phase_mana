@@ -402,7 +402,7 @@ msgstr "高级"
 
 #: ui/views/OnlinePlay.tsx:188
 msgid "Advanced connection (room code)"
-msgstr ""
+msgstr "高级连接（房间代码）"
 
 #: ui/components/deck/DeckListControls.tsx:109
 msgid "All"
@@ -983,7 +983,7 @@ msgstr "关闭右侧面板"
 
 #: ui/views/OnlinePlay.tsx:171
 msgid "Close room and stop engine"
-msgstr ""
+msgstr "关闭房间并停止引擎"
 
 #: ui/components/editor/CardSearch.tsx:1087
 msgid "CMC"
@@ -1232,7 +1232,7 @@ msgstr "份数"
 
 #: ui/views/OnlinePlay.tsx:170
 msgid "Copy invitation"
-msgstr ""
+msgstr "复制邀请"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:368
 msgid "Copy limit rule"
@@ -2307,11 +2307,11 @@ msgstr "主机"
 
 #: ui/views/OnlinePlay.tsx:158
 msgid "Host a room"
-msgstr ""
+msgstr "主持房间"
 
 #: ui/views/OnlinePlay.tsx:161
 msgid "Host and create invitation"
-msgstr ""
+msgstr "主持并创建邀请"
 
 #: ui/game/hostedAiPlay.ts:40
 #: ui/game/hostedAiPlay.ts:127
@@ -2485,7 +2485,7 @@ msgstr "保存的会话无效。"
 
 #: ui/phase/online.ts:194
 msgid "Invalid session credentials"
-msgstr ""
+msgstr "会话凭证无效"
 
 #: ui/phase/online.ts:206
 msgid "Invalid session snapshot"
@@ -2498,35 +2498,35 @@ msgstr "无效的最终结果"
 #: ui/phase/invite.ts:68
 #: ui/phase/invite.ts:112
 msgid "Invitation code is damaged."
-msgstr ""
+msgstr "邀请码已损坏。"
 
 #: ui/phase/invite.ts:106
 msgid "Invitation code is empty."
-msgstr ""
+msgstr "邀请码为空。"
 
 #: ui/phase/invite.ts:62
 msgid "Invitation code is not valid base64url."
-msgstr ""
+msgstr "邀请码不是有效的 base64url。"
 
 #: ui/phase/invite.ts:82
 msgid "Invitation has no valid room code."
-msgstr ""
+msgstr "邀请中没有有效的房间代码。"
 
 #: ui/phase/invite.ts:83
 msgid "Invitation is missing its room password."
-msgstr ""
+msgstr "邀请缺少房间密码。"
 
 #: ui/phase/invite.ts:81
 msgid "Invitation is missing its server address."
-msgstr ""
+msgstr "邀请缺少服务器地址。"
 
 #: ui/phase/invite.ts:78
 msgid "Invitation is not an object."
-msgstr ""
+msgstr "邀请不是一个对象。"
 
 #: ui/phase/invite.ts:84
 msgid "Invitation password is too long."
-msgstr ""
+msgstr "邀请密码过长。"
 
 #. placeholder {0}: stripUsernameTag(username)
 #: ui/stores/useServerStore.ts:471
@@ -2593,15 +2593,15 @@ msgstr "加入房间"
 
 #: ui/views/OnlinePlay.tsx:178
 msgid "Join with an invitation"
-msgstr ""
+msgstr "使用邀请加入"
 
 #: ui/views/OnlinePlay.tsx:183
 msgid "Join with invitation"
-msgstr ""
+msgstr "使用邀请加入"
 
 #: ui/views/OnlinePlay.tsx:183
 msgid "Joining…"
-msgstr ""
+msgstr "正在加入…"
 
 #: ui/components/editor/DeckSaveConflictDialog.tsx:52
 msgid "Keep my changes"
@@ -2639,7 +2639,7 @@ msgstr "标签“{trimmed}”已添加"
 
 #: ui/views/OnlinePlay.tsx:144
 msgid "LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding."
-msgstr ""
+msgstr "局域网地址：来宾需要能访问此网络，且主机防火墙已放行。若要通过互联网游玩，请配置 TLS 隧道或端口转发。"
 
 #: ui/components/settings/LanguagePreferenceCard.tsx:20
 msgid "Language for card names, type lines and printed rules text. Falls back to English when a localized printing is unavailable."
@@ -3517,7 +3517,7 @@ msgstr "粘贴导出的自定义赛制"
 #: ui/phase/invite.ts:100
 #: ui/phase/invite.ts:102
 msgid "Paste an invitation code."
-msgstr ""
+msgstr "请粘贴邀请码。"
 
 #: ui/components/collection/CollectionImportDialog.tsx:274
 msgid "Paste from clipboard"
@@ -3526,7 +3526,7 @@ msgstr "从剪贴板粘贴"
 #: ui/views/OnlinePlay.tsx:179
 #: ui/views/OnlinePlay.tsx:180
 msgid "Paste invitation"
-msgstr ""
+msgstr "粘贴邀请"
 
 #: ui/views/CasualModes.tsx:126
 msgid "Pauper Commander"
@@ -4027,7 +4027,7 @@ msgstr "主持房间需要服务器连接。"
 #: ui/views/OnlinePlay.tsx:164
 #: ui/views/OnlinePlay.tsx:165
 msgid "Room invitation"
-msgstr ""
+msgstr "房间邀请"
 
 #: ui/components/game/modals/DialogCardInspector.tsx:47
 msgid "Rotate card"
@@ -4492,7 +4492,7 @@ msgstr "正在开始多人游戏…"
 
 #: ui/views/OnlinePlay.tsx:161
 msgid "Starting the engine…"
-msgstr ""
+msgstr "正在启动引擎…"
 
 #: ui/components/companion/CustomCounterDialog.tsx:70
 msgid "Starting value"
@@ -4625,11 +4625,11 @@ msgstr "该用户名已被占用"
 
 #: ui/phase/invite.ts:104
 msgid "That is not an invitation code."
-msgstr ""
+msgstr "这不是邀请码。"
 
 #: ui/phase/invite.ts:103
 msgid "That is too long to be an invitation code."
-msgstr ""
+msgstr "这太长，不可能是邀请码。"
 
 #: ui/views/Settings.tsx:216
 msgid "That name is reserved for a built-in server"
@@ -4657,7 +4657,7 @@ msgstr "对局"
 
 #: ui/views/OnlinePlay.tsx:159
 msgid "The game engine runs on this machine. Share the invitation; nobody has to type an address."
-msgstr ""
+msgstr "游戏引擎运行在本机。分享邀请即可；无需任何人手动输入地址。"
 
 #: ui/components/game/GameFailedScreen.tsx:12
 msgid "The game failed to start"
@@ -4665,7 +4665,7 @@ msgstr "对局启动失败"
 
 #: ui/views/OnlinePlay.tsx:141
 msgid "The host advertises this public address. Internet reachability has not been verified; the tunnel or port forwarding must remain available."
-msgstr ""
+msgstr "主机公布了这个公网地址。尚未验证互联网可达性；隧道或端口转发必须保持可用。"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:196
 msgid "The host picked this table's background when creating it."
@@ -4673,7 +4673,7 @@ msgstr "房主在创建时选定了此牌桌的背景。"
 
 #: ui/phase/host.ts:24
 msgid "The host request failed."
-msgstr ""
+msgstr "主机请求失败。"
 
 #: ui/views/OnlineDraftPanel.tsx:76
 msgid "The match starts when every player has submitted a deck."
@@ -4777,19 +4777,19 @@ msgstr "本地 Phase 后端不支持此功能。"
 
 #: ui/phase/invite.ts:144
 msgid "This HTTPS page may block an insecure ws:// connection. Use a secure wss:// tunnel or open the host's HTTP page on your local network."
-msgstr ""
+msgstr "此 HTTPS 页面可能阻止不安全的 ws:// 连接。请使用安全的 wss:// 隧道，或在局域网中打开主机的 HTTP 页面。"
 
 #: ui/phase/online.ts:96
 msgid "This HTTPS page requires a secure WSS invitation. Open the local HTTP app for LAN play, or configure a TLS tunnel."
-msgstr ""
+msgstr "此 HTTPS 页面需要使用安全的 WSS 邀请。请打开本地 HTTP 应用进行局域网游玩，或配置 TLS 隧道。"
 
 #: ui/phase/invite.ts:80
 msgid "This invitation was made by a newer version."
-msgstr ""
+msgstr "此邀请由更新版本创建。"
 
 #: ui/views/OnlinePlay.tsx:143
 msgid "This invitation works only on this machine. Enable LAN hosting or configure a public address to invite another computer."
-msgstr ""
+msgstr "此邀请仅在本机有效。请启用局域网主持，或配置公网地址以邀请其他电脑。"
 
 #: ui/components/game/GameLoadingScreen.tsx:70
 msgid "This is taking longer than expected. You can keep waiting, or leave and return to the lobby."

@@ -1,6 +1,7 @@
 import { ManaSymbols } from "@/components/game/ManaSymbols";
 import { cn } from "@/lib/utils";
 import { isVisibleBattlefieldKeyword } from "@/lib/battlefieldKeywords";
+import { translateKeyword } from "@/i18n/cardKeywords";
 
 const CHIP_BASE =
   "text-[8px] font-bold uppercase bg-black/60 text-white px-1 py-px rounded leading-none max-w-full truncate";
@@ -21,9 +22,9 @@ function truncateChipLabel(text: string): string {
 export function KeywordChip({ kw }: { kw: string }) {
   const colonIdx = kw.indexOf(":");
   if (colonIdx === -1) {
-    return <span className={CHIP_BASE}>{truncateChipLabel(kw)}</span>;
+    return <span className={CHIP_BASE}>{truncateChipLabel(translateKeyword(kw))}</span>;
   }
-  const label = kw.slice(0, colonIdx);
+  const label = translateKeyword(kw.slice(0, colonIdx));
   const cost = kw.slice(colonIdx + 1);
   return (
     <span className={cn("inline-flex items-center gap-0.5", CHIP_BASE)}>

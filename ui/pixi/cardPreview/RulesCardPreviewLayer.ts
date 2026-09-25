@@ -62,6 +62,7 @@ import {
   PREVIEW_SECTION_HEADER_HEIGHT,
 } from "./RulesPreviewSectionHeader";
 import { parseManaCost } from "@/pixi/manaSymbols";
+import { translateKeyword } from "@/i18n/cardKeywords";
 import {
   CARD_PREVIEW_ANCHOR_GAP as PANEL_GAP,
   CARD_PREVIEW_EDGE_PAD as EDGE_PAD,
@@ -942,7 +943,9 @@ export class RulesCardPreviewLayer {
     let rowHeight = 0;
     for (const keyword of keywords) {
       const separator = keyword.indexOf(":");
-      const label = (separator < 0 ? keyword : keyword.slice(0, separator)).trim().toUpperCase();
+      const label = translateKeyword(
+        (separator < 0 ? keyword : keyword.slice(0, separator)).trim(),
+      ).toUpperCase();
       if (!label) continue;
       const mana =
         separator < 0

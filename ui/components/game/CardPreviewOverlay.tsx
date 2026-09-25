@@ -14,6 +14,7 @@ import { isCreature, isLethalDamage } from "./game.utils";
 import { cn } from "@/lib/utils";
 import type { CardRailState } from "@/components/game/cardRailState";
 import { isVisibleBattlefieldKeyword } from "@/lib/battlefieldKeywords";
+import { translateKeyword } from "@/i18n/cardKeywords";
 const MAX_PREVIEW_KEYWORDS = 8;
 export function CardPreviewOverlay({
   card,
@@ -140,7 +141,7 @@ export function CardPreviewOverlay({
             <div className="flex flex-wrap gap-1 justify-center">
               {visibleKeywords.map((kw, i) => {
                 const colonIdx = kw.indexOf(":");
-                const label = colonIdx === -1 ? kw : kw.slice(0, colonIdx);
+                const label = translateKeyword(colonIdx === -1 ? kw : kw.slice(0, colonIdx));
                 const cost = colonIdx === -1 ? null : kw.slice(colonIdx + 1);
                 return (
                   <span
