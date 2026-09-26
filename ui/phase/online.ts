@@ -18,6 +18,14 @@ interface Credentials { game_code: string; player_token: string; full_key: Termi
 interface Status { endpoint: string; code: string; connected: boolean; message: string; publicUrl: string | null }
 let status: Status = { endpoint: "", code: "", connected: false, message: "", publicUrl: null };
 const listeners = new Set<() => void>();
+const eventListeners = new Set<(type: string, data: unknown) => void>();
+export function subscribeOnlineEvents(listener: (type: string, data: unknown) => void) {
+  eventListeners.add(listener);
+  return () => { eventListeners.delete(listener); };
+}
+function emitOnlineEvent(type: string, data: unknown) {
+  eventListeners.forEach(listener => listener(type, data));
+}
 export const onlineStatus = () => status;
 export const subscribeOnline = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
 function update(patch: Partial<Status>) { status = { ...status, ...patch }; listeners.forEach(listener => listener()); }
@@ -119,6 +127,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
     settleCreate(new Error(message));
     settleJoin(new Error(message));
     update({ message });
+    emitOnlineEvent("ConnectionError", { message });
     useGameStore.setState({ currentPrompt: null, isWaitingForResponse: false });
     toast.error(message);
   };
@@ -197,7 +206,10 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
           if (frame.type === "SessionAttached") settleJoin();
         }
         if (frame.type === "GameCreated" && credentials) settleCreate(undefined, credentials.game_code);
-        if (frame.type === "GameStarted") send("ManabrewSnapshot");
+        if (frame.type === "GameStarted") {
+          send("ManabrewSnapshot");
+          emitOnlineEvent("GameStarted", data);
+        }
       } else if (frame.type === "StateUpdate") {
         // The server pushes the final private snapshot before retiring the room.
         if (data.state?.waiting_for?.type !== "GameOver") send("ManabrewSnapshot");
@@ -234,6 +246,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
   current.onclose = () => {
     if (socket !== current) return;
     update({ connected: false, message: t`Disconnected — reconnect to resume your seat.` });
+    emitOnlineEvent("ConnectionError", { message: t`Disconnected — reconnect to resume your seat.` });
     settle(new Error("Connection closed"));
     settleCreate(new Error("Connection closed"));
     settleJoin(new Error("Connection closed"));
@@ -255,7 +268,7 @@ configureOnlineDraftTransport({ connect: connectOnline, send });
  */
 export function createPrivateRoom(
   endpoint: string,
-  input: { deck: unknown; displayName: string; players: number; password?: string },
+  input: { deck: unknown; displayName: string; players: number; password?: string; formatConfig?: unknown; startWhenFull?: boolean },
 ): Promise<{ gameCode: string; password: string }> {
   const password = input.password ?? randomPassword();
   return new Promise((resolve, reject) => {
@@ -264,6 +277,8 @@ export function createPrivateRoom(
     connectOnline(endpoint, { type: "CreateGameWithSettings", data: {
       deck: input.deck, display_name: input.displayName, public: false, password,
       timer_seconds: null, player_count: input.players,
+      ...(input.formatConfig ? { format_config: input.formatConfig } : {}),
+      start_when_full: input.startWhenFull ?? true,
     } });
     const timer = setTimeout(() => settleCreate(new Error(t`The server did not confirm the room in time.`)), 30000);
     pendingCreate = { resolve: (gameCode) => resolve({ gameCode, password }), reject, timer };
@@ -282,6 +297,14 @@ export function joinPrivateRoom(
     const timer = setTimeout(() => settleJoin(new Error("The server did not seat this client in time.")), 30000);
     pendingJoin = { resolve, reject, timer };
   });
+}
+
+export function startOnlineGame(): void {
+  send("SeatMutate", { mutation: { type: "Start" } });
+}
+
+export function abandonOnlineGame(): void {
+  send("AbandonGame");
 }
 
 export function respondOnline(message: unknown): Promise<void> {

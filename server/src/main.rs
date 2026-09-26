@@ -5,6 +5,8 @@ use std::path::{Path, PathBuf};
 
 mod startup;
 mod gateway;
+#[cfg(test)]
+mod cache_tests;
 
 /// `PHASE_CARD_DB` takes either shape the engine reads: a raw MTGJSON
 /// `AtomicCards.json` (`{"meta":…,"data":…}`, its Oracle text parsed at
@@ -74,7 +76,16 @@ fn load_card_db(path: &Path) -> Result<(CardDatabase, PathBuf), String> {
 fn write_export_cache(db: &CardDatabase, cache: &Path) -> std::io::Result<()> {
     // Write beside the target and rename, so a half-written cache is never read.
     let partial = cache.with_extension("json.partial");
-    std::fs::write(&partial, db.export_json())?;
+    // The engine's subset export preserves stored face keys and metadata but
+    // deliberately omits legality. Restore it for a full application cache.
+    let names = db.face_iter().map(|(key, _)| key.to_owned()).collect();
+    let mut export: serde_json::Value = serde_json::from_str(&db.export_subset_json(&names))?;
+    for (name, entry) in export.as_object_mut().expect("card export is an object") {
+        if let Some(legalities) = db.get_legalities(name) {
+            entry["legalities"] = serde_json::to_value(engine::database::legality::legalities_to_export_map(legalities))?;
+        }
+    }
+    std::fs::write(&partial, serde_json::to_vec(&export)?)?;
     std::fs::rename(&partial, cache)
 }
 
@@ -130,8 +141,10 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .map(PathBuf::from)
         .unwrap_or_else(default_card_db);
     let started = std::time::Instant::now();
-    let (db, loaded_from) =
-        load_card_db(&path).map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
+    let load_path = path.clone();
+    let (db, loaded_from) = tokio::task::spawn_blocking(move || load_card_db(&load_path))
+        .await?
+        .map_err(|e| -> Box<dyn std::error::Error> { e.into() })?;
     eprintln!(
         "loaded {} cards from {} in {:?}",
         db.card_count(),

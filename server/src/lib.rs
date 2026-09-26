@@ -52,6 +52,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 pub mod host_process;
+pub mod waiting_room;
 
 #[cfg(test)]
 mod ai_difficulty_tests;

@@ -10908,3 +10908,143 @@ msgstr "無法連線至對局伺服器。"
 
 msgid "The server did not confirm the room in time."
 msgstr "伺服器未能及時確認房間，請重試。"
+
+
+msgid "Create a room first. Inside, take a seat, choose the format and your deck, then get ready."
+msgstr "先建立房間，再入座、選擇賽制和自己的套牌，準備後開始對局。"
+
+msgid "Reconnect waiting room"
+msgstr "重新連線等待房間"
+
+msgid "Legacy direct games require a deck before connecting."
+msgstr "舊版直連對局需要先填寫牌表，再連線。"
+
+msgid "This host does not support waiting rooms. Update the host and try again."
+msgstr "此主持服務不支援等待房間，請更新主持服務後重試。"
+
+msgid "The room is disconnected. Reconnect before making changes."
+msgstr "房間已中斷，請重新連線後操作。"
+
+msgid "Room connection replaced."
+msgstr "已切換房間連線。"
+
+msgid "Invalid room membership."
+msgstr "房間成員憑據無效。"
+
+msgid "Room connection lost. Reconnect to return to your seat."
+msgstr "房間連線已中斷，重新連線即可返回座位。"
+
+msgid "Could not connect to the waiting room."
+msgstr "無法連線等待房間。"
+
+msgid "No saved waiting room in this tab."
+msgstr "此分頁沒有儲存的等待房間。"
+
+msgid "Left the room."
+msgstr "已離開房間。"
+
+msgid "Waiting room"
+msgstr "等待房間"
+
+msgid "Leave room"
+msgstr "離開房間"
+
+msgid "Starting game…"
+msgstr "正在開始對局…"
+
+msgid "Game started."
+msgstr "對局已開始。"
+
+msgid "Choose a seat, select a deck, then get ready."
+msgstr "選擇座位和套牌，然後準備。"
+
+msgid "Seat {0}"
+msgstr "座位 {0}"
+
+msgid "Not ready"
+msgstr "未準備"
+
+msgid "Sit here"
+msgstr "坐這裡"
+
+msgid "Stand up"
+msgstr "離開座位"
+
+msgid "Take a seat to choose your deck and get ready."
+msgstr "請先入座，再選擇套牌並準備。"
+
+msgid "Take a seat and wait for every seat to be filled, connected, and ready before starting."
+msgstr "入座後，等待所有座位坐滿、連線正常且全部準備，再開始對局。"
+
+msgid "Your deck"
+msgstr "你的套牌"
+
+msgid "No preset decks for this format."
+msgstr "此賽制暫無預設套牌。"
+
+msgid "Main deck: {0} · Sideboard: {1} · Commanders: {2}"
+msgstr "主牌：{0} · 備牌：{1} · 指揮官：{2}"
+
+msgid "Use deck"
+msgstr "使用這副套牌"
+
+msgid "Changing your deck clears your ready status."
+msgstr "更換套牌後需要重新準備。"
+
+msgid "Return to game"
+msgstr "進入對局"
+
+msgid "Every seat must be occupied, connected and ready"
+msgstr "所有座位需要坐滿、連線正常且全部準備。"
+
+msgid "Seat is already occupied"
+msgstr "這個座位已經有人了。"
+
+msgid "Seat is out of range"
+msgstr "座位編號無效。"
+
+msgid "Only the host can perform this action"
+msgstr "只有房主可以執行此操作。"
+
+msgid "Room is not waiting"
+msgstr "房間已開始對局，無法再修改設定。"
+
+msgid "Sit down and unready before changing your deck"
+msgstr "請先入座並取消準備，再更換套牌。"
+
+msgid "Sit down before readying"
+msgstr "請先入座，再準備。"
+
+msgid "Choose a deck before readying"
+msgstr "請先選擇套牌，再準備。"
+
+msgid "Main deck cannot be empty"
+msgstr "主牌不能為空。"
+
+msgid "An occupied seat would be removed"
+msgstr "需要先讓即將移除的座位上的玩家離座，才能減少人數。"
+
+msgid "Invalid room code or password"
+msgstr "房間邀請無效，請檢查房間碼和密碼。"
+
+msgid "Invalid reconnect credentials"
+msgstr "重新連線憑據無效，請重新加入房間。"
+
+msgid "A room already exists. Reconnect instead."
+msgstr "房間已經存在，請重新連線等待房間。"
+
+msgid "Room is no longer waiting"
+msgstr "房間已開始對局，無法加入。"
+
+msgid "Room member limit reached"
+msgstr "房間成員人數已達上限。"
+
+msgid "Game launch timed out. Ready again to retry."
+msgstr "開始對局逾時，請重新準備後重試。"
+
+
+msgid "Could not start the game: {reason}"
+msgstr "無法開始對局：{reason}"
+
+msgid "Close room"
+msgstr "關閉房間"

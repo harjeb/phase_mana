@@ -10912,3 +10912,143 @@ msgstr "Could not connect to the Phase server"
 
 msgid "The server did not confirm the room in time."
 msgstr "The server did not confirm the room in time."
+
+
+msgid "Create a room first. Inside, take a seat, choose the format and your deck, then get ready."
+msgstr "Create a room first. Inside, take a seat, choose the format and your deck, then get ready."
+
+msgid "Reconnect waiting room"
+msgstr "Reconnect waiting room"
+
+msgid "Legacy direct games require a deck before connecting."
+msgstr "Legacy direct games require a deck before connecting."
+
+msgid "This host does not support waiting rooms. Update the host and try again."
+msgstr "This host does not support waiting rooms. Update the host and try again."
+
+msgid "The room is disconnected. Reconnect before making changes."
+msgstr "The room is disconnected. Reconnect before making changes."
+
+msgid "Room connection replaced."
+msgstr "Room connection replaced."
+
+msgid "Invalid room membership."
+msgstr "Invalid room membership."
+
+msgid "Room connection lost. Reconnect to return to your seat."
+msgstr "Room connection lost. Reconnect to return to your seat."
+
+msgid "Could not connect to the waiting room."
+msgstr "Could not connect to the waiting room."
+
+msgid "No saved waiting room in this tab."
+msgstr "No saved waiting room in this tab."
+
+msgid "Left the room."
+msgstr "Left the room."
+
+msgid "Waiting room"
+msgstr "Waiting room"
+
+msgid "Leave room"
+msgstr "Leave room"
+
+msgid "Starting game…"
+msgstr "Starting game…"
+
+msgid "Game started."
+msgstr "Game started."
+
+msgid "Choose a seat, select a deck, then get ready."
+msgstr "Choose a seat, select a deck, then get ready."
+
+msgid "Seat {0}"
+msgstr "Seat {0}"
+
+msgid "Not ready"
+msgstr "Not ready"
+
+msgid "Sit here"
+msgstr "Sit here"
+
+msgid "Stand up"
+msgstr "Stand up"
+
+msgid "Take a seat to choose your deck and get ready."
+msgstr "Take a seat to choose your deck and get ready."
+
+msgid "Take a seat and wait for every seat to be filled, connected, and ready before starting."
+msgstr "Take a seat and wait for every seat to be filled, connected, and ready before starting."
+
+msgid "Your deck"
+msgstr "Your deck"
+
+msgid "No preset decks for this format."
+msgstr "No preset decks for this format."
+
+msgid "Main deck: {0} · Sideboard: {1} · Commanders: {2}"
+msgstr "Main deck: {0} · Sideboard: {1} · Commanders: {2}"
+
+msgid "Use deck"
+msgstr "Use deck"
+
+msgid "Changing your deck clears your ready status."
+msgstr "Changing your deck clears your ready status."
+
+msgid "Return to game"
+msgstr "Return to game"
+
+msgid "Every seat must be occupied, connected and ready"
+msgstr "Every seat must be occupied, connected and ready"
+
+msgid "Seat is already occupied"
+msgstr "Seat is already occupied"
+
+msgid "Seat is out of range"
+msgstr "Seat is out of range"
+
+msgid "Only the host can perform this action"
+msgstr "Only the host can perform this action"
+
+msgid "Room is not waiting"
+msgstr "Room is not waiting"
+
+msgid "Sit down and unready before changing your deck"
+msgstr "Sit down and unready before changing your deck"
+
+msgid "Sit down before readying"
+msgstr "Sit down before readying"
+
+msgid "Choose a deck before readying"
+msgstr "Choose a deck before readying"
+
+msgid "Main deck cannot be empty"
+msgstr "Main deck cannot be empty"
+
+msgid "An occupied seat would be removed"
+msgstr "An occupied seat would be removed"
+
+msgid "Invalid room code or password"
+msgstr "Invalid room code or password"
+
+msgid "Invalid reconnect credentials"
+msgstr "Invalid reconnect credentials"
+
+msgid "A room already exists. Reconnect instead."
+msgstr "A room already exists. Reconnect instead."
+
+msgid "Room is no longer waiting"
+msgstr "Room is no longer waiting"
+
+msgid "Room member limit reached"
+msgstr "Room member limit reached"
+
+msgid "Game launch timed out. Ready again to retry."
+msgstr "Game launch timed out. Ready again to retry."
+
+
+msgid "Could not start the game: {reason}"
+msgstr "Could not start the game: {reason}"
+
+msgid "Close room"
+msgstr "Close room"

@@ -36,6 +36,9 @@ pub struct HostInfo {
     pub lan_endpoints: Vec<String>,
     pub binary: String,
     pub port: u16,
+    /// Local control capability; only expose HostInfo through the local API.
+    pub room_key: String,
+    pub public_endpoint: Option<String>,
 }
 
 struct Running {
@@ -43,6 +46,7 @@ struct Running {
     /// Held open so `--exit-on-stdin-close` reaps the engine if this host dies.
     _stdin: Option<ChildStdin>,
     info: HostInfo,
+    _listener: Option<crate::waiting_room::Listener>,
 }
 
 static RUNNING: OnceLock<Mutex<Option<Running>>> = OnceLock::new();
@@ -103,9 +107,26 @@ pub fn start() -> Result<HostInfo, String> {
     let reservation = TcpListener::bind((bind, port))
         .map_err(|error| format!("Cannot bind host port {port}: {error}"))?;
 
+    let native_port = free_port()?;
+    let room_key = crate::waiting_room::capability();
+    let public_endpoint = std::env::var("PHASE_HOST_PUBLIC_URL").ok()
+        .filter(|value| !value.trim().is_empty())
+        .map(|value| {
+            let mut url = reqwest::Url::parse(value.trim()).map_err(|e| e.to_string())?;
+            if !matches!(url.scheme(), "ws" | "wss") || url.host_str().is_none() || !url.username().is_empty() || url.password().is_some() {
+                return Err("PHASE_HOST_PUBLIC_URL must be a ws/wss URL without credentials".to_string());
+            }
+            url.set_path("/room"); url.set_query(None); url.set_fragment(None);
+            Ok(url.to_string())
+        }).transpose()?;
+    let public_url = std::env::var("PHASE_HOST_PUBLIC_URL").ok()
+        .filter(|s| !s.trim().is_empty())
+        .map(|s| format!("{}/ws", s.trim().trim_end_matches('/').trim_end_matches("/room").trim_end_matches("/ws")))
+        .unwrap_or_else(|| format!("ws://127.0.0.1:{port}/ws"));
     let mut command = Command::new(&binary);
     command
-        .args(["--port", &port.to_string(), "--bind", bind])
+        .args(["--port", &native_port.to_string(), "--bind", "127.0.0.1"])
+        .args(["--public-url", &public_url])
         .arg("--data-dir")
         .arg(&data_dir)
         // Keep the game database out of the engine checkout: this host is a
@@ -117,19 +138,9 @@ pub fn start() -> Result<HostInfo, String> {
         .stdin(Stdio::piped())
         .stdout(Stdio::null())
         .stderr(Stdio::inherit());
-    // PHASE_DEV_FIXTURE is inherited only when explicitly set by the operator.
-    // A reverse proxy or tunnel the operator already runs. The engine advertises
-    // it as `ServerHello.public_url`, which is what turns the invitation from a
-    // LAN address into a `wss://` one. `NGROK_AUTHTOKEN` needs no flag here: the
-    // engine grows its own tunnel when built with `--features ngrok`, and this
-    // child inherits the environment.
-    if let Ok(public_url) = std::env::var("PHASE_HOST_PUBLIC_URL") {
-        if !public_url.trim().is_empty() {
-            command.args(["--public-url", public_url.trim()]);
-        }
-    }
-
-    drop(reservation);
+    // A configured tunnel points at the wrapper port so guests can use both
+    // /room and /ws. The private native port is never advertised in invitations.
+    // Keep the wrapper reservation bound while the private native engine starts.
     let mut child = command
         .spawn()
         .map_err(|e| format!("Cannot start {}: {e}", binary.display()))?;
@@ -150,8 +161,8 @@ pub fn start() -> Result<HostInfo, String> {
                 binary.display()
             ));
         }
-        if let Ok(stream) = TcpStream::connect_timeout(&SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), port), Duration::from_millis(200)) {
-            if let Err(error) = verify_protocol(stream, port) {
+        if let Ok(stream) = TcpStream::connect_timeout(&SocketAddr::new(IpAddr::V4(Ipv4Addr::LOCALHOST), native_port), Duration::from_millis(200)) {
+            if let Err(error) = verify_protocol(stream, native_port) {
                 reap(&mut child);
                 return Err(error);
             }
@@ -164,17 +175,23 @@ pub fn start() -> Result<HostInfo, String> {
         std::thread::sleep(READY_POLL);
     }
 
+    let listener = match crate::waiting_room::Listener::start(reservation, native_port, room_key.clone()) {
+        Ok(listener) => listener,
+        Err(error) => { reap(&mut child); return Err(format!("Cannot start waiting room: {error}")); }
+    };
     let info = HostInfo {
-        endpoint: format!("ws://127.0.0.1:{port}/ws"),
+        endpoint: format!("ws://127.0.0.1:{port}/room"),
         lan_endpoints: if lan {
-            lan_addresses().into_iter().map(|ip| format!("ws://{ip}:{port}/ws")).collect()
+            lan_addresses().into_iter().map(|ip| format!("ws://{ip}:{port}/room")).collect()
         } else {
             Vec::new()
         },
         binary: binary.display().to_string(),
         port,
+        room_key,
+        public_endpoint,
     };
-    *guard = Some(Running { child, _stdin: stdin, info: info.clone() });
+    *guard = Some(Running { child, _stdin: stdin, info: info.clone(), _listener: Some(listener) });
     Ok(info)
 }
 
@@ -188,7 +205,7 @@ fn resolve_binary() -> Result<PathBuf, String> {
         let path = PathBuf::from(configured);
         return path.is_file().then_some(path).ok_or_else(|| "PHASE_SERVER_BIN does not name a file".to_string());
     }
-    let candidate = Path::new(env!("CARGO_MANIFEST_DIR")).join("../.phase-host/target/debug/phase-server");
+    let candidate = Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("../.phase-host/target/debug/phase-server{}", std::env::consts::EXE_SUFFIX));
     if candidate.is_file() { return Ok(candidate); }
     Err("No compatible host engine installed. Run `npm run host:build`, or set PHASE_SERVER_BIN to a Phase 76 / ManaBrew 2 binary.".to_string())
 }
@@ -313,7 +330,8 @@ mod tests {
         let mut running = Some(Running {
             child,
             _stdin: None,
-            info: HostInfo { endpoint: String::new(), lan_endpoints: vec![], binary: String::new(), port: 1 },
+            info: HostInfo { endpoint: String::new(), lan_endpoints: vec![], binary: String::new(), port: 1, room_key: String::new(), public_endpoint: None },
+            _listener: None,
         });
         assert!(live_info(&mut running).is_none());
         assert!(running.is_none());

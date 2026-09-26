@@ -76,7 +76,7 @@ try {
     hostCalls++;
     return hostCalls===1
       ? route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Missing proxy</title>'})
-      : route.fulfill({json:{endpoint:'ws://127.0.0.1:19474/ws',lanEndpoints:['ws://192.168.0.2:19474/ws'],binary:'mock',port:19474}});
+      : route.fulfill({json:{endpoint:'ws://127.0.0.1:19474/room',lanEndpoints:['ws://192.168.0.2:19474/room'],binary:'mock',port:19474,roomKey:'local-key'}});
   });
   page.on('console',message=>{if(message.type()==='error' && message.text().includes('19474')) console.error(message.text());});
   await page.context().routeWebSocket(/19474/,socket=>{
@@ -84,22 +84,19 @@ try {
     socket.onMessage(message=>{
       const frame=JSON.parse(String(message));
       socketMessages.push(frame.type);
-      if(frame.type==='CreateGameWithSettings') {
-        assert.equal(frame.data.public,false);
-        assert.ok(frame.data.password);
-        socket.send(JSON.stringify({type:'GameCreated',data:{game_code:'ABC123',player_token:'mock-seat',full_key:{game_code:'ABC123',generation:1}}}));
+      if(frame.type==='RoomCreate') {
+        assert.equal(frame.data.roomKey,'local-key');
+        assert.equal(frame.data.deck,undefined);
+        socket.send(JSON.stringify({type:'RoomAttached',data:{code:'ABC123',memberId:'owner',token:'member-token',password:'invite-password'}}));
+        socket.send(JSON.stringify({type:'RoomState',data:{code:'ABC123',hostId:'owner',phase:'waiting',format:'standard',capacity:2,members:[{id:'owner',name:'Player',seat:null,ready:false,connected:true,deckName:null}]}}));
       }
     });
-    socket.send(JSON.stringify({type:'ServerHello',data:{mode:'Full',protocol_version:76,manabrew_version:2}}));
+    socket.send(JSON.stringify({type:'RoomHello',data:{version:1}}));
   });
   await page.goto(origin+'/#/play/online');
   // Hash navigation reuses the document; reload to install WebSocket interception.
   await page.reload();
   const hostButton=page.getByRole('button',{name:'主持并创建邀请',exact:true});
-  await hostButton.click();
-  await page.getByRole('alert').filter({hasText:'请输入牌数有效的牌表'}).waitFor();
-  assert.equal(hostCalls,0,'invalid decks must not start hosting');
-  await page.locator('textarea').first().fill('24 Forest\n36 Oblivious Bookworm');
   await hostButton.click();
   await page.getByRole('alert').filter({hasText:'本地主持服务返回了无效响应'}).waitFor();
   assert.ok(await hostButton.isEnabled());
@@ -110,7 +107,8 @@ try {
     throw error;
   });
   assert.equal(hostCalls,2);
+  assert.ok(!socketMessages.includes('CreateGameWithSettings'),'Empty-room hosting must not create a native game');
   assert.equal(await page.getByRole('alert').count(),0);
   await page.screenshot({path:'tools/host-room-smoke.png'});
-  console.log('PASS: Chinese history, strict format filters, weighted AI BO3, persistence, and visible hosting validation/failure plus mocked invitation creation.');
+  console.log('PASS: Chinese history, strict format filters, weighted AI BO3, persistence, and visible hosting failure plus mocked empty-room invitation creation.');
 } finally { await browser.close(); }

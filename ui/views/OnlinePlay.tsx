@@ -5,8 +5,10 @@ import { Button } from "@/components/ui/button";
 import { parseDeckListText } from "@/lib/deckImport";
 import { decodeInvite, encodeInvite, inviteEndpoint } from "@/phase/invite";
 import { hostedRoom, hostRequest, saveHostedRoom, stopHostedRoom } from "@/phase/host";
-import { closeOnline, connectOnline, createPrivateRoom, joinPrivateRoom, latestOnlineEndpoint, onlineStatus, subscribeOnline } from "@/phase/online";
+import { closeOnline, connectOnline, joinPrivateRoom, latestOnlineEndpoint, onlineStatus, subscribeOnline } from "@/phase/online";
 import OnlineDraftPanel from "@/views/OnlineDraftPanel";
+import { HostedWaitingRoom } from "@/components/lobby/HostedWaitingRoom";
+import { createWaitingRoom, hasSavedWaitingRoom, joinWaitingRoom, leaveWaitingRoom, reconnectWaitingRoom, sendWaitingRoomCommand, subscribeWaitingRoom, waitingRoomStatus } from "@/phase/waitingRoom";
 
 /** What `/api/host/start` returns: the engine this host spawned for us. */
 interface HostInfo {
@@ -14,6 +16,8 @@ interface HostInfo {
   lanEndpoints: string[];
   binary: string;
   port: number;
+  roomKey?: string;
+  publicEndpoint?: string;
 }
 
 /**
@@ -29,6 +33,7 @@ async function startHostEngine(): Promise<HostInfo> {
 
 export default function OnlinePlay() {
   const state = useSyncExternalStore(subscribeOnline, onlineStatus);
+  const roomStatus = useSyncExternalStore(subscribeWaitingRoom, waitingRoomStatus);
   const [mode, setMode] = useState<"constructed" | "draft">("constructed");
   const [endpoint, setEndpoint] = useState(state.endpoint || latestOnlineEndpoint() || "ws://127.0.0.1:9374/ws");
   const [name, setName] = useState(() => t`Player`);
@@ -80,18 +85,20 @@ export default function OnlinePlay() {
   }
 
   const hostRoom = () => run("host", async () => {
-    const payload = deckPayload();
     const host = await startHostEngine();
+    if (!host.roomKey || new URL(host.endpoint).pathname !== "/room") {
+      throw new Error(t`This host does not support waiting rooms. Update the host and try again.`);
+    }
     saveHostedRoom({ endpoint: host.endpoint, code: "" });
     setEndpoint(host.endpoint);
     try {
-      const room = await createPrivateRoom(host.endpoint, { deck: payload, displayName: name.trim() || t`Player`, players });
-      const share = inviteEndpoint(onlineStatus().publicUrl, host.lanEndpoints[0] ?? host.endpoint);
-      const saved = { endpoint: host.endpoint, code: encodeInvite({ endpoint: share.endpoint, gameCode: room.gameCode, password: room.password }), scope: share.scope };
+      const room = await createWaitingRoom(host.endpoint, name.trim() || t`Player`, host.roomKey);
+      const share = inviteEndpoint(host.publicEndpoint ?? null, host.lanEndpoints[0] ?? host.endpoint);
+      const saved = { endpoint: host.endpoint, code: encodeInvite({ endpoint: share.endpoint, gameCode: room.code, password: room.password }), scope: share.scope };
       saveHostedRoom(saved);
       setInvite(saved);
     } catch (cause) {
-      closeOnline();
+      leaveWaitingRoom();
       try { await stopHostedRoom(); }
       catch (cleanup) { throw new Error(`${cause}; ${cleanup}`); }
       finally { setInvite(hostedRoom()); }
@@ -100,20 +107,24 @@ export default function OnlinePlay() {
   });
 
   const joinByInvite = () => run("join", async () => {
-    const payload = deckPayload();
     const parsed = decodeInvite(inviteText);
     // Show where this is going before the socket opens, so a bad invite is
     // attributable to the address it carried rather than to the seat.
     setCode(parsed.gameCode);
     setEndpoint(parsed.endpoint);
-    await joinPrivateRoom(parsed.endpoint, {
-      deck: payload, displayName: name.trim() || t`Player`, gameCode: parsed.gameCode, password: parsed.password,
-    });
+    if (new URL(parsed.endpoint).pathname === "/room") {
+      await joinWaitingRoom(parsed.endpoint, name.trim() || t`Player`, parsed.gameCode, parsed.password);
+    } else {
+      await joinPrivateRoom(parsed.endpoint, {
+        deck: deckPayload(), displayName: name.trim() || t`Player`, gameCode: parsed.gameCode, password: parsed.password,
+      });
+    }
   });
 
   async function stopHost() {
     await run("host", async () => {
       await stopHostedRoom();
+      leaveWaitingRoom();
       setInvite(null);
       closeOnline();
     });
@@ -147,20 +158,20 @@ export default function OnlinePlay() {
       : t`LAN address: guests need a route to this network and an open host firewall. For internet play, configure a TLS tunnel or port forwarding.`;
   return <section className="mx-auto max-w-2xl space-y-4 p-6">
     <h1 className="text-2xl font-bold"><Trans>Online multiplayer</Trans></h1>
-    <p><Trans>Connect to a Phase server. Each player submits their own deck; the server runs the game and keeps hands private.</Trans></p>
-    <label className="block"><Trans>Server URL</Trans><input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
-    <label className="block"><Trans>Your name</Trans><input className={field} value={name} maxLength={80} onChange={event => setName(event.target.value)} /></label>
-    <div className="flex gap-2"><Button variant={mode === "constructed" ? "primary" : "outline"} onClick={() => setMode("constructed")}><Trans>Constructed</Trans></Button><Button variant={mode === "draft" ? "primary" : "outline"} onClick={() => setMode("draft")}><Trans>Draft</Trans></Button></div>
-    {mode === "draft" ? <OnlineDraftPanel endpoint={endpoint} name={name} connected={state.connected} /> : <>
-    <label className="block"><Trans>Players</Trans><select aria-label={t`Players`} className={field} value={players} onChange={event => setPlayers(Number(event.target.value))}>
-      {[2, 3, 4].map(count => <option key={count} value={count}>{count}</option>)}
-    </select></label>
-    <label className="block"><Trans>Deck list</Trans><textarea className={field} rows={10} placeholder={"4 Lightning Bolt\n24 Mountain\n…"} value={deck} onChange={event => setDeck(event.target.value)} /></label>
+    <p><Trans>Create a room first. Inside, take a seat, choose the format and your deck, then get ready.</Trans></p>
+    {!roomStatus.room && <label className="block"><Trans>Your name</Trans><input className={field} value={name} maxLength={80} onChange={event => setName(event.target.value)} /></label>}
+    {!roomStatus.room && <div className="flex gap-2"><Button variant={mode === "constructed" ? "primary" : "outline"} onClick={() => setMode("constructed")}><Trans>Constructed</Trans></Button><Button variant={mode === "draft" ? "primary" : "outline"} onClick={() => setMode("draft")}><Trans>Draft</Trans></Button></div>}
+    {mode === "draft" ? <>
+      <label className="block"><Trans>Server URL</Trans><input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
+      <OnlineDraftPanel endpoint={endpoint.replace(/\/room\/?$/, "/ws")} name={name} connected={state.connected} />
+    </> : <>
+    {roomStatus.room && <HostedWaitingRoom status={roomStatus} onCommand={sendWaitingRoomCommand} onLeave={() => { if (invite) void stopHost(); else leaveWaitingRoom(); }} />}
+    {!roomStatus.connected && hasSavedWaitingRoom() && <Button variant="outline" disabled={!!busy || roomStatus.connecting} onClick={() => void run("join", async () => { await reconnectWaitingRoom(); })}><Trans>Reconnect waiting room</Trans></Button>}
 
-    <div className="space-y-2 rounded border p-3">
+    {(!roomStatus.room || invite) && <div className="space-y-2 rounded border p-3">
       <h2 className="font-semibold"><Trans>Host a room</Trans></h2>
       <p className="text-sm text-muted-foreground"><Trans>The game engine runs on this machine. Share the invitation; nobody has to type an address.</Trans></p>
-      <Button variant="primary" onClick={hostRoom} disabled={!!busy || !!invite || state.connected}>
+      <Button variant="primary" onClick={hostRoom} disabled={!!busy || !!invite || state.connected || roomStatus.connected}>
         {busy === "host" ? <Trans>Starting the engine…</Trans> : <Trans>Host and create invitation</Trans>}
       </Button>
       {error && errorKind === "host" && <p role="alert" className="text-destructive">{error}</p>}
@@ -176,9 +187,9 @@ export default function OnlinePlay() {
         </div>
         <p className="text-sm" role="status">{scopeNote}</p>
       </>}
-    </div>
+    </div>}
 
-    <div className="space-y-2 rounded border p-3">
+    {!roomStatus.room && <div className="space-y-2 rounded border p-3">
       <h2 className="font-semibold"><Trans>Join with an invitation</Trans></h2>
       <label className="block"><Trans>Paste invitation</Trans>
         <textarea aria-label={t`Paste invitation`} className={field} rows={3} value={inviteText} onChange={event => setInviteText(event.target.value)} />
@@ -187,19 +198,25 @@ export default function OnlinePlay() {
         {busy === "join" ? <Trans>Joining…</Trans> : <Trans>Join with invitation</Trans>}
       </Button>
       {error && errorKind === "join" && <p role="alert" className="text-destructive">{error}</p>}
-    </div>
+    </div>}
 
-    <details className="space-y-2 rounded border p-3">
+    {!roomStatus.room && <details className="space-y-2 rounded border p-3">
       <summary className="cursor-pointer font-semibold"><Trans>Advanced connection (room code)</Trans></summary>
+      <p className="text-sm text-muted-foreground"><Trans>Legacy direct games require a deck before connecting.</Trans></p>
+      <label className="block"><Trans>Server URL</Trans><input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
+      <label className="block"><Trans>Players</Trans><select aria-label={t`Players`} className={field} value={players} onChange={event => setPlayers(Number(event.target.value))}>
+        {[2, 3, 4].map(count => <option key={count} value={count}>{count}</option>)}
+      </select></label>
+      <label className="block"><Trans>Deck list</Trans><textarea className={field} rows={10} placeholder={"4 Lightning Bolt\n24 Mountain\n…"} value={deck} onChange={event => setDeck(event.target.value)} /></label>
       <label className="block"><Trans>Room code</Trans><input className={field} value={code} onChange={event => setCode(event.target.value)} /></label>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" onClick={() => connect("create")} disabled={state.connected}><Trans>Create room</Trans></Button>
         <Button variant="outline" onClick={() => connect("join")} disabled={state.connected}><Trans>Join room</Trans></Button>
       </div>
-    </details>
+    </details>}
     </>}
-    <Button variant="outline" onClick={() => connect("reconnect")} disabled={!!busy}><Trans>Reconnect saved seat</Trans></Button>
-    <Button variant="outline" onClick={closeOnline}><Trans>Disconnect</Trans></Button>
+    {!roomStatus.room && <><Button variant="outline" onClick={() => connect("reconnect")} disabled={!!busy}><Trans>Reconnect saved seat</Trans></Button>
+    <Button variant="outline" onClick={closeOnline}><Trans>Disconnect</Trans></Button></>}
     {state.code && <p><Trans>Room code: <strong>{state.code}</strong></Trans></p>}
     <p role="status">{state.message}</p>
     {error && errorKind === null && <p role="alert" className="text-destructive">{error}</p>}
