@@ -46,16 +46,14 @@ export interface PresetDeckDefinition {
 
 export type PresetDeck = Deck & { engines?: EngineKind[] };
 
-/** Only table variants may reuse decks tagged with a different base format. */
+/** A selected built-in format only shows presets explicitly matching that format. */
 export function filterPresetDecksForFormat<T extends { format?: string }>(
   decks: T[],
   formatId: string | null,
   customFormat = false,
 ): T[] {
   if (formatId === null || customFormat) return decks;
-  const matching = decks.filter((deck) => (deck.format ?? "standard") === formatId);
-  const tableVariant = ["archenemy", "planechase", "two_headed_giant"].includes(formatId);
-  return tableVariant && matching.length === 0 ? decks : matching;
+  return decks.filter((deck) => (deck.format ?? "standard") === formatId);
 }
 
 // A preset without an explicit engines list predates per-engine curation and is

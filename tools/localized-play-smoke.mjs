@@ -37,7 +37,7 @@ try {
   assert.equal(await page.getByRole('option',{name:'Last 30 days',exact:true}).count(),0);
   await page.screenshot({path:'tools/localized-history-smoke.png'});
   await page.goto(origin+'/#/play/offline/constructed');
-  for(const name of ['小小指挥官','单挑指挥官','老学派 93/94','老学派 95']) {
+  for(const name of ['小小指挥官','单挑指挥官','老学派 93/94','老学派 95','魔王战','时空竞逐','双头巨人']) {
     await page.getByRole('button',{name,exact:true}).click();
     await page.getByText('此赛制暂无入门套牌。',{exact:true}).waitFor();
     assert.equal(await page.getByRole('button',{name:/Smoke Bookworm/}).count(),0);

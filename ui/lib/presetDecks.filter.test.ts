@@ -31,11 +31,14 @@ describe("preset deck format filtering", () => {
   });
 
   it.each(["archenemy", "planechase", "two_headed_giant"])(
-    "allows %s table variants to use base-format decks, preferring specifically tagged presets",
+    "only offers matching %s presets and leaves an unmatched format empty",
     (format) => {
-      expect(filterPresetDecksForFormat(decks, format)).toEqual(decks);
+      expect(filterPresetDecksForFormat(decks, format)).toEqual([]);
       const dedicated = { id: "dedicated", format };
-      expect(filterPresetDecksForFormat([...decks, dedicated], format)).toEqual([dedicated]);
+      const otherVariants = ["archenemy", "planechase", "two_headed_giant"]
+        .filter((variant) => variant !== format)
+        .map((variant) => ({ id: variant, format: variant }));
+      expect(filterPresetDecksForFormat([...decks, ...otherVariants, dedicated], format)).toEqual([dedicated]);
     },
   );
 });
