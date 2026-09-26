@@ -23,7 +23,7 @@ msgstr ""
 #. placeholder {0}: importedCube.rejectedCardCount
 #. placeholder {0}: lastImportedCube.rejectedCardCount
 #: ui/components/lobby/TableSetupGameCard.tsx:320
-#: ui/views/Limited.tsx:412
+#: ui/views/Limited.tsx:463
 msgid " · {0} without local engine data"
 msgstr " · {0} without local engine data"
 
@@ -78,11 +78,11 @@ msgid ", then drag and scroll to zoom and frame it."
 msgstr ", then drag and scroll to zoom and frame it."
 
 #. placeholder {0}: info.boosterCovers
-#: ui/views/Limited.tsx:700
+#: ui/views/Limited.tsx:778
 msgid "· {0} cover arts"
 msgstr "· {0} cover arts"
 
-#: ui/views/Limited.tsx:1073
+#: ui/views/Limited.tsx:1151
 msgid "· singleton"
 msgstr "· singleton"
 
@@ -239,7 +239,7 @@ msgstr "{0} card{1} selected"
 #: ui/components/deck/DeckHubEntryCard.tsx:178
 #: ui/components/editor/ImportDeckTextDialog.tsx:343
 #: ui/components/lobby/DeckSelectionCard.tsx:241
-#: ui/views/Limited.tsx:698
+#: ui/views/Limited.tsx:776
 msgid "{0} cards"
 msgstr "{0} cards"
 
@@ -295,13 +295,13 @@ msgid "{0} linked to your account"
 msgstr "{0} linked to your account"
 
 #. placeholder {0}: draftableSets.length
-#: ui/views/Limited.tsx:280
+#: ui/views/Limited.tsx:331
 msgid "{0} local sets listed"
 msgstr "{0} local sets listed"
 
 #. placeholder {0}: cube.playableCardCount
 #. placeholder {1}: cube.rejectedCardCount
-#: ui/views/Limited.tsx:1076
+#: ui/views/Limited.tsx:1154
 msgid "{0} locally recognized · {1} name-only"
 msgstr "{0} locally recognized · {1} name-only"
 
@@ -337,12 +337,12 @@ msgstr "{0} printing"
 #. placeholder {0}: matched.length
 #. placeholder {1}: matched .slice(0, 6) .map((s) => s.code.toUpperCase()) .join(", ")
 #. placeholder {2}: matched.length > 6 ? "…" : ""
-#: ui/views/Limited.tsx:644
+#: ui/views/Limited.tsx:713
 msgid "{0} sets · {1}{2}"
 msgstr "{0} sets · {1}{2}"
 
 #. placeholder {0}: matched.length
-#: ui/views/Limited.tsx:653
+#: ui/views/Limited.tsx:722
 msgid "{0} sets · pod {podSize}"
 msgstr "{0} sets · pod {podSize}"
 
@@ -506,7 +506,7 @@ msgstr "{name}, one copy"
 msgid "{openTables, plural, one {# table open} other {# tables open}} · {onlinePlayers} online"
 msgstr "{openTables, plural, one {# table open} other {# tables open}} · {onlinePlayers} online"
 
-#: ui/views/Limited.tsx:843
+#: ui/views/Limited.tsx:921
 msgid "{picksPerPass}× pick"
 msgstr "{picksPerPass}× pick"
 
@@ -553,7 +553,7 @@ msgstr "{summary}, {0} failed"
 msgid "{totalCount} cards"
 msgstr "{totalCount} cards"
 
-#: ui/views/Limited.tsx:736
+#: ui/views/Limited.tsx:814
 msgid "{totalSlots} cards / pack"
 msgstr "{totalSlots} cards / pack"
 
@@ -581,7 +581,7 @@ msgstr "+ Custom"
 #. placeholder {0}: cube.name
 #. placeholder {1}: cube.cardCount
 #. placeholder {2}: cube.numPacks
-#: ui/views/Limited.tsx:1072
+#: ui/views/Limited.tsx:1150
 msgid "<0>{0}</0> · {1} cards · {2} packs/player"
 msgstr "<0>{0}</0> · {1} cards · {2} packs/player"
 
@@ -1076,7 +1076,7 @@ msgstr "Adding cards to this deck…"
 msgid "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 msgstr "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 
-#: ui/views/Limited.tsx:835
+#: ui/views/Limited.tsx:913
 msgid "Advanced"
 msgstr "Advanced"
 
@@ -1399,7 +1399,7 @@ msgid "Back"
 msgstr "Back"
 
 #: ui/views/CasualModes.tsx:93
-#: ui/views/Limited.tsx:466
+#: ui/views/Limited.tsx:535
 msgid "Back Draft"
 msgstr "Back Draft"
 
@@ -1487,6 +1487,10 @@ msgstr "Battlefield Zone Column Order"
 msgid "Before changing the mana base"
 msgstr "Before changing the mana base"
 
+#: ui/components/limited/PickAPackDialog.tsx:34
+msgid "Before opening, snake-pick which unopened boosters you and the AI will draft from."
+msgstr "Before opening, snake-pick which unopened boosters you and the AI will draft from."
+
 #: ui/views/Tournaments.tsx:68
 msgid "Best of one"
 msgstr "Best of one"
@@ -1544,28 +1548,28 @@ msgid "Board settings"
 msgstr "Board settings"
 
 #: ui/components/layout/TopBar.tsx:57
-#: ui/views/Limited.tsx:343
+#: ui/views/Limited.tsx:394
 msgid "Booster Draft"
 msgstr "Booster Draft"
 
-#: ui/views/Limited.tsx:887
+#: ui/views/Limited.tsx:965
 msgid "Booster Draft only. 1 = vanilla MTG. 2+ = each seat picks N cards before passing."
 msgstr "Booster Draft only. 1 = vanilla MTG. 2+ = each seat picks N cards before passing."
 
-#: ui/views/Limited.tsx:891
+#: ui/views/Limited.tsx:969
 msgid "Booster Draft only. With 4-player pods, raise to 2 so each seat ends with ~30 picks."
 msgstr "Booster Draft only. With 4-player pods, raise to 2 so each seat ends with ~30 picks."
 
-#: ui/views/Limited.tsx:719
+#: ui/views/Limited.tsx:797
 msgid "Booster recipe"
 msgstr "Booster recipe"
 
-#: ui/views/Limited.tsx:780
+#: ui/views/Limited.tsx:858
 msgid "Booster variant"
 msgstr "Booster variant"
 
 #: ui/views/CasualModes.tsx:101
-#: ui/views/Limited.tsx:476
+#: ui/views/Limited.tsx:545
 msgid "Boosters of nothing but rares — or the silver/iron sub-variant."
 msgstr "Boosters of nothing but rares — or the silver/iron sub-variant."
 
@@ -1759,6 +1763,7 @@ msgstr "Cache"
 #: ui/components/editor/ImportDeckTextDialog.tsx:216
 #: ui/components/editor/ImportDeckTextDialog.tsx:332
 #: ui/components/game/modals/ConcedeGameModal.tsx:53
+#: ui/components/limited/PickAPackDialog.tsx:64
 #: ui/components/lobby/CreateGameDialog.tsx:839
 #: ui/components/lobby/CustomFormatDialog.tsx:184
 #: ui/components/lobby/CustomFormatDialog.tsx:501
@@ -1990,7 +1995,7 @@ msgstr "Casual"
 
 #: ui/components/play/PlayHome.tsx:43
 #: ui/views/CasualModes.tsx:45
-#: ui/views/Limited.tsx:361
+#: ui/views/Limited.tsx:412
 msgid "Casual Modes"
 msgstr "Casual Modes"
 
@@ -2144,7 +2149,7 @@ msgstr "Choose a format"
 msgid "Choose a format before starting"
 msgstr "Choose a format before starting"
 
-#: ui/views/Limited.tsx:317
+#: ui/views/Limited.tsx:368
 msgid "Choose a mode"
 msgstr "Choose a mode"
 
@@ -2195,6 +2200,10 @@ msgstr "Choose how to play this card"
 #: ui/components/limited/SolomonWorkspace.tsx:65
 msgid "Choose one of the two piles your opponent split."
 msgstr "Choose one of the two piles your opponent split."
+
+#: ui/views/Limited.tsx:519
+msgid "Choose packs"
+msgstr "Choose packs"
 
 #: ui/components/editor/DeckListView.tsx:563
 msgid "Choose printing…"
@@ -2260,7 +2269,7 @@ msgstr "Claim your username, others won't be able to steal it!"
 msgid "CLASS LEVELS"
 msgstr "CLASS LEVELS"
 
-#: ui/views/Limited.tsx:866
+#: ui/views/Limited.tsx:944
 msgid "clear"
 msgstr "clear"
 
@@ -2268,7 +2277,7 @@ msgstr "clear"
 #: ui/components/editor/DeckSelectionTray.tsx:162
 #: ui/components/editor/PlaymatEditorModal.tsx:411
 #: ui/components/lobby/DeckVsSelector.tsx:1017
-#: ui/views/Limited.tsx:712
+#: ui/views/Limited.tsx:790
 msgid "Clear"
 msgstr "Clear"
 
@@ -2549,7 +2558,7 @@ msgid "Commander damage by source"
 msgstr "Commander damage by source"
 
 #: ui/views/CasualModes.tsx:58
-#: ui/views/Limited.tsx:366
+#: ui/views/Limited.tsx:417
 msgid "Commander Draft"
 msgstr "Commander Draft"
 
@@ -2574,7 +2583,7 @@ msgstr "Commander source"
 msgid "Commander Spellbook request failed (HTTP {0})"
 msgstr "Commander Spellbook request failed (HTTP {0})"
 
-#: ui/views/Limited.tsx:492
+#: ui/views/Limited.tsx:561
 msgid "Common (iron)"
 msgstr "Common (iron)"
 
@@ -2748,7 +2757,7 @@ msgstr "Connection failed."
 msgid "Connection lost"
 msgstr "Connection lost"
 
-#: ui/phase/transport.ts:128
+#: ui/phase/transport.ts:130
 msgid "Conspiracy reveal was rejected"
 msgstr "Conspiracy reveal was rejected"
 
@@ -2766,7 +2775,7 @@ msgid "Constructed formats"
 msgstr "Constructed formats"
 
 #: ui/views/CasualModes.tsx:121
-#: ui/views/Limited.tsx:517
+#: ui/views/Limited.tsx:586
 msgid "Continuous Draft"
 msgstr "Continuous Draft"
 
@@ -3173,12 +3182,12 @@ msgstr "Cube \"{cubeIdOrUrl}\" came back empty"
 msgid "Cube / local pool"
 msgstr "Cube / local pool"
 
-#: ui/views/Limited.tsx:402
+#: ui/views/Limited.tsx:453
 msgid "CubeCobra Import"
 msgstr "CubeCobra Import"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:290
-#: ui/views/Limited.tsx:421
+#: ui/views/Limited.tsx:472
 msgid "cubeid or cubecobra.com/…"
 msgstr "cubeid or cubecobra.com/…"
 
@@ -3261,13 +3270,13 @@ msgstr "Dark wood"
 msgid "Data & session"
 msgstr "Data & session"
 
-#: ui/views/Limited.tsx:501
-#: ui/views/Limited.tsx:510
-#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:570
+#: ui/views/Limited.tsx:579
+#: ui/views/Limited.tsx:588
 msgid "Dealing cards…"
 msgstr "Dealing cards…"
 
-#: ui/views/Limited.tsx:386
+#: ui/views/Limited.tsx:437
 msgid "Dealing piles…"
 msgstr "Dealing piles…"
 
@@ -3465,7 +3474,7 @@ msgstr "Decorative board effects — creature entrance stomp + dust, stat and da
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
 #: ui/components/settings/LlmOpponentCard.tsx:105
-#: ui/views/Limited.tsx:788
+#: ui/views/Limited.tsx:866
 msgid "Default"
 msgstr "Default"
 
@@ -3708,7 +3717,7 @@ msgstr "Draft"
 msgid "Draft \"{0}\" saved"
 msgstr "Draft \"{0}\" saved"
 
-#: ui/views/Limited.tsx:1091
+#: ui/views/Limited.tsx:1169
 msgid "Draft (pod {podSize})"
 msgstr "Draft (pod {podSize})"
 
@@ -3737,7 +3746,7 @@ msgid "Draft format"
 msgstr "Draft format"
 
 #: ui/views/CasualModes.tsx:94
-#: ui/views/Limited.tsx:467
+#: ui/views/Limited.tsx:536
 msgid "Draft normally, then swap pools with the seat across from you."
 msgstr "Draft normally, then swap pools with the seat across from you."
 
@@ -3831,7 +3840,7 @@ msgid "Duplicate"
 msgstr "Duplicate"
 
 #: ui/views/CasualModes.tsx:86
-#: ui/views/Limited.tsx:457
+#: ui/views/Limited.tsx:526
 msgid "Duplicate Sealed (Mirror)"
 msgstr "Duplicate Sealed (Mirror)"
 
@@ -4059,7 +4068,7 @@ msgid "Everyone at the table needs to be ready."
 msgstr "Everyone at the table needs to be ready."
 
 #: ui/views/CasualModes.tsx:87
-#: ui/views/Limited.tsx:458
+#: ui/views/Limited.tsx:527
 msgid "Everyone opens the same five packs and builds from identical pools."
 msgstr "Everyone opens the same five packs and builds from identical pools."
 
@@ -4216,7 +4225,7 @@ msgid "Failed to join the local Forge room."
 msgstr "Failed to join the local Forge room."
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:122
+#: ui/views/Gauntlet.tsx:127
 msgid "Failed to launch match: {0}"
 msgstr "Failed to launch match: {0}"
 
@@ -4228,12 +4237,12 @@ msgid "Failed to load Community deck"
 msgstr "Failed to load Community deck"
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:134
+#: ui/views/Gauntlet.tsx:139
 msgid "Failed to load decks: {0}"
 msgstr "Failed to load decks: {0}"
 
 #. placeholder {0}: String(err)
-#: ui/views/Limited.tsx:268
+#: ui/views/Limited.tsx:319
 msgid "Failed to load pool: {0}"
 msgstr "Failed to load pool: {0}"
 
@@ -4256,7 +4265,7 @@ msgid "Failed to remove bot."
 msgstr "Failed to remove bot."
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:144
+#: ui/views/Gauntlet.tsx:149
 msgid "Failed to save sideboard: {0}"
 msgstr "Failed to save sideboard: {0}"
 
@@ -4290,7 +4299,7 @@ msgstr "Failed to start sealed: {0}"
 msgid "Favorites"
 msgstr "Favorites"
 
-#: ui/views/Limited.tsx:979
+#: ui/views/Limited.tsx:1057
 msgid "Fetching set…"
 msgstr "Fetching set…"
 
@@ -4490,7 +4499,7 @@ msgstr "foil"
 #: ui/components/editor/CardDetailModal.tsx:312
 #: ui/components/editor/CardSearch.tsx:461
 #: ui/components/editor/DeckSelectionTray.tsx:147
-#: ui/views/Limited.tsx:752
+#: ui/views/Limited.tsx:830
 msgid "Foil"
 msgstr "Foil"
 
@@ -4573,7 +4582,7 @@ msgstr "Found in collection"
 msgid "Four-player Commander"
 msgstr "Four-player Commander"
 
-#: ui/views/Limited.tsx:367
+#: ui/views/Limited.tsx:418
 msgid "Four-seat, two-card picks (CR 903.13), then a 4-player Commander game."
 msgstr "Four-seat, two-card picks (CR 903.13), then a 4-player Commander game."
 
@@ -4853,7 +4862,7 @@ msgstr "Group cards by mana value"
 msgid "Group cards by type"
 msgstr "Group cards by type"
 
-#: ui/views/Limited.tsx:801
+#: ui/views/Limited.tsx:879
 msgid "guaranteed slot active"
 msgstr "guaranteed slot active"
 
@@ -5080,7 +5089,7 @@ msgstr "Import card list"
 msgid "Import collection"
 msgstr "Import collection"
 
-#: ui/views/Limited.tsx:404
+#: ui/views/Limited.tsx:455
 msgid "Import Cube"
 msgstr "Import Cube"
 
@@ -5137,7 +5146,7 @@ msgid "Imported Deck"
 msgstr "Imported Deck"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:307
-#: ui/views/Limited.tsx:404
+#: ui/views/Limited.tsx:455
 msgid "Importing…"
 msgstr "Importing…"
 
@@ -5732,7 +5741,7 @@ msgstr "Load card images"
 #. placeholder {1}: importedCube.cardCount
 #. placeholder {1}: lastImportedCube.cardCount
 #: ui/components/lobby/TableSetupGameCard.tsx:312
-#: ui/views/Limited.tsx:410
+#: ui/views/Limited.tsx:461
 msgid "Loaded: <0>{0}</0> — {1} cards"
 msgstr "Loaded: <0>{0}</0> — {1} cards"
 
@@ -5763,7 +5772,7 @@ msgstr "Loading deck"
 msgid "Loading decks"
 msgstr "Loading decks"
 
-#: ui/views/Gauntlet.tsx:317
+#: ui/views/Gauntlet.tsx:322
 msgid "Loading decks…"
 msgstr "Loading decks…"
 
@@ -5775,7 +5784,7 @@ msgstr "Loading draft…"
 msgid "Loading gauntlet…"
 msgstr "Loading gauntlet…"
 
-#: ui/views/Limited.tsx:280
+#: ui/views/Limited.tsx:331
 msgid "Loading local sets…"
 msgstr "Loading local sets…"
 
@@ -5807,7 +5816,7 @@ msgstr "Loading your decks"
 #: ui/components/play/CommunityDeckShelf.tsx:35
 #: ui/components/play/PresetDeckShelf.tsx:27
 #: ui/components/settings/MyAssetsSection.tsx:132
-#: ui/views/Limited.tsx:722
+#: ui/views/Limited.tsx:800
 msgid "Loading…"
 msgstr "Loading…"
 
@@ -5827,7 +5836,7 @@ msgstr "Local AI tournament · Single elimination. One human and 3, 7, or 15 AI 
 msgid "local analysis"
 msgstr "local analysis"
 
-#: ui/views/Limited.tsx:744
+#: ui/views/Limited.tsx:822
 msgid "Local booster information could not be loaded. No substitute recipe will be used."
 msgstr "Local booster information could not be loaded. No substitute recipe will be used."
 
@@ -5844,7 +5853,7 @@ msgstr "Local Phase supports up to three AI opponents (four players)."
 msgid "Local play against the AI. Draft variants, Commander offshoots and retro rulesets that don't fit the standard formats."
 msgstr "Local play against the AI. Draft variants, Commander offshoots and retro rulesets that don't fit the standard formats."
 
-#: ui/views/Limited.tsx:277
+#: ui/views/Limited.tsx:328
 msgid "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
 msgstr "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
 
@@ -6077,11 +6086,11 @@ msgstr "Manual preserves your placement; automatic modes arrange new cards."
 msgid "Manual result — unverified"
 msgstr "Manual result — unverified"
 
-#: ui/stores/useGameStore.ts:478
+#: ui/stores/useGameStore.ts:484
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "Manual room client requires the manual tabletop runtime."
 
-#: ui/stores/useGameStore.ts:449
+#: ui/stores/useGameStore.ts:455
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "Manual room host requires the manual tabletop runtime."
 
@@ -6446,7 +6455,7 @@ msgstr "My Decks"
 msgid "My decks ({0}) · ~{1}"
 msgstr "My decks ({0}) · ~{1}"
 
-#: ui/views/Limited.tsx:490
+#: ui/views/Limited.tsx:559
 msgid "Mythic only"
 msgstr "Mythic only"
 
@@ -6529,7 +6538,7 @@ msgstr "No active manual tabletop game."
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "No AI deck available for this format — pick one yourself."
 
-#: ui/phase/transport.ts:127
+#: ui/phase/transport.ts:129
 msgid "No authorized conspiracy reveal action"
 msgstr "No authorized conspiracy reveal action"
 
@@ -6681,7 +6690,7 @@ msgstr "No legendaries in deck — type a name below."
 msgid "no lines yet"
 msgstr "no lines yet"
 
-#: ui/stores/useGameStore.ts:690
+#: ui/stores/useGameStore.ts:696
 msgid "No local player is available to concede."
 msgstr "No local player is available to concede."
 
@@ -6693,7 +6702,7 @@ msgstr "No log entries yet."
 msgid "No matching commands"
 msgstr "No matching commands"
 
-#: ui/views/Limited.tsx:643
+#: ui/views/Limited.tsx:712
 msgid "No matching local sets"
 msgstr "No matching local sets"
 
@@ -6701,7 +6710,7 @@ msgstr "No matching local sets"
 msgid "No messages yet."
 msgstr "No messages yet."
 
-#: ui/views/Gauntlet.tsx:201
+#: ui/views/Gauntlet.tsx:206
 msgid "No opponent — gauntlet finished."
 msgstr "No opponent — gauntlet finished."
 
@@ -6904,7 +6913,7 @@ msgstr "Not Owned First"
 msgid "Not ready"
 msgstr "Not ready"
 
-#: ui/views/Limited.tsx:771
+#: ui/views/Limited.tsx:849
 msgid "Not supported"
 msgstr "Not supported"
 
@@ -7066,7 +7075,7 @@ msgid "One human plus three AI at 40 life each; add opponents in the setup scree
 msgstr "One human plus three AI at 40 life each; add opponents in the setup screen."
 
 #: ui/views/CasualModes.tsx:115
-#: ui/views/Limited.tsx:509
+#: ui/views/Limited.tsx:578
 msgid "One shared pool, snake order, one card at a time."
 msgstr "One shared pool, snake order, one card at a time."
 
@@ -7097,6 +7106,7 @@ msgstr "Only the host can do that"
 #~ msgid "Only the host can perform this action"
 #~ msgstr "Only the host can perform this action"
 
+#: ui/components/limited/PickAPackDialog.tsx:57
 #: ui/views/Tournaments.tsx:76
 msgid "Open"
 msgstr "Open"
@@ -7148,7 +7158,7 @@ msgid "Open My Decks"
 msgstr "Open My Decks"
 
 #: ui/views/CasualModes.tsx:80
-#: ui/views/Limited.tsx:449
+#: ui/views/Limited.tsx:500
 msgid "Open one booster, add 15 basic lands and play the whole pack."
 msgstr "Open one booster, add 15 basic lands and play the whole pack."
 
@@ -7156,7 +7166,7 @@ msgstr "Open one booster, add 15 basic lands and play the whole pack."
 msgid "Open Pack Wars"
 msgstr "Open Pack Wars"
 
-#: ui/views/Limited.tsx:326
+#: ui/views/Limited.tsx:377
 msgid "Open packs, build a 40-card deck, run an AI gauntlet."
 msgstr "Open packs, build a 40-card deck, run an AI gauntlet."
 
@@ -7212,13 +7222,15 @@ msgstr "Open your exile"
 msgid "Open your graveyard"
 msgstr "Open your graveyard"
 
-#: ui/views/Limited.tsx:327
-#: ui/views/Limited.tsx:345
-#: ui/views/Limited.tsx:368
-#: ui/views/Limited.tsx:450
-#: ui/views/Limited.tsx:459
-#: ui/views/Limited.tsx:468
-#: ui/views/Limited.tsx:477
+#: ui/views/Limited.tsx:378
+#: ui/views/Limited.tsx:396
+#: ui/views/Limited.tsx:419
+#: ui/views/Limited.tsx:501
+#: ui/views/Limited.tsx:510
+#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:528
+#: ui/views/Limited.tsx:537
+#: ui/views/Limited.tsx:546
 msgid "Opening packs…"
 msgstr "Opening packs…"
 
@@ -7247,7 +7259,7 @@ msgstr "Opponents"
 msgid "Optimize deck printings"
 msgstr "Optimize deck printings"
 
-#: ui/views/Limited.tsx:858
+#: ui/views/Limited.tsx:936
 msgid "Optional integer for reproducible opens. Leave blank for random."
 msgstr "Optional integer for reproducible opens. Leave blank for random."
 
@@ -7263,7 +7275,7 @@ msgstr "Optional yes/no costs"
 msgid "or"
 msgstr "or"
 
-#: ui/views/Limited.tsx:435
+#: ui/views/Limited.tsx:486
 msgid "or load saved pool…"
 msgstr "or load saved pool…"
 
@@ -7343,22 +7355,27 @@ msgstr "Owned in another printing · {owned} total"
 msgid "Owned only"
 msgstr "Owned only"
 
+#: ui/components/limited/PickAPackDialog.tsx:55
 #: ui/views/OnlineDraftPanel.tsx:63
 msgid "Pack"
 msgstr "Pack"
 
-#: ui/views/Limited.tsx:443
+#: ui/views/Limited.tsx:494
 msgid "Pack & Draft Variants"
 msgstr "Pack & Draft Variants"
 
+#: ui/views/Limited.tsx:508
+msgid "Pack Wars — Pack in Hand"
+msgstr "Pack Wars — Pack in Hand"
+
 #: ui/views/CasualModes.tsx:79
-#: ui/views/Limited.tsx:448
+#: ui/views/Limited.tsx:499
 msgid "Pack Wars (Mini-Master)"
 msgstr "Pack Wars (Mini-Master)"
 
 #: ui/components/lobby/TableRoomSidebar.tsx:205
-#: ui/views/Limited.tsx:333
-#: ui/views/Limited.tsx:392
+#: ui/views/Limited.tsx:384
+#: ui/views/Limited.tsx:443
 msgid "Packs"
 msgstr "Packs"
 
@@ -7442,7 +7459,7 @@ msgstr "Password-Protected Table"
 msgid "Paste"
 msgstr "Paste"
 
-#: ui/views/Limited.tsx:403
+#: ui/views/Limited.tsx:454
 msgid "Paste a cube id or url, or load a saved pool .json file."
 msgstr "Paste a cube id or url, or load a saved pool .json file."
 
@@ -7559,11 +7576,11 @@ msgstr "Pick a set for sealed below."
 msgid "Pick a set for the draft below."
 msgstr "Pick a set for the draft below."
 
-#: ui/views/Limited.tsx:87
+#: ui/views/Limited.tsx:91
 msgid "Pick a set to draft first."
 msgstr "Pick a set to draft first."
 
-#: ui/views/Limited.tsx:609
+#: ui/views/Limited.tsx:678
 msgid "Pick a theme. We'll merge pools from the most recent draftable sets that match its rotation window and start a normal pod draft against AI seats."
 msgstr "Pick a theme. We'll merge pools from the most recent draftable sets that match its rotation window and start a normal pod draft against AI seats."
 
@@ -7577,12 +7594,17 @@ msgstr "Pick color"
 msgid "pick failed: {0}"
 msgstr "pick failed: {0}"
 
+#: ui/components/limited/PickAPackDialog.tsx:31
+#: ui/views/Limited.tsx:517
+msgid "Pick-a-Pack"
+msgstr "Pick-a-Pack"
+
 #: ui/components/lobby/TableSetupGameCard.tsx:354
 msgid "Picks / pass"
 msgstr "Picks / pass"
 
 #: ui/components/lobby/TableRoomSidebar.tsx:211
-#: ui/views/Limited.tsx:876
+#: ui/views/Limited.tsx:954
 msgid "Picks per pass"
 msgstr "Picks per pass"
 
@@ -7809,7 +7831,7 @@ msgstr "Please select a deck for this format"
 msgid "Pod draft — pass packs around the table."
 msgstr "Pod draft — pass packs around the table."
 
-#: ui/views/Limited.tsx:344
+#: ui/views/Limited.tsx:395
 msgid "Pod draft against AI seats — 3 packs each."
 msgstr "Pod draft against AI seats — 3 packs each."
 
@@ -7818,8 +7840,8 @@ msgid "Pod draft from a CubeCobra cube."
 msgstr "Pod draft from a CubeCobra cube."
 
 #: ui/components/lobby/TableSetupGameCard.tsx:197
-#: ui/views/Limited.tsx:351
-#: ui/views/Limited.tsx:374
+#: ui/views/Limited.tsx:402
+#: ui/views/Limited.tsx:425
 #: ui/views/OnlineDraftPanel.tsx:46
 msgid "Pod size"
 msgstr "Pod size"
@@ -7832,7 +7854,7 @@ msgstr "Points"
 msgid "Points: win / draw / loss"
 msgstr "Points: win / draw / loss"
 
-#: ui/views/Limited.tsx:250
+#: ui/views/Limited.tsx:301
 msgid "Pool file must contain a non-empty `pool` array of DraftCards."
 msgstr "Pool file must contain a non-empty `pool` array of DraftCards."
 
@@ -7886,7 +7908,7 @@ msgid "Preparing your cards…"
 msgstr "Preparing your cards…"
 
 #. placeholder {0}: info.prerelease
-#: ui/views/Limited.tsx:705
+#: ui/views/Limited.tsx:783
 msgid "Prerelease: <0>{0}</0>"
 msgstr "Prerelease: <0>{0}</0>"
 
@@ -8094,7 +8116,7 @@ msgstr "Ramp, removal, combo…"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:266
 #: ui/components/lobby/TableSetupGameCard.tsx:379
-#: ui/views/Limited.tsx:856
+#: ui/views/Limited.tsx:934
 msgid "random"
 msgstr "random"
 
@@ -8114,14 +8136,14 @@ msgstr "Range"
 msgid "Rank"
 msgstr "Rank"
 
-#: ui/views/Limited.tsx:489
+#: ui/views/Limited.tsx:558
 msgid "Rare + Mythic"
 msgstr "Rare + Mythic"
 
 #: ui/components/dev/designSystem/sections/ComponentsSection.tsx:121
 #: ui/components/editor/CardSearch.tsx:326
 #: ui/components/editor/CardSearch.tsx:1100
-#: ui/views/Limited.tsx:482
+#: ui/views/Limited.tsx:551
 msgid "Rarity"
 msgstr "Rarity"
 
@@ -8273,7 +8295,7 @@ msgid "Refresh tables"
 msgstr "Refresh tables"
 
 #: ui/views/CasualModes.tsx:100
-#: ui/views/Limited.tsx:475
+#: ui/views/Limited.tsx:544
 msgid "Reject Rare"
 msgstr "Reject Rare"
 
@@ -8601,7 +8623,7 @@ msgstr "Return to combat"
 #~ msgstr "Return to game"
 
 #: ui/views/CasualModes.tsx:122
-#: ui/views/Limited.tsx:518
+#: ui/views/Limited.tsx:587
 msgid "Reveal four, take 1-2-1; the first chooser alternates each batch."
 msgstr "Reveal four, take 1-2-1; the first chooser alternates each batch."
 
@@ -8629,7 +8651,7 @@ msgstr "Ring"
 msgid "Ring-bearer"
 msgstr "Ring-bearer"
 
-#: ui/views/Limited.tsx:850
+#: ui/views/Limited.tsx:928
 msgid "RNG seed"
 msgstr "RNG seed"
 
@@ -8686,7 +8708,7 @@ msgid "Rotate your device"
 msgstr "Rotate your device"
 
 #: ui/views/CasualModes.tsx:114
-#: ui/views/Limited.tsx:508
+#: ui/views/Limited.tsx:577
 msgid "Rotisserie Draft"
 msgstr "Rotisserie Draft"
 
@@ -8765,7 +8787,7 @@ msgstr "Same {0} · MV {1} · not owned"
 msgid "Same colour identity, mana value, and primary card type."
 msgstr "Same colour identity, mana value, and primary card type."
 
-#: ui/views/Limited.tsx:871
+#: ui/views/Limited.tsx:949
 msgid "Same seed + same pool → identical packs every open."
 msgstr "Same seed + same pool → identical packs every open."
 
@@ -8982,12 +9004,12 @@ msgstr "Scryfall returned no cards for set {setCode}"
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/components/lobby/TableRoom.tsx:72
 #: ui/lib/formatLabels.ts:23
-#: ui/views/Limited.tsx:325
+#: ui/views/Limited.tsx:376
 #: ui/views/MatchHistory.tsx:58
 msgid "Sealed"
 msgstr "Sealed"
 
-#: ui/views/Limited.tsx:1087
+#: ui/views/Limited.tsx:1165
 msgid "Sealed ({numBoosters} packs)"
 msgstr "Sealed ({numBoosters} packs)"
 
@@ -8999,7 +9021,7 @@ msgstr "sealed config has no pool source"
 msgid "Sealed Deck Build"
 msgstr "Sealed Deck Build"
 
-#: ui/views/Limited.tsx:587
+#: ui/views/Limited.tsx:656
 msgid "Sealed templates"
 msgstr "Sealed templates"
 
@@ -9113,12 +9135,12 @@ msgstr "Secondary"
 msgid "Seed"
 msgstr "Seed"
 
-#: ui/views/Limited.tsx:1080
+#: ui/views/Limited.tsx:1158
 msgid "seed {seed}"
 msgstr "seed {seed}"
 
 #. placeholder {0}: seed.trim()
-#: ui/views/Limited.tsx:838
+#: ui/views/Limited.tsx:916
 msgid "seed = {0}"
 msgstr "seed = {0}"
 
@@ -9465,7 +9487,7 @@ msgstr "Sideboard plans"
 msgid "Sideboard policy"
 msgstr "Sideboard policy"
 
-#: ui/views/Gauntlet.tsx:141
+#: ui/views/Gauntlet.tsx:146
 msgid "Sideboard updated."
 msgstr "Sideboard updated."
 
@@ -9542,7 +9564,7 @@ msgstr "Simulate next AI game / replay"
 msgid "Single elimination"
 msgstr "Single elimination"
 
-#: ui/views/Limited.tsx:796
+#: ui/views/Limited.tsx:874
 msgid "Single recipe"
 msgstr "Single recipe"
 
@@ -9580,6 +9602,10 @@ msgstr "Skip manabrew servers and connect directly to the other players at the t
 msgid "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
 msgstr "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
 
+#: ui/views/Limited.tsx:518
+msgid "Snake-pick which unopened boosters you and the AI will draft from, then draft normally."
+msgstr "Snake-pick which unopened boosters you and the AI will draft from, then draft normally."
+
 #: ui/components/game/panels/SnapshotsPanel.tsx:23
 #: ui/components/game/panels/SnapshotsPanel.tsx:30
 msgid "Snapshots"
@@ -9591,7 +9617,7 @@ msgid "Snapshots ({0})"
 msgstr "Snapshots ({0})"
 
 #: ui/views/CasualModes.tsx:107
-#: ui/views/Limited.tsx:499
+#: ui/views/Limited.tsx:568
 msgid "Solomon Draft"
 msgstr "Solomon Draft"
 
@@ -9685,7 +9711,7 @@ msgid "Split"
 msgstr "Split"
 
 #: ui/views/CasualModes.tsx:108
-#: ui/views/Limited.tsx:500
+#: ui/views/Limited.tsx:569
 msgid "Split 8-card batches into two piles; your opponent chooses one."
 msgstr "Split 8-card batches into two piles; your opponent chooses one."
 
@@ -9715,7 +9741,7 @@ msgstr "Stand up"
 msgid "Standard"
 msgstr "Standard"
 
-#: ui/views/Limited.tsx:320
+#: ui/views/Limited.tsx:371
 msgid "Standard Modes"
 msgstr "Standard Modes"
 
@@ -9731,7 +9757,7 @@ msgstr "Start a match your way, or open a deck from your collection."
 msgid "Start as @{trimmed}"
 msgstr "Start as @{trimmed}"
 
-#: ui/views/Limited.tsx:468
+#: ui/views/Limited.tsx:537
 msgid "Start Back Draft"
 msgstr "Start Back Draft"
 
@@ -9739,11 +9765,11 @@ msgstr "Start Back Draft"
 msgid "Start building"
 msgstr "Start building"
 
-#: ui/views/Limited.tsx:368
+#: ui/views/Limited.tsx:419
 msgid "Start Commander Draft"
 msgstr "Start Commander Draft"
 
-#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:588
 msgid "Start Continuous"
 msgstr "Start Continuous"
 
@@ -9752,11 +9778,11 @@ msgstr "Start Continuous"
 msgid "Start draft"
 msgstr "Start draft"
 
-#: ui/views/Limited.tsx:345
+#: ui/views/Limited.tsx:396
 msgid "Start Draft"
 msgstr "Start Draft"
 
-#: ui/views/Limited.tsx:1069
+#: ui/views/Limited.tsx:1147
 msgid "Start from imported cube"
 msgstr "Start from imported cube"
 
@@ -9765,7 +9791,7 @@ msgstr "Start from imported cube"
 msgid "Start game"
 msgstr "Start game"
 
-#: ui/views/Limited.tsx:459
+#: ui/views/Limited.tsx:528
 msgid "Start Mirror Sealed"
 msgstr "Start Mirror Sealed"
 
@@ -9777,15 +9803,19 @@ msgstr "Start Mirror Sealed"
 msgid "Start next round"
 msgstr "Start next round"
 
-#: ui/views/Limited.tsx:450
+#: ui/views/Limited.tsx:501
 msgid "Start Pack Wars"
 msgstr "Start Pack Wars"
 
-#: ui/views/Limited.tsx:477
+#: ui/views/Limited.tsx:510
+msgid "Start Pack-in-Hand"
+msgstr "Start Pack-in-Hand"
+
+#: ui/views/Limited.tsx:546
 msgid "Start Reject Rare"
 msgstr "Start Reject Rare"
 
-#: ui/views/Limited.tsx:510
+#: ui/views/Limited.tsx:579
 msgid "Start Rotisserie"
 msgstr "Start Rotisserie"
 
@@ -9793,11 +9823,11 @@ msgstr "Start Rotisserie"
 msgid "Start sealed"
 msgstr "Start sealed"
 
-#: ui/views/Limited.tsx:327
+#: ui/views/Limited.tsx:378
 msgid "Start Sealed"
 msgstr "Start Sealed"
 
-#: ui/views/Limited.tsx:501
+#: ui/views/Limited.tsx:570
 msgid "Start Solomon"
 msgstr "Start Solomon"
 
@@ -9813,7 +9843,7 @@ msgstr "Start the game engine"
 msgid "Start tracking"
 msgstr "Start tracking"
 
-#: ui/views/Limited.tsx:386
+#: ui/views/Limited.tsx:437
 msgid "Start Winston"
 msgstr "Start Winston"
 
@@ -10117,6 +10147,10 @@ msgstr "Take this seat"
 msgid "Take your seat"
 msgstr "Take your seat"
 
+#: ui/components/limited/PickAPackDialog.tsx:57
+msgid "Taken"
+msgstr "Taken"
+
 #: ui/components/game/ManualTabletopControls.tsx:397
 #: ui/components/game/ManualTabletopControls.tsx:398
 msgid "Tap"
@@ -10299,7 +10333,7 @@ msgstr "The playmat fills a wide, landscape area (roughly 5:2). For a crisp resu
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 
-#: ui/stores/useGameStore.ts:390
+#: ui/stores/useGameStore.ts:395
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "The previous game is still closing. Try again in a moment."
 
@@ -10336,6 +10370,10 @@ msgstr "The session was left or replaced before this response arrived."
 msgid "The tournament game could not start. Retry this match."
 msgstr "The tournament game could not start. Retry this match."
 
+#: ui/views/Limited.tsx:509
+msgid "The whole pack starts in your hand; each turn you may play a basic from outside the game."
+msgstr "The whole pack starts in your hand; each turn you may play a basic from outside the game."
+
 #: ui/views/Settings.tsx:300
 #: ui/views/Settings.tsx:966
 msgid "Theme"
@@ -10361,7 +10399,7 @@ msgstr "Theme mode must be light or dark."
 msgid "Theme name must contain 1 to 80 characters."
 msgstr "Theme name must contain 1 to 80 characters."
 
-#: ui/views/Limited.tsx:605
+#: ui/views/Limited.tsx:674
 msgid "Themed Chaos Draft"
 msgstr "Themed Chaos Draft"
 
@@ -10684,7 +10722,7 @@ msgstr "Two teams of two share a 30-life total and take their turns together."
 msgid "Two-Headed Giant"
 msgstr "Two-Headed Giant"
 
-#: ui/views/Limited.tsx:385
+#: ui/views/Limited.tsx:436
 msgid "Two-seat shared-stack pile draft against the AI."
 msgstr "Two-seat shared-stack pile draft against the AI."
 
@@ -10730,7 +10768,7 @@ msgstr "Unblocked"
 msgid "Unbound"
 msgstr "Unbound"
 
-#: ui/views/Limited.tsx:491
+#: ui/views/Limited.tsx:560
 msgid "Uncommon (silver)"
 msgstr "Uncommon (silver)"
 
@@ -11207,13 +11245,13 @@ msgstr "Wins"
 msgid "Wins by player"
 msgstr "Wins by player"
 
-#: ui/views/Limited.tsx:1095
+#: ui/views/Limited.tsx:1173
 msgid "Winston ({winstonPacks} packs)"
 msgstr "Winston ({winstonPacks} packs)"
 
 #: ui/components/layout/TopBar.tsx:66
 #: ui/views/CasualModes.tsx:65
-#: ui/views/Limited.tsx:384
+#: ui/views/Limited.tsx:435
 msgid "Winston Draft"
 msgstr "Winston Draft"
 
@@ -11396,6 +11434,12 @@ msgstr "Your name"
 #: ui/components/limited/SolomonWorkspace.tsx:154
 msgid "Your picks: {0}"
 msgstr "Your picks: {0}"
+
+#. placeholder {0}: view.yourPicks
+#. placeholder {1}: view.picksEach
+#: ui/components/limited/PickAPackDialog.tsx:42
+msgid "Your picks: {0} / {1}"
+msgstr "Your picks: {0} / {1}"
 
 #: ui/views/OnlineDraftPanel.tsx:73
 msgid "Your pool"

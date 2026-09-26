@@ -23,7 +23,7 @@ msgstr ""
 #. placeholder {0}: importedCube.rejectedCardCount
 #. placeholder {0}: lastImportedCube.rejectedCardCount
 #: ui/components/lobby/TableSetupGameCard.tsx:320
-#: ui/views/Limited.tsx:412
+#: ui/views/Limited.tsx:463
 msgid " · {0} without local engine data"
 msgstr " · {0} 张缺少本地引擎数据"
 
@@ -78,11 +78,11 @@ msgid ", then drag and scroll to zoom and frame it."
 msgstr "，然后拖动并滚动以缩放和取景。"
 
 #. placeholder {0}: info.boosterCovers
-#: ui/views/Limited.tsx:700
+#: ui/views/Limited.tsx:778
 msgid "· {0} cover arts"
 msgstr "· {0} 种封面图"
 
-#: ui/views/Limited.tsx:1073
+#: ui/views/Limited.tsx:1151
 msgid "· singleton"
 msgstr "· 单例"
 
@@ -239,7 +239,7 @@ msgstr "已选择 {0} 张牌{1}"
 #: ui/components/deck/DeckHubEntryCard.tsx:178
 #: ui/components/editor/ImportDeckTextDialog.tsx:343
 #: ui/components/lobby/DeckSelectionCard.tsx:241
-#: ui/views/Limited.tsx:698
+#: ui/views/Limited.tsx:776
 msgid "{0} cards"
 msgstr "{0} 张牌"
 
@@ -295,13 +295,13 @@ msgid "{0} linked to your account"
 msgstr "{0} 已关联到你的账户"
 
 #. placeholder {0}: draftableSets.length
-#: ui/views/Limited.tsx:280
+#: ui/views/Limited.tsx:331
 msgid "{0} local sets listed"
 msgstr "已列出 {0} 个本地系列"
 
 #. placeholder {0}: cube.playableCardCount
 #. placeholder {1}: cube.rejectedCardCount
-#: ui/views/Limited.tsx:1076
+#: ui/views/Limited.tsx:1154
 msgid "{0} locally recognized · {1} name-only"
 msgstr "{0} 张已在本地识别 · {1} 张仅有牌名"
 
@@ -337,12 +337,12 @@ msgstr "{0} 版本"
 #. placeholder {0}: matched.length
 #. placeholder {1}: matched .slice(0, 6) .map((s) => s.code.toUpperCase()) .join(", ")
 #. placeholder {2}: matched.length > 6 ? "…" : ""
-#: ui/views/Limited.tsx:644
+#: ui/views/Limited.tsx:713
 msgid "{0} sets · {1}{2}"
 msgstr "{0} 个系列 · {1}{2}"
 
 #. placeholder {0}: matched.length
-#: ui/views/Limited.tsx:653
+#: ui/views/Limited.tsx:722
 msgid "{0} sets · pod {podSize}"
 msgstr "{0} 个系列 · {podSize} 人桌"
 
@@ -506,7 +506,7 @@ msgstr "{name}，一张"
 msgid "{openTables, plural, one {# table open} other {# tables open}} · {onlinePlayers} online"
 msgstr "{openTables} 桌开放 · {onlinePlayers} 人在线"
 
-#: ui/views/Limited.tsx:843
+#: ui/views/Limited.tsx:921
 msgid "{picksPerPass}× pick"
 msgstr "每次选 {picksPerPass} 张"
 
@@ -553,7 +553,7 @@ msgstr "{summary}，{0} 张失败"
 msgid "{totalCount} cards"
 msgstr "{totalCount} 张牌"
 
-#: ui/views/Limited.tsx:736
+#: ui/views/Limited.tsx:814
 msgid "{totalSlots} cards / pack"
 msgstr "每包 {totalSlots} 张牌"
 
@@ -581,7 +581,7 @@ msgstr "+ 自定义"
 #. placeholder {0}: cube.name
 #. placeholder {1}: cube.cardCount
 #. placeholder {2}: cube.numPacks
-#: ui/views/Limited.tsx:1072
+#: ui/views/Limited.tsx:1150
 msgid "<0>{0}</0> · {1} cards · {2} packs/player"
 msgstr "<0>{0}</0> · {1} 张牌 · 每人 {2} 包"
 
@@ -1075,7 +1075,7 @@ msgstr "正在向此套牌添加卡牌…"
 msgid "Adds the experimental Ironsmith trusted engine as a Create Room option. Card support is partial and games may be rough — off by default. Leave this off unless you're testing Ironsmith."
 msgstr "在创建房间选项中添加实验性的 Ironsmith 可信引擎。目前仅支持部分卡牌，对局可能不够稳定，默认关闭。除非你正在测试 Ironsmith，否则请保持关闭。"
 
-#: ui/views/Limited.tsx:835
+#: ui/views/Limited.tsx:913
 msgid "Advanced"
 msgstr "高级"
 
@@ -1398,7 +1398,7 @@ msgid "Back"
 msgstr "返回"
 
 #: ui/views/CasualModes.tsx:93
-#: ui/views/Limited.tsx:466
+#: ui/views/Limited.tsx:535
 msgid "Back Draft"
 msgstr ""
 
@@ -1486,6 +1486,10 @@ msgstr "战场区域栏顺序"
 msgid "Before changing the mana base"
 msgstr "更改法术力基础之前"
 
+#: ui/components/limited/PickAPackDialog.tsx:34
+msgid "Before opening, snake-pick which unopened boosters you and the AI will draft from."
+msgstr ""
+
 #: ui/views/Tournaments.tsx:68
 msgid "Best of one"
 msgstr "单局决胜"
@@ -1543,28 +1547,28 @@ msgid "Board settings"
 msgstr "牌桌设置"
 
 #: ui/components/layout/TopBar.tsx:57
-#: ui/views/Limited.tsx:343
+#: ui/views/Limited.tsx:394
 msgid "Booster Draft"
 msgstr "轮抽"
 
-#: ui/views/Limited.tsx:887
+#: ui/views/Limited.tsx:965
 msgid "Booster Draft only. 1 = vanilla MTG. 2+ = each seat picks N cards before passing."
 msgstr "仅适用于补充包轮抽。1 为常规万智牌规则；2 及以上表示每位玩家选取相应数量的牌后再传递。"
 
-#: ui/views/Limited.tsx:891
+#: ui/views/Limited.tsx:969
 msgid "Booster Draft only. With 4-player pods, raise to 2 so each seat ends with ~30 picks."
 msgstr "仅适用于补充包轮抽。四人桌建议设为 2，以便每位玩家最终选到约 30 张牌。"
 
-#: ui/views/Limited.tsx:719
+#: ui/views/Limited.tsx:797
 msgid "Booster recipe"
 msgstr "补充包构成"
 
-#: ui/views/Limited.tsx:780
+#: ui/views/Limited.tsx:858
 msgid "Booster variant"
 msgstr "补充包变体"
 
 #: ui/views/CasualModes.tsx:101
-#: ui/views/Limited.tsx:476
+#: ui/views/Limited.tsx:545
 msgid "Boosters of nothing but rares — or the silver/iron sub-variant."
 msgstr ""
 
@@ -1758,6 +1762,7 @@ msgstr "缓存"
 #: ui/components/editor/ImportDeckTextDialog.tsx:216
 #: ui/components/editor/ImportDeckTextDialog.tsx:332
 #: ui/components/game/modals/ConcedeGameModal.tsx:53
+#: ui/components/limited/PickAPackDialog.tsx:64
 #: ui/components/lobby/CreateGameDialog.tsx:839
 #: ui/components/lobby/CustomFormatDialog.tsx:184
 #: ui/components/lobby/CustomFormatDialog.tsx:501
@@ -1989,7 +1994,7 @@ msgstr "休闲"
 
 #: ui/components/play/PlayHome.tsx:43
 #: ui/views/CasualModes.tsx:45
-#: ui/views/Limited.tsx:361
+#: ui/views/Limited.tsx:412
 msgid "Casual Modes"
 msgstr "休闲模式"
 
@@ -2143,7 +2148,7 @@ msgstr "选择赛制"
 msgid "Choose a format before starting"
 msgstr "开始前请选择赛制"
 
-#: ui/views/Limited.tsx:317
+#: ui/views/Limited.tsx:368
 msgid "Choose a mode"
 msgstr "选择模式"
 
@@ -2193,6 +2198,10 @@ msgstr "选择如何打出这张牌"
 
 #: ui/components/limited/SolomonWorkspace.tsx:65
 msgid "Choose one of the two piles your opponent split."
+msgstr ""
+
+#: ui/views/Limited.tsx:519
+msgid "Choose packs"
 msgstr ""
 
 #: ui/components/editor/DeckListView.tsx:563
@@ -2259,7 +2268,7 @@ msgstr "注册你的专属用户名，其他人就无法使用它了！"
 msgid "CLASS LEVELS"
 msgstr "职业等级"
 
-#: ui/views/Limited.tsx:866
+#: ui/views/Limited.tsx:944
 msgid "clear"
 msgstr "清除"
 
@@ -2267,7 +2276,7 @@ msgstr "清除"
 #: ui/components/editor/DeckSelectionTray.tsx:162
 #: ui/components/editor/PlaymatEditorModal.tsx:411
 #: ui/components/lobby/DeckVsSelector.tsx:1017
-#: ui/views/Limited.tsx:712
+#: ui/views/Limited.tsx:790
 msgid "Clear"
 msgstr "清除"
 
@@ -2548,7 +2557,7 @@ msgid "Commander damage by source"
 msgstr "按来源的指挥官伤害"
 
 #: ui/views/CasualModes.tsx:58
-#: ui/views/Limited.tsx:366
+#: ui/views/Limited.tsx:417
 msgid "Commander Draft"
 msgstr "指挥官轮抽"
 
@@ -2573,7 +2582,7 @@ msgstr "指挥官来源"
 msgid "Commander Spellbook request failed (HTTP {0})"
 msgstr "Commander Spellbook 请求失败（HTTP {0}）"
 
-#: ui/views/Limited.tsx:492
+#: ui/views/Limited.tsx:561
 msgid "Common (iron)"
 msgstr ""
 
@@ -2747,7 +2756,7 @@ msgstr "连接失败。"
 msgid "Connection lost"
 msgstr "连接已断开"
 
-#: ui/phase/transport.ts:128
+#: ui/phase/transport.ts:130
 msgid "Conspiracy reveal was rejected"
 msgstr "阴谋揭露被拒绝"
 
@@ -2765,7 +2774,7 @@ msgid "Constructed formats"
 msgstr "构筑赛制"
 
 #: ui/views/CasualModes.tsx:121
-#: ui/views/Limited.tsx:517
+#: ui/views/Limited.tsx:586
 msgid "Continuous Draft"
 msgstr ""
 
@@ -3172,12 +3181,12 @@ msgstr "魔方“{cubeIdOrUrl}”返回为空"
 msgid "Cube / local pool"
 msgstr "Cube / 本地牌池"
 
-#: ui/views/Limited.tsx:402
+#: ui/views/Limited.tsx:453
 msgid "CubeCobra Import"
 msgstr "从 CubeCobra 导入"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:290
-#: ui/views/Limited.tsx:421
+#: ui/views/Limited.tsx:472
 msgid "cubeid or cubecobra.com/…"
 msgstr "轮抽盒 ID 或 cubecobra.com/…"
 
@@ -3260,13 +3269,13 @@ msgstr "深色木材"
 msgid "Data & session"
 msgstr "数据与会话"
 
-#: ui/views/Limited.tsx:501
-#: ui/views/Limited.tsx:510
-#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:570
+#: ui/views/Limited.tsx:579
+#: ui/views/Limited.tsx:588
 msgid "Dealing cards…"
 msgstr ""
 
-#: ui/views/Limited.tsx:386
+#: ui/views/Limited.tsx:437
 msgid "Dealing piles…"
 msgstr "正在分配牌堆…"
 
@@ -3464,7 +3473,7 @@ msgstr "战场装饰特效，包括生物进场时的震动和扬尘、数值与
 
 #: ui/components/dev/themeEditor/ThemeEditorWorkspace.tsx:77
 #: ui/components/settings/LlmOpponentCard.tsx:105
-#: ui/views/Limited.tsx:788
+#: ui/views/Limited.tsx:866
 msgid "Default"
 msgstr "默认"
 
@@ -3707,7 +3716,7 @@ msgstr "轮抽"
 msgid "Draft \"{0}\" saved"
 msgstr "轮抽“{0}”已保存"
 
-#: ui/views/Limited.tsx:1091
+#: ui/views/Limited.tsx:1169
 msgid "Draft (pod {podSize})"
 msgstr "轮抽（{podSize} 人桌）"
 
@@ -3736,7 +3745,7 @@ msgid "Draft format"
 msgstr "轮抽赛制"
 
 #: ui/views/CasualModes.tsx:94
-#: ui/views/Limited.tsx:467
+#: ui/views/Limited.tsx:536
 msgid "Draft normally, then swap pools with the seat across from you."
 msgstr ""
 
@@ -3830,7 +3839,7 @@ msgid "Duplicate"
 msgstr "创建副本"
 
 #: ui/views/CasualModes.tsx:86
-#: ui/views/Limited.tsx:457
+#: ui/views/Limited.tsx:526
 msgid "Duplicate Sealed (Mirror)"
 msgstr ""
 
@@ -4058,7 +4067,7 @@ msgid "Everyone at the table needs to be ready."
 msgstr "牌桌上的所有玩家都需要准备就绪。"
 
 #: ui/views/CasualModes.tsx:87
-#: ui/views/Limited.tsx:458
+#: ui/views/Limited.tsx:527
 msgid "Everyone opens the same five packs and builds from identical pools."
 msgstr ""
 
@@ -4215,7 +4224,7 @@ msgid "Failed to join the local Forge room."
 msgstr "加入本地 Forge 房间失败。"
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:122
+#: ui/views/Gauntlet.tsx:127
 msgid "Failed to launch match: {0}"
 msgstr "启动对局失败：{0}"
 
@@ -4227,12 +4236,12 @@ msgid "Failed to load Community deck"
 msgstr "加载社区套牌失败"
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:134
+#: ui/views/Gauntlet.tsx:139
 msgid "Failed to load decks: {0}"
 msgstr "加载套牌失败：{0}"
 
 #. placeholder {0}: String(err)
-#: ui/views/Limited.tsx:268
+#: ui/views/Limited.tsx:319
 msgid "Failed to load pool: {0}"
 msgstr "无法加载牌池：{0}"
 
@@ -4255,7 +4264,7 @@ msgid "Failed to remove bot."
 msgstr "无法移除机器人。"
 
 #. placeholder {0}: String(err)
-#: ui/views/Gauntlet.tsx:144
+#: ui/views/Gauntlet.tsx:149
 msgid "Failed to save sideboard: {0}"
 msgstr "保存备牌失败：{0}"
 
@@ -4289,7 +4298,7 @@ msgstr "开始现开失败：{0}"
 msgid "Favorites"
 msgstr "收藏"
 
-#: ui/views/Limited.tsx:979
+#: ui/views/Limited.tsx:1057
 msgid "Fetching set…"
 msgstr "正在获取系列…"
 
@@ -4489,7 +4498,7 @@ msgstr "闪卡"
 #: ui/components/editor/CardDetailModal.tsx:312
 #: ui/components/editor/CardSearch.tsx:461
 #: ui/components/editor/DeckSelectionTray.tsx:147
-#: ui/views/Limited.tsx:752
+#: ui/views/Limited.tsx:830
 msgid "Foil"
 msgstr "闪卡"
 
@@ -4572,7 +4581,7 @@ msgstr "收藏中的"
 msgid "Four-player Commander"
 msgstr "四人指挥官"
 
-#: ui/views/Limited.tsx:367
+#: ui/views/Limited.tsx:418
 msgid "Four-seat, two-card picks (CR 903.13), then a 4-player Commander game."
 msgstr "四人同桌，每次选两张牌（完整规则 903.13），随后进行四人指挥官对局。"
 
@@ -4852,7 +4861,7 @@ msgstr "按法术力值分组"
 msgid "Group cards by type"
 msgstr "按类型分组"
 
-#: ui/views/Limited.tsx:801
+#: ui/views/Limited.tsx:879
 msgid "guaranteed slot active"
 msgstr "保证槽位已激活"
 
@@ -5079,7 +5088,7 @@ msgstr "导入卡牌列表"
 msgid "Import collection"
 msgstr "导入收藏"
 
-#: ui/views/Limited.tsx:404
+#: ui/views/Limited.tsx:455
 msgid "Import Cube"
 msgstr "导入轮抽盒"
 
@@ -5136,7 +5145,7 @@ msgid "Imported Deck"
 msgstr "导入的套牌"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:307
-#: ui/views/Limited.tsx:404
+#: ui/views/Limited.tsx:455
 msgid "Importing…"
 msgstr "正在导入…"
 
@@ -5731,7 +5740,7 @@ msgstr "加载牌张图像"
 #. placeholder {1}: importedCube.cardCount
 #. placeholder {1}: lastImportedCube.cardCount
 #: ui/components/lobby/TableSetupGameCard.tsx:312
-#: ui/views/Limited.tsx:410
+#: ui/views/Limited.tsx:461
 msgid "Loaded: <0>{0}</0> — {1} cards"
 msgstr "已加载：<0>{0}</0> — {1} 张牌"
 
@@ -5762,7 +5771,7 @@ msgstr "正在加载套牌"
 msgid "Loading decks"
 msgstr "正在加载套牌"
 
-#: ui/views/Gauntlet.tsx:317
+#: ui/views/Gauntlet.tsx:322
 msgid "Loading decks…"
 msgstr "正在加载套牌…"
 
@@ -5774,7 +5783,7 @@ msgstr "正在加载轮抽…"
 msgid "Loading gauntlet…"
 msgstr "正在加载试炼…"
 
-#: ui/views/Limited.tsx:280
+#: ui/views/Limited.tsx:331
 msgid "Loading local sets…"
 msgstr "正在加载本地系列…"
 
@@ -5806,7 +5815,7 @@ msgstr "正在加载你的套牌"
 #: ui/components/play/CommunityDeckShelf.tsx:35
 #: ui/components/play/PresetDeckShelf.tsx:27
 #: ui/components/settings/MyAssetsSection.tsx:132
-#: ui/views/Limited.tsx:722
+#: ui/views/Limited.tsx:800
 msgid "Loading…"
 msgstr "正在加载…"
 
@@ -5826,7 +5835,7 @@ msgstr "本地 AI 锦标赛 · 单败淘汰。由一名玩家和 3、7 或 15 �
 msgid "local analysis"
 msgstr "本地分析"
 
-#: ui/views/Limited.tsx:744
+#: ui/views/Limited.tsx:822
 msgid "Local booster information could not be loaded. No substitute recipe will be used."
 msgstr "无法加载本地补充包信息。不会使用替代构成。"
 
@@ -5843,7 +5852,7 @@ msgstr "本地 Phase 最多支持三个 AI 对手（四名玩家）。"
 msgid "Local play against the AI. Draft variants, Commander offshoots and retro rulesets that don't fit the standard formats."
 msgstr "在本地与 AI 对战，体验常规赛制之外的轮抽变体、指挥官衍生玩法和复古规则。"
 
-#: ui/views/Limited.tsx:277
+#: ui/views/Limited.tsx:328
 msgid "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
 msgstr "本地游戏支持使用六包补充包的现开赛，以及对抗 AI、每次选一张牌的三包补充包轮抽。仅列出已下载且可用的牌池（参见 README）。"
 
@@ -6076,11 +6085,11 @@ msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
 msgid "Manual result — unverified"
 msgstr "手动结果 —— 未经核实"
 
-#: ui/stores/useGameStore.ts:478
+#: ui/stores/useGameStore.ts:484
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "手动房间客户端需要手动桌面运行时。"
 
-#: ui/stores/useGameStore.ts:449
+#: ui/stores/useGameStore.ts:455
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "手动房间主机需要手动桌面运行时。"
 
@@ -6445,7 +6454,7 @@ msgstr "我的套牌"
 msgid "My decks ({0}) · ~{1}"
 msgstr "我的套牌（{0}）· 约 {1}"
 
-#: ui/views/Limited.tsx:490
+#: ui/views/Limited.tsx:559
 msgid "Mythic only"
 msgstr ""
 
@@ -6528,7 +6537,7 @@ msgstr "没有进行中的手动桌面游戏。"
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "此赛制没有可用的 AI 套牌 — 请自行选择一套。"
 
-#: ui/phase/transport.ts:127
+#: ui/phase/transport.ts:129
 msgid "No authorized conspiracy reveal action"
 msgstr "没有已授权的阴谋揭露操作"
 
@@ -6680,7 +6689,7 @@ msgstr "套牌中没有传奇生物——请在下方输入名称。"
 msgid "no lines yet"
 msgstr "暂无数据"
 
-#: ui/stores/useGameStore.ts:690
+#: ui/stores/useGameStore.ts:696
 msgid "No local player is available to concede."
 msgstr "没有可认输的本地玩家。"
 
@@ -6692,7 +6701,7 @@ msgstr "暂无日志条目。"
 msgid "No matching commands"
 msgstr "没有匹配的命令"
 
-#: ui/views/Limited.tsx:643
+#: ui/views/Limited.tsx:712
 msgid "No matching local sets"
 msgstr "没有匹配的本地系列"
 
@@ -6700,7 +6709,7 @@ msgstr "没有匹配的本地系列"
 msgid "No messages yet."
 msgstr "暂无消息。"
 
-#: ui/views/Gauntlet.tsx:201
+#: ui/views/Gauntlet.tsx:206
 msgid "No opponent — gauntlet finished."
 msgstr "没有对手 — 试炼结束。"
 
@@ -6903,7 +6912,7 @@ msgstr "未拥有优先"
 msgid "Not ready"
 msgstr "未准备"
 
-#: ui/views/Limited.tsx:771
+#: ui/views/Limited.tsx:849
 msgid "Not supported"
 msgstr "不支持"
 
@@ -7065,7 +7074,7 @@ msgid "One human plus three AI at 40 life each; add opponents in the setup scree
 msgstr "一名人类加三个 AI，各 40 点生命；在设置界面中添加对手。"
 
 #: ui/views/CasualModes.tsx:115
-#: ui/views/Limited.tsx:509
+#: ui/views/Limited.tsx:578
 msgid "One shared pool, snake order, one card at a time."
 msgstr ""
 
@@ -7096,6 +7105,7 @@ msgstr "只有房主可以执行此操作"
 #~ msgid "Only the host can perform this action"
 #~ msgstr "只有房主可以执行此操作。"
 
+#: ui/components/limited/PickAPackDialog.tsx:57
 #: ui/views/Tournaments.tsx:76
 msgid "Open"
 msgstr "公开"
@@ -7147,7 +7157,7 @@ msgid "Open My Decks"
 msgstr "打开我的套牌"
 
 #: ui/views/CasualModes.tsx:80
-#: ui/views/Limited.tsx:449
+#: ui/views/Limited.tsx:500
 msgid "Open one booster, add 15 basic lands and play the whole pack."
 msgstr ""
 
@@ -7155,7 +7165,7 @@ msgstr ""
 msgid "Open Pack Wars"
 msgstr ""
 
-#: ui/views/Limited.tsx:326
+#: ui/views/Limited.tsx:377
 msgid "Open packs, build a 40-card deck, run an AI gauntlet."
 msgstr "打开补充包，构筑一副 40 张牌的套牌，连续挑战 AI。"
 
@@ -7211,13 +7221,15 @@ msgstr "打开你的放逐区"
 msgid "Open your graveyard"
 msgstr "打开你的坟墓场"
 
-#: ui/views/Limited.tsx:327
-#: ui/views/Limited.tsx:345
-#: ui/views/Limited.tsx:368
-#: ui/views/Limited.tsx:450
-#: ui/views/Limited.tsx:459
-#: ui/views/Limited.tsx:468
-#: ui/views/Limited.tsx:477
+#: ui/views/Limited.tsx:378
+#: ui/views/Limited.tsx:396
+#: ui/views/Limited.tsx:419
+#: ui/views/Limited.tsx:501
+#: ui/views/Limited.tsx:510
+#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:528
+#: ui/views/Limited.tsx:537
+#: ui/views/Limited.tsx:546
 msgid "Opening packs…"
 msgstr "正在打开补充包…"
 
@@ -7246,7 +7258,7 @@ msgstr "对手"
 msgid "Optimize deck printings"
 msgstr "优化套牌版本"
 
-#: ui/views/Limited.tsx:858
+#: ui/views/Limited.tsx:936
 msgid "Optional integer for reproducible opens. Leave blank for random."
 msgstr "可填写整数以重现开包结果。留空则随机生成。"
 
@@ -7262,7 +7274,7 @@ msgstr "可选的是/否费用"
 msgid "or"
 msgstr "或"
 
-#: ui/views/Limited.tsx:435
+#: ui/views/Limited.tsx:486
 msgid "or load saved pool…"
 msgstr "或加载已保存的牌池…"
 
@@ -7342,22 +7354,27 @@ msgstr "拥有另一个版本 · 共 {owned}"
 msgid "Owned only"
 msgstr "仅已拥有"
 
+#: ui/components/limited/PickAPackDialog.tsx:55
 #: ui/views/OnlineDraftPanel.tsx:63
 msgid "Pack"
 msgstr "补充包"
 
-#: ui/views/Limited.tsx:443
+#: ui/views/Limited.tsx:494
 msgid "Pack & Draft Variants"
 msgstr ""
 
+#: ui/views/Limited.tsx:508
+msgid "Pack Wars — Pack in Hand"
+msgstr ""
+
 #: ui/views/CasualModes.tsx:79
-#: ui/views/Limited.tsx:448
+#: ui/views/Limited.tsx:499
 msgid "Pack Wars (Mini-Master)"
 msgstr ""
 
 #: ui/components/lobby/TableRoomSidebar.tsx:205
-#: ui/views/Limited.tsx:333
-#: ui/views/Limited.tsx:392
+#: ui/views/Limited.tsx:384
+#: ui/views/Limited.tsx:443
 msgid "Packs"
 msgstr "补充包"
 
@@ -7441,7 +7458,7 @@ msgstr "设有密码的牌桌"
 msgid "Paste"
 msgstr "粘贴"
 
-#: ui/views/Limited.tsx:403
+#: ui/views/Limited.tsx:454
 msgid "Paste a cube id or url, or load a saved pool .json file."
 msgstr "粘贴轮抽盒 ID 或网址，或加载已保存的牌池 .json 文件。"
 
@@ -7558,11 +7575,11 @@ msgstr "请在下方选择现开系列。"
 msgid "Pick a set for the draft below."
 msgstr "请在下方选择轮抽系列。"
 
-#: ui/views/Limited.tsx:87
+#: ui/views/Limited.tsx:91
 msgid "Pick a set to draft first."
 msgstr "请先选择要轮抽的系列。"
 
-#: ui/views/Limited.tsx:609
+#: ui/views/Limited.tsx:678
 msgid "Pick a theme. We'll merge pools from the most recent draftable sets that match its rotation window and start a normal pod draft against AI seats."
 msgstr "选择一个主题。我们会合并符合其轮替范围的最新可轮抽系列牌池，然后开始与 AI 同桌进行普通轮抽。"
 
@@ -7576,12 +7593,17 @@ msgstr "选择颜色"
 msgid "pick failed: {0}"
 msgstr "选择失败：{0}"
 
+#: ui/components/limited/PickAPackDialog.tsx:31
+#: ui/views/Limited.tsx:517
+msgid "Pick-a-Pack"
+msgstr ""
+
 #: ui/components/lobby/TableSetupGameCard.tsx:354
 msgid "Picks / pass"
 msgstr "每次传包选牌数"
 
 #: ui/components/lobby/TableRoomSidebar.tsx:211
-#: ui/views/Limited.tsx:876
+#: ui/views/Limited.tsx:954
 msgid "Picks per pass"
 msgstr "每轮传递选牌数"
 
@@ -7808,7 +7830,7 @@ msgstr "请为此赛制选择一套套牌"
 msgid "Pod draft — pass packs around the table."
 msgstr "多人轮抽——绕桌传递补充包。"
 
-#: ui/views/Limited.tsx:344
+#: ui/views/Limited.tsx:395
 msgid "Pod draft against AI seats — 3 packs each."
 msgstr "与 AI 同桌轮抽，每人 3 包。"
 
@@ -7817,8 +7839,8 @@ msgid "Pod draft from a CubeCobra cube."
 msgstr "使用 CubeCobra Cube 进行多人轮抽。"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:197
-#: ui/views/Limited.tsx:351
-#: ui/views/Limited.tsx:374
+#: ui/views/Limited.tsx:402
+#: ui/views/Limited.tsx:425
 #: ui/views/OnlineDraftPanel.tsx:46
 msgid "Pod size"
 msgstr "桌位规模"
@@ -7831,7 +7853,7 @@ msgstr "积分"
 msgid "Points: win / draw / loss"
 msgstr "积分：胜 / 平 / 负"
 
-#: ui/views/Limited.tsx:250
+#: ui/views/Limited.tsx:301
 msgid "Pool file must contain a non-empty `pool` array of DraftCards."
 msgstr "牌池文件必须包含非空的 DraftCards `pool` 数组。"
 
@@ -7885,7 +7907,7 @@ msgid "Preparing your cards…"
 msgstr "正在准备卡牌…"
 
 #. placeholder {0}: info.prerelease
-#: ui/views/Limited.tsx:705
+#: ui/views/Limited.tsx:783
 msgid "Prerelease: <0>{0}</0>"
 msgstr "售前赛：<0>{0}</0>"
 
@@ -8093,7 +8115,7 @@ msgstr "加速、去除、组合技…"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:266
 #: ui/components/lobby/TableSetupGameCard.tsx:379
-#: ui/views/Limited.tsx:856
+#: ui/views/Limited.tsx:934
 msgid "random"
 msgstr "随机"
 
@@ -8113,14 +8135,14 @@ msgstr "时间范围"
 msgid "Rank"
 msgstr "排名"
 
-#: ui/views/Limited.tsx:489
+#: ui/views/Limited.tsx:558
 msgid "Rare + Mythic"
 msgstr ""
 
 #: ui/components/dev/designSystem/sections/ComponentsSection.tsx:121
 #: ui/components/editor/CardSearch.tsx:326
 #: ui/components/editor/CardSearch.tsx:1100
-#: ui/views/Limited.tsx:482
+#: ui/views/Limited.tsx:551
 msgid "Rarity"
 msgstr "稀有度"
 
@@ -8272,7 +8294,7 @@ msgid "Refresh tables"
 msgstr "刷新牌桌"
 
 #: ui/views/CasualModes.tsx:100
-#: ui/views/Limited.tsx:475
+#: ui/views/Limited.tsx:544
 msgid "Reject Rare"
 msgstr ""
 
@@ -8600,7 +8622,7 @@ msgstr "返回战斗"
 #~ msgstr "进入对局"
 
 #: ui/views/CasualModes.tsx:122
-#: ui/views/Limited.tsx:518
+#: ui/views/Limited.tsx:587
 msgid "Reveal four, take 1-2-1; the first chooser alternates each batch."
 msgstr ""
 
@@ -8628,7 +8650,7 @@ msgstr "戒指"
 msgid "Ring-bearer"
 msgstr "持戒人"
 
-#: ui/views/Limited.tsx:850
+#: ui/views/Limited.tsx:928
 msgid "RNG seed"
 msgstr "随机种子"
 
@@ -8685,7 +8707,7 @@ msgid "Rotate your device"
 msgstr "请旋转设备"
 
 #: ui/views/CasualModes.tsx:114
-#: ui/views/Limited.tsx:508
+#: ui/views/Limited.tsx:577
 msgid "Rotisserie Draft"
 msgstr ""
 
@@ -8764,7 +8786,7 @@ msgstr "相同 {0} · 法术力值 {1} · 未拥有"
 msgid "Same colour identity, mana value, and primary card type."
 msgstr "相同的颜色标识、法术力值和主要牌张类型。"
 
-#: ui/views/Limited.tsx:871
+#: ui/views/Limited.tsx:949
 msgid "Same seed + same pool → identical packs every open."
 msgstr "相同种子 + 相同牌池 → 每次开包结果相同。"
 
@@ -8981,12 +9003,12 @@ msgstr "Scryfall 未返回系列 {setCode} 的任何卡牌"
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/components/lobby/TableRoom.tsx:72
 #: ui/lib/formatLabels.ts:23
-#: ui/views/Limited.tsx:325
+#: ui/views/Limited.tsx:376
 #: ui/views/MatchHistory.tsx:58
 msgid "Sealed"
 msgstr "现开"
 
-#: ui/views/Limited.tsx:1087
+#: ui/views/Limited.tsx:1165
 msgid "Sealed ({numBoosters} packs)"
 msgstr "现开赛（{numBoosters} 包）"
 
@@ -8998,7 +9020,7 @@ msgstr "现开配置没有牌池来源"
 msgid "Sealed Deck Build"
 msgstr "现开套牌构筑"
 
-#: ui/views/Limited.tsx:587
+#: ui/views/Limited.tsx:656
 msgid "Sealed templates"
 msgstr "现开赛模板"
 
@@ -9112,12 +9134,12 @@ msgstr "次要"
 msgid "Seed"
 msgstr "种子"
 
-#: ui/views/Limited.tsx:1080
+#: ui/views/Limited.tsx:1158
 msgid "seed {seed}"
 msgstr "种子 {seed}"
 
 #. placeholder {0}: seed.trim()
-#: ui/views/Limited.tsx:838
+#: ui/views/Limited.tsx:916
 msgid "seed = {0}"
 msgstr "种子 = {0}"
 
@@ -9464,7 +9486,7 @@ msgstr "备牌计划"
 msgid "Sideboard policy"
 msgstr "备牌规则"
 
-#: ui/views/Gauntlet.tsx:141
+#: ui/views/Gauntlet.tsx:146
 msgid "Sideboard updated."
 msgstr "备牌已更新。"
 
@@ -9541,7 +9563,7 @@ msgstr "模拟下一局 AI 对局／重赛"
 msgid "Single elimination"
 msgstr "单败淘汰"
 
-#: ui/views/Limited.tsx:796
+#: ui/views/Limited.tsx:874
 msgid "Single recipe"
 msgstr "单一配方"
 
@@ -9579,6 +9601,10 @@ msgstr "绕过 Manabrew 服务器，直接连接同桌的其他玩家。这会�
 msgid "Skip yes/no cost prompts (kicker, buyback, Phyrexian) — never pay the extra cost."
 msgstr "跳过是/否费用提示（增幅、购回、非瑞克西亚）— 永不支付额外费用。"
 
+#: ui/views/Limited.tsx:518
+msgid "Snake-pick which unopened boosters you and the AI will draft from, then draft normally."
+msgstr ""
+
 #: ui/components/game/panels/SnapshotsPanel.tsx:23
 #: ui/components/game/panels/SnapshotsPanel.tsx:30
 msgid "Snapshots"
@@ -9590,7 +9616,7 @@ msgid "Snapshots ({0})"
 msgstr "快照 ({0})"
 
 #: ui/views/CasualModes.tsx:107
-#: ui/views/Limited.tsx:499
+#: ui/views/Limited.tsx:568
 msgid "Solomon Draft"
 msgstr ""
 
@@ -9684,7 +9710,7 @@ msgid "Split"
 msgstr "分离"
 
 #: ui/views/CasualModes.tsx:108
-#: ui/views/Limited.tsx:500
+#: ui/views/Limited.tsx:569
 msgid "Split 8-card batches into two piles; your opponent chooses one."
 msgstr ""
 
@@ -9714,7 +9740,7 @@ msgstr "离开座位"
 msgid "Standard"
 msgstr "标准"
 
-#: ui/views/Limited.tsx:320
+#: ui/views/Limited.tsx:371
 msgid "Standard Modes"
 msgstr "常规模式"
 
@@ -9730,7 +9756,7 @@ msgstr "按你喜欢的方式开始对局，或打开收藏中的一套牌。"
 msgid "Start as @{trimmed}"
 msgstr "以 @{trimmed} 的身份开始"
 
-#: ui/views/Limited.tsx:468
+#: ui/views/Limited.tsx:537
 msgid "Start Back Draft"
 msgstr ""
 
@@ -9738,11 +9764,11 @@ msgstr ""
 msgid "Start building"
 msgstr "开始构筑"
 
-#: ui/views/Limited.tsx:368
+#: ui/views/Limited.tsx:419
 msgid "Start Commander Draft"
 msgstr "开始指挥官轮抽"
 
-#: ui/views/Limited.tsx:519
+#: ui/views/Limited.tsx:588
 msgid "Start Continuous"
 msgstr ""
 
@@ -9751,11 +9777,11 @@ msgstr ""
 msgid "Start draft"
 msgstr "开始轮抽"
 
-#: ui/views/Limited.tsx:345
+#: ui/views/Limited.tsx:396
 msgid "Start Draft"
 msgstr "开始轮抽"
 
-#: ui/views/Limited.tsx:1069
+#: ui/views/Limited.tsx:1147
 msgid "Start from imported cube"
 msgstr "使用已导入的轮抽盒开始"
 
@@ -9764,7 +9790,7 @@ msgstr "使用已导入的轮抽盒开始"
 msgid "Start game"
 msgstr "开始游戏"
 
-#: ui/views/Limited.tsx:459
+#: ui/views/Limited.tsx:528
 msgid "Start Mirror Sealed"
 msgstr ""
 
@@ -9776,15 +9802,19 @@ msgstr ""
 msgid "Start next round"
 msgstr "开始下一轮"
 
-#: ui/views/Limited.tsx:450
+#: ui/views/Limited.tsx:501
 msgid "Start Pack Wars"
 msgstr ""
 
-#: ui/views/Limited.tsx:477
+#: ui/views/Limited.tsx:510
+msgid "Start Pack-in-Hand"
+msgstr ""
+
+#: ui/views/Limited.tsx:546
 msgid "Start Reject Rare"
 msgstr ""
 
-#: ui/views/Limited.tsx:510
+#: ui/views/Limited.tsx:579
 msgid "Start Rotisserie"
 msgstr ""
 
@@ -9792,11 +9822,11 @@ msgstr ""
 msgid "Start sealed"
 msgstr "开始现开"
 
-#: ui/views/Limited.tsx:327
+#: ui/views/Limited.tsx:378
 msgid "Start Sealed"
 msgstr "开始现开赛"
 
-#: ui/views/Limited.tsx:501
+#: ui/views/Limited.tsx:570
 msgid "Start Solomon"
 msgstr ""
 
@@ -9812,7 +9842,7 @@ msgstr "启动对局引擎"
 msgid "Start tracking"
 msgstr "开始追踪"
 
-#: ui/views/Limited.tsx:386
+#: ui/views/Limited.tsx:437
 msgid "Start Winston"
 msgstr "开始温斯顿轮抽"
 
@@ -10116,6 +10146,10 @@ msgstr "在此入座"
 msgid "Take your seat"
 msgstr "就座"
 
+#: ui/components/limited/PickAPackDialog.tsx:57
+msgid "Taken"
+msgstr ""
+
 #: ui/components/game/ManualTabletopControls.tsx:397
 #: ui/components/game/ManualTabletopControls.tsx:398
 msgid "Tap"
@@ -10298,7 +10332,7 @@ msgstr "牌垫会填充一个宽幅的横向区域（约 5:2）。为获得清�
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "预览栏是编辑器共享的牌张检查器。将鼠标悬停在工作区任意位置的牌上，其图片和详情就会显示在那里，不会打断你正在进行的操作。"
 
-#: ui/stores/useGameStore.ts:390
+#: ui/stores/useGameStore.ts:395
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "上一局游戏仍在关闭中。请稍后重试。"
 
@@ -10335,6 +10369,10 @@ msgstr "在此响应到达之前，会话已离开或被替换。"
 msgid "The tournament game could not start. Retry this match."
 msgstr "锦标赛对局启动失败，请重试本场比赛。"
 
+#: ui/views/Limited.tsx:509
+msgid "The whole pack starts in your hand; each turn you may play a basic from outside the game."
+msgstr ""
+
 #: ui/views/Settings.tsx:300
 #: ui/views/Settings.tsx:966
 msgid "Theme"
@@ -10360,7 +10398,7 @@ msgstr "主题模式必须为浅色或深色。"
 msgid "Theme name must contain 1 to 80 characters."
 msgstr "主题名称必须包含 1 到 80 个字符。"
 
-#: ui/views/Limited.tsx:605
+#: ui/views/Limited.tsx:674
 msgid "Themed Chaos Draft"
 msgstr "主题混沌轮抽"
 
@@ -10683,7 +10721,7 @@ msgstr "两队各两人共享 30 点生命总数，并一起进行回合。"
 msgid "Two-Headed Giant"
 msgstr "双头巨人"
 
-#: ui/views/Limited.tsx:385
+#: ui/views/Limited.tsx:436
 msgid "Two-seat shared-stack pile draft against the AI."
 msgstr "与 AI 进行双人共享牌堆的温斯顿轮抽。"
 
@@ -10729,7 +10767,7 @@ msgstr "未阻挡"
 msgid "Unbound"
 msgstr "未绑定"
 
-#: ui/views/Limited.tsx:491
+#: ui/views/Limited.tsx:560
 msgid "Uncommon (silver)"
 msgstr ""
 
@@ -11206,13 +11244,13 @@ msgstr "胜场"
 msgid "Wins by player"
 msgstr "各玩家胜场"
 
-#: ui/views/Limited.tsx:1095
+#: ui/views/Limited.tsx:1173
 msgid "Winston ({winstonPacks} packs)"
 msgstr "温斯顿轮抽（{winstonPacks} 包）"
 
 #: ui/components/layout/TopBar.tsx:66
 #: ui/views/CasualModes.tsx:65
-#: ui/views/Limited.tsx:384
+#: ui/views/Limited.tsx:435
 msgid "Winston Draft"
 msgstr "温斯顿轮抽"
 
@@ -11394,6 +11432,12 @@ msgstr "你的名字"
 #. placeholder {0}: draft.pickedPile.length
 #: ui/components/limited/SolomonWorkspace.tsx:154
 msgid "Your picks: {0}"
+msgstr ""
+
+#. placeholder {0}: view.yourPicks
+#. placeholder {1}: view.picksEach
+#: ui/components/limited/PickAPackDialog.tsx:42
+msgid "Your picks: {0} / {1}"
 msgstr ""
 
 #: ui/views/OnlineDraftPanel.tsx:73

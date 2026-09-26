@@ -126,6 +126,8 @@ export interface VariantSetup {
   customPool?: boolean;
   poolType?: LimitedPoolType;
   singleton?: boolean;
+  /** Pod size for variants that need one (Pick-a-Pack); defaults to 2. */
+  podSize?: number;
 }
 
 export interface VariantMetadata {
@@ -137,6 +139,30 @@ export interface VariantMetadata {
   deckSize: number;
   engine: "draft" | "sealed" | "variant";
 }
+
+/** One unopened booster on offer during a Pick-a-Pack pre-draft. */
+export interface PickAPackOffer {
+  index: number;
+  setCode: string;
+  taken: boolean;
+}
+
+/** Pick-a-Pack (\u5148\u9009\u5305): snake-pick which boosters to open, then draft. */
+export interface PickAPackView {
+  sessionId: string;
+  variantKind: "pick_a_pack";
+  awaitingPick: boolean;
+  done: boolean;
+  seatCount: number;
+  picksEach: number;
+  yourPicks: number;
+  packs: PickAPackOffer[];
+}
+
+/** The Pick-a-Pack commands either report the next pick or hand over the draft. */
+export type PickAPackResponse =
+  | { kind: "pick"; state: PickAPackView }
+  | { kind: "draft"; state: DraftState };
 
 export interface WinstonSetup {
   poolPacks: number;
@@ -189,6 +215,8 @@ export interface GauntletOpponent {
 export interface GauntletState {
   gauntletId: string;
   kind: "sealed" | "draft";
+  /** Casual variant this gauntlet came from, when any (e.g. `pack_wars_hand`). */
+  variantKind?: string;
   rounds: number;
   currentRound: number;
   wins: number;

@@ -24,36 +24,44 @@ type Result<T> = std::result::Result<T, String>;
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 enum Variant {
     PackWars,
+    PackWarsHand,
     Solomon,
     DuplicateSealed,
     BackDraft,
     Rotisserie,
     RejectRare,
     Continuous,
+    PickAPack,
 }
 
 impl Variant {
     fn parse(value: &str) -> Option<Self> {
         match value {
             "pack_wars" | "mini_master" => Some(Self::PackWars),
+            "pack_wars_hand" | "pack_wars_as_hand" | "mini_master_hand" => {
+                Some(Self::PackWarsHand)
+            }
             "solomon" => Some(Self::Solomon),
             "duplicate_sealed" | "mirror_sealed" => Some(Self::DuplicateSealed),
             "back_draft" | "backdraft" => Some(Self::BackDraft),
             "rotisserie" => Some(Self::Rotisserie),
             "reject_rare" | "reject_rares" => Some(Self::RejectRare),
             "continuous" => Some(Self::Continuous),
+            "pick_a_pack" | "pickapack" | "pick_pack" => Some(Self::PickAPack),
             _ => None,
         }
     }
     fn id(self) -> &'static str {
         match self {
             Self::PackWars => "pack_wars",
+            Self::PackWarsHand => "pack_wars_hand",
             Self::Solomon => "solomon",
             Self::DuplicateSealed => "duplicate_sealed",
             Self::BackDraft => "back_draft",
             Self::Rotisserie => "rotisserie",
             Self::RejectRare => "reject_rare",
             Self::Continuous => "continuous",
+            Self::PickAPack => "pick_a_pack",
         }
     }
 }
@@ -131,6 +139,9 @@ struct Gauntlet {
     round_recorded: bool,
     /// Pack Wars decks are pack + 15 basics (below the 40-card Limited floor).
     min_deck_size: usize,
+    /// The casual variant this gauntlet belongs to, when any; the client uses
+    /// it to pick the opening-zone shape for the match.
+    variant: Option<Variant>,
 }
 
 /// Interactive casual drafts that the pick-and-pass reducer cannot express:
@@ -188,6 +199,93 @@ impl VariantDraft {
         }
     }
 }
+/// A pack source that deals a fixed, pre-chosen set of boosters per seat.
+/// Pick-a-Pack uses it after the players snake-pick their unopened packs.
+struct FixedPackSource {
+    packs: Vec<Vec<DraftPack>>,
+}
+
+impl PackSource for FixedPackSource {
+    fn generate_pack(&self, _rng: &mut dyn rand::RngCore, seat: u8, pack_number: u8) -> DraftPack {
+        self.packs
+            .get(seat as usize)
+            .and_then(|seat_packs| seat_packs.get(pack_number as usize))
+            .cloned()
+            .unwrap_or_else(|| DraftPack(Vec::new()))
+    }
+}
+
+/// Pick-a-Pack (先选包): snake-pick which unopened boosters each seat opens,
+/// then run a normal draft from the chosen packs.
+#[derive(Clone)]
+struct PackPick {
+    offers: Vec<DraftPack>,
+    used: Vec<bool>,
+    /// Seat taking each step of the snake.
+    order: Vec<usize>,
+    cursor: usize,
+    /// Offer indexes chosen by each seat.
+    seats: Vec<Vec<usize>>,
+    pod: usize,
+    picks_each: usize,
+    rng: ChaCha20Rng,
+    seed: u64,
+    set_code: String,
+    cards_per_pack: u8,
+}
+
+impl PackPick {
+    fn is_done(&self) -> bool {
+        self.cursor >= self.order.len()
+    }
+    fn awaiting_human(&self) -> bool {
+        !self.is_done() && self.order[self.cursor] == 0
+    }
+    fn label(&self, index: usize) -> String {
+        self.offers[index]
+            .0
+            .first()
+            .map(|c| c.set_code.clone())
+            .unwrap_or_default()
+    }
+}
+
+/// Let every bot seat take its snake picks until the human is on turn or the
+/// pool is exhausted. Bots pick uniformly among the remaining offers.
+fn advance_pack_pick(p: &mut PackPick) {
+    while !p.is_done() {
+        let seat = p.order[p.cursor];
+        if seat == 0 {
+            break;
+        }
+        let available: Vec<usize> = (0..p.offers.len()).filter(|i| !p.used[*i]).collect();
+        if available.is_empty() {
+            break;
+        }
+        let idx = available[p.rng.random_range(0..available.len())];
+        p.used[idx] = true;
+        p.seats[seat].push(idx);
+        p.cursor += 1;
+    }
+}
+
+fn pack_pick_view(p: &PackPick, id: &str) -> Value {
+    json!({
+        "sessionId": id,
+        "variantKind": "pick_a_pack",
+        "awaitingPick": p.awaiting_human(),
+        "done": p.is_done(),
+        "seatCount": p.pod,
+        "picksEach": p.picks_each,
+        "yourPicks": p.seats.first().map_or(0, Vec::len),
+        "packs": (0..p.offers.len()).map(|i| json!({
+            "index": i,
+            "setCode": p.label(i),
+            "taken": p.used[i],
+        })).collect::<Vec<_>>(),
+    })
+}
+
 /// A ready pack source plus the bookkeeping `DraftConfig` needs. `set_code` is
 /// the land/land-set label; the cube source uses a placeholder.
 struct LimitSource {
@@ -207,6 +305,8 @@ pub struct LimitedService {
     gauntlets: HashMap<String, Gauntlet>,
     /// Interactive casual drafts (Solomon/Rotisserie/Continuous).
     variants: HashMap<String, VariantDraft>,
+    /// Pick-a-Pack pre-draft pack selection, keyed until the draft starts.
+    pack_picks: HashMap<String, PackPick>,
     next_id: u64,
 }
 impl Default for LimitedService {
@@ -228,6 +328,7 @@ impl LimitedService {
             winston: HashMap::new(),
             gauntlets: HashMap::new(),
             variants: HashMap::new(),
+            pack_picks: HashMap::new(),
             next_id: 0,
         }
     }
@@ -454,6 +555,16 @@ impl LimitedService {
             }])),
             "limited_list_variants" => Ok(variant_list()),
             "limited_start_variant" => self.start_variant(&args),
+            "limited_start_pick_a_pack" => self.start_pick_a_pack(&args),
+            "limited_pick_a_pack_pick" => self.pick_a_pack_pick(&args),
+            "limited_get_pick_a_pack_state" => {
+                let id = text(&args, "sessionId")?;
+                let pick = self
+                    .pack_picks
+                    .get(id)
+                    .ok_or("Unknown Pick-a-Pack session")?;
+                Ok(json!({"kind":"pick","state":pack_pick_view(pick, id)}))
+            }
             "limited_get_variant_state" => {
                 let id = text(&args, "sessionId")?;
                 self.variant_view(id)
@@ -476,8 +587,9 @@ impl LimitedService {
                         return Err("Sealed does not take pod size, rounds or picks".into());
                     }
                     let pack_count = match variant {
-                        // Mini-Master opens exactly one pack per seat.
-                        Some(Variant::PackWars) => 1,
+                        // Mini-Master opens exactly one pack per seat; the
+                        // hand variant reshapes the zones after the game starts.
+                        Some(Variant::PackWars) | Some(Variant::PackWarsHand) => 1,
                         // Duplicate Sealed uses the guide's five identical packs.
                         Some(Variant::DuplicateSealed) => 5,
                         _ => setup.num_boosters.unwrap_or(6),
@@ -485,7 +597,10 @@ impl LimitedService {
                     // A custom (Cube) pool rarely holds the 720 cards eight
                     // 15-card-pack seats need, so size the pod to the pool.
                     // Mini-Master is always a two-player duel.
-                    let seats = if variant == Some(Variant::PackWars) {
+                    let seats = if matches!(
+                        variant,
+                        Some(Variant::PackWars) | Some(Variant::PackWarsHand)
+                    ) {
                         2u8
                     } else if custom {
                         (setup.pool.len() / (usize::from(pack_count) * 15)).clamp(2, 8) as u8
@@ -505,12 +620,16 @@ impl LimitedService {
                     }
                     let min_deck_size = match variant {
                         // Mini-Master: the whole pack plus three of each basic.
-                        Some(Variant::PackWars) => session.pools[0].len() + 15,
+                        Some(Variant::PackWars) | Some(Variant::PackWarsHand) => {
+                            session.pools[0].len() + 15
+                        }
                         _ => 40,
                     };
                     session.config.min_deck_size = min_deck_size;
                     let build = |pool: &[DraftCardInstance], name: &str| match variant {
-                        Some(Variant::PackWars) => build_pack_wars_deck(pool, name),
+                        Some(Variant::PackWars) | Some(Variant::PackWarsHand) => {
+                            build_pack_wars_deck(pool, name)
+                        }
                         _ => build_deck(pool, name),
                     };
                     let suggested = build(&session.pools[0], "Suggested deck")?;
@@ -875,6 +994,7 @@ impl LimitedService {
                     losses: 0,
                     round_recorded: false,
                     min_deck_size: 40,
+                    variant: draft.variant,
                 };
                 let id = self.id("gauntlet");
                 let view = gauntlet_view(&id, &gauntlet);
@@ -917,6 +1037,7 @@ impl LimitedService {
                     losses: 0,
                     round_recorded: false,
                     min_deck_size: sealed.min_deck_size,
+                    variant: sealed.variant,
                 };
                 let id = self.id("gauntlet");
                 let view = gauntlet_view(&id, &gauntlet);
@@ -2061,6 +2182,137 @@ impl LimitedService {
         Ok(value)
     }
 
+    /// Pick-a-Pack step 1: generate the pooled boosters and let every bot take
+    /// its snake picks until the human is on turn.
+    fn start_pick_a_pack(&mut self, args: &Value) -> Result<Value> {
+        let setup = parse_setup(args)?;
+        let pod = usize::from(setup.pod_size.unwrap_or(2));
+        if !(2..=8).contains(&pod) {
+            return Err("Pick-a-Pack needs a pod of 2 to 8 seats".into());
+        }
+        let picks_each = 3usize;
+        let seed = setup.seed.unwrap_or_else(rand::random);
+        let src = self.build_source(&setup, pod as u8, picks_each as u8, seed)?;
+        let mut rng = ChaCha20Rng::seed_from_u64(seed ^ 0x9E37_79B9);
+        let mut offers = Vec::with_capacity(pod * picks_each);
+        for seat in 0..pod as u8 {
+            for pack_number in 0..picks_each as u8 {
+                offers.push(src.source.generate_pack(&mut rng, seat, pack_number));
+            }
+        }
+        // The packs are unopened, so shuffling the pool is what the real table
+        // sees; a seat must not know which pack it would otherwise have opened.
+        for i in (1..offers.len()).rev() {
+            let j = rng.random_range(0..=i);
+            offers.swap(i, j);
+        }
+        // Snake order (0,1,…,n-1,n-1,…,0,…) with a random initial direction.
+        let mut order = Vec::with_capacity(pod * picks_each);
+        let mut forward = rng.random_bool(0.5);
+        while order.len() < pod * picks_each {
+            let seats: Vec<usize> = if forward {
+                (0..pod).collect()
+            } else {
+                (0..pod).rev().collect()
+            };
+            for s in seats {
+                if order.len() < pod * picks_each {
+                    order.push(s);
+                }
+            }
+            forward = !forward;
+        }
+        let id = self.id("pickapack");
+        let mut pick = PackPick {
+            used: vec![false; offers.len()],
+            seats: vec![Vec::new(); pod],
+            offers,
+            order,
+            cursor: 0,
+            pod,
+            picks_each,
+            rng,
+            seed,
+            set_code: src.set_code.clone(),
+            cards_per_pack: src.cards_per_pack,
+        };
+        advance_pack_pick(&mut pick);
+        let view = json!({"kind":"pick","state":pack_pick_view(&pick, &id)});
+        self.pack_picks.insert(id, pick);
+        Ok(view)
+    }
+
+    /// Pick-a-Pack step 2: record the human's booster, finish the bots, and turn
+    /// the chosen packs into a normal draft once every seat has its three.
+    fn pick_a_pack_pick(&mut self, args: &Value) -> Result<Value> {
+        let id = text(args, "sessionId")?.to_string();
+        let index = args
+            .get("packIndex")
+            .and_then(Value::as_u64)
+            .ok_or("Missing packIndex")? as usize;
+        let pick = self
+            .pack_picks
+            .get_mut(&id)
+            .ok_or("Unknown Pick-a-Pack session")?;
+        if !pick.awaiting_human() {
+            return Err("It is not your turn to pick a booster".into());
+        }
+        if index >= pick.offers.len() || pick.used[index] {
+            return Err("That booster is not on offer".into());
+        }
+        pick.used[index] = true;
+        pick.seats[0].push(index);
+        pick.cursor += 1;
+        advance_pack_pick(pick);
+        if !pick.is_done() {
+            return Ok(json!({"kind":"pick","state":pack_pick_view(pick, &id)}));
+        }
+        let pick = self.pack_picks.remove(&id).expect("checked above");
+        let packs_by_seat: Vec<Vec<DraftPack>> = (0..pick.pod)
+            .map(|seat| {
+                pick.seats[seat]
+                    .iter()
+                    .map(|i| pick.offers[*i].clone())
+                    .collect()
+            })
+            .collect();
+        let src = LimitSource {
+            source: Box::new(FixedPackSource {
+                packs: packs_by_seat,
+            }),
+            draft_source: DraftSource::Set {
+                layout: SetLayout::UniformByRound {
+                    codes: vec![pick.set_code.clone()],
+                },
+            },
+            set_code: pick.set_code.clone(),
+            cards_per_pack: pick.cards_per_pack,
+        };
+        let session = start_session(
+            &id,
+            DraftKind::Quick,
+            pick.pod as u8,
+            pick.picks_each as u8,
+            src,
+            pick.seed,
+        )?;
+        let value = draft_view(&session, &[], false, false, Some(Variant::PickAPack));
+        let rng = ChaCha20Rng::seed_from_u64(session.config.rng_seed);
+        self.drafts.insert(
+            id,
+            Draft {
+                current: Snapshot { session, rng },
+                undo: Vec::new(),
+                pending: Vec::new(),
+                pending_effect: false,
+                commander_draft: false,
+                variant: Some(Variant::PickAPack),
+                back_draft_swapped: false,
+            },
+        );
+        Ok(json!({"kind":"draft","state":value}))
+    }
+
     /// Converts a finished bespoke variant into a normal Deckbuilding session so
     /// the existing deck builder and gauntlet flow can take over.
     fn finish_variant(&mut self, id: &str, vd: VariantDraft) -> Result<Value> {
@@ -2121,6 +2373,8 @@ impl LimitedService {
 fn variant_list() -> Value {
     json!([
         {"id":"pack_wars","label":"Pack Wars (Mini-Master)","description":"Open one booster plus 15 basic lands and play it as-is.","players":2,"packs":1,"deckSize":30,"engine":"sealed"},
+        {"id":"pack_wars_hand","label":"Pack Wars — whole pack in hand","description":"The opened pack is your starting hand; basics stay in the library and are drawn one per turn.","players":2,"packs":1,"deckSize":30,"engine":"sealed"},
+        {"id":"pick_a_pack","label":"Pick-a-Pack (choose packs first)","description":"Snake-pick which unopened boosters each player opens, then draft normally.","players":2,"packs":6,"deckSize":40,"engine":"variant"},
         {"id":"solomon","label":"Solomon Draft","description":"Split 8-card batches into two piles; your opponent chooses one.","players":2,"packs":6,"deckSize":40,"engine":"variant"},
         {"id":"duplicate_sealed","label":"Duplicate Sealed (Mirror)","description":"Everyone opens the same five packs and builds from identical pools.","players":2,"packs":5,"deckSize":40,"engine":"sealed"},
         {"id":"back_draft","label":"Back Draft","description":"Draft normally, then swap pools with the seat across from you.","players":2,"packs":3,"deckSize":40,"engine":"draft"},
@@ -2584,15 +2838,59 @@ mod variant_tests {
     fn variant_ids_round_trip() {
         for id in [
             "pack_wars",
+            "pack_wars_hand",
             "solomon",
             "duplicate_sealed",
             "back_draft",
             "rotisserie",
             "reject_rare",
             "continuous",
+            "pick_a_pack",
         ] {
             assert_eq!(Variant::parse(id).unwrap().id(), id);
         }
+    }
+
+    #[test]
+    fn pick_a_pack_snake_picks_then_starts_a_draft() {
+        let mut service = LimitedService::default();
+        let setup = json!({"setup":{"pool":cube_pool(120),"customPool":true,"variant":"pick_a_pack","seed":11,"podSize":2}});
+        let mut response = service.invoke("limited_start_pick_a_pack", setup).unwrap();
+        assert_eq!(response["kind"], "pick");
+        let id = response["state"]["sessionId"].as_str().unwrap().to_owned();
+        let mut guard = 0;
+        while response["kind"] == "pick" {
+            let state = &response["state"];
+            assert_eq!(state["awaitingPick"].as_bool(), Some(true));
+            let index = state["packs"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|p| !p["taken"].as_bool().unwrap())
+                .unwrap()["index"]
+                .as_u64()
+                .unwrap();
+            response = service
+                .invoke(
+                    "limited_pick_a_pack_pick",
+                    json!({"sessionId": id, "packIndex": index}),
+                )
+                .unwrap();
+            guard += 1;
+            assert!(guard < 10, "pick-a-pack did not terminate");
+        }
+        assert_eq!(response["kind"], "draft");
+        assert_eq!(response["state"]["variantKind"].as_str(), Some("pick_a_pack"));
+        let draft = &service.drafts[&id];
+        assert_eq!(draft.variant, Some(Variant::PickAPack));
+        // The normal draft starts, with the human's first chosen booster on top.
+        assert_eq!(draft.current.session.status, DraftStatus::Drafting);
+        assert_eq!(
+            draft.current.session.current_pack[0]
+                .as_ref()
+                .map(|p| p.0.len()),
+            Some(15)
+        );
     }
 
     #[test]
@@ -2779,5 +3077,5 @@ fn gauntlet_view(id: &str, g: &Gauntlet) -> Value {
     let opponents: Vec<Value> = g.opponents.iter().enumerate().map(|(i,d)|json!({"round":i+1,"deckName":d.name,"mainCount":d.main.len(),"sideboardCount":d.sideboard.len()})).collect();
     let complete = g.round_recorded && g.round == g.opponents.len();
     json!({"gauntletId":id,"kind":g.kind,"rounds":g.opponents.len(),"currentRound":g.round,"wins":g.wins,"losses":g.losses,
-        "completed":complete,"humanDeckName":g.human.name,"currentOpponent":if complete {None} else {opponents.get(g.round-1)},"opponents":opponents})
+        "completed":complete,"humanDeckName":g.human.name,"variantKind":g.variant.map(Variant::id),"currentOpponent":if complete {None} else {opponents.get(g.round-1)},"opponents":opponents})
 }

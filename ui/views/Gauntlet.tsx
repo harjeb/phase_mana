@@ -102,6 +102,11 @@ export default function Gauntlet() {
       const decks = await fetchMatchDecks(gauntletId);
       setMatchDecks(decks);
       const formatId = activeGauntlet.kind === "sealed" ? "sealed" : "draft";
+      const gameMode =
+        activeGauntlet.variantKind === "pack_wars" ||
+        activeGauntlet.variantKind === "pack_wars_hand"
+          ? activeGauntlet.variantKind
+          : undefined;
       const [human, opponent] = await Promise.all([
         buildGauntletDeck("Gauntlet Deck", decks.humanMain, decks.humanSideboard, formatId),
         buildGauntletDeck(
@@ -112,7 +117,7 @@ export default function Gauntlet() {
         ),
       ]);
       armGauntletReturn(gauntletId, activeGauntlet.currentRound);
-      const started = await startGame(human, formatId, undefined, [opponent], undefined, decks.humanConspiracies ?? [], undefined, [decks.opponentConspiracies ?? []]);
+      const started = await startGame(human, formatId, undefined, [opponent], undefined, decks.humanConspiracies ?? [], undefined, [decks.opponentConspiracies ?? []], undefined, gameMode);
       if (!started) {
         clearGauntletReturn();
         return;

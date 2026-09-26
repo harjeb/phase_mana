@@ -29,7 +29,7 @@ const platform: IPlatformApi = {
     // The host owns one session: the deck the player picked becomes seat 0 and
     // the chosen AI decks seats 1–3. Omitting a deck falls back to the host's
     // built-in casual deck.
-    startGame: async ({ deck, format, commanderName, opponentDecks, conspiracies, customRules, opponentConspiracies, aiDifficulty, llm }) => {
+    startGame: async ({ deck, format, commanderName, opponentDecks, conspiracies, customRules, opponentConspiracies, aiDifficulty, llm, gameMode }) => {
       if ((opponentDecks?.length ?? 0) > 3) {
         throw new Error(t`Local Phase supports up to three AI opponents (four players).`);
       }
@@ -62,6 +62,7 @@ const platform: IPlatformApi = {
         format: format ?? deck.format ?? "standard",
         difficulty: aiDifficulty,
         llm,
+        gameMode,
         humanDeck,
         humanCommanders: commanders,
         humanConspiracies: conspiracies,

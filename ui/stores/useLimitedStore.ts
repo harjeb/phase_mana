@@ -14,6 +14,7 @@ import type {
   SealedPool,
   SealedSetup,
   SealedTemplateMetadata,
+  PickAPackResponse,
   VariantSetup,
   WinstonSetup,
   WinstonState,
@@ -63,6 +64,10 @@ interface LimitedStore {
   ) => Promise<DraftState>;
   /** Solomon Draft: the human is the splitter and assigns cards to a pile. */
   splitVariant: (sessionId: string, pile: DraftCard[]) => Promise<DraftState>;
+  /** Pick-a-Pack: generate the pooled boosters and start the snake pick. */
+  startPickAPack: (setup: VariantSetup) => Promise<PickAPackResponse>;
+  /** Pick-a-Pack: claim a booster, or receive the finished normal draft. */
+  pickPack: (sessionId: string, packIndex: number) => Promise<PickAPackResponse>;
 
   startWinston: (setup: WinstonSetup) => Promise<WinstonState>;
   winstonTake: (sessionId: string) => Promise<WinstonState>;
@@ -275,6 +280,36 @@ export const useLimitedStore = create<LimitedStore>((set) => ({
       });
       set({ activeDraft: state, lastError: null });
       return state;
+    } catch (err) {
+      const msg = String(err);
+      set({ lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  startPickAPack: async (setup) => {
+    set({ isStarting: true, lastError: null });
+    try {
+      const response = await invoke<PickAPackResponse>("limited_start_pick_a_pack", { setup });
+      if (response.kind === "draft") set({ activeDraft: response.state });
+      set({ isStarting: false });
+      return response;
+    } catch (err) {
+      const msg = String(err);
+      set({ isStarting: false, lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  pickPack: async (sessionId, packIndex) => {
+    try {
+      const response = await invoke<PickAPackResponse>("limited_pick_a_pack_pick", {
+        sessionId,
+        packIndex,
+      });
+      if (response.kind === "draft") set({ activeDraft: response.state });
+      set({ lastError: null });
+      return response;
     } catch (err) {
       const msg = String(err);
       set({ lastError: msg });

@@ -2,15 +2,16 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Boxes, Crown, Dice5, Hourglass, Layers, Shuffle, Swords, Wand2, X } from "lucide-react";
+import { Boxes, Crown, Dice5, Hourglass, Layers, Package, Shuffle, Swords, Wand2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SetPicker } from "@/components/limited/SetPicker";
 import { SetSymbol } from "@/components/limited/SetSymbol";
+import { PickAPackDialog } from "@/components/limited/PickAPackDialog";
 import { useLimitedStore } from "@/stores/useLimitedStore";
 import { fetchEditionInfo, fetchLocalSets, fetchSetPool, type EditionInfo } from "@/api/limitedEdition";
 import { cn } from "@/lib/utils";
-import type { DraftCard } from "@/types/limited";
+import type { DraftCard, PickAPackView } from "@/types/limited";
 import type { ScryfallSet } from "@/types/scryfall";
 export default function Limited() {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ export default function Limited() {
   const startWinston = useLimitedStore((s) => s.startWinston);
   const startCommanderDraft = useLimitedStore((s) => s.startCommanderDraft);
   const startVariant = useLimitedStore((s) => s.startVariant);
+  const startPickAPack = useLimitedStore((s) => s.startPickAPack);
+  const pickPack = useLimitedStore((s) => s.pickPack);
   const importCube = useLimitedStore((s) => s.importCubeFromCubeCobra);
   const isStarting = useLimitedStore((s) => s.isStarting);
   const lastError = useLimitedStore((s) => s.lastError);
@@ -50,6 +53,7 @@ export default function Limited() {
   const [seedInput, setSeedInput] = useState("");
   const [picksPerPass, setPicksPerPass] = useState(1);
   const [rejectRarity, setRejectRarity] = useState("rare");
+  const [pickView, setPickView] = useState<PickAPackView | null>(null);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const seedOpt = useMemo(() => {
     const trimmed = seedInput.trim();
@@ -165,6 +169,53 @@ export default function Limited() {
         seed: seedOpt,
       });
       navigate(`/sealed/${result.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartPackWarsHand = async () => {
+    try {
+      const pool = await fetchPool();
+      const result = await startSealed({
+        poolType: "Full",
+        numBoosters: 1,
+        pool,
+        variant: "pack_wars_hand",
+        seed: seedOpt,
+      });
+      navigate(`/sealed/${result.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartPickAPack = async () => {
+    try {
+      const pool = await fetchPool();
+      const response = await startPickAPack({
+        pool,
+        variant: "pick_a_pack",
+        seed: seedOpt,
+        podSize: 2,
+      });
+      if (response.kind === "draft") {
+        navigate(`/draft/${response.state.sessionId}`);
+        return;
+      }
+      setPickView(response.state);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handlePickPack = async (index: number) => {
+    if (!pickView) return;
+    try {
+      const response = await pickPack(pickView.sessionId, index);
+      if (response.kind === "draft") {
+        setPickView(null);
+        navigate(`/draft/${response.state.sessionId}`);
+        return;
+      }
+      setPickView(response.state);
     } catch {
       /* surfaced via lastError */
     }
@@ -453,6 +504,24 @@ export default function Limited() {
           />
 
           <ModeCard
+            icon={<Boxes className="h-5 w-5" />}
+            title={t`Pack Wars — Pack in Hand`}
+            description={t`The whole pack starts in your hand; each turn you may play a basic from outside the game.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Start Pack-in-Hand`)}
+            disabled={startBlocked}
+            onStart={handleStartPackWarsHand}
+          />
+
+          <ModeCard
+            icon={<Package className="h-5 w-5" />}
+            title={t`Pick-a-Pack`}
+            description={t`Snake-pick which unopened boosters you and the AI will draft from, then draft normally.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Choose packs`)}
+            disabled={startBlocked}
+            onStart={handleStartPickAPack}
+          />
+
+          <ModeCard
             icon={<Layers className="h-5 w-5" />}
             title={t`Duplicate Sealed (Mirror)`}
             description={t`Everyone opens the same five packs and builds from identical pools.`}
@@ -660,6 +729,15 @@ export default function Limited() {
           })}
         </ul>
       </CollapsibleSection>
+
+      <PickAPackDialog
+        view={pickView}
+        pending={isStarting || fetchingPool}
+        onPick={handlePickPack}
+        onOpenChange={(open) => {
+          if (!open) setPickView(null);
+        }}
+      />
     </div>
   );
 }

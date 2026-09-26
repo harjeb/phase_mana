@@ -145,6 +145,7 @@ async function initializeGame({
   customRules,
   opponentConspiracies,
   tournamentAiDifficulty,
+  gameMode,
   isLaunchCurrent,
 }: {
   deck: Deck;
@@ -158,6 +159,8 @@ async function initializeGame({
   tournamentAiDifficulty?: AiDifficultyLabel;
   /** P5: a full custom ruleset; when set the host ignores `formatId`. */
   customRules?: CustomFormatRules;
+  /** Special local game mode forwarded to the host (e.g. `pack_wars_hand`). */
+  gameMode?: string;
   set: (partial: Partial<GameState>) => void;
   get: () => GameState;
   isLaunchCurrent: () => boolean;
@@ -313,6 +316,7 @@ async function initializeGame({
       opponentConspiracies,
       aiDifficulty: tournamentAiDifficulty ?? usePreferencesStore.getState().aiDifficulty,
       llm: tournamentAiDifficulty ? undefined : llmSeatRequest(usePreferencesStore.getState().llmSeat),
+      gameMode,
     });
     const result = await (firstForgeStart ? withForgeStartTimeout(start) : start);
     if (!isLaunchCurrent()) {
@@ -343,6 +347,7 @@ async function initializeGame({
         customRules,
         opponentConspiracies,
         tournamentAiDifficulty,
+        gameMode,
         isLaunchCurrent,
       });
     }
@@ -384,7 +389,7 @@ export const useGameStore = create<GameState>()(
       updateGameView: (view) => set({ gameView: view }),
       setGameConfig: (config) => set({ gameConfig: config }),
       dismissIronsmithDeckError: () => set({ ironsmithDeckError: null }),
-      startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies, tournamentAiDifficulty) => {
+      startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies, tournamentAiDifficulty, gameMode) => {
         if (get().isGameActive) return false;
         if (gameLaunchInFlight !== null) {
           toast.info(t`The previous game is still closing. Try again in a moment.`);
@@ -403,6 +408,7 @@ export const useGameStore = create<GameState>()(
             customRules,
             opponentConspiracies,
             tournamentAiDifficulty,
+            gameMode,
             set,
             get,
             isLaunchCurrent: () => launchGeneration === gameLaunchGeneration,

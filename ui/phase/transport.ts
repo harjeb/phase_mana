@@ -105,6 +105,8 @@ export async function startLocalDeckGame(decks: {
   difficulty?: string;
   /** Optional OpenAI-compatible endpoint that plays the AI seats. */
   llm?: import("@/lib/llmSeat").LlmSeatRequest;
+  /** Special local game mode, e.g. `pack_wars_hand` (whole pack as opening hand). */
+  gameMode?: string;
   extraOpponents?: { deck: string[]; commanders: string[]; conspiracy?: string[]; sideboard?: string[] }[];
 }): Promise<void> {
   invalidateSnapshotGeneration();

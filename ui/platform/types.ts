@@ -29,6 +29,8 @@ export interface StartGameParams {
   aiDifficulty?: string;
   /** Optional OpenAI-compatible endpoint that plays the AI seats. */
   llm?: LlmSeatRequest;
+  /** Special local game mode, e.g. `pack_wars_hand` (whole pack as opening hand). */
+  gameMode?: string;
 }
 
 export interface StartMultiplayerGameParams {

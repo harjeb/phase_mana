@@ -111,6 +111,8 @@ export interface GameState {
     opponentConspiracies?: string[][],
     /** Per-game built-in AI override; never changes user preferences. */
     tournamentAiDifficulty?: import("@/lib/aiDifficulty").AiDifficultyLabel,
+    /** Special local game mode forwarded to the host (e.g. `pack_wars_hand`). */
+    gameMode?: string,
   ) => Promise<boolean>;
   startManualTabletopGame: (deck: Deck, formatId?: string, commanderName?: string) => Promise<void>;
   startManualRoomHost: (localPlayerSlot: string) => Promise<void>;

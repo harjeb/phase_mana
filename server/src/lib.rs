@@ -18,7 +18,7 @@ use engine::{
         coverage::card_face_gaps,
         deck_loading::{load_and_hydrate_decks, load_deck_with_conspiracy_choices, resolve_deck_list, ConspiracyChoice, DeckList, PlayerDeckList},
         deck_validation::validate_name_deck_for_format_full,
-        engine::{apply, start_game},
+        engine::{apply, start_game, start_game_skip_mulligan},
         interaction::bind_interaction_authority,
     },
     types::{
@@ -66,6 +66,8 @@ mod conspiracy_tests;
 mod table_tests;
 #[cfg(test)]
 mod game_log_tests;
+#[cfg(test)]
+mod pack_wars_tests;
 
 mod game_log;
 mod llm_seat;
@@ -365,6 +367,11 @@ pub struct StartRequest {
     /// Additional opponents after seat 1; the local human always owns seat 0.
     #[serde(default)]
     pub extra_opponents: Vec<OpponentDeck>,
+    /// Casual post-start reshuffle from `docs/开包与轮抽玩法规则.md`. `"pack_wars_hand"`
+    /// is the Mini-Master variant where the opened pack is the whole starting
+    /// hand and only basic lands remain in the library.
+    #[serde(default)]
+    pub game_mode: Option<String>,
 }
 
 #[derive(Default, Deserialize)]
@@ -410,6 +417,43 @@ struct Session {
 
 mod limited;
 
+/// `docs/开包与轮抽玩法规则.md` §1 variant: the opened pack is the whole
+/// starting hand, so after the normal mulligan every non-basic card moves to
+/// hand and the basic lands become the library. The guide's "play one basic
+/// from outside each turn" then falls out of the normal draw step, and the
+/// deck-out flag is cleared so the variant's "ignore draw effects" convention
+/// holds.
+fn apply_whole_pack_hand(game: &mut GameState) {
+    use engine::types::{CoreType, Supertype, Zone};
+    for p in 0..game.players.len() {
+        let ids: Vec<_> = game.players[p]
+            .hand
+            .iter()
+            .chain(game.players[p].library.iter())
+            .copied()
+            .collect();
+        let (basics, pack): (Vec<_>, Vec<_>) = ids.into_iter().partition(|id| {
+            game.objects.get(id).is_some_and(|o| {
+                o.card_types.core_types.contains(&CoreType::Land)
+                    && o.card_types.supertypes.contains(&Supertype::Basic)
+            })
+        });
+        for id in &pack {
+            if let Some(o) = game.objects.get_mut(id) {
+                o.zone = Zone::Hand;
+            }
+        }
+        for id in &basics {
+            if let Some(o) = game.objects.get_mut(id) {
+                o.zone = Zone::Library;
+            }
+        }
+        game.players[p].hand = pack.into_iter().collect();
+        game.players[p].library = basics.into_iter().collect();
+        game.players[p].drew_from_empty_library = false;
+    }
+}
+
 pub struct Host {
     limited: limited::LimitedService,
     db: Arc<CardDatabase>,
@@ -438,6 +482,12 @@ impl Host {
     pub fn start(&mut self, request: StartRequest) -> Result<Snapshot, HostError> {
         let limited = request.custom_rules.is_none()
             && matches!(request.format.as_deref(), Some("draft" | "sealed"));
+        // Pack Wars is a 30-card Limited variant (one booster + 15 basics), so it
+        // must clear the 40-card Limited floor every other Limited deck obeys.
+        let pack_wars = matches!(
+            request.game_mode.as_deref(),
+            Some("pack_wars" | "pack_wars_hand")
+        );
         if request.extra_opponents.len() > 2 {
             return Err(bad("Local tables support 2–4 players"));
         }
@@ -449,8 +499,11 @@ impl Host {
             }
         }
         let format_id = request.format.as_deref();
-        let (config, commander, fixed_deck) =
+        let (mut config, commander, fixed_deck) =
             resolve_format(format_id, player_count, request.custom_rules.as_ref())?;
+        if pack_wars {
+            config.deck_size = DeckSizeRule::Minimum(30);
+        }
         if !commander
             && (!request.human_commanders.is_empty()
                 || !request.ai_commanders.is_empty()
@@ -494,7 +547,7 @@ impl Host {
             if fixed_deck {
                 continue;
             }
-            if limited && deck.len() < 40 {
+            if limited && !pack_wars && deck.len() < 40 {
                 return Err(bad(format!(
                     "{label}: Limited main deck requires at least 40 cards"
                 )));
@@ -630,7 +683,16 @@ impl Host {
         }
         let mut log = GameLog::new();
         let before = game.clone();
-        let result = start_game(&mut game);
+        let result = if request.game_mode.as_deref() == Some("pack_wars_hand") {
+            // The guide's pack-in-hand variant never takes a normal opening
+            // hand, so it must not run the mulligan either.
+            start_game_skip_mulligan(&mut game)
+        } else {
+            start_game(&mut game)
+        };
+        if request.game_mode.as_deref() == Some("pack_wars_hand") {
+            apply_whole_pack_hand(&mut game);
+        }
         log.capture(&before, &game, &result.events);
         bind_interaction_session(&mut game);
         let ai_session = AiSession::arc_from_game(&game);
