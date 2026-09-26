@@ -767,6 +767,12 @@ impl LimitedService {
                     draft.current = draft.undo.pop().ok_or("No draft pick to undo")?;
                     draft.pending.clear();
                     draft.pending_effect = false;
+                    // Undoing the last pick puts the draft back before the
+                    // Back Draft hand-off, so the swap must be re-applied when
+                    // the pick is redone.
+                    if draft.variant == Some(Variant::BackDraft) {
+                        draft.back_draft_swapped = false;
+                    }
                 } else if command == "limited_pick_card" {
                     let mut next = draft.current.clone();
                     let name = text(&args, "cardName")?;
@@ -832,7 +838,7 @@ impl LimitedService {
                         && !draft.back_draft_swapped
                         && draft.current.session.status == DraftStatus::Deckbuilding
                     {
-                        swap_seat_pools(&mut draft.current.session);
+                        swap_seat_pools(&mut draft.current.session, &mut draft.current.rng);
                         draft.back_draft_swapped = true;
                     }
                 }
@@ -1708,9 +1714,16 @@ fn winston_view(id: &str, s: &DraftSession) -> Value {
         "deckSize":deck_size,"pickedPile":s.pools[0].iter().map(Card::from).collect::<Vec<_>>(),
         "aiPickCount":ai_picks,"awaitingHuman":!complete && active_seat==0,"isComplete":complete})
 }
-fn swap_seat_pools(s: &mut DraftSession) {
-    for i in (0..s.pools.len()).step_by(2) {
-        s.pools.swap(i, i + 1);
+fn swap_seat_pools(s: &mut DraftSession, rng: &mut ChaCha20Rng) {
+    use rand::seq::SliceRandom;
+    // The guide randomizes the pairings, so shuffle the seats and swap
+    // adjacent entries (an odd seat is left unpaired).
+    let mut seats: Vec<usize> = (0..s.pools.len()).collect();
+    seats.shuffle(rng);
+    for pair in seats.chunks(2) {
+        if let [a, b] = pair {
+            s.pools.swap(*a, *b);
+        }
     }
 }
 
@@ -2024,13 +2037,30 @@ impl LimitedService {
         if custom {
             return Ok((to_instances(&setup.pool), "CUBE".into()));
         }
-        let code = setup
-            .pool
-            .iter()
-            .find_map(|c| c.id.strip_prefix("limited:").and_then(|r| r.split(':').next()))
-            .ok_or("Rotisserie needs a standard set pool")?;
-        let pool = self.load_pool(code)?;
-        Ok((to_instances(&pool_cards(&pool)), pool.code))
+        // Rotisserie uses one or two full sets, each card once.
+        let mut codes: Vec<String> = Vec::new();
+        for card in &setup.pool {
+            if let Some(code) = card
+                .id
+                .strip_prefix("limited:")
+                .and_then(|r| r.split(':').next())
+            {
+                if !codes.iter().any(|c| c.eq_ignore_ascii_case(code)) {
+                    codes.push(code.to_string());
+                }
+            }
+        }
+        if codes.is_empty() {
+            return Err("Rotisserie needs a standard set pool".into());
+        }
+        if codes.len() > 2 {
+            return Err("Rotisserie uses one or two full sets".into());
+        }
+        let mut cards = Vec::new();
+        for code in &codes {
+            cards.extend(to_instances(&pool_cards(&self.load_pool(code)?)));
+        }
+        Ok((cards, codes[0].clone()))
     }
 
     fn start_variant(&mut self, args: &Value) -> Result<Value> {
@@ -2046,7 +2076,12 @@ impl LimitedService {
             ));
         }
         let seed = setup.seed.unwrap_or_else(rand::random);
-        let seats = 2usize;
+        // Rotisserie is arranged by pool size, so it takes a pod; the other
+        // interactive variants are duels.
+        let seats = match variant {
+            Variant::Rotisserie => usize::from(setup.pod_size.unwrap_or(2)).clamp(2, 8),
+            _ => 2usize,
+        };
         let (mut cards, set_code) = match variant {
             Variant::Rotisserie => self.variant_single_copies(&setup)?,
             _ => self.variant_dealt_cards(&setup, seats as u8, 3, seed)?,
@@ -2072,6 +2107,12 @@ impl LimitedService {
             _ => {}
         }
         let id = self.id("variant");
+        // Solomon: the guide randomizes who splits first and who chooses.
+        let initial_splitter = if variant == Variant::Solomon {
+            rng.random_range(0..seats)
+        } else {
+            0
+        };
         let mut vd = VariantDraft {
             kind: variant,
             seat_count: seats,
@@ -2086,7 +2127,7 @@ impl LimitedService {
             active: 0,
             forward: true,
             batch: Vec::new(),
-            splitter: 0,
+            splitter: initial_splitter,
             awaiting_split: false,
             solomon_piles: None,
             continuous_queue: Vec::new(),
@@ -2463,9 +2504,11 @@ fn advance_continuous(vd: &mut VariantDraft) {
         let (seat, count) = vd.continuous_queue[0];
         let take = count.min(vd.batch.len());
         if seat == 0 {
+            // Keep any picks already made this step: a 1-2-1 batch asks the
+            // human for two cards in a row, and re-clearing `pending` here let
+            // that seat keep drawing from the batch (55/33 instead of 44/44).
             vd.offer = vd.batch.clone();
             vd.need = take;
-            vd.pending.clear();
             return;
         }
         for _ in 0..take {
@@ -2592,8 +2635,10 @@ fn variant_split(vd: &mut VariantDraft, pile: &[String]) -> Result<()> {
     if vd.kind != Variant::Solomon || !vd.awaiting_split {
         return Err("No split is pending".into());
     }
-    if pile.is_empty() || pile.len() >= vd.batch.len() {
-        return Err("Give each pile at least one card".into());
+    // The guide explicitly allows an 8/0 split, so an empty pile is legal;
+    // only a pile holding more ids than the batch is nonsense.
+    if pile.len() > vd.batch.len() {
+        return Err("More cards than the batch".into());
     }
     let mut a = Vec::new();
     let mut b = Vec::new();
@@ -2969,6 +3014,31 @@ mod variant_tests {
     }
 
     #[test]
+    fn rotisserie_honors_a_larger_pod() {
+        let mut service = LimitedService::default();
+        let initial = service
+            .invoke(
+                "limited_start_variant",
+                json!({"setup":{"pool":cube_pool(20),"customPool":true,"variant":"rotisserie","seed":5,"podSize":4}}),
+            )
+            .unwrap();
+        let id = initial["sessionId"].as_str().unwrap().to_owned();
+        let mut guard = 0;
+        loop {
+            let s = state(&mut service, &id);
+            if s["isComplete"].as_bool().unwrap() {
+                break;
+            }
+            pick(&mut service, &id);
+            guard += 1;
+            assert!(guard < 100, "rotisserie did not terminate");
+        }
+        let session = &service.drafts[&id].current.session;
+        assert_eq!(session.pools.len(), 4);
+        assert_eq!(session.pools.iter().map(Vec::len).sum::<usize>(), 20);
+    }
+
+    #[test]
     fn continuous_takes_one_one_two_per_batch() {
         let mut service = LimitedService::default();
         let id = start_variant(&mut service, "continuous", 90);
@@ -2987,8 +3057,9 @@ mod variant_tests {
         }
         assert_eq!(&needs[..3], &[1, 1, 2]);
         // Two cards are set aside, then every one of the remaining 88 is dealt.
-        let total: usize = service.drafts[&id].current.session.pools.iter().map(Vec::len).sum();
-        assert_eq!(total, 88);
+        let pools = &service.drafts[&id].current.session.pools;
+        assert_eq!(pools[0].len(), 44, "the human must take exactly 44");
+        assert_eq!(pools[1].len(), 44, "the bot must take exactly 44");
     }
 
     #[test]
@@ -3014,6 +3085,28 @@ mod variant_tests {
             .invoke("limited_variant_pick", json!({"sessionId": id, "cardId": choose, "pile": 0}))
             .unwrap();
         assert_eq!(after_choose["awaitingSplit"].as_bool(), Some(true));
+    }
+
+    #[test]
+    fn solomon_allows_an_eight_zero_split() {
+        let mut service = LimitedService::default();
+        let id = start_variant(&mut service, "solomon", 90);
+        let batch: Vec<Value> = state(&mut service, &id)["currentPack"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|c| c["id"].clone())
+            .collect();
+        // The guide explicitly permits putting the whole batch in one pile.
+        service
+            .invoke("limited_variant_split", json!({"sessionId": id, "pile": batch}))
+            .expect("an 8/0 split must be accepted");
+        let vd = &service.variants[&id];
+        assert_eq!(
+            vd.pools[0].len() + vd.pools[1].len(),
+            8,
+            "the whole batch must still be dealt"
+        );
     }
 
     #[test]
@@ -3070,6 +3163,26 @@ mod variant_tests {
         assert!(draft.back_draft_swapped);
         // The pool shown to the human is the other seat's draft pool.
         assert_eq!(draft.current.session.pools[0].len(), 45);
+        // Undoing the final pick puts the draft back before the hand-off;
+        // redoing it must swap the pools again rather than silently skip it.
+        service
+            .invoke("limited_undo_pick", json!({"sessionId": id}))
+            .unwrap();
+        assert!(!service.drafts[&id].back_draft_swapped, "undo must clear the swap");
+        let mut guard = 0;
+        loop {
+            let s = state(&mut service, &id);
+            if s["isComplete"].as_bool().unwrap() {
+                break;
+            }
+            pick(&mut service, &id);
+            guard += 1;
+            assert!(guard < 10, "back draft did not re-terminate");
+        }
+        assert!(
+            service.drafts[&id].back_draft_swapped,
+            "redoing the last pick must restore the swap"
+        );
     }
 }
 

@@ -272,7 +272,12 @@ export default function Limited() {
   const handleStartVariant = async (variant: string) => {
     try {
       const pool = await fetchPool();
-      const state = await startVariant({ pool, variant, seed: seedOpt });
+      const state = await startVariant({
+        pool,
+        variant,
+        seed: seedOpt,
+        podSize: variant === "rotisserie" ? podSize : undefined,
+      });
       navigate(`/draft/${state.sessionId}`);
     } catch {
       /* surfaced via lastError */

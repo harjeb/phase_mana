@@ -23,7 +23,16 @@ export default function Sealed() {
     sideboard: [],
   });
   const TARGET_MAIN_SIZE = activeSealed?.minDeckSize ?? 40;
-  const mainShortBy = Math.max(0, TARGET_MAIN_SIZE - builtDeck.main.length);
+  // Mini-Master is played as opened: the pack is never shown or edited, so the
+  // sealed suggestions are used verbatim.
+  const isPackWars =
+    activeSealed?.variantKind === "pack_wars" ||
+    activeSealed?.variantKind === "pack_wars_hand";
+  const effectiveMain = isPackWars ? (activeSealed?.suggestedDeck?.main ?? []) : builtDeck.main;
+  const effectiveSideboard = isPackWars
+    ? (activeSealed?.suggestedDeck?.sideboard ?? [])
+    : builtDeck.sideboard;
+  const mainShortBy = Math.max(0, TARGET_MAIN_SIZE - effectiveMain.length);
   useEffect(() => {
     if (!id) return;
     if (!activeSealed || activeSealed.sessionId !== id) {
@@ -82,8 +91,8 @@ export default function Sealed() {
                   "sealed",
                   id,
                   activeSealed.aiDecks.length,
-                  builtDeck.main,
-                  builtDeck.sideboard,
+                  effectiveMain,
+                  effectiveSideboard,
                 );
                 navigate(`/gauntlet/${g.gauntletId}`);
               } catch {
@@ -101,14 +110,25 @@ export default function Sealed() {
       </header>
 
       <div className="min-h-0 flex-1">
-        <LimitedDeckBuilder
-          pool={activeSealed.cards}
-          initialMain={initialMain}
-          initialSideboard={initialSideboard}
-          defaultDeckName={activeSealed.deckName}
-          format="sealed"
-          onChange={setBuiltDeck}
-        />
+        {isPackWars ? (
+          <div className="flex h-full items-center justify-center rounded border border-border/50 bg-card/30 p-6">
+            <p className="max-w-md text-center text-sm text-muted-foreground">
+              <Trans>
+                Mini-Master plays the booster exactly as opened. The pack stays hidden
+                until you draw it in the match.
+              </Trans>
+            </p>
+          </div>
+        ) : (
+          <LimitedDeckBuilder
+            pool={activeSealed.cards}
+            initialMain={initialMain}
+            initialSideboard={initialSideboard}
+            defaultDeckName={activeSealed.deckName}
+            format="sealed"
+            onChange={setBuiltDeck}
+          />
+        )}
       </div>
 
       {lastError && (
