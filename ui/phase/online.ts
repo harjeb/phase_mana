@@ -109,7 +109,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
   active = true;
   revision = -1;
   credentials = request === "reconnect" ? initial.data as Credentials : null;
-  update({ endpoint, publicUrl: null, code: credentials?.game_code ?? (initial.data as { game_code?: string } | undefined)?.game_code ?? "", connected: false, message: "Connecting…" });
+  update({ endpoint, publicUrl: null, code: credentials?.game_code ?? (initial.data as { game_code?: string } | undefined)?.game_code ?? "", connected: false, message: t`Connecting…` });
   const current = new WebSocket(endpoint);
   socket = current;
   let hello = false;
@@ -136,7 +136,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
         send("ClientHello", { client_version: "0.1.0", build_commit: "phase-mana", protocol_version: 76, wire_formats: [] });
         update({
           connected: true,
-          message: "Waiting for players…",
+          message: t`Waiting for players…`,
           // The host's shareable base address, when it advertises one. Absent
           // on a bare LAN server, which is why the invite falls back.
           publicUrl: typeof data.public_url === "string" && data.public_url ? data.public_url : null,
@@ -219,7 +219,7 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
         send("ManabrewSnapshot");
       } else if (["Error", "ActionRejected", "ActionFailed", "RequestRejected", "VersionMismatch"].includes(frame.type)) {
         if (frame.type === "RequestRejected" && data?.reason === "ManaBrew: GameNotStarted" && revision < 0) {
-          update({ message: "Waiting for players…" });
+          update({ message: t`Waiting for players…` });
           return;
         }
         const hadAnswer = answer !== null;
@@ -233,14 +233,14 @@ export function connectOnline(endpoint: string, request: { type: string; data?: 
   };
   current.onclose = () => {
     if (socket !== current) return;
-    update({ connected: false, message: "Disconnected — reconnect to resume your seat." });
+    update({ connected: false, message: t`Disconnected — reconnect to resume your seat.` });
     settle(new Error("Connection closed"));
     settleCreate(new Error("Connection closed"));
     settleJoin(new Error("Connection closed"));
     useGameStore.setState({ currentPrompt: null, isWaitingForResponse: false });
     toast.error(t`Connection lost`, { action: { label: "Reconnect", onClick: () => draftSession ? reconnectOnlineDraft(endpoint) : connectOnline(endpoint, "reconnect") } });
   };
-  current.onerror = () => { if (socket === current) fail("Could not connect to the Phase server"); };
+  current.onerror = () => { if (socket === current) fail(t`Could not connect to the Phase server`); };
 }
 
 configureOnlineDraftTransport({ connect: connectOnline, send });
@@ -265,7 +265,7 @@ export function createPrivateRoom(
       deck: input.deck, display_name: input.displayName, public: false, password,
       timer_seconds: null, player_count: input.players,
     } });
-    const timer = setTimeout(() => settleCreate(new Error("The server did not confirm the room in time.")), 30000);
+    const timer = setTimeout(() => settleCreate(new Error(t`The server did not confirm the room in time.`)), 30000);
     pendingCreate = { resolve: (gameCode) => resolve({ gameCode, password }), reject, timer };
   });
 }

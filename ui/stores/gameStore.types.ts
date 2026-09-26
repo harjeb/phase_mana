@@ -109,6 +109,8 @@ export interface GameState {
     /** P5: a full custom ruleset; when set the host ignores `formatId`. */
     customRules?: CustomFormatRules,
     opponentConspiracies?: string[][],
+    /** Per-game built-in AI override; never changes user preferences. */
+    tournamentAiDifficulty?: import("@/lib/aiDifficulty").AiDifficultyLabel,
   ) => Promise<boolean>;
   startManualTabletopGame: (deck: Deck, formatId?: string, commanderName?: string) => Promise<void>;
   startManualRoomHost: (localPlayerSlot: string) => Promise<void>;

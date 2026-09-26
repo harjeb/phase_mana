@@ -36,6 +36,7 @@ export default function OnlinePlay() {
   const [players, setPlayers] = useState(2);
   const [deck, setDeck] = useState("");
   const [error, setError] = useState("");
+  const [errorKind, setErrorKind] = useState<"host" | "join" | null>(null);
   const [inviteText, setInviteText] = useState("");
   const [invite, setInvite] = useState(hostedRoom);
   const [busy, setBusy] = useState<"host" | "join" | null>(null);
@@ -68,6 +69,7 @@ export default function OnlinePlay() {
   async function run(kind: "host" | "join", action: () => Promise<void>) {
     try {
       setError("");
+      setErrorKind(kind);
       setBusy(kind);
       await action();
     } catch (cause) {
@@ -120,6 +122,7 @@ export default function OnlinePlay() {
   function connect(kind: "create" | "join" | "reconnect") {
     try {
       setError("");
+      setErrorKind(null);
       if (kind === "reconnect") return connectOnline(endpoint, "reconnect");
       const data = deckPayload();
       if (kind === "create") connectOnline(endpoint, { type: "CreateGameWithSettings", data: {
@@ -160,6 +163,7 @@ export default function OnlinePlay() {
       <Button variant="primary" onClick={hostRoom} disabled={!!busy || !!invite || state.connected}>
         {busy === "host" ? <Trans>Starting the engine…</Trans> : <Trans>Host and create invitation</Trans>}
       </Button>
+      {error && errorKind === "host" && <p role="alert" className="text-destructive">{error}</p>}
       {invite && <>
         <label className="block"><Trans>Room invitation</Trans>
           <input aria-label={t`Room invitation`} className={field} readOnly value={invite.code} onFocus={event => event.target.select()} />
@@ -182,6 +186,7 @@ export default function OnlinePlay() {
       <Button variant="primary" onClick={joinByInvite} disabled={!!busy || !!invite}>
         {busy === "join" ? <Trans>Joining…</Trans> : <Trans>Join with invitation</Trans>}
       </Button>
+      {error && errorKind === "join" && <p role="alert" className="text-destructive">{error}</p>}
     </div>
 
     <details className="space-y-2 rounded border p-3">
@@ -197,6 +202,6 @@ export default function OnlinePlay() {
     <Button variant="outline" onClick={closeOnline}><Trans>Disconnect</Trans></Button>
     {state.code && <p><Trans>Room code: <strong>{state.code}</strong></Trans></p>}
     <p role="status">{state.message}</p>
-    {error && <p role="alert" className="text-destructive">{error}</p>}
+    {error && errorKind === null && <p role="alert" className="text-destructive">{error}</p>}
   </section>;
 }

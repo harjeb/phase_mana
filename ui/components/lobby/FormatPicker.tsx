@@ -1,4 +1,6 @@
 import { Trans } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName, formatDisplayDescription } from "@/lib/formatLabels";
 import { FormatBadge } from "@/components/game/FormatBadge";
 import { GAME_FORMATS, type GameFormat } from "@/lib/formats";
 interface FormatPickerProps {
@@ -30,6 +32,7 @@ export function FormatPicker({ formats = GAME_FORMATS, onSelect }: FormatPickerP
   );
 }
 function FormatTile({ format, onClick }: { format: GameFormat; onClick: () => void }) {
+  useLingui();
   return (
     <button
       type="button"
@@ -37,10 +40,10 @@ function FormatTile({ format, onClick }: { format: GameFormat; onClick: () => vo
       className="flex flex-col gap-2 rounded-lg border border-border/60 bg-card/60 p-4 text-left transition-colors duration-75 hover:border-primary/60 hover:bg-card/80"
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-base font-semibold leading-tight">{format.name}</h3>
+        <h3 className="text-base font-semibold leading-tight">{formatDisplayName(format)}</h3>
         <FormatBadge formatId={format.id} />
       </div>
-      <p className="text-xs leading-snug text-muted-foreground">{format.description}</p>
+      <p className="text-xs leading-snug text-muted-foreground">{formatDisplayDescription(format)}</p>
     </button>
   );
 }

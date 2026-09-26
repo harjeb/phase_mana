@@ -1,8 +1,8 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { encodeInvite } from "./invite";
-import { hostedRoom, saveHostedRoom, stopHostedRoom } from "./host";
+import { hostedRoom, hostRequest, saveHostedRoom, stopHostedRoom } from "./host";
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 it("keeps the invitation when stop fails, and clears it only after successful teardown", async () => {
   const values = new Map<string, string>();
   vi.stubGlobal("sessionStorage", {
@@ -20,5 +20,27 @@ it("keeps the invitation when stop fails, and clears it only after successful te
   request.mockResolvedValue({ ok: true, json: async () => ({ running: false }) });
   await stopHostedRoom();
   expect(hostedRoom()).toBeNull();
-  expect(request).toHaveBeenLastCalledWith("/api/host/stop", { method: "POST", headers: { "X-Phase-Host": "1" } });
+  expect(request).toHaveBeenLastCalledWith("/api/host/stop", expect.objectContaining({ method: "POST", headers: { "X-Phase-Host": "1" }, signal: expect.any(AbortSignal) }));
+});
+
+
+it("explains an unavailable host service instead of exposing a fetch failure", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
+  await expect(hostRequest("start")).rejects.toThrow("Could not reach the local hosting service");
+});
+
+it("explains HTML responses from a missing API proxy", async () => {
+  vi.stubGlobal("fetch", vi.fn().mockResolvedValue({ ok: true, json: async () => { throw new SyntaxError("Unexpected token <"); } }));
+  await expect(hostRequest("start")).rejects.toThrow("local hosting service returned an invalid response");
+});
+
+it("aborts a stalled start request so the UI can leave its busy state", async () => {
+  vi.useFakeTimers();
+  vi.stubGlobal("fetch", vi.fn((_url, options) => new Promise((_resolve, reject) => {
+    options.signal.addEventListener("abort", () => reject(new DOMException("Aborted", "AbortError")));
+  })));
+  const result = expect(hostRequest("start")).rejects.toThrow("hosting request timed out");
+  await vi.advanceTimersByTimeAsync(120000);
+  await result;
+  expect(vi.getTimerCount()).toBe(0);
 });

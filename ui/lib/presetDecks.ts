@@ -46,6 +46,18 @@ export interface PresetDeckDefinition {
 
 export type PresetDeck = Deck & { engines?: EngineKind[] };
 
+/** Only table variants may reuse decks tagged with a different base format. */
+export function filterPresetDecksForFormat<T extends { format?: string }>(
+  decks: T[],
+  formatId: string | null,
+  customFormat = false,
+): T[] {
+  if (formatId === null || customFormat) return decks;
+  const matching = decks.filter((deck) => (deck.format ?? "standard") === formatId);
+  const tableVariant = ["archenemy", "planechase", "two_headed_giant"].includes(formatId);
+  return tableVariant && matching.length === 0 ? decks : matching;
+}
+
 // A preset without an explicit engines list predates per-engine curation and is
 // assumed playable everywhere except Ironsmith, whose card pool is verified
 // per deck.

@@ -1,5 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react";
 import { useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { TrendChart, type TrendPointView } from "@/components/stats/TrendChart";
@@ -34,19 +35,41 @@ import type { OfflinePlayGame } from "@/lib/offlinePlayRecord";
 import { cn } from "@/lib/utils";
 
 const CARD_ROW_LIMIT = 40;
-const RANGES = [
+function ranges() { return [
   { value: 7, label: t`Last 7 days` },
   { value: 30, label: t`Last 30 days` },
   { value: 90, label: t`Last 90 days` },
   { value: 0, label: t`All time` },
-] as const;
-const RESULTS: { value: MatchResult | "all"; label: string }[] = [
+] as const; }
+function results(): { value: MatchResult | "all"; label: string }[] { return [
   { value: "all", label: t`All results` },
   { value: "win", label: t`Wins` },
   { value: "loss", label: t`Losses` },
   { value: "draw", label: t`Draws` },
   { value: "unfinished", label: t`Unfinished` },
-];
+]; }
+
+function formatLabel(value: string): string {
+  const labels: Record<string, string> = {
+    standard: t`Standard`, pioneer: t`Pioneer`, modern: t`Modern`, legacy: t`Legacy`,
+    vintage: t`Vintage`, pauper: t`Pauper`, premodern: t`Premodern`, commander: t`Commander`,
+    oathbreaker: t`Oathbreaker`, tiny_leaders: t`Tiny Leaders`, duel_commander: t`Duel Commander`,
+    pauper_commander: t`Pauper Commander`, momir: t`Momir`, old_school_93_94: t`Old School 93/94`,
+    old_school_95: t`Old School 95`, archenemy: t`Archenemy`, planechase: t`Planechase`,
+    two_headed_giant: t`Two-Headed Giant`, draft: t`Draft`, sealed: t`Sealed`,
+    brawl: t`Brawl`, historicBrawl: t`Brawl`, Unknown: t`Unknown`,
+  };
+  return labels[value] ?? value;
+}
+
+function deckLabel(value: string): string {
+  if (value === "Unknown deck") return t`Unknown deck`;
+  if (value.endsWith(" (commander)")) {
+    const commander = value.slice(0, -12);
+    return t`${commander} (commander)`;
+  }
+  return value;
+}
 const RESULT_TONE: Record<MatchResult, string> = {
   win: "border-transparent bg-primary text-primary-foreground",
   loss: "border-transparent bg-destructive text-destructive-foreground",
@@ -61,7 +84,7 @@ function percent(value: number): string {
 function duration(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   const rest = Math.round(seconds % 60);
-  return minutes > 0 ? `${minutes}m ${rest}s` : `${rest}s`;
+  return minutes > 0 ? t`${minutes}m ${rest}s` : t`${rest}s`;
 }
 
 function resultLabel(result: MatchResult): string {
@@ -105,11 +128,13 @@ function StatTable({
   rows,
   nameHeader,
   empty,
+  nameLabel = (value: string) => value,
 }: {
   title: string;
   rows: RecordRow[];
   nameHeader: string;
   empty: string;
+  nameLabel?: (value: string) => string;
 }) {
   return (
     <Card>
@@ -133,7 +158,7 @@ function StatTable({
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.key}>
-                  <TableCell className="max-w-[18rem] truncate capitalize">{row.key}</TableCell>
+                  <TableCell className="max-w-[18rem] truncate capitalize">{nameLabel(row.key)}</TableCell>
                   <TableCell className="text-right tabular-nums">{row.games}</TableCell>
                   <TableCell className="text-right tabular-nums">{row.wins}</TableCell>
                   <TableCell className="text-right tabular-nums">{row.losses}</TableCell>
@@ -149,6 +174,7 @@ function StatTable({
 }
 
 export default function MatchHistory() {
+  const { i18n } = useLingui();
   const [matches, setMatches] = useState<OfflinePlayGame[]>(() => loadMatches());
   const [confirmClear, setConfirmClear] = useState(false);
   const [days, setDays] = useState(30);
@@ -179,15 +205,19 @@ export default function MatchHistory() {
 
   const decided = summary.wins + summary.losses;
   const gamesPoints: TrendPointView[] = series.map((point) => ({
-    label: point.key,
+    label: i18n.date(point.dayMs),
     value: point.games,
-    detail: `${point.key}: ${point.wins}–${point.losses}`,
+    detail: `${i18n.date(point.dayMs)}: ${point.wins}–${point.losses}`,
   }));
-  const winRatePoints: TrendPointView[] = series.map((point) => ({
-    label: point.key,
-    value: point.cumulativeWinRate,
-    detail: `${point.key}: ${percent(point.cumulativeWinRate)} cumulative`,
-  }));
+  const winRatePoints: TrendPointView[] = series.map((point) => {
+    const date = i18n.date(point.dayMs);
+    const rate = percent(point.cumulativeWinRate);
+    return {
+      label: date,
+      value: point.cumulativeWinRate,
+      detail: t`${date}: ${rate} cumulative`,
+    };
+  });
 
   function clear() {
     clearMatches();
@@ -239,25 +269,25 @@ export default function MatchHistory() {
               label={t`Range`}
               value={String(days)}
               onChange={(value) => setDays(Number(value))}
-              options={RANGES.map((range) => ({ value: String(range.value), label: range.label }))}
+              options={ranges().map((range) => ({ value: String(range.value), label: range.label }))}
             />
             <FilterSelect
               label={t`Format`}
               value={format}
               onChange={setFormat}
-              options={[{ value: "", label: t`All formats` }, ...formatOptions.map((value) => ({ value, label: value }))]}
+              options={[{ value: "", label: t`All formats` }, ...formatOptions.map((value) => ({ value, label: formatLabel(value) }))]}
             />
             <FilterSelect
               label={t`Deck`}
               value={deck}
               onChange={setDeck}
-              options={[{ value: "", label: t`All decks` }, ...deckOptions.map((value) => ({ value, label: value }))]}
+              options={[{ value: "", label: t`All decks` }, ...deckOptions.map((value) => ({ value, label: deckLabel(value) }))]}
             />
             <FilterSelect
               label={t`Result`}
               value={result}
               onChange={(value) => setResult(value as MatchResult | "all")}
-              options={RESULTS}
+              options={results()}
             />
             <label className="flex min-w-40 flex-1 flex-col gap-1 text-xs text-muted-foreground">
               <Trans>Search</Trans>
@@ -308,8 +338,8 @@ export default function MatchHistory() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <StatTable title={t`Decks`} nameHeader={t`Deck`} rows={decks} empty={t`No decided games in this range.`} />
-            <StatTable title={t`Formats`} nameHeader={t`Format`} rows={formats} empty={t`No decided games in this range.`} />
+            <StatTable title={t`Decks`} nameHeader={t`Deck`} rows={decks} nameLabel={deckLabel} empty={t`No decided games in this range.`} />
+            <StatTable title={t`Formats`} nameHeader={t`Format`} rows={formats} nameLabel={formatLabel} empty={t`No decided games in this range.`} />
             <StatTable
               title={t`Opponents`}
               nameHeader={t`Opponent deck`}
@@ -366,13 +396,13 @@ export default function MatchHistory() {
                     return (
                       <TableRow key={match.reportId}>
                         <TableCell className="whitespace-nowrap text-muted-foreground">
-                          {new Date(match.startedAt).toLocaleDateString()}
+                          {i18n.date(new Date(match.startedAt))}
                         </TableCell>
                         <TableCell className="max-w-[12rem] truncate">
                           {seat?.deckName || t`Unknown deck`}
                         </TableCell>
                         <TableCell className="max-w-[12rem] truncate">{opponents || "—"}</TableCell>
-                        <TableCell className="capitalize">{match.format ?? "—"}</TableCell>
+                        <TableCell className="capitalize">{match.format ? formatLabel(match.format) : "—"}</TableCell>
                         <TableCell className="text-right tabular-nums">{duration(match.durationS)}</TableCell>
                         <TableCell className="text-right">
                           <Badge className={cn("whitespace-nowrap", RESULT_TONE[outcome])}>

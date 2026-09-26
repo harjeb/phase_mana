@@ -1,5 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName } from "@/lib/formatLabels";
 import { useCallback, useMemo, useState } from "react";
 import { ArrowLeft, CheckCircle2, ClipboardPaste, Download } from "lucide-react";
 import { toast } from "sonner";
@@ -39,6 +41,7 @@ export function ImportDeckTextDialog({
   onImport,
   mode = "create",
 }: ImportDeckTextDialogProps) {
+  useLingui();
   const guideSteps = [
     t`Open your deck on Moxfield.`,
     t`Click the ••• menu, then Export.`,
@@ -263,7 +266,7 @@ export function ImportDeckTextDialog({
                       <option value=""><Trans>Auto-detect</Trans></option>
                       {IMPORT_FORMATS.map((format) => (
                         <option key={format.id} value={format.id}>
-                          {format.name}
+                          {formatDisplayName(format)}
                         </option>
                       ))}
                     </select>

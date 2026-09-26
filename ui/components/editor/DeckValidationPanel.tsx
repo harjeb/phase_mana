@@ -1,8 +1,11 @@
 import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName } from "@/lib/formatLabels";
 import { AlertTriangle } from "lucide-react";
 import { useDeckStore } from "@/stores/useDeckStore";
 import { getFormat, validateDeckSections } from "@/lib/formats";
 export function DeckValidationPanel({ unsupportedNames }: { unsupportedNames?: Set<string> }) {
+  useLingui();
   const { currentDeck } = useDeckStore();
   const format = getFormat(currentDeck.format ?? "standard");
   if (!format) return null;
@@ -23,6 +26,7 @@ export function DeckValidationPanel({ unsupportedNames }: { unsupportedNames?: S
       : [];
   const errors = [...compatibilityErrors, ...validation.errors];
   const count = errors.length;
+  const formatName = formatDisplayName(format);
   return (
     <div
       data-editor-validation
@@ -33,7 +37,7 @@ export function DeckValidationPanel({ unsupportedNames }: { unsupportedNames?: S
         <span className="text-sm font-semibold text-destructive">
           {count} {count === 1 ? t`issue` : t`issues`}
         </span>
-        <span className="text-xs text-destructive/60">for {format.name}</span>
+        <span className="text-xs text-destructive/60">{t`Format: ${formatName}`}</span>
       </div>
       <ul className="mt-1.5 space-y-0.5 pl-6">
         {errors.map((err, i) => (

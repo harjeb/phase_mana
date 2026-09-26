@@ -6,7 +6,20 @@ import { Input } from "@/components/ui/input";
 import { tournaments } from "@/phase/tournaments";
 import type { TournamentOutcome, TournamentRole } from "@/phase/tournaments";
 
+import { LocalTournament } from "@/views/LocalTournament";
+
 export function Tournaments() {
+  const [mode, setMode] = useState<"local" | "remote">("local");
+  return <>
+    <div className="flex flex-wrap gap-2 px-4 pt-4 sm:px-6 lg:px-8" role="group" aria-label={t`Tournament mode`}>
+      <Button variant={mode === "local" ? "primary" : "outline"} aria-pressed={mode === "local"} onClick={() => setMode("local")}><Trans>Local AI tournament</Trans></Button>
+      <Button variant={mode === "remote" ? "primary" : "outline"} aria-pressed={mode === "remote"} onClick={() => setMode("remote")}><Trans>Remote / manual tournament</Trans></Button>
+    </div>
+    {mode === "local" ? <LocalTournament /> : <RemoteTournaments />}
+  </>;
+}
+
+function RemoteTournaments() {
   const state = useSyncExternalStore(tournaments.subscribe, tournaments.getSnapshot);
   const [endpoint, setEndpoint] = useState(state.endpoint || "ws://127.0.0.1:9374/ws");
   const [error, setError] = useState("");

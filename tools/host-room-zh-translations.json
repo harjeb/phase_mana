@@ -1,0 +1,19 @@
+{
+  "Connecting…": {"hans":"正在连接…","hant":"正在連線…"},
+  "Waiting for players…": {"hans":"等待玩家加入…","hant":"等待玩家加入…"},
+  "Disconnected — reconnect to resume your seat.": {"hans":"连接已断开，请重新连接以恢复席位。","hant":"連線已中斷，請重新連線以恢復席位。"},
+  "Could not connect to the Phase server": {"hans":"无法连接到对局服务器。","hant":"無法連線至對局伺服器。"},
+  "The server did not confirm the room in time.": {"hans":"服务器未能及时确认房间，请重试。","hant":"伺服器未能及時確認房間，請重試。"},
+  "The local hosting service returned an invalid response. Start the local app and try again.": {
+    "hans": "本地主持服务返回了无效响应。请启动本地应用后重试。",
+    "hant": "本機主持服務傳回了無效回應。請啟動本機應用程式後重試。"
+  },
+  "The hosting request timed out. Check the local app and try again.": {
+    "hans": "主持请求超时。请检查本地应用后重试。",
+    "hant": "主持請求逾時。請檢查本機應用程式後重試。"
+  },
+  "Could not reach the local hosting service. Start the local app and try again.": {
+    "hans": "无法连接本地主持服务。请启动本地应用后重试。",
+    "hant": "無法連線至本機主持服務。請啟動本機應用程式後重試。"
+  }
+}

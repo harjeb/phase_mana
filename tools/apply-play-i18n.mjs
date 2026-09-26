@@ -19,6 +19,7 @@ const translations = Object.assign(
     'tools/onboarding-i18n-translations.json',
     'tools/settings-page-i18n-translations.json',
     'tools/settings-components-i18n-translations.json',
+    'tools/local-tournament-i18n-translations.json',
     ...process.argv.slice(2),
   ].map(path => JSON.parse(readFileSync(path, 'utf8'))),
 );

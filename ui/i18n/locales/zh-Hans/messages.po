@@ -13,6 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: ui/components/game/KeywordHelpPanel.tsx
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
+msgid "Printed example: {0}"
+msgstr "牌面示例：{0}"
+
 #. js-lingui-explicit-id
 #: ui/views/OnlineDraftPanel.tsx:24
 #: ui/views/OnlinePlay.tsx:20
@@ -177,7 +182,7 @@ msgstr "“锁定”会固定战场上的牌库、坟墓场、放逐区和统帅
 msgid "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 msgstr "“写实”使用完整的印刷卡牌图像。“画面优先”显示插画，并叠加清晰的名称和类别。“迷你牌框”在插画周围添加名称栏和类别栏。此设置仅影响战场上的卡牌。"
 
-#: ui/views/Tournaments.tsx:119
+#: ui/views/Tournaments.tsx:132
 msgid "(dropped)"
 msgstr "（已退赛）"
 
@@ -580,15 +585,15 @@ msgstr "1 张牌"
 
 #: ui/components/lobby/CreateGameDialog.tsx:51
 msgid "100 cards, singleton, 30 life, 1v1 commander"
-msgstr "100 张，单卡制，30 点生命，一对一指挥官"
+msgstr "100张，单卡制，30点起始生命，一对一指挥官对战"
 
 #: ui/components/lobby/CreateGameDialog.tsx:48
 msgid "100 cards, singleton, 40 life, requires commander"
-msgstr "100 张，单卡制，40 点生命，需要指挥官"
+msgstr "100张，单卡制，40点起始生命，需要指挥官"
 
 #: ui/components/lobby/CreateGameDialog.tsx:52
 msgid "100 cards, singleton, 40 life, uncommon creature commander, commons only"
-msgstr "100 张，单卡制，40 点生命，非普通生物指挥官，其余仅限普通牌"
+msgstr "100张，单卡制，40点起始生命，使用非普通生物作指挥官，其余仅限普通牌"
 
 #: ui/views/CasualModes.tsx:119
 msgid "100-card singleton, 30 life, tuned for 1v1."
@@ -657,7 +662,7 @@ msgstr "现开牌池构筑的 40 张套牌"
 #: ui/components/lobby/CreateGameDialog.tsx:59
 #: ui/components/lobby/CreateGameDialog.tsx:60
 msgid "40+ cards, no copy limit, 20 life"
-msgstr "40 张以上，同名牌数量不限，20 点生命"
+msgstr "至少40张，不限同名牌数量，20点起始生命"
 
 #: ui/components/dev/designSystem/sections/AssetsSection.tsx:20
 msgid "48px"
@@ -665,7 +670,7 @@ msgstr "48px"
 
 #: ui/components/lobby/CreateGameDialog.tsx:50
 msgid "50 cards, singleton, 20 life, legendary commander with mana value 3 or less"
-msgstr "50 张，单卡制，20 点生命，法术力值不超过 3 的传奇指挥官"
+msgstr "50张，单卡制，20点起始生命，指挥官须为法术力值不大于3的传奇生物"
 
 #: ui/views/CasualModes.tsx:112
 msgid "50-card singleton, 20 life, a legendary commander with mana value 3 or less."
@@ -673,7 +678,7 @@ msgstr "50 张单卡套牌、20 点生命，统帅须为法术力值不大于 3 
 
 #: ui/components/lobby/CreateGameDialog.tsx:49
 msgid "60 cards, singleton, 20 life, planeswalker + signature spell"
-msgstr "60 张，单卡制，20 点生命，鹏洛客与招牌咒语"
+msgstr "60张，单卡制，20点起始生命，一张鹏洛客与一张招牌咒语"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:403
 msgid "60-card constructed, rotating sets"
@@ -681,7 +686,7 @@ msgstr "60 张牌的构筑赛，系列轮替"
 
 #: ui/components/lobby/CreateGameDialog.tsx:57
 msgid "60-card decks, 20 life, a shared planar deck and the planar die"
-msgstr "60 张套牌，20 点生命，共享时空套牌和时空骰"
+msgstr "60张套牌，20点起始生命，共用时空套牌与时空骰"
 
 #: ui/views/CasualModes.tsx:105
 msgid "60-card singleton, 20 life, a planeswalker plus its signature spell."
@@ -721,31 +726,31 @@ msgstr "60 张牌，自 Return to Ravnica 起的系列"
 
 #: ui/components/lobby/CreateGameDialog.tsx:43
 msgid "60+ cards, max 4 copies, 20 life, 8th Edition forward"
-msgstr "60 张以上，每张最多 4 张，20 点生命，自第八版起"
+msgstr "至少60张，同名牌最多4张，20点起始生命，牌池从第八版起"
 
 #: ui/components/lobby/CreateGameDialog.tsx:44
 msgid "60+ cards, max 4 copies, 20 life, all sets, banned list"
-msgstr "60 张以上，每张最多 4 张，20 点生命，所有系列，禁牌表"
+msgstr "至少60张，同名牌最多4张，20点起始生命，全系列牌池，设有禁牌表"
 
 #: ui/components/lobby/CreateGameDialog.tsx:45
 msgid "60+ cards, max 4 copies, 20 life, all sets, restricted list"
-msgstr "60 张以上，每张最多 4 张，20 点生命，所有系列，限牌表"
+msgstr "至少60张，同名牌最多4张，20点起始生命，全系列牌池，设有限制牌表"
 
 #: ui/components/lobby/CreateGameDialog.tsx:46
 msgid "60+ cards, max 4 copies, 20 life, commons only"
-msgstr "60 张以上，每张最多 4 张，20 点生命，仅限普通牌"
+msgstr "至少60张，同名牌最多4张，20点起始生命，仅限普通牌"
 
 #: ui/components/lobby/CreateGameDialog.tsx:42
 msgid "60+ cards, max 4 copies, 20 life, Return to Ravnica forward"
-msgstr "60 张以上，每张最多 4 张，20 点生命，自再访拉尼卡起"
+msgstr "至少60张，同名牌最多4张，20点起始生命，牌池从再访拉尼卡起"
 
 #: ui/components/lobby/CreateGameDialog.tsx:41
 msgid "60+ cards, max 4 copies, 20 life, rotating sets"
-msgstr "60 张以上，每张最多 4 张，20 点生命，系列轮替"
+msgstr "至少60张，同名牌最多4张，20点起始生命，牌池定期轮替"
 
 #: ui/components/lobby/CreateGameDialog.tsx:47
 msgid "60+ cards, max 4 copies, Fourth Edition through Scourge"
-msgstr "60 张以上，每张最多 4 张，第四版至劫运降临"
+msgstr "至少60张，同名牌最多4张，牌池从第四版到劫运降临"
 
 #: ui/components/dev/designSystem/sections/AssetsSection.tsx:16
 msgid "96px"
@@ -1062,14 +1067,26 @@ msgstr "快攻"
 msgid "AI"
 msgstr "AI"
 
+#: ui/views/LocalTournament.tsx:80
+msgid "AI {id}"
+msgstr "AI {id}"
+
 #: ui/components/lobby/DeckVsSelector.tsx:877
 #: ui/components/lobby/DeckVsSelector.tsx:881
 msgid "AI difficulty"
 msgstr "AI 难度"
 
+#: ui/views/LocalTournament.tsx:72
+#~ msgid "AI matches run real engine games only when requested. Draws require a replay. Leaving or reloading a human game without an engine result leaves the match pending; a confirmed concession counts as a loss. No sideboarding or prizes."
+#~ msgstr "AI 对局仅在点击后由真实引擎运行。平局需要重赛。在引擎给出结果前离开或刷新玩家对局，该场比赛仍待完成；引擎确认的认输计为负场。不支持换备牌，也不设奖励。"
+
 #: ui/views/Settings.tsx:336
 msgid "AI opponent"
 msgstr "AI 对手"
+
+#: ui/views/LocalTournament.tsx:84
+msgid "AI sideboarding uses a modest deterministic heuristic: swap at most one nonland copy to favor removal relevant to the opponent’s original deck types. It never reads live hands and is not an optimal strategy. Main and sideboard counts stay fixed."
+msgstr "AI 换备牌使用简单的确定性策略：每次最多交换一张非地牌，根据对手原始套牌的类别选择更适用的去除。不会读取实时手牌，也不代表最优策略。主牌和备牌的数量保持不变。"
 
 #: ui/components/editor/CardSearch.tsx:182
 msgid "Alchemy"
@@ -1082,7 +1099,7 @@ msgstr "全部"
 
 #: ui/components/deck/DeckListControls.tsx:116
 msgid "All formats"
-msgstr "所有赛制"
+msgstr "全部赛制"
 
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:142
 msgid "All types"
@@ -1094,7 +1111,7 @@ msgstr "透明度"
 
 #: ui/components/lobby/CreateGameDialog.tsx:54
 msgid "Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn"
-msgstr "Alpha 至堕落王朝，22 张限牌，7 张禁牌，法术力灼伤"
+msgstr "牌池从阿尔法版到堕落帝国，22张限制牌、7张禁牌，启用法术力灼烧"
 
 #: ui/views/CasualModes.tsx:133
 msgid "Alpha through Fallen Empires, 22 restricted, 7 banned, mana burn."
@@ -1165,7 +1182,7 @@ msgstr "仅作用于战场上的牌。手牌、堆叠和对话框的显示设置
 #: ui/components/lobby/OpenTableCard.tsx:21
 #: ui/views/CasualModes.tsx:168
 msgid "Archenemy"
-msgstr "魔王"
+msgstr "魔王战"
 
 #. placeholder {0}: res.status
 #: ui/lib/archidekt.ts:184
@@ -1301,7 +1318,7 @@ msgstr "可用操作 · {0}"
 msgid "Available on current face · {0}"
 msgstr "当前牌面可用 · {0}"
 
-#: ui/views/Tournaments.tsx:65
+#: ui/views/Tournaments.tsx:78
 msgid "Available tournaments"
 msgstr "可参加的锦标赛"
 
@@ -1408,13 +1425,17 @@ msgstr "战场区域栏顺序"
 msgid "Before changing the mana base"
 msgstr "更改法术力基础之前"
 
-#: ui/views/Tournaments.tsx:55
+#: ui/views/Tournaments.tsx:68
 msgid "Best of one"
 msgstr "单局决胜"
 
-#: ui/views/Tournaments.tsx:55
+#: ui/views/Tournaments.tsx:68
 msgid "Best of three"
 msgstr "三局两胜"
+
+#: ui/views/LocalTournamentSideboard.tsx:15
+msgid "Between-game sideboarding"
+msgstr "局间换备牌"
 
 #: ui/components/editor/CardSearch.tsx:278
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
@@ -1428,6 +1449,16 @@ msgstr "被阻挡："
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:28
 msgid "Blue"
 msgstr "蓝"
+
+#: ui/views/LocalTournament.tsx:95
+#: ui/views/LocalTournament.tsx:100
+msgid "BO1 · First to 1 win"
+msgstr "BO1 · 一局定胜负"
+
+#: ui/views/LocalTournament.tsx:95
+#: ui/views/LocalTournament.tsx:100
+msgid "BO3 · First to 2 wins · Sideboarding"
+msgstr "BO3 · 三局两胜 · 支持换备牌"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:144
 msgid "Board appearance"
@@ -1633,11 +1664,11 @@ msgstr "按来源"
 msgid "By tag"
 msgstr "按标签"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Bye"
 msgstr "轮空"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Byes"
 msgstr "轮空"
 
@@ -1663,8 +1694,9 @@ msgstr "缓存"
 #: ui/components/settings/MyAssetsSection.tsx:169
 #: ui/views/DeckEditor.tsx:932
 #: ui/views/DeckEditor.tsx:1108
+#: ui/views/LocalTournament.tsx:111
 #: ui/views/Settings.tsx:536
-#: ui/views/Tournaments.tsx:87
+#: ui/views/Tournaments.tsx:100
 msgid "Cancel"
 msgstr "取消"
 
@@ -1694,7 +1726,7 @@ msgstr "在改变方向前捕获一次实验。检查点保存在此设备上。
 
 #: ui/components/editor/ImportDeckTextDialog.tsx:167
 msgid "Card"
-msgstr "牌"
+msgstr "卡牌"
 
 #: ui/components/editor/DeckListView.tsx:107
 #: ui/components/editor/DeckListView.tsx:108
@@ -1883,6 +1915,10 @@ msgstr "休闲模式"
 #: ui/lib/aiDifficulty.ts:14
 msgid "cEDH"
 msgstr "cEDH"
+
+#: ui/views/LocalTournament.tsx:109
+msgid "Champion"
+msgstr "冠军"
 
 #: ui/components/lobby/TableRoomSidebar.tsx:247
 msgid "Change deck"
@@ -2396,6 +2432,7 @@ msgstr "指挥区和特殊区域的牌未被复制"
 #: ui/components/lobby/DeckVsSelector.tsx:46
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/Draft.tsx:109
+#: ui/views/LocalTournament.tsx:19
 msgid "Commander"
 msgstr "指挥官"
 
@@ -2512,7 +2549,11 @@ msgstr "配置添加"
 msgid "Confirm addition"
 msgstr "确认添加"
 
-#: ui/views/Tournaments.tsx:87
+#: ui/views/LocalTournament.tsx:111
+msgid "Confirm deletion"
+msgstr "确认删除"
+
+#: ui/views/Tournaments.tsx:100
 msgid "Confirm end tournament"
 msgstr "确认结束锦标赛"
 
@@ -2528,7 +2569,7 @@ msgstr "确认选择"
 msgid "Confirm when you're ready"
 msgstr "准备好后请确认"
 
-#: ui/views/Tournaments.tsx:37
+#: ui/views/Tournaments.tsx:50
 msgid "Connect"
 msgstr "连接"
 
@@ -2550,7 +2591,7 @@ msgstr "连接多人游戏后即可创建牌桌。"
 
 #: ui/components/lobby/UserList.tsx:58
 #: ui/views/OnlineDraftPanel.tsx:59
-#: ui/views/Tournaments.tsx:39
+#: ui/views/Tournaments.tsx:52
 msgid "Connected"
 msgstr "已连接"
 
@@ -2584,7 +2625,7 @@ msgstr "连接失败。"
 msgid "Connection lost"
 msgstr "连接已断开"
 
-#: ui/phase/transport.ts:122
+#: ui/phase/transport.ts:125
 msgid "Conspiracy reveal was rejected"
 msgstr "阴谋揭露被拒绝"
 
@@ -2903,7 +2944,7 @@ msgstr "无法上传该图片"
 msgid "Couldn’t verify deck ownership."
 msgstr "无法验证套牌归属。"
 
-#: ui/stores/useScryfallStore.ts:799
+#: ui/stores/useScryfallStore.ts:800
 msgid "Couldnt find uris for printing: "
 msgstr "找不到以下版本的 URI： "
 
@@ -2919,7 +2960,7 @@ msgstr "覆盖"
 msgid "Cover every battlefield style (larger download)"
 msgstr "包含所有战场样式（下载量更大）"
 
-#: ui/views/Tournaments.tsx:59
+#: ui/views/Tournaments.tsx:72
 msgid "Create"
 msgstr "创建"
 
@@ -2930,6 +2971,10 @@ msgstr "创建一个可复用的标签，并将拖入的牌添加到其中。"
 #: ui/views/OnlineDraftPanel.tsx:50
 msgid "Create draft"
 msgstr "创建轮抽"
+
+#: ui/views/LocalTournament.tsx:96
+msgid "Create local tournament"
+msgstr "创建本地锦标赛"
 
 #: ui/views/OnlinePlay.tsx:191
 msgid "Create room"
@@ -2944,7 +2989,7 @@ msgstr "创建牌桌"
 msgid "Create tag"
 msgstr "创建标签"
 
-#: ui/views/Tournaments.tsx:45
+#: ui/views/Tournaments.tsx:58
 msgid "Create tournament"
 msgstr "创建锦标赛"
 
@@ -3338,6 +3383,14 @@ msgstr "删除整个收藏？"
 msgid "Delete image"
 msgstr "删除图片"
 
+#: ui/views/LocalTournament.tsx:110
+msgid "Delete local tournament"
+msgstr "删除本地锦标赛"
+
+#: ui/views/LocalTournament.tsx:111
+msgid "Delete this saved event and all its results?"
+msgstr "删除此已保存的赛事及全部结果？"
+
 #: ui/components/deck/DeckHubEntryCard.tsx:124
 msgid "Deleted user"
 msgstr "已注销用户"
@@ -3395,7 +3448,7 @@ msgid "Disabled"
 msgstr "已禁用"
 
 #: ui/views/OnlinePlay.tsx:197
-#: ui/views/Tournaments.tsx:38
+#: ui/views/Tournaments.tsx:51
 msgid "Disconnect"
 msgstr "断开连接"
 
@@ -3403,7 +3456,7 @@ msgstr "断开连接"
 #: ui/components/lobby/UserList.tsx:70
 #: ui/phase/onlineDraft.test.ts:40
 #: ui/views/OnlineDraftPanel.tsx:59
-#: ui/views/Tournaments.tsx:39
+#: ui/views/Tournaments.tsx:52
 msgid "Disconnected"
 msgstr "已断线"
 
@@ -3532,8 +3585,8 @@ msgstr "拖动以定位，使用滑块缩放。"
 msgid "Drag to reposition · scroll or pinch to zoom · drop or paste an image"
 msgstr "拖动以重新定位 · 滚动或捏合以缩放 · 拖入或粘贴图片"
 
-#: ui/views/Tournaments.tsx:100
-#: ui/views/Tournaments.tsx:112
+#: ui/views/Tournaments.tsx:113
+#: ui/views/Tournaments.tsx:125
 msgid "Draw"
 msgstr "平局"
 
@@ -3541,12 +3594,16 @@ msgstr "平局"
 msgid "Draw a card"
 msgstr "抓一张牌"
 
+#: ui/views/LocalTournament.tsx:105
+msgid "Draws requiring replay"
+msgstr "需要重赛的平局次数"
+
 #: ui/components/editor/DeckListView.tsx:1436
 #: ui/components/editor/DeckListView.tsx:2321
 msgid "Drop cards here"
 msgstr "将卡牌放到此处"
 
-#: ui/views/Tournaments.tsx:89
+#: ui/views/Tournaments.tsx:102
 msgid "Drop from tournament"
 msgstr "退出锦标赛"
 
@@ -3558,7 +3615,7 @@ msgstr "放到此处"
 msgid "Drop image to use as playmat"
 msgstr "拖入图片以用作牌垫"
 
-#: ui/views/Tournaments.tsx:93
+#: ui/views/Tournaments.tsx:106
 msgid "dropped"
 msgstr "已退赛"
 
@@ -3574,6 +3631,7 @@ msgstr "双色地"
 #: ui/components/lobby/DeckVsSelector.tsx:49
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:118
+#: ui/views/LocalTournament.tsx:20
 msgid "Duel Commander"
 msgstr "单挑指挥官"
 
@@ -3596,6 +3654,10 @@ msgstr "例如 http://localhost:11434/v1 或 https://api.openai.com/v1"
 #: ui/components/OnboardingWelcome.tsx:88
 msgid "e.g. StormCrow"
 msgstr "例如：风暴乌鸦"
+
+#: ui/views/LocalTournament.tsx:83
+msgid "Each Play or Run AI action runs one real game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
+msgstr "每次点击进行对局或运行 AI 都会运行一局真实比赛。BO1 先赢一局获胜，BO3 先赢两局获胜。平局不计胜场。BO3 可在局间换备牌，但首局前不可换备牌。不设奖励。"
 
 #: ui/components/lobby/TableSetupGameCard.tsx:435
 msgid "Each player opens packs and builds independently."
@@ -3680,7 +3742,7 @@ msgstr "结界"
 msgid "Enchantments"
 msgstr "结界"
 
-#: ui/views/Tournaments.tsx:86
+#: ui/views/Tournaments.tsx:99
 msgid "End tournament"
 msgstr "结束锦标赛"
 
@@ -3746,7 +3808,8 @@ msgstr "输入密码以加入 {0}。"
 msgid "Enter the room code."
 msgstr "请输入房间代码。"
 
-#: ui/views/Tournaments.tsx:92
+#: ui/views/LocalTournament.tsx:101
+#: ui/views/Tournaments.tsx:105
 msgid "Entrants"
 msgstr "参赛者"
 
@@ -3767,7 +3830,7 @@ msgstr "估算涵盖分级 2–4。分级 1（休闲）和 5（cEDH）由玩家�
 msgid "Estimated unblocked damage: {0}"
 msgstr "预计未被阻挡的伤害：{0}"
 
-#: ui/views/Tournaments.tsx:46
+#: ui/views/Tournaments.tsx:59
 msgid "Event name"
 msgstr "赛事名称"
 
@@ -3855,7 +3918,7 @@ msgstr "展开所有分区"
 msgid "experimental"
 msgstr "实验性"
 
-#: ui/views/Tournaments.tsx:77
+#: ui/views/Tournaments.tsx:90
 msgid "Expires"
 msgstr "过期时间"
 
@@ -4082,7 +4145,7 @@ msgstr "筛选…"
 #: ui/components/editor/CardSearch.tsx:964
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:115
 msgid "Filters"
-msgstr "筛选"
+msgstr "筛选条件"
 
 #: ui/components/companion/GameSummaryDialog.tsx:41
 msgid "Final scores"
@@ -4101,6 +4164,10 @@ msgstr "正在为你寻找牌桌…"
 msgid "Finish"
 msgstr "版本类型"
 
+#: ui/views/LocalTournament.tsx:45
+msgid "Finish or leave your current game first."
+msgstr "请先完成或离开当前对局。"
+
 #: ui/components/editor/DeckTagManagerDialog.tsx:81
 msgid "Finish renaming"
 msgstr "完成重命名"
@@ -4113,7 +4180,7 @@ msgstr "第一名"
 msgid "First Print"
 msgstr "首次印刷"
 
-#: ui/views/Game.tsx:2551
+#: ui/views/Game.tsx:2568
 msgid "First Strike Damage"
 msgstr "先制打击伤害"
 
@@ -4238,7 +4305,7 @@ msgstr "跟随对局"
 msgid "Foreground and muted copy"
 msgstr "前景色与弱化文本"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Forfeit"
 msgstr "认输"
 
@@ -4259,6 +4326,7 @@ msgstr "Forge 对战 AI 需要服务器用户名。"
 #: ui/components/lobby/CreateGameDialog.tsx:468
 #: ui/components/lobby/TableRoomSidebar.tsx:103
 #: ui/components/lobby/TableSetupGameCard.tsx:153
+#: ui/views/LocalTournament.tsx:92
 msgid "Format"
 msgstr "赛制"
 
@@ -4456,7 +4524,7 @@ msgstr "对局操作预览"
 
 #: ui/views/OnlineDraftPanel.tsx:80
 msgid "Games"
-msgstr "对局"
+msgstr "对局数"
 
 #: ui/components/layout/TopBar.tsx:69
 msgid "Gauntlet"
@@ -5096,7 +5164,7 @@ msgstr "加入正在等待玩家的牌桌。"
 msgid "Join an open table or create a room for your group."
 msgstr "加入开放的牌桌，或创建房间与朋友一起玩。"
 
-#: ui/views/Tournaments.tsx:81
+#: ui/views/Tournaments.tsx:94
 msgid "Join as player"
 msgstr "以玩家身份加入"
 
@@ -5259,10 +5327,15 @@ msgstr "离开牌桌"
 msgid "Leave Without Saving"
 msgstr "不保存离开"
 
+#: ui/views/LocalTournament.tsx:85
+msgid "Leaving or reloading a human game without an engine result leaves that game unscored. A confirmed concession counts as one game loss."
+msgstr "在引擎给出结果前离开或刷新玩家对局，该局不计分。引擎确认的认输计为输掉一局。"
+
 #: ui/components/editor/CardSearch.tsx:158
 #: ui/components/lobby/CreateGameDialog.tsx:44
 #: ui/components/lobby/DeckVsSelector.tsx:42
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Legacy"
 msgstr "薪传"
 
@@ -5430,6 +5503,7 @@ msgid "Loading local sets…"
 msgstr "正在加载本地系列…"
 
 #: ui/components/play/PresetDeckShelf.tsx:53
+#: ui/views/LocalTournament.tsx:98
 msgid "Loading preset decks…"
 msgstr "正在加载预设套牌…"
 
@@ -5460,6 +5534,18 @@ msgstr "正在加载你的套牌"
 msgid "Loading…"
 msgstr "正在加载…"
 
+#: ui/views/Tournaments.tsx:15
+msgid "Local AI tournament"
+msgstr "本地 AI 锦标赛"
+
+#: ui/views/LocalTournament.tsx:71
+#~ msgid "Local AI tournament · Single elimination · Best of one. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+#~ msgstr "本地 AI 锦标赛 · 单败淘汰 · 一局定胜负。由一名玩家和 3、7 或 15 名 AI 参赛。套牌与内置 AI 难度在创建时随机分配，并保存在此浏览器中，允许重复套牌。"
+
+#: ui/views/LocalTournament.tsx:82
+msgid "Local AI tournament · Single elimination. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+msgstr "本地 AI 锦标赛 · 单败淘汰。由一名玩家和 3、7 或 15 名 AI 参赛。套牌与内置 AI 难度在创建时随机分配，并保存在此浏览器中，允许重复套牌。"
+
 #: ui/components/editor/DeckIntentPanel.tsx:43
 msgid "local analysis"
 msgstr "本地分析"
@@ -5484,6 +5570,10 @@ msgstr "在本地与 AI 对战，体验常规赛制之外的轮抽变体、指�
 #: ui/views/Limited.tsx:202
 msgid "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
 msgstr "本地游戏支持使用六包补充包的现开赛，以及对抗 AI、每次选一张牌的三包补充包轮抽。仅列出已下载且可用的牌池（参见 README）。"
+
+#: ui/stores/useLocalTournamentStore.ts:23
+msgid "Local tournaments require a browser with Web Locks support."
+msgstr "本地锦标赛需要支持 Web Locks 的浏览器。"
 
 #: ui/phase/Launch.tsx:177
 #~ msgid "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
@@ -5522,7 +5612,7 @@ msgstr "看起来不错！"
 msgid "LORE CHAPTERS"
 msgstr "传世章节"
 
-#: ui/views/Tournaments.tsx:113
+#: ui/views/Tournaments.tsx:126
 msgid "Loser's game wins"
 msgstr "败者胜局"
 
@@ -5549,6 +5639,7 @@ msgstr "主牌"
 
 #: ui/components/editor/DeckSelectionTray.tsx:86
 #: ui/components/editor/ImportDeckTextDialog.tsx:186
+#: ui/views/LocalTournamentSideboard.tsx:17
 msgid "Main deck"
 msgstr "主牌"
 
@@ -5561,6 +5652,11 @@ msgstr "主牌需要再添加 {0} 张牌{1}。"
 #: ui/views/OnlineDraftBuilder.tsx:17
 msgid "Main deck:"
 msgstr "主牌："
+
+#: ui/views/LocalTournamentSideboard.tsx:19
+#: ui/views/LocalTournamentSideboard.tsx:19
+msgid "Main-deck copy to remove"
+msgstr "换出的主牌"
 
 #: ui/components/lobby/PlayerCard.tsx:22
 #: ui/components/lobby/QualificationBadge.tsx:17
@@ -5672,7 +5768,7 @@ msgstr "在此管理上传的资源"
 msgid "Manual"
 msgstr "手动"
 
-#: ui/views/Tournaments.tsx:112
+#: ui/views/Tournaments.tsx:125
 msgid "Manual match outcome"
 msgstr "手动录入对局结果"
 
@@ -5680,15 +5776,15 @@ msgstr "手动录入对局结果"
 msgid "Manual preserves your placement; automatic modes arrange new cards."
 msgstr "手动会保留你的摆放；自动模式会排列新加入的牌。"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Manual result — unverified"
 msgstr "手动结果 —— 未经核实"
 
-#: ui/stores/useGameStore.ts:470
+#: ui/stores/useGameStore.ts:477
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "手动房间客户端需要手动桌面运行时。"
 
-#: ui/stores/useGameStore.ts:441
+#: ui/stores/useGameStore.ts:448
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "手动房间主机需要手动桌面运行时。"
 
@@ -5724,14 +5820,18 @@ msgstr "对局"
 msgid "Match in progress"
 msgstr "对局进行中"
 
-#: ui/views/Tournaments.tsx:54
+#: ui/views/Tournaments.tsx:67
 msgid "Match structure"
 msgstr "对局结构"
 
+#: ui/views/LocalTournament.tsx:95
+msgid "Match type"
+msgstr "对局赛制"
+
 #: ui/views/OnlineDraftPanel.tsx:80
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Matches"
-msgstr "对局"
+msgstr "对局列表"
 
 #: ui/components/editor/SideboardPlansDialog.tsx:78
 msgid "Matchup"
@@ -5871,8 +5971,9 @@ msgstr "模型 ID，例如 gpt-4o 或 llama3.1:8b"
 #: ui/components/lobby/CustomFormatDialog.tsx:475
 #: ui/components/lobby/DeckVsSelector.tsx:41
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Modern"
-msgstr "近代"
+msgstr "摩登"
 
 #: ui/components/lobby/CreateGameDialog.tsx:53
 #: ui/components/lobby/DeckVsSelector.tsx:51
@@ -5887,7 +5988,7 @@ msgstr "Momir 的疯狂 — 引擎会提供一套雪境基本地套牌和随机�
 
 #: ui/components/lobby/CreateGameDialog.tsx:53
 msgid "Momir's Madness — the engine supplies the 60-card snow-basic deck and random-creature emblem"
-msgstr "莫密尔的疯狂——引擎提供 60 张雪境基本地套牌和随机生物徽记"
+msgstr "莫米尔的疯狂：自动提供60张雪境基本地套牌及随机生物徽记"
 
 #: ui/components/companion/StatusChips.tsx:23
 msgid "Monarch"
@@ -6118,7 +6219,7 @@ msgstr "没有进行中的手动桌面游戏。"
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "此赛制没有可用的 AI 套牌 — 请自行选择一套。"
 
-#: ui/phase/transport.ts:121
+#: ui/phase/transport.ts:124
 msgid "No authorized conspiracy reveal action"
 msgstr "没有已授权的阴谋揭露操作"
 
@@ -6167,6 +6268,11 @@ msgstr "没有符合此赛制和搜索条件的社区套牌。"
 msgid "No Community decks match your search."
 msgstr "没有符合搜索条件的社区套牌。"
 
+#: ui/views/LocalTournament.tsx:89
+#: ui/views/LocalTournament.tsx:97
+msgid "No compatible preset decks are available for this format."
+msgstr "此赛制没有可用的兼容预设套牌。"
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:103
 msgid "No current combat assignments."
 msgstr "当前没有战斗分配。"
@@ -6203,7 +6309,7 @@ msgstr "还没有套牌——前往<0>我的套牌</0>构筑一套吧。"
 msgid "No editable unsupported cards"
 msgstr "没有可编辑的不受支持牌张"
 
-#: ui/views/Tournaments.tsx:93
+#: ui/views/Tournaments.tsx:106
 msgid "No entrants yet."
 msgstr "暂无参赛者。"
 
@@ -6216,7 +6322,7 @@ msgstr "暂无事件。"
 msgid "No fetch implementation available"
 msgstr "没有可用的 fetch 实现"
 
-#: ui/views/Game.tsx:628
+#: ui/views/Game.tsx:632
 msgid "No game card to cast: {cardId}"
 msgstr "没有可施放的卡牌：{cardId}"
 
@@ -6249,7 +6355,7 @@ msgstr "套牌中没有传奇生物——请在下方输入名称。"
 msgid "no lines yet"
 msgstr "暂无数据"
 
-#: ui/stores/useGameStore.ts:674
+#: ui/stores/useGameStore.ts:681
 msgid "No local player is available to concede."
 msgstr "没有可认输的本地玩家。"
 
@@ -6396,7 +6502,7 @@ msgstr "尚无标签"
 msgid "No tokens match this search."
 msgstr "没有符合此搜索的衍生物。"
 
-#: ui/views/Tournaments.tsx:66
+#: ui/views/Tournaments.tsx:79
 msgid "No tournaments listed."
 msgstr "暂无锦标赛。"
 
@@ -6485,6 +6591,7 @@ msgstr "没有可撤销的操作"
 #: ui/components/lobby/DeckVsSelector.tsx:47
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/CasualModes.tsx:104
+#: ui/views/LocalTournament.tsx:19
 msgid "Oathbreaker"
 msgstr "破誓者"
 
@@ -6530,7 +6637,7 @@ msgstr "老学派 93/94"
 
 #: ui/components/lobby/CreateGameDialog.tsx:55
 msgid "Old School 93/94 plus Fourth Edition through Homelands, mana burn"
-msgstr "老派 93/94 加第四版至家园，法术力灼伤"
+msgstr "老学派93/94牌池，加上第四版至家园，启用法术力灼烧"
 
 #: ui/views/CasualModes.tsx:140
 msgid "Old School 93/94 plus Fourth Edition through Homelands."
@@ -6590,7 +6697,7 @@ msgstr "您的局域网 · {0}"
 
 #: ui/components/lobby/CreateGameDialog.tsx:56
 msgid "One archenemy at 40 life against the heroes at 20, with a scheme deck"
-msgstr "一名 40 点生命的魔王使用阴谋套牌，对抗 20 点生命的英雄"
+msgstr "40点生命的魔王对抗各20点生命的勇士，使用阴谋套牌"
 
 #: ui/components/editor/CombosPanel.tsx:189
 msgid "One card away"
@@ -6632,7 +6739,7 @@ msgstr "在线轮抽传输不可用。"
 msgid "Online multiplayer"
 msgstr "在线多人"
 
-#: ui/views/Game.tsx:2553
+#: ui/views/Game.tsx:2570
 msgid "only first & double strikers deal damage now"
 msgstr "现在只有先制打击和连击生物造成伤害"
 
@@ -6640,7 +6747,7 @@ msgstr "现在只有先制打击和连击生物造成伤害"
 msgid "Only the host can do that"
 msgstr "只有房主可以执行此操作"
 
-#: ui/views/Tournaments.tsx:63
+#: ui/views/Tournaments.tsx:76
 msgid "Open"
 msgstr "公开"
 
@@ -6783,11 +6890,11 @@ msgstr "牌面文字"
 msgid "Organize pairings, report results and follow standings."
 msgstr "安排对阵、提交赛果并查看排名。"
 
-#: ui/views/Tournaments.tsx:30
+#: ui/views/Tournaments.tsx:43
 msgid "Organizer"
 msgstr "组织者"
 
-#: ui/views/Tournaments.tsx:42
+#: ui/views/Tournaments.tsx:55
 msgid "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
 msgstr "组织者与玩家凭据分别保存在此浏览器标签页中、针对该服务器。重新连接即可恢复。请在过期前续期；关闭标签页将失去访问权限。"
 
@@ -6862,15 +6969,15 @@ msgstr "每位玩家补充包数"
 msgid "Page Not Found"
 msgstr "页面未找到"
 
-#: ui/views/Tournaments.tsx:85
+#: ui/views/Tournaments.tsx:98
 msgid "Pair next round"
 msgstr "为下一轮配对"
 
-#: ui/views/Tournaments.tsx:51
+#: ui/views/Tournaments.tsx:64
 msgid "Pairing system"
 msgstr "配对系统"
 
-#: ui/views/Tournaments.tsx:94
+#: ui/views/Tournaments.tsx:107
 msgid "Pairings and manual results (unverified)"
 msgstr "配对与手动结果（未经核实）"
 
@@ -6976,13 +7083,15 @@ msgstr "粘贴邀请"
 #: ui/components/lobby/CreateGameDialog.tsx:46
 #: ui/components/lobby/DeckVsSelector.tsx:44
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Pauper"
-msgstr "平民"
+msgstr "纯普"
 
 #: ui/components/lobby/CreateGameDialog.tsx:52
 #: ui/components/lobby/DeckVsSelector.tsx:50
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:125
+#: ui/views/LocalTournament.tsx:21
 msgid "Pauper Commander"
 msgstr "贫民指挥官"
 
@@ -6990,7 +7099,8 @@ msgstr "贫民指挥官"
 msgid "Peer to Peer"
 msgstr "点对点连接"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/LocalTournament.tsx:105
+#: ui/views/Tournaments.tsx:110
 msgid "Pending"
 msgstr "待定"
 
@@ -7015,7 +7125,7 @@ msgstr "持久化选择"
 msgid "Personal theme name"
 msgstr "个人主题名称"
 
-#: ui/views/Tournaments.tsx:36
+#: ui/views/Tournaments.tsx:49
 msgid "Phase broker URL"
 msgstr "Phase 代理服务器地址"
 
@@ -7078,6 +7188,7 @@ msgstr "已由环境变量 PHASE_MANA_CARD_IMAGES 固定。"
 #: ui/components/lobby/CreateGameDialog.tsx:42
 #: ui/components/lobby/DeckVsSelector.tsx:40
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Pioneer"
 msgstr "先驱"
 
@@ -7123,6 +7234,14 @@ msgstr "进行对局"
 msgid "Play modes"
 msgstr "对战模式"
 
+#: ui/views/LocalTournament.tsx:107
+msgid "Play next game"
+msgstr "进行下一局"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Play next game / replay"
+msgstr "进行下一局／重赛"
+
 #: ui/components/layout/navDestinations.ts:52
 #: ui/components/layout/TopBar.tsx:24
 #: ui/components/layout/TopBar.tsx:27
@@ -7135,6 +7254,14 @@ msgstr "离线游戏"
 msgid "Play stats"
 msgstr "对局统计"
 
+#: ui/views/LocalTournament.tsx:107
+msgid "Play tournament game"
+msgstr "进行锦标赛对局"
+
+#: ui/views/LocalTournament.tsx:92
+#~ msgid "Play tournament match"
+#~ msgstr "进行锦标赛对局"
+
 #: ui/components/OnboardingGuide.tsx:7
 msgid "Play with friends"
 msgstr "与好友一起玩"
@@ -7146,8 +7273,8 @@ msgstr "与好友一起玩"
 #: ui/views/OnlinePlay.tsx:108
 #: ui/views/OnlinePlay.tsx:126
 #: ui/views/OnlinePlay.tsx:133
-#: ui/views/Tournaments.tsx:30
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:43
+#: ui/views/Tournaments.tsx:131
 msgid "Player"
 msgstr "玩家"
 
@@ -7159,7 +7286,7 @@ msgstr "玩家详情"
 msgid "Player HUD"
 msgstr "玩家 HUD"
 
-#: ui/views/Tournaments.tsx:81
+#: ui/views/Tournaments.tsx:94
 msgid "Player name"
 msgstr "玩家名称"
 
@@ -7194,7 +7321,7 @@ msgstr "玩家与聊天"
 msgid "Players in the lobby who aren't at a table."
 msgstr "大厅中尚未入座的玩家。"
 
-#: ui/views/Tournaments.tsx:48
+#: ui/views/Tournaments.tsx:61
 msgid "Players per table"
 msgstr "每桌玩家数"
 
@@ -7270,11 +7397,11 @@ msgstr "使用 CubeCobra Cube 进行多人轮抽。"
 msgid "Pod size"
 msgstr "桌位规模"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Points"
 msgstr "积分"
 
-#: ui/views/Tournaments.tsx:74
+#: ui/views/Tournaments.tsx:87
 msgid "Points: win / draw / loss"
 msgstr "积分：胜 / 平 / 负"
 
@@ -7321,6 +7448,7 @@ msgstr "顶级（单局）"
 #: ui/components/lobby/CreateGameDialog.tsx:47
 #: ui/components/lobby/DeckVsSelector.tsx:45
 #: ui/components/lobby/OpenTableCard.tsx:17
+#: ui/views/LocalTournament.tsx:19
 msgid "Premodern"
 msgstr "前摩登"
 
@@ -7541,7 +7669,7 @@ msgstr "随机 AI"
 msgid "Random AI deck"
 msgstr "随机 AI 套牌"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Rank"
 msgstr "排名"
 
@@ -7618,7 +7746,7 @@ msgstr "写实使用印刷画面。规则显示牌张规则和当前对局信息
 msgid "Receive the first game state"
 msgstr "接收初始对局状态"
 
-#: ui/views/Tournaments.tsx:37
+#: ui/views/Tournaments.tsx:50
 msgid "Reconnect"
 msgstr "重新连接"
 
@@ -7684,7 +7812,7 @@ msgid "Refined wood"
 msgstr "精制木材"
 
 #: ui/views/DeckEditor.tsx:697
-#: ui/views/Tournaments.tsx:90
+#: ui/views/Tournaments.tsx:103
 msgid "Refresh"
 msgstr "刷新"
 
@@ -7707,6 +7835,10 @@ msgstr "发布日期"
 #: ui/components/deck/PublishDeckDialog.tsx:90
 msgid "Reload this account deck before publishing it."
 msgstr "发布前请重新加载此账户套牌。"
+
+#: ui/views/Tournaments.tsx:16
+msgid "Remote / manual tournament"
+msgstr "远程／手动锦标赛"
 
 #: ui/components/editor/deckEditor.utils.ts:48
 #: ui/components/editor/DeckListView.tsx:2578
@@ -7876,7 +8008,7 @@ msgstr "重命名套牌"
 msgid "Renderer"
 msgstr "渲染器"
 
-#: ui/views/Tournaments.tsx:77
+#: ui/views/Tournaments.tsx:90
 msgid "Renew credential"
 msgstr "续期凭据"
 
@@ -8066,9 +8198,10 @@ msgstr "旋转牌张"
 msgid "Rotate your device"
 msgstr "请旋转设备"
 
+#: ui/views/LocalTournament.tsx:103
 #: ui/views/OnlineDraftPanel.tsx:57
-#: ui/views/Tournaments.tsx:74
-#: ui/views/Tournaments.tsx:96
+#: ui/views/Tournaments.tsx:87
+#: ui/views/Tournaments.tsx:109
 msgid "Round"
 msgstr "轮次"
 
@@ -8076,7 +8209,7 @@ msgstr "轮次"
 msgid "Rounds"
 msgstr "轮数"
 
-#: ui/views/Tournaments.tsx:58
+#: ui/views/Tournaments.tsx:71
 msgid "Rounds (blank for automatic)"
 msgstr "轮数（留空自动）"
 
@@ -8098,6 +8231,22 @@ msgstr "规则与回合"
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:783
 msgid "Rules text"
 msgstr "规则文字"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run AI game"
+msgstr "运行 AI 对局"
+
+#: ui/views/LocalTournament.tsx:92
+#~ msgid "Run AI match"
+#~ msgstr "运行 AI 对局"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run next AI game"
+msgstr "运行下一局 AI 对局"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run next AI game / replay"
+msgstr "运行下一局 AI 对局／重赛"
 
 #: ui/game/runtimeRegistry.ts:23
 msgid "Runtime unavailable: {kind}"
@@ -8778,8 +8927,14 @@ msgstr "备牌 {0}"
 #: ui/components/editor/ImportDeckTextDialog.tsx:183
 #: ui/components/game/SideboardDialog.tsx:36
 #: ui/components/lobby/CustomFormatDialog.tsx:388
+#: ui/views/LocalTournamentSideboard.tsx:17
 msgid "Sideboard"
 msgstr "备牌"
+
+#: ui/views/LocalTournamentSideboard.tsx:20
+#: ui/views/LocalTournamentSideboard.tsx:20
+msgid "Sideboard copy to add"
+msgstr "换入的备牌"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:460
 msgid "Sideboard only"
@@ -8855,7 +9010,7 @@ msgstr "已登录为 @{0}"
 msgid "Signed in from another tab — this tab was disconnected."
 msgstr "已在另一个标签页登录 — 此标签页已断开连接。"
 
-#: ui/views/Tournaments.tsx:52
+#: ui/views/Tournaments.tsx:65
 msgid "Single elimination"
 msgstr "单败淘汰"
 
@@ -8998,6 +9153,7 @@ msgstr "堆叠默认视图"
 #: ui/components/lobby/CreateGameDialog.tsx:41
 #: ui/components/lobby/DeckVsSelector.tsx:39
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Standard"
 msgstr "标准"
 
@@ -9005,7 +9161,7 @@ msgstr "标准"
 msgid "Standard Modes"
 msgstr "常规模式"
 
-#: ui/views/Tournaments.tsx:117
+#: ui/views/Tournaments.tsx:130
 msgid "Standings from manual reports (unverified)"
 msgstr "基于手动上报的排名（未经核实）"
 
@@ -9193,7 +9349,7 @@ msgstr "结构规则"
 msgid "Submit deck"
 msgstr "提交套牌"
 
-#: ui/views/Tournaments.tsx:114
+#: ui/views/Tournaments.tsx:127
 msgid "Submit unverified result"
 msgstr "提交未经核实的结果"
 
@@ -9213,7 +9369,15 @@ msgstr "受 Manabrew 和 Forge 引擎支持"
 msgid "Surface"
 msgstr "表面"
 
-#: ui/views/Tournaments.tsx:52
+#: ui/views/LocalTournamentSideboard.tsx:27
+msgid "Swap and save"
+msgstr "交换并保存"
+
+#: ui/views/LocalTournamentSideboard.tsx:16
+msgid "Swap one main-deck copy with one sideboard copy. Each swap is saved immediately for this match. Original lists return next round; commanders cannot change."
+msgstr "将一张主牌与一张备牌交换。每次交换立即保存，并用于本轮比赛。下一轮恢复原始牌表；指挥官不可更改。"
+
+#: ui/views/Tournaments.tsx:65
 msgid "Swiss"
 msgstr "瑞士制"
 
@@ -9446,6 +9610,14 @@ msgstr "OpenAI 格式的 API 根地址。从服务商文档里复制的完整接
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
 msgstr "自动处理器会回答只有唯一合法答案的提示（目标、模式……）以及信息性确认（RevealCards、掷骰）。这些始终自动处理 — 无需开关。下面的列表涵盖你可能希望不再被询问的可选费用。"
 
+#: ui/views/LocalTournament.tsx:59
+msgid "The engine did not identify both players. Retry this match."
+msgstr "引擎未能识别双方玩家，请重试本场比赛。"
+
+#: ui/views/LocalTournament.tsx:72
+msgid "The engine returned an invalid tournament result."
+msgstr "引擎返回了无效的比赛结果。"
+
 #: ui/components/lobby/TablePickerDialog.tsx:72
 msgid "The felt you'll play this game on."
 msgstr "本局对战使用的桌面。"
@@ -9482,6 +9654,11 @@ msgstr "主机请求失败。"
 msgid "The Manabrew engine is a work in progress and may have bugs or missing cards. For the most stable experience, play on the Forge engine."
 msgstr "Manabrew 引擎仍在开发中，可能存在错误或缺失卡牌。若想获得最稳定的体验，请使用 Forge 引擎。"
 
+#: ui/views/LocalTournament.tsx:44
+#: ui/views/LocalTournamentSideboard.tsx:25
+msgid "The match changed in another tab. Review the current lists and try again."
+msgstr "另一标签页已更改此比赛。请查看当前牌表后重试。"
+
 #: ui/views/OnlineDraftPanel.tsx:76
 msgid "The match starts when every player has submitted a deck."
 msgstr "当所有玩家都提交套牌后，对局开始。"
@@ -9507,13 +9684,17 @@ msgstr "牌垫会填充一个宽幅的横向区域（约 5:2）。为获得清�
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "预览栏是编辑器共享的牌张检查器。将鼠标悬停在工作区任意位置的牌上，其图片和详情就会显示在那里，不会打断你正在进行的操作。"
 
-#: ui/stores/useGameStore.ts:383
+#: ui/stores/useGameStore.ts:389
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "上一局游戏仍在关闭中。请稍后重试。"
 
 #: ui/components/play/RejoinMatchCard.tsx:148
 msgid "The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out."
 msgstr "无法连接中继服务器。你可以从此设备移除这场对局，但你的座位可能会保留，直到中继服务器判定超时。"
+
+#: ui/views/Game.tsx:1985
+msgid "The result could not be saved. The match remains pending."
+msgstr "无法保存结果，本场比赛仍待完成。"
 
 #: ui/views/Lobby.tsx:334
 msgid "The room is full."
@@ -9523,9 +9704,13 @@ msgstr "房间已满。"
 msgid "The selected policy would not change this deck"
 msgstr "所选策略不会改变此套牌"
 
-#: ui/phase/transport.ts:51
+#: ui/phase/transport.ts:53
 msgid "The session was left or replaced before this response arrived."
 msgstr "在此响应到达之前，会话已离开或被替换。"
+
+#: ui/views/LocalTournament.tsx:55
+msgid "The tournament game could not start. Retry this match."
+msgstr "锦标赛对局启动失败，请重试本场比赛。"
 
 #: ui/views/Settings.tsx:300
 #: ui/views/Settings.tsx:966
@@ -9587,6 +9772,10 @@ msgstr "此套牌已在另一台设备上更改"
 #: ui/components/deck/HubDeckPreviewDialog.tsx:269
 msgid "This deck could not be loaded"
 msgstr "无法加载此套牌"
+
+#: ui/views/LocalTournamentSideboard.tsx:28
+msgid "This deck has no sideboard cards."
+msgstr "此套牌没有备牌。"
 
 #. placeholder {0}: entry.engines[0]
 #. placeholder {0}: preset.engines?.[0] ?? "Ironsmith"
@@ -9675,6 +9864,10 @@ msgstr "此服务器不支持所需的 Phase 多人协议（76 / ManaBrew 2）�
 msgid "This starter deck uses an unsupported format."
 msgstr "此新手套牌使用了不支持的赛制。"
 
+#: ui/stores/useLocalTournamentStore.ts:25
+msgid "This tournament is busy in another tab."
+msgstr "另一个标签页正在运行此锦标赛。"
+
 #: ui/components/companion/SetupMenu.tsx:115
 #: ui/components/companion/TurnTimer.tsx:94
 msgid "Timer mode"
@@ -9684,6 +9877,7 @@ msgstr "计时器模式"
 #: ui/components/lobby/DeckVsSelector.tsx:48
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:111
+#: ui/views/LocalTournament.tsx:20
 msgid "Tiny Leaders"
 msgstr "小小指挥官"
 
@@ -9766,6 +9960,11 @@ msgstr "热门套牌"
 msgid "Top decks right now"
 msgstr "当前热门套牌"
 
+#: ui/views/LocalTournament.tsx:94
+#: ui/views/LocalTournament.tsx:100
+msgid "Total entrants"
+msgstr "参赛人数"
+
 #: ui/components/editor/CardSearch.tsx:1136
 msgid "tou"
 msgstr "防御力"
@@ -9774,7 +9973,7 @@ msgstr "防御力"
 msgid "Toughness"
 msgstr "防御力"
 
-#: ui/views/Tournaments.tsx:63
+#: ui/views/Tournaments.tsx:76
 msgid "Tournament code"
 msgstr "锦标赛代码"
 
@@ -9782,7 +9981,15 @@ msgstr "锦标赛代码"
 msgid "Tournament management requires lobby protocol 9 or newer."
 msgstr "锦标赛管理需要大厅协议 9 或更高版本。"
 
-#: ui/views/Tournaments.tsx:33
+#: ui/views/LocalTournament.tsx:113
+msgid "Tournament match in progress. Please wait; do not start another game."
+msgstr "锦标赛对局正在进行，请稍候，不要启动其他对局。"
+
+#: ui/views/Tournaments.tsx:14
+msgid "Tournament mode"
+msgstr "比赛模式"
+
+#: ui/views/Tournaments.tsx:46
 msgid "Tournament organizer: manual results are unverified. Pairings do not create hosted games, verify decks, or automatically report results. Standings reflect player reports."
 msgstr "锦标赛组织者：手动结果未经核实。配对不会创建托管对局、不会验证套牌，也不会自动上报结果。排名仅反映玩家上报的结果。"
 
@@ -9828,7 +10035,7 @@ msgstr "起手有两张或更多地"
 
 #: ui/components/lobby/CreateGameDialog.tsx:58
 msgid "Two teams of two share a 30-life total and take their turns together"
-msgstr "两队各两人，每队共享 30 点生命并同时进行回合"
+msgstr "两队各两人，同队共用30点生命并一起进行回合"
 
 #: ui/views/CasualModes.tsx:183
 msgid "Two teams of two share a 30-life total and take their turns together."
@@ -10183,6 +10390,7 @@ msgstr "查看可见的牌"
 #: ui/components/lobby/CreateGameDialog.tsx:45
 #: ui/components/lobby/DeckVsSelector.tsx:43
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Vintage"
 msgstr "特选"
 
@@ -10286,6 +10494,11 @@ msgstr "白"
 msgid "Win lines"
 msgstr "制胜线路"
 
+#. placeholder {0}: label(match.winner)
+#: ui/views/LocalTournament.tsx:105
+msgid "Winner: {0}"
+msgstr "获胜者：{0}"
+
 #: ui/components/companion/StatsDialog.tsx:76
 msgid "Wins by player"
 msgstr "各玩家胜场"
@@ -10329,6 +10542,7 @@ msgstr "年份"
 #: ui/components/lobby/TablePickerDialog.tsx:61
 #: ui/components/lobby/TablePickerDialog.tsx:80
 #: ui/components/lobby/TableSetup.tsx:225
+#: ui/views/LocalTournament.tsx:80
 msgid "You"
 msgstr "你"
 
@@ -10473,6 +10687,10 @@ msgstr "你的名字"
 msgid "Your pool"
 msgstr "你的牌池"
 
+#: ui/views/LocalTournament.tsx:93
+msgid "Your preset deck"
+msgstr "你的预设套牌"
+
 #: ui/hooks/useGameSessionResume.ts:60
 msgid "Your previous desktop Forge game ended when the app closed."
 msgstr "你之前的桌面 Forge 游戏随应用关闭而结束。"
@@ -10529,7 +10747,167 @@ msgstr "区域牌堆"
 msgid "Zoom"
 msgstr "缩放"
 
-#: ui/components/game/KeywordHelpPanel.tsx
-#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
-msgid "Printed example: {0}"
-msgstr "牌面示例：{0}"
+
+msgid "Match History"
+msgstr "对局记录"
+
+msgid "Win rates, trends, and results from games played on this device."
+msgstr "查看本设备上的对局结果、胜率与变化趋势。"
+
+msgid "Win rates and results from your finished games."
+msgstr "查看已结束对局的胜率与结果。"
+
+msgid "Last 7 days"
+msgstr "最近7天"
+
+msgid "Last 30 days"
+msgstr "最近30天"
+
+msgid "Last 90 days"
+msgstr "最近90天"
+
+msgid "All time"
+msgstr "全部时间"
+
+msgid "All results"
+msgstr "全部结果"
+
+msgid "Wins"
+msgstr "胜场"
+
+msgid "Losses"
+msgstr "负场"
+
+msgid "Draws"
+msgstr "平局"
+
+msgid "Unfinished"
+msgstr "未结束"
+
+msgid "Win"
+msgstr "获胜"
+
+msgid "Loss"
+msgstr "落败"
+
+msgid "{minutes}m {rest}s"
+msgstr "{minutes}分{rest}秒"
+
+msgid "{rest}s"
+msgstr "{rest}秒"
+
+msgid "{date}: {rate} cumulative"
+msgstr "{date}：累计胜率 {rate}"
+
+msgid "{commander} (commander)"
+msgstr "{commander}（指挥官）"
+
+msgid "Win rate"
+msgstr "胜率"
+
+msgid "Delete all history?"
+msgstr "删除全部对局记录？"
+
+msgid "Clear history"
+msgstr "清空记录"
+
+msgid "No games recorded yet. Finish a game to start building stats."
+msgstr "暂无对局记录。完成一局游戏后，即可在此查看统计。"
+
+msgid "Range"
+msgstr "时间范围"
+
+msgid "All decks"
+msgstr "全部套牌"
+
+msgid "Result"
+msgstr "结果"
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Deck, opponent, or card"
+msgstr "搜索套牌、对手或卡牌"
+
+msgid "Avg game"
+msgstr "平均对局时长"
+
+msgid "Games per day"
+msgstr "每日对局数"
+
+msgid "Win rate over time"
+msgstr "胜率趋势"
+
+msgid "Decks"
+msgstr "套牌"
+
+msgid "No decided games in this range."
+msgstr "此时间范围内暂无分出胜负的对局。"
+
+msgid "Opponent deck"
+msgstr "对手套牌"
+
+msgid "Cards"
+msgstr "卡牌"
+
+msgid "Showing the {CARD_ROW_LIMIT} most-played cards. Win rate counts a card whenever it was in your deck in a decided game."
+msgstr "显示出场最多的 {CARD_ROW_LIMIT} 张卡牌。只要卡牌在分出胜负的对局中属于你的套牌，该局就会计入此牌的胜率。"
+
+msgid "When"
+msgstr "日期"
+
+msgid "Duration"
+msgstr "时长"
+
+msgid "No games match these filters."
+msgstr "没有符合筛选条件的对局。"
+
+msgid "Unknown deck"
+msgstr "未知套牌"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Brawl"
+msgstr "争锋"
+
+msgid "Format: {formatName}"
+msgstr "赛制：{formatName}"
+
+msgid "Play starts one real human game. Simulate AI game draws one AI-only winner locally at random, with modest weights for land balance, mana curve, and built-in AI difficulty. Missing card metadata reduces the deck weights. Each seat has a 25%–75% win chance; no game engine is used for these draws."
+msgstr "“开始游戏”会启动一局由真人参与的实际对局。“模拟 AI 对局”会在本地随机抽取一位 AI 胜者，并根据地牌比例、法术力曲线和内置 AI 难度略微调整权重。卡牌资料缺失时，套牌权重的影响会降低。双方的获胜概率均为 25%–75%；此类抽取不使用游戏引擎。"
+
+msgid "Each action records one game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
+msgstr "每次操作记录一局结果。BO1 需赢一局；BO3 需赢两局。平局不计为胜局。BO3 可在局间换备牌，首局开始前不可换备牌。无奖励。"
+
+msgid "Simulate AI game"
+msgstr "模拟 AI 对局"
+
+msgid "Simulate next AI game"
+msgstr "模拟下一局 AI 对局"
+
+msgid "Simulate next AI game / replay"
+msgstr "模拟下一局 AI 对局／重赛"
+
+
+msgid "The local hosting service returned an invalid response. Start the local app and try again."
+msgstr "本地主持服务返回了无效响应。请启动本地应用后重试。"
+
+msgid "The hosting request timed out. Check the local app and try again."
+msgstr "主持请求超时。请检查本地应用后重试。"
+
+msgid "Could not reach the local hosting service. Start the local app and try again."
+msgstr "无法连接本地主持服务。请启动本地应用后重试。"
+
+
+msgid "Waiting for players…"
+msgstr "等待玩家加入…"
+
+msgid "Disconnected — reconnect to resume your seat."
+msgstr "连接已断开，请重新连接以恢复席位。"
+
+msgid "Could not connect to the Phase server"
+msgstr "无法连接到对局服务器。"
+
+msgid "The server did not confirm the room in time."
+msgstr "服务器未能及时确认房间，请重试。"

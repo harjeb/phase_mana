@@ -1,4 +1,6 @@
 import { getFormat } from "@/lib/formats";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName, formatDisplayDescription } from "@/lib/formatLabels";
 import { cn } from "@/lib/utils";
 
 const COLOR_CLASSES: Record<string, string> = {
@@ -21,6 +23,7 @@ interface FormatBadgeProps {
 }
 
 export function FormatBadge({ formatId, className }: FormatBadgeProps) {
+  const { i18n } = useLingui();
   const format = getFormat(formatId);
   if (!format) return null;
   const textColor = COLOR_CLASSES[format.badgeColor] ?? "text-muted-foreground";
@@ -31,9 +34,9 @@ export function FormatBadge({ formatId, className }: FormatBadgeProps) {
         textColor,
         className,
       )}
-      title={format.description}
+      title={formatDisplayDescription(format)}
     >
-      {format.shortName}
+      {i18n.locale.startsWith("zh") ? formatDisplayName(format) : format.shortName}
     </span>
   );
 }

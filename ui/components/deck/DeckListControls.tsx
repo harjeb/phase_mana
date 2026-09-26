@@ -1,4 +1,6 @@
 import { Trans } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName } from "@/lib/formatLabels";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -62,6 +64,7 @@ export function DeckListControls({
   sortBy,
   onSortChange,
 }: DeckListControlsProps) {
+  useLingui();
   const hasActiveFilters = search || formatFilter || colorFilter.length > 0;
   function clearAll() {
     onSearchChange("");
@@ -119,7 +122,7 @@ export function DeckListControls({
             {GAME_FORMATS.map((f) => (
               <DropdownMenuItem key={f.id} onSelect={() => onFormatChange(f.id)} className="gap-2">
                 <FormatBadge formatId={f.id} />
-                <span className="text-xs">{f.name}</span>
+                <span className="text-xs">{formatDisplayName(f)}</span>
                 {formatFilter === f.id && <Check className="h-3 w-3 ml-auto text-primary" />}
               </DropdownMenuItem>
             ))}

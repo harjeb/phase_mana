@@ -12,6 +12,7 @@ import { useIsShortScreen, useIsTouch } from "@/hooks/useBreakpoints";
 import { cn, pickRandom, pickRandomDistinct } from "@/lib/utils";
 import { toast } from "sonner";
 import { ROUTES } from "@/lib/constants";
+import { filterPresetDecksForFormat } from "@/lib/presetDecks";
 import { resolveAiOpponent } from "@/lib/aiOpponent";
 import { getDeckFingerprint } from "@/lib/decks";
 import { reportPublishedDeckPlay } from "@/lib/deckPlayEvidence";
@@ -213,15 +214,9 @@ export function DeckVsSelector({
       });
   }, [hubDecks.enabled, hubRestoreAttempt, loadHubDeck, preSelectedHubDeckId]);
   const searchLower = deckSearch.toLowerCase();
-  const formatMatchedPresets = presetDecks.filter(
-    (deck) =>
-      selectedFormat === null || customFormatId !== null || (deck.format ?? "standard") === selectedFormat,
+  const formatFilteredPresets = filterPresetDecksForFormat(
+    presetDecks, selectedFormat, customFormatId !== null,
   );
-  // Casual table formats (Archenemy, Planechase, Two-Headed Giant) have no
-  // presets tagged with their own id; fall back to every preset so those
-  // tables can still be set up rather than showing an empty picker.
-  const formatFilteredPresets =
-    formatMatchedPresets.length > 0 ? formatMatchedPresets : presetDecks;
   const filteredDecks = searchLower
     ? formatFilteredPresets.filter(
         (deck) =>

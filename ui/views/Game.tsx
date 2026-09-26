@@ -70,6 +70,8 @@ import { useTheme } from "@/hooks/useTheme";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useLimitedStore } from "@/stores/useLimitedStore";
 import { peek as peekGauntletMatch, tryConsumeGauntletMatch } from "@/lib/gauntletReturn";
+import { peekTournamentReturn, consumeTournamentResult } from "@/lib/localTournamentReturn";
+import { useLocalTournamentStore } from "@/stores/useLocalTournamentStore";
 import { intentIsHostile, intentPrefersArrow } from "@/types/promptType";
 import type { PromptType } from "@/protocol";
 import { declareAttackersOutput } from "@/components/prompts/internal/playerActions";
@@ -238,6 +240,8 @@ interface GameProps {
   exitTo?: string;
 }
 export default function Game({ exitTo }: GameProps = {}) {
+  const tournamentGame = useRef(Boolean(peekTournamentReturn()));
+  if (peekTournamentReturn()) tournamentGame.current = true;
   const responseError = useGameStore((s) =>
     s.debugInfo.startsWith("Respond error:") ? s.debugInfo : undefined,
   );
@@ -1964,11 +1968,24 @@ export default function Game({ exitTo }: GameProps = {}) {
   );
   useEffect(() => {
     if (!gameView?.gameOver && activePrompt?.input.type !== "gameOver") return;
-    if (peekGauntletMatch()) return;
+    if (peekGauntletMatch() || peekTournamentReturn()) return;
     const timer = setTimeout(() => endGame(), 3000);
     return () => clearTimeout(timer);
   }, [gameView?.gameOver, activePrompt?.input.type, endGame]);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!gameView?.gameOver) return;
+    const result = consumeTournamentResult(gameView.winnerId);
+    if (!result) return;
+    const store = useLocalTournamentStore.getState();
+    const pairing = store.event?.id === result.eventId ? store.event.rounds[result.round]?.[result.match] : null;
+    try {
+      if (pairing) store.result(result.eventId, result.round, result.match, result.humanWon === null ? null : result.humanWon ? 0 : pairing.players.find(id => id !== 0)!, result.token);
+    } catch {
+      useLocalTournamentStore.setState({ error: t`The result could not be saved. The match remains pending.` });
+    }
+    void endGame().then(() => navigate("/play/tournaments", { replace: true }));
+  }, [gameView?.gameOver, gameView?.winnerId, navigate, endGame]);
   useEffect(() => {
     if (!gameView?.gameOver) return;
     const pending = tryConsumeGauntletMatch();
@@ -1983,7 +2000,7 @@ export default function Game({ exitTo }: GameProps = {}) {
       navigate(`/gauntlet/${pending.gauntletId}`);
     })();
   }, [gameView?.gameOver, gameView?.winnerId, myPlayerSlot, navigate, endGame]);
-  if (!isGameActive) return <Navigate to={exitTo ?? "/lobby"} replace />;
+  if (!isGameActive) return <Navigate to={tournamentGame.current ? "/play/tournaments" : exitTo ?? "/lobby"} replace />;
   if (fatalError) {
     return <GameFailedScreen message={fatalError} onLeave={endGame} />;
   }

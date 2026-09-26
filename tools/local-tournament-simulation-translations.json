@@ -1,0 +1,13 @@
+{
+  "Play starts one real human game. Simulate AI game draws one AI-only winner locally at random, with modest weights for land balance, mana curve, and built-in AI difficulty. Missing card metadata reduces the deck weights. Each seat has a 25%–75% win chance; no game engine is used for these draws.": {
+    "hans": "“开始游戏”会启动一局由真人参与的实际对局。“模拟 AI 对局”会在本地随机抽取一位 AI 胜者，并根据地牌比例、法术力曲线和内置 AI 难度略微调整权重。卡牌资料缺失时，套牌权重的影响会降低。双方的获胜概率均为 25%–75%；此类抽取不使用游戏引擎。",
+    "hant": "「開始遊戲」會啟動一局由真人參與的實際對局。「模擬 AI 對局」會在本機隨機抽出一位 AI 勝者，並根據地牌比例、魔法力曲線和內建 AI 難度略微調整權重。卡牌資料缺失時，套牌權重的影響會降低。雙方的獲勝機率均為 25%–75%；此類抽取不使用遊戲引擎。"
+  },
+  "Each action records one game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes.": {
+    "hans": "每次操作记录一局结果。BO1 需赢一局；BO3 需赢两局。平局不计为胜局。BO3 可在局间换备牌，首局开始前不可换备牌。无奖励。",
+    "hant": "每次操作記錄一局結果。BO1 需贏一局；BO3 需贏兩局。平局不計為勝局。BO3 可在局間換備牌，首局開始前不可換備牌。無獎勵。"
+  },
+  "Simulate AI game": { "hans": "模拟 AI 对局", "hant": "模擬 AI 對局" },
+  "Simulate next AI game": { "hans": "模拟下一局 AI 对局", "hant": "模擬下一局 AI 對局" },
+  "Simulate next AI game / replay": { "hans": "模拟下一局 AI 对局／重赛", "hant": "模擬下一局 AI 對局／重賽" }
+}

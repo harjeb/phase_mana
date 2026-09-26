@@ -13,6 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: ui/components/game/KeywordHelpPanel.tsx
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
+msgid "Printed example: {0}"
+msgstr "Printed example: {0}"
+
 #. js-lingui-explicit-id
 #: ui/views/OnlineDraftPanel.tsx:24
 #: ui/views/OnlinePlay.tsx:20
@@ -177,7 +182,7 @@ msgstr "\"Locked\" keeps the deck, graveyard, exile, and command piles fixed on 
 msgid "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 msgstr "\"Realistic\" uses the full printed card image. \"Art-forward\" shows the art with a crisp name/type overlay. \"Mini-frame\" frames the art with name and type bars. This setting only affects battlefield cards."
 
-#: ui/views/Tournaments.tsx:119
+#: ui/views/Tournaments.tsx:132
 msgid "(dropped)"
 msgstr "(dropped)"
 
@@ -1063,14 +1068,26 @@ msgstr "Aggro"
 msgid "AI"
 msgstr "AI"
 
+#: ui/views/LocalTournament.tsx:80
+msgid "AI {id}"
+msgstr "AI {id}"
+
 #: ui/components/lobby/DeckVsSelector.tsx:877
 #: ui/components/lobby/DeckVsSelector.tsx:881
 msgid "AI difficulty"
 msgstr "AI difficulty"
 
+#: ui/views/LocalTournament.tsx:72
+#~ msgid "AI matches run real engine games only when requested. Draws require a replay. Leaving or reloading a human game without an engine result leaves the match pending; a confirmed concession counts as a loss. No sideboarding or prizes."
+#~ msgstr "AI matches run real engine games only when requested. Draws require a replay. Leaving or reloading a human game without an engine result leaves the match pending; a confirmed concession counts as a loss. No sideboarding or prizes."
+
 #: ui/views/Settings.tsx:336
 msgid "AI opponent"
 msgstr "AI opponent"
+
+#: ui/views/LocalTournament.tsx:84
+msgid "AI sideboarding uses a modest deterministic heuristic: swap at most one nonland copy to favor removal relevant to the opponent’s original deck types. It never reads live hands and is not an optimal strategy. Main and sideboard counts stay fixed."
+msgstr "AI sideboarding uses a modest deterministic heuristic: swap at most one nonland copy to favor removal relevant to the opponent’s original deck types. It never reads live hands and is not an optimal strategy. Main and sideboard counts stay fixed."
 
 #: ui/components/editor/CardSearch.tsx:182
 msgid "Alchemy"
@@ -1302,7 +1319,7 @@ msgstr "Available actions · {0}"
 msgid "Available on current face · {0}"
 msgstr "Available on current face · {0}"
 
-#: ui/views/Tournaments.tsx:65
+#: ui/views/Tournaments.tsx:78
 msgid "Available tournaments"
 msgstr "Available tournaments"
 
@@ -1409,13 +1426,17 @@ msgstr "Battlefield Zone Column Order"
 msgid "Before changing the mana base"
 msgstr "Before changing the mana base"
 
-#: ui/views/Tournaments.tsx:55
+#: ui/views/Tournaments.tsx:68
 msgid "Best of one"
 msgstr "Best of one"
 
-#: ui/views/Tournaments.tsx:55
+#: ui/views/Tournaments.tsx:68
 msgid "Best of three"
 msgstr "Best of three"
+
+#: ui/views/LocalTournamentSideboard.tsx:15
+msgid "Between-game sideboarding"
+msgstr "Between-game sideboarding"
 
 #: ui/components/editor/CardSearch.tsx:278
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:30
@@ -1429,6 +1450,16 @@ msgstr "Blocked by"
 #: ui/components/game/modals/DialogCardBrowserToolbar.tsx:28
 msgid "Blue"
 msgstr "Blue"
+
+#: ui/views/LocalTournament.tsx:95
+#: ui/views/LocalTournament.tsx:100
+msgid "BO1 · First to 1 win"
+msgstr "BO1 · First to 1 win"
+
+#: ui/views/LocalTournament.tsx:95
+#: ui/views/LocalTournament.tsx:100
+msgid "BO3 · First to 2 wins · Sideboarding"
+msgstr "BO3 · First to 2 wins · Sideboarding"
 
 #: ui/components/game/modals/GameSettingsModal.tsx:144
 msgid "Board appearance"
@@ -1634,11 +1665,11 @@ msgstr "By source"
 msgid "By tag"
 msgstr "By tag"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Bye"
 msgstr "Bye"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Byes"
 msgstr "Byes"
 
@@ -1664,8 +1695,9 @@ msgstr "Cache"
 #: ui/components/settings/MyAssetsSection.tsx:169
 #: ui/views/DeckEditor.tsx:932
 #: ui/views/DeckEditor.tsx:1108
+#: ui/views/LocalTournament.tsx:111
 #: ui/views/Settings.tsx:536
-#: ui/views/Tournaments.tsx:87
+#: ui/views/Tournaments.tsx:100
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -1884,6 +1916,10 @@ msgstr "Casual Modes"
 #: ui/lib/aiDifficulty.ts:14
 msgid "cEDH"
 msgstr "cEDH"
+
+#: ui/views/LocalTournament.tsx:109
+msgid "Champion"
+msgstr "Champion"
 
 #: ui/components/lobby/TableRoomSidebar.tsx:247
 msgid "Change deck"
@@ -2397,6 +2433,7 @@ msgstr "Command-zone and special-section cards were not duplicated"
 #: ui/components/lobby/DeckVsSelector.tsx:46
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/Draft.tsx:109
+#: ui/views/LocalTournament.tsx:19
 msgid "Commander"
 msgstr "Commander"
 
@@ -2513,7 +2550,11 @@ msgstr "Configure addition"
 msgid "Confirm addition"
 msgstr "Confirm addition"
 
-#: ui/views/Tournaments.tsx:87
+#: ui/views/LocalTournament.tsx:111
+msgid "Confirm deletion"
+msgstr "Confirm deletion"
+
+#: ui/views/Tournaments.tsx:100
 msgid "Confirm end tournament"
 msgstr "Confirm end tournament"
 
@@ -2529,7 +2570,7 @@ msgstr "Confirm pick"
 msgid "Confirm when you're ready"
 msgstr "Confirm when you're ready"
 
-#: ui/views/Tournaments.tsx:37
+#: ui/views/Tournaments.tsx:50
 msgid "Connect"
 msgstr "Connect"
 
@@ -2551,7 +2592,7 @@ msgstr "Connect to multiplayer to open a table."
 
 #: ui/components/lobby/UserList.tsx:58
 #: ui/views/OnlineDraftPanel.tsx:59
-#: ui/views/Tournaments.tsx:39
+#: ui/views/Tournaments.tsx:52
 msgid "Connected"
 msgstr "Connected"
 
@@ -2585,7 +2626,7 @@ msgstr "Connection failed."
 msgid "Connection lost"
 msgstr "Connection lost"
 
-#: ui/phase/transport.ts:122
+#: ui/phase/transport.ts:125
 msgid "Conspiracy reveal was rejected"
 msgstr "Conspiracy reveal was rejected"
 
@@ -2904,7 +2945,7 @@ msgstr "Couldn't upload that image"
 msgid "Couldn’t verify deck ownership."
 msgstr "Couldn’t verify deck ownership."
 
-#: ui/stores/useScryfallStore.ts:799
+#: ui/stores/useScryfallStore.ts:800
 msgid "Couldnt find uris for printing: "
 msgstr "Couldnt find uris for printing: "
 
@@ -2920,7 +2961,7 @@ msgstr "Cover"
 msgid "Cover every battlefield style (larger download)"
 msgstr "Cover every battlefield style (larger download)"
 
-#: ui/views/Tournaments.tsx:59
+#: ui/views/Tournaments.tsx:72
 msgid "Create"
 msgstr "Create"
 
@@ -2931,6 +2972,10 @@ msgstr "Create a reusable tag and add the dropped cards to it."
 #: ui/views/OnlineDraftPanel.tsx:50
 msgid "Create draft"
 msgstr "Create draft"
+
+#: ui/views/LocalTournament.tsx:96
+msgid "Create local tournament"
+msgstr "Create local tournament"
 
 #: ui/views/OnlinePlay.tsx:191
 msgid "Create room"
@@ -2945,7 +2990,7 @@ msgstr "Create table"
 msgid "Create tag"
 msgstr "Create tag"
 
-#: ui/views/Tournaments.tsx:45
+#: ui/views/Tournaments.tsx:58
 msgid "Create tournament"
 msgstr "Create tournament"
 
@@ -3339,6 +3384,14 @@ msgstr "Delete entire collection?"
 msgid "Delete image"
 msgstr "Delete image"
 
+#: ui/views/LocalTournament.tsx:110
+msgid "Delete local tournament"
+msgstr "Delete local tournament"
+
+#: ui/views/LocalTournament.tsx:111
+msgid "Delete this saved event and all its results?"
+msgstr "Delete this saved event and all its results?"
+
 #: ui/components/deck/DeckHubEntryCard.tsx:124
 msgid "Deleted user"
 msgstr "Deleted user"
@@ -3396,7 +3449,7 @@ msgid "Disabled"
 msgstr "Disabled"
 
 #: ui/views/OnlinePlay.tsx:197
-#: ui/views/Tournaments.tsx:38
+#: ui/views/Tournaments.tsx:51
 msgid "Disconnect"
 msgstr "Disconnect"
 
@@ -3404,7 +3457,7 @@ msgstr "Disconnect"
 #: ui/components/lobby/UserList.tsx:70
 #: ui/phase/onlineDraft.test.ts:40
 #: ui/views/OnlineDraftPanel.tsx:59
-#: ui/views/Tournaments.tsx:39
+#: ui/views/Tournaments.tsx:52
 msgid "Disconnected"
 msgstr "Disconnected"
 
@@ -3533,8 +3586,8 @@ msgstr "Drag to position, use the slider to zoom."
 msgid "Drag to reposition · scroll or pinch to zoom · drop or paste an image"
 msgstr "Drag to reposition · scroll or pinch to zoom · drop or paste an image"
 
-#: ui/views/Tournaments.tsx:100
-#: ui/views/Tournaments.tsx:112
+#: ui/views/Tournaments.tsx:113
+#: ui/views/Tournaments.tsx:125
 msgid "Draw"
 msgstr "Draw"
 
@@ -3542,12 +3595,16 @@ msgstr "Draw"
 msgid "Draw a card"
 msgstr "Draw a card"
 
+#: ui/views/LocalTournament.tsx:105
+msgid "Draws requiring replay"
+msgstr "Draws requiring replay"
+
 #: ui/components/editor/DeckListView.tsx:1436
 #: ui/components/editor/DeckListView.tsx:2321
 msgid "Drop cards here"
 msgstr "Drop cards here"
 
-#: ui/views/Tournaments.tsx:89
+#: ui/views/Tournaments.tsx:102
 msgid "Drop from tournament"
 msgstr "Drop from tournament"
 
@@ -3559,7 +3616,7 @@ msgstr "Drop here"
 msgid "Drop image to use as playmat"
 msgstr "Drop image to use as playmat"
 
-#: ui/views/Tournaments.tsx:93
+#: ui/views/Tournaments.tsx:106
 msgid "dropped"
 msgstr "dropped"
 
@@ -3575,6 +3632,7 @@ msgstr "Dual Land"
 #: ui/components/lobby/DeckVsSelector.tsx:49
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:118
+#: ui/views/LocalTournament.tsx:20
 msgid "Duel Commander"
 msgstr "Duel Commander"
 
@@ -3597,6 +3655,10 @@ msgstr "e.g. http://localhost:11434/v1 or https://api.openai.com/v1"
 #: ui/components/OnboardingWelcome.tsx:88
 msgid "e.g. StormCrow"
 msgstr "e.g. StormCrow"
+
+#: ui/views/LocalTournament.tsx:83
+msgid "Each Play or Run AI action runs one real game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
+msgstr "Each Play or Run AI action runs one real game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
 
 #: ui/components/lobby/TableSetupGameCard.tsx:435
 msgid "Each player opens packs and builds independently."
@@ -3681,7 +3743,7 @@ msgstr "Enchant."
 msgid "Enchantments"
 msgstr "Enchantments"
 
-#: ui/views/Tournaments.tsx:86
+#: ui/views/Tournaments.tsx:99
 msgid "End tournament"
 msgstr "End tournament"
 
@@ -3747,7 +3809,8 @@ msgstr "Enter the password to join {0}."
 msgid "Enter the room code."
 msgstr "Enter the room code."
 
-#: ui/views/Tournaments.tsx:92
+#: ui/views/LocalTournament.tsx:101
+#: ui/views/Tournaments.tsx:105
 msgid "Entrants"
 msgstr "Entrants"
 
@@ -3768,7 +3831,7 @@ msgstr "Estimate covers brackets 2–4. Bracket 1 (casual) and 5 (cEDH) are self
 msgid "Estimated unblocked damage: {0}"
 msgstr "Estimated unblocked damage: {0}"
 
-#: ui/views/Tournaments.tsx:46
+#: ui/views/Tournaments.tsx:59
 msgid "Event name"
 msgstr "Event name"
 
@@ -3856,7 +3919,7 @@ msgstr "Expand all sections"
 msgid "experimental"
 msgstr "experimental"
 
-#: ui/views/Tournaments.tsx:77
+#: ui/views/Tournaments.tsx:90
 msgid "Expires"
 msgstr "Expires"
 
@@ -4102,6 +4165,10 @@ msgstr "Finding you a table…"
 msgid "Finish"
 msgstr "Finish"
 
+#: ui/views/LocalTournament.tsx:45
+msgid "Finish or leave your current game first."
+msgstr "Finish or leave your current game first."
+
 #: ui/components/editor/DeckTagManagerDialog.tsx:81
 msgid "Finish renaming"
 msgstr "Finish renaming"
@@ -4114,7 +4181,7 @@ msgstr "First place"
 msgid "First Print"
 msgstr "First Print"
 
-#: ui/views/Game.tsx:2551
+#: ui/views/Game.tsx:2568
 msgid "First Strike Damage"
 msgstr "First Strike Damage"
 
@@ -4239,7 +4306,7 @@ msgstr "Follow game"
 msgid "Foreground and muted copy"
 msgstr "Foreground and muted copy"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Forfeit"
 msgstr "Forfeit"
 
@@ -4260,6 +4327,7 @@ msgstr "Forge play vs AI requires a server username."
 #: ui/components/lobby/CreateGameDialog.tsx:468
 #: ui/components/lobby/TableRoomSidebar.tsx:103
 #: ui/components/lobby/TableSetupGameCard.tsx:153
+#: ui/views/LocalTournament.tsx:92
 msgid "Format"
 msgstr "Format"
 
@@ -5097,7 +5165,7 @@ msgstr "Join a table that is already waiting for players."
 msgid "Join an open table or create a room for your group."
 msgstr "Join an open table or create a room for your group."
 
-#: ui/views/Tournaments.tsx:81
+#: ui/views/Tournaments.tsx:94
 msgid "Join as player"
 msgstr "Join as player"
 
@@ -5260,10 +5328,15 @@ msgstr "Leave table"
 msgid "Leave Without Saving"
 msgstr "Leave Without Saving"
 
+#: ui/views/LocalTournament.tsx:85
+msgid "Leaving or reloading a human game without an engine result leaves that game unscored. A confirmed concession counts as one game loss."
+msgstr "Leaving or reloading a human game without an engine result leaves that game unscored. A confirmed concession counts as one game loss."
+
 #: ui/components/editor/CardSearch.tsx:158
 #: ui/components/lobby/CreateGameDialog.tsx:44
 #: ui/components/lobby/DeckVsSelector.tsx:42
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Legacy"
 msgstr "Legacy"
 
@@ -5431,6 +5504,7 @@ msgid "Loading local sets…"
 msgstr "Loading local sets…"
 
 #: ui/components/play/PresetDeckShelf.tsx:53
+#: ui/views/LocalTournament.tsx:98
 msgid "Loading preset decks…"
 msgstr "Loading preset decks…"
 
@@ -5461,6 +5535,18 @@ msgstr "Loading your decks"
 msgid "Loading…"
 msgstr "Loading…"
 
+#: ui/views/Tournaments.tsx:15
+msgid "Local AI tournament"
+msgstr "Local AI tournament"
+
+#: ui/views/LocalTournament.tsx:71
+#~ msgid "Local AI tournament · Single elimination · Best of one. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+#~ msgstr "Local AI tournament · Single elimination · Best of one. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+
+#: ui/views/LocalTournament.tsx:82
+msgid "Local AI tournament · Single elimination. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+msgstr "Local AI tournament · Single elimination. One human and 3, 7, or 15 AI entrants. Decks and built-in AI difficulties are randomly assigned once and saved in this browser. Duplicate decks are allowed."
+
 #: ui/components/editor/DeckIntentPanel.tsx:43
 msgid "local analysis"
 msgstr "local analysis"
@@ -5485,6 +5571,10 @@ msgstr "Local play against the AI. Draft variants, Commander offshoots and retro
 #: ui/views/Limited.tsx:202
 msgid "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
 msgstr "Local play supports six-pack Sealed and three-pack Booster Draft against AI, with one card per pick. Only playable downloaded pools are listed (see README)."
+
+#: ui/stores/useLocalTournamentStore.ts:23
+msgid "Local tournaments require a browser with Web Locks support."
+msgstr "Local tournaments require a browser with Web Locks support."
 
 #: ui/phase/Launch.tsx:177
 #~ msgid "Local two-player demo. Both seats use the server's casual Forest / Grizzly Bears deck. The AI plays through Phase's legal actions, priority, combat, and choices."
@@ -5523,7 +5613,7 @@ msgstr "Looks good!"
 msgid "LORE CHAPTERS"
 msgstr "LORE CHAPTERS"
 
-#: ui/views/Tournaments.tsx:113
+#: ui/views/Tournaments.tsx:126
 msgid "Loser's game wins"
 msgstr "Loser's game wins"
 
@@ -5550,6 +5640,7 @@ msgstr "Main"
 
 #: ui/components/editor/DeckSelectionTray.tsx:86
 #: ui/components/editor/ImportDeckTextDialog.tsx:186
+#: ui/views/LocalTournamentSideboard.tsx:17
 msgid "Main deck"
 msgstr "Main deck"
 
@@ -5562,6 +5653,11 @@ msgstr "Main deck needs {0} more card{1}."
 #: ui/views/OnlineDraftBuilder.tsx:17
 msgid "Main deck:"
 msgstr "Main deck:"
+
+#: ui/views/LocalTournamentSideboard.tsx:19
+#: ui/views/LocalTournamentSideboard.tsx:19
+msgid "Main-deck copy to remove"
+msgstr "Main-deck copy to remove"
 
 #: ui/components/lobby/PlayerCard.tsx:22
 #: ui/components/lobby/QualificationBadge.tsx:17
@@ -5673,7 +5769,7 @@ msgstr "Manage uploaded assets here"
 msgid "Manual"
 msgstr "Manual"
 
-#: ui/views/Tournaments.tsx:112
+#: ui/views/Tournaments.tsx:125
 msgid "Manual match outcome"
 msgstr "Manual match outcome"
 
@@ -5681,15 +5777,15 @@ msgstr "Manual match outcome"
 msgid "Manual preserves your placement; automatic modes arrange new cards."
 msgstr "Manual preserves your placement; automatic modes arrange new cards."
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/Tournaments.tsx:110
 msgid "Manual result — unverified"
 msgstr "Manual result — unverified"
 
-#: ui/stores/useGameStore.ts:470
+#: ui/stores/useGameStore.ts:477
 msgid "Manual room client requires the manual tabletop runtime."
 msgstr "Manual room client requires the manual tabletop runtime."
 
-#: ui/stores/useGameStore.ts:441
+#: ui/stores/useGameStore.ts:448
 msgid "Manual room host requires the manual tabletop runtime."
 msgstr "Manual room host requires the manual tabletop runtime."
 
@@ -5725,12 +5821,16 @@ msgstr "Match"
 msgid "Match in progress"
 msgstr "Match in progress"
 
-#: ui/views/Tournaments.tsx:54
+#: ui/views/Tournaments.tsx:67
 msgid "Match structure"
 msgstr "Match structure"
 
+#: ui/views/LocalTournament.tsx:95
+msgid "Match type"
+msgstr "Match type"
+
 #: ui/views/OnlineDraftPanel.tsx:80
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Matches"
 msgstr "Matches"
 
@@ -5872,6 +5972,7 @@ msgstr "Model id, e.g. gpt-4o or llama3.1:8b"
 #: ui/components/lobby/CustomFormatDialog.tsx:475
 #: ui/components/lobby/DeckVsSelector.tsx:41
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Modern"
 msgstr "Modern"
 
@@ -6119,7 +6220,7 @@ msgstr "No active manual tabletop game."
 msgid "No AI deck available for this format — pick one yourself."
 msgstr "No AI deck available for this format — pick one yourself."
 
-#: ui/phase/transport.ts:121
+#: ui/phase/transport.ts:124
 msgid "No authorized conspiracy reveal action"
 msgstr "No authorized conspiracy reveal action"
 
@@ -6168,6 +6269,11 @@ msgstr "No Community decks match this format and search."
 msgid "No Community decks match your search."
 msgstr "No Community decks match your search."
 
+#: ui/views/LocalTournament.tsx:89
+#: ui/views/LocalTournament.tsx:97
+msgid "No compatible preset decks are available for this format."
+msgstr "No compatible preset decks are available for this format."
+
 #: ui/components/game/modals/CombatBreakdownModal.tsx:103
 msgid "No current combat assignments."
 msgstr "No current combat assignments."
@@ -6204,7 +6310,7 @@ msgstr "No decks yet — build one in <0>My Decks</0>."
 msgid "No editable unsupported cards"
 msgstr "No editable unsupported cards"
 
-#: ui/views/Tournaments.tsx:93
+#: ui/views/Tournaments.tsx:106
 msgid "No entrants yet."
 msgstr "No entrants yet."
 
@@ -6217,7 +6323,7 @@ msgstr "No events yet."
 msgid "No fetch implementation available"
 msgstr "No fetch implementation available"
 
-#: ui/views/Game.tsx:628
+#: ui/views/Game.tsx:632
 msgid "No game card to cast: {cardId}"
 msgstr "No game card to cast: {cardId}"
 
@@ -6250,7 +6356,7 @@ msgstr "No legendaries in deck — type a name below."
 msgid "no lines yet"
 msgstr "no lines yet"
 
-#: ui/stores/useGameStore.ts:674
+#: ui/stores/useGameStore.ts:681
 msgid "No local player is available to concede."
 msgstr "No local player is available to concede."
 
@@ -6397,7 +6503,7 @@ msgstr "No tags yet"
 msgid "No tokens match this search."
 msgstr "No tokens match this search."
 
-#: ui/views/Tournaments.tsx:66
+#: ui/views/Tournaments.tsx:79
 msgid "No tournaments listed."
 msgstr "No tournaments listed."
 
@@ -6486,6 +6592,7 @@ msgstr "Nothing to undo"
 #: ui/components/lobby/DeckVsSelector.tsx:47
 #: ui/components/lobby/OpenTableCard.tsx:17
 #: ui/views/CasualModes.tsx:104
+#: ui/views/LocalTournament.tsx:19
 msgid "Oathbreaker"
 msgstr "Oathbreaker"
 
@@ -6633,7 +6740,7 @@ msgstr "Online draft transport is unavailable."
 msgid "Online multiplayer"
 msgstr "Online multiplayer"
 
-#: ui/views/Game.tsx:2553
+#: ui/views/Game.tsx:2570
 msgid "only first & double strikers deal damage now"
 msgstr "only first & double strikers deal damage now"
 
@@ -6641,7 +6748,7 @@ msgstr "only first & double strikers deal damage now"
 msgid "Only the host can do that"
 msgstr "Only the host can do that"
 
-#: ui/views/Tournaments.tsx:63
+#: ui/views/Tournaments.tsx:76
 msgid "Open"
 msgstr "Open"
 
@@ -6784,11 +6891,11 @@ msgstr "Oracle Text"
 msgid "Organize pairings, report results and follow standings."
 msgstr "Organize pairings, report results and follow standings."
 
-#: ui/views/Tournaments.tsx:30
+#: ui/views/Tournaments.tsx:43
 msgid "Organizer"
 msgstr "Organizer"
 
-#: ui/views/Tournaments.tsx:42
+#: ui/views/Tournaments.tsx:55
 msgid "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
 msgstr "Organizer and player credentials are saved separately for this server in this browser tab. Reconnect restores them. Renew before expiry; closing the tab loses access."
 
@@ -6863,15 +6970,15 @@ msgstr "Packs per player"
 msgid "Page Not Found"
 msgstr "Page Not Found"
 
-#: ui/views/Tournaments.tsx:85
+#: ui/views/Tournaments.tsx:98
 msgid "Pair next round"
 msgstr "Pair next round"
 
-#: ui/views/Tournaments.tsx:51
+#: ui/views/Tournaments.tsx:64
 msgid "Pairing system"
 msgstr "Pairing system"
 
-#: ui/views/Tournaments.tsx:94
+#: ui/views/Tournaments.tsx:107
 msgid "Pairings and manual results (unverified)"
 msgstr "Pairings and manual results (unverified)"
 
@@ -6977,6 +7084,7 @@ msgstr "Paste invitation"
 #: ui/components/lobby/CreateGameDialog.tsx:46
 #: ui/components/lobby/DeckVsSelector.tsx:44
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Pauper"
 msgstr "Pauper"
 
@@ -6984,6 +7092,7 @@ msgstr "Pauper"
 #: ui/components/lobby/DeckVsSelector.tsx:50
 #: ui/components/lobby/OpenTableCard.tsx:19
 #: ui/views/CasualModes.tsx:125
+#: ui/views/LocalTournament.tsx:21
 msgid "Pauper Commander"
 msgstr "Pauper Commander"
 
@@ -6991,7 +7100,8 @@ msgstr "Pauper Commander"
 msgid "Peer to Peer"
 msgstr "Peer to Peer"
 
-#: ui/views/Tournaments.tsx:97
+#: ui/views/LocalTournament.tsx:105
+#: ui/views/Tournaments.tsx:110
 msgid "Pending"
 msgstr "Pending"
 
@@ -7016,7 +7126,7 @@ msgstr "Persistent choices"
 msgid "Personal theme name"
 msgstr "Personal theme name"
 
-#: ui/views/Tournaments.tsx:36
+#: ui/views/Tournaments.tsx:49
 msgid "Phase broker URL"
 msgstr "Phase broker URL"
 
@@ -7079,6 +7189,7 @@ msgstr "Pinned by PHASE_MANA_CARD_IMAGES."
 #: ui/components/lobby/CreateGameDialog.tsx:42
 #: ui/components/lobby/DeckVsSelector.tsx:40
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Pioneer"
 msgstr "Pioneer"
 
@@ -7124,6 +7235,14 @@ msgstr "Play match"
 msgid "Play modes"
 msgstr "Play modes"
 
+#: ui/views/LocalTournament.tsx:107
+msgid "Play next game"
+msgstr "Play next game"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Play next game / replay"
+msgstr "Play next game / replay"
+
 #: ui/components/layout/navDestinations.ts:52
 #: ui/components/layout/TopBar.tsx:24
 #: ui/components/layout/TopBar.tsx:27
@@ -7136,6 +7255,14 @@ msgstr "Play Offline"
 msgid "Play stats"
 msgstr "Play stats"
 
+#: ui/views/LocalTournament.tsx:107
+msgid "Play tournament game"
+msgstr "Play tournament game"
+
+#: ui/views/LocalTournament.tsx:92
+#~ msgid "Play tournament match"
+#~ msgstr "Play tournament match"
+
 #: ui/components/OnboardingGuide.tsx:7
 msgid "Play with friends"
 msgstr "Play with friends"
@@ -7147,8 +7274,8 @@ msgstr "Play with friends"
 #: ui/views/OnlinePlay.tsx:108
 #: ui/views/OnlinePlay.tsx:126
 #: ui/views/OnlinePlay.tsx:133
-#: ui/views/Tournaments.tsx:30
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:43
+#: ui/views/Tournaments.tsx:131
 msgid "Player"
 msgstr "Player"
 
@@ -7160,7 +7287,7 @@ msgstr "Player details"
 msgid "Player HUD"
 msgstr "Player HUD"
 
-#: ui/views/Tournaments.tsx:81
+#: ui/views/Tournaments.tsx:94
 msgid "Player name"
 msgstr "Player name"
 
@@ -7195,7 +7322,7 @@ msgstr "Players and chat"
 msgid "Players in the lobby who aren't at a table."
 msgstr "Players in the lobby who aren't at a table."
 
-#: ui/views/Tournaments.tsx:48
+#: ui/views/Tournaments.tsx:61
 msgid "Players per table"
 msgstr "Players per table"
 
@@ -7271,11 +7398,11 @@ msgstr "Pod draft from a CubeCobra cube."
 msgid "Pod size"
 msgstr "Pod size"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Points"
 msgstr "Points"
 
-#: ui/views/Tournaments.tsx:74
+#: ui/views/Tournaments.tsx:87
 msgid "Points: win / draw / loss"
 msgstr "Points: win / draw / loss"
 
@@ -7322,6 +7449,7 @@ msgstr "Premier (Bo1)"
 #: ui/components/lobby/CreateGameDialog.tsx:47
 #: ui/components/lobby/DeckVsSelector.tsx:45
 #: ui/components/lobby/OpenTableCard.tsx:17
+#: ui/views/LocalTournament.tsx:19
 msgid "Premodern"
 msgstr "Premodern"
 
@@ -7542,7 +7670,7 @@ msgstr "Random AI"
 msgid "Random AI deck"
 msgstr "Random AI deck"
 
-#: ui/views/Tournaments.tsx:118
+#: ui/views/Tournaments.tsx:131
 msgid "Rank"
 msgstr "Rank"
 
@@ -7619,7 +7747,7 @@ msgstr "Realistic uses printed art. Rules shows card rules and current game info
 msgid "Receive the first game state"
 msgstr "Receive the first game state"
 
-#: ui/views/Tournaments.tsx:37
+#: ui/views/Tournaments.tsx:50
 msgid "Reconnect"
 msgstr "Reconnect"
 
@@ -7685,7 +7813,7 @@ msgid "Refined wood"
 msgstr "Refined wood"
 
 #: ui/views/DeckEditor.tsx:697
-#: ui/views/Tournaments.tsx:90
+#: ui/views/Tournaments.tsx:103
 msgid "Refresh"
 msgstr "Refresh"
 
@@ -7708,6 +7836,10 @@ msgstr "Release Date"
 #: ui/components/deck/PublishDeckDialog.tsx:90
 msgid "Reload this account deck before publishing it."
 msgstr "Reload this account deck before publishing it."
+
+#: ui/views/Tournaments.tsx:16
+msgid "Remote / manual tournament"
+msgstr "Remote / manual tournament"
 
 #: ui/components/editor/deckEditor.utils.ts:48
 #: ui/components/editor/DeckListView.tsx:2578
@@ -7877,7 +8009,7 @@ msgstr "Rename Deck"
 msgid "Renderer"
 msgstr "Renderer"
 
-#: ui/views/Tournaments.tsx:77
+#: ui/views/Tournaments.tsx:90
 msgid "Renew credential"
 msgstr "Renew credential"
 
@@ -8067,9 +8199,10 @@ msgstr "Rotate card"
 msgid "Rotate your device"
 msgstr "Rotate your device"
 
+#: ui/views/LocalTournament.tsx:103
 #: ui/views/OnlineDraftPanel.tsx:57
-#: ui/views/Tournaments.tsx:74
-#: ui/views/Tournaments.tsx:96
+#: ui/views/Tournaments.tsx:87
+#: ui/views/Tournaments.tsx:109
 msgid "Round"
 msgstr "Round"
 
@@ -8077,7 +8210,7 @@ msgstr "Round"
 msgid "Rounds"
 msgstr "Rounds"
 
-#: ui/views/Tournaments.tsx:58
+#: ui/views/Tournaments.tsx:71
 msgid "Rounds (blank for automatic)"
 msgstr "Rounds (blank for automatic)"
 
@@ -8099,6 +8232,22 @@ msgstr "Rules and turn"
 #: ui/pixi/cardPreview/RulesCardPreviewLayer.ts:783
 msgid "Rules text"
 msgstr "Rules text"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run AI game"
+msgstr "Run AI game"
+
+#: ui/views/LocalTournament.tsx:92
+#~ msgid "Run AI match"
+#~ msgstr "Run AI match"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run next AI game"
+msgstr "Run next AI game"
+
+#: ui/views/LocalTournament.tsx:107
+msgid "Run next AI game / replay"
+msgstr "Run next AI game / replay"
 
 #: ui/game/runtimeRegistry.ts:23
 msgid "Runtime unavailable: {kind}"
@@ -8779,8 +8928,14 @@ msgstr "Side {0}"
 #: ui/components/editor/ImportDeckTextDialog.tsx:183
 #: ui/components/game/SideboardDialog.tsx:36
 #: ui/components/lobby/CustomFormatDialog.tsx:388
+#: ui/views/LocalTournamentSideboard.tsx:17
 msgid "Sideboard"
 msgstr "Sideboard"
+
+#: ui/views/LocalTournamentSideboard.tsx:20
+#: ui/views/LocalTournamentSideboard.tsx:20
+msgid "Sideboard copy to add"
+msgstr "Sideboard copy to add"
 
 #: ui/components/lobby/CustomFormatDialog.tsx:460
 msgid "Sideboard only"
@@ -8856,7 +9011,7 @@ msgstr "Signed in as @{0}"
 msgid "Signed in from another tab — this tab was disconnected."
 msgstr "Signed in from another tab — this tab was disconnected."
 
-#: ui/views/Tournaments.tsx:52
+#: ui/views/Tournaments.tsx:65
 msgid "Single elimination"
 msgstr "Single elimination"
 
@@ -8999,6 +9154,7 @@ msgstr "Stack default view"
 #: ui/components/lobby/CreateGameDialog.tsx:41
 #: ui/components/lobby/DeckVsSelector.tsx:39
 #: ui/components/lobby/OpenTableCard.tsx:15
+#: ui/views/LocalTournament.tsx:17
 msgid "Standard"
 msgstr "Standard"
 
@@ -9006,7 +9162,7 @@ msgstr "Standard"
 msgid "Standard Modes"
 msgstr "Standard Modes"
 
-#: ui/views/Tournaments.tsx:117
+#: ui/views/Tournaments.tsx:130
 msgid "Standings from manual reports (unverified)"
 msgstr "Standings from manual reports (unverified)"
 
@@ -9194,7 +9350,7 @@ msgstr "Structure"
 msgid "Submit deck"
 msgstr "Submit deck"
 
-#: ui/views/Tournaments.tsx:114
+#: ui/views/Tournaments.tsx:127
 msgid "Submit unverified result"
 msgstr "Submit unverified result"
 
@@ -9214,7 +9370,15 @@ msgstr "Supported by the Manabrew and Forge engines"
 msgid "Surface"
 msgstr "Surface"
 
-#: ui/views/Tournaments.tsx:52
+#: ui/views/LocalTournamentSideboard.tsx:27
+msgid "Swap and save"
+msgstr "Swap and save"
+
+#: ui/views/LocalTournamentSideboard.tsx:16
+msgid "Swap one main-deck copy with one sideboard copy. Each swap is saved immediately for this match. Original lists return next round; commanders cannot change."
+msgstr "Swap one main-deck copy with one sideboard copy. Each swap is saved immediately for this match. Original lists return next round; commanders cannot change."
+
+#: ui/views/Tournaments.tsx:65
 msgid "Swiss"
 msgstr "Swiss"
 
@@ -9447,6 +9611,14 @@ msgstr "The API root, in OpenAI format. A full endpoint pasted from your provide
 msgid "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
 msgstr "The auto-resolver answers prompts that have a single legal answer (target, mode, …) and informational acks (RevealCards, dice rolls). Those are always automatic — no toggle. The list below covers optional costs you may prefer to never be asked about."
 
+#: ui/views/LocalTournament.tsx:59
+msgid "The engine did not identify both players. Retry this match."
+msgstr "The engine did not identify both players. Retry this match."
+
+#: ui/views/LocalTournament.tsx:72
+msgid "The engine returned an invalid tournament result."
+msgstr "The engine returned an invalid tournament result."
+
 #: ui/components/lobby/TablePickerDialog.tsx:72
 msgid "The felt you'll play this game on."
 msgstr "The felt you'll play this game on."
@@ -9483,6 +9655,11 @@ msgstr "The host request failed."
 msgid "The Manabrew engine is a work in progress and may have bugs or missing cards. For the most stable experience, play on the Forge engine."
 msgstr "The Manabrew engine is a work in progress and may have bugs or missing cards. For the most stable experience, play on the Forge engine."
 
+#: ui/views/LocalTournament.tsx:44
+#: ui/views/LocalTournamentSideboard.tsx:25
+msgid "The match changed in another tab. Review the current lists and try again."
+msgstr "The match changed in another tab. Review the current lists and try again."
+
 #: ui/views/OnlineDraftPanel.tsx:76
 msgid "The match starts when every player has submitted a deck."
 msgstr "The match starts when every player has submitted a deck."
@@ -9508,13 +9685,17 @@ msgstr "The playmat fills a wide, landscape area (roughly 5:2). For a crisp resu
 msgid "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 msgstr "The Preview rail is the editor's shared card inspector. Hover a card anywhere in the workspace and its image and details appear there without interrupting what you are doing."
 
-#: ui/stores/useGameStore.ts:383
+#: ui/stores/useGameStore.ts:389
 msgid "The previous game is still closing. Try again in a moment."
 msgstr "The previous game is still closing. Try again in a moment."
 
 #: ui/components/play/RejoinMatchCard.tsx:148
 msgid "The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out."
 msgstr "The relay could not be reached. You can remove this match from this device, but your seat may remain until the relay times it out."
+
+#: ui/views/Game.tsx:1985
+msgid "The result could not be saved. The match remains pending."
+msgstr "The result could not be saved. The match remains pending."
 
 #: ui/views/Lobby.tsx:334
 msgid "The room is full."
@@ -9524,9 +9705,13 @@ msgstr "The room is full."
 msgid "The selected policy would not change this deck"
 msgstr "The selected policy would not change this deck"
 
-#: ui/phase/transport.ts:51
+#: ui/phase/transport.ts:53
 msgid "The session was left or replaced before this response arrived."
 msgstr "The session was left or replaced before this response arrived."
+
+#: ui/views/LocalTournament.tsx:55
+msgid "The tournament game could not start. Retry this match."
+msgstr "The tournament game could not start. Retry this match."
 
 #: ui/views/Settings.tsx:300
 #: ui/views/Settings.tsx:966
@@ -9588,6 +9773,10 @@ msgstr "This deck changed on another device"
 #: ui/components/deck/HubDeckPreviewDialog.tsx:269
 msgid "This deck could not be loaded"
 msgstr "This deck could not be loaded"
+
+#: ui/views/LocalTournamentSideboard.tsx:28
+msgid "This deck has no sideboard cards."
+msgstr "This deck has no sideboard cards."
 
 #. placeholder {0}: entry.engines[0]
 #. placeholder {0}: preset.engines?.[0] ?? "Ironsmith"
@@ -9676,6 +9865,10 @@ msgstr "This server does not support the required Phase multiplayer protocol (76
 msgid "This starter deck uses an unsupported format."
 msgstr "This starter deck uses an unsupported format."
 
+#: ui/stores/useLocalTournamentStore.ts:25
+msgid "This tournament is busy in another tab."
+msgstr "This tournament is busy in another tab."
+
 #: ui/components/companion/SetupMenu.tsx:115
 #: ui/components/companion/TurnTimer.tsx:94
 msgid "Timer mode"
@@ -9685,6 +9878,7 @@ msgstr "Timer mode"
 #: ui/components/lobby/DeckVsSelector.tsx:48
 #: ui/components/lobby/OpenTableCard.tsx:18
 #: ui/views/CasualModes.tsx:111
+#: ui/views/LocalTournament.tsx:20
 msgid "Tiny Leaders"
 msgstr "Tiny Leaders"
 
@@ -9767,6 +9961,11 @@ msgstr "Top Decks"
 msgid "Top decks right now"
 msgstr "Top decks right now"
 
+#: ui/views/LocalTournament.tsx:94
+#: ui/views/LocalTournament.tsx:100
+msgid "Total entrants"
+msgstr "Total entrants"
+
 #: ui/components/editor/CardSearch.tsx:1136
 msgid "tou"
 msgstr "tou"
@@ -9775,7 +9974,7 @@ msgstr "tou"
 msgid "Toughness"
 msgstr "Toughness"
 
-#: ui/views/Tournaments.tsx:63
+#: ui/views/Tournaments.tsx:76
 msgid "Tournament code"
 msgstr "Tournament code"
 
@@ -9783,7 +9982,15 @@ msgstr "Tournament code"
 msgid "Tournament management requires lobby protocol 9 or newer."
 msgstr "Tournament management requires lobby protocol 9 or newer."
 
-#: ui/views/Tournaments.tsx:33
+#: ui/views/LocalTournament.tsx:113
+msgid "Tournament match in progress. Please wait; do not start another game."
+msgstr "Tournament match in progress. Please wait; do not start another game."
+
+#: ui/views/Tournaments.tsx:14
+msgid "Tournament mode"
+msgstr "Tournament mode"
+
+#: ui/views/Tournaments.tsx:46
 msgid "Tournament organizer: manual results are unverified. Pairings do not create hosted games, verify decks, or automatically report results. Standings reflect player reports."
 msgstr "Tournament organizer: manual results are unverified. Pairings do not create hosted games, verify decks, or automatically report results. Standings reflect player reports."
 
@@ -10184,6 +10391,7 @@ msgstr "View visible cards"
 #: ui/components/lobby/CreateGameDialog.tsx:45
 #: ui/components/lobby/DeckVsSelector.tsx:43
 #: ui/components/lobby/OpenTableCard.tsx:16
+#: ui/views/LocalTournament.tsx:18
 msgid "Vintage"
 msgstr "Vintage"
 
@@ -10287,6 +10495,11 @@ msgstr "White"
 msgid "Win lines"
 msgstr "Win lines"
 
+#. placeholder {0}: label(match.winner)
+#: ui/views/LocalTournament.tsx:105
+msgid "Winner: {0}"
+msgstr "Winner: {0}"
+
 #: ui/components/companion/StatsDialog.tsx:76
 msgid "Wins by player"
 msgstr "Wins by player"
@@ -10330,6 +10543,7 @@ msgstr "Year"
 #: ui/components/lobby/TablePickerDialog.tsx:61
 #: ui/components/lobby/TablePickerDialog.tsx:80
 #: ui/components/lobby/TableSetup.tsx:225
+#: ui/views/LocalTournament.tsx:80
 msgid "You"
 msgstr "You"
 
@@ -10474,6 +10688,10 @@ msgstr "Your name"
 msgid "Your pool"
 msgstr "Your pool"
 
+#: ui/views/LocalTournament.tsx:93
+msgid "Your preset deck"
+msgstr "Your preset deck"
+
 #: ui/hooks/useGameSessionResume.ts:60
 msgid "Your previous desktop Forge game ended when the app closed."
 msgstr "Your previous desktop Forge game ended when the app closed."
@@ -10530,7 +10748,167 @@ msgstr "Zone Piles"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ui/components/game/KeywordHelpPanel.tsx
-#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
-msgid "Printed example: {0}"
-msgstr "Printed example: {0}"
+
+msgid "Match History"
+msgstr "Match History"
+
+msgid "Win rates, trends, and results from games played on this device."
+msgstr "Win rates, trends, and results from games played on this device."
+
+msgid "Win rates and results from your finished games."
+msgstr "Win rates and results from your finished games."
+
+msgid "Last 7 days"
+msgstr "Last 7 days"
+
+msgid "Last 30 days"
+msgstr "Last 30 days"
+
+msgid "Last 90 days"
+msgstr "Last 90 days"
+
+msgid "All time"
+msgstr "All time"
+
+msgid "All results"
+msgstr "All results"
+
+msgid "Wins"
+msgstr "Wins"
+
+msgid "Losses"
+msgstr "Losses"
+
+msgid "Draws"
+msgstr "Draws"
+
+msgid "Unfinished"
+msgstr "Unfinished"
+
+msgid "Win"
+msgstr "Win"
+
+msgid "Loss"
+msgstr "Loss"
+
+msgid "{minutes}m {rest}s"
+msgstr "{minutes}m {rest}s"
+
+msgid "{rest}s"
+msgstr "{rest}s"
+
+msgid "{date}: {rate} cumulative"
+msgstr "{date}: {rate} cumulative"
+
+msgid "{commander} (commander)"
+msgstr "{commander} (commander)"
+
+msgid "Win rate"
+msgstr "Win rate"
+
+msgid "Delete all history?"
+msgstr "Delete all history?"
+
+msgid "Clear history"
+msgstr "Clear history"
+
+msgid "No games recorded yet. Finish a game to start building stats."
+msgstr "No games recorded yet. Finish a game to start building stats."
+
+msgid "Range"
+msgstr "Range"
+
+msgid "All decks"
+msgstr "All decks"
+
+msgid "Result"
+msgstr "Result"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Deck, opponent, or card"
+msgstr "Deck, opponent, or card"
+
+msgid "Avg game"
+msgstr "Avg game"
+
+msgid "Games per day"
+msgstr "Games per day"
+
+msgid "Win rate over time"
+msgstr "Win rate over time"
+
+msgid "Decks"
+msgstr "Decks"
+
+msgid "No decided games in this range."
+msgstr "No decided games in this range."
+
+msgid "Opponent deck"
+msgstr "Opponent deck"
+
+msgid "Cards"
+msgstr "Cards"
+
+msgid "Showing the {CARD_ROW_LIMIT} most-played cards. Win rate counts a card whenever it was in your deck in a decided game."
+msgstr "Showing the {CARD_ROW_LIMIT} most-played cards. Win rate counts a card whenever it was in your deck in a decided game."
+
+msgid "When"
+msgstr "When"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "No games match these filters."
+msgstr "No games match these filters."
+
+msgid "Unknown deck"
+msgstr "Unknown deck"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Brawl"
+msgstr "Brawl"
+
+msgid "Format: {formatName}"
+msgstr "Format: {formatName}"
+
+msgid "Play starts one real human game. Simulate AI game draws one AI-only winner locally at random, with modest weights for land balance, mana curve, and built-in AI difficulty. Missing card metadata reduces the deck weights. Each seat has a 25%–75% win chance; no game engine is used for these draws."
+msgstr "Play starts one real human game. Simulate AI game draws one AI-only winner locally at random, with modest weights for land balance, mana curve, and built-in AI difficulty. Missing card metadata reduces the deck weights. Each seat has a 25%–75% win chance; no game engine is used for these draws."
+
+msgid "Each action records one game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
+msgstr "Each action records one game. BO1 requires one game win; BO3 requires two. Draws do not count as wins. BO3 allows sideboarding between games, never before game one. No prizes."
+
+msgid "Simulate AI game"
+msgstr "Simulate AI game"
+
+msgid "Simulate next AI game"
+msgstr "Simulate next AI game"
+
+msgid "Simulate next AI game / replay"
+msgstr "Simulate next AI game / replay"
+
+
+msgid "The local hosting service returned an invalid response. Start the local app and try again."
+msgstr "The local hosting service returned an invalid response. Start the local app and try again."
+
+msgid "The hosting request timed out. Check the local app and try again."
+msgstr "The hosting request timed out. Check the local app and try again."
+
+msgid "Could not reach the local hosting service. Start the local app and try again."
+msgstr "Could not reach the local hosting service. Start the local app and try again."
+
+
+msgid "Waiting for players…"
+msgstr "Waiting for players…"
+
+msgid "Disconnected — reconnect to resume your seat."
+msgstr "Disconnected — reconnect to resume your seat."
+
+msgid "Could not connect to the Phase server"
+msgstr "Could not connect to the Phase server"
+
+msgid "The server did not confirm the room in time."
+msgstr "The server did not confirm the room in time."

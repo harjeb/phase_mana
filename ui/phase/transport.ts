@@ -1,4 +1,5 @@
 import { t } from "@lingui/core/macro";
+import { clearTournamentReturn, noteTournamentEngineSession } from "@/lib/localTournamentReturn";
 import { toast } from "sonner";
 import type { Prompt, StateUpdate } from "@/protocol";
 import { armActiveLocalGame } from "@/lib/activeLocalGame";
@@ -29,6 +30,7 @@ interface Snapshot {
 let generation = 0;
 
 export function invalidateSnapshotGeneration(): void {
+  clearTournamentReturn();
   generation += 1;
 }
 
@@ -62,6 +64,7 @@ if (import.meta.env.DEV) {
 }
 
 export function acceptSnapshot(snapshot: Snapshot): void {
+  noteTournamentEngineSession(snapshot.logSessionId);
   const { setState, getState } = useGameStore;
   setState({
     isGameActive: true, isMultiplayer: false, isHost: false,

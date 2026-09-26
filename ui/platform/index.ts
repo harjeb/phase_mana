@@ -107,13 +107,12 @@ const platform: IPlatformApi = {
     },
     restoreSnapshot: unsupported,
     getPrompt: async () => {
-      const { isOnlineSession } = await import("@/phase/online");
-      if (isOnlineSession()) {
-        const { useGameStore } = await import("@/stores/useGameStore");
-        return useGameStore.getState().currentPrompt;
-      }
-      const { requestSnapshot } = await import("@/phase/transport");
-      return (await requestSnapshot("state")).prompt;
+      // Local start/respond snapshots and online frames already install prompts
+      // in the store. The battle view can mount before /api/start completes:
+      // fetching /api/state here races startup (or reads the previous game).
+      // A missing prompt is normal until the startup snapshot arrives.
+      const { useGameStore } = await import("@/stores/useGameStore");
+      return useGameStore.getState().currentPrompt;
     },
   },
   storage: {

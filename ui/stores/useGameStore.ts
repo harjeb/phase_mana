@@ -1,4 +1,6 @@
 import { t } from "@lingui/core/macro";
+import { clearTournamentReturn } from "@/lib/localTournamentReturn";
+import type { AiDifficultyLabel } from "@/lib/aiDifficulty";
 import { beginGame, noteAnswerSent } from "@/lib/engineTelemetry";
 import {
   engineReportGameId,
@@ -142,6 +144,7 @@ async function initializeGame({
   conspiracies,
   customRules,
   opponentConspiracies,
+  tournamentAiDifficulty,
   isLaunchCurrent,
 }: {
   deck: Deck;
@@ -152,12 +155,14 @@ async function initializeGame({
   /** CR 905.4: conspiracy card names that start in the local host's command zone. */
   conspiracies?: string[];
   opponentConspiracies?: string[][];
+  tournamentAiDifficulty?: AiDifficultyLabel;
   /** P5: a full custom ruleset; when set the host ignores `formatId`. */
   customRules?: CustomFormatRules;
   set: (partial: Partial<GameState>) => void;
   get: () => GameState;
   isLaunchCurrent: () => boolean;
 }): Promise<void> {
+  clearTournamentReturn();
   deck = withResolvedDeckName(deck);
   const selectedFormatId = formatId ?? deck.format ?? "standard";
   const format = getFormat(selectedFormatId);
@@ -306,8 +311,8 @@ async function initializeGame({
       conspiracies,
       customRules,
       opponentConspiracies,
-      aiDifficulty: usePreferencesStore.getState().aiDifficulty,
-      llm: llmSeatRequest(usePreferencesStore.getState().llmSeat),
+      aiDifficulty: tournamentAiDifficulty ?? usePreferencesStore.getState().aiDifficulty,
+      llm: tournamentAiDifficulty ? undefined : llmSeatRequest(usePreferencesStore.getState().llmSeat),
     });
     const result = await (firstForgeStart ? withForgeStartTimeout(start) : start);
     if (!isLaunchCurrent()) {
@@ -337,6 +342,7 @@ async function initializeGame({
         conspiracies,
         customRules,
         opponentConspiracies,
+        tournamentAiDifficulty,
         isLaunchCurrent,
       });
     }
@@ -378,7 +384,7 @@ export const useGameStore = create<GameState>()(
       updateGameView: (view) => set({ gameView: view }),
       setGameConfig: (config) => set({ gameConfig: config }),
       dismissIronsmithDeckError: () => set({ ironsmithDeckError: null }),
-      startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies) => {
+      startGame: async (deck, formatId, commanderName, opponentDecks, engine, conspiracies, customRules, opponentConspiracies, tournamentAiDifficulty) => {
         if (get().isGameActive) return false;
         if (gameLaunchInFlight !== null) {
           toast.info(t`The previous game is still closing. Try again in a moment.`);
@@ -396,6 +402,7 @@ export const useGameStore = create<GameState>()(
             conspiracies,
             customRules,
             opponentConspiracies,
+            tournamentAiDifficulty,
             set,
             get,
             isLaunchCurrent: () => launchGeneration === gameLaunchGeneration,
@@ -694,6 +701,7 @@ export const useGameStore = create<GameState>()(
         }
       },
       endGame: async () => {
+        clearTournamentReturn();
         gameLaunchGeneration += 1;
         const activeSession = peekActiveGameSession();
         clearActiveGameSession();

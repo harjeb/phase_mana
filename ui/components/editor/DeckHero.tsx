@@ -1,4 +1,6 @@
 import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
+import { formatDisplayName } from "@/lib/formatLabels";
 import { useRef, useState } from "react";
 import { Check, ChevronDown, ImagePlus, Pencil } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,8 +21,10 @@ import { PlaymatEditorModal } from "./PlaymatEditorModal";
 import { cn } from "@/lib/utils";
 import type { DeckFormat } from "@/protocol/deck";
 export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => void }) {
+  useLingui();
   const currentDeck = useDeckStore((s) => s.currentDeck);
   const isReadOnly = useDeckStore((s) => s.isReadOnly);
+  const currentFormat = getFormat(currentDeck.format ?? "standard");
   const setDeckName = useDeckStore((s) => s.setDeckName);
   const setDeckFormat = useDeckStore((s) => s.setDeckFormat);
   const setPlaymat = useDeckStore((s) => s.setPlaymat);
@@ -132,7 +136,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
                 >
                   <FormatBadge formatId={currentDeck.format ?? "standard"} />
                   <span className="font-medium">
-                    {getFormat(currentDeck.format ?? "standard")?.name}
+                    {currentFormat && formatDisplayName(currentFormat)}
                   </span>
                   <ChevronDown className="h-3 w-3 text-muted-foreground" />
                 </button>
@@ -145,7 +149,7 @@ export function DeckHero({ onNameCommit }: { onNameCommit: (name: string) => voi
                     className="gap-2"
                   >
                     <FormatBadge formatId={f.id} />
-                    <span className="text-xs">{f.name}</span>
+                    <span className="text-xs">{formatDisplayName(f)}</span>
                     {(currentDeck.format ?? "standard") === f.id && (
                       <Check className="h-3 w-3 ml-auto text-primary" />
                     )}
