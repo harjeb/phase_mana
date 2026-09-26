@@ -9,6 +9,7 @@
  */
 import { HubRequestError, recordOfflineGame } from "@/api/hub";
 import { getDeckEvidenceFingerprint } from "@/lib/deckFingerprint";
+import { appendMatch } from "@/lib/matchHistory";
 import { APP_VERSION, STORAGE_KEYS } from "@/lib/constants";
 import { getPlatform } from "@/platform";
 import type { Deck } from "@/protocol";
@@ -30,6 +31,8 @@ export interface OfflinePlayCard {
 export interface OfflinePlaySeat {
   username: string;
   isBot: boolean;
+  /** The seat on this device. Absent on records written before it existed. */
+  isLocal?: boolean;
   deckName?: string;
   commander?: string;
   publishedDeckId?: string;
@@ -208,6 +211,9 @@ export interface OfflineSeatOutcome {
   seatId: string;
   username: string;
   isBot: boolean;
+  /** True for the seat the person at this device is playing. Set explicitly on
+   *  multiplayer, where every seat is a human; offline it falls back to `!isBot`. */
+  isLocal?: boolean;
   conceded: boolean;
 }
 
@@ -221,6 +227,9 @@ export function reportOfflineGame(meta: {
   winner: string | null;
   seats: OfflineSeatOutcome[];
   engineError?: string | null;
+  /** Multiplayer games are kept locally only: `/api/stats/game` is the offline
+   *  analytics table, and the relay already owns the online record. */
+  skipHub?: boolean;
 }): void {
   const game = open;
   if (!game) return;
@@ -246,11 +255,16 @@ export function reportOfflineGame(meta: {
       players: meta.seats.map((seat) => ({
         username: seat.username,
         isBot: seat.isBot,
+        isLocal: seat.isLocal ?? !seat.isBot,
         sideboardCount: 0,
         cards: [],
         ...game.decks.get(seat.seatId),
       })),
     };
+    // Keep a local copy for the on-device match history, independent of the
+    // hub: the queue below is drained (deleted) once the hub accepts it.
+    appendMatch(record);
+    if (meta.skipHub) return;
     const pending = [...loadPending(), { game: record, queuedAt: Date.now() }].slice(-MAX_PENDING);
     savePending(pending);
     void flushOfflinePlayRecords();

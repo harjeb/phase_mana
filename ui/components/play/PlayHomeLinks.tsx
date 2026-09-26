@@ -6,6 +6,7 @@ import {
   Globe,
   HeartPulse,
   Info,
+  LineChart,
   PackageOpen,
   Palette,
   Search,
@@ -40,6 +41,13 @@ const TOOLS = [
     desc: msg`Every card, printing, and ruling at your fingertips.`,
     icon: Search,
     tone: "blue",
+  },
+  {
+    to: ROUTES.MATCH_HISTORY,
+    label: msg`Match History`,
+    desc: msg`Win rates and results from your finished games.`,
+    icon: LineChart,
+    tone: "amber",
   },
   {
     to: ROUTES.COMPANION,

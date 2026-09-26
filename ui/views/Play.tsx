@@ -11,6 +11,7 @@ import Game from "./Game";
 import CasualModes from "./CasualModes";
 import OnlinePlay from "./OnlinePlay";
 import Tournaments from "./Tournaments";
+import MatchHistory from "./MatchHistory";
 import { isLiveEngineGameRouteState } from "@/game/engineGameLaunch";
 import { ROUTES } from "@/lib/constants";
 import { resolveOfflineEngine } from "@/lib/offlineEngine";
@@ -168,6 +169,7 @@ export default function Play() {
   }
   if (pathname === "/play/online") return <OnlinePlay />;
   if (pathname === "/play/tournaments") return <Tournaments />;
+  if (pathname === ROUTES.MATCH_HISTORY) return <MatchHistory />;
   if (pathname === ROUTES.PLAY_OFFLINE) {
     return <Navigate to={ROUTES.PLAY_OFFLINE_CONSTRUCTED} replace />;
   }

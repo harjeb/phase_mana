@@ -533,6 +533,14 @@ export const useGameStore = create<GameState>()(
         decks.forEach((d, i) => {
           gameDecks[`player-${i}`] = d;
         });
+        // Record online games in the local match history too. Hub reporting is
+        // skipped at game end (the relay owns the online record).
+        void beginOfflineGame({
+          engine: engine ?? "Manabrew",
+          format: format ?? null,
+          startingLife,
+          decks: gameDecks,
+        });
         const server = useServerStore.getState();
         if (server.currentRoom) {
           armActiveGameSession({

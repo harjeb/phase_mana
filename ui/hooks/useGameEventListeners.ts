@@ -10,6 +10,7 @@ import {
 import { teardownForgeAiSession } from "@/game/hostedAiPlay";
 import { engineReportGameId, reportEngineStats } from "@/lib/engineStatsReport";
 import { currentOfflineGameId, reportOfflineGame } from "@/lib/offlinePlayRecord";
+import type { OfflineSeatOutcome } from "@/lib/offlinePlayRecord";
 import { offlineSeats } from "@/lib/offlineSeats";
 import { clearLocalGame } from "@/lib/localGamePresence";
 import { useGameStore } from "@/stores/useGameStore";
@@ -162,14 +163,37 @@ function reportHostOutcome(state: GameState): void {
     })
     .catch(() => undefined);
 }
+/** One seat per player in an online game. Every seat is human (bots may be
+ *  present but are not distinguishable here), so `isLocal` is what marks the
+ *  seat at this device for the local stats. */
+function multiplayerSeats(state: GameState): OfflineSeatOutcome[] {
+  const username = useServerStore.getState().username;
+  return (state.gameView?.players ?? []).map((player) => ({
+    seatId: player.id,
+    username: player.id === state.myPlayerSlot ? username ?? player.name : player.name,
+    isBot: false,
+    isLocal: player.id === state.myPlayerSlot,
+    conceded: player.status === "conceded",
+  }));
+}
 /** Close the book on the current game. Safe to call more than once. */
 function reportEngineGame(): void {
   const state = useGameStore.getState();
   // Read before the offline record is closed: reporting the game clears it, and
   // the engine report below needs the same id to file itself against.
   const offlineGameId = currentOfflineGameId();
-  if (state.isMultiplayer) reportHostOutcome(state);
-  if (!state.isMultiplayer) {
+  if (state.isMultiplayer) {
+    reportHostOutcome(state);
+    const seats = multiplayerSeats(state);
+    const winnerId = state.gameView?.winnerId ?? null;
+    reportOfflineGame({
+      gameOver: isOver(state),
+      winner: seats.find((seat) => seat.seatId === winnerId)?.username ?? null,
+      seats,
+      engineError: state.engineCrash,
+      skipHub: true,
+    });
+  } else {
     clearLocalGame();
     const seats = offlineSeats(state.gameView);
     const winnerId = state.gameView?.winnerId ?? null;
