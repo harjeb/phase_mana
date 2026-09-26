@@ -131,7 +131,7 @@ export function GameSettingsModal({ onClose }: { onClose: () => void }) {
               { value: true, label: t`Full control` },
             ]}
             onChange={setFullControl}
-            hint={t`Full control stops at every window. Autopass skips windows with only mana abilities after a short delay.`}
+            hint={t`Full control stops at every window. Autopass skips dead windows after a short delay, and the opponent's upkeep/draw pass after 5s unless you act.`}
           />
           <Choice
             label={t`Choose simultaneous trigger order`}

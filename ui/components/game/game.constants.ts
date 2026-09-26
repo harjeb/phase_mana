@@ -255,4 +255,8 @@ export const HOVER_DELAY_MAX = 1500;
 export const HOVER_DELAY_STEP = 50;
 export const AUTOPASS_DELAY_MIN_MS = 700;
 export const AUTOPASS_DELAY_MAX_MS = 1500;
+// Opponent-turn windows where only instant-speed options are available (e.g.
+// upkeep/draw with an instant in hand) get a longer, idle-reset grace period
+// before passing automatically.
+export const OPPONENT_INSTANT_AUTOPASS_DELAY_MS = 5000;
 export const TRIGGER_ORDER_PROMPT_TITLE = "Order triggered abilities";

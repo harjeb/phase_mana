@@ -51,7 +51,7 @@ export function PromptPreferencesPanel() {
           <div className="space-y-1">
             <Label htmlFor="prompt-full-control">{t`Full control`}</Label>
             <p className="text-xs text-muted-foreground">
-              {t`Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay.`}
+              {t`Stop at every priority window, even when you have no possible response. When off, windows where you can only tap for mana pass automatically after a short delay, and the opponent's upkeep/draw pass after 5s unless you act.`}
             </p>
           </div>
         </div>

@@ -18,6 +18,7 @@ import {
   AUTOPASS_DELAY_MAX_MS,
   AUTOPASS_DELAY_MIN_MS,
   GAME_CARD_SIZES,
+  OPPONENT_INSTANT_AUTOPASS_DELAY_MS,
 } from "@/components/game/game.constants";
 import { usePromptPreferencesStore } from "@/stores/usePromptPreferencesStore";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
@@ -42,7 +43,8 @@ import {
   type WaitingHourglassVisual,
   actionTitle,
   actionViewKey,
-  isAutopassWindow,
+  autopassWindow,
+  type AutopassWindow,
   promptRichText,
   promptText,
   promptTypeForView,
@@ -62,8 +64,10 @@ export class PromptLayer extends PromptModalLayer {
   private onStageMove = (event: FederatedPointerEvent): void => this.moveDrag(event);
   private onStageUp = (event: FederatedPointerEvent): void => this.finishDrag(event);
   private onStageCancel = (event: FederatedPointerEvent): void => this.cancelPointerDrag(event);
-  private onModifierEvent = (event: KeyboardEvent | PointerEvent): void =>
+  private onModifierEvent = (event: KeyboardEvent | PointerEvent): void => {
     this.updateEndTurnModifiers(event);
+    this.resetAutopassOnActivity();
+  };
   private onModifierReset = (): void => {
     this.setEndTurnModifiersHeld(false);
     this.setSelectionFilterFocused(false);
@@ -72,6 +76,7 @@ export class PromptLayer extends PromptModalLayer {
     this.bumpActionPanel((event as CustomEvent<boolean>).detail === true);
   private readonly onTick = (ticker: Ticker): void => this.update(ticker.deltaMS);
   private ambientColor: number | null = null;
+  private autopassKind: AutopassWindow | null = null;
 
   constructor(app: Application, callbacks: PromptLayerCallbacks = {}) {
     super(app, callbacks);
@@ -220,6 +225,7 @@ export class PromptLayer extends PromptModalLayer {
     this.order = [];
     this.autopassRemainingMs = null;
     this.autopassTotalMs = 0;
+    this.autopassKind = null;
     this.scryItems = {};
     this.scrySelectedId = null;
     this.damageAssigned = {};
@@ -258,9 +264,9 @@ export class PromptLayer extends PromptModalLayer {
         ...Object.fromEntries(input.zones.map((_, index) => [`zone-${index}`, []])),
       };
     }
-    if (isAutopassWindow(spec)) {
-      this.autopassTotalMs =
-        AUTOPASS_DELAY_MIN_MS + Math.random() * (AUTOPASS_DELAY_MAX_MS - AUTOPASS_DELAY_MIN_MS);
+    this.autopassKind = autopassWindow(spec);
+    if (this.autopassKind) {
+      this.autopassTotalMs = this.autopassDelay(this.autopassKind);
       this.autopassRemainingMs = this.autopassTotalMs;
     }
   }
@@ -1604,7 +1610,7 @@ export class PromptLayer extends PromptModalLayer {
       {
         title: fullControl
           ? `Full control — you stop at every priority window${hint}`
-          : `Autopass: dead priority windows pass automatically${hint}`,
+          : `Autopass: dead windows pass automatically, the opponent's upkeep/draw after 5s${hint}`,
         icon: fullControl ? "lucide-hand" : "lucide-zap",
         iconSize: 12,
         outline: true,
@@ -1715,9 +1721,21 @@ export class PromptLayer extends PromptModalLayer {
   private resetAutopassState(): void {
     this.autopassRemainingMs = null;
     this.autopassTotalMs = 0;
-    if (!isAutopassWindow(this.spec)) return;
-    this.autopassTotalMs =
-      AUTOPASS_DELAY_MIN_MS + Math.random() * (AUTOPASS_DELAY_MAX_MS - AUTOPASS_DELAY_MIN_MS);
+    this.autopassKind = autopassWindow(this.spec);
+    if (!this.autopassKind) return;
+    this.autopassTotalMs = this.autopassDelay(this.autopassKind);
+    this.autopassRemainingMs = this.autopassTotalMs;
+  }
+
+  private autopassDelay(kind: AutopassWindow): number {
+    if (kind === "opponentInstant") return OPPONENT_INSTANT_AUTOPASS_DELAY_MS;
+    return AUTOPASS_DELAY_MIN_MS + Math.random() * (AUTOPASS_DELAY_MAX_MS - AUTOPASS_DELAY_MIN_MS);
+  }
+
+  // "If you don't act, continue": the opponent-turn instant window restarts its
+  // countdown on any input, so reading the board keeps it open.
+  private resetAutopassOnActivity(): void {
+    if (this.autopassKind !== "opponentInstant" || this.autopassRemainingMs == null) return;
     this.autopassRemainingMs = this.autopassTotalMs;
   }
 
@@ -2159,12 +2177,14 @@ export class PromptLayer extends PromptModalLayer {
     }
 
     if (this.autopassRemainingMs != null) {
-      const canAutopass = isAutopassWindow(this.spec);
-      if (!canAutopass) {
+      const kind = autopassWindow(this.spec);
+      if (!kind) {
         this.autopassRemainingMs = null;
         this.autopassTotalMs = 0;
+        this.autopassKind = null;
         this.rebuild();
       } else {
+        this.autopassKind = kind;
         this.autopassRemainingMs -= deltaMs;
         if (this.autopassRemainingMs <= 0) {
           this.autopassRemainingMs = null;

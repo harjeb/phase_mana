@@ -316,16 +316,40 @@ export function actionTitle(promptType: PromptOverlaySpec["action"]["promptType"
       return "Action Required";
   }
 }
-export function isAutopassWindow(spec: PromptOverlaySpec | null): boolean {
+export type AutopassWindow = "dead" | "opponentInstant";
+
+// Steps on the opponent's turn where nobody has committed to anything yet, so
+// holding an instant is no reason to stall at every priority window. Combat and
+// end-of-turn windows are deliberately excluded: those are when you want to act.
+const QUIET_OPPONENT_STEPS = new Set(["upkeep", "draw"]);
+
+export function autopassWindow(spec: PromptOverlaySpec | null): AutopassWindow | null {
   const input = spec?.currentPrompt?.input;
-  return (
-    spec != null &&
-    input?.type === "chooseAction" &&
-    spec.action.promptActionOverride == null &&
-    !spec.action.isWaitingForResponse &&
-    !usePromptPreferencesStore.getState().fullControl &&
-    input.actions.every((action) => action.type === "activateAbility" && action.isManaAbility)
-  );
+  if (
+    spec == null ||
+    input?.type !== "chooseAction" ||
+    spec.action.promptActionOverride != null ||
+    spec.action.isWaitingForResponse ||
+    usePromptPreferencesStore.getState().fullControl
+  ) {
+    return null;
+  }
+  if (input.actions.every((action) => action.type === "activateAbility" && action.isManaAbility)) {
+    return "dead";
+  }
+  if (
+    !spec.action.isMyTurn &&
+    spec.gameView.stack.length === 0 &&
+    QUIET_OPPONENT_STEPS.has(spec.action.step) &&
+    input.actions.some(
+      (action) =>
+        action.type === "cast" ||
+        (action.type === "activateAbility" && !action.isManaAbility),
+    )
+  ) {
+    return "opponentInstant";
+  }
+  return null;
 }
 
 function sameArray<T>(
