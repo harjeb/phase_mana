@@ -63,6 +63,7 @@ import {
 } from "./RulesPreviewSectionHeader";
 import { parseManaCost } from "@/pixi/manaSymbols";
 import { translateKeyword } from "@/i18n/cardKeywords";
+import { getKeywordHelp } from "@/i18n/keywordHelp";
 import {
   CARD_PREVIEW_ANCHOR_GAP as PANEL_GAP,
   CARD_PREVIEW_EDGE_PAD as EDGE_PAD,
@@ -737,7 +738,13 @@ export class RulesCardPreviewLayer {
         display.keywords.length > 0 ? this.theme.gameTheme.cardRing : undefined,
       );
       if (!this.isCollapsed("details")) {
-        if (display.keywords.length > 0) y = this.addKeywordChips(display.keywords, y);
+        if (display.keywords.length > 0) {
+          y = this.addKeywordChips(display.keywords, y);
+          // Use only resolved display keywords: hidden and inactive faces omit live abilities.
+          for (const help of getKeywordHelp(display.keywords)) {
+            y = this.addOracleAbilityRow(`${help.name}：${help.description}`, y + 8, false);
+          }
+        }
         for (const cost of display.costs) {
           y = this.addStaticAbilityRow(`${cost.label} ${cost.cost}`, y);
         }

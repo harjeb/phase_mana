@@ -1,5 +1,8 @@
 import { topModal } from "@/lib/modalStack";
 import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
+import { getKeywordHelp } from "@/i18n/keywordHelp";
+import { KeywordHelpPanel } from "./KeywordHelpPanel";
 import { createPortal } from "react-dom";
 import { Loader2, RotateCw } from "lucide-react";
 import type { CardDto } from "@/protocol/game";
@@ -138,7 +141,16 @@ export function CardPreview({
   slot,
   imageSize = "large",
 }: CardPreviewProps) {
+  const { i18n } = useLingui();
   const resolvedGameCard = useResolvedGameCard(card);
+  // Live keywords include granted abilities and exclude lost ones. Do not borrow
+  // them for an inactive face, or reveal any information about a face-down card.
+  const keywordHelp = getKeywordHelp(
+    card.isFaceDown || (card.isDoubleFaced && showBackFace !== card.isTransformed)
+      ? []
+      : (card.keywords ?? []),
+    i18n.locale,
+  );
   const hasActions = Boolean(actions?.length && onSelectAction);
   const themeColors = useTheme().gameTheme;
   const showHoverAreas = useGameDevStore((s) => s.showHoverAreas);
@@ -184,7 +196,8 @@ export function CardPreview({
         ]
       : [];
   const hasMainActions = mainActions.length > 0;
-  const showSidePanel = hasMainActions || Boolean(rail || extraClassActions.length);
+  const showSidePanel =
+    keywordHelp.length > 0 || hasMainActions || Boolean(rail || extraClassActions.length);
   const isDebugCard = card.id === DEBUG_KEYWORD_CARD_ID;
   const deckCard: DeckCard = isDebugCard
     ? ({
@@ -542,6 +555,7 @@ export function CardPreview({
                   zIndex: -1,
                 }}
               />
+              <KeywordHelpPanel entries={keywordHelp} maxHeight={cardHeight} />
               {hasMainActions && (
                 <CardPreviewActions
                   actions={mainActions}

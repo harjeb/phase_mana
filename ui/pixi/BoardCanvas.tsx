@@ -30,6 +30,8 @@ import {
   Z_HAND_ACTIONS_MENU,
 } from "./constants";
 import { HandCardActions } from "@/components/game/zones/HandCardActions";
+import { KeywordHelpPanel } from "@/components/game/KeywordHelpPanel";
+import { getKeywordHelp } from "@/i18n/keywordHelp";
 import { useCardFaces } from "@/hooks/useCardFaces";
 import { useKeybindings } from "@/hooks/useKeybindings";
 import { useGameDevStore } from "@/stores/useGameDevStore";
@@ -594,7 +596,27 @@ export function BoardCanvas({
     );
   }, [handCardStyle, hoverCardId, scene]);
   const showHandFlip = !!handHover && hoverFaces.isFlippable;
-  const handActionPanelVisible = Boolean(showActionPanel && !handRulesView);
+  // Hand hover enlarges the Pixi card in place; it deliberately does not mount
+  // CardPreview. Render its reminder beside the same live bounds as the actions,
+  // even when the card is uncastable and has no available actions.
+  const handKeywordHelp = getKeywordHelp(
+    !handHover || handHover.card.isFaceDown ||
+      (hoverFaces.isFlippable && handFlipBack !== handHover.card.isTransformed)
+      ? [] : handHover.card.keywords,
+    i18n.locale,
+  );
+  const showHandSidePanel = Boolean(handHover && !handRulesView &&
+    (showActionPanel || handKeywordHelp.length > 0));
+  const handPanelLeft = handHover ? Math.max(8,
+    handHover.bounds.x + handHover.bounds.width + HAND_ACTIONS_GAP_PX + HAND_ACTIONS_PANEL_W <=
+      (canvasRef.current?.clientWidth ?? Infinity) - 8
+      ? handHover.bounds.x + handHover.bounds.width + HAND_ACTIONS_GAP_PX
+      : handHover.bounds.x - HAND_ACTIONS_GAP_PX - HAND_ACTIONS_PANEL_W,
+  ) : 0;
+  const handPanelMaxHeight = Math.max(80,
+    (canvasRef.current?.clientHeight ?? 900) - Math.max(8, handHover?.bounds.y ?? 8) - 8,
+  );
+  const handActionPanelVisible = showHandSidePanel;
   useEffect(() => {
     if (handActionPanelVisible || !handActionHoverHeldRef.current) return;
     handActionHoverHeldRef.current = false;
@@ -708,19 +730,20 @@ export function BoardCanvas({
         style={{ width: "100%", height: "100%", display: "block", touchAction: "none" }}
         onContextMenu={(e) => e.preventDefault()}
       />
-      {showActionPanel && !handRulesView && (
+      {handHover && showHandSidePanel && (
         <>
-          {/* Curved hover bridge: its border-radius clips the hit region so the
-              cursor can travel from the lifted card to the action panel without
-              dropping the hover. Transparent in play; tinted by the dev overlay. */}
+          {/* Bridge lets the cursor reach reminders/actions without dropping
+              the lifted card, on either side. Transparent outside the dev overlay. */}
           <div
             style={{
               position: "absolute",
-              left: handHover.bounds.x + handHover.bounds.width,
+              left: Math.min(handPanelLeft, handHover.bounds.x + handHover.bounds.width),
               top: handHover.bounds.y,
               width: HAND_ACTIONS_GAP_PX + HAND_ACTIONS_PANEL_W,
               height: handHover.bounds.height,
-              borderBottomRightRadius: "100%",
+              ...(handPanelLeft < handHover.bounds.x
+                ? { borderBottomLeftRadius: "100%" }
+                : { borderBottomRightRadius: "100%" }),
               backgroundColor: showHoverAreas
                 ? withAlpha(getTheme().gameTheme.success, 0.28)
                 : "transparent",
@@ -730,26 +753,27 @@ export function BoardCanvas({
             onMouseLeave={releaseHandActionHover}
           />
           <div
+            data-hand-preview-help
+            className="flex flex-col gap-1.5 overflow-y-auto overscroll-contain"
             style={{
               position: "absolute",
-              left: Math.min(
-                handHover.bounds.x + handHover.bounds.width + HAND_ACTIONS_GAP_PX,
-                Math.max(
-                  0,
-                  (canvasRef.current?.clientWidth ?? Infinity) - HAND_ACTIONS_PANEL_W - 8,
-                ),
-              ),
-              top: handHover.bounds.y,
+              left: handPanelLeft,
+              top: Math.max(8, handHover.bounds.y),
+              width: HAND_ACTIONS_PANEL_W,
+              maxHeight: handPanelMaxHeight,
               zIndex: Z_HAND_ACTIONS_MENU,
             }}
             onMouseEnter={holdHandActionHover}
             onMouseLeave={releaseHandActionHover}
           >
-            <HandCardActions
-              card={handHover.card}
-              actions={handActions}
-              onSelectAction={selectHandAction}
-            />
+            <KeywordHelpPanel entries={handKeywordHelp} maxHeight={handPanelMaxHeight} />
+            {showActionPanel && (
+              <HandCardActions
+                card={handHover.card}
+                actions={handActions}
+                onSelectAction={selectHandAction}
+              />
+            )}
           </div>
         </>
       )}
