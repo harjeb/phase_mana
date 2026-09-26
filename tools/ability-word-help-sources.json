@@ -1,0 +1,433 @@
+{
+  "augment": {
+    "name": "附体",
+    "fragments": ["{3}{W}，从你手上展示此牌：将它与目标宿主组合。只能于法术时机附体。"],
+    "fullText": "飞行\\n每当你以两个或更多生物攻击时，\\n附体{3}{W}（{3}{W}，从你手上展示此牌：将它与目标宿主组合。只能于法术时机附体。）",
+    "source": {
+      "url": "https://mtgch.com/api/v1/card/ust/10/",
+      "field": "atomic_translated_text",
+      "card": "Humming-"
+    }
+  },
+  "landfall": {
+    "fragments": [
+      "每当一个地在你的操控下进战场时"
+    ],
+    "fullText": "当赞迪卡复仇者进战场时，你每操控一个地，便派出一个0/1绿色植物衍生生物。\n地落～每当一个地在你的操控下进战场时，你可以在每个由你操控的植物生物上各放置一个+1/+1指示物。",
+    "source": {
+      "url": "https://scryfall.com/card/248bd095-6990-4dbc-94c1-affbb403b784",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Avenger of Zendikar"
+    },
+    "name": "地落"
+  },
+  "constellation": {
+    "fragments": [
+      "每当达克索斯的苦痛或另一个结界在你的操控下进战场时"
+    ],
+    "fullText": "星彩～每当达克索斯的苦痛或另一个结界在你的操控下进战场时，直到回合结束，达克索斯的苦痛成为5/5，具飞行与敏捷异能的恶魔生物，且仍具有原本类别。",
+    "source": {
+      "url": "https://scryfall.com/card/4433ce39-1b4a-44c2-8bab-04d52c6ae3d2",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Daxos's Torment"
+    },
+    "name": "星彩"
+  },
+  "heroic": {
+    "fragments": [
+      "每当你施放以飞马骑士为目标的咒语时"
+    ],
+    "fullText": "飞行\n勇行～每当你施放以飞马骑士为目标的咒语时，在飞马骑士上放置一个+1/+1指示物。",
+    "source": {
+      "url": "https://scryfall.com/card/a1c418b1-defc-4d65-a1e6-bdcfa5585377",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Wingsteed Rider"
+    },
+    "name": "勇行"
+  },
+  "magecraft": {
+    "fragments": [
+      "每当你施放或复制瞬间或法术咒语时"
+    ],
+    "fullText": "魔艺～每当你施放或复制瞬间或法术咒语时，二元之声薇兰得+1/+1直到回合结束。\n如果某个由你操控之永久物的触发式异能，是因你施放或复制了瞬间或法术咒语而触发，则该异能额外触发一次。",
+    "source": {
+      "url": "https://scryfall.com/card/f6dd9604-9ccd-48f0-a683-82142f428e11",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Veyran, Voice of Duality"
+    },
+    "name": "魔艺"
+  },
+  "rally": {
+    "fragments": [
+      "每当哥马法达勇士或另一个伙伴在你的操控下进战场时"
+    ],
+    "fullText": "奋扬～每当哥马法达勇士或另一个伙伴在你的操控下进战场时，由你操控的生物获得不灭异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/343bf5d8-1062-4f81-832d-d5313ee87261",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Hero of Goma Fada"
+    },
+    "name": "奋扬"
+  },
+  "raid": {
+    "fragments": [
+      "如果你本回合中攻击过"
+    ],
+    "fullText": "目标对手弃两张牌。\n突击～如果你本回合中攻击过，则派出一个珍宝衍生物。（珍宝衍生物是具有「{T}，牺牲此神器：加一点任意颜色的法术力」的神器。）",
+    "source": {
+      "url": "https://scryfall.com/card/ebf7c48b-e601-40a8-87b8-bf56b2acfdc3",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Heartless Pillage"
+    },
+    "name": "突击"
+  },
+  "battalion": {
+    "fragments": [
+      "每当前线医士与至少两个其他生物攻击时"
+    ],
+    "fullText": "协战～每当前线医士与至少两个其他生物攻击时，由你操控的生物获得不灭异能直到回合结束。\n牺牲前线医士：除非目标法术力费用中包含{X}之咒语的操控者支付{3}，否则反击之。",
+    "source": {
+      "url": "https://scryfall.com/card/9190abbc-c2e8-48a0-98db-33b96de7ffce",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Frontline Medic"
+    },
+    "name": "协战"
+  },
+  "kinship": {
+    "fragments": [
+      "在你的维持开始时，你可以检视你的牌库顶牌。 如果它与风飘洁英有共通之生物类别，你可以展示该牌。"
+    ],
+    "fullText": "血族～在你的维持开始时，你可以检视你的牌库顶牌。 如果它与风飘洁英有共通之生物类别，你可以展示该牌。 如果你如此作，则风飘洁英得+2/+2且获得飞行与警戒异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/388281fe-74b2-4c66-80b7-9fba295abfcf",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Kithkin Zephyrnaut"
+    },
+    "name": "血族"
+  },
+  "domain": {
+    "fragments": [
+      "由你操控的地之中基本地类别的数量"
+    ],
+    "fullText": "虹彩地镜须横置进战场。\n领土～{T}：加X点法术力到你的法术力池中，其颜色组合可任意选择，X为由你操控的地之中基本地类别的数量。",
+    "source": {
+      "url": "https://scryfall.com/card/588b7e8f-585b-4067-914e-036af15285ef",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Prismatic Geoscope"
+    },
+    "name": "领土"
+  },
+  "metalcraft": {
+    "fragments": [
+      "只要你操控三个或更多神器"
+    ],
+    "fullText": "每当一个武具在你的操控下进战场时，你可以抓一张牌。\n金技～只要你操控三个或更多神器，由你操控的武具便具有佩带{0}。",
+    "source": {
+      "url": "https://scryfall.com/card/bfe02a57-6987-4716-911d-22bfe7e29d02",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Puresteel Paladin"
+    },
+    "name": "金技"
+  },
+  "morbid": {
+    "fragments": [
+      "如果本回合中有生物死去"
+    ],
+    "fullText": "硫磺射击对任意一个目标造成3点伤害。\n丧心～如果本回合中有生物死去，则改为硫磺射击造成5点伤害。",
+    "source": {
+      "url": "https://scryfall.com/card/af106c8f-cd17-4ee6-8dbe-20b24d4b9fdd",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Brimstone Volley"
+    },
+    "name": "丧心"
+  },
+  "delirium": {
+    "fragments": [
+      "只要你坟墓场中牌的牌张类别有四种或更多"
+    ],
+    "fullText": "践踏\n每当残酷劫掠者对任一牌手造成战斗伤害时，检视你牌库顶的三张牌。将其中任意数量的牌置入你的坟墓场，其余则以任意顺序放回你的牌库顶。\n躁狂～只要你坟墓场中牌的牌张类别有四种或更多，残酷劫掠者便得+2/+2。",
+    "source": {
+      "url": "https://scryfall.com/card/cae1c8a8-645d-444c-a2fe-d774ae6e80f8",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Grim Flayer"
+    },
+    "name": "躁狂"
+  },
+  "coven": {
+    "fragments": [
+      "若你操控三个或更多力量各不相同的生物"
+    ],
+    "fullText": "系命\n鸠集～每当救赎唱团进战场或攻击时，若你操控三个或更多力量各不相同的生物，则将目标法术力值等于或小于3的永久物牌从你坟墓场移回战场。",
+    "source": {
+      "url": "https://scryfall.com/card/44442377-3f70-4b3f-a610-c729a255c374",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Redemption Choir"
+    },
+    "name": "鸠集"
+  },
+  "converge": {
+    "fragments": [
+      "施放此咒语时用来支付费用的法术力颜色数量"
+    ],
+    "fullText": "聚辉～从你牌库中搜寻一张生物，瞬间或法术牌，且其法术力值须等于或小于施放此咒语时用来支付费用的法术力颜色数量，放逐该牌，然后洗牌。你可以施放该牌，且不需支付其法术力费用。",
+    "source": {
+      "url": "https://scryfall.com/card/e5eb89dc-17e5-4b05-a7df-a90ab053247f",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Bring to Light"
+    },
+    "name": "聚辉"
+  },
+  "formidable": {
+    "fragments": [
+      "若由你操控之生物的力量总和等于或大于8"
+    ],
+    "fullText": "强横～在你回合的战斗开始时，若由你操控之生物的力量总和等于或大于8，则目标由你操控的生物获得敏捷异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/6932cbc6-3e3a-41a0-b0a2-6bb338d145ee",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Surrak, the Hunt Caller"
+    },
+    "name": "强横"
+  },
+  "enrage": {
+    "fragments": [
+      "每当城市匕牙龙受到伤害时"
+    ],
+    "fullText": "警戒\n激怒～每当城市匕牙龙受到伤害时，增殖。（选择任意数量的永久物和／或牌手，然后为其已有之每种指示物各多放置一个同类的指示物。）",
+    "source": {
+      "url": "https://scryfall.com/card/5175f7dc-35d2-402c-9285-01df1bde8efb",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Urban Daggertooth"
+    },
+    "name": "激怒"
+  },
+  "bloodrush": {
+    "fragments": [
+      "弃掉烙肤鬼怪",
+      "目标进行攻击的生物"
+    ],
+    "fullText": "血激～{R}，弃掉烙肤鬼怪：目标进行攻击的生物得+2/+1直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/a6ac206c-1c52-4fea-b159-31d6939e73b1",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Skinbrand Goblin"
+    },
+    "name": "血激"
+  },
+  "cohort": {
+    "fragments": [
+      "{T}，横置一个由你操控且未横置的伙伴"
+    ],
+    "fullText": "齐力～{T}，横置一个由你操控且未横置的伙伴：在每个由你操控的生物上各放置一个+1/+1指示物。",
+    "source": {
+      "url": "https://scryfall.com/card/871cc5cb-d1be-41e5-9bb9-0c027b719085",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Munda's Vanguard"
+    },
+    "name": "齐力"
+  },
+  "parley": {
+    "fragments": [
+      "每位牌手各展示其牌库顶牌。每以此法展示出一张非地牌",
+      "然后每位牌手各抓一张牌。"
+    ],
+    "fullText": "论争～每位牌手各展示其牌库顶牌。每以此法展示出一张非地牌，你便将一个1/1白色，具飞行异能的精怪衍生生物放进战场。然后每位牌手各抓一张牌。",
+    "source": {
+      "url": "https://scryfall.com/card/4616e06b-f1d4-43de-95cf-f04ef5e2b9a7",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Rousing of Souls"
+    },
+    "name": "论争"
+  },
+  "pack tactics": {
+    "fragments": [
+      "每当大哥布林队长攻击时，若你本次战斗中用以攻击之生物力量总和等于或大于6"
+    ],
+    "fullText": "集群战术～每当大哥布林队长攻击时，若你本次战斗中用以攻击之生物力量总和等于或大于6，则大哥布林队长获得先攻异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/fc4fc85d-1769-42ea-b828-6c42c78d8b0f",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Hobgoblin Captain"
+    },
+    "name": "集群战术"
+  },
+  "will of the council": {
+    "fragments": [
+      "由你开始，每位牌手各投票选择",
+      "票数最多或与他者同为最多"
+    ],
+    "fullText": "议定～由你开始，每位牌手各投票选择一个不由你操控的非地永久物。放逐票数最多或与他者同为最多的所有永久物。",
+    "source": {
+      "url": "https://scryfall.com/card/25fc0c95-c1eb-4108-9f2f-0f2d60c74b61",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Council's Judgment"
+    },
+    "name": "议定"
+  },
+  "fateful hour": {
+    "fragments": [
+      "如果你的生命为5或更少"
+    ],
+    "fullText": "由你操控的生物得+1/+1直到回合结束。命悬一刻～如果你的生命为5或更少，这些生物本回合也不会毁坏。（致命伤害以及注明「消灭」的效应都不会将它们消灭。）",
+    "source": {
+      "url": "https://scryfall.com/card/c7ff4494-43e0-4774-b3dc-38c3ada91cf2",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Break of Day"
+    },
+    "name": "命悬一刻"
+  },
+  "hellbent": {
+    "fragments": [
+      "只要你没有手牌"
+    ],
+    "fullText": "飞行\n背水战～只要你没有手牌，恶魔小丑便得+2/+1。",
+    "source": {
+      "url": "https://scryfall.com/card/36b8927d-7ef1-4c07-af4d-36d7c2f0f440",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Demon's Jester"
+    },
+    "name": "背水战"
+  },
+  "undergrowth": {
+    "fragments": [
+      "你坟墓场中的生物牌数量"
+    ],
+    "fullText": "朽力～当貌纹绘师进战场时，直到回合结束，目标生物获得威慑异能且得+X/+0，X为你坟墓场中的生物牌数量。（它只能被两个或更多生物阻挡。）",
+    "source": {
+      "url": "https://scryfall.com/card/69a75e3b-1233-467d-abc1-95dfbbd79e4f",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Moodmark Painter"
+    },
+    "name": "朽力"
+  },
+  "channel": {
+    "fragments": [
+      "弃掉阳刃武士"
+    ],
+    "fullText": "警戒\n魂力～{2}，弃掉阳刃武士：从你牌库中搜寻一张基本的平原牌，展示该牌，将它置于你手上，然后洗牌。你获得2点生命。",
+    "source": {
+      "url": "https://scryfall.com/card/fa8933a3-6cff-4838-b383-cdf41ac8bb72",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Sunblade Samurai"
+    },
+    "name": "魂力"
+  },
+  "spell mastery": {
+    "fragments": [
+      "如果你坟墓场中有两张或更多的瞬间和／或法术牌"
+    ],
+    "fullText": "肆虐火光对目标生物造成X点伤害。\n精熟咒语～如果你坟墓场中有两张或更多的瞬间和／或法术牌，则肆虐火光再对该生物的操控者造成X点伤害。",
+    "source": {
+      "url": "https://scryfall.com/card/f8fc7388-38dc-4433-a665-48482b0b50f4",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Ravaging Blaze"
+    },
+    "name": "精熟咒语"
+  },
+  "eminence": {
+    "fragments": [
+      "只要太初龙在统帅区中或战场上"
+    ],
+    "fullText": "威仪～只要太初龙在统帅区中或战场上，你施放的其他龙咒语便减少{1}来施放。\n飞行\n每当一个或数个由你操控的龙攻击时，抓等量的牌，然后你可以将一张永久物牌从你手上放进战场。",
+    "source": {
+      "url": "https://scryfall.com/card/aa996bbf-c2ba-4274-8bad-bc37bc486973",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "The Ur-Dragon"
+    },
+    "name": "威仪"
+  },
+  "ferocious": {
+    "fragments": [
+      "如果你操控力量等于或大于4的生物"
+    ],
+    "fullText": "目标生物获得连击异能直到回合结束。（它能造成先攻与普通战斗伤害。）\n威猛～如果你操控力量等于或大于4的生物，则受影响的生物再获得践踏异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/bcf129f8-0b94-4e56-a671-f17a59677e63",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Temur Battle Rage"
+    },
+    "name": "威猛"
+  },
+  "chroma": {
+    "fragments": [
+      "你坟墓场中所有牌之法术力费用中黑色法术力符号之数量"
+    ],
+    "fullText": "渲色～伏击暗灵的力量和防御力各等同于你坟墓场中所有牌之法术力费用中黑色法术力符号之数量。",
+    "source": {
+      "url": "https://scryfall.com/card/62390ce8-26c9-42c7-830b-9e476330959e",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Umbra Stalker"
+    },
+    "name": "渲色"
+  },
+  "radiance": {
+    "fragments": [
+      "目标生物和每个与该生物有共通颜色的其它生物"
+    ],
+    "fullText": "辉耀～选择一种颜色。 目标生物和每个与该生物有共通颜色的其它生物获得反该色保护异能直到回合结束。",
+    "source": {
+      "url": "https://scryfall.com/card/1c9a5818-7c3f-40bf-b8ac-db4d77aebf9c",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Bathe in Light"
+    },
+    "name": "辉耀"
+  },
+  "revolt": {
+    "fragments": [
+      "如果本回合中有由你操控的永久物离开战场"
+    ],
+    "fullText": "如果目标生物的总法术力费用等于或小于2，则消灭之。\n反抗～如果本回合中有由你操控的永久物离开战场，则改为如果目标生物的总法术力费用等于或小于4，则消灭之。",
+    "source": {
+      "url": "https://scryfall.com/card/38815a8d-8d08-4b3f-abaa-c0fd77e40edf",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Fatal Push"
+    },
+    "name": "反抗"
+  },
+  "adamant": {
+    "fragments": [
+      "若施放它时支付过至少三点相同颜色的法术力"
+    ],
+    "fullText": "固色～当发条仆从进战场时，若施放它时支付过至少三点相同颜色的法术力，则抓一张牌。",
+    "source": {
+      "url": "https://scryfall.com/card/822e8dbc-53f4-4c9c-bf8c-a36751b290a1",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Clockwork Servant"
+    },
+    "name": "固色"
+  },
+  "descend": {
+    "fragments": [
+      "如果有永久物牌从任何区域进入你的坟墓场，便算作你有落坟。"
+    ],
+    "fullText": "飞行，系命\n在你的结束步骤开始时，若你本回合中有落坟，则占卜1。（如果有永久物牌从任何区域进入你的坟墓场，便算作你有落坟。）",
+    "source": {
+      "url": "https://scryfall.com/card/e2850149-f29b-426c-85d7-ae53dee29552",
+      "field": "cards[].foreignData[language=Chinese Simplified].text",
+      "card": "Ruin-Lurker Bat"
+    },
+    "name": "落坟"
+  },
+  "double team": {
+    "fragments": [
+      "当此生物攻击时，将它的一张副本幻变进你手上，然后这两者均永久失去双打异能。"
+    ],
+    "fullText": "双打（当此生物攻击时，将它的一张副本幻变进你手上，然后这两者均永久失去双打异能。）",
+    "source": {
+      "url": "https://mtgch.com/api/v1/card/hbg/28/",
+      "field": "atomic_translated_text",
+      "card": "Soldiers of the Watch"
+    },
+    "name": "双打"
+  },
+  "starting intensity": {
+    "name": "起始强度",
+    "fragments": ["起始强度3", "此法术对任意一个目标造成伤害，其数量等同于其强度。然后由你拥有且名称为静电放射的牌强化1。"],
+    "fullText": "起始强度3\\n此法术对任意一个目标造成伤害，其数量等同于其强度。然后由你拥有且名称为静电放射的牌强化1。",
+    "source": {
+      "url": "https://mtgch.com/api/v1/card/j21/25/",
+      "field": "atomic_translated_text",
+      "card": "Static Discharge"
+    }
+  }
+}

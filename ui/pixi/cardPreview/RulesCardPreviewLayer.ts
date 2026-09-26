@@ -742,7 +742,10 @@ export class RulesCardPreviewLayer {
           y = this.addKeywordChips(display.keywords, y);
           // Use only resolved display keywords: hidden and inactive faces omit live abilities.
           for (const help of getKeywordHelp(display.keywords)) {
-            y = this.addOracleAbilityRow(`${help.name}：${help.description}`, y + 8, false);
+            const description = help.example
+              ? `${i18n._(msg`Printed example: ${help.example}`)}\n${help.description}`
+              : help.description;
+            y = this.addOracleAbilityRow(`${help.name}：${description}`, y + 8, false);
           }
         }
         for (const cost of display.costs) {

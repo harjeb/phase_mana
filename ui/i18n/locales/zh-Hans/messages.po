@@ -10528,3 +10528,8 @@ msgstr "区域牌堆"
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr "缩放"
+
+#: ui/components/game/KeywordHelpPanel.tsx
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
+msgid "Printed example: {0}"
+msgstr "牌面示例：{0}"

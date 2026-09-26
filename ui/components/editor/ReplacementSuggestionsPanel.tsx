@@ -182,44 +182,47 @@ export function ReplacementSuggestionsPanel({
                 <div className="sticky top-0 z-10 border-b bg-popover px-2 py-1 text-[10px] text-muted-foreground">
                   <Trans>Choose a card from your deck to replace</Trans>
                 </div>
-                {filteredCandidates.map((card, index) => (
-                  <button
-                    key={card.identity.name}
-                    type="button"
-                    role="option"
-                    aria-selected={card.identity.name === target.identity.name}
-                    className={cn(
-                      "flex w-full items-center gap-2 border-b border-border/30 px-2 py-1 text-left last:border-0 hover:bg-muted",
-                      targetActiveIndex === index && "bg-muted",
-                    )}
-                    onMouseEnter={(event) => {
-                      setTargetActiveIndex(index);
-                      onHover?.(card, event);
-                    }}
-                    onMouseLeave={onLeave}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => {
-                      requestIdRef.current += 1;
-                      setLoading(false);
-                      setTargetName(card.identity.name);
-                      setTargetQuery(card.identity.name);
-                      setSuggestions([]);
-                      setTargetMenuOpen(false);
-                    }}
-                  >
-                    <ScryfallImg
-                      src={card.uris.small || card.uris.normal}
-                      alt=""
-                      className="h-11 w-8 shrink-0 rounded object-cover object-top"
-                    />
-                    <span className="min-w-0 flex-1 truncate text-xs font-medium">
-                      {card.identity.name}
-                    </span>
-                    <span className="shrink-0 text-[10px] text-muted-foreground">
-                      MV {card.cmc}
-                    </span>
-                  </button>
-                ))}
+                {filteredCandidates.map((card, index) => {
+                  const uris = withLocalCardArt(card.uris, card.identity.name);
+                  return (
+                    <button
+                      key={card.identity.name}
+                      type="button"
+                      role="option"
+                      aria-selected={card.identity.name === target.identity.name}
+                      className={cn(
+                        "flex w-full items-center gap-2 border-b border-border/30 px-2 py-1 text-left last:border-0 hover:bg-muted",
+                        targetActiveIndex === index && "bg-muted",
+                      )}
+                      onMouseEnter={(event) => {
+                        setTargetActiveIndex(index);
+                        onHover?.(card, event);
+                      }}
+                      onMouseLeave={onLeave}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => {
+                        requestIdRef.current += 1;
+                        setLoading(false);
+                        setTargetName(card.identity.name);
+                        setTargetQuery(card.identity.name);
+                        setSuggestions([]);
+                        setTargetMenuOpen(false);
+                      }}
+                    >
+                      <ScryfallImg
+                        src={uris?.small || uris?.normal}
+                        alt=""
+                        className="h-11 w-8 shrink-0 rounded object-cover object-top"
+                      />
+                      <span className="min-w-0 flex-1 truncate text-xs font-medium">
+                        {card.identity.name}
+                      </span>
+                      <span className="shrink-0 text-[10px] text-muted-foreground">
+                        MV {card.cmc}
+                      </span>
+                    </button>
+                  );
+                })}
                 {filteredCandidates.length === 0 && (
                   <p className="px-2 py-3 text-xs text-muted-foreground">
                     <Trans>No cards in this deck match your search.</Trans>

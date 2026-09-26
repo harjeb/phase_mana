@@ -10529,3 +10529,8 @@ msgstr "Zone Piles"
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr "Zoom"
+
+#: ui/components/game/KeywordHelpPanel.tsx
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
+msgid "Printed example: {0}"
+msgstr "Printed example: {0}"

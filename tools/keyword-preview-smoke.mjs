@@ -19,7 +19,8 @@ try {
     const { createRoot } = dom.default ?? dom;
     const { I18nProvider } = await import(dependency('@lingui_react'));
     const { i18n } = await import('/ui/i18n/i18n.ts');
-    i18n.loadAndActivate({ locale: 'zh-Hans', messages: {} });
+    const { messages } = await import('/ui/i18n/locales/zh-Hans/messages.po');
+    i18n.loadAndActivate({ locale: 'zh-Hans', messages });
     const card = {
       id: 'keyword-smoke', identity: { name: 'Concordia Pegasus', setCode: 'm19', cardNumber: '7', isToken: false },
       color: 'W', manaCost: '{1}{W}', cmc: 2, types: ['Creature'], subtypes: ['Pegasus'], supertypes: [],
@@ -57,6 +58,11 @@ try {
   assert.equal(await panel.locator('img[alt="{1}"]').count(), 2);
   assert.equal(await panel.locator('img[alt="{U}"]').count(), 2);
   await page.screenshot({ path: 'tools/keyword-preview-kicker-smoke.png' });
+  await page.evaluate(() => window.__renderKeywordPreview({ keywords: ['Landfall', 'Radiance'] }));
+  await page.waitForFunction(() => document.querySelector('[data-keyword-help]')?.textContent.includes('牌面示例'));
+  assert.match(await panel.innerText(), /牌面示例：Avenger of Zendikar/);
+  assert.match(await panel.innerText(), /牌面示例：Bathe in Light/);
+  await page.screenshot({ path: 'tools/keyword-preview-examples-smoke.png' });
   await page.evaluate(() => window.__renderKeywordPreview({ keywords: [
     'Flying', 'First strike', 'Double strike', 'Trample', 'Deathtouch', 'Lifelink',
     'Vigilance', 'Haste', 'Reach', 'Defender', 'Menace', 'Indestructible', 'Hexproof',

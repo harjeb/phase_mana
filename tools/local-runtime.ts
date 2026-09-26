@@ -133,9 +133,12 @@ function scryfallImageFor(name: string): Promise<string | null> {
       if (!response.ok) return null;
       const card = (await response.json()) as {
         image_uris?: { normal?: string };
-        card_faces?: { image_uris?: { normal?: string } }[];
+        card_faces?: { name?: string; image_uris?: { normal?: string } }[];
       };
-      return card.image_uris?.normal ?? card.card_faces?.[0]?.image_uris?.normal ?? null;
+      const requestedName = name.trim().toLowerCase();
+      const face = card.card_faces?.find((face) => face.name?.trim().toLowerCase() === requestedName)
+        ?? card.card_faces?.[0];
+      return card.image_uris?.normal ?? face?.image_uris?.normal ?? null;
     } catch {
       return null;
     }

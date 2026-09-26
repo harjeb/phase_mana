@@ -174,14 +174,11 @@ async fn handle(State(g): State<Arc<Gateway>>, req: Request) -> Response {
                 .send()
                 .await
             {
-                Ok(res) if res.status().is_success() => {
-                    res.json::<Value>().await.ok().and_then(|v| {
-                        v.pointer("/image_uris/normal")
-                            .or_else(|| v.pointer("/card_faces/0/image_uris/normal"))
-                            .and_then(Value::as_str)
-                            .map(str::to_owned)
-                    })
-                }
+                Ok(res) if res.status().is_success() => res
+                    .json::<Value>()
+                    .await
+                    .ok()
+                    .and_then(|v| scryfall_image_for(&v, name).map(str::to_owned)),
                 _ => None,
             }
         } else {
@@ -205,6 +202,25 @@ async fn handle(State(g): State<Arc<Gateway>>, req: Request) -> Response {
         Some(file) => serve_file(file, head).await,
         None => StatusCode::NOT_FOUND.into_response(),
     }
+}
+fn scryfall_image_for<'a>(card: &'a Value, name: &str) -> Option<&'a str> {
+    let requested_name = name.trim().to_lowercase();
+    let face = card
+        .get("card_faces")
+        .and_then(Value::as_array)
+        .and_then(|faces| {
+            faces
+                .iter()
+                .find(|face| {
+                    face.get("name")
+                        .and_then(Value::as_str)
+                        .is_some_and(|name| name.trim().to_lowercase() == requested_name)
+                })
+                .or_else(|| faces.first())
+        });
+    card.pointer("/image_uris/normal")
+        .and_then(Value::as_str)
+        .or_else(|| face?.pointer("/image_uris/normal")?.as_str())
 }
 fn allowed_art(url: &str) -> bool {
     reqwest::Url::parse(url).is_ok_and(|u| {
@@ -419,6 +435,29 @@ async fn config_request(g: &Gateway, req: Request, browse: bool) -> Response {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn named_art_selects_matching_face_and_preserves_shared_scan() {
+        let mut card = json!({"card_faces": [
+            {"name": "Front", "image_uris": {"normal": "https://cards.scryfall.io/front.jpg"}},
+            {"name": "  Back’s Name  ", "image_uris": {"normal": "https://cards.scryfall.io/back.jpg"}}
+        ]});
+        assert_eq!(
+            scryfall_image_for(&card, " back’s NAME "),
+            Some("https://cards.scryfall.io/back.jpg")
+        );
+        for name in ["Front", "Front // Back’s Name", "Unknown"] {
+            assert_eq!(
+                scryfall_image_for(&card, name),
+                Some("https://cards.scryfall.io/front.jpg")
+            );
+        }
+        card["image_uris"] = json!({"normal": "https://cards.scryfall.io/shared.jpg"});
+        assert_eq!(
+            scryfall_image_for(&card, "Back’s Name"),
+            Some("https://cards.scryfall.io/shared.jpg")
+        );
+        assert_eq!(scryfall_image_for(&json!({}), "Missing"), None);
+    }
     #[tokio::test]
     async fn proxy_preserves_post_body_without_credentials() {
         let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();

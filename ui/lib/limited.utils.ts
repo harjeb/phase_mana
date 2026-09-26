@@ -4,6 +4,7 @@ import type { DraftCard } from "@/types/limited";
 import type { Deck, DeckCard } from "@/protocol/deck";
 import type { ScryfallCard } from "@/types/scryfall";
 import { frontFaceName, parseTypeLine } from "@/lib/scryfall.utils";
+import { localCardImageUris, withLocalCardArt } from "@/lib/localCardArt";
 import { cardKey, peekCard, useCard, useScryfallStore } from "@/stores/useScryfallStore";
 import { effectiveRarity, RARITY_ORDER, type UIRarity } from "@/lib/cardRarity";
 
@@ -64,8 +65,10 @@ export function refToDeckCard(
   idx: number,
 ): DeckCard {
   const info = entry?.info;
-  const typeLine = parseTypeLine(info?.type_line ?? "");
   const isDfc = info?.layout === "transform" || info?.layout === "modal_dfc";
+  const front = isDfc ? info?.card_faces?.[0] : undefined;
+  const back = isDfc ? info?.card_faces?.[1] : undefined;
+  const typeLine = parseTypeLine(front?.type_line ?? info?.type_line ?? "");
   return {
     identity: {
       id: `pool-${idx}-${ref.setCode}-${ref.cardNumber}`,
@@ -76,16 +79,30 @@ export function refToDeckCard(
       foil: ref.foil,
     },
     color: (info?.colors ?? []).join(""),
-    manaCost: info?.mana_cost ?? "",
+    manaCost: front?.mana_cost ?? info?.mana_cost ?? "",
     cmc: info?.cmc ?? 0,
     types: typeLine.types,
     subtypes: typeLine.subtypes,
     supertypes: typeLine.supertypes,
-    text: info?.oracle_text ?? "",
+    text: front?.oracle_text ?? info?.oracle_text ?? "",
     layout: info?.layout,
     isDoubleFaced: isDfc,
+    backFace: back
+      ? {
+          name: back.name,
+          manaCost: back.mana_cost ?? "",
+          typeLine: back.type_line ?? "",
+          oracleText: back.oracle_text ?? "",
+          uris: withLocalCardArt(back.image_uris, back.name) ?? localCardImageUris(back.name)!,
+        }
+      : undefined,
     colorIdentity: info?.color_identity ?? [],
-    uris: entry?.uris ?? PLACEHOLDER_URIS,
+    uris:
+      (front
+        ? withLocalCardArt(front.image_uris, front.name) ?? localCardImageUris(front.name)
+        : withLocalCardArt(entry?.uris, ref.name)) ??
+      localCardImageUris(ref.name) ??
+      PLACEHOLDER_URIS,
   };
 }
 

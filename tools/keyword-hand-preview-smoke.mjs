@@ -3,9 +3,14 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 const base = process.env.SMOKE_BASE_URL || 'http://127.0.0.1:1420';
+const natureSmoke = process.env.NATURE_SMOKE === '1';
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 try {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  const chineseArtResponses = [];
+  page.on('response', response => {
+    if (/nature_s_rhythm\.full\.webp/.test(response.url()) && response.status() === 200) chineseArtResponses.push(response.url());
+  });
   page.on('pageerror', e => console.error('PAGE', e.message));
   await page.addInitScript(() => {
     localStorage.setItem('manabrew.termsAcceptance', JSON.stringify({version:'1.5.0',acceptedAt:new Date().toISOString()}));
@@ -40,14 +45,19 @@ try {
       await page.mouse.move(x, y);
       await page.waitForTimeout(350);
       const panel = page.locator('[data-hand-preview-help] [data-keyword-help]');
-      if (await panel.count() && /增幅|系命|跃迁/.test(await panel.innerText())) {
-        assert.match(await panel.innerText(), /你施放此咒语时可以额外支付|此生物所造成的伤害会让你获得等量的生命|你可以支付跃迁费用来从手上施放此牌/);
+      const expectedName = natureSmoke ? /谐颂/ : /增幅|系命|跃迁/;
+      if (await panel.count() && expectedName.test(await panel.innerText())) {
+        assert.match(await panel.innerText(), natureSmoke ? /从你坟墓场中施放此牌/ : /你施放此咒语时可以额外支付|此生物所造成的伤害会让你获得等量的生命|你可以支付跃迁费用来从手上施放此牌/);
         if (/跃迁/.test(await panel.innerText())) {
           assert.match(await panel.innerText(), /飞行/);
           assert.equal(await panel.locator('dt').count(), 2);
         }
         await page.waitForFunction(() => [...document.querySelectorAll('[data-hand-preview-help] img')].every(img => img.complete && img.naturalWidth > 0));
-        await page.screenshot({ path: process.env.KICKER_FIXTURE === '1' ? 'tools/keyword-hand-kicker-smoke.png' : 'tools/keyword-hand-preview-smoke.png' });
+        await page.screenshot({ path: natureSmoke ? 'tools/keyword-hand-nature-smoke.png' : process.env.KICKER_FIXTURE === '1' ? 'tools/keyword-hand-kicker-smoke.png' : 'tools/keyword-hand-preview-smoke.png' });
+        if (natureSmoke) {
+          assert.ok(chineseArtResponses.length, 'The real hand must load Nature’s Rhythm from its local Chinese art file');
+          console.log('PASS Nature’s Rhythm Chinese image and Harmonize tooltip', chineseArtResponses[0]);
+        }
         console.log('PASS actual game hand hover: sourced keyword tooltip is visible without clicking Show rules', {x,y});
         found = true;
         break;

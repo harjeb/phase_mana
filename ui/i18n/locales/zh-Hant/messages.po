@@ -10525,3 +10525,8 @@ msgstr ""
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr ""
+
+#: ui/components/game/KeywordHelpPanel.tsx
+#: ui/pixi/cardPreview/RulesCardPreviewLayer.ts
+msgid "Printed example: {0}"
+msgstr "牌面範例：{0}"

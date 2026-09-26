@@ -7,6 +7,7 @@ import { ScryfallImg } from "@/components/ScryfallImg";
 import type { DeckCard } from "@/protocol/deck";
 import { tokenIdentityKey } from "@/stores/useScryfallStore";
 import { cn } from "@/lib/utils";
+import { withLocalCardArt } from "@/lib/localCardArt";
 import { useDeckSectionOpen } from "./deckSectionExpansion";
 import { EDITOR_PANEL_CLASS } from "./deckEditor.styles";
 export interface TokenSectionProps {
@@ -98,7 +99,7 @@ function TokenGridCard({
       onMouseLeave={() => onLeave?.()}
     >
       <ScryfallImg
-        src={token.uris.normal}
+        src={customized ? token.uris.normal : withLocalCardArt(token.uris, name)?.normal}
         alt={name}
         className="w-full rounded-lg border border-border/50 shadow-sm"
         draggable={false}

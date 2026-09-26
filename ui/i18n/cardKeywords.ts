@@ -1,4 +1,5 @@
 import { i18n } from "@/i18n/i18n";
+import { KEYWORD_RULE_HELP } from "./keywordHelpRules";
 
 /**
  * Official localized names for Magic ability keywords.
@@ -247,9 +248,12 @@ const KEYWORDS: Record<string, KeywordName> = {
 };
 
 const BY_LOCALE: Record<string, Record<string, string>> = {
-  "zh-Hans": Object.fromEntries(
-    Object.entries(KEYWORDS).map(([key, name]) => [key, name.hans]),
-  ),
+  "zh-Hans": {
+    ...Object.fromEntries(Object.entries(KEYWORDS).map(([key, name]) => [key, name.hans])),
+    ...Object.fromEntries(Object.entries(KEYWORD_RULE_HELP)
+      .filter(([, rule]) => rule.name)
+      .map(([key, rule]) => [key, rule.name!])),
+  },
   "zh-Hant": Object.fromEntries(
     Object.entries(KEYWORDS).map(([key, name]) => [key, name.hant]),
   ),
