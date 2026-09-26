@@ -11508,3 +11508,10 @@ msgstr "Zone Piles"
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr "Zoom"
+
+
+msgid "Host a draft room"
+msgstr "Host a draft room"
+
+msgid "Advanced connection"
+msgstr "Advanced connection"

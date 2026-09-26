@@ -4,7 +4,7 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
 import { parseDeckListText } from "@/lib/deckImport";
 import { decodeInvite, encodeInvite, inviteEndpoint } from "@/phase/invite";
-import { hostedRoom, hostRequest, saveHostedRoom, stopHostedRoom } from "@/phase/host";
+import { hostedRoom, hostRequest, saveHostedRoom, stopHostedRoom, type HostedRoom } from "@/phase/host";
 import { closeOnline, connectOnline, joinPrivateRoom, latestOnlineEndpoint, onlineStatus, subscribeOnline } from "@/phase/online";
 import OnlineDraftPanel from "@/views/OnlineDraftPanel";
 import { HostedWaitingRoom } from "@/components/lobby/HostedWaitingRoom";
@@ -43,7 +43,7 @@ export default function OnlinePlay() {
   const [error, setError] = useState("");
   const [errorKind, setErrorKind] = useState<"host" | "join" | null>(null);
   const [inviteText, setInviteText] = useState("");
-  const [invite, setInvite] = useState(hostedRoom);
+  const [invite, setInvite] = useState<HostedRoom | null>(() => hostedRoom("room"));
   const [busy, setBusy] = useState<"host" | "join" | null>(null);
   useEffect(() => {
     let disposed = false;
@@ -89,19 +89,19 @@ export default function OnlinePlay() {
     if (!host.roomKey || new URL(host.endpoint).pathname !== "/room") {
       throw new Error(t`This host does not support waiting rooms. Update the host and try again.`);
     }
-    saveHostedRoom({ endpoint: host.endpoint, code: "" });
+    saveHostedRoom({ endpoint: host.endpoint, code: "", kind: "room" });
     setEndpoint(host.endpoint);
     try {
       const room = await createWaitingRoom(host.endpoint, name.trim() || t`Player`, host.roomKey);
       const share = inviteEndpoint(host.publicEndpoint ?? null, host.lanEndpoints[0] ?? host.endpoint);
-      const saved = { endpoint: host.endpoint, code: encodeInvite({ endpoint: share.endpoint, gameCode: room.code, password: room.password }), scope: share.scope };
+      const saved = { endpoint: host.endpoint, code: encodeInvite({ endpoint: share.endpoint, gameCode: room.code, password: room.password }), scope: share.scope, kind: "room" as const };
       saveHostedRoom(saved);
       setInvite(saved);
     } catch (cause) {
       leaveWaitingRoom();
       try { await stopHostedRoom(); }
       catch (cleanup) { throw new Error(`${cause}; ${cleanup}`); }
-      finally { setInvite(hostedRoom()); }
+      finally { setInvite(hostedRoom("room")); }
       throw cause;
     }
   });
@@ -161,10 +161,7 @@ export default function OnlinePlay() {
     <p><Trans>Create a room first. Inside, take a seat, choose the format and your deck, then get ready.</Trans></p>
     {!roomStatus.room && <label className="block"><Trans>Your name</Trans><input className={field} value={name} maxLength={80} onChange={event => setName(event.target.value)} /></label>}
     {!roomStatus.room && <div className="flex gap-2"><Button variant={mode === "constructed" ? "primary" : "outline"} onClick={() => setMode("constructed")}><Trans>Constructed</Trans></Button><Button variant={mode === "draft" ? "primary" : "outline"} onClick={() => setMode("draft")}><Trans>Draft</Trans></Button></div>}
-    {mode === "draft" ? <>
-      <label className="block"><Trans>Server URL</Trans><input className={field} value={endpoint} onChange={event => setEndpoint(event.target.value)} /></label>
-      <OnlineDraftPanel endpoint={endpoint.replace(/\/room\/?$/, "/ws")} name={name} connected={state.connected} />
-    </> : <>
+    {mode === "draft" ? <OnlineDraftPanel endpoint={endpoint} name={name} connected={state.connected} /> : <>
     {roomStatus.room && <HostedWaitingRoom status={roomStatus} onCommand={sendWaitingRoomCommand} onLeave={() => { if (invite) void stopHost(); else leaveWaitingRoom(); }} />}
     {!roomStatus.connected && hasSavedWaitingRoom() && <Button variant="outline" disabled={!!busy || roomStatus.connecting} onClick={() => void run("join", async () => { await reconnectWaitingRoom(); })}><Trans>Reconnect waiting room</Trans></Button>}
 

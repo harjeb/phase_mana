@@ -24,6 +24,25 @@ it("keeps the invitation when stop fails, and clears it only after successful te
 });
 
 
+
+it("keeps a hosted draft and a constructed room out of each other's panels", () => {
+  const values = new Map<string, string>();
+  vi.stubGlobal("sessionStorage", {
+    getItem: (key: string) => values.get(key) ?? null,
+    setItem: (key: string, value: string) => values.set(key, value),
+    removeItem: (key: string) => values.delete(key),
+  });
+  const invite = encodeInvite({ endpoint: "ws://192.168.1.2:1234/ws", gameCode: "ABC123", password: "secret" });
+  saveHostedRoom({ endpoint: "ws://127.0.0.1:1234/room", code: invite, kind: "draft" });
+  expect(hostedRoom()).toMatchObject({ kind: "draft" });
+  expect(hostedRoom("draft")).not.toBeNull();
+  expect(hostedRoom("room")).toBeNull();
+  saveHostedRoom({ endpoint: "ws://127.0.0.1:1234/room", code: invite });
+  expect(hostedRoom()).toMatchObject({ endpoint: "ws://127.0.0.1:1234/room" });
+  expect(hostedRoom("room")).not.toBeNull();
+  expect(hostedRoom("draft")).toBeNull();
+});
+
 it("explains an unavailable host service instead of exposing a fetch failure", async () => {
   vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
   await expect(hostRequest("start")).rejects.toThrow("Could not reach the local hosting service");

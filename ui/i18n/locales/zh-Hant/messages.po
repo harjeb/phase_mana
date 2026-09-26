@@ -11504,3 +11504,10 @@ msgstr ""
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr ""
+
+
+msgid "Host a draft room"
+msgstr "主持輪抽房間"
+
+msgid "Advanced connection"
+msgstr "進階連線"

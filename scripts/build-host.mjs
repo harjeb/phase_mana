@@ -47,6 +47,7 @@ try {
   console.log(`[host:build] Pinned source ready: ${source}`);
   run('cargo', ['build', '--locked', '--profile', 'dev', '-p', 'phase-server', '--bin', 'phase-server', '--features', 'manabrew'], source);
   run('cargo', ['build', '--locked', '--profile', 'dev', '-p', 'phase-engine', '--bin', 'oracle-gen', '--features', 'cli'], source);
+  run('cargo', ['build', '--locked', '--profile', 'dev', '-p', 'draft-core', '--bin', 'draft-pool-gen'], source);
   mkdirSync(data, { recursive: true });
   temporary = mkdtempSync(join(data, '.card-data-'));
   const output = join(temporary, 'card-data.json');
@@ -57,7 +58,18 @@ try {
     throw new Error('oracle-gen produced an empty or invalid card export');
   }
   renameSync(output, join(data, 'card-data.json'));
-  console.log(`[host:build] Ready (${Object.keys(cards).length} card faces)\nServer: ${join(target, 'debug', `phase-server${suffix}`)}\nData root: ${data}\nRevision: ${revision}`);
+  // Server-hosted drafts read their own file; without it every create answers
+  // "No draft pool data for set: X". Generated from the same MTGJSON sets that
+  // the sibling checkout keeps, and promoted only when it produced sets.
+  const sets = join(sibling, 'data/mtgjson/sets');
+  if (!existsSync(sets)) throw new Error(`Required MTGJSON sets directory missing: ${sets}`);
+  const draftPools = join(data, 'draft-pools.json');
+  run(join(target, 'debug', `draft-pool-gen${suffix}`), [sets, draftPools], source);
+  const pools = JSON.parse(readFileSync(draftPools, 'utf8'));
+  if (!pools || typeof pools !== 'object' || Array.isArray(pools) || Object.keys(pools).length === 0) {
+    throw new Error('draft-pool-gen produced an empty or invalid draft pool export');
+  }
+  console.log(`[host:build] Ready (${Object.keys(cards).length} card faces, ${Object.keys(pools).length} draftable sets)\nServer: ${join(target, 'debug', `phase-server${suffix}`)}\nData root: ${data}\nRevision: ${revision}`);
 } catch (error) {
   console.error(`[host:build] ${error.message}`);
   process.exitCode = 1;

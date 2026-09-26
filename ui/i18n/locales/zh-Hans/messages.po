@@ -11507,3 +11507,10 @@ msgstr "区域牌堆"
 #: ui/components/settings/AvatarCropDialog.tsx:145
 msgid "Zoom"
 msgstr "缩放"
+
+
+msgid "Host a draft room"
+msgstr "主持轮抽房间"
+
+msgid "Advanced connection"
+msgstr "高级连接"

@@ -2,11 +2,23 @@ import { t } from "@lingui/core/macro";
 import { decodeInvite, inviteEndpoint } from "./invite";
 
 const key = "phase-host-room";
-export interface HostedRoom { endpoint: string; code: string; scope?: ReturnType<typeof inviteEndpoint>["scope"] }
-export function hostedRoom(): HostedRoom | null {
+/**
+ * `kind` distinguishes the two room protocols that share one engine: the
+ * constructed waiting room (`/room`) and a server-hosted draft (`/ws`). Only
+ * the UI filters on it; the engine lifecycle does not care which room opened.
+ */
+export interface HostedRoom {
+  endpoint: string;
+  code: string;
+  scope?: ReturnType<typeof inviteEndpoint>["scope"];
+  kind?: "room" | "draft";
+}
+/** Without a `kind` this answers for whichever room this tab is hosting. */
+export function hostedRoom(kind?: "room" | "draft"): HostedRoom | null {
   try {
     const room = JSON.parse(sessionStorage.getItem(key) ?? "null");
     if (!room || typeof room.endpoint !== "string") return null;
+    if (kind && (room.kind ?? "room") !== kind) return null;
     if (room.code) decodeInvite(room.code);
     return room;
   } catch { return null; }

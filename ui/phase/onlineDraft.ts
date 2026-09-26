@@ -40,6 +40,10 @@ export function reconnectOnlineDraft(endpoint: string) {
   update({ endpoint, code: credential.draft_code, seat: credential.seat_index, view: null, pending: false, error: "", matchCode: null });
   connection().connect(endpoint, { type: "ReconnectDraft", data: { draft_code: credential.draft_code, player_token: credential.player_token } });
 }
+/** Forget the last draft, so closing a hosted room returns the panel to its lobby state. */
+export function resetOnlineDraft() {
+  update({ endpoint: "", code: "", seat: null, view: null, pending: false, error: "", remainingMs: null, matchCode: null });
+}
 /** Called only by the authenticated socket owner. Unknown frames remain with the game transport. */
 export function handleOnlineDraftFrame(frame: { type: string; data?: unknown }, endpoint: string): boolean {
   const data = frame.data as Record<string, unknown> | undefined;
