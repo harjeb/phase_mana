@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import LimitedDeckBuilder from "@/components/limited/LimitedDeckBuilder";
 import { DraftStatusBar } from "@/components/limited/DraftStatusBar";
 import { DraftWorkspace } from "@/components/limited/DraftWorkspace";
+import { SolomonWorkspace } from "@/components/limited/SolomonWorkspace";
 import type { LimitedDraftMode } from "@/components/limited/LimitedModeToggle";
 import { useLimitedStore } from "@/stores/useLimitedStore";
 import { startLocalDeckGame } from "@/phase/transport";
@@ -26,6 +27,8 @@ export default function Draft() {
   const activeDraft = useLimitedStore((s) => s.activeDraft);
   const pick = useLimitedStore((s) => s.pickDraftCard);
   const undo = useLimitedStore((s) => s.undoDraftPick);
+  const splitVariant = useLimitedStore((s) => s.splitVariant);
+  const chooseVariantPile = useLimitedStore((s) => s.chooseVariantPile);
   const refresh = useLimitedStore((s) => s.refreshDraftState);
   const conspiracyHooks = useLimitedStore((s) => s.conspiracyHooks);
   const fetchConspiracyHooks = useLimitedStore((s) => s.fetchConspiracyHooks);
@@ -89,6 +92,32 @@ export default function Draft() {
       await undo(draftId);
     } catch {
       /* surfaced via lastError */
+    }
+  };
+  const handleSplit = async (pile: DraftCard[]) => {
+    if (!draftId || pickingRef.current) return;
+    pickingRef.current = true;
+    setPicking(true);
+    try {
+      await splitVariant(draftId, pile);
+    } catch {
+      /* surfaced via lastError */
+    } finally {
+      pickingRef.current = false;
+      setPicking(false);
+    }
+  };
+  const handleChoosePile = async (pileIndex: number, pick_card: DraftCard) => {
+    if (!draftId || pickingRef.current) return;
+    pickingRef.current = true;
+    setPicking(true);
+    try {
+      await chooseVariantPile(draftId, pileIndex, pick_card);
+    } catch {
+      /* surfaced via lastError */
+    } finally {
+      pickingRef.current = false;
+      setPicking(false);
     }
   };
   const canBuild = activeDraft.pickedPile.length >= 1;
@@ -180,6 +209,14 @@ export default function Draft() {
             targetMainSize={targetMain}
           />
         </div>
+      ) : activeDraft.variantKind === "solomon" ? (
+        <SolomonWorkspace
+          draft={activeDraft}
+          onSplit={handleSplit}
+          onChoosePile={handleChoosePile}
+          onBuild={canBuild ? () => setUserMode("building") : undefined}
+          pending={picking}
+        />
       ) : (
         <DraftWorkspace
           draft={activeDraft}

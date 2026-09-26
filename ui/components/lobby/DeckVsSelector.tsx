@@ -49,9 +49,6 @@ function formatDisplayName(name: string): string {
     case "Tiny Leaders": return t`Tiny Leaders`;
     case "Duel Commander": return t`Duel Commander`;
     case "Pauper Commander": return t`Pauper Commander`;
-    case "Momir": return t`Momir`;
-    case "Old School 93/94": return t`Old School 93/94`;
-    case "Old School 95": return t`Old School 95`;
     case "Archenemy": return t`Archenemy`;
     case "Planechase": return t`Planechase`;
     case "Two-Headed Giant": return t`Two-Headed Giant`;

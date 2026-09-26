@@ -75,7 +75,7 @@ The desktop app uses **Tauri v2**, not Electron. Building requires Tauri's platf
 **Play**
 - **Offline vs AI** — pick your deck and the AI's from the bundled presets; both must share a format or **Fight!** stays disabled. The offline picker and `#/deck-editor` are the deck selection for local play.
 - **Commander** — Phase's Commander rules in local 2–4-player games: 40 life, separate command zones, and engine validation of every 100-card deck (commanders, singleton, colour identity, commander eligibility). Choose **4-player pod** for one human and three AI opponents.
-- **Casual Modes** (`#/play/offline/casual`) — Oathbreaker, Tiny Leaders, Duel Commander, Pauper Commander, Old School 93/94 and 95, Momir, Archenemy, Planechase, and Two-Headed Giant.
+- **Casual Modes** (`#/play/offline/casual`) — Oathbreaker, Tiny Leaders, Duel Commander, Pauper Commander, Archenemy, Planechase, and Two-Headed Giant.
 - **Draft & Sealed** (`#/limited`) — Quick Draft (2–8 seats, three packs, one card per pick), six-pack Sealed, **Winston Draft**, **Cube / imported pool**, **Themed Chaos Draft**, **Commander Draft** (CR 903.13), and the Conspiracy/Mystery Booster special pick (Cogwork Librarian, CR 905.2). Phase's `draft-core` collates real MTGJSON booster sheets and runs the same AI.
 
 **Shell** — deck editor, card search, collection, and settings are reachable through the hash router: `#/play`, `#/deck-editor`, `#/search`, `#/limited`, `#/settings`, `#/about`.
@@ -244,7 +244,7 @@ npm run test:startup   # 端口递增与后端发现测试
 **对局**
 - **离线对战 AI** —— 从内置预设中分别选择你和 AI 的卡组；两副卡组格式必须一致，否则 **Fight!** 不可用。离线选择器与 `#/deck-editor` 就是本地对局的选牌入口。
 - **指挥官** —— 本地 2–4 人对局使用 Phase 的指挥官规则：40 点生命、独立指挥区，并对每副 100 张卡组（指挥官、单张、颜色标识、指挥官资格）做引擎校验。选择 **4-player pod** 即可 1 人对 3 个 AI。
-- **休闲模式**（`#/play/offline/casual`）—— Oathbreaker、Tiny Leaders、Duel Commander、Pauper Commander、Old School 93/94 与 95、Momir、Archenemy、Planechase、双头巨人。
+- **休闲模式**（`#/play/offline/casual`）—— Oathbreaker、Tiny Leaders、Duel Commander、Pauper Commander、Archenemy、Planechase、双头巨人。
 - **轮抽与现开**（`#/limited`）—— 快速轮抽（2–8 人，三包，每挑一张）、六包现开、**Winston Draft**、**Cube / 导入牌池**、**主题混沌轮抽**、**指挥官轮抽**（CR 903.13），以及 Conspiracy/Mystery Booster 的特殊挑牌（Cogwork Librarian，CR 905.2）。Phase 的 `draft-core` 会拼装真实的 MTGJSON 补充包表，并由同一个 AI 完成选牌与组牌。
 
 **界面** —— 卡组编辑器、卡牌搜索、收藏、设置，均为 hash 路由：`#/play`、`#/deck-editor`、`#/search`、`#/limited`、`#/settings`、`#/about`。

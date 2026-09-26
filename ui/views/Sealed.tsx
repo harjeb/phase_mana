@@ -22,7 +22,7 @@ export default function Sealed() {
     main: [],
     sideboard: [],
   });
-  const TARGET_MAIN_SIZE = 40;
+  const TARGET_MAIN_SIZE = activeSealed?.minDeckSize ?? 40;
   const mainShortBy = Math.max(0, TARGET_MAIN_SIZE - builtDeck.main.length);
   useEffect(() => {
     if (!id) return;

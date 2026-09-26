@@ -17,9 +17,11 @@ try {
   for (const heading of ['Draft variants', 'Constructed formats', 'Special tables']) {
     await page.getByText(heading, { exact: true }).waitFor();
   }
-  for (const card of ['Commander Draft', 'Winston Draft', 'Cube / local pool', 'Oathbreaker',
-    'Tiny Leaders', 'Duel Commander', 'Pauper Commander', 'Old School 93/94', 'Old School 95',
-    'Momir', 'Four-player Commander', 'Archenemy', 'Planechase', 'Two-Headed Giant']) {
+  for (const card of ['Commander Draft', 'Winston Draft', 'Cube / local pool',
+    'Pack Wars (Mini-Master)', 'Duplicate Sealed (Mirror)', 'Back Draft', 'Reject Rare',
+    'Solomon Draft', 'Rotisserie Draft', 'Continuous Draft', 'Oathbreaker',
+    'Tiny Leaders', 'Duel Commander', 'Pauper Commander',
+    'Four-player Commander', 'Archenemy', 'Planechase', 'Two-Headed Giant']) {
     await page.getByText(card, { exact: true }).first().waitFor();
   }
   await page.screenshot({ path: '/tmp/pm-casual-hub.png', fullPage: true });

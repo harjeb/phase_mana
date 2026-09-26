@@ -54,8 +54,7 @@ function formatLabel(value: string): string {
     standard: t`Standard`, pioneer: t`Pioneer`, modern: t`Modern`, legacy: t`Legacy`,
     vintage: t`Vintage`, pauper: t`Pauper`, premodern: t`Premodern`, commander: t`Commander`,
     oathbreaker: t`Oathbreaker`, tiny_leaders: t`Tiny Leaders`, duel_commander: t`Duel Commander`,
-    pauper_commander: t`Pauper Commander`, momir: t`Momir`, old_school_93_94: t`Old School 93/94`,
-    old_school_95: t`Old School 95`, archenemy: t`Archenemy`, planechase: t`Planechase`,
+    pauper_commander: t`Pauper Commander`, archenemy: t`Archenemy`, planechase: t`Planechase`,
     two_headed_giant: t`Two-Headed Giant`, draft: t`Draft`, sealed: t`Sealed`,
     brawl: t`Brawl`, historicBrawl: t`Brawl`, Unknown: t`Unknown`,
   };

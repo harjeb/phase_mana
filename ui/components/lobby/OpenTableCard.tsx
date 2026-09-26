@@ -16,8 +16,7 @@ const formatLabels: Record<string, MessageDescriptor> = {
   Legacy: msg`Legacy`, Vintage: msg`Vintage`, Pauper: msg`Pauper`,
   Premodern: msg`Premodern`, Commander: msg`Commander`, Oathbreaker: msg`Oathbreaker`,
   "Tiny Leaders": msg`Tiny Leaders`, "Duel Commander": msg`Duel Commander`,
-  "Pauper Commander": msg`Pauper Commander`, Momir: msg`Momir`,
-  "Old School 93/94": msg`Old School 93/94`, "Old School 95": msg`Old School 95`,
+  "Pauper Commander": msg`Pauper Commander`,
   Archenemy: msg`Archenemy`, Planechase: msg`Planechase`,
   "Two-Headed Giant": msg`Two-Headed Giant`, Draft: msg`Draft`, Sealed: msg`Sealed`,
 };

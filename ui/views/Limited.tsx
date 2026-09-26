@@ -18,6 +18,7 @@ export default function Limited() {
   const startBoosterDraft = useLimitedStore((s) => s.startBoosterDraft);
   const startWinston = useLimitedStore((s) => s.startWinston);
   const startCommanderDraft = useLimitedStore((s) => s.startCommanderDraft);
+  const startVariant = useLimitedStore((s) => s.startVariant);
   const importCube = useLimitedStore((s) => s.importCubeFromCubeCobra);
   const isStarting = useLimitedStore((s) => s.isStarting);
   const lastError = useLimitedStore((s) => s.lastError);
@@ -48,6 +49,7 @@ export default function Limited() {
   const [selectedVariant, setSelectedVariant] = useState<string>("");
   const [seedInput, setSeedInput] = useState("");
   const [picksPerPass, setPicksPerPass] = useState(1);
+  const [rejectRarity, setRejectRarity] = useState("rare");
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const seedOpt = useMemo(() => {
     const trimmed = seedInput.trim();
@@ -147,6 +149,79 @@ export default function Limited() {
         seed: seedOpt,
         picksPerPass: 2,
       });
+      navigate(`/draft/${state.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartPackWars = async () => {
+    try {
+      const pool = await fetchPool();
+      const result = await startSealed({
+        poolType: "Full",
+        numBoosters: 1,
+        pool,
+        variant: "pack_wars",
+        seed: seedOpt,
+      });
+      navigate(`/sealed/${result.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartDuplicateSealed = async () => {
+    try {
+      const pool = await fetchPool();
+      const result = await startSealed({
+        poolType: "Full",
+        numBoosters: 5,
+        pool,
+        variant: "duplicate_sealed",
+        seed: seedOpt,
+      });
+      navigate(`/sealed/${result.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartBackDraft = async () => {
+    try {
+      const pool = await fetchPool();
+      const evenPod = podSize % 2 === 0 ? podSize : podSize + 1;
+      const state = await startBoosterDraft({
+        podSize: evenPod,
+        rounds: 3,
+        pool,
+        variant: "back_draft",
+        seed: seedOpt,
+        picksPerPass,
+      });
+      navigate(`/draft/${state.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartRejectRare = async () => {
+    try {
+      const pool = await fetchPool();
+      const state = await startBoosterDraft({
+        podSize,
+        rounds: 3,
+        pool,
+        variant: "reject_rare",
+        rarity: rejectRarity,
+        seed: seedOpt,
+        picksPerPass,
+      });
+      navigate(`/draft/${state.sessionId}`);
+    } catch {
+      /* surfaced via lastError */
+    }
+  };
+  const handleStartVariant = async (variant: string) => {
+    try {
+      const pool = await fetchPool();
+      const state = await startVariant({ pool, variant, seed: seedOpt });
       navigate(`/draft/${state.sessionId}`);
     } catch {
       /* surfaced via lastError */
@@ -360,6 +435,91 @@ export default function Limited() {
               <span><Trans>or load saved pool…</Trans></span>
             </label>
           </ModeCard>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <Trans>Pack &amp; Draft Variants</Trans>
+        </h2>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <ModeCard
+            icon={<Boxes className="h-5 w-5" />}
+            title={t`Pack Wars (Mini-Master)`}
+            description={t`Open one booster, add 15 basic lands and play the whole pack.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Start Pack Wars`)}
+            disabled={startBlocked}
+            onStart={handleStartPackWars}
+          />
+
+          <ModeCard
+            icon={<Layers className="h-5 w-5" />}
+            title={t`Duplicate Sealed (Mirror)`}
+            description={t`Everyone opens the same five packs and builds from identical pools.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Start Mirror Sealed`)}
+            disabled={startBlocked}
+            onStart={handleStartDuplicateSealed}
+          />
+
+          <ModeCard
+            icon={<Shuffle className="h-5 w-5" />}
+            title={t`Back Draft`}
+            description={t`Draft normally, then swap pools with the seat across from you.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Start Back Draft`)}
+            disabled={startBlocked}
+            onStart={handleStartBackDraft}
+          />
+
+          <ModeCard
+            icon={<Wand2 className="h-5 w-5" />}
+            title={t`Reject Rare`}
+            description={t`Boosters of nothing but rares — or the silver/iron sub-variant.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Opening packs…`, t`Start Reject Rare`)}
+            disabled={startBlocked}
+            onStart={handleStartRejectRare}
+          >
+            <label htmlFor="rejectRarity" className="flex items-center justify-between gap-2 text-xs">
+              <span className="text-muted-foreground"><Trans>Rarity</Trans></span>
+              <select
+                id="rejectRarity"
+                value={rejectRarity}
+                onChange={(e) => setRejectRarity(e.target.value)}
+                className="h-7 rounded border border-border/70 bg-background px-1 text-xs"
+              >
+                <option value="rare">{t`Rare + Mythic`}</option>
+                <option value="mythic">{t`Mythic only`}</option>
+                <option value="uncommon">{t`Uncommon (silver)`}</option>
+                <option value="common">{t`Common (iron)`}</option>
+              </select>
+            </label>
+          </ModeCard>
+
+          <ModeCard
+            icon={<Crown className="h-5 w-5" />}
+            title={t`Solomon Draft`}
+            description={t`Split 8-card batches into two piles; your opponent chooses one.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Dealing cards…`, t`Start Solomon`)}
+            disabled={startBlocked}
+            onStart={() => handleStartVariant("solomon")}
+          />
+
+          <ModeCard
+            icon={<Hourglass className="h-5 w-5" />}
+            title={t`Rotisserie Draft`}
+            description={t`One shared pool, snake order, one card at a time.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Dealing cards…`, t`Start Rotisserie`)}
+            disabled={startBlocked}
+            onStart={() => handleStartVariant("rotisserie")}
+          />
+
+          <ModeCard
+            icon={<Dice5 className="h-5 w-5" />}
+            title={t`Continuous Draft`}
+            description={t`Reveal four, take 1-2-1; the first chooser alternates each batch.`}
+            ctaLabel={ctaLabel(fetchingPool, isStarting, t`Dealing cards…`, t`Start Continuous`)}
+            disabled={startBlocked}
+            onStart={() => handleStartVariant("continuous")}
+          />
         </div>
       </section>
 

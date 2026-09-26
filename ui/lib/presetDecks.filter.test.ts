@@ -9,7 +9,7 @@ describe("preset deck format filtering", () => {
     { id: "older-untagged" },
   ];
 
-  it.each(["tiny_leaders", "duel_commander", "pauper_commander", "oathbreaker", "old_school_93_94", "old_school_95", "premodern"])(
+  it.each(["tiny_leaders", "duel_commander", "pauper_commander", "oathbreaker", "premodern"])(
     "does not offer every deck when %s has no presets",
     (format) => expect(filterPresetDecksForFormat(decks, format)).toEqual([]),
   );

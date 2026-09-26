@@ -12,13 +12,60 @@ use draft_wasm::{
 };
 use engine::types::{card::DraftEffect, player::PlayerId};
 use phase_ai::config::AiDifficulty;
-use rand::SeedableRng;
+use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha20Rng;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::BTreeMap;
 
 type Result<T> = std::result::Result<T, String>;
+
+/// Casual pack/draft variants from `docs/开包与轮抽玩法规则.md`.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+enum Variant {
+    PackWars,
+    Solomon,
+    DuplicateSealed,
+    BackDraft,
+    Rotisserie,
+    RejectRare,
+    Continuous,
+}
+
+impl Variant {
+    fn parse(value: &str) -> Option<Self> {
+        match value {
+            "pack_wars" | "mini_master" => Some(Self::PackWars),
+            "solomon" => Some(Self::Solomon),
+            "duplicate_sealed" | "mirror_sealed" => Some(Self::DuplicateSealed),
+            "back_draft" | "backdraft" => Some(Self::BackDraft),
+            "rotisserie" => Some(Self::Rotisserie),
+            "reject_rare" | "reject_rares" => Some(Self::RejectRare),
+            "continuous" => Some(Self::Continuous),
+            _ => None,
+        }
+    }
+    fn id(self) -> &'static str {
+        match self {
+            Self::PackWars => "pack_wars",
+            Self::Solomon => "solomon",
+            Self::DuplicateSealed => "duplicate_sealed",
+            Self::BackDraft => "back_draft",
+            Self::Rotisserie => "rotisserie",
+            Self::RejectRare => "reject_rare",
+            Self::Continuous => "continuous",
+        }
+    }
+}
+
+fn parse_variant(setup: &Setup) -> Result<Option<Variant>> {
+    match setup.variant.as_deref() {
+        None | Some("") => Ok(None),
+        Some(value) => Variant::parse(value)
+            .map(Some)
+            .ok_or_else(|| format!("Unknown local Limited variant '{value}'")),
+    }
+}
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "camelCase")]
@@ -59,12 +106,18 @@ struct Draft {
     pending: Vec<String>,
     pending_effect: bool,
     commander_draft: bool,
+    /// The casual variant this session belongs to, if any.
+    variant: Option<Variant>,
+    /// Back Draft swaps the finished pools among paired seats exactly once.
+    back_draft_swapped: bool,
 }
 #[derive(Clone)]
 struct Sealed {
     session: DraftSession,
     suggested: Deck,
     opponents: Vec<Deck>,
+    variant: Option<Variant>,
+    min_deck_size: usize,
 }
 struct Gauntlet {
     kind: &'static str,
@@ -76,6 +129,64 @@ struct Gauntlet {
     wins: usize,
     losses: usize,
     round_recorded: bool,
+    /// Pack Wars decks are pack + 15 basics (below the 40-card Limited floor).
+    min_deck_size: usize,
+}
+
+/// Interactive casual drafts that the pick-and-pass reducer cannot express:
+/// Solomon (split/choose piles), Rotisserie (snake pick from one open pool),
+/// and Continuous (1-2-1 batches of four).
+#[derive(Clone)]
+struct VariantDraft {
+    kind: Variant,
+    seat_count: usize,
+    rng: ChaCha20Rng,
+    seed: u64,
+    pools: Vec<Vec<DraftCardInstance>>,
+    set_code: String,
+    /// Cards not yet assigned to a pool.
+    remaining: Vec<DraftCardInstance>,
+    /// Cards the human may choose from this step.
+    offer: Vec<DraftCardInstance>,
+    /// Exact number the human takes from `offer` this step.
+    need: usize,
+    /// Human picks buffered within one multi-card step.
+    pending: Vec<String>,
+    /// Next seat to move in a sequential (snake) order.
+    active: usize,
+    /// Rotisserie snake direction (left-to-right, then right-to-left).
+    forward: bool,
+    /// Solomon: the batch currently being split.
+    batch: Vec<DraftCardInstance>,
+    /// Solomon: the seat that splits the current batch.
+    splitter: usize,
+    /// Solomon: true while the human must assign the batch into two piles.
+    awaiting_split: bool,
+    /// Solomon: the two piles a bot split for the human to choose between.
+    solomon_piles: Option<(Vec<DraftCardInstance>, Vec<DraftCardInstance>)>,
+    /// Continuous: the (seat, count) steps left in the current batch.
+    continuous_queue: Vec<(usize, usize)>,
+    /// Continuous: which seat picks first in the current batch.
+    continuous_first: usize,
+    /// Completed batches, used to alternate the first chooser/splitter.
+    batch_index: usize,
+    min_deck_size: usize,
+    undo: Vec<VariantDraft>,
+}
+
+impl VariantDraft {
+    fn is_complete(&self) -> bool {
+        match self.kind {
+            Variant::Rotisserie => self.remaining.is_empty(),
+            Variant::Continuous => {
+                self.remaining.is_empty() && self.batch.is_empty() && self.need == 0
+            }
+            Variant::Solomon => {
+                self.remaining.is_empty() && self.batch.is_empty() && !self.awaiting_split
+            }
+            _ => true,
+        }
+    }
 }
 /// A ready pack source plus the bookkeeping `DraftConfig` needs. `set_code` is
 /// the land/land-set label; the cube source uses a placeholder.
@@ -94,6 +205,8 @@ pub struct LimitedService {
     sealed: HashMap<String, Sealed>,
     winston: HashMap<String, Snapshot>,
     gauntlets: HashMap<String, Gauntlet>,
+    /// Interactive casual drafts (Solomon/Rotisserie/Continuous).
+    variants: HashMap<String, VariantDraft>,
     next_id: u64,
 }
 impl Default for LimitedService {
@@ -114,6 +227,7 @@ impl LimitedService {
             sealed: HashMap::new(),
             winston: HashMap::new(),
             gauntlets: HashMap::new(),
+            variants: HashMap::new(),
             next_id: 0,
         }
     }
@@ -205,9 +319,7 @@ impl LimitedService {
         pack_count: u8,
         seed: u64,
     ) -> Result<LimitSource> {
-        if setup.variant.as_deref().is_some_and(|v| !v.is_empty()) {
-            return Err("Local Limited supports standard set boosters and custom pools only; named variants are not implemented".into());
-        }
+        let variant = parse_variant(setup)?;
         let custom = setup.custom_pool || setup.pool_type.as_deref() == Some("Custom");
         let mut codes: Vec<String> = Vec::new();
         if !custom {
@@ -222,6 +334,26 @@ impl LimitedService {
                     }
                 }
             }
+        }
+        // Reject Rare: repackage a single set's rares (or the silver/iron
+        // sub-variant rarity) into 15-card boosters, duplicates permitted.
+        if variant == Some(Variant::RejectRare) {
+            if custom || codes.len() != 1 {
+                return Err("Reject Rare needs exactly one standard set pool".into());
+            }
+            let base = self.load_pool(&codes[0])?;
+            verify_pool(&setup.pool, std::slice::from_ref(&base))?;
+            let rarity = rarity_pool(&base, &reject_rare_rarities(setup))?;
+            return Ok(LimitSource {
+                source: Box::new(PackGenerator::new(rarity)),
+                draft_source: DraftSource::Set {
+                    layout: SetLayout::UniformByRound {
+                        codes: vec![base.code.clone()],
+                    },
+                },
+                set_code: base.code.clone(),
+                cards_per_pack: 15,
+            });
         }
         if custom || codes.is_empty() {
             let cards = to_instances(&setup.pool);
@@ -320,8 +452,17 @@ impl LimitedService {
                 "flagName": "additional_pick",
                 "description": "As you draft a card, you may draft an additional card from that booster pack, then return Cogwork Librarian to the pack (CR 905.2)."
             }])),
+            "limited_list_variants" => Ok(variant_list()),
+            "limited_start_variant" => self.start_variant(&args),
+            "limited_get_variant_state" => {
+                let id = text(&args, "sessionId")?;
+                self.variant_view(id)
+            }
+            "limited_variant_pick" => self.variant_command("limited_pick_card", &args),
+            "limited_variant_split" => self.variant_split(&args),
             "limited_start_booster_draft" | "limited_start_sealed" => {
                 let setup = parse_setup(&args)?;
+                let variant = parse_variant(&setup)?;
                 let seed = setup.seed.unwrap_or_else(rand::random);
                 if command == "limited_start_sealed" {
                     let custom = setup.pool_type.as_deref() == Some("Custom");
@@ -334,33 +475,68 @@ impl LimitedService {
                     {
                         return Err("Sealed does not take pod size, rounds or picks".into());
                     }
-                    let pack_count = setup.num_boosters.unwrap_or(6);
+                    let pack_count = match variant {
+                        // Mini-Master opens exactly one pack per seat.
+                        Some(Variant::PackWars) => 1,
+                        // Duplicate Sealed uses the guide's five identical packs.
+                        Some(Variant::DuplicateSealed) => 5,
+                        _ => setup.num_boosters.unwrap_or(6),
+                    };
                     // A custom (Cube) pool rarely holds the 720 cards eight
                     // 15-card-pack seats need, so size the pod to the pool.
-                    let seats = if custom {
+                    // Mini-Master is always a two-player duel.
+                    let seats = if variant == Some(Variant::PackWars) {
+                        2u8
+                    } else if custom {
                         (setup.pool.len() / (usize::from(pack_count) * 15)).clamp(2, 8) as u8
                     } else {
                         8u8
                     };
                     let src = self.build_source(&setup, seats, pack_count, seed)?;
                     let id = self.id("sealed");
-                    let session =
-                        start_session(&id, DraftKind::Sealed, seats, pack_count, src, seed)?;
-                    let suggested = build_deck(&session.pools[0], "Suggested deck")?;
+                    let mut session =
+                        start_sealed_variant_session(&id, seats, pack_count, src, seed, 40)?;
+                    // Mirror Sealed: every seat receives the same card pool.
+                    if variant == Some(Variant::DuplicateSealed) {
+                        let first = session.pools[0].clone();
+                        for pool in session.pools.iter_mut().skip(1) {
+                            *pool = first.clone();
+                        }
+                    }
+                    let min_deck_size = match variant {
+                        // Mini-Master: the whole pack plus three of each basic.
+                        Some(Variant::PackWars) => session.pools[0].len() + 15,
+                        _ => 40,
+                    };
+                    session.config.min_deck_size = min_deck_size;
+                    let build = |pool: &[DraftCardInstance], name: &str| match variant {
+                        Some(Variant::PackWars) => build_pack_wars_deck(pool, name),
+                        _ => build_deck(pool, name),
+                    };
+                    let suggested = build(&session.pools[0], "Suggested deck")?;
                     let opponents = session
                         .pools
                         .iter()
                         .enumerate()
                         .skip(1)
-                        .map(|(i, p)| build_deck(p, &format!("AI {i}")))
+                        .map(|(i, p)| build(p, &format!("AI {i}")))
                         .collect::<Result<Vec<_>>>()?;
-                    let value = sealed_view(&id, &session, &suggested, &opponents);
+                    let value = sealed_view(
+                        &id,
+                        &session,
+                        &suggested,
+                        &opponents,
+                        variant,
+                        min_deck_size,
+                    );
                     self.sealed.insert(
                         id,
                         Sealed {
                             session,
                             suggested,
                             opponents,
+                            variant,
+                            min_deck_size,
                         },
                     );
                     Ok(value)
@@ -376,10 +552,13 @@ impl LimitedService {
                     if setup.picks_per_pass.unwrap_or(1) != 1 {
                         return Err("Standard Draft uses one pick per pass".into());
                     }
+                    if variant == Some(Variant::BackDraft) && pod % 2 != 0 {
+                        return Err("Back Draft swaps pools in pairs; use an even pod".into());
+                    }
                     let src = self.build_source(&setup, pod, rounds, seed)?;
                     let id = self.id("draft");
                     let session = start_session(&id, DraftKind::Quick, pod, rounds, src, seed)?;
-                    let value = draft_view(&session, &[], false, false);
+                    let value = draft_view(&session, &[], false, false, variant);
                     let rng = ChaCha20Rng::seed_from_u64(session.config.rng_seed);
                     self.drafts.insert(
                         id,
@@ -389,6 +568,8 @@ impl LimitedService {
                             pending: Vec::new(),
                             pending_effect: false,
                             commander_draft: false,
+                            variant,
+                            back_draft_swapped: false,
                         },
                     );
                     Ok(value)
@@ -438,7 +619,7 @@ impl LimitedService {
                 let id = self.id("commander-draft");
                 let session =
                     start_session(&id, DraftKind::CommanderDraft, pod, pack_count, src, seed)?;
-                let value = draft_view(&session, &[], true, false);
+                let value = draft_view(&session, &[], true, false, None);
                 let rng = ChaCha20Rng::seed_from_u64(session.config.rng_seed);
                 self.drafts.insert(
                     id,
@@ -448,14 +629,20 @@ impl LimitedService {
                         pending: Vec::new(),
                         pending_effect: false,
                         commander_draft: true,
+                        variant: None,
+                        back_draft_swapped: false,
                     },
                 );
                 Ok(value)
             }
             "limited_get_draft_state" | "limited_pick_card" | "limited_undo_pick" => {
+                let session_id = text(&args, "sessionId")?.to_string();
+                if self.variants.contains_key(&session_id) {
+                    return self.variant_command(command, &args);
+                }
                 let draft = self
                     .drafts
-                    .get_mut(text(&args, "sessionId")?)
+                    .get_mut(session_id.as_str())
                     .ok_or("Unknown local draft session")?;
                 if command == "limited_undo_pick" {
                     draft.current = draft.undo.pop().ok_or("No draft pick to undo")?;
@@ -513,6 +700,7 @@ impl LimitedService {
                             &draft.pending,
                             draft.commander_draft,
                             draft.pending_effect,
+                            draft.variant,
                         ));
                     }
                     pick_and_bots(&mut next, pending, effect)?;
@@ -520,12 +708,21 @@ impl LimitedService {
                     draft.pending_effect = false;
                     // Commit only after every reducer action succeeds. Undo includes bot RNG.
                     draft.undo.push(std::mem::replace(&mut draft.current, next));
+                    // Back Draft: the finished pools change hands in pairs.
+                    if draft.variant == Some(Variant::BackDraft)
+                        && !draft.back_draft_swapped
+                        && draft.current.session.status == DraftStatus::Deckbuilding
+                    {
+                        swap_seat_pools(&mut draft.current.session);
+                        draft.back_draft_swapped = true;
+                    }
                 }
                 Ok(draft_view(
                     &draft.current.session,
                     &draft.pending,
                     draft.commander_draft,
                     draft.pending_effect,
+                    draft.variant,
                 ))
             }
             "limited_get_sealed_pool" => {
@@ -536,6 +733,8 @@ impl LimitedService {
                     &sealed.session,
                     &sealed.suggested,
                     &sealed.opponents,
+                    sealed.variant,
+                    sealed.min_deck_size,
                 ))
             }
             "limited_commander_draft_info" => {
@@ -644,7 +843,7 @@ impl LimitedService {
                         .and_then(Value::as_u64)
                         .filter(|n| *n >= 1 && *n < s.pools.len() as u64)
                         .ok_or("Invalid number of draft opponents")? as usize;
-                let human = submitted_deck(&args, &s.pools[0])?;
+                let human = submitted_deck(&args, &s.pools[0], 40)?;
                 let opponents = s
                     .pools
                     .iter()
@@ -675,6 +874,7 @@ impl LimitedService {
                     wins: 0,
                     losses: 0,
                     round_recorded: false,
+                    min_deck_size: 40,
                 };
                 let id = self.id("gauntlet");
                 let view = gauntlet_view(&id, &gauntlet);
@@ -692,7 +892,7 @@ impl LimitedService {
                     .filter(|n| (1..=7).contains(n))
                     .ok_or("Gauntlet rounds must be between 1 and 7")?
                     as usize;
-                let human = submitted_deck(&args, &sealed.session.pools[0])?;
+                let human = submitted_deck(&args, &sealed.session.pools[0], sealed.min_deck_size)?;
                 let opponent_conspiracies = sealed
                     .session
                     .pools
@@ -716,6 +916,7 @@ impl LimitedService {
                     wins: 0,
                     losses: 0,
                     round_recorded: false,
+                    min_deck_size: sealed.min_deck_size,
                 };
                 let id = self.id("gauntlet");
                 let view = gauntlet_view(&id, &gauntlet);
@@ -731,7 +932,7 @@ impl LimitedService {
                 let g = self.gauntlets.get_mut(id).ok_or("Unknown local gauntlet")?;
                 match command {
                     "limited_update_gauntlet_human_deck" => {
-                        g.human = submitted_deck(&args, &g.pool)?;
+                        g.human = submitted_deck(&args, &g.pool, g.min_deck_size)?;
                     }
                     "limited_get_gauntlet_match_decks" => {
                         let opponent = &g.opponents[g.round - 1];
@@ -815,6 +1016,8 @@ struct Setup {
     picks_per_pass: Option<u8>,
     pool_type: Option<String>,
     num_boosters: Option<u8>,
+    /// Reject Rare sub-variant: rare (default), mythic, uncommon or common.
+    rarity: Option<String>,
     #[allow(dead_code)]
     pool_packs: Option<u8>,
 }
@@ -1008,6 +1211,102 @@ fn validate_pool(pool: &LimitedSetPool) -> Result<()> {
     }
     Ok(())
 }
+/// The rarity classes a Reject Rare booster is built from.
+fn reject_rare_rarities(setup: &Setup) -> Vec<Rarity> {
+    match setup.rarity.as_deref().map(str::to_ascii_lowercase).as_deref() {
+        Some("uncommon") | Some("silver") => vec![Rarity::Uncommon],
+        Some("common") | Some("iron") => vec![Rarity::Common],
+        Some("mythic") => vec![Rarity::Mythic],
+        _ => vec![Rarity::Rare, Rarity::Mythic],
+    }
+}
+
+/// Rebuild a set pool from only the requested rarity classes, drawing each
+/// 15-card booster with replacement so smaller sets still fill every pack.
+fn rarity_pool(base: &LimitedSetPool, rarities: &[Rarity]) -> Result<LimitedSetPool> {
+    let mut cards: Vec<SheetCard> = Vec::new();
+    let mut seen = std::collections::HashSet::new();
+    for sheet in base.sheets.values() {
+        for card in &sheet.cards {
+            if rarities.contains(&card.rarity)
+                && seen.insert((card.set_code.clone(), card.collector_number.clone()))
+            {
+                cards.push(card.clone());
+            }
+        }
+    }
+    if cards.is_empty() {
+        return Err(format!("{} has no cards of the requested rarity", base.code));
+    }
+    let prints = cards
+        .iter()
+        .map(|c| LimitedCardPrint {
+            print_id: format!("{}:{}", c.set_code, c.collector_number),
+            name: c.name.clone(),
+            set_code: c.set_code.clone(),
+            collector_number: c.collector_number.clone(),
+            rarity: c.rarity,
+            booster_eligible: true,
+        })
+        .collect();
+    let total_weight = cards.len() as u64;
+    let mut sheets = BTreeMap::new();
+    sheets.insert(
+        "rarity".into(),
+        SheetDefinition {
+            cards,
+            total_weight,
+            allow_duplicates: true,
+            fixed: false,
+            foil: false,
+            balance_colors: false,
+        },
+    );
+    Ok(LimitedSetPool {
+        code: format!("{}-R", base.code),
+        name: format!("{} (reject)", base.name),
+        release_date: base.release_date.clone(),
+        pack_variants: vec![PackVariant {
+            contents: vec![PackSlot {
+                slot: "rarity".into(),
+                count: 15,
+                choices: vec![WeightedSheetChoice {
+                    sheet: "rarity".into(),
+                    weight: 1,
+                }],
+            }],
+            weight: 1,
+        }],
+        pack_variants_total_weight: 1,
+        sheets,
+        prints,
+        basic_lands: base.basic_lands.clone(),
+    })
+}
+
+/// Mini-Master: the whole pack plus three of each basic land, no deckbuilding.
+fn build_pack_wars_deck(pool: &[DraftCardInstance], name: &str) -> Result<Deck> {
+    let mut main: Vec<Card> = pool.iter().map(Card::from).collect();
+    for land in ["Plains", "Island", "Swamp", "Mountain", "Forest"] {
+        for i in 0..3 {
+            main.push(Card {
+                id: format!("basic:{land}:{i}"),
+                name: land.into(),
+                set_code: String::new(),
+                card_number: format!("basic-{}-{i}", land.to_ascii_lowercase()),
+                foil: false,
+            });
+        }
+    }
+    let deck = Deck {
+        name: name.into(),
+        main,
+        sideboard: Vec::new(),
+    };
+    validate_deck(&deck, pool, pool.len() + 15)?;
+    Ok(deck)
+}
+
 fn start_session(
     id: &str,
     kind: DraftKind,
@@ -1054,6 +1353,58 @@ fn start_session(
     .map_err(|e| e.to_string())?;
     Ok(session)
 }
+/// Sealed session for casual variants (Pack Wars / Duplicate Sealed) whose pack
+/// count and deck floor differ from the fixed six-pack Sealed procedure.
+fn start_sealed_variant_session(
+    id: &str,
+    seats: u8,
+    pack_count: u8,
+    src: LimitSource,
+    seed: u64,
+    min_deck_size: usize,
+) -> Result<DraftSession> {
+    let config = DraftConfig {
+        source: src.draft_source,
+        set_code: src.set_code,
+        kind: DraftKind::Sealed,
+        pod_size: seats,
+        cards_per_pack: src.cards_per_pack,
+        pack_count,
+        min_deck_size,
+        addable_cards: DeckAddableCards::standard_basics(),
+        rng_seed: seed,
+        tournament_format: TournamentFormat::Swiss,
+        pod_policy: PodPolicy::Casual,
+        spectator_visibility: SpectatorVisibility::Public,
+    };
+    let seat_list = (0..seats)
+        .map(|seat| {
+            if seat == 0 {
+                DraftSeat::Human {
+                    player_id: PlayerId(0),
+                    display_name: "You".into(),
+                }
+            } else {
+                DraftSeat::Bot {
+                    name: format!("AI {seat}"),
+                }
+            }
+        })
+        .collect();
+    let mut session = DraftSession::new(config.clone(), seat_list, id.into());
+    let mut rng = ChaCha20Rng::seed_from_u64(seed);
+    let packs = src
+        .source
+        .generate_packs(&mut rng, &config, seats)
+        .map_err(|e| e.to_string())?;
+    session.pools = packs
+        .into_iter()
+        .map(|seat_packs| seat_packs.into_iter().flat_map(|p| p.0).collect())
+        .collect();
+    session.status = DraftStatus::Deckbuilding;
+    Ok(session)
+}
+
 /// The pooled card whose CR 905.2 draft effect this seat may still activate.
 fn draft_effect_card(s: &DraftSession, seat: usize) -> Option<String> {
     s.pools[seat]
@@ -1236,7 +1587,13 @@ fn winston_view(id: &str, s: &DraftSession) -> Value {
         "deckSize":deck_size,"pickedPile":s.pools[0].iter().map(Card::from).collect::<Vec<_>>(),
         "aiPickCount":ai_picks,"awaitingHuman":!complete && active_seat==0,"isComplete":complete})
 }
-fn draft_view(s: &DraftSession, pending: &[String], commander_draft: bool, pending_effect: bool) -> Value {
+fn swap_seat_pools(s: &mut DraftSession) {
+    for i in (0..s.pools.len()).step_by(2) {
+        s.pools.swap(i, i + 1);
+    }
+}
+
+fn draft_view(s: &DraftSession, pending: &[String], commander_draft: bool, pending_effect: bool, variant: Option<Variant>) -> Value {
     let complete = s.status != DraftStatus::Drafting;
     let pack: Vec<Card> = s.current_pack[0]
         .as_ref()
@@ -1267,6 +1624,7 @@ fn draft_view(s: &DraftSession, pending: &[String], commander_draft: bool, pendi
         "draftEffectAvailable":!complete && pending.is_empty() && human_pick_step(s, true).1.is_some(),
         "draftEffectActive":pending_effect,
         "commanderDraft":commander_draft, "minDeckSize":s.config.min_deck_size,
+        "variantKind":variant.map(Variant::id),
         "passDirection":match s.pass_direction {PassDirection::Left=>"left",PassDirection::Right=>"right"}})
 }
 fn build_deck(pool: &[DraftCardInstance], name: &str) -> Result<Deck> {
@@ -1310,7 +1668,7 @@ fn build_deck(pool: &[DraftCardInstance], name: &str) -> Result<Deck> {
         main,
         sideboard: remaining,
     };
-    validate_deck(&deck, pool)?;
+    validate_deck(&deck, pool, 40)?;
     Ok(deck)
 }
 fn pick_commander(pool: &[DraftCardInstance]) -> Option<String> {
@@ -1425,7 +1783,7 @@ fn finish_commander_deck(
     })
 }
 
-fn validate_deck(deck: &Deck, pool: &[DraftCardInstance]) -> Result<()> {
+fn validate_deck(deck: &Deck, pool: &[DraftCardInstance], min_deck_size: usize) -> Result<()> {
     // CR 905.4: conspiracies come from the sideboard, never the library.
     if deck.main.iter().any(|c| {
         pool.iter()
@@ -1443,7 +1801,7 @@ fn validate_deck(deck: &Deck, pool: &[DraftCardInstance]) -> Result<()> {
         .collect();
     let basics = DeckAddableCards::standard_basics();
     for cards in [&main, &all] {
-        validate_limited_deck(cards, &names, &basics, 40, &[], &[], 0).map_err(|errors| {
+        validate_limited_deck(cards, &names, &basics, min_deck_size, &[], &[], 0).map_err(|errors| {
             errors
                 .iter()
                 .map(ToString::to_string)
@@ -1472,7 +1830,7 @@ fn validate_deck(deck: &Deck, pool: &[DraftCardInstance]) -> Result<()> {
     }
     Ok(())
 }
-fn submitted_deck(args: &Value, pool: &[DraftCardInstance]) -> Result<Deck> {
+fn submitted_deck(args: &Value, pool: &[DraftCardInstance], min_deck_size: usize) -> Result<Deck> {
     let deck = Deck {
         name: "Your Sealed deck".into(),
         main: serde_json::from_value(args.get("main").cloned().ok_or("Missing main")?)
@@ -1482,7 +1840,7 @@ fn submitted_deck(args: &Value, pool: &[DraftCardInstance]) -> Result<Deck> {
         )
         .map_err(|e| e.to_string())?,
     };
-    validate_deck(&deck, pool)?;
+    validate_deck(&deck, pool, min_deck_size)?;
     Ok(deck)
 }
 
@@ -1500,10 +1858,601 @@ fn conspiracy_names(deck: &Deck, pool: &[DraftCardInstance]) -> Vec<String> {
         .map(|c| c.name.clone())
         .collect()
 }
-fn sealed_view(id: &str, s: &DraftSession, suggested: &Deck, opponents: &[Deck]) -> Value {
+fn sealed_view(id: &str, s: &DraftSession, suggested: &Deck, opponents: &[Deck], variant: Option<Variant>, min_deck_size: usize) -> Value {
     json!({"sessionId":id,"deckName":format!("{} Sealed",s.set_code),"landSetCode":s.set_code,
-        "cards":s.pools[0].iter().map(Card::from).collect::<Vec<_>>(),"suggestedDeck":suggested,"aiDecks":opponents})
+        "cards":s.pools[0].iter().map(Card::from).collect::<Vec<_>>(),"suggestedDeck":suggested,"aiDecks":opponents,
+        "minDeckSize":min_deck_size,"variantKind":variant.map(Variant::id)})
 }
+impl LimitedService {
+    /// Deals `seats × pack_count` real boosters and returns the flattened cards.
+    fn variant_dealt_cards(
+        &self,
+        setup: &Setup,
+        seats: u8,
+        pack_count: u8,
+        seed: u64,
+    ) -> Result<(Vec<DraftCardInstance>, String)> {
+        let src = self.build_source(setup, seats, pack_count, seed)?;
+        let set_code = src.set_code.clone();
+        let config = DraftConfig {
+            source: src.draft_source,
+            set_code: src.set_code,
+            kind: DraftKind::Quick,
+            pod_size: seats,
+            cards_per_pack: src.cards_per_pack,
+            pack_count,
+            min_deck_size: 40,
+            addable_cards: DeckAddableCards::standard_basics(),
+            rng_seed: seed,
+            tournament_format: TournamentFormat::Swiss,
+            pod_policy: PodPolicy::Casual,
+            spectator_visibility: SpectatorVisibility::Public,
+        };
+        let mut rng = ChaCha20Rng::seed_from_u64(seed);
+        let packs = src
+            .source
+            .generate_packs(&mut rng, &config, seats)
+            .map_err(|e| e.to_string())?;
+        let cards = packs.into_iter().flatten().flat_map(|p| p.0).collect();
+        Ok((cards, set_code))
+    }
+
+    /// One copy of every printable card in the set (or the imported pool).
+    fn variant_single_copies(&self, setup: &Setup) -> Result<(Vec<DraftCardInstance>, String)> {
+        let custom = setup.custom_pool || setup.pool_type.as_deref() == Some("Custom");
+        if custom {
+            return Ok((to_instances(&setup.pool), "CUBE".into()));
+        }
+        let code = setup
+            .pool
+            .iter()
+            .find_map(|c| c.id.strip_prefix("limited:").and_then(|r| r.split(':').next()))
+            .ok_or("Rotisserie needs a standard set pool")?;
+        let pool = self.load_pool(code)?;
+        Ok((to_instances(&pool_cards(&pool)), pool.code))
+    }
+
+    fn start_variant(&mut self, args: &Value) -> Result<Value> {
+        let setup = parse_setup(args)?;
+        let variant = parse_variant(&setup)?.ok_or("Missing variant")?;
+        if !matches!(
+            variant,
+            Variant::Solomon | Variant::Rotisserie | Variant::Continuous
+        ) {
+            return Err(format!(
+                "Variant '{}' starts through its draft or sealed command",
+                variant.id()
+            ));
+        }
+        let seed = setup.seed.unwrap_or_else(rand::random);
+        let seats = 2usize;
+        let (mut cards, set_code) = match variant {
+            Variant::Rotisserie => self.variant_single_copies(&setup)?,
+            _ => self.variant_dealt_cards(&setup, seats as u8, 3, seed)?,
+        };
+        if cards.len() < 4 {
+            return Err("Not enough cards to run this variant".into());
+        }
+        let mut rng = ChaCha20Rng::seed_from_u64(seed);
+        match variant {
+            // Each player sets one card aside, leaving 44 each (88 shared).
+            Variant::Continuous => {
+                use rand::seq::SliceRandom;
+                cards.shuffle(&mut rng);
+                for _ in 0..2 {
+                    let i = rng.random_range(0..cards.len());
+                    cards.remove(i);
+                }
+            }
+            Variant::Solomon => {
+                use rand::seq::SliceRandom;
+                cards.shuffle(&mut rng);
+            }
+            _ => {}
+        }
+        let id = self.id("variant");
+        let mut vd = VariantDraft {
+            kind: variant,
+            seat_count: seats,
+            rng,
+            seed,
+            pools: vec![Vec::new(); seats],
+            set_code,
+            remaining: cards,
+            offer: Vec::new(),
+            need: 0,
+            pending: Vec::new(),
+            active: 0,
+            forward: true,
+            batch: Vec::new(),
+            splitter: 0,
+            awaiting_split: false,
+            solomon_piles: None,
+            continuous_queue: Vec::new(),
+            continuous_first: 0,
+            batch_index: 0,
+            min_deck_size: 40,
+            undo: Vec::new(),
+        };
+        advance_variant(&mut vd);
+        let value = variant_view(&vd, &id);
+        self.variants.insert(id, vd);
+        Ok(value)
+    }
+
+    fn variant_view(&self, id: &str) -> Result<Value> {
+        let vd = self
+            .variants
+            .get(id)
+            .ok_or("Unknown local variant session")?;
+        Ok(variant_view(vd, id))
+    }
+
+    /// Routes state/pick/undo for ids that live in the bespoke variant engine.
+    fn variant_command(&mut self, command: &str, args: &Value) -> Result<Value> {
+        let id = text(args, "sessionId")?.to_string();
+        match command {
+            "limited_get_draft_state" => self.variant_view(&id),
+            "limited_undo_pick" => {
+                let mut next = self
+                    .variants
+                    .get(&id)
+                    .ok_or("Unknown local variant session")?
+                    .clone();
+                let prev = next.undo.pop().ok_or("No variant action to undo")?;
+                next = prev;
+                let value = variant_view(&next, &id);
+                self.variants.insert(id, next);
+                Ok(value)
+            }
+            "limited_pick_card" => {
+                let card_id = args
+                    .get("cardId")
+                    .and_then(Value::as_str)
+                    .ok_or("Missing cardId")?
+                    .to_string();
+                let pile = args
+                    .get("pile")
+                    .and_then(Value::as_u64)
+                    .map(|n| n as usize);
+                let mut next = self
+                    .variants
+                    .get(&id)
+                    .ok_or("Unknown local variant session")?
+                    .clone();
+                next.undo.push(variant_snapshot(&next));
+                variant_pick(&mut next, &card_id, pile)?;
+                advance_variant(&mut next);
+                if next.is_complete() {
+                    return self.finish_variant(&id, next);
+                }
+                let value = variant_view(&next, &id);
+                self.variants.insert(id, next);
+                Ok(value)
+            }
+            _ => Err(format!("Unsupported variant command '{command}'")),
+        }
+    }
+
+    fn variant_split(&mut self, args: &Value) -> Result<Value> {
+        let id = text(args, "sessionId")?.to_string();
+        let pile: Vec<String> = args
+            .get("pile")
+            .and_then(Value::as_array)
+            .map(|a| {
+                a.iter()
+                    .filter_map(|v| v.as_str().map(str::to_string))
+                    .collect()
+            })
+            .unwrap_or_default();
+        let mut next = self
+            .variants
+            .get(&id)
+            .ok_or("Unknown local variant session")?
+            .clone();
+        next.undo.push(variant_snapshot(&next));
+        variant_split(&mut next, &pile)?;
+        advance_variant(&mut next);
+        if next.is_complete() {
+            return self.finish_variant(&id, next);
+        }
+        let value = variant_view(&next, &id);
+        self.variants.insert(id, next);
+        Ok(value)
+    }
+
+    /// Converts a finished bespoke variant into a normal Deckbuilding session so
+    /// the existing deck builder and gauntlet flow can take over.
+    fn finish_variant(&mut self, id: &str, vd: VariantDraft) -> Result<Value> {
+        let seats: Vec<DraftSeat> = (0..vd.seat_count)
+            .map(|seat| {
+                if seat == 0 {
+                    DraftSeat::Human {
+                        player_id: PlayerId(0),
+                        display_name: "You".into(),
+                    }
+                } else {
+                    DraftSeat::Bot {
+                        name: format!("AI {seat}"),
+                    }
+                }
+            })
+            .collect();
+        let config = DraftConfig {
+            source: DraftSource::Set {
+                layout: SetLayout::UniformByRound {
+                    codes: vec![vd.set_code.clone()],
+                },
+            },
+            set_code: vd.set_code.clone(),
+            kind: DraftKind::Quick,
+            pod_size: vd.seat_count as u8,
+            cards_per_pack: 15,
+            pack_count: 3,
+            min_deck_size: vd.min_deck_size,
+            addable_cards: DeckAddableCards::standard_basics(),
+            rng_seed: vd.seed,
+            tournament_format: TournamentFormat::Swiss,
+            pod_policy: PodPolicy::Casual,
+            spectator_visibility: SpectatorVisibility::Public,
+        };
+        let mut session = DraftSession::new(config, seats, id.into());
+        session.pools = vd.pools.clone();
+        session.status = DraftStatus::Deckbuilding;
+        let value = draft_view(&session, &[], false, false, Some(vd.kind));
+        let rng = ChaCha20Rng::seed_from_u64(vd.seed);
+        self.drafts.insert(
+            id.into(),
+            Draft {
+                current: Snapshot { session, rng },
+                undo: Vec::new(),
+                pending: Vec::new(),
+                pending_effect: false,
+                commander_draft: false,
+                variant: Some(vd.kind),
+                back_draft_swapped: false,
+            },
+        );
+        self.variants.remove(id);
+        Ok(value)
+    }
+}
+
+fn variant_list() -> Value {
+    json!([
+        {"id":"pack_wars","label":"Pack Wars (Mini-Master)","description":"Open one booster plus 15 basic lands and play it as-is.","players":2,"packs":1,"deckSize":30,"engine":"sealed"},
+        {"id":"solomon","label":"Solomon Draft","description":"Split 8-card batches into two piles; your opponent chooses one.","players":2,"packs":6,"deckSize":40,"engine":"variant"},
+        {"id":"duplicate_sealed","label":"Duplicate Sealed (Mirror)","description":"Everyone opens the same five packs and builds from identical pools.","players":2,"packs":5,"deckSize":40,"engine":"sealed"},
+        {"id":"back_draft","label":"Back Draft","description":"Draft normally, then swap pools with the seat across from you.","players":2,"packs":3,"deckSize":40,"engine":"draft"},
+        {"id":"rotisserie","label":"Rotisserie Draft","description":"One shared pool, snake order, one card at a time.","players":2,"packs":0,"deckSize":40,"engine":"variant"},
+        {"id":"reject_rare","label":"Reject Rare Draft","description":"Boosters of nothing but rares (or the silver/iron sub-variant).","players":2,"packs":3,"deckSize":40,"engine":"draft"},
+        {"id":"continuous","label":"Continuous Draft","description":"Reveal four, take 1-2-1; the first chooser alternates each batch.","players":2,"packs":6,"deckSize":40,"engine":"variant"}
+    ])
+}
+
+/// One-level undo snapshot. The clone deliberately drops its own history so the
+/// stored snapshots stay linear instead of nesting recursively.
+fn variant_snapshot(vd: &VariantDraft) -> VariantDraft {
+    let mut snapshot = vd.clone();
+    snapshot.undo = Vec::new();
+    snapshot
+}
+
+fn advance_variant(vd: &mut VariantDraft) {    match vd.kind {
+        Variant::Rotisserie => advance_rotisserie(vd),
+        Variant::Continuous => advance_continuous(vd),
+        Variant::Solomon => advance_solomon(vd),
+        _ => {}
+    }
+}
+
+/// Rotisserie: one open pool, seats pick one card each in snake order.
+fn advance_rotisserie(vd: &mut VariantDraft) {
+    loop {
+        if vd.remaining.is_empty() {
+            vd.offer.clear();
+            vd.need = 0;
+            return;
+        }
+        if vd.active == 0 {
+            vd.offer = vd.remaining.clone();
+            vd.need = 1;
+            return;
+        }
+        let idx = bot_pick(
+            &vd.remaining,
+            AiDifficulty::Medium,
+            &vd.pools[vd.active],
+            None,
+            &mut vd.rng,
+        );
+        let card = vd.remaining.remove(idx);
+        vd.pools[vd.active].push(card);
+        step_snake(vd);
+    }
+}
+
+/// Snake draft order: 0,1,2,…,n-1,n-1,…,1,0,0,1,…
+fn step_snake(vd: &mut VariantDraft) {
+    if vd.forward {
+        if vd.active + 1 < vd.seat_count {
+            vd.active += 1;
+        } else {
+            vd.forward = false;
+        }
+    } else if vd.active > 0 {
+        vd.active -= 1;
+    } else {
+        vd.forward = true;
+    }
+}
+
+/// Continuous Draft: four-card batches taken 1-2-1, first chooser alternating.
+fn advance_continuous(vd: &mut VariantDraft) {
+    loop {
+        if vd.continuous_queue.is_empty() {
+            if vd.remaining.is_empty() {
+                vd.batch.clear();
+                vd.offer.clear();
+                vd.need = 0;
+                return;
+            }
+            let n = 4.min(vd.remaining.len());
+            vd.batch = vd.remaining.drain(0..n).collect();
+            vd.continuous_first = vd.batch_index % 2;
+            vd.continuous_queue = if vd.continuous_first == 0 {
+                vec![(0, 1), (1, 2), (0, 1)]
+            } else {
+                vec![(1, 1), (0, 2), (1, 1)]
+            };
+        }
+        let (seat, count) = vd.continuous_queue[0];
+        let take = count.min(vd.batch.len());
+        if seat == 0 {
+            vd.offer = vd.batch.clone();
+            vd.need = take;
+            vd.pending.clear();
+            return;
+        }
+        for _ in 0..take {
+            if vd.batch.is_empty() {
+                break;
+            }
+            let idx = bot_pick(
+                &vd.batch,
+                AiDifficulty::Medium,
+                &vd.pools[1],
+                None,
+                &mut vd.rng,
+            );
+            let card = vd.batch.remove(idx);
+            vd.pools[1].push(card);
+        }
+        vd.continuous_queue.remove(0);
+        if vd.continuous_queue.is_empty() {
+            vd.batch.clear();
+            vd.batch_index += 1;
+        }
+    }
+}
+
+/// Solomon Draft: 8-card batches (last batch up to 10) split by alternating
+/// seats; the other seat chooses one of the two piles.
+fn advance_solomon(vd: &mut VariantDraft) {
+    if !vd.batch.is_empty() || vd.solomon_piles.is_some() {
+        return;
+    }
+    if vd.remaining.is_empty() {
+        vd.offer.clear();
+        vd.need = 0;
+        vd.awaiting_split = false;
+        return;
+    }
+    let n = if vd.remaining.len() <= 10 {
+        vd.remaining.len()
+    } else {
+        8
+    };
+    vd.batch = vd.remaining.drain(0..n).collect();
+    vd.offer = vd.batch.clone();
+    vd.need = 1;
+    if vd.splitter == 0 {
+        vd.awaiting_split = true;
+    } else {
+        let (a, b) = solomon_bot_split(&vd.batch);
+        vd.solomon_piles = Some((a, b));
+    }
+}
+
+fn variant_pick(vd: &mut VariantDraft, card_id: &str, pile: Option<usize>) -> Result<()> {
+    match vd.kind {
+        Variant::Rotisserie => {
+            let idx = vd
+                .remaining
+                .iter()
+                .position(|c| c.instance_id == card_id)
+                .ok_or("Selected card is not available")?;
+            let card = vd.remaining.remove(idx);
+            vd.pools[0].push(card);
+            vd.pending.clear();
+            vd.offer.clear();
+            vd.need = 0;
+            step_snake(vd);
+            Ok(())
+        }
+        Variant::Continuous => {
+            if vd.need == 0 {
+                return Err("No pick is pending".into());
+            }
+            if vd.pending.iter().any(|id| id == card_id) {
+                return Err("That card is already selected".into());
+            }
+            let idx = vd
+                .batch
+                .iter()
+                .position(|c| c.instance_id == card_id)
+                .ok_or("Selected card is not available")?;
+            let card = vd.batch.remove(idx);
+            vd.pools[0].push(card);
+            vd.pending.push(card_id.to_string());
+            if vd.pending.len() < vd.need {
+                vd.offer = vd.batch.clone();
+                return Ok(());
+            }
+            vd.pending.clear();
+            vd.offer.clear();
+            vd.need = 0;
+            vd.continuous_queue.remove(0);
+            if vd.continuous_queue.is_empty() {
+                vd.batch.clear();
+                vd.batch_index += 1;
+            }
+            Ok(())
+        }
+        Variant::Solomon => {
+            if vd.awaiting_split {
+                return Err("Assign these cards to the two piles first".into());
+            }
+            let choice = pile.ok_or("Solomon Draft requires a pile choice")?;
+            let (a, b) = vd.solomon_piles.take().ok_or("No split is pending")?;
+            let (human, bot) = match choice {
+                0 => (a, b),
+                1 => (b, a),
+                _ => return Err("Pile must be 0 or 1".into()),
+            };
+            vd.pools[0].extend(human);
+            vd.pools[1].extend(bot);
+            vd.offer.clear();
+            vd.need = 0;
+            vd.batch.clear();
+            vd.batch_index += 1;
+            vd.splitter = 1 - vd.splitter;
+            Ok(())
+        }
+        _ => Err("This variant does not take picks".into()),
+    }
+}
+
+/// The human splitter hands the bot two piles; the bot takes the stronger one.
+fn variant_split(vd: &mut VariantDraft, pile: &[String]) -> Result<()> {
+    if vd.kind != Variant::Solomon || !vd.awaiting_split {
+        return Err("No split is pending".into());
+    }
+    if pile.is_empty() || pile.len() >= vd.batch.len() {
+        return Err("Give each pile at least one card".into());
+    }
+    let mut a = Vec::new();
+    let mut b = Vec::new();
+    for card in &vd.batch {
+        if pile.iter().any(|id| id == &card.instance_id) {
+            a.push(card.clone());
+        } else {
+            b.push(card.clone());
+        }
+    }
+    if pile_score(&a) >= pile_score(&b) {
+        vd.pools[1].extend(a);
+        vd.pools[0].extend(b);
+    } else {
+        vd.pools[0].extend(a);
+        vd.pools[1].extend(b);
+    }
+    vd.batch.clear();
+    vd.offer.clear();
+    vd.need = 0;
+    vd.awaiting_split = false;
+    vd.batch_index += 1;
+    vd.splitter = 1 - vd.splitter;
+    Ok(())
+}
+
+fn solomon_bot_split(batch: &[DraftCardInstance]) -> (Vec<DraftCardInstance>, Vec<DraftCardInstance>) {
+    let mut order: Vec<usize> = (0..batch.len()).collect();
+    order.sort_by_key(|&i| std::cmp::Reverse(card_score(&batch[i])));
+    let mut a = Vec::new();
+    let mut b = Vec::new();
+    for (rank, &i) in order.iter().enumerate() {
+        if rank % 2 == 0 {
+            a.push(batch[i].clone());
+        } else {
+            b.push(batch[i].clone());
+        }
+    }
+    (a, b)
+}
+
+fn pile_score(cards: &[DraftCardInstance]) -> i32 {
+    cards.iter().map(card_score).sum()
+}
+
+/// Coarse card value for the Solomon AI: rarity dominates, curve breaks ties.
+fn card_score(card: &DraftCardInstance) -> i32 {
+    let rarity = match card.rarity.as_str() {
+        "mythic" => 40,
+        "rare" => 30,
+        "special" | "bonus" => 20,
+        "uncommon" => 15,
+        _ => 5,
+    };
+    rarity * 10 + i32::from(card.cmc.min(7))
+}
+
+fn variant_view(vd: &VariantDraft, id: &str) -> Value {
+    let complete = vd.is_complete();
+    let pack: Vec<Card> = vd
+        .offer
+        .iter()
+        .filter(|c| !vd.pending.contains(&c.instance_id))
+        .map(Card::from)
+        .collect();
+    let seats: Vec<Value> = (0..vd.seat_count)
+        .map(|i| {
+            json!({
+                "seat": i,
+                "name": if i == 0 { "You".to_string() } else { format!("AI {i}") },
+                "isHuman": i == 0,
+                "picksMade": vd.pools[i].len(),
+                "lastPickName": vd.pools[i].last().map(|c| c.name.clone()),
+                "currentPackSize": if i == 0 { pack.len() } else { 0 },
+                "packsWaiting": 0,
+                "awaitingPick": !complete,
+            })
+        })
+        .collect();
+    let total_picks: usize = vd.pools.iter().map(Vec::len).sum();
+    let mut value = json!({
+        "sessionId": id,
+        "round": 1,
+        "totalRounds": 1,
+        "pickNumber": total_picks + 1,
+        "packSize": vd.offer.len(),
+        "currentPack": pack,
+        "pickedPile": vd.pools[0].iter().map(Card::from).collect::<Vec<_>>(),
+        "seatSummaries": seats,
+        "isRoundOver": complete,
+        "isComplete": complete,
+        "awaitingHuman": !complete && !vd.awaiting_split && vd.need > 0,
+        "awaitingSplit": vd.awaiting_split,
+        "splitter": vd.splitter,
+        "picksPerPass": vd.need.max(1),
+        "picksRemainingInPack": vd.need.saturating_sub(vd.pending.len()),
+        "draftEffectAvailable": false,
+        "humanConspiracies": Vec::<String>::new(),
+        "variantKind": vd.kind.id(),
+        "minDeckSize": vd.min_deck_size,
+    });
+    if vd.kind == Variant::Solomon && !vd.awaiting_split && vd.splitter != 0 {
+        if let Some((a, b)) = &vd.solomon_piles {
+            let piles: Vec<Vec<Card>> = vec![
+                a.iter().map(Card::from).collect(),
+                b.iter().map(Card::from).collect(),
+            ];
+            value["piles"] = json!(piles);
+        }
+    }
+    value
+}
+
 #[cfg(test)]
 mod conspiracy_tests {
     use super::*;
@@ -1580,10 +2529,249 @@ mod conspiracy_tests {
             .unwrap();
         let conspiracy = deck.sideboard.remove(index);
         deck.main.push(conspiracy.clone());
-        assert!(validate_deck(&deck, &pool).is_err());
+        assert!(validate_deck(&deck, &pool, 40).is_err());
         deck.main.pop();
         deck.sideboard.extend([conspiracy.clone(), conspiracy]);
-        assert!(validate_deck(&deck, &pool).is_err());
+        assert!(validate_deck(&deck, &pool, 40).is_err());
+    }
+}
+
+#[cfg(test)]
+mod variant_tests {
+    use super::*;
+
+    fn cube_pool(n: usize) -> Vec<Value> {
+        (0..n)
+            .map(|i| json!({
+                "id": format!("cube-{i}"), "name": format!("Card {i}"),
+                "setCode": "CUBE", "cardNumber": i.to_string()
+            }))
+            .collect()
+    }
+
+    fn state(service: &mut LimitedService, id: &str) -> Value {
+        service
+            .invoke("limited_get_draft_state", json!({"sessionId": id}))
+            .unwrap()
+    }
+
+    fn pick(service: &mut LimitedService, id: &str) -> Value {
+        let s = state(service, id);
+        let card = &s["currentPack"][0];
+        service
+            .invoke(
+                "limited_pick_card",
+                json!({
+                    "sessionId": id, "cardId": card["id"], "cardName": card["name"],
+                    "setCode": card["setCode"], "cardNumber": card["cardNumber"]
+                }),
+            )
+            .unwrap()
+    }
+
+    fn start_variant(service: &mut LimitedService, variant: &str, n: usize) -> String {
+        let initial = service
+            .invoke(
+                "limited_start_variant",
+                json!({"setup":{"pool":cube_pool(n),"customPool":true,"variant":variant,"seed":7}}),
+            )
+            .unwrap();
+        assert_eq!(initial["variantKind"].as_str().unwrap(), variant);
+        initial["sessionId"].as_str().unwrap().to_owned()
+    }
+
+    #[test]
+    fn variant_ids_round_trip() {
+        for id in [
+            "pack_wars",
+            "solomon",
+            "duplicate_sealed",
+            "back_draft",
+            "rotisserie",
+            "reject_rare",
+            "continuous",
+        ] {
+            assert_eq!(Variant::parse(id).unwrap().id(), id);
+        }
+    }
+
+    #[test]
+    fn reject_rare_rarity_subvariants_map() {
+        let setup = |rarity: Option<&str>| {
+            let mut value = json!({"pool": [], "customPool": false});
+            if let Some(rarity) = rarity {
+                value["rarity"] = json!(rarity);
+            }
+            parse_setup(&json!({"setup": value})).unwrap()
+        };
+        assert_eq!(reject_rare_rarities(&setup(Some("silver"))), vec![Rarity::Uncommon]);
+        assert_eq!(reject_rare_rarities(&setup(Some("iron"))), vec![Rarity::Common]);
+        assert_eq!(reject_rare_rarities(&setup(Some("mythic"))), vec![Rarity::Mythic]);
+        assert_eq!(reject_rare_rarities(&setup(None)), vec![Rarity::Rare, Rarity::Mythic]);
+    }
+
+    #[test]
+    fn rarity_pool_keeps_only_requested_rarities_and_allows_duplicates() {
+        let card = |name: &str, rarity: Rarity| SheetCard {
+            name: name.into(),
+            set_code: "tst".into(),
+            collector_number: name.into(),
+            rarity,
+            weight: 1,
+            colors: vec![],
+            cmc: 1,
+            type_line: "Creature".into(),
+            draft_effect: None,
+        };
+        let mut sheets = BTreeMap::new();
+        sheets.insert("main".into(), SheetDefinition {
+            cards: vec![card("R1", Rarity::Rare), card("R2", Rarity::Rare), card("C1", Rarity::Common)],
+            total_weight: 3,
+            allow_duplicates: false,
+            fixed: false,
+            foil: false,
+            balance_colors: false,
+        });
+        let base = LimitedSetPool {
+            code: "tst".into(),
+            name: "Test".into(),
+            release_date: None,
+            pack_variants: vec![],
+            pack_variants_total_weight: 0,
+            sheets,
+            prints: vec![],
+            basic_lands: vec![],
+        };
+        let pool = rarity_pool(&base, &[Rarity::Rare]).unwrap();
+        let sheet = &pool.sheets["rarity"];
+        assert_eq!(sheet.cards.len(), 2);
+        assert!(sheet.allow_duplicates);
+        assert_eq!(pool.pack_variants[0].contents[0].count, 15);
+    }
+
+    #[test]
+    fn rotisserie_snake_picks_until_pool_is_empty() {
+        let mut service = LimitedService::default();
+        let id = start_variant(&mut service, "rotisserie", 20);
+        let mut guard = 0;
+        loop {
+            let s = state(&mut service, &id);
+            if s["isComplete"].as_bool().unwrap() {
+                break;
+            }
+            assert!(s["awaitingHuman"].as_bool().unwrap());
+            pick(&mut service, &id);
+            guard += 1;
+            assert!(guard < 100, "rotisserie did not terminate");
+        }
+        let draft = &service.drafts[&id];
+        assert_eq!(draft.variant, Some(Variant::Rotisserie));
+        let total: usize = draft.current.session.pools.iter().map(Vec::len).sum();
+        assert_eq!(total, 20);
+    }
+
+    #[test]
+    fn continuous_takes_one_one_two_per_batch() {
+        let mut service = LimitedService::default();
+        let id = start_variant(&mut service, "continuous", 90);
+        let mut needs = Vec::new();
+        loop {
+            let s = state(&mut service, &id);
+            if s["isComplete"].as_bool().unwrap() {
+                break;
+            }
+            let need = s["picksPerPass"].as_u64().unwrap() as usize;
+            needs.push(need);
+            for _ in 0..need {
+                pick(&mut service, &id);
+            }
+            assert!(needs.len() < 60, "continuous did not terminate");
+        }
+        assert_eq!(&needs[..3], &[1, 1, 2]);
+        // Two cards are set aside, then every one of the remaining 88 is dealt.
+        let total: usize = service.drafts[&id].current.session.pools.iter().map(Vec::len).sum();
+        assert_eq!(total, 88);
+    }
+
+    #[test]
+    fn solomon_alternates_splitter_and_chooser() {
+        let mut service = LimitedService::default();
+        let id = start_variant(&mut service, "solomon", 90);
+        let initial = state(&mut service, &id);
+        assert_eq!(initial["awaitingSplit"].as_bool(), Some(true));
+        let batch = initial["currentPack"].as_array().unwrap();
+        let half: Vec<Value> = batch
+            .iter()
+            .take(batch.len() / 2)
+            .map(|c| c["id"].clone())
+            .collect();
+        let after_split = service
+            .invoke("limited_variant_split", json!({"sessionId": id, "pile": half}))
+            .unwrap();
+        assert_eq!(after_split["awaitingSplit"].as_bool(), Some(false));
+        let piles = after_split["piles"].as_array().unwrap();
+        assert_eq!(piles.len(), 2);
+        let choose = piles[0][0]["id"].clone();
+        let after_choose = service
+            .invoke("limited_variant_pick", json!({"sessionId": id, "cardId": choose, "pile": 0}))
+            .unwrap();
+        assert_eq!(after_choose["awaitingSplit"].as_bool(), Some(true));
+    }
+
+    #[test]
+    fn pack_wars_seals_a_pack_plus_fifteen_basics() {
+        let mut service = LimitedService::default();
+        let initial = service
+            .invoke(
+                "limited_start_sealed",
+                json!({"setup":{"pool":cube_pool(60),"customPool":true,"poolType":"Custom","variant":"pack_wars","seed":2}}),
+            )
+            .unwrap();
+        assert_eq!(initial["variantKind"].as_str(), Some("pack_wars"));
+        assert_eq!(initial["minDeckSize"].as_u64(), Some(30));
+        assert_eq!(initial["suggestedDeck"]["main"].as_array().unwrap().len(), 30);
+    }
+
+    #[test]
+    fn duplicate_sealed_clones_one_pool_to_every_seat() {
+        let mut service = LimitedService::default();
+        let initial = service
+            .invoke(
+                "limited_start_sealed",
+                json!({"setup":{"pool":cube_pool(150),"customPool":true,"poolType":"Custom","variant":"duplicate_sealed","seed":4}}),
+            )
+            .unwrap();
+        let id = initial["sessionId"].as_str().unwrap();
+        let session = &service.sealed[id].session;
+        assert_eq!(session.pools.len(), 2);
+        assert_eq!(session.pools[0], session.pools[1]);
+    }
+
+    #[test]
+    fn back_draft_swaps_pools_after_the_last_pick() {
+        let mut service = LimitedService::default();
+        let initial = service
+            .invoke(
+                "limited_start_booster_draft",
+                json!({"setup":{"pool":cube_pool(90),"customPool":true,"podSize":2,"rounds":3,"variant":"back_draft","seed":1}}),
+            )
+            .unwrap();
+        let id = initial["sessionId"].as_str().unwrap().to_owned();
+        let mut guard = 0;
+        loop {
+            let s = state(&mut service, &id);
+            if s["isComplete"].as_bool().unwrap() {
+                break;
+            }
+            pick(&mut service, &id);
+            guard += 1;
+            assert!(guard < 200, "back draft did not terminate");
+        }
+        let draft = &service.drafts[&id];
+        assert_eq!(draft.variant, Some(Variant::BackDraft));
+        assert!(draft.back_draft_swapped);
+        // The pool shown to the human is the other seat's draft pool.
+        assert_eq!(draft.current.session.pools[0].len(), 45);
     }
 }
 

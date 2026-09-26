@@ -36,6 +36,10 @@ export interface SealedPool {
   cards: DraftCard[];
   suggestedDeck: LimitedDeck | null;
   aiDecks: LimitedDeck[];
+  /** Deck-construction floor reported by the session (40, or 30 for Pack Wars). */
+  minDeckSize?: number;
+  /** Casual mode this pool came from (pack_wars, duplicate_sealed, ...). */
+  variantKind?: string;
 }
 
 export interface SealedSetup {
@@ -87,6 +91,12 @@ export interface DraftState {
   commanderDraft?: boolean;
   /** Deck-construction floor reported by the session (40 draft, 60 commander). */
   minDeckSize?: number;
+  /** Casual mode this session belongs to (solomon, rotisserie, continuous, ...). */
+  variantKind?: string;
+  /** Solomon Draft: the human is assigning the current batch into two piles. */
+  awaitingSplit?: boolean;
+  /** Solomon Draft: the two piles offered to the human to choose from. */
+  piles?: DraftCard[][];
 }
 
 export interface CommanderGameSetup {
@@ -101,9 +111,31 @@ export interface BoosterDraftSetup {
   rounds: number;
   pool: DraftCard[];
   variant?: string;
+  /** Reject Rare sub-variant: rare (default), mythic, uncommon/silver, common/iron. */
+  rarity?: string;
   seed?: number;
   picksPerPass?: number;
   customPool?: boolean;
+}
+
+/** Setup for the bespoke interactive variants (Solomon/Rotisserie/Continuous). */
+export interface VariantSetup {
+  pool: DraftCard[];
+  variant: string;
+  seed?: number;
+  customPool?: boolean;
+  poolType?: LimitedPoolType;
+  singleton?: boolean;
+}
+
+export interface VariantMetadata {
+  id: string;
+  label: string;
+  description: string;
+  players: number;
+  packs: number;
+  deckSize: number;
+  engine: "draft" | "sealed" | "variant";
 }
 
 export interface WinstonSetup {

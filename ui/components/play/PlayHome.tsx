@@ -41,7 +41,7 @@ const MODES = [
   {
     to: ROUTES.PLAY_OFFLINE_CASUAL,
     label: msg`Casual Modes`,
-    desc: msg`Commander Draft, Winston, Cube, Momir, Oathbreaker and retro rulesets.`,
+    desc: msg`Commander Draft, Winston, Cube, Oathbreaker and special tables.`,
     icon: Shuffle,
     tone: "amber",
   },

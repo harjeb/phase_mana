@@ -14,6 +14,7 @@ import type {
   SealedPool,
   SealedSetup,
   SealedTemplateMetadata,
+  VariantSetup,
   WinstonSetup,
   WinstonState,
 } from "@/types/limited";
@@ -52,6 +53,16 @@ interface LimitedStore {
   pickDraftCard: (sessionId: string, card: DraftCard, useDraftEffect?: boolean) => Promise<DraftState>;
   undoDraftPick: (sessionId: string) => Promise<DraftState>;
   refreshDraftState: (sessionId: string) => Promise<void>;
+  /** Starts a bespoke interactive variant (Solomon/Rotisserie/Continuous). */
+  startVariant: (setup: VariantSetup) => Promise<DraftState>;
+  /** Solomon Draft: the human is the chooser and takes one of the two piles. */
+  chooseVariantPile: (
+    sessionId: string,
+    pileIndex: number,
+    pick: DraftCard,
+  ) => Promise<DraftState>;
+  /** Solomon Draft: the human is the splitter and assigns cards to a pile. */
+  splitVariant: (sessionId: string, pile: DraftCard[]) => Promise<DraftState>;
 
   startWinston: (setup: WinstonSetup) => Promise<WinstonState>;
   winstonTake: (sessionId: string) => Promise<WinstonState>;
@@ -224,6 +235,50 @@ export const useLimitedStore = create<LimitedStore>((set) => ({
       set({ activeDraft: state, lastError: null });
     } catch (err) {
       set({ lastError: String(err) });
+    }
+  },
+
+  startVariant: async (setup) => {
+    set({ isStarting: true, lastError: null });
+    try {
+      const state = await invoke<DraftState>("limited_start_variant", { setup });
+      set({ activeDraft: state, isStarting: false });
+      return state;
+    } catch (err) {
+      const msg = String(err);
+      set({ isStarting: false, lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  chooseVariantPile: async (sessionId, pileIndex, pick) => {
+    try {
+      const state = await invoke<DraftState>("limited_variant_pick", {
+        sessionId,
+        cardId: pick.id,
+        pile: pileIndex,
+      });
+      set({ activeDraft: state, lastError: null });
+      return state;
+    } catch (err) {
+      const msg = String(err);
+      set({ lastError: msg });
+      throw new Error(msg);
+    }
+  },
+
+  splitVariant: async (sessionId, pile) => {
+    try {
+      const state = await invoke<DraftState>("limited_variant_split", {
+        sessionId,
+        pile: pile.map((card) => card.id),
+      });
+      set({ activeDraft: state, lastError: null });
+      return state;
+    } catch (err) {
+      const msg = String(err);
+      set({ lastError: msg });
+      throw new Error(msg);
     }
   },
 
