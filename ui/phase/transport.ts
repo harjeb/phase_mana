@@ -1,6 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { toast } from "sonner";
 import type { Prompt, StateUpdate } from "@/protocol";
+import { armActiveLocalGame } from "@/lib/activeLocalGame";
 import { applyPrompt, applyState } from "@/stores/gameStore.constants";
 import { useGameStore } from "@/stores/useGameStore";
 import { normalizeGameLogPayload } from "@/types/gameLog";
@@ -105,6 +106,8 @@ export async function startLocalDeckGame(decks: {
 }): Promise<void> {
   invalidateSnapshotGeneration();
   acceptSnapshot(await requestSnapshot("start", decks));
+  // The host now owns a session for this tab; a refresh should find it again.
+  armActiveLocalGame();
 }
 
 /**

@@ -13,6 +13,7 @@ import {
   currentOfflineGameId,
 } from "@/lib/offlinePlayRecord";
 import { announceLocalGame, clearLocalGame } from "@/lib/localGamePresence";
+import { clearActiveLocalGame } from "@/lib/activeLocalGame";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { toast } from "sonner";
@@ -688,6 +689,7 @@ export const useGameStore = create<GameState>()(
         gameLaunchGeneration += 1;
         const activeSession = peekActiveGameSession();
         clearActiveGameSession();
+        clearActiveLocalGame();
         const runtime = getSelectedGameRuntime();
         const wasMultiplayer = get().isMultiplayer;
         // Before the state is cleared: how the engine performed. A game the
