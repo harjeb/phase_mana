@@ -1,3 +1,5 @@
+import { msg } from "@lingui/core/macro";
+import { i18n } from "@/i18n/i18n";
 import {
   Application,
   Container,
@@ -298,22 +300,22 @@ export function promptTypeForView(
 export function actionTitle(promptType: PromptOverlaySpec["action"]["promptType"]): string {
   switch (promptType) {
     case "chooseAction":
-      return "Priority";
+      return i18n._(msg`Priority`);
     case "chooseAttackers":
-      return "Declare Attackers";
+      return i18n._(msg`Declare Attackers`);
     case "chooseBlockers":
-      return "Declare Blockers";
+      return i18n._(msg`Declare Blockers`);
     case "chooseBoardTargets":
-      return "Choose Targets";
+      return i18n._(msg`Choose Targets`);
     case "chooseDamageAssignmentOrder":
-      return "Damage Order";
+      return i18n._(msg`Damage Order`);
     case "payManaCost":
-      return "Pay Mana";
+      return i18n._(msg`Pay Mana`);
     case "mulligan":
     case "mulliganPutBack":
-      return "Mulligan";
+      return i18n._(msg`Mulligan`);
     default:
-      return "Action Required";
+      return i18n._(msg`Action Required`);
   }
 }
 export type AutopassWindow = "dead" | "opponentInstant";

@@ -5,6 +5,7 @@ import {
   Graphics,
   Rectangle,
 } from "pixi.js";
+import { promptChoiceLabel } from "@/i18n/promptChoiceLabel";
 import { OPPONENT_SEATS } from "@/components/game/game.types";
 import { hexToNum } from "@/pixi/colorUtils";
 import { CardSprite } from "@/pixi/CardSprite";
@@ -251,7 +252,7 @@ export abstract class PromptModalLayer extends PromptLayerBase {
     });
     panel.hitArea = new Rectangle(0, 0, width, height);
     panel.accessible = true;
-    panel.accessibleTitle = presentation.title;
+    panel.accessibleTitle = promptChoiceLabel(presentation.title);
     panel.tabIndex = -1;
     const sourceSprite = sourceCard ? new CardSprite(sourceCard, "hand") : null;
     let sourceWidth = 0;
@@ -295,7 +296,7 @@ export abstract class PromptModalLayer extends PromptLayerBase {
       ? Math.max(120, width - PANEL_PADDING * 2 - sourceWidth - 16)
       : width - titleX - 50;
     const title = promptRichText(
-      presentation.title,
+      promptChoiceLabel(presentation.title),
       this.viewportWidth < 760 ? 18 : 22,
       this.theme.appTheme.foreground,
       titleWidth,
@@ -602,12 +603,12 @@ export abstract class PromptModalLayer extends PromptLayerBase {
       buttonHeight,
     );
     const buttons = [
-      this.makeButton(denyLabel, () => this.spec!.respond({ type: "decision", value: false }), {
+      this.makeButton(promptChoiceLabel(denyLabel), () => this.spec!.respond({ type: "decision", value: false }), {
         outline: true,
         width: buttonWidth,
         height: buttonHeight,
       }),
-      this.makeButton(confirmLabel, () => this.spec!.respond({ type: "decision", value: true }), {
+      this.makeButton(promptChoiceLabel(confirmLabel), () => this.spec!.respond({ type: "decision", value: true }), {
         width: buttonWidth,
         height: buttonHeight,
       }),
@@ -622,7 +623,11 @@ export abstract class PromptModalLayer extends PromptLayerBase {
     maxTotal: number,
   ): void {
     const showFilter = options.length > 5;
-    const indexedOptions = options.map((option, index) => ({ option, index }));
+    // Localize a display-only copy; response indices and original option data stay intact.
+    const indexedOptions = options.map((option, index) => ({
+      option: { ...option, label: promptChoiceLabel(option.label) },
+      index,
+    }));
     const normalizedFilter = this.selectionFilter.toLocaleLowerCase();
     const visibleOptions = showFilter
       ? indexedOptions.filter(({ option }) =>

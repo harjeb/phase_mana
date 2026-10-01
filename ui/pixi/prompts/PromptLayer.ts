@@ -1,3 +1,6 @@
+import { msg } from "@lingui/core/macro";
+import { i18n } from "@/i18n/i18n";
+import { promptChoiceLabel } from "@/i18n/promptChoiceLabel";
 import { topModal } from "@/lib/modalStack";
 import { summarizeCombat } from "@/components/game/combatSummary";
 import {
@@ -400,7 +403,7 @@ export class PromptLayer extends PromptModalLayer {
     panel.eventMode = "static";
     panel.hitArea = new Rectangle(0, 0, width, panelHeight);
     panel.accessible = true;
-    panel.accessibleTitle = hasAction ? actionTitle(effectivePromptType) : "Waiting";
+    panel.accessibleTitle = hasAction ? actionTitle(effectivePromptType) : i18n._(msg`Waiting`);
     panel.tabIndex = -1;
 
     if (hasAction) {
@@ -442,7 +445,7 @@ export class PromptLayer extends PromptModalLayer {
         right -= info.buttonWidth + 6;
       }
       const title = promptText(
-        (hasAction ? actionTitle(effectivePromptType) : "Waiting").toUpperCase(),
+        (hasAction ? actionTitle(effectivePromptType) : i18n._(msg`Waiting`)).toUpperCase(),
         11,
         this.theme.appTheme.foreground,
         {
@@ -486,7 +489,7 @@ export class PromptLayer extends PromptModalLayer {
             x,
             y,
             width,
-            hasAction ? actionTitle(effectivePromptType) : "Waiting",
+            hasAction ? actionTitle(effectivePromptType) : i18n._(msg`Waiting`),
           );
         });
       });
@@ -517,7 +520,7 @@ export class PromptLayer extends PromptModalLayer {
         x,
         y,
         width,
-        hasAction ? actionTitle(effectivePromptType) : "Waiting",
+        hasAction ? actionTitle(effectivePromptType) : i18n._(msg`Waiting`),
       );
     }
     if (minimal && action.dimmed) this.container.visible = false;
@@ -557,7 +560,7 @@ export class PromptLayer extends PromptModalLayer {
         if (!minimal) {
           const pending = action.pendingAttackers.length > 0;
           const hint = promptText(
-            pending ? "Pick a target — click an opponent or planeswalker" : ATTACK_DRAG_HINT,
+            pending ? i18n._(msg`Pick a target — click an opponent or planeswalker`) : i18n._(ATTACK_DRAG_HINT),
             11,
             pending ? this.theme.appTheme.foreground : muted,
             {
@@ -594,7 +597,7 @@ export class PromptLayer extends PromptModalLayer {
               );
         const buttons = [
           this.makeActionButton(
-            "Attack All",
+            i18n._(msg`Attack All`),
             "lucide-swords",
             attackAll,
             "attackAction",
@@ -603,7 +606,7 @@ export class PromptLayer extends PromptModalLayer {
             touch,
           ),
           this.makeActionButton(
-            !minimal && attackCount > 0 ? `Attack (${attackCount})` : "Attack",
+            !minimal && attackCount > 0 ? i18n._(msg`Attack (${attackCount})`) : i18n._(msg`Attack`),
             "lucide-sword",
             action.onSubmitAttack,
             "attackAction",
@@ -613,7 +616,7 @@ export class PromptLayer extends PromptModalLayer {
             { badge: minimal && attackCount > 0 ? String(attackCount) : undefined },
           ),
           this.makeActionButton(
-            "Pass",
+            i18n._(msg`Pass`),
             "lucide-ban",
             action.onPassPriority,
             "priority",
@@ -637,9 +640,9 @@ export class PromptLayer extends PromptModalLayer {
         let width = 0;
         const error = action.blockError ?? action.blockRequirementError;
         const hint = action.pendingAttacker
-          ? "Attacker selected — click your blocker."
+          ? i18n._(msg`Attacker selected — click your blocker.`)
           : action.pendingBlocker
-            ? "Blocker selected — click the attacker to block."
+            ? i18n._(msg`Blocker selected — click the attacker to block.`)
             : null;
         if (error) {
           const shown = minimal && error.length > 42 ? `${error.slice(0, 41).trimEnd()}…` : error;
@@ -683,7 +686,7 @@ export class PromptLayer extends PromptModalLayer {
         if (action.blockAssignments.length > 0) {
           buttons.push(
             this.makeActionButton(
-              `Block ${action.blockAssignments.length}`,
+              i18n._(msg`Block ${action.blockAssignments.length}`),
               "lucide-shield",
               () => action.onDeclareBlockers(action.blockAssignments),
               "defenseAction",
@@ -698,7 +701,7 @@ export class PromptLayer extends PromptModalLayer {
         }
         buttons.push(
           this.makeActionButton(
-            "No Blocks",
+            i18n._(msg`No Blocks`),
             "lucide-ban",
             action.onPassPriority,
             "cancel",
@@ -727,10 +730,10 @@ export class PromptLayer extends PromptModalLayer {
           action.damageOrderCount >= action.damageOrderTotal && action.damageOrderTotal > 0;
         const instruction = promptText(
           action.damageOrderCount === 0
-            ? "Click blockers in the order damage is dealt."
+            ? i18n._(msg`Click blockers in the order damage is dealt.`)
             : complete
-              ? "Order set — confirm to deal damage."
-              : `Click the next blocker (${action.damageOrderCount}/${action.damageOrderTotal}).`,
+              ? i18n._(msg`Order set — confirm to deal damage.`)
+              : i18n._(msg`Click the next blocker (${action.damageOrderCount}/${action.damageOrderTotal}).`),
           12,
           muted,
           { style: "italic", width, align: "center" },
@@ -740,7 +743,7 @@ export class PromptLayer extends PromptModalLayer {
         container.addChild(instruction);
         let y = instruction.height + 6;
         const controls = [
-          this.makeButton("AUTO", action.onDefaultDamageOrder, {
+          this.makeButton(i18n._(msg`AUTO`), action.onDefaultDamageOrder, {
             action: "attackAction",
             flat: true,
             shadow: true,
@@ -754,7 +757,7 @@ export class PromptLayer extends PromptModalLayer {
         ];
         if (action.damageOrderCount > 0) {
           controls.push(
-            this.makeButton("UNDO", action.onUndoDamageOrder, {
+            this.makeButton(i18n._(msg`UNDO`), action.onUndoDamageOrder, {
               action: "attackAction",
               flat: true,
               shadow: true,
@@ -773,7 +776,7 @@ export class PromptLayer extends PromptModalLayer {
         y += row.height;
         if (complete) {
           y += 6;
-          const confirm = this.makeButton("CONFIRM ORDER", action.onConfirmDamageOrder, {
+          const confirm = this.makeButton(i18n._(msg`CONFIRM ORDER`), action.onConfirmDamageOrder, {
             action: "attackAction",
             flat: true,
             shadow: true,
@@ -799,7 +802,7 @@ export class PromptLayer extends PromptModalLayer {
           const cancel = action.targetCompletionKind === "cancel";
           buttons.push(
             this.makeActionButton(
-              action.targetCompletionLabel ?? "Done",
+              action.targetCompletionLabel ?? i18n._(msg`Done`),
               cancel ? "lucide-ban" : "lucide-check",
               action.onCompleteTargets,
               cancel ? "cancel" : "priority",
@@ -816,10 +819,10 @@ export class PromptLayer extends PromptModalLayer {
       case "promptRequired": {
         const hidden = this.spec!.modalHidden;
         const button = this.makeButton(
-          minimal ? "PROMPT" : hidden ? "PROMPT REQUIRED" : "PROMPT OPEN",
+          minimal ? i18n._(msg`PROMPT`) : hidden ? i18n._(msg`PROMPT REQUIRED`) : i18n._(msg`PROMPT OPEN`),
           this.spec!.onShowModal,
           {
-            title: hidden ? "Prompt required. Click to reopen." : "Prompt is open.",
+            title: hidden ? i18n._(msg`Prompt required. Click to reopen.`) : i18n._(msg`Prompt is open.`),
             action: "cancel",
             flat: true,
             radius: minimal ? 20 : 8,
@@ -845,7 +848,7 @@ export class PromptLayer extends PromptModalLayer {
           return this.layoutActionRow(
             [
               this.makeActionButton(
-                "Keep",
+                i18n._(msg`Keep`),
                 "lucide-check-bold",
                 action.onMulliganKeep,
                 "priority",
@@ -854,7 +857,7 @@ export class PromptLayer extends PromptModalLayer {
                 touch,
               ),
               this.makeActionButton(
-                "Mulligan",
+                i18n._(msg`Mulligan`),
                 "lucide-rotate-cw-bold",
                 action.onMulliganDraw,
                 "secondary",
@@ -872,7 +875,7 @@ export class PromptLayer extends PromptModalLayer {
         const width = availableWidth;
         const row = this.layoutActionRow(
           [
-            this.makeButton("Keep", action.onMulliganKeep, {
+            this.makeButton(i18n._(msg`Keep`), action.onMulliganKeep, {
               action: "priority",
               flat: true,
               shadow: true,
@@ -886,7 +889,7 @@ export class PromptLayer extends PromptModalLayer {
               fontWeight: "900",
               letterSpacing: 1.12,
             }),
-            this.makeButton("Mulligan", action.onMulliganDraw, {
+            this.makeButton(i18n._(msg`Mulligan`), action.onMulliganDraw, {
               variant: "secondary",
               flat: true,
               shadow: true,
@@ -967,17 +970,19 @@ export class PromptLayer extends PromptModalLayer {
   ): ActionViewLayout {
     const action = this.spec!.action;
     const stackEmpty = this.spec!.gameView.stack.length === 0;
-    const endLabel = stackEmpty ? (action.isMyTurn ? "END TURN" : "NEXT TURN") : "RESOLVE STACK";
+    const endLabel = stackEmpty
+      ? (action.isMyTurn ? i18n._(msg`END TURN`) : i18n._(msg`NEXT TURN`))
+      : i18n._(msg`RESOLVE STACK`);
     const endTitle = stackEmpty
       ? action.isMyTurn
-        ? "Pass until end of turn"
-        : "Pass until the next turn"
-      : "Pass until the stack is empty";
+        ? i18n._(msg`Pass until end of turn`)
+        : i18n._(msg`Pass until the next turn`)
+      : i18n._(msg`Pass until the stack is empty`);
     const endCombo = resolveCombo("pass-end-of-turn", useKeybindingsStore.getState().overrides);
     const passCombo = resolveCombo("pass-priority", useKeybindingsStore.getState().overrides);
     const morphed = this.endTurnModifiersHeld;
     const counting = this.autopassRemainingMs != null;
-    const passLabel = morphed ? endLabel : counting ? "PASSING" : "PASS";
+    const passLabel = morphed ? endLabel : counting ? i18n._(msg`PASSING`) : i18n._(msg`PASS`);
     const combo = morphed ? endCombo : passCombo;
     const height = 40;
 
@@ -1007,7 +1012,7 @@ export class PromptLayer extends PromptModalLayer {
           fontSize: 12,
           fontWeight: "900",
           letterSpacing: 1.44,
-          title: morphed ? endTitle : "Pass priority",
+          title: morphed ? endTitle : i18n._(msg`Pass priority`),
         },
       );
       if (counting) {
@@ -1059,7 +1064,7 @@ export class PromptLayer extends PromptModalLayer {
         backgroundAlpha: morphed ? 0.15 : 0,
         hoverBackgroundAlpha: morphed ? 0.2 : 0.1,
         shortcut: combo ? comboSymbols(combo) : undefined,
-        title: morphed ? endTitle : "Pass priority",
+        title: morphed ? endTitle : i18n._(msg`Pass priority`),
       },
     );
     if (counting) {
@@ -1119,7 +1124,7 @@ export class PromptLayer extends PromptModalLayer {
       hourglass.container.position.set(width / 2, height / 2);
       container.addChild(hourglass.container);
     } else {
-      const label = promptText("WAITING FOR OTHERS", 11, color, {
+      const label = promptText(i18n._(msg`WAITING FOR OTHERS`), 11, color, {
         weight: "600",
         letterSpacing: 1.54,
       });
@@ -1218,20 +1223,20 @@ export class PromptLayer extends PromptModalLayer {
     const input = this.spec!.currentPrompt?.input;
     const label =
       input?.type === "chooseBoardTargets"
-        ? input.presentation.title
+        ? promptChoiceLabel(input.presentation.title)
         : action.promptType === "chooseBoardTargets"
-          ? "Choose a target"
+          ? i18n._(msg`Choose a target`)
           : action.promptType === "scry"
-            ? "Scry"
+            ? i18n._(msg`Scry`)
             : action.promptType === "chooseCards"
-              ? "Choose cards"
-              : "Waiting...";
+              ? i18n._(msg`Choose cards`)
+              : i18n._(msg`Waiting...`);
     const container = new Container();
     const sourceCard = this.promptSourceCard();
     const source = sourceCard ? this.makeActionCardThumbnail(sourceCard) : null;
     const completion = action.onCompleteTargets
       ? this.makeActionButton(
-          action.targetCompletionLabel ?? "Done",
+          action.targetCompletionLabel ?? i18n._(msg`Done`),
           action.targetCompletionKind === "cancel" ? "lucide-ban" : "lucide-check",
           action.onCompleteTargets,
           action.targetCompletionKind === "cancel" ? "cancel" : "priority",
@@ -1328,7 +1333,7 @@ export class PromptLayer extends PromptModalLayer {
     const container = new Container();
     const buttons = [
       this.makeActionButton(
-        info?.canConfirmFromPool ? "Confirm" : "Auto",
+        info?.canConfirmFromPool ? i18n._(msg`Confirm`) : i18n._(msg`Auto`),
         info?.canConfirmFromPool ? "lucide-check" : "lucide-wand-sparkles",
         info?.canConfirmFromPool ? action.onPayManaCost : action.onAutoManaCost,
         "priority",
@@ -1340,7 +1345,7 @@ export class PromptLayer extends PromptModalLayer {
     if (info?.delveAvailable && info.onOpenDelve) {
       buttons.push(
         this.makeActionButton(
-          "Delve",
+          i18n._(msg`Delve`),
           "exile",
           info.onOpenDelve,
           "defenseAction",
@@ -1353,7 +1358,7 @@ export class PromptLayer extends PromptModalLayer {
     if (info?.lifeToPay != null && info.onPayLife) {
       buttons.push(
         this.makeActionButton(
-          `${info.lifeToPay} Life`,
+          i18n._(msg`${info.lifeToPay} Life`),
           "lucide-heart-crack",
           info.onPayLife,
           "attackAction",
@@ -1365,7 +1370,7 @@ export class PromptLayer extends PromptModalLayer {
     }
     buttons.push(
       this.makeActionButton(
-        "Cancel",
+        i18n._(msg`Cancel`),
         "lucide-ban",
         action.onCancelManaCost,
         "cancel",
@@ -1400,7 +1405,7 @@ export class PromptLayer extends PromptModalLayer {
     const canConfirm = !disabled && selected === count;
     if (minimal) {
       const label = promptText(
-        `${selected}/${count} selected`,
+        i18n._(msg`${selected}/${count} selected`),
         10,
         this.theme.appTheme["muted-foreground"],
         {
@@ -1410,7 +1415,7 @@ export class PromptLayer extends PromptModalLayer {
       );
       label.anchor.set(0, 0.5);
       const button = this.makeActionButton(
-        "Confirm",
+        i18n._(msg`Confirm`),
         "lucide-check",
         action.onMulliganPutBackConfirm,
         "primary",
@@ -1431,7 +1436,7 @@ export class PromptLayer extends PromptModalLayer {
     const width = Math.max(120, availableWidth * 0.6);
     const container = new Container();
     const label = promptText(
-      `SELECTED ${selected} OF ${count} · LIBRARY BOTTOM`,
+      i18n._(msg`SELECTED ${selected} OF ${count} · LIBRARY BOTTOM`),
       10,
       canConfirm ? this.theme.appTheme.foreground : this.theme.appTheme["muted-foreground"],
       {
@@ -1441,7 +1446,7 @@ export class PromptLayer extends PromptModalLayer {
     );
     label.anchor.set(0.5, 0);
     label.position.set(width / 2, 0);
-    const button = this.makeButton("CONFIRM", action.onMulliganPutBackConfirm, {
+    const button = this.makeButton(i18n._(msg`CONFIRM`), action.onMulliganPutBackConfirm, {
       flat: true,
       shadow: true,
       radius: 8,
@@ -1522,7 +1527,7 @@ export class PromptLayer extends PromptModalLayer {
       icon.alpha = 1;
     });
     button.accessible = true;
-    button.accessibleTitle = "Open game menu";
+    button.accessibleTitle = i18n._(msg`Open game menu`);
     button.tabIndex = 0;
     if (minimal) {
       button.on("pointerdown", (event: FederatedPointerEvent) => event.stopPropagation());
@@ -1534,13 +1539,13 @@ export class PromptLayer extends PromptModalLayer {
   private makeActionContextButton(): PromptButton {
     const open = this.actionContextOpen;
     return this.makeButton(
-      "PROMPT INFO",
+      i18n._(msg`PROMPT INFO`),
       () => {
         this.actionContextOpen = !this.actionContextOpen;
         this.rebuild();
       },
       {
-        title: open ? "Hide prompt details" : "Show prompt details",
+        title: open ? i18n._(msg`Hide prompt details`) : i18n._(msg`Show prompt details`),
         icon: "lucide-info",
         iconSize: 12,
         labelPlacement: "hidden",
@@ -1575,10 +1580,10 @@ export class PromptLayer extends PromptModalLayer {
       const manaInPool = Object.values(info.manaPool).reduce((total, amount) => total + amount, 0);
       lines.push(
         info.canConfirmFromPool
-          ? `PAYMENT READY · ${manaInPool} MANA IN POOL`
+          ? i18n._(msg`PAYMENT READY · ${manaInPool} MANA IN POOL`)
           : manaInPool > 0
-            ? `${manaInPool} MANA IN POOL · CHOOSE PAYMENT`
-            : "CHOOSE HOW TO PAY",
+            ? i18n._(msg`${manaInPool} MANA IN POOL · CHOOSE PAYMENT`)
+            : i18n._(msg`CHOOSE HOW TO PAY`),
       );
     }
     return lines;
@@ -1602,15 +1607,15 @@ export class PromptLayer extends PromptModalLayer {
     const fullControl = state.fullControl;
     const hint = combo ? ` (${formatCombo(combo)})` : "";
     return this.makeButton(
-      fullControl ? "FULL CTRL" : "AUTOPASS",
+      fullControl ? i18n._(msg`FULL CTRL`) : i18n._(msg`AUTOPASS`),
       () => {
         const next = !usePromptPreferencesStore.getState().fullControl;
         usePromptPreferencesStore.getState().setFullControl(next);
       },
       {
         title: fullControl
-          ? `Full control — you stop at every priority window${hint}`
-          : `Autopass: dead windows pass automatically, the opponent's upkeep/draw after 5s${hint}`,
+          ? i18n._(msg`Full control — you stop at every priority window${hint}`)
+          : i18n._(msg`Autopass: dead windows pass automatically, the opponent's upkeep/draw after 5s${hint}`),
         icon: fullControl ? "lucide-hand" : "lucide-zap",
         iconSize: 12,
         outline: true,
@@ -1808,7 +1813,7 @@ export class PromptLayer extends PromptModalLayer {
           weight: "600",
         });
         attacker.position.set(8, rowY - attacker.height / 2);
-        const verb = promptText(pairing.attacker === "You" ? "attack" : "attacks", 12, muted);
+        const verb = promptText(pairing.attacker === "You" ? i18n._(msg`attack`) : i18n._(msg`attacks`), 12, muted);
         verb.position.set(
           Math.min(availableWidth - 100, 14 + attacker.width),
           rowY - verb.height / 2,
@@ -1865,7 +1870,7 @@ export class PromptLayer extends PromptModalLayer {
       const swords = this.makeIcon("lucide-swords", 14, destructive);
       swords.position.set(14, y + 17);
       const count = promptText(
-        `${attackerCount} ${attackerCount === 1 ? "attacker" : "attackers"}`,
+        attackerCount === 1 ? i18n._(msg`${attackerCount} attacker`) : i18n._(msg`${attackerCount} attackers`),
         12,
         this.theme.appTheme.foreground,
         { weight: "600" },
@@ -1874,13 +1879,13 @@ export class PromptLayer extends PromptModalLayer {
       container.addChild(swords, count);
       let x = count.x + count.width + 8;
       if (showIncoming) {
-        const blocks = promptText(`${blockedCount} blocked · ${unblockedCount} open`, 12, muted);
+        const blocks = promptText(i18n._(msg`${blockedCount} blocked · ${unblockedCount} open`), 12, muted);
         blocks.position.set(x, y + 17 - blocks.height / 2);
         container.addChild(blocks);
         x += blocks.width + 8;
       }
       const damage = promptText(
-        `${showIncoming ? "Est." : "Open"} ${incomingDamage}`,
+        showIncoming ? i18n._(msg`Est. ${incomingDamage}`) : i18n._(msg`Open ${incomingDamage}`),
         12,
         lethal ? destructive : this.theme.appTheme.foreground,
         { weight: lethal ? "700" : "600" },
@@ -1891,7 +1896,7 @@ export class PromptLayer extends PromptModalLayer {
       );
       container.addChild(damage);
       if (firstStrike) {
-        const strike = promptText("First or double strike", 12, this.theme.appTheme.warning, {
+        const strike = promptText(i18n._(msg`First or double strike`), 12, this.theme.appTheme.warning, {
           weight: "500",
         });
         const zap = this.makeIcon("lucide-zap", 12, this.theme.appTheme.warning);
@@ -1900,7 +1905,7 @@ export class PromptLayer extends PromptModalLayer {
         container.addChild(zap, strike);
       }
       if (lethal) {
-        const lethalLabel = promptText("LETHAL?", 10, destructive, {
+        const lethalLabel = promptText(i18n._(msg`LETHAL?`), 10, destructive, {
           weight: "700",
           letterSpacing: 0.5,
         });

@@ -1,4 +1,6 @@
 import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react";
+import { gameLogBadge, localizeGameLogMessage } from "@/i18n/gameLog";
 import { cn } from "@/lib/utils";
 import type { GameLogEntryType, GameLogEntry } from "@/types/gameLog";
 import { withAlpha } from "@/themes/gameTheme";
@@ -22,6 +24,7 @@ export function ActionLog({
   resolvePlayerName,
   onHoverLogCard,
 }: ActionLogProps) {
+  const { i18n } = useLingui();
   const visibleLog = gameLog.filter((entry) => entry.entryType !== "rule");
   const { appTheme, gameTheme: themeColors } = useTheme();
   const cardPreviewMode = usePreferencesStore((state) => state.cardPreviewMode);
@@ -58,14 +61,6 @@ export function ActionLog({
   };
   const priorityColor = appTheme.primary;
   const infoColor = themeColors.promptAction.defenseAction;
-  const typeLabel: Record<GameLogEntryType, string> = {
-    info: `INFO`,
-    action: `ACTION`,
-    stack: `STACK`,
-    priority: `PRIO`,
-    rule: `RULE`,
-    warning: `WARN`,
-  };
   const getStyleForType = (
     type: GameLogEntryType,
     message: string,
@@ -148,11 +143,7 @@ export function ActionLog({
                     className="px-1 py-0.5 rounded text-[10px] font-semibold"
                     style={{ backgroundColor: style.bg, color: style.fg }}
                   >
-                    {entry.entryType === "stack" && /\bresolved?\b/i.test(entry.message)
-                      ? `RESOLVE`
-                      : /^TURN\b/i.test(entry.message)
-                        ? `TURN`
-                        : typeLabel[entry.entryType]}
+                    {gameLogBadge(entry.entryType, entry.message, i18n.locale)}
                   </span>
                   <span className="text-[10px] text-muted-foreground/80">
                     {formatTs(entry.timestampMs)}
@@ -211,7 +202,7 @@ export function ActionLog({
                     entry.entryType === "warning" ? "whitespace-pre-wrap break-all" : undefined
                   }
                 >
-                  {entry.message}
+                  {localizeGameLogMessage(entry.message, i18n.locale)}
                 </div>
               </div>
             );
