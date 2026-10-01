@@ -629,6 +629,13 @@
   label {
     touch-action: manipulation;
   }
+  /* Native option menus can retain a light platform background while inheriting
+     dark-theme text. Set both colors together where the browser supports it. */
+  select option,
+  select optgroup {
+    background-color: var(--color-popover);
+    color: var(--color-popover-foreground);
+  }
 }
 
 .game-touch-surface {
