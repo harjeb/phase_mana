@@ -396,27 +396,40 @@ export function DeckVsSelector({
     if (!selectedFormat && entry.formatId) setSelectedFormat(entry.formatId);
     assignDeck(entry);
   }
-  function handleRandomOpponent() {
-    if (!selectedFormat) return;
-    const random = pickRandom(formatFilteredPresets);
+  // Use the format/engine-filtered local catalog, not incomplete Community
+  // search results. Random selection works offline and ignores the text search.
+  const randomDeckCandidates: SelectedDeck[] = [
+    ...formatFilteredUserDecks.filter((entry) =>
+      customFormat ? true : deckValidations.get(entry.id)?.legal === true,
+    ),
+    ...formatFilteredPresets.map((deck): SelectedDeck => ({
+      id: `preset:${deck.id ?? deck.name}`,
+      sourceId: deck.id ?? deck.name,
+      name: deck.name,
+      desc: deck.description,
+      color: deck.color,
+      sourceDeck: deck,
+      source: "preset",
+      formatId: deck.format ?? "standard",
+      commanderName: deck.commanders?.[0]?.identity.name,
+      coverCardName: deck.coverCardName,
+    })),
+  ].filter((entry) => entry.sourceDeck.cards.length > 0 || (entry.sourceDeck.commanders?.length ?? 0) > 0);
+  function handleRandomDeck(side: "player" | "opponent") {
+    if (starting) return;
+    const random = pickRandom(randomDeckCandidates);
     if (!random) return;
     invalidateHubSelection();
-    const sourceId = random.id ?? random.name;
-    opponentTouchedRef.current = true;
-    setOpponentDeck({
-      id: `preset:${sourceId}`,
-      sourceId,
-      name: random.name,
-      desc: random.description,
-      color: random.color,
-      sourceDeck: random,
-      source: "preset",
-      formatId: selectedFormat,
-      commanderName: random.commanders?.[0]?.identity.name,
-      coverCardName: random.coverCardName,
-    });
-    setOpponentConfirmed(true);
-    setPickingSide(playerDeck ? null : "player");
+    if (!selectedFormat) setSelectedFormat(random.formatId ?? "standard");
+    if (side === "player") {
+      setPlayerDeck(random);
+      setPickingSide("opponent");
+    } else {
+      opponentTouchedRef.current = true;
+      setOpponentDeck(random);
+      setOpponentConfirmed(true);
+      setPickingSide(playerDeck ? null : "player");
+    }
   }
   function handleFight() {
     if (!playerDeck || !opponentDeck || starting) return;
@@ -595,8 +608,8 @@ export function DeckVsSelector({
         </p>
       </div>
 
-      <div className="flex-shrink-0 px-4 pb-2 pt-3 sm:px-6 lg:px-8">
-        <div className="relative">
+      <div className="flex flex-shrink-0 flex-wrap items-center gap-2 px-4 pb-2 pt-3 sm:px-6 lg:px-8">
+        <div className="relative min-w-40 flex-1">
           <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
           <input
             type="text"
@@ -611,6 +624,26 @@ export function DeckVsSelector({
             spellCheck={false}
           />
         </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleRandomDeck("player")}
+          disabled={starting || randomDeckCandidates.length === 0}
+          title={t`Randomly choose from your playable decks and starter decks for this format`}
+        >
+          <Shuffle className="h-3.5 w-3.5" aria-hidden="true" />
+          <Trans>Random your deck</Trans>
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleRandomDeck("opponent")}
+          disabled={starting || randomDeckCandidates.length === 0}
+          title={t`Randomly choose from your playable decks and starter decks for this format`}
+        >
+          <Shuffle className="h-3.5 w-3.5" aria-hidden="true" />
+          <Trans>Random AI deck</Trans>
+        </Button>
       </div>
 
       <div className="flex-1 space-y-6 overflow-y-auto px-4 pb-4 sm:px-6 lg:px-8">
@@ -852,10 +885,12 @@ export function DeckVsSelector({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleRandomOpponent();
+                    handleRandomDeck("opponent");
                   }}
                   className="inline-flex w-8 shrink-0 items-center justify-center gap-0.5 rounded-r-md text-[10px] text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground pointer-coarse:w-10"
                   title={t`Random AI deck`}
+                  aria-label={t`Random AI deck`}
+                  disabled={starting || randomDeckCandidates.length === 0}
                 >
                   <Shuffle className="h-3 w-3" />
                 </button>
