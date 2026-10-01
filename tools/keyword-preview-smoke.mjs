@@ -41,7 +41,14 @@ try {
   assert.match(await panel.innerText(), /飞行.*此生物只能被具飞行或延势异能的生物阻挡。/s);
   const bounds = await panel.boundingBox();
   assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 1440 && bounds.y >= 0 && bounds.y + bounds.height <= 900);
-  await page.screenshot({ path: 'tools/keyword-preview-smoke.png' });
+  const tags = page.locator('[data-keyword-tags]');
+  await tags.waitFor({ state: 'visible' });
+  const tagBounds = await tags.boundingBox();
+  const cardBounds = await page.locator('[data-card-preview] .\\@container').boundingBox();
+  assert.ok(Math.abs(tagBounds.y - (cardBounds.y + cardBounds.height * 0.3)) < 2);
+  assert.ok(tagBounds.x < cardBounds.x + cardBounds.width * 0.1);
+  assert.match(await tags.innerText(), /飞行/);
+  await page.screenshot({ path: 'tools/keyword-preview-position-smoke.png' });
   await page.evaluate(() => window.__renderKeywordPreview({}, { mouseX: 1410, mouseY: 870 }));
   await page.waitForTimeout(300);
   const edge = await panel.boundingBox();
@@ -86,7 +93,83 @@ try {
   await panel.waitFor({ state: 'detached' });
   await page.evaluate(() => window.__renderKeywordPreview({ isFaceDown: true }));
   await panel.waitFor({ state: 'detached' });
-  console.log('PASS real CardPreview: Chinese flying and live-format kicker reminders visible, edge placement, long-list wheel/keyboard scrolling, empty keywords, face-down suppression');
+  await tags.waitFor({ state: 'detached' });
+  await page.evaluate(() => window.__renderKeywordPreview({ isDoubleFaced: true, isTransformed: false }, { showBackFace: true }));
+  await tags.waitFor({ state: 'detached' });
+  const battlefield = await page.evaluate(async () => {
+    const source = await (await fetch('/ui/stores/useScryfallStore.ts')).text();
+    const pixiPath = source.match(/from "([^"]*pixi[^"]*)"/)[1];
+    const { Application } = await import(pixiPath);
+    const { CardSprite } = await import('/ui/pixi/CardSprite.ts');
+    const { GAME_CARD_DEFAULTS } = await import('/ui/lib/gameCard.ts');
+    const { usePreferencesStore } = await import('/ui/stores/usePreferencesStore.ts');
+    usePreferencesStore.setState({ battlefieldCardStyle: 'realistic' });
+    const app = new Application();
+    await app.init({ width: 400, height: 400, preference: 'webgl' });
+    Object.assign(app.canvas.style, { position: 'fixed', left: '20px', top: '20px', zIndex: '99999' });
+    document.body.append(app.canvas);
+    const card = { ...GAME_CARD_DEFAULTS, id: 'battlefield-keyword-smoke',
+      identity: { name: 'Concordia Pegasus', setCode: 'm19', cardNumber: '7' },
+      types: ['Creature'], power: '1', toughness: '3', keywords: ['Flying', 'Vigilance'] };
+    const sprite = new CardSprite(card, 'battlefield');
+    sprite.position.set(200, 200);
+    sprite.scale.set(3);
+    app.stage.addChild(sprite);
+    const labels = () => sprite.keywordsContainer.children.map(chip => chip.children[1].text);
+    const initial = labels();
+    sprite.updateCardContent({ ...card, keywords: ['Haste'] });
+    const changed = labels();
+    sprite.updateCardContent({ ...card, isFaceDown: true });
+    const hidden = labels();
+    sprite.updateCardContent(card);
+    app.render();
+    window.__keywordSprite = sprite;
+    window.__keywordApp = app;
+    window.__keywordCard = card;
+    return { initial, changed, hidden };
+  });
+  assert.deepEqual(battlefield.initial, ['飞行', '警戒']);
+  assert.deepEqual(battlefield.changed, ['敏捷']);
+  assert.deepEqual(battlefield.hidden, []);
+  await page.waitForTimeout(1500);
+  await page.screenshot({ path: 'tools/keyword-battlefield-position-smoke.png' });
+  const rules = await page.evaluate(async () => {
+    const { RulesCardPreviewLayer } = await import('/ui/pixi/cardPreview/RulesCardPreviewLayer.ts');
+    const { getTheme } = await import('/ui/hooks/useTheme.ts');
+    const app = window.__keywordApp;
+    app.stage.removeChild(window.__keywordSprite);
+    const noop = () => {};
+    const layer = new RulesCardPreviewLayer(getTheme(), {
+      onPointerEnter: noop, onPointerLeave: noop, onInteractionReady: noop,
+      onRenderRequested: () => app.render(), onSelectAction: noop, onDismiss: noop,
+      onFlip: noop, onToggleView: noop,
+    });
+    app.stage.addChild(layer.container);
+    layer.setViewport(400, 400);
+    const spec = { card: window.__keywordCard, phase: 'open', sticky: true,
+      showBackFace: false, suppressed: false, skipEnterAnimation: true,
+      actions: [], anchor: null, pointer: { x: 200, y: 200 }, slot: null };
+    layer.setSpec(spec);
+    const chips = layer.chrome.children.find(child => Math.abs(child.y - layer.panelHeight * 0.3) < 1);
+    const count = chips?.children.length;
+    layer.setSpec({ ...spec, card: { ...spec.card, keywords: [] } });
+    const cleared = !layer.chrome.children.some(child => Math.abs(child.y - layer.panelHeight * 0.3) < 1);
+    layer.setSpec(spec);
+    app.render();
+    window.__keywordRules = layer;
+    return { count, cleared };
+  });
+  assert.equal(rules.count, 2);
+  assert.equal(rules.cleared, true);
+  await page.waitForTimeout(500);
+  await page.screenshot({ path: 'tools/keyword-rules-position-smoke.png' });
+  await page.evaluate(() => {
+    window.__keywordRules.destroy();
+    window.__keywordSprite.destroy({ children: true });
+    window.__keywordApp.destroy(true, { children: true });
+  });
+  await page.close();
+  console.log('PASS keyword tags: printed/rules left-side placement, realistic battlefield tags and live updates; Chinese reminders, edge placement, scrolling, empty/face-down/inactive-face suppression');
 } finally {
   await browser.close();
 }

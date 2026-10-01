@@ -435,6 +435,7 @@ export function CardPreview({
                   horizontal={horizontal}
                   rail={rail}
                   compactRail={false}
+                  showKeywords={!card.isDoubleFaced || showBackFace === card.isTransformed}
                 />
                 {showHoverAreas && (
                   <div

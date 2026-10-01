@@ -77,7 +77,9 @@ export function BattlefieldCardFace({
     : `${pad}px`;
 
   const typeLine = cardTypeLine(card);
-  const { shown: keywords, hidden: hiddenKeywords } = battlefieldKeywords(card.keywords);
+  const { shown: keywords, hidden: hiddenKeywords } = battlefieldKeywords(
+    card.isFaceDown ? [] : card.keywords,
+  );
 
   // P1P1 / M1M1 are dropped here: the net buff/debuff shows in the P/T color.
   const otherCounters = card.counters

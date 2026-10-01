@@ -12,7 +12,11 @@ import {
 } from "pixi.js";
 import type { CardDto } from "@/protocol/game";
 import type { HandActionOption } from "@/stores/useGameUIStore";
-import { deriveCardRailState, type CardRailState } from "@/components/game/cardRailState";
+import {
+  deriveCardRailState,
+  toRomanNumeral,
+  type CardRailState,
+} from "@/components/game/cardRailState";
 import { cardTypeLine, counterColorKey, counterIconName } from "@/components/game/cardPresentation";
 import { CARD_W, CARD_H, CARD_RADIUS } from "@/components/game/game.constants";
 import { deriveCardChoiceIndicators } from "@/components/game/game.utils";
@@ -230,6 +234,22 @@ const RAIL_LABEL_STYLE = registerTintedTextStyle(
     fill: tintedTextFill(),
   }),
 );
+// Damage marked on a permanent (CR 120.3e) reads as a red "-N" beside its P/T.
+const DAMAGE_MARKER_STYLE = new TextStyle({
+  fontFamily: "Inter, system-ui, -apple-system, sans-serif",
+  fontSize: 13,
+  fontWeight: "900",
+  fill: "#ff3b30",
+  stroke: { color: "#1a0000", width: 3, join: "round" },
+});
+// A Saga's current chapter (CR 714.2b: its lore count) as a Roman-numeral token.
+const CHAPTER_MARKER_STYLE = new TextStyle({
+  fontFamily: "Georgia, 'Times New Roman', serif",
+  fontSize: 12,
+  fontWeight: "900",
+  fill: "#ffffff",
+  stroke: { color: "#000000", width: 2, join: "round" },
+});
 const BADGE_TITLE_BAND_FRAC = 0.1;
 const PRINTED_ART_TOP_FRAC = 0.12;
 const MAX_VISIBLE_COUNTERS = 4;
@@ -394,6 +414,10 @@ export class CardSprite extends Container {
   private ptBg: Graphics;
   private ptText: Text;
   private damageGfx: Graphics;
+  private damageText: Text;
+  private chapterContainer: Container;
+  private chapterBg: Graphics;
+  private chapterText: Text;
   private badgeContainer: Container;
   private badgeBg: Graphics;
   private badgeText: Text;
@@ -559,6 +583,14 @@ export class CardSprite extends Container {
     this.addChild(this.railContainer);
     this.counterContainer = new Container();
     this.addChild(this.counterContainer);
+    this.chapterContainer = new Container();
+    this.chapterContainer.visible = false;
+    this.chapterBg = new Graphics();
+    this.chapterText = new Text({ text: "", style: CHAPTER_MARKER_STYLE });
+    this.chapterText.resolution = TEXT_RASTER_RESOLUTION;
+    this.chapterContainer.addChild(this.chapterBg);
+    this.chapterContainer.addChild(this.chapterText);
+    this.addChild(this.chapterContainer);
     this.keywordsContainer = new Container();
     this.addChild(this.keywordsContainer);
     this.ptContainer = new Container();
@@ -569,6 +601,10 @@ export class CardSprite extends Container {
     this.ptContainer.addChild(this.ptText);
     this.ptContainer.visible = false;
     this.addChild(this.ptContainer);
+    this.damageText = new Text({ text: "", style: DAMAGE_MARKER_STYLE });
+    this.damageText.resolution = TEXT_RASTER_RESOLUTION;
+    this.damageText.visible = false;
+    this.addChild(this.damageText);
 
     this.foilRing = new Graphics({ context: foilContext(this.cw, this.ch) });
     this.foilRing.visible = false;
@@ -1066,8 +1102,9 @@ export class CardSprite extends Container {
     const previousRail = this.railState;
     this.updateRail();
     const railChanged = previousRail !== this.railState;
-    if (statsChanged || frameChanged || railChanged) this.updatePT();
-    if (card.damage !== previous.damage || card.toughness !== previous.toughness || frameChanged) {
+    if (statsChanged || frameChanged || railChanged) {
+      this.updatePT();
+      // The damage marker sits against the P/T badge, so it follows its layout.
       this.updateDamage();
     }
     if (badgeChanged || frameChanged) this.updateBadge();
@@ -1078,7 +1115,13 @@ export class CardSprite extends Container {
         this.counterPopFx = oneShot(performance.now(), STAT_POP.durationMs);
       }
     }
-    if (keywordsChanged || card.id !== previous.id) this.updateKeywords();
+    if (
+      keywordsChanged ||
+      frameChanged ||
+      card.choices?.length !== previous.choices?.length
+    ) {
+      this.updateKeywords();
+    }
     if (card.foil !== previous.foil) this.updateFoil();
     if (card.isRingBearer !== previous.isRingBearer) this.updateRingBearer();
     if (card.manaCost !== previous.manaCost || frameChanged) this.updateMana();
@@ -1276,8 +1319,12 @@ export class CardSprite extends Container {
   }
   private updateKeywords(): void {
     this.keywordsContainer.removeChildren().forEach((c) => c.destroy({ children: true }));
-    const custom = this.isBattlefield && activeStyle !== "realistic";
-    if (!custom && this.card.id !== DEBUG_KEYWORD_CARD_ID) return;
+    if (
+      this.card.isFaceDown ||
+      (!this.isBattlefield && this.card.id !== DEBUG_KEYWORD_CARD_ID)
+    ) {
+      return;
+    }
     const { shown, hidden } = battlefieldKeywords(this.card.keywords, MAX_VISIBLE_KEYWORDS);
     if (shown.length === 0) return;
     const rowH = KEYWORD_ROW_H;
@@ -1292,6 +1339,7 @@ export class CardSprite extends Container {
       txt.anchor.set(0, 0.5);
       txt.x = 3;
       txt.y = rowH / 2;
+      txt.scale.x = Math.min(1, (this.cw - 12) / Math.max(1, txt.width));
       const cw = Math.min(txt.width + 6, this.cw - 6);
       bg.roundRect(0, 0, cw, rowH, CHIP_RADIUS);
       bg.fill({ color: shadowNum, alpha: 0.7 });
@@ -1628,6 +1676,7 @@ export class CardSprite extends Container {
     this.railMarkerGfx.stroke({ color: hexToNum(theme.textOnTinted), width: 1.2, alpha: 0.64 });
   }
   private updateCounters(): void {
+    this.updateChapterMarker();
     this.counterContainer.removeChildren().forEach((c) => c.destroy({ children: true }));
     this.counterContainer.scale.set(1);
     this.counterContainer.alpha = 1;
@@ -1724,8 +1773,10 @@ export class CardSprite extends Container {
     const dmg = card.damage ?? 0;
     if (dmg <= 0) {
       this.damageGfx.visible = false;
+      this.damageText.visible = false;
       return;
     }
+    this.updateDamageMarker(dmg);
     const tough = parseInt(card.toughness ?? "0", 10);
     const alpha = Math.min(0.5, (tough > 0 ? dmg / tough : 1) * 0.5);
     this.damageGfx.visible = true;
@@ -1739,6 +1790,48 @@ export class CardSprite extends Container {
       this.damageGfx.roundRect(0, 0, this.cw, this.ch, CARD_RADIUS);
     }
     this.damageGfx.fill({ color: hexToNum(activeTheme.gameTheme.pt.lethal), alpha });
+  }
+
+  private updateDamageMarker(damage: number): void {
+    if (!this.isBattlefield) {
+      this.damageText.visible = false;
+      return;
+    }
+    this.damageText.visible = true;
+    this.damageText.text = `-${damage}`;
+    const w = this.damageText.width;
+    const h = this.damageText.height;
+    if (this.ptContainer.visible) {
+      // Stack directly above the P/T badge, right-aligned with it.
+      const ptRight = this.ptContainer.x - this.ptContainer.pivot.x + this.ptContainer.width;
+      const ptTop = this.ptContainer.y - this.ptContainer.pivot.y;
+      this.damageText.position.set(ptRight - w, ptTop - h + 1);
+    } else {
+      const railReserve = this.railState ? RAIL_W + RAIL_RIGHT + 2 : 0;
+      const bottom = this.ch - 3 - (this.frameTypeBandH > 0 ? this.frameTypeBandH + 1 : 0);
+      this.damageText.position.set(this.cw - w - 3 - railReserve, bottom - h);
+    }
+  }
+
+  private updateChapterMarker(): void {
+    const rail = this.railState;
+    const lore = this.card.counters?.Lore ?? 0;
+    if (!this.isBattlefield || rail?.kind !== "saga" || lore <= 0) {
+      this.chapterContainer.visible = false;
+      return;
+    }
+    this.chapterContainer.visible = true;
+    this.chapterText.text = toRomanNumeral(lore);
+    const w = Math.max(18, this.chapterText.width + 8);
+    const h = this.chapterText.height + 4;
+    this.chapterBg.clear();
+    this.chapterBg.roundRect(0, 0, w, h, h / 2);
+    this.chapterBg.fill({ color: hexToNum(activeTheme.gameTheme.counter.lore), alpha: 0.95 });
+    this.chapterBg.roundRect(0, 0, w, h, h / 2);
+    this.chapterBg.stroke({ color: 0xffffff, width: 1, alpha: 0.8 });
+    this.chapterText.position.set((w - this.chapterText.width) / 2, 2);
+    const top = this.frameNameBandH > 0 ? this.frameNameBandH + 3 : Math.round(this.ch * 0.14);
+    this.chapterContainer.position.set(4, top);
   }
 
   setElevation(amount: number): void {

@@ -690,6 +690,9 @@ export class RulesCardPreviewLayer {
     this.bodyMask.fill(hexToNum(this.frame.paper));
     this.fitArt();
     this.bodyScroller.position.set(this.contentX, this.bodyTop);
+    if (!spec.card.isFaceDown && display.keywords.length > 0) {
+      this.addKeywordChips(display.keywords, this.panelHeight * 0.3);
+    }
 
     let y = 8;
     this.actions.setContent({
@@ -739,7 +742,6 @@ export class RulesCardPreviewLayer {
       );
       if (!this.isCollapsed("details")) {
         if (display.keywords.length > 0) {
-          y = this.addKeywordChips(display.keywords, y);
           // Use only resolved display keywords: hidden and inactive faces omit live abilities.
           for (const help of getKeywordHelp(display.keywords)) {
             const description = help.example
@@ -949,9 +951,14 @@ export class RulesCardPreviewLayer {
   }
 
   private addKeywordChips(keywords: string[], y: number): number {
-    let x = 0;
-    let rowHeight = 0;
-    for (const keyword of keywords) {
+    const chips = new Container();
+    chips.eventMode = "none";
+    chips.position.set(ART_INSET, y);
+    const visible = keywords.slice(0, 8);
+    if (keywords.length > visible.length)
+      visible.push(`+${keywords.length - visible.length}`);
+    let offsetY = 0;
+    for (const keyword of visible) {
       const separator = keyword.indexOf(":");
       const label = translateKeyword(
         (separator < 0 ? keyword : keyword.slice(0, separator)).trim(),
@@ -973,23 +980,19 @@ export class RulesCardPreviewLayer {
       );
       const width = Math.min(this.contentWidth, content.width + 14);
       const height = Math.max(24, textHeight + 8);
-      if (x > 0 && x + width > this.contentWidth) {
-        x = 0;
-        y += rowHeight + 5;
-        rowHeight = 0;
-      }
       const chip = new Container();
       const background = new Graphics();
       background.roundRect(0, 0, width, height, 7);
       background.fill({ color: hexToNum(this.theme.gameTheme.canvas.shadow), alpha: 0.82 });
       content.position.set(7, (height - textHeight) / 2);
-      chip.position.set(x, y);
+      chip.position.set(0, offsetY);
       chip.addChild(background, content);
-      this.bodyContent.addChild(chip);
-      x += width + 5;
-      rowHeight = Math.max(rowHeight, height);
+      chips.addChild(chip);
+      offsetY += height + 5;
     }
-    return y + rowHeight;
+    chips.scale.set(Math.min(1, (this.panelHeight * 0.6) / Math.max(1, offsetY)));
+    this.chrome.addChild(chips);
+    return y + chips.height;
   }
 
   private addChips(items: Array<{ label: string; color: string }>, y: number): number {

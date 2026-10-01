@@ -66,7 +66,7 @@ function clampPosition(value: number, max: number): number {
   return Math.max(0, Math.min(max, Math.trunc(value)));
 }
 
-function toRomanNumeral(value: number): string {
+export function toRomanNumeral(value: number): string {
   let remaining = value;
   let result = "";
   for (const [amount, glyph] of ROMAN_NUMERALS) {

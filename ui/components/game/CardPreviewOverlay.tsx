@@ -21,11 +21,13 @@ export function CardPreviewOverlay({
   horizontal,
   rail,
   compactRail,
+  showKeywords = true,
 }: {
   card: CardDto;
   horizontal: boolean;
   rail: CardRailState | null;
   compactRail: boolean;
+  showKeywords?: boolean;
 }) {
   const themeColors = useTheme().gameTheme;
   const creature = isCreature(card);
@@ -57,7 +59,10 @@ export function CardPreviewOverlay({
     card.isCopy,
     card.identity.isToken,
   ]);
-  const keywords = (card.keywords ?? []).filter(isVisibleBattlefieldKeyword);
+  const keywords =
+    showKeywords && !card.isFaceDown
+      ? (card.keywords ?? []).filter(isVisibleBattlefieldKeyword)
+      : [];
   const visibleKeywords = keywords.slice(0, MAX_PREVIEW_KEYWORDS);
   const hiddenKeywordCount = keywords.length - visibleKeywords.length;
   const damage = card.damage ?? 0;
@@ -94,7 +99,7 @@ export function CardPreviewOverlay({
     : undefined;
   const railRightStyle = compactRail ? "calc(5.5% + var(--card-rail-width) + 0.35rem)" : "5.5%";
   const showTopStrip =
-    statusBadges.length > 0 || (card.choices?.length ?? 0) > 0 || keywords.length > 0;
+    statusBadges.length > 0 || (card.choices?.length ?? 0) > 0;
   const showPT = creature && !horizontal && !!card.power && !!card.toughness;
   const overlayCounters = useMemo(() => {
     if (!card.counters) return null;
@@ -137,28 +142,33 @@ export function CardPreviewOverlay({
             </div>
           )}
           <CardChoiceIndicators card={card} expanded />
-          {keywords.length > 0 && (
-            <div className="flex flex-wrap gap-1 justify-center">
-              {visibleKeywords.map((kw, i) => {
-                const colonIdx = kw.indexOf(":");
-                const label = translateKeyword(colonIdx === -1 ? kw : kw.slice(0, colonIdx));
-                const cost = colonIdx === -1 ? null : kw.slice(colonIdx + 1);
-                return (
-                  <span
-                    key={`${kw}-${i}`}
-                    className="inline-flex items-center gap-0.5 text-[11px] font-bold uppercase tracking-wide bg-black/75 text-white px-2 py-0.5 rounded shadow-md"
-                  >
-                    {label}
-                    {cost && <ManaSymbols cost={cost} size="sm" />}
-                  </span>
-                );
-              })}
-              {hiddenKeywordCount > 0 && (
-                <span className="inline-flex items-center text-[11px] font-bold uppercase tracking-wide bg-black/75 text-white px-2 py-0.5 rounded shadow-md">
-                  +{hiddenKeywordCount}
-                </span>
-              )}
-            </div>
+        </div>
+      )}
+      {keywords.length > 0 && (
+        <div
+          data-keyword-tags
+          className="absolute top-[30%] left-2 right-2 z-10 flex flex-col items-start gap-1 pointer-events-none"
+        >
+          {visibleKeywords.map((kw, i) => {
+            const colonIdx = kw.indexOf(":");
+            const label = translateKeyword(
+              colonIdx === -1 ? kw : kw.slice(0, colonIdx),
+            );
+            const cost = colonIdx === -1 ? null : kw.slice(colonIdx + 1);
+            return (
+              <span
+                key={`${kw}-${i}`}
+                className="inline-flex items-center gap-0.5 text-[11px] font-bold uppercase tracking-wide bg-black/75 text-white px-2 py-0.5 rounded shadow-md"
+              >
+                {label}
+                {cost && <ManaSymbols cost={cost} size="sm" />}
+              </span>
+            );
+          })}
+          {hiddenKeywordCount > 0 && (
+            <span className="inline-flex items-center text-[11px] font-bold uppercase tracking-wide bg-black/75 text-white px-2 py-0.5 rounded shadow-md">
+              +{hiddenKeywordCount}
+            </span>
           )}
         </div>
       )}
