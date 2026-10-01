@@ -59,6 +59,7 @@ import { usePromptEffects } from "@/hooks/usePromptEffects";
 import { useCombatState } from "@/hooks/useCombatState";
 import { useGameEventListeners } from "@/hooks/useGameEventListeners";
 import { useGamePrefetch } from "@/hooks/useGamePrefetch";
+import { useGameSfx } from "@/hooks/useGameSfx";
 import { useMultiplayerInterruption } from "@/hooks/useMultiplayerInterruption";
 import { useLiveGameNavigationGuard } from "@/hooks/useLiveGameNavigationGuard";
 import { GameBoard } from "@/components/game/GameBoard";
@@ -1092,6 +1093,7 @@ export default function Game({ exitTo }: GameProps = {}) {
   }, [gameView?.priorityPlayerId, priorityHighlightPlayerId]);
   useGameEventListeners();
   useGamePrefetch();
+  useGameSfx();
   useKeybindings({
     "open-settings": () => setGameSettingsOpen(true),
     "toggle-stack": () => useStackUIStore.getState().toggleCollapsed(),

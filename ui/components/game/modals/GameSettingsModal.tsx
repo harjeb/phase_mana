@@ -141,6 +141,31 @@ export function GameSettingsModal({ onClose }: { onClose: () => void }) {
             hint={t`When off, simultaneous triggers are ordered automatically.`}
           />
         </Section>
+        <Section title={t`Sound`}>
+          <Choice
+            label={t`Sound effects`}
+            value={prefs.sfxEnabled}
+            options={onOffOptions()}
+            onChange={prefs.setSfxEnabled}
+            hint={t`Short effects for drawing, attacking, life changes and more.`}
+          />
+          <div className="space-y-2">
+            <label htmlFor={`${id}-sfx-volume`} className="text-sm font-medium">
+              {t`Volume · ${Math.round(prefs.sfxVolume * 100)}%`}
+            </label>
+            <input
+              id={`${id}-sfx-volume`}
+              type="range"
+              min={0}
+              max={100}
+              step={5}
+              value={Math.round(prefs.sfxVolume * 100)}
+              disabled={!prefs.sfxEnabled}
+              onChange={(e) => prefs.setSfxVolume(Number(e.target.value) / 100)}
+              className="w-full accent-primary"
+            />
+          </div>
+        </Section>
         <Section title={t`Board appearance`}>
           <div className="space-y-2">
             <label htmlFor={`${id}-size`} className="text-sm font-medium">

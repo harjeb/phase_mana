@@ -9288,6 +9288,11 @@ msgstr ""
 msgid "Shockland"
 msgstr ""
 
+#: ui/components/game/modals/GameSettingsModal.tsx:150
+#: ui/views/Settings.tsx:814
+msgid "Short effects for drawing, attacking, life changes and more."
+msgstr "ドロー、攻撃、ライフの増減などの短い効果音。"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:301
 msgid "Short label"
 msgstr ""
@@ -9594,6 +9599,15 @@ msgstr ""
 #: ui/components/editor/DeckBuilder.tsx:1657
 msgid "Sort: {0}"
 msgstr ""
+
+#: ui/components/game/modals/GameSettingsModal.tsx:144
+msgid "Sound"
+msgstr "サウンド"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:146
+#: ui/views/Settings.tsx:813
+msgid "Sound effects"
+msgstr "効果音"
 
 #: ui/components/deck/DeckHubFilterPanel.tsx:135
 msgid "Source"
@@ -11013,6 +11027,12 @@ msgstr ""
 #: ui/components/editor/DeckLabelsModal.tsx:24
 msgid "Voltron"
 msgstr ""
+
+#. placeholder {0}: Math.round(prefs.sfxVolume * 100)
+#: ui/components/game/modals/GameSettingsModal.tsx:154
+#: ui/views/Settings.tsx:834
+msgid "Volume · {0}%"
+msgstr "音量 · {0}%"
 
 #: ui/components/lobby/CreateGameDialog.tsx:814
 msgid "vs"

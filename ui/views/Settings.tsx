@@ -809,6 +809,43 @@ export default function Settings() {
               </div>
             </PreferenceCard>
 
+            <PreferenceCard
+              title={t`Sound effects`}
+              description={t`Short effects for drawing, attacking, life changes and more.`}
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={prefs.sfxEnabled ? "selected" : "outline"}
+                    size="sm"
+                    onClick={() => prefs.setSfxEnabled(true)}
+                  >
+                    <Trans>On</Trans>
+                  </Button>
+                  <Button
+                    variant={!prefs.sfxEnabled ? "selected" : "outline"}
+                    size="sm"
+                    onClick={() => prefs.setSfxEnabled(false)}
+                  >
+                    <Trans>Off</Trans>
+                  </Button>
+                </div>
+                <p className="text-sm font-medium">
+                  {t`Volume · ${Math.round(prefs.sfxVolume * 100)}%`}
+                </p>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={Math.round(prefs.sfxVolume * 100)}
+                  disabled={!prefs.sfxEnabled}
+                  onChange={(e) => prefs.setSfxVolume(Number(e.target.value) / 100)}
+                  className="w-full accent-primary"
+                />
+              </div>
+            </PreferenceCard>
+
             {isFeatureEnabled("ironsmithRuntime") && IRONSMITH_WASM_AVAILABLE && (
               <PreferenceCard
                 title={t`Ironsmith engine (experimental)`}

@@ -9368,6 +9368,11 @@ msgstr "Shift 点击选择范围，Cmd/Ctrl 点击选择单张牌，然后拖动
 msgid "Shockland"
 msgstr "电震地"
 
+#: ui/components/game/modals/GameSettingsModal.tsx:150
+#: ui/views/Settings.tsx:814
+msgid "Short effects for drawing, attacking, life changes and more."
+msgstr "抽牌、攻击、生命值变化等的简短音效。"
+
 #: ui/components/lobby/CustomFormatDialog.tsx:301
 msgid "Short label"
 msgstr "短标签"
@@ -9680,6 +9685,15 @@ msgstr "已拥有的牌优先"
 #: ui/components/editor/DeckBuilder.tsx:1657
 msgid "Sort: {0}"
 msgstr "排序：{0}"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:144
+msgid "Sound"
+msgstr "声音"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:146
+#: ui/views/Settings.tsx:813
+msgid "Sound effects"
+msgstr "音效"
 
 #: ui/components/deck/DeckHubFilterPanel.tsx:135
 msgid "Source"
@@ -11103,6 +11117,12 @@ msgstr "火山岩"
 #: ui/components/editor/DeckLabelsModal.tsx:24
 msgid "Voltron"
 msgstr "扮装"
+
+#. placeholder {0}: Math.round(prefs.sfxVolume * 100)
+#: ui/components/game/modals/GameSettingsModal.tsx:154
+#: ui/views/Settings.tsx:834
+msgid "Volume · {0}%"
+msgstr "音量 · {0}%"
 
 #: ui/components/lobby/CreateGameDialog.tsx:814
 msgid "vs"

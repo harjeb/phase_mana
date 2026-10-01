@@ -35,6 +35,11 @@ export const CARD_SIZE_MULTIPLIER_MIN = 0.75;
 // (the old 300% top was one: everything saturated around 150%).
 export const CARD_SIZE_MULTIPLIER_MAX = 1.5;
 
+export const DEFAULT_SFX_VOLUME = 0.7;
+export function clampSfxVolume(volume: number): number {
+  return Number.isFinite(volume) ? Math.min(1, Math.max(0, volume)) : DEFAULT_SFX_VOLUME;
+}
+
 export interface PreferencesState {
   appThemePreset: string;
   setAppThemePreset: (id: string) => void;
@@ -112,6 +117,13 @@ export interface PreferencesState {
   // (cards move, state indicators stay).
   inGameAnimations: boolean;
   setInGameAnimations: (value: boolean) => void;
+
+  // In-game sound effects (draws, attacks, life changes, ...).
+  sfxEnabled: boolean;
+  setSfxEnabled: (value: boolean) => void;
+  /** Master volume for sound effects, 0..1. */
+  sfxVolume: number;
+  setSfxVolume: (volume: number) => void;
 
   chooseOrderOnMultipleTriggers: boolean;
   setChooseOrderOnMultipleTriggers: (value: boolean) => void;
@@ -195,6 +207,8 @@ const PERSISTED_PREFERENCE_KEYS = [
   "battlefieldCardStyle",
   "boardBackgroundId",
   "inGameAnimations",
+  "sfxEnabled",
+  "sfxVolume",
   "chooseOrderOnMultipleTriggers",
   "ironsmithRuntimeEnabled",
   "directTransport",
@@ -272,6 +286,12 @@ function pickPersistedPreferences(persistedState: unknown): Partial<PreferencesS
   }
   if (typeof next.onlineCardLocalizationEnabled !== "boolean") {
     delete next.onlineCardLocalizationEnabled;
+  }
+  if (typeof next.sfxEnabled !== "boolean") delete next.sfxEnabled;
+  if (typeof next.sfxVolume === "number") {
+    next.sfxVolume = clampSfxVolume(next.sfxVolume);
+  } else {
+    delete next.sfxVolume;
   }
   return next as Partial<PreferencesState>;
 }
@@ -361,6 +381,11 @@ export const usePreferencesStore = create<PreferencesState>()(
 
           inGameAnimations: true,
           setInGameAnimations: (inGameAnimations) => set({ inGameAnimations }),
+
+          sfxEnabled: true,
+          setSfxEnabled: (sfxEnabled) => set({ sfxEnabled }),
+          sfxVolume: DEFAULT_SFX_VOLUME,
+          setSfxVolume: (sfxVolume) => set({ sfxVolume: clampSfxVolume(sfxVolume) }),
 
           chooseOrderOnMultipleTriggers: true,
           setChooseOrderOnMultipleTriggers: (chooseOrderOnMultipleTriggers) =>

@@ -14,6 +14,14 @@ copyright and license notices are retained.
 | ManaBrew protocol crates (vendored under `tools/generate-types/`) | <https://github.com/witchesofthehill/manabrew> | GPL-3.0-or-later |
 | manabrew-protocol | <https://crates.io/crates/manabrew-protocol> | AGPL-3.0-or-later |
 | Forge (referenced, not vendored) | <https://github.com/Card-Forge/forge> | GPL-3.0-or-later |
+| In-game sound effects (`public/audio/sfx/`, 14 `.m4a` files) | <https://github.com/phase-rs/phase> (`client/public/audio/sfx/`) | Not stated upstream — see note below |
+
+**Sound effects note.** The effects were copied unmodified from the phase.rs
+client. That repository does not ship a separate license or credit file for its
+audio assets (its theme manifest credits only the music as AI-generated), so
+their provenance is undocumented. Confirm the terms with the upstream authors
+before redistributing builds publicly, or replace the files — they are loaded by
+name from `ui/audio/sfxCatalog.ts`.
 
 ## License texts
 

@@ -9369,6 +9369,11 @@ msgstr "Shift-click ranges, Cmd/Ctrl-click individual cards, then drag or use M,
 msgid "Shockland"
 msgstr "Shockland"
 
+#: ui/components/game/modals/GameSettingsModal.tsx:150
+#: ui/views/Settings.tsx:814
+msgid "Short effects for drawing, attacking, life changes and more."
+msgstr "Short effects for drawing, attacking, life changes and more."
+
 #: ui/components/lobby/CustomFormatDialog.tsx:301
 msgid "Short label"
 msgstr "Short label"
@@ -9681,6 +9686,15 @@ msgstr "Sort owned cards first"
 #: ui/components/editor/DeckBuilder.tsx:1657
 msgid "Sort: {0}"
 msgstr "Sort: {0}"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:144
+msgid "Sound"
+msgstr "Sound"
+
+#: ui/components/game/modals/GameSettingsModal.tsx:146
+#: ui/views/Settings.tsx:813
+msgid "Sound effects"
+msgstr "Sound effects"
 
 #: ui/components/deck/DeckHubFilterPanel.tsx:135
 msgid "Source"
@@ -11104,6 +11118,12 @@ msgstr "Volcanic stone"
 #: ui/components/editor/DeckLabelsModal.tsx:24
 msgid "Voltron"
 msgstr "Voltron"
+
+#. placeholder {0}: Math.round(prefs.sfxVolume * 100)
+#: ui/components/game/modals/GameSettingsModal.tsx:154
+#: ui/views/Settings.tsx:834
+msgid "Volume · {0}%"
+msgstr "Volume · {0}%"
 
 #: ui/components/lobby/CreateGameDialog.tsx:814
 msgid "vs"
