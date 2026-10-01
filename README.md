@@ -70,6 +70,36 @@ npm run test:startup   # port fallback and endpoint discovery tests
 
 The desktop app uses **Tauri v2**, not Electron. Building requires Tauri's platform prerequisites (on Windows: MSVC C++ tools and WebView2), plus the sibling Phase sources; installed users do not need Node, Git, or Rust. The app opens on ManaBrew's own loading screen, automatically downloads the official MTGJSON `AtomicCards.json` on first launch, and displays transfer progress there; later launches reuse the app-managed database. There is no separate setup screen or file-import picker. Parsing raw MTGJSON may take several minutes after downloading. Runtime data/settings live in the OS application-data directory, not the install directory. The native server serves the bundled frontend and API on loopback ports, each incrementing when occupied; closing the app stops its own server. See [`src-tauri/README.md`](src-tauri/README.md) for prerequisites, staging, security boundaries, and data limitations. A static `dist/` alone is **not** a standalone engine: Web mode still needs the local server and proxy/runtime routes.
 
+### Pinned multiplayer host build
+
+`npm run host:build` uses `.phase-host/source` at exactly
+`27f190967c3eff7a54794078c654df05d0c66045`, requiring a clean checkout
+(including no untracked files). It checks and applies the repository-owned
+`scripts/patches/host-prompts.patch`, builds the host and data generators, and
+regenerates `.phase-host/data/card-data.json` and `draft-pools.json` as usual.
+The patch is required; do not apply it manually before building. After success
+or failure, the script checks reversal and removes only its own patch. It never
+runs `git reset` or `git clean`; unrelated edits made during the build survive.
+If reversal conflicts, it fails and leaves changes for manual review. A forced
+process termination cannot guarantee cleanup. Do not edit the source or run
+concurrent host builds while this command is running.
+
+Build output defaults to `.phase-host/target`. To avoid replacing a running
+Windows server executable, choose a different target directory (relative paths
+are resolved from this repository root):
+
+```powershell
+$env:PHASE_MANA_HOST_TARGET_DIR = 'F:/phase_mana/.phase-host/target-prompts'
+npm run host:build
+```
+
+POSIX equivalent: `PHASE_MANA_HOST_TARGET_DIR=.phase-host/target-prompts npm run host:build`.
+This overrides Cargo's target directory for all three builds and generator
+execution, not the source/data directories or any running server. Launch the
+new server explicitly from the printed executable path; existing servers are
+not stopped or switched. Workflow-only tests (no host build):
+`node --test scripts/with-tracked-patch.test.mjs`.
+
 ### Features
 
 **Play**

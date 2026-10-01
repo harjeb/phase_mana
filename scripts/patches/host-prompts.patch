@@ -1,0 +1,832 @@
+diff --git a/crates/manabrew-compat/src/lib.rs b/crates/manabrew-compat/src/lib.rs
+index 70ad5ceca..193cde450 100644
+--- a/crates/manabrew-compat/src/lib.rs
++++ b/crates/manabrew-compat/src/lib.rs
+@@ -1032,8 +1032,8 @@ static UNSUPPORTED_PROTOCOL_CAPABILITIES: [UnsupportedCapability; 92] = [
+     UnsupportedCapability {
+         code: "local.named-choice-unsupported",
+         area: "prompts",
+-        reason: "Split by vocabulary after reading the enum rather than assuming. Both WaitingFor::NamedChoice and WaitingFor::CostTypeChoice carry { choice_type: ChoiceType, options: Vec<String> }, and ChoiceType has eighteen variants. Most are CLOSED sets the engine already enumerates into `options` — CreatureType, Color, CardType, LandType, BasicLandType, Keyword, CounterKind, Opponent, Player, OddOrEven, TwoColors, Labeled, NumberRange — and every one of those fits ChooseFromSelection (or ChooseColor / ChooseNumber) with no extension at all; CostTypeChoice is entirely in this group. Only CardName, Word, Artist, CardPredicate, and CardPredicateGuess are open vocabularies, and for those none of the nineteen families carries a free-text answer: ChooseCards needs CardDtos, ChooseFromSelection needs enumerated labels, ChooseBoardTargets needs TargetRefs. So this is mostly unwritten mapping and only partly a missing shape.",
+-        suggested_protocol_extension: "None needed for the closed-vocabulary majority — that is adapter work. For CardName / Word / Artist, add a text-answer family (or specify that the producer must supply a bounded candidate list, which is only possible where the card's Oracle text restricts the name set).",
++        reason: "Finite NamedChoice options now map verbatim to a one-of ChooseFromSelection; numeric free entry maps to ChooseNumber with ChoiceType's authoritative bounds. CostTypeChoice uses the engine's exact-choice schema, including CancelCast only when offered there. The remaining gap is genuine open text (CardName, Word, Artist, CardPredicate, CardPredicateGuess), empty nonnumeric option domains, or numeric bounds not representable on the wire. Suggestions are not an exhaustive card-name vocabulary and must not be presented as one. No current family carries a free-text answer.",
++        suggested_protocol_extension: "Add a text-answer family for open card-name and text domains. Finite options and numeric free entry already use existing selection and number families without an extension.",
+     },
+     UnsupportedCapability {
+         code: "local.dig-unsupported",
+@@ -1705,9 +1705,45 @@ fn build_prompt_input(
+         WaitingFor::ModalFaceChoice { .. } => {
+             unsupported_prompt(waiting_for, "local.mdfc-face-choice-unsupported")
+         }
+-        WaitingFor::NamedChoice { .. } | WaitingFor::CostTypeChoice { .. } => {
+-            unsupported_prompt(waiting_for, "local.named-choice-unsupported")
++        WaitingFor::NamedChoice {
++            choice_type,
++            options,
++            ..
++        } => {
++            use engine::types::ability::{ChoiceType, FreeEntry};
++            if let Some(FreeEntry::Number { min, max }) = choice_type.free_entry() {
++                let (Ok(min), Ok(max)) = (i32::try_from(min), i32::try_from(max)) else {
++                    return unsupported_prompt(waiting_for, "local.named-choice-unsupported");
++                };
++                return Ok(PromptInput::ChooseNumber(ChooseNumberInput {
++                    presentation: presentation("Choose a number"),
++                    min,
++                    max,
++                }));
++            }
++            if options.is_empty()
++                || matches!(
++                    choice_type,
++                    ChoiceType::CardName
++                        | ChoiceType::Word
++                        | ChoiceType::Artist
++                        | ChoiceType::CardPredicate { .. }
++                        | ChoiceType::CardPredicateGuess { .. }
++                )
++            {
++                return unsupported_prompt(waiting_for, "local.named-choice-unsupported");
++            }
++            Ok(PromptInput::ChooseFromSelection(ChooseFromSelectionInput {
++                presentation: presentation("Choose"),
++                options: options
++                    .iter()
++                    .map(|option| selection_option(option.clone()))
++                    .collect(),
++                min_total: 1,
++                max_total: 1,
++            }))
+         }
++        WaitingFor::CostTypeChoice { .. } => interaction_prompt(prepared, card_lookup),
+         WaitingFor::AssignCombatDamage {
+             attacker_id,
+             blockers,
+@@ -1829,8 +1865,8 @@ fn build_prompt_input(
+                     .clone()
+                     .unwrap_or_else(|| "Pay the cost?".to_string()),
+             ),
+-            confirm_label: "Pay".to_string(),
+-            deny_label: "Decline".to_string(),
++            confirm_label: "Confirm payment".to_string(),
++            deny_label: "Do not pay".to_string(),
+         })),
+         WaitingFor::UnlessPaymentChooseCost { .. } => {
+             unsupported_prompt(waiting_for, "local.cost-prevention-unsupported")
+@@ -2060,7 +2096,10 @@ fn interaction_prompt(
+     Ok(PromptInput::ChooseFromSelection(ChooseFromSelectionInput {
+-        presentation: presentation("Choose"),
++        presentation: presentation(match waiting_for {
++            WaitingFor::OptionalCostChoice { .. } => "Pay the optional cost?",
++            _ => "Choose",
++        }),
+         options: choices
+             .iter()
+             .map(|choice| selection_option(choice_label(choice)))
+             .collect(),
+         min_total,
+@@ -2332,10 +2371,31 @@ fn choice_label(choice: &InteractionChoice) -> String {
+         .surfaces
+         .iter()
+         .filter_map(|surface| match surface {
++            InteractionPresentationSurface::Action {
++                code: engine::types::interaction::InteractionActionCode::CancelCast,
++                ..
++            } => Some(CANCEL_CAST_OPTION_LABEL.to_string()),
+             InteractionPresentationSurface::Object {
+                 name, reference, ..
+             } => Some(name.clone().unwrap_or_else(|| reference.clone())),
+-            InteractionPresentationSurface::Value { value, .. } => Some(value.clone()),
++            InteractionPresentationSurface::Value {
++                role: InteractionRoleCode::CostBranchIndex,
++                value,
++                ..
++            } => Some(format!("Confirm payment (cost option {value})")),
++            // Interpret only engine-typed semantic roles, never arbitrary 0/1
++            // options: those can be real amounts or positional choices.
++            InteractionPresentationSurface::Value { role, value, .. } => Some(
++                match (role, value.as_str()) {
++                    (InteractionRoleCode::Pay, "true" | "pay") => "Confirm payment",
++                    (InteractionRoleCode::Pay, "false" | "decline")
++                    | (InteractionRoleCode::CostBranch, "decline") => "Do not pay",
++                    (InteractionRoleCode::Accept, "true" | "take") => "Yes",
++                    (InteractionRoleCode::Accept, "false" | "decline") => "No",
++                    _ => value.as_str(),
++                }
++                .to_string(),
++            ),
+             InteractionPresentationSurface::Player { seat, .. } => Some(format!("Player {seat}")),
+             _ => None,
+         })
+@@ -2586,6 +2643,21 @@ pub fn translate_response(
+         UpstreamPromptOutput::ChooseNumber(ChooseNumberOutput::NumberDecision {
+             chosen_number,
+         }) => {
++            if let WaitingFor::NamedChoice { choice_type, .. } = &state.waiting_for {
++                return match chosen_number {
++                    Some(value)
++                        if choice_type.accepts_free_entry_answer(&value.to_string())
++                            == Some(true) =>
++                    {
++                        Ok(GameAction::ChooseOption {
++                            choice: value.to_string(),
++                        })
++                    }
++                    _ => Err(AdapterError::IllegalResponseForPrompt {
++                        response_kind: "numberDecision",
++                    }),
++                };
++            }
+             match chosen_number {
+                 // CR 107.3 + CR 107.1b: X is a value its controller chooses, and
+                 // a negative number can never be chosen — so a declined or
+@@ -2607,6 +2679,20 @@ pub fn translate_response(
+         UpstreamPromptOutput::ChooseFromSelection(
+             ChooseFromSelectionOutput::SelectionDecision { chosen_indices },
+         ) => match &state.waiting_for {
++            WaitingFor::NamedChoice { options, .. } => {
++                let [index] = chosen_indices.as_slice() else {
++                    return Err(AdapterError::IllegalResponseForPrompt {
++                        response_kind: "selectionDecision",
++                    });
++                };
++                options
++                    .get(*index)
++                    .cloned()
++                    .map(|choice| GameAction::ChooseOption { choice })
++                    .ok_or(AdapterError::IllegalResponseForPrompt {
++                        response_kind: "selectionDecision",
++                    })
++            }
+             // The two bespoke producers of this family. Their answer is a list
+             // of mode indices — one response covering several picks — which is
+             // not the one-choice-per-answer shape the projection returns, so it
+@@ -6473,6 +6559,253 @@ mod tests {
+     /// candidate order the engine never promised; the assertion that matters is
+     /// that the index the client echoes round-trips to the action that label
+     /// stands for.
++    fn named_choice_state(
++        choice_type: engine::types::ability::ChoiceType,
++        options: Vec<String>,
++    ) -> GameState {
++        let mut state = GameState::new_two_player(7);
++        let free_entry = choice_type.free_entry();
++        state.waiting_for = WaitingFor::NamedChoice {
++            player: PlayerId(0),
++            choice_type,
++            options,
++            source: None,
++            persist_player: None,
++            free_entry,
++        };
++        bind_interaction_authority(&mut state, InteractionSessionId("named-choice".into()))
++            .unwrap();
++        state
++    }
++
++    #[test]
++    fn named_choice_finite_labels_indices_and_guards() {
++        use engine::types::ability::ChoiceType;
++        let labels = vec![
++            "second / exact".to_string(),
++            "FIRST — é".to_string(),
++            "third".to_string(),
++        ];
++        let state = named_choice_state(ChoiceType::Color { excluded: vec![] }, labels.clone());
++        let prepared = prepare_snapshot_with_prompt_id(&state, PlayerId(0), "game", 42).unwrap();
++        let PromptInput::Upstream(UpstreamPromptInput::ChooseFromSelection(input)) =
++            build_prompt_input(&prepared, &lookup).unwrap()
++        else {
++            panic!("selection expected")
++        };
++        assert_eq!(
++            input
++                .options
++                .iter()
++                .map(|o| o.label.clone())
++                .collect::<Vec<_>>(),
++            labels
++        );
++        assert_eq!((input.min_total, input.max_total), (1, 1));
++        for (index, label) in labels.iter().enumerate() {
++            let output =
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices: vec![index],
++                });
++            assert_eq!(
++                translate_response(42, output.clone(), &prepared.prompt_context(), &state).unwrap(),
++                GameAction::ChooseOption {
++                    choice: label.clone()
++                }
++            );
++            assert!(
++                translate_response(41, output.clone(), &prepared.prompt_context(), &state).is_err()
++            );
++            let other = prepare_snapshot_with_prompt_id(&state, PlayerId(1), "game", 42).unwrap();
++            assert!(translate_response(42, output, &other.prompt_context(), &state).is_err());
++        }
++        for chosen_indices in [vec![], vec![0, 1], vec![0, 0], vec![3], vec![usize::MAX]] {
++            assert!(translate_response(
++                42,
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices
++                }),
++                &prepared.prompt_context(),
++                &state
++            )
++            .is_err());
++        }
++    }
++
++    #[test]
++    fn named_choice_finite_options_are_not_truncated() {
++        use engine::types::ability::ChoiceType;
++        let labels: Vec<String> = (0..300).map(|n| n.to_string()).collect();
++        let state = named_choice_state(
++            ChoiceType::NumberRange {
++                min: 0,
++                max: Some(299),
++                distinctness: Default::default(),
++            },
++            labels.clone(),
++        );
++        let prepared = prepare_snapshot_with_prompt_id(&state, PlayerId(0), "game", 42).unwrap();
++        let PromptInput::Upstream(UpstreamPromptInput::ChooseFromSelection(input)) =
++            build_prompt_input(&prepared, &lookup).unwrap()
++        else {
++            panic!("selection expected")
++        };
++        assert_eq!(
++            input
++                .options
++                .iter()
++                .map(|o| o.label.clone())
++                .collect::<Vec<_>>(),
++            labels
++        );
++        assert_eq!(
++            translate_response(
++                42,
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices: vec![299]
++                }),
++                &prepared.prompt_context(),
++                &state
++            )
++            .unwrap(),
++            GameAction::ChooseOption {
++                choice: "299".into()
++            }
++        );
++    }
++
++    #[test]
++    fn named_choice_numeric_engine_bounds_and_no_default() {
++        use engine::types::ability::ChoiceType;
++        let state = named_choice_state(
++            ChoiceType::NumberRange {
++                min: 3,
++                max: None,
++                distinctness: Default::default(),
++            },
++            vec![],
++        );
++        let prepared = prepare_snapshot_with_prompt_id(&state, PlayerId(0), "game", 42).unwrap();
++        let PromptInput::Upstream(UpstreamPromptInput::ChooseNumber(input)) =
++            build_prompt_input(&prepared, &lookup).unwrap()
++        else {
++            panic!("number expected")
++        };
++        assert_eq!((input.min, input.max), (3, i32::MAX));
++        for value in [3, 100_000, i32::MAX] {
++            assert_eq!(
++                translate_response(
++                    42,
++                    PromptOutput::ChooseNumber(ChooseNumberOutput::NumberDecision {
++                        chosen_number: Some(value)
++                    }),
++                    &prepared.prompt_context(),
++                    &state
++                )
++                .unwrap(),
++                GameAction::ChooseOption {
++                    choice: value.to_string()
++                }
++            );
++        }
++        for chosen_number in [None, Some(-1), Some(0), Some(2)] {
++            assert!(translate_response(
++                42,
++                PromptOutput::ChooseNumber(ChooseNumberOutput::NumberDecision { chosen_number }),
++                &prepared.prompt_context(),
++                &state
++            )
++            .is_err());
++        }
++    }
++
++    #[test]
++    fn named_choice_open_text_is_not_a_fixed_suggestion_list() {
++        use engine::types::ability::ChoiceType;
++        for kind in [ChoiceType::CardName, ChoiceType::Word, ChoiceType::Artist] {
++            let state = named_choice_state(kind, vec!["Only a suggestion".into()]);
++            let prepared =
++                prepare_snapshot_with_prompt_id(&state, PlayerId(0), "game", 42).unwrap();
++            assert!(build_prompt_input(&prepared, &lookup).is_err());
++        }
++    }
++
++    #[test]
++    fn cost_type_choice_uses_only_authoritative_exact_choices() {
++        use engine::types::ability::ChoiceType;
++        let mut state = cost_reduction_election_state();
++        let WaitingFor::OrderCostReductions {
++            player,
++            pending_cast,
++            ..
++        } = state.waiting_for.clone()
++        else {
++            panic!("cost pause expected")
++        };
++        state.waiting_for = WaitingFor::CostTypeChoice {
++            player,
++            pending_cast,
++            choice_type: ChoiceType::Color { excluded: vec![] },
++            options: vec!["Blue".into(), "White".into()],
++        };
++        bind_interaction_authority(&mut state, InteractionSessionId("cost-type".into())).unwrap();
++        let prepared = prepare_snapshot_with_prompt_id(&state, player, "game", 42).unwrap();
++        let PromptInput::Upstream(UpstreamPromptInput::ChooseFromSelection(input)) =
++            build_prompt_input(&prepared, &lookup).unwrap()
++        else {
++            panic!("selection expected")
++        };
++        assert_eq!((input.min_total, input.max_total), (1, 1));
++        assert_eq!(
++            input
++                .options
++                .iter()
++                .map(|o| o.label.as_str())
++                .collect::<Vec<_>>(),
++            vec![CANCEL_CAST_OPTION_LABEL, "Blue", "White"]
++        );
++        assert_eq!(
++            translate_response(
++                42,
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices: vec![0],
++                }),
++                &prepared.prompt_context(),
++                &state,
++            ).unwrap(),
++            GameAction::CancelCast,
++        );
++        for (index, choice) in ["Blue", "White"].into_iter().enumerate() {
++            assert_eq!(
++                translate_response(
++                    42,
++                    PromptOutput::ChooseFromSelection(
++                        ChooseFromSelectionOutput::SelectionDecision {
++                            chosen_indices: vec![index + 1]
++                        }
++                    ),
++                    &prepared.prompt_context(),
++                    &state
++                )
++                .unwrap(),
++                GameAction::ChooseOption {
++                    choice: choice.into()
++                }
++            );
++        }
++        for chosen_indices in [vec![], vec![0, 1], vec![3]] {
++            assert!(translate_response(
++                42,
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices
++                }),
++                &prepared.prompt_context(),
++                &state
++            )
++            .is_err());
++        }
++    }
++
+     #[test]
+     fn an_unmapped_waiting_state_prompts_from_the_interaction_projection() {
+         let mut state = GameState::new_two_player(7);
+@@ -9308,6 +9644,68 @@ mod tests {
+     /// Built live, not from a fabricated `WaitingFor`, because the prompt's
+     /// trailing rollback option is gated on the engine's real legal-action set
+     /// offering `GameAction::CancelCast`.
++    #[test]
++    fn payment_labels_preserve_authoritative_actions_and_numeric_values() {
++        use engine::types::ability::{AbilityCost, AdditionalCost};
++        let mut state = cost_reduction_election_state();
++        let WaitingFor::OrderCostReductions { player, pending_cast, .. } =
++            state.waiting_for.clone()
++        else { panic!("cost pause expected") };
++        state.waiting_for = WaitingFor::OptionalCostChoice {
++            player,
++            pending_cast,
++            cost: AdditionalCost::Optional {
++                cost: AbilityCost::Mana { cost: engine::types::mana::ManaCost::default() },
++                repeatability: Default::default(),
++            },
++            times_kicked: 0,
++            origin: Default::default(),
++            gift_kind: None,
++        };
++        bind_interaction_authority(&mut state, InteractionSessionId("payment-labels".into())).unwrap();
++        let prepared = prepare_snapshot_with_prompt_id(&state, player, "game", 42).unwrap();
++        let PromptInput::Upstream(UpstreamPromptInput::ChooseFromSelection(input)) =
++            build_prompt_input(&prepared, &lookup).unwrap()
++        else { panic!("selection expected") };
++        assert_eq!(input.presentation.title, "Pay the optional cost?");
++        let mut payments = Vec::new();
++        for (index, option) in input.options.iter().enumerate() {
++            let action = translate_response(
++                42,
++                PromptOutput::ChooseFromSelection(ChooseFromSelectionOutput::SelectionDecision {
++                    chosen_indices: vec![index],
++                }),
++                &prepared.prompt_context(),
++                &state,
++            ).unwrap();
++            if let GameAction::DecideOptionalCost { pay } = action {
++                assert_eq!(option.label, if pay { "Confirm payment" } else { "Do not pay" });
++                payments.push(pay);
++            }
++        }
++        payments.sort();
++        assert_eq!(payments, vec![false, true]);
++        let opportunity = sole_open_opportunity(&state, player).unwrap();
++        let InteractionOpportunityResponse::ExactChoices { choices } = opportunity.response
++        else { panic!("exact choices expected") };
++        let mut choice = choices[0].clone();
++        for (role, value, expected) in [
++            (InteractionRoleCode::Option, "0", "0"),
++            (InteractionRoleCode::Option, "1", "1"),
++            (InteractionRoleCode::Option, "true", "true"),
++            (InteractionRoleCode::CostBranchIndex, "0", "Confirm payment (cost option 0)"),
++            (InteractionRoleCode::CostBranchIndex, "1", "Confirm payment (cost option 1)"),
++            (InteractionRoleCode::CostBranch, "decline", "Do not pay"),
++            (InteractionRoleCode::Accept, "true", "Yes"),
++            (InteractionRoleCode::Accept, "false", "No"),
++        ] {
++            choice.surfaces = vec![InteractionPresentationSurface::Value {
++                role, index: None, value: value.into(),
++            }];
++            assert_eq!(choice_label(&choice), expected);
++        }
++    }
++
+     fn cost_reduction_election_state() -> GameState {
+         use engine::game::scenario::{GameScenario, P0};
+         use engine::types::ability::StaticDefinition;
+diff --git a/crates/engine/src/parser/oracle_effect/mod.rs b/crates/engine/src/parser/oracle_effect/mod.rs
+index 10ec7312c..84b578e1a 100644
+--- a/crates/engine/src/parser/oracle_effect/mod.rs
++++ b/crates/engine/src/parser/oracle_effect/mod.rs
+@@ -1795,7 +1795,15 @@ fn try_parse_whenever_this_turn(tp: TextPair) -> Option<ParsedEffectClause> {
+         // explicit "this turn"/"this combat" window. Without it, "at the beginning
+         // of [phase]" is a printed trigger and must not be intercepted here.
+         None if is_phase_form => return None,
+-        None => tp.split_around(", ")?,
++        // CR 603.7b: reuse the printed-trigger condition/effect boundary detector so a
++        // comma inside the condition's unscoped Oxford subtype list
++        // ("… or Serpent attacks, draw a card", Summon: Leviathan) is not mistaken
++        // for the boundary. `split_around(", ")` stops at the FIRST comma.
++        None => {
++            let comma = crate::parser::oracle_trigger::find_effect_boundary(tp.lower)?;
++            let (before, after_comma) = tp.split_at(comma);
++            (before, after_comma.strip_prefix(", ")?)
++        }
+     };
+ 
+     // Condition spans the keyword through the split boundary. The "whenever "
+diff --git a/crates/engine/src/parser/oracle_trigger.rs b/crates/engine/src/parser/oracle_trigger.rs
+index fa8dafdaf..d38c81497 100644
+--- a/crates/engine/src/parser/oracle_trigger.rs
++++ b/crates/engine/src/parser/oracle_trigger.rs
+@@ -10589,7 +10589,7 @@ fn continues_keyword_list(prefix: &str, after_comma: &str) -> bool {
+     starts_with_keyword_phrase(after).is_some()
+ }
+ 
+-fn find_effect_boundary(lower: &str) -> Option<usize> {
++pub(crate) fn find_effect_boundary(lower: &str) -> Option<usize> {
+     use super::oracle_nom::primitives::split_once_on;
+     let mut search_start = 0;
+     while let Ok((_, (before, after))) = split_once_on(&lower[search_start..], ", ") {
+@@ -10707,6 +10707,20 @@ fn continues_player_action_list(after_comma: &str) -> bool {
+     if !starts_with_type_word(after_conjunction) {
+         return false;
+     }
++    // CR 205.3m + CR 508.1a: the LAST leg of an UNSCOPED Oxford subtype list ends
++    // with the trigger event verb itself ("a Kraken, Leviathan, …, or Serpent
++    // attacks"). "attacks" is also in `PREDICATE_VERBS`, so the one-item window in
++    // `is_new_sentence_not_type_continuation` would read it as an effect predicate
++    // and cut the condition at the PREVIOUS comma (Summon: Leviathan). A bare
++    // subtype IMMEDIATELY followed by a trigger event verb is a condition
++    // subject-predicate, not an effect: effects are imperatives, not a noun phrase
++    // plus a third-person event verb. "Immediately" is load-bearing — the SCOPED
++    // form ("… or Otter you control attacks") has "you control" between the
++    // subtype and the verb and must keep its pinned boundary
++    // (`condition_side_type_list_boundary_is_unchanged`).
++    if type_word_immediately_followed_by_event_head(after_conjunction) {
++        return true;
++    }
+     // Type word found — distinguish continuation from new sentence.
+     // A continuation has no predicate verb before the trigger event verb;
+     // a new sentence has a subject + predicate verb ("creatures you control get").
+@@ -10722,6 +10736,41 @@ fn type_phrase_continues_to_combat_damage_player_event(text: &str) -> bool {
+     parse_combat_damage_to_player(rest).is_ok()
+ }
+ 
++/// CR 205.3m + CR 508.1a: Does `text` open with a bare creature subtype IMMEDIATELY
++/// followed by a trigger event head ("serpent attacks", "swamp becomes tapped")?
++///
++/// Used by [`continues_player_action_list`] to keep the final leg of an unscoped
++/// Oxford subtype list inside the trigger CONDITION. Consumes exactly one subtype
++/// via [`parse_subtype`] — deliberately NOT [`parse_type_phrase_folding`], which
++/// would also swallow a trailing "you control" and thereby admit the scoped form
++/// whose boundary is pinned by `condition_side_type_list_boundary_is_unchanged`.
++fn type_word_immediately_followed_by_event_head(text: &str) -> bool {
++    let text = text.trim_start();
++    let text = alt((
++        value((), tag::<_, _, OracleError<'_>>("and/or ")),
++        value((), tag("or ")),
++        value((), tag("and ")),
++    ))
++    .parse(text)
++    .map(|(rest, _)| rest)
++    .unwrap_or(text);
++    let text = alt((tag::<_, _, OracleError<'_>>("a "), tag("an ")))
++        .parse(text)
++        .map(|(rest, _)| rest)
++        .unwrap_or(text);
++    let Some((_, subtype_len)) = parse_subtype(text) else {
++        return false;
++    };
++    let rest = text[subtype_len..].trim_start();
++    match parse_event_head_start(rest) {
++        Ok((after_verb, _)) => {
++            let after_verb = after_verb.trim_start();
++            after_verb.is_empty() || after_verb.starts_with(',') || after_verb.starts_with('.')
++        }
++        Err(_) => false,
++    }
++}
++
+ fn parse_combat_damage_to_player(input: &str) -> OracleResult<'_, ()> {
+     value(
+         (),
+@@ -16866,7 +16915,7 @@ fn try_parse_self_or_another_controlled_subtype_enters(
+         }
+ 
+         let Some(subtype_filters) =
+-            build_controlled_subtype_filters(subtype_text, true, ControllerRef::You)
++            build_controlled_subtype_filters(subtype_text, true, Some(ControllerRef::You))
+         else {
+             continue;
+         };
+@@ -17018,7 +17067,7 @@ fn try_parse_controlled_subtype_enters(lower: &str) -> Option<(TriggerMode, Trig
+         return None;
+     }
+ 
+-    let valid_card = build_controlled_subtype_filter(subtype_text, false, ControllerRef::You)?;
++    let valid_card = build_controlled_subtype_filter(subtype_text, false, Some(ControllerRef::You))?;
+ 
+     let mut def = make_base();
+     def.mode = TriggerMode::ChangesZone;
+@@ -17051,7 +17100,7 @@ fn try_parse_another_controlled_subtype_enters(
+             continue;
+         }
+ 
+-        let valid_card = build_controlled_subtype_filter(subtype_text, true, ControllerRef::You)?;
++        let valid_card = build_controlled_subtype_filter(subtype_text, true, Some(ControllerRef::You))?;
+ 
+         let mut def = make_base();
+         def.mode = TriggerMode::ChangesZone;
+@@ -17064,25 +17113,38 @@ fn try_parse_another_controlled_subtype_enters(
+ }
+ 
+ fn try_parse_controlled_subtype_attacks(lower: &str) -> Option<(TriggerMode, TriggerDefinition)> {
+-    for prefix in ["whenever a ", "whenever an ", "when a ", "when an "] {
++    // CR 603.7b: `try_parse_whenever_this_turn` strips the leading trigger keyword
++    // before routing a delayed condition here, so the bare "a "/"an " forms must be
++    // accepted alongside the printed "whenever a "/"when a " forms.
++    for prefix in ["whenever a ", "whenever an ", "when a ", "when an ", "a ", "an "] {
+         let Ok((rest, ())) = value((), tag::<_, _, OracleError<'_>>(prefix)).parse(lower) else {
+             continue;
+         };
+         let Some(subject_text) = rest.strip_suffix(" attacks") else {
+             continue;
+         };
+-        let Some(subtype_text) = subject_text.trim().strip_suffix(" you control") else {
+-            continue;
+-        };
++        // CR 508.1a: "you control" is optional — "whenever a Kraken, Leviathan,
++        // Merfolk, Octopus, or Serpent attacks" (Summon: Leviathan) omits the
++        // controller scope and matches any controller's creatures.
++        let (subtype_text, controller) =
++            match subject_text.trim().strip_suffix(" you control") {
++                Some(st) => (st, Some(ControllerRef::You)),
++                None => (subject_text.trim(), None),
++            };
+         let (_, remainder) = parse_type_phrase_folding(subtype_text);
+-        if remainder.len() < subtype_text.len() {
++        // A single, fully-recognized type phrase (with or without "you control") is
++        // left to the generic subject+event decomposition, which models its extra
++        // properties. This arm exists for the Oxford-comma subtype LIST the generic
++        // path cannot span, so only step past the guard when a comma is present.
++        if remainder.len() < subtype_text.len() && !subtype_text.contains(',') {
+             continue;
+         }
+         if !is_subtype_phrase(subtype_text) {
+             continue;
+         }
+ 
+-        let valid_card = build_controlled_subtype_filter(subtype_text, false, ControllerRef::You)?;
++        let valid_card =
++            build_controlled_subtype_filter(subtype_text, false, controller)?;
+ 
+         let mut def = make_base();
+         def.mode = TriggerMode::Attacks;
+@@ -17093,17 +17155,46 @@ fn try_parse_controlled_subtype_attacks(lower: &str) -> Option<(TriggerMode, Tri
+     None
+ }
+ 
++/// CR 205.3m: Split an Oxford comma subtype list (e.g. "Kraken, Leviathan,
++/// Merfolk, Octopus, or Serpent") into individual subtype tokens. Handles
++/// both simple "A or B" and Oxford "A, B, C, or D" forms.
++fn split_oxford_subtype_list(text: &str) -> Vec<&str> {
++    // Split on commas first, then strip leading "or "/"and " from each segment.
++    let mut result = Vec::new();
++    for segment in text.split(',') {
++        let trimmed = segment.trim();
++        if trimmed.is_empty() {
++            continue;
++        }
++        // Strip leading "or " / "and " conjunction from segments after the
++        // first comma (e.g. ", or Serpent" → "Serpent").
++        let word = trimmed
++            .strip_prefix("or ")
++            .or_else(|| trimmed.strip_prefix("and "))
++            .unwrap_or(trimmed)
++            .trim();
++        if !word.is_empty() {
++            result.push(word);
++        }
++    }
++    // Fallback: if there were no commas, split on " or " for the simple
++    // "Samurai or Warrior" form.
++    if result.len() <= 1 {
++        result = text.split(" or ").map(str::trim).filter(|s| !s.is_empty()).collect();
++    }
++    result
++}
++
+ fn is_subtype_phrase(text: &str) -> bool {
+-    text.split(" or ").all(|part| {
+-        let trimmed = part.trim();
+-        !trimmed.is_empty() && !is_core_type_name(trimmed) && !is_non_subtype_subject_name(trimmed)
++    split_oxford_subtype_list(text).iter().all(|part| {
++        !part.is_empty() && !is_core_type_name(part) && !is_non_subtype_subject_name(part)
+     })
+ }
+ 
+ fn build_controlled_subtype_filter(
+     subtype_text: &str,
+     another: bool,
+-    controller: ControllerRef,
++    controller: Option<ControllerRef>,
+ ) -> Option<TargetFilter> {
+     let filters = build_controlled_subtype_filters(subtype_text, another, controller)?;
+     Some(match filters.as_slice() {
+@@ -17115,22 +17206,20 @@ fn build_controlled_subtype_filter(
+ fn build_controlled_subtype_filters(
+     subtype_text: &str,
+     another: bool,
+-    controller: ControllerRef,
++    controller: Option<ControllerRef>,
+ ) -> Option<Vec<TargetFilter>> {
+     let mut filters = Vec::new();
+ 
+-    for subtype in subtype_text
+-        .split(" or ")
+-        .map(str::trim)
+-        .filter(|s| !s.is_empty())
+-    {
++    for subtype in split_oxford_subtype_list(subtype_text) {
+         if is_core_type_name(subtype) || is_non_subtype_subject_name(subtype) {
+             return None;
+         }
+ 
+         let mut typed = TypedFilter::default()
+-            .subtype(canonicalize_subtype_name(subtype))
+-            .controller(controller.clone());
++            .subtype(canonicalize_subtype_name(subtype));
++        if let Some(ref ctrl) = controller {
++            typed = typed.controller(ctrl.clone());
++        }
+         if another {
+             typed = typed.properties(vec![FilterProp::Another]);
+         }
+diff --git a/crates/engine/src/parser/oracle_trigger_tests.rs b/crates/engine/src/parser/oracle_trigger_tests.rs
+index 8e0cf9cd4..28a6bcc62 100644
+--- a/crates/engine/src/parser/oracle_trigger_tests.rs
++++ b/crates/engine/src/parser/oracle_trigger_tests.rs
+@@ -18306,6 +18306,93 @@ fn trigger_samurai_or_warrior_attacks_alone() {
+     );
+ }
+ 
++#[test]
++fn trigger_oxford_comma_subtype_attacks_unscoped() {
++    let def = parse_trigger_line(
++        "Whenever a Kraken, Leviathan, Merfolk, Octopus, or Serpent attacks, draw a card.",
++        "Summon: Leviathan",
++    );
++    assert_eq!(def.mode, TriggerMode::Attacks);
++    let Some(TargetFilter::Or { filters }) = def.valid_card else {
++        panic!("expected Or target filter for valid_card, got {:?}", def.valid_card);
++    };
++    assert_eq!(filters.len(), 5);
++    let subtypes: Vec<String> = filters
++        .into_iter()
++        .map(|f| match f {
++            TargetFilter::Typed(tf) => {
++                assert_eq!(tf.controller, None, "unscoped trigger must not bind to ControllerRef::You");
++                tf.type_filters
++                    .into_iter()
++                    .find_map(|t| match t {
++                        TypeFilter::Subtype(s) => Some(s),
++                        _ => None,
++                    })
++                    .expect("subtype filter")
++            }
++            other => panic!("expected Typed filter, got {:?}", other),
++        })
++        .collect();
++    assert_eq!(
++        subtypes,
++        vec!["Kraken", "Leviathan", "Merfolk", "Octopus", "Serpent"]
++    );
++    assert!(matches!(def.execute.unwrap().effect.as_ref(), Effect::Draw { .. }));
++}
++
++#[test]
++fn summon_leviathan_saga_chapters_schedule_attacks_draw() {
++    // CR 205.3m + CR 508.1a + CR 603.7b: Summon: Leviathan's chapters II and III
++    // create an until-end-of-turn delayed "whenever a Kraken, Leviathan, Merfolk,
++    // Octopus, or Serpent attacks, draw a card" trigger. Before the fix the
++    // condition/effect boundary landed at the comma after "Octopus" (the final
++    // "or Serpent attacks" leg had "attacks" read as an effect predicate) and the
++    // trigger parser then produced `TriggerMode::Unknown`, leaving the payload as
++    // `Effect::Unimplemented("unrecognized_clause_head")` — the runtime error
++    // "Cannot play Summon: Leviathan".
++    let parsed = parse_oracle_text(
++        "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\n\
++I — Return each creature that isn't a Kraken, Leviathan, Merfolk, Octopus, or Serpent to its owner's hand.\n\
++II, III — Until end of turn, whenever a Kraken, Leviathan, Merfolk, Octopus, or Serpent attacks, draw a card.\n\
++Ward {2}",
++        "Summon: Leviathan",
++        &[],
++        &["Enchantment".to_string(), "Creature".to_string()],
++        &["Saga".to_string(), "Leviathan".to_string()],
++    );
++
++    let mut seen = 0;
++    for trigger in &parsed.triggers {
++        let Some(execute) = trigger.execute.as_ref() else {
++            continue;
++        };
++        let Effect::CreateDelayedTrigger {
++            condition: DelayedTriggerCondition::WheneverEvent { trigger: inner, .. },
++            effect,
++            ..
++        } = execute.effect.as_ref()
++        else {
++            continue;
++        };
++        seen += 1;
++        assert_eq!(
++            inner.mode,
++            TriggerMode::Attacks,
++            "inner trigger must be a real Attacks matcher, not Unknown"
++        );
++        let Some(TargetFilter::Or { filters }) = inner.valid_card.as_ref() else {
++            panic!("expected 5-way Or subtype filter, got {:?}", inner.valid_card);
++        };
++        assert_eq!(filters.len(), 5, "one filter per subtype: {filters:?}");
++        assert!(
++            matches!(effect.effect.as_ref(), Effect::Draw { .. }),
++            "the delayed payload must be Draw, not Unimplemented, got {:?}",
++            effect.effect
++        );
++    }
++    assert_eq!(seen, 2, "chapters II and III each schedule the delayed trigger");
++}
++
+ #[test]
+ fn trigger_this_siege_enters_is_self_etb() {
+     let def = parse_trigger_line("When this Siege enters, draw a card.", "Invasion");
