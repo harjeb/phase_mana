@@ -88,6 +88,15 @@ jobs:
       - name: Test startup and proxy discovery
         run: npm run test:startup
 
+      - name: Download build-time card database
+        run: |
+          $data = '../phase/data/mtgjson'
+          New-Item -ItemType Directory -Force $data | Out-Null
+          curl.exe --fail --location --proto '=https' --proto-redir '=https' --retry 3 --output "$data/AtomicCards.json.partial" https://mtgjson.com/api/v5/AtomicCards.json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Move-Item -Force "$data/AtomicCards.json.partial" "$data/AtomicCards.json"
+          # Packaging parses and validates this data with the freshly built sidecar.
+
       - name: Build Web frontend and Tauri EXE / MSI
         run: npm run build:app
 

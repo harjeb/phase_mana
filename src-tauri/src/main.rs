@@ -219,6 +219,21 @@ async fn boot_desktop(
         .map_err(|_| "Desktop startup is already running")?;
     let dir = state_dir(&app)?;
     progress(&app, "checking", 0, None);
+    // This export is generated and validated by the same sidecar during packaging.
+    // Read it in place: no first-run network request, copy, or Oracle-text parse.
+    let bundled = app
+        .path()
+        .resource_dir()
+        .map_err(|e| e.to_string())?
+        .join("resources/data/card-data.json");
+    if let Ok(db) = database(&bundled) {
+        let result = launch_server(&app, &window, &runtime, &dir, db).await;
+        if !result.as_ref().is_err_and(|e| e.contains("Cannot load")) {
+            return result;
+        }
+        // Recover from damaged card data, not unrelated server/port failures.
+        eprintln!("Bundled card database failed to load; trying the managed raw database");
+    }
     let destination = dir.join("AtomicCards.json");
     let cached = database(&destination).is_ok();
     let db = if cached {

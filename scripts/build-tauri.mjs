@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { cp, mkdir, rm, access, chmod, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { prepareCardData } from './prepare-card-data.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -13,12 +14,13 @@ function run(command, argv, capture = false) {
 }
 try {
   const targetIndex = args.indexOf('--target');
-  const target = targetIndex >= 0 ? args[targetIndex + 1] : run('rustc', ['-vV'], true).match(/^host: (.+)$/m)?.[1].trim();
+  const host = run('rustc', ['-vV'], true).match(/^host: (.+)$/m)?.[1].trim();
+  const target = targetIndex >= 0 ? args[targetIndex + 1] : host;
   if (!target || target.startsWith('--')) throw new Error('Cannot determine Rust target');
   const manifest = path.join(root, 'server', 'Cargo.toml');
   await access(path.join(root, 'dist', 'index.html'));
   const metadata = JSON.parse(run('cargo', ['metadata', '--no-deps', '--format-version', '1', '--manifest-path', manifest], true));
-  run('cargo', ['build', '--release', '--manifest-path', manifest, '--target', target]);
+  run('cargo', ['build', '--release', '--locked', '--manifest-path', manifest, '--target', target, '--bin', 'phase-mana-server']);
   const extension = target.includes('windows') ? '.exe' : '';
   const binaries = path.join(root, 'src-tauri', 'binaries');
   const resources = path.join(root, 'src-tauri', 'resources');
@@ -28,6 +30,13 @@ try {
   const staged = path.join(binaries, `phase-mana-server-${target}${extension}`);
   await cp(path.join(metadata.target_directory, target, 'release', `phase-mana-server${extension}`), staged);
   if (!extension) await chmod(staged, 0o755);
+  let generator = staged;
+  if (target !== host) {
+    // Build-time parsing must run on the host, not a foreign target executable.
+    run('cargo', ['build', '--release', '--locked', '--manifest-path', manifest, '--target', host, '--bin', 'phase-mana-server']);
+    generator = path.join(metadata.target_directory, host, 'release', `phase-mana-server${host.includes('windows') ? '.exe' : ''}`);
+  }
+  await prepareCardData({ root, resources, generator, sidecar: staged, run });
   await cp(path.join(root, 'dist'), path.join(resources, 'web-dist'), { recursive: true });
   try {
     await access(path.join(root, 'resources', 'draft-pools'));
@@ -39,7 +48,7 @@ try {
   for (const name of await readdir(path.resolve(root, '../phase'))) {
     if (/^(LICENSE|NOTICE)/.test(name)) await cp(path.resolve(root, '../phase', name), path.join(licenses, `phase-${name}`));
   }
-  await writeFile(path.join(licenses, 'desktop-dependencies.txt'), 'Tauri: MIT OR Apache-2.0; reqwest: MIT OR Apache-2.0; Tokio: MIT; serde/serde_json: MIT OR Apache-2.0. See src-tauri/Cargo.lock for exact resolved dependencies. MTGJSON data is downloaded separately from https://mtgjson.com/; Magic card content remains property of its respective owners.\n');
+  await writeFile(path.join(licenses, 'desktop-dependencies.txt'), 'Tauri: MIT OR Apache-2.0; reqwest: MIT OR Apache-2.0; Tokio: MIT; serde/serde_json: MIT OR Apache-2.0. See src-tauri/Cargo.lock for exact resolved dependencies. Includes a pre-parsed card database derived from MTGJSON (https://mtgjson.com/), made available under CC0; Magic card content remains property of its respective owners. Raw MTGJSON may be downloaded separately for recovery.\n');
   if (!args.includes('--stage-only')) {
     // Run npm-installed Tauri CLI directly with Node; avoids Windows .cmd quoting/shell injection.
     const cli = path.join(root, 'node_modules', '@tauri-apps', 'cli', 'tauri.js');

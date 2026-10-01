@@ -37,14 +37,20 @@ fn export_cache_path(source: &Path) -> PathBuf {
     dir.join("card-data.json")
 }
 
-/// A cached export is only trusted when it is at least as new as the file it was
-/// parsed from, so a re-downloaded `AtomicCards.json` is re-parsed instead of
-/// being shadowed by the previous release's cache.
+/// Trust a cache only when it is at least as new as both its source and this
+/// executable: rebuilding the engine must invalidate exports from older parsers.
 fn usable_export_cache(source: &Path) -> Option<PathBuf> {
     let cache = export_cache_path(source);
-    let cached_at = cache.metadata().ok()?.modified().ok()?;
-    let parsed_at = source.metadata().ok()?.modified().ok()?;
-    (cached_at >= parsed_at).then_some(cache)
+    let executable = std::env::current_exe().ok()?;
+    export_cache_is_fresh(&cache, source, &executable).then_some(cache)
+}
+
+fn export_cache_is_fresh(cache: &Path, source: &Path, executable: &Path) -> bool {
+    let modified = |path: &Path| path.metadata().and_then(|metadata| metadata.modified());
+    match (modified(cache), modified(source), modified(executable)) {
+        (Ok(cached), Ok(raw), Ok(built)) => cached >= raw && cached >= built,
+        _ => false,
+    }
 }
 
 /// Raw MTGJSON needs its Oracle text parsed at startup — minutes of work for the
@@ -107,7 +113,80 @@ fn default_card_db() -> PathBuf {
     }
 }
 
+#[derive(Debug, PartialEq, Eq)]
+enum Command {
+    Serve,
+    Prepare { raw: PathBuf, output: PathBuf },
+    Validate(PathBuf),
+}
+
+fn parse_command(args: &[std::ffi::OsString]) -> Result<Command, String> {
+    match args {
+        [] => Ok(Command::Serve),
+        [command, raw, output] if command == "--prepare-card-db" => Ok(Command::Prepare {
+            raw: raw.into(), output: output.into(),
+        }),
+        [command, export] if command == "--validate-card-db" => Ok(Command::Validate(export.into())),
+        _ => Err("Usage: phase-mana-server [--prepare-card-db <raw.json> <output.json> | --validate-card-db <export.json>]".into()),
+    }
+}
+
+fn validate_card_db(path: &Path) -> Result<usize, String> {
+    let db = CardDatabase::from_export(path)
+        .map_err(|error| format!("Cannot validate {}: {error}", path.display()))?;
+    let faces = db.face_iter().count();
+    if faces == 0 {
+        return Err(format!("Card database {} contains no faces", path.display()));
+    }
+    Ok(faces)
+}
+
+fn run_card_db_command(command: Command) -> Result<(), String> {
+    let started = std::time::Instant::now();
+    match command {
+        Command::Prepare { raw, output } => {
+            // Always parse raw input with the current engine; never consult caches.
+            let db = CardDatabase::from_mtgjson(&raw)
+                .map_err(|error| format!("Cannot parse {}: {error}", raw.display()))?;
+            let faces = db.face_iter().count();
+            if faces == 0 {
+                return Err(format!("Raw card database {} contains no faces", raw.display()));
+            }
+            if let Some(parent) = output.parent().filter(|parent| !parent.as_os_str().is_empty()) {
+                std::fs::create_dir_all(parent)
+                    .map_err(|error| format!("Cannot create {}: {error}", parent.display()))?;
+            }
+            write_export_cache(&db, &output)
+                .map_err(|error| format!("Cannot write {}: {error}", output.display()))?;
+            drop(db);
+            let restored_faces = validate_card_db(&output)?;
+            if restored_faces != faces {
+                return Err(format!("Export {} has {restored_faces} faces; expected {faces}", output.display()));
+            }
+            eprintln!("Prepared and validated {faces} card faces from {} to {} in {:?}", raw.display(), output.display(), started.elapsed());
+        }
+        Command::Validate(path) => {
+            let faces = validate_card_db(&path)?;
+            eprintln!("Validated {faces} card faces from {} in {:?}", path.display(), started.elapsed());
+        }
+        Command::Serve => return Err("Expected an offline card database command".into()),
+    }
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let command = parse_command(&std::env::args_os().skip(1).collect::<Vec<_>>())?;
+    if command != Command::Serve {
+        // Full deserialization and Oracle parsing need the same stack as serve's
+        // blocking workers, without constructing a runtime or binding listeners.
+        std::thread::Builder::new()
+            .name("card-db".into())
+            .stack_size(16 * 1024 * 1024)
+            .spawn(move || run_card_db_command(command))?
+            .join()
+            .map_err(|_| "Card database worker panicked")??;
+        return Ok(());
+    }
     // Engine parsing and debug-mode reducers need more than the default 2 MiB
     // worker stack. This also configures the spawn_blocking AI workers.
     tokio::runtime::Builder::new_multi_thread()
