@@ -318,9 +318,16 @@ export function AppInitGate({ children, desktopBoot }: { children: ReactNode; de
                       </span>
                     </div>
 
-                    <div className="relative h-3.5 w-full overflow-hidden rounded-full border border-border/80 bg-muted/40">
+                    <div
+                      role="progressbar"
+                      aria-label={title}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={desktopBoot && !desktopBoot.total ? undefined : pct}
+                      className="relative h-3.5 w-full overflow-hidden rounded-full border border-border/80 bg-muted/40"
+                    >
                       <div
-                        className="relative h-full overflow-hidden rounded-full bg-gradient-to-r from-primary/70 via-primary to-primary/70 shadow-[inset_0_0_8px] shadow-primary/40 transition-[width] duration-200 ease-out"
+                        className="relative h-full overflow-hidden rounded-full bg-primary bg-gradient-to-r from-primary/70 via-primary to-primary/70 shadow-[inset_0_0_8px] shadow-primary/40 transition-[width] duration-200 ease-out"
                         style={{ width: `${target}%` }}
                       >
                         <div

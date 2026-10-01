@@ -5,6 +5,7 @@ import { I18nProvider } from "@lingui/react";
 import { ThemeProvider } from "next-themes";
 import { AppInitGate, type DesktopBootStage } from "@/components/AppInitGate";
 import { i18n } from "@/i18n/i18n";
+import { useApplyTheme } from "@/hooks/useTheme";
 
 interface BootProgress {
   stage: DesktopBootStage;
@@ -12,7 +13,10 @@ interface BootProgress {
   total: number | null;
 }
 
-export function DesktopBoot() {
+function DesktopBootContent() {
+  // The boot page mounts without App, so it must apply the theme itself.
+  // ThemeProvider only sets light/dark; useApplyTheme supplies actual CSS colors.
+  useApplyTheme();
   const [progress, setProgress] = useState<BootProgress>({ stage: "checking", received: 0, total: null });
   const [error, setError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
@@ -49,11 +53,17 @@ export function DesktopBoot() {
   };
 
   return (
+    <AppInitGate desktopBoot={{ ...progress, error, retry }}>
+      {null}
+    </AppInitGate>
+  );
+}
+
+export function DesktopBoot() {
+  return (
     <I18nProvider i18n={i18n}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-        <AppInitGate desktopBoot={{ ...progress, error, retry }}>
-          {null}
-        </AppInitGate>
+        <DesktopBootContent />
       </ThemeProvider>
     </I18nProvider>
   );
