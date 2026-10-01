@@ -7,11 +7,12 @@ use draft_core::{
     validation::validate_limited_deck, view,
 };
 use draft_wasm::{
-    bot_ai::{bot_pick, winston_decision},
+    bot_ai::{bot_pick, winston_decision, PickContext},
     suggest::suggest_deck,
 };
 use engine::types::{card::DraftEffect, player::PlayerId};
 use phase_ai::config::AiDifficulty;
+use phase_ai::draft_context::DraftStage;
 use rand::{Rng, SeedableRng};
 use rand_chacha::ChaCha20Rng;
 use serde::{Deserialize, Serialize};
@@ -1588,12 +1589,14 @@ fn pick_and_bots(
         let pack = s.current_pack[seat].as_ref().expect("pack measured above");
         let mut remaining = pack.0.clone();
         let mut ids = Vec::with_capacity(take);
+        let context = PickContext::for_session(s);
         for _ in 0..take {
             let i = bot_pick(
                 &remaining,
                 AiDifficulty::Medium,
                 &s.pools[seat],
                 None,
+                context,
                 &mut snapshot.rng,
             );
             ids.push(remaining.remove(i).instance_id);
@@ -2433,6 +2436,27 @@ fn variant_snapshot(vd: &VariantDraft) -> VariantDraft {
     snapshot
 }
 
+/// Where `seat` is in a variant draft, for the bot's next pick. Variants deal
+/// no booster rounds, so the draft is read as the three rounds of a standard
+/// pod, split evenly over the picks each seat makes in all.
+fn variant_pick_context(vd: &VariantDraft, seat: usize) -> PickContext {
+    const ROUNDS: usize = 3;
+    // Every card still to be drafted, plus every card already drafted; `offer`
+    // only mirrors cards counted in `remaining` or `batch`.
+    let total =
+        vd.remaining.len() + vd.batch.len() + vd.pools.iter().map(Vec::len).sum::<usize>();
+    let round_len = total.div_ceil(vd.seat_count).div_ceil(ROUNDS).max(1);
+    let round = (vd.pools[seat].len() / round_len).min(ROUNDS - 1);
+    PickContext {
+        stage: DraftStage {
+            pack_index: round as u8,
+            pack_count: ROUNDS as u8,
+            cards_per_pack: u8::try_from(round_len).unwrap_or(u8::MAX),
+        },
+        min_deck_size: vd.min_deck_size,
+    }
+}
+
 fn advance_variant(vd: &mut VariantDraft) {    match vd.kind {
         Variant::Rotisserie => advance_rotisserie(vd),
         Variant::Continuous => advance_continuous(vd),
@@ -2459,6 +2483,7 @@ fn advance_rotisserie(vd: &mut VariantDraft) {
             AiDifficulty::Medium,
             &vd.pools[vd.active],
             None,
+            variant_pick_context(vd, vd.active),
             &mut vd.rng,
         );
         let card = vd.remaining.remove(idx);
@@ -2520,6 +2545,7 @@ fn advance_continuous(vd: &mut VariantDraft) {
                 AiDifficulty::Medium,
                 &vd.pools[1],
                 None,
+                variant_pick_context(vd, 1),
                 &mut vd.rng,
             );
             let card = vd.batch.remove(idx);
