@@ -76,8 +76,8 @@ export function localCardArtRouteAvailable(): Promise<boolean> {
 /**
  * Nearest source first: this machine's own cache, then a host on this network
  * that already downloaded it, then the CDN. The first two are plain same-scheme
- * http and need no CORS dance; the CDN sends no `access-control-allow-origin`,
- * which is why it goes through the native fetch.
+ * http; remote peers still need CORS. Scryfall's CDN supports anonymous CORS,
+ * so the last source loads directly, never through an image proxy.
  */
 async function fetchImageBytes(url: string): Promise<Blob> {
   const key = cacheKeyForImage(url);
@@ -87,7 +87,12 @@ async function fetchImageBytes(url: string): Promise<Blob> {
       if (!candidate) continue;
       try {
         const res = await fetch(candidate);
-        if (res.ok) return await res.blob();
+        // A missing cache route can be answered by an SPA's index.html with
+        // HTTP 200. Do not cache/relabel that document as a JPEG: decoding it
+        // fails later, after the CDN fallback has already been skipped.
+        if (res.ok && res.headers.get("content-type")?.toLowerCase().startsWith("image/")) {
+          return await res.blob();
+        }
       } catch {
         // Offline, or no such host: the next source gets a turn.
       }

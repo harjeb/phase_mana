@@ -528,6 +528,35 @@ mod tests {
         }
     }
     #[tokio::test]
+    async fn absent_image_library_redirects_to_direct_scryfall_art() {
+        let root = std::env::temp_dir().join(format!("gateway-no-art-{}", rand::random::<u64>()));
+        // Neither a configured folder nor an image pack exists.
+        let g = Arc::new(Gateway {
+            web: root.clone(),
+            config: root.join("card-images.config.json"),
+            images: Mutex::new(root.join("card-images")),
+            pinned: false,
+            port: 1420,
+            backend: 3001,
+            client: reqwest::Client::builder().no_proxy().build().unwrap(),
+        });
+        let cdn = "https://cards.scryfall.io/normal/front/a/b/card.jpg?123";
+        let query = reqwest::Url::parse_with_params("http://localhost/", &[("fallback", cdn)]).unwrap();
+        for method in [Method::GET, Method::HEAD] {
+            let req = Request::builder()
+                .method(method)
+                .uri(format!("/card-images/c/card.full.webp?{}", query.query().unwrap()))
+                .header("host", "127.0.0.1:1420")
+                .header("origin", "http://127.0.0.1:1420")
+                .body(Body::empty())
+                .unwrap();
+            let response = handle(State(g.clone()), req).await;
+            assert_eq!(response.status(), StatusCode::FOUND);
+            assert_eq!(response.headers()["location"], cdn);
+            assert!(to_bytes(response.into_body(), 1024).await.unwrap().is_empty());
+        }
+    }
+    #[tokio::test]
     async fn traversal_and_missing_assets() {
         let root = std::env::temp_dir().join(format!("gateway-{}", rand::random::<u64>()));
         tokio::fs::create_dir_all(&root).await.unwrap();

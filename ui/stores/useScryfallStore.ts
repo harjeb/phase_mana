@@ -31,6 +31,7 @@ import { Texture, ImageSource } from "pixi.js";
 import { useEffect, useState } from "react";
 import { frontFaceName } from "@/lib/scryfall.utils";
 import { cardFaceImageUris } from "@/lib/cardImage";
+import { isTwoFaceLayout } from "@/lib/cardLayout";
 import { DEFAULT_SCRYFALL_LANGUAGE, type ScryfallLanguage } from "@/i18n/locales";
 import { localizeWithMtgch } from "@/api/mtgch";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
@@ -624,23 +625,35 @@ export const useScryfallStore = create<ScryfallState>()(
       getCardTexture: async (deckCard, variant = "full", faceIndex = 0) => {
         const pick = (u: ScryfallImageUris | undefined) =>
           variant === "art" ? u?.art_crop : u?.border_crop;
-        const useStoredUris = get().locale === DEFAULT_SCRYFALL_LANGUAGE;
-        // A transformed card carries its back face's name, so a deck record
-        // resolved locally already holds the face this index asks for when it
-        // has no separate `backFace` (see `missingDeckCard`).
-        let url = useStoredUris
-          ? faceIndex === 0
-            ? pick(deckCard.uris)
-            : pick(deckCard.backFace?.uris ?? deckCard.uris)
+        const storedFace = faceIndex === 0 ? undefined : deckCard.backFace;
+        const needsBack = faceIndex === 1 &&
+          (!!storedFace || deckCard.isDoubleFaced || isTwoFaceLayout(deckCard.layout));
+        // Records synthesized for an already transformed name have no separate
+        // back face or layout; their sole image already depicts the requested face.
+        const storedUris = withLocalCardArt(
+          needsBack ? storedFace?.uris : deckCard.uris,
+          storedFace?.name ?? deckCard.identity.name,
+        );
+        const lookup = {
+          name: deckCard.identity.name,
+          setCode: deckCard.identity.setCode || undefined,
+          collectorNumber: deckCard.identity.cardNumber || undefined,
+        };
+        const pickEntry = (entry: CardEntry) => pick(cardFaceImageUris(
+          entry.info,
+          faceIndex === 1 && (needsBack || isTwoFaceLayout(entry.info.layout))
+            ? undefined
+            : entry.uris,
+          faceIndex,
+        ));
+        // Prefer localization only when it is already available. Known image
+        // URLs must never wait for metadata (Chinese localization is text-only).
+        const cachedEntry = get().cards[cardKey(lookup)]?.card;
+        let url = get().locale !== DEFAULT_SCRYFALL_LANGUAGE && cachedEntry
+          ? pickEntry(cachedEntry)
           : undefined;
-        if (!url) {
-          const entry = await get().getCard({
-            name: deckCard.identity.name,
-            setCode: deckCard.identity.setCode || undefined,
-            collectorNumber: deckCard.identity.cardNumber || undefined,
-          });
-          url = pick(cardFaceImageUris(entry.info, entry.uris, faceIndex));
-        }
+        url ||= pick(storedUris);
+        if (!url) url = pickEntry(await get().getCard(lookup));
         if (!url) return Texture.EMPTY;
 
         const cached = getCachedTexture(url);

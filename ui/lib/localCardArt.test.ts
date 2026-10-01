@@ -79,6 +79,15 @@ describe("withLocalCardArt", () => {
     expect(uris?.normal).toBe("/card-images/g/grizzly_bears.full.webp?name=Grizzly%20Bears");
   });
 
+  it("repairs saved local-only URLs so an absent image folder can fall back online", () => {
+    const local = "/card-images/g/grizzly_bears.full.webp";
+    const uris = withLocalCardArt({ normal: local, border_crop: local, art_crop: local }, "Grizzly Bears");
+    expect(uris?.normal).toBe(`${local}?name=Grizzly%20Bears`);
+    expect(uris?.border_crop).toBe(uris?.normal);
+    expect(uris?.art_crop).toBe(uris?.normal);
+    expect(withLocalCardArt(uris, "Grizzly Bears")).toEqual(uris);
+  });
+
   it("leaves an already-local uri alone so its CDN fallback survives", () => {
     const local =
       "/card-images/g/grizzly_bears.full.webp" +

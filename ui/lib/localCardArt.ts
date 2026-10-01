@@ -78,7 +78,7 @@ export function withLocalCardArt(
 ): ScryfallImageUris | undefined {
   if (!uris) return uris;
   const next = { ...uris };
-  for (const variant of SCAN_VARIANTS) {
+  for (const variant of [...SCAN_VARIANTS, "art_crop"] as const) {
     // Already pointing at the pack: preserve the CDN fallback while adding
     // any filename aliases introduced since this URL was saved.
     if (next[variant]?.startsWith(LOCAL_CARD_ART_ROUTE)) {
@@ -88,11 +88,20 @@ export function withLocalCardArt(
       // Persisted local URLs may predate the image-pack filename aliases.
       const additions = imageStems(name).filter(Boolean).map(scanPath)
         .filter((path) => !paths.has(path));
-      const suffix = additions.map((path) => `alt=${encodeURIComponent(path)}`).join("&");
+      const params = additions.map((path) => `alt=${encodeURIComponent(path)}`);
+      // Older saved decks may contain only a local filename. Such a URL wins
+      // over fetched metadata in both the DOM hook and texture store, so give
+      // a missing/absent library the same online fallback as a new card.
+      if (!url.searchParams.get("fallback") && !url.searchParams.get("name") && name.trim()) {
+        params.unshift(`name=${encodeURIComponent(name)}`);
+      }
+      const suffix = params.join("&");
       next[variant] = suffix ? `${existing}${existing.includes("?") ? "&" : "?"}${suffix}` : existing;
       continue;
     }
-    next[variant] = scanUrl(name, next[variant]) ?? next[variant];
+    if (variant !== "art_crop") {
+      next[variant] = scanUrl(name, next[variant]) ?? next[variant];
+    }
   }
   return next;
 }
