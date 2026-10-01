@@ -416,6 +416,15 @@ struct Session {
 }
 
 mod limited;
+mod tournament;
+
+struct PreparedGame {
+    game: GameState,
+    log: GameLog,
+    seed: u64,
+    ai_config: AiConfig,
+    llm: Option<Arc<LlmSeat>>,
+}
 
 /// `docs/开包与轮抽玩法规则.md` §1 variant: the opened pack is the whole
 /// starting hand, so after the normal mulligan every non-basic card moves to
@@ -479,7 +488,7 @@ impl Host {
         Ok(id)
     }
 
-    pub fn start(&mut self, request: StartRequest) -> Result<Snapshot, HostError> {
+    fn prepare_game(&self, request: StartRequest) -> Result<PreparedGame, HostError> {
         let limited = request.custom_rules.is_none()
             && matches!(request.format.as_deref(), Some("draft" | "sealed"));
         // Pack Wars is a 30-card Limited variant (one booster + 15 basics), so it
@@ -695,6 +704,23 @@ impl Host {
         }
         log.capture(&before, &game, &result.events);
         bind_interaction_session(&mut game);
+        Ok(PreparedGame {
+            game,
+            log,
+            seed,
+            ai_config,
+            llm,
+        })
+    }
+
+    pub fn start(&mut self, request: StartRequest) -> Result<Snapshot, HostError> {
+        let PreparedGame {
+            mut game,
+            mut log,
+            seed,
+            ai_config,
+            llm,
+        } = self.prepare_game(request)?;
         let ai_session = AiSession::arc_from_game(&game);
         let mut rng = StdRng::seed_from_u64(seed);
         let ai_actions = advance_ai(
@@ -1097,6 +1123,7 @@ type SharedHost = Arc<Mutex<Host>>;
 pub fn router(host: Host) -> Router {
     Router::new()
         .route("/api/start", post(start))
+        .route("/api/tournament/simulate", post(tournament::simulate))
         .route("/api/respond", post(respond))
         .route("/api/state", get(state))
         .route("/api/limited", post(limited_command))

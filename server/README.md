@@ -35,6 +35,22 @@ The shell remains responsible for all resource downloads and supplying `PHASE_MA
 
  `PHASE_CARD_DB` selects the card database and accepts both shapes the engine reads: a raw MTGJSON `AtomicCards.json` (`CardDatabase::from_mtgjson`, Oracle text parsed at startup — 36,046 cards take ~2 min and ~1.3 GB in a release build, so never run the host in debug with it) or a pre-parsed `oracle-gen` export (`CardDatabase::from_export`), which loads in seconds. Without the variable, phase's `data/mtgjson/AtomicCards.json` is used when that cache exists, otherwise `data/mtgjson/test_fixture.json` (87 cards) — no generated export or download is required for the demo. The two formats are told apart by their first key (`{"meta"` vs `{"card name"`). Defaults are casual 60-card decks (24 Forest, 36 Grizzly Bears), not a tournament legality claim. Name arrays are validated for existence and engine support before the engine's resolver runs; deck-format legality is not enforced for ordinary games. Commander games enforce the engine's canonical deck-format validation.
 
+## Local AI tournament simulation
+
+`POST /api/tournament/simulate` runs one isolated two-seat game, without replacing or advancing the human session. This is unrelated to remote/broker tournament APIs and uses no LLM or network calls.
+
+```json
+{"format":"casual","players":[{"deck":["Plains","Plains","Plains","Plains","Plains","Plains","Plains"],"difficulty":"VeryEasy"},{"deck":["Plains","Plains","Plains","Plains","Plains","Plains","Plains"],"commanders":[],"difficulty":"Easy"}]}
+```
+
+Exactly two players are required. Each deck is an explicit array (one card name per copy); commanders are optional exclusive slots. Unknown properties are rejected. Difficulty is required per seat and accepts `VeryEasy`, `Easy`, `Medium`, `Hard`, `VeryHard`, or `CEDH` (case-insensitive, surrounding whitespace ignored). Random deck/difficulty selection is the caller's responsibility; each simulation uses a fresh random engine seed.
+
+HTTP 200 returns `{"winner":0,"draw":false,"turns":3,"actions":42}` (numbers illustrative). Winner is the submitted seat index, or `null` with `draw:true` only when the engine explicitly ends in a draw. Invalid decks/formats/difficulties return HTTP 400 `{"error":"..."}`; malformed JSON/schema uses Axum's rejection response. Stalls, AI failures, panics, or budget exhaustion return HTTP 422 `{"error":"..."}` and never count as a win or draw.
+
+The driver allows at most 10,000 actions and checks a 60-second deadline between decisions. This is a **cooperative** runtime bound: initialization and a currently executing engine/search call cannot be interrupted. It holds the shared host lock during simulation, so other local host requests wait. Limits are server-owned, not caller-configurable.
+
+Initialization shares `Host::start` validation/loading. Existing limitations apply: ordinary constructed format labels do **not** enforce sanctioned deck legality; Commander/custom bundled formats use engine format validation. Limited decks have size checks but no draft-pool ownership check. Momir supplies its own library. Unsupported engine/AI decisions may fail explicitly. This endpoint is a local game runner, not pairing, bracket, persistence, or official tournament certification.
+
 ## HTTP JSON schema
 
 - `POST /api/start`: `{ "seed": 42, "humanDeck": ["Forest", "..."], "aiDeck": ["Forest", "..."] }`. Every property optional; omit decks for presets, seed defaults to 42. One string per copy, 7–250 cards. Starting again replaces the session only on success.
