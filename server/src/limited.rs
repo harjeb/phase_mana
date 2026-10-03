@@ -1351,18 +1351,62 @@ fn reject_rare_rarities(setup: &Setup) -> Vec<Rarity> {
 
 /// Rebuild a set pool from only the requested rarity classes, drawing each
 /// 15-card booster with replacement so smaller sets still fill every pack.
+///
+/// Each card is dealt as often as the set's own boosters open it, from the
+/// pack recipe's slot and sheet weights. Counting every printing equally made
+/// a bonus sheet (EOE's Stellar Sights lands, BFZ Expeditions) as likely as
+/// the main set. A sheet made entirely of lands is the land slot (basics plus
+/// the set's common lands), which a booster opens at most once; MTGJSON rates
+/// it common, so taking it whole filled iron packs with lands. Basics are free
+/// in deckbuilding and are never dealt. A card's printings share one entry
+/// that keeps the main printing (lowest collector number). A pool without a
+/// pack recipe weighs every sheet equally.
 fn rarity_pool(base: &LimitedSetPool, rarities: &[Rarity]) -> Result<LimitedSetPool> {
-    let mut cards: Vec<SheetCard> = Vec::new();
-    let mut seen = std::collections::HashSet::new();
-    for sheet in base.sheets.values() {
-        for card in &sheet.cards {
-            if rarities.contains(&card.rarity)
-                && seen.insert((card.set_code.clone(), card.collector_number.clone()))
-            {
-                cards.push(card.clone());
+    let packs = f64::from(base.pack_variants_total_weight.max(1));
+    let mut sheet_rate: HashMap<&str, f64> = HashMap::new();
+    for variant in &base.pack_variants {
+        for slot in &variant.contents {
+            let choices: u32 = slot.choices.iter().map(|c| c.weight).sum();
+            for choice in &slot.choices {
+                *sheet_rate.entry(choice.sheet.as_str()).or_default() += f64::from(variant.weight)
+                    / packs
+                    * f64::from(slot.count)
+                    * f64::from(choice.weight)
+                    / f64::from(choices.max(1));
             }
         }
     }
+    let mut by_name: BTreeMap<String, (f64, SheetCard)> = BTreeMap::new();
+    for (name, sheet) in &base.sheets {
+        let per_pack = if base.pack_variants.is_empty() {
+            1.0
+        } else {
+            sheet_rate.get(name.as_str()).copied().unwrap_or(0.0)
+        };
+        if per_pack <= 0.0 || sheet.cards.iter().all(is_land) {
+            continue;
+        }
+        let sheet_weight = sheet.total_weight.max(1) as f64;
+        for card in &sheet.cards {
+            if !rarities.contains(&card.rarity) || is_basic_land(card) {
+                continue;
+            }
+            let share = per_pack * card.weight as f64 / sheet_weight;
+            let entry = by_name.entry(card.name.clone()).or_insert_with(|| (0.0, card.clone()));
+            entry.0 += share;
+            if collector_order(&card.collector_number) < collector_order(&entry.1.collector_number) {
+                entry.1 = card.clone();
+            }
+        }
+    }
+    // Integer weights keep the relative rates; any dealt card stays possible.
+    let cards: Vec<SheetCard> = by_name
+        .into_values()
+        .map(|(rate, mut card)| {
+            card.weight = ((rate * 1e6).round() as u64).max(1);
+            card
+        })
+        .collect();
     if cards.is_empty() {
         return Err(format!("{} has no cards of the requested rarity", base.code));
     }
@@ -1377,7 +1421,7 @@ fn rarity_pool(base: &LimitedSetPool, rarities: &[Rarity]) -> Result<LimitedSetP
             booster_eligible: true,
         })
         .collect();
-    let total_weight = cards.len() as u64;
+    let total_weight = cards.iter().map(|c| c.weight).sum();
     let mut sheets = BTreeMap::new();
     sheets.insert(
         "rarity".into(),
@@ -1410,6 +1454,24 @@ fn rarity_pool(base: &LimitedSetPool, rarities: &[Rarity]) -> Result<LimitedSetP
         prints,
         basic_lands: base.basic_lands.clone(),
     })
+}
+
+fn type_words(card: &SheetCard) -> impl Iterator<Item = &str> {
+    card.type_line.split(|c: char| !c.is_alphanumeric())
+}
+
+fn is_land(card: &SheetCard) -> bool {
+    type_words(card).any(|word| word == "Land")
+}
+
+fn is_basic_land(card: &SheetCard) -> bool {
+    is_land(card) && type_words(card).any(|word| word == "Basic")
+}
+
+/// Main-set printings come first; "123a" sorts with 123, unnumbered last.
+fn collector_order(number: &str) -> (u32, &str) {
+    let digits = number.find(|c: char| !c.is_ascii_digit()).unwrap_or(number.len());
+    (number[..digits].parse().unwrap_or(u32::MAX), number)
 }
 
 /// Mini-Master: the whole pack plus three of each basic land, no deckbuilding.
@@ -3016,6 +3078,118 @@ mod variant_tests {
         assert_eq!(sheet.cards.len(), 2);
         assert!(sheet.allow_duplicates);
         assert_eq!(pool.pack_variants[0].contents[0].count, 15);
+    }
+
+    #[test]
+    fn rarity_pool_skips_land_slot_and_basics_and_counts_each_card_once() {
+        let card = |name: &str, number: &str, type_line: &str| SheetCard {
+            name: name.into(),
+            set_code: "tst".into(),
+            collector_number: number.into(),
+            rarity: Rarity::Common,
+            weight: 1,
+            colors: vec![],
+            cmc: 0,
+            type_line: type_line.into(),
+            draft_effect: None,
+        };
+        let sheet = |cards: Vec<SheetCard>, foil: bool| SheetDefinition {
+            total_weight: cards.len() as u64,
+            cards,
+            allow_duplicates: false,
+            fixed: false,
+            foil,
+            balance_colors: false,
+        };
+        let mut sheets = BTreeMap::new();
+        sheets.insert("common".into(), sheet(vec![
+            card("Bear", "10", "Creature — Bear"),
+            card("Evolving Wilds", "20", "Land"),
+        ], false));
+        // The land slot: basics plus a common land only that slot deals.
+        sheets.insert("land".into(), sheet(vec![
+            card("Plains", "30", "Basic Land — Plains"),
+            card("Slot Land", "31", "Land"),
+        ], false));
+        // A foil sheet repeats basics and holds an alternate-art printing.
+        sheets.insert("foil".into(), sheet(vec![
+            card("Island", "32", "Basic Land — Island"),
+            card("Bear", "300", "Creature — Bear"),
+        ], true));
+        let base = LimitedSetPool {
+            code: "tst".into(),
+            name: "Test".into(),
+            release_date: None,
+            pack_variants: vec![],
+            pack_variants_total_weight: 0,
+            sheets,
+            prints: vec![],
+            basic_lands: vec![],
+        };
+        let pool = rarity_pool(&base, &[Rarity::Common]).unwrap();
+        let dealt: Vec<_> = pool.sheets["rarity"]
+            .cards
+            .iter()
+            .map(|c| (c.name.as_str(), c.collector_number.as_str()))
+            .collect();
+        assert_eq!(dealt, vec![("Bear", "10"), ("Evolving Wilds", "20")]);
+    }
+
+    #[test]
+    fn rarity_pool_deals_cards_as_often_as_the_set_boosters_open_them() {
+        let card = |name: &str| SheetCard {
+            name: name.into(),
+            set_code: "tst".into(),
+            collector_number: name.into(),
+            rarity: Rarity::Rare,
+            weight: 1,
+            colors: vec![],
+            cmc: 1,
+            type_line: "Creature".into(),
+            draft_effect: None,
+        };
+        let sheet = |cards: Vec<SheetCard>| SheetDefinition {
+            total_weight: cards.len() as u64,
+            cards,
+            allow_duplicates: false,
+            fixed: false,
+            foil: false,
+            balance_colors: false,
+        };
+        let mut sheets = BTreeMap::new();
+        sheets.insert("rare".into(), sheet(vec![card("Main1"), card("Main2")]));
+        sheets.insert("bonus".into(), sheet(vec![card("Bonus")]));
+        sheets.insert("unused".into(), sheet(vec![card("Never")]));
+        let choice = |sheet: &str, weight| WeightedSheetChoice { sheet: sheet.into(), weight };
+        let base = LimitedSetPool {
+            code: "tst".into(),
+            name: "Test".into(),
+            release_date: None,
+            // One rare slot, plus a wildcard that is the bonus sheet 1 time in 10.
+            pack_variants: vec![PackVariant {
+                contents: vec![
+                    PackSlot { slot: "rare".into(), count: 1, choices: vec![choice("rare", 1)] },
+                    PackSlot {
+                        slot: "wildcard".into(),
+                        count: 1,
+                        choices: vec![choice("rare", 9), choice("bonus", 1)],
+                    },
+                ],
+                weight: 1,
+            }],
+            pack_variants_total_weight: 1,
+            sheets,
+            prints: vec![],
+            basic_lands: vec![],
+        };
+        let pool = rarity_pool(&base, &[Rarity::Rare]).unwrap();
+        let sheet = &pool.sheets["rarity"];
+        let weight = |name: &str| sheet.cards.iter().find(|c| c.name == name).map(|c| c.weight);
+        // Main cards: (1 + 0.9) / 2 per pack each; the bonus card: 0.1.
+        assert_eq!(weight("Main1"), Some(950_000));
+        assert_eq!(weight("Bonus"), Some(100_000));
+        assert_eq!(weight("Never"), None);
+        assert_eq!(sheet.total_weight, sheet.cards.iter().map(|c| c.weight).sum::<u64>());
     }
 
     #[test]
