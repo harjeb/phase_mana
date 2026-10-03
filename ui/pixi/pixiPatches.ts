@@ -51,6 +51,13 @@ export function installPixiPatches(): void {
   // Upstream bug: https://github.com/pixijs/pixijs/blob/main/src/rendering/renderers/shared/texture/TexturePool.ts#L112
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pool: any = TexturePool;
+  // Pixi 8.21 rewrote the pool (`_buckets` / `_poolKey`), and its own
+  // returnTexture already ignores a texture it did not hand out and destroys
+  // one whose bucket is gone. This guard reads the old fields: on the new pool
+  // it found no key for any texture and dropped every return, so each filter
+  // pass allocated a render target that was never freed until the GPU ran out
+  // of memory (GL_OUT_OF_MEMORY, blank board). Patch only the old pool.
+  if (!("_poolKeyHash" in pool)) return;
   const original = pool.returnTexture?.bind(pool);
   if (typeof original !== "function") return;
 
