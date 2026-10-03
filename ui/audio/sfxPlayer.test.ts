@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { SFX_FILES, SFX_IDS, sfxUrl } from "./sfxCatalog";
+import { SFX_IDS } from "./sfxCatalog";
 import { SfxPlayer } from "./sfxPlayer";
+
+vi.mock("virtual:sfx-data", async () => {
+  const { SFX_FILES } = await import("./sfxCatalog");
+  return { default: Object.fromEntries(Object.values(SFX_FILES).map((name) => [name, "AAAA"])) };
+});
 
 class FakeGain {
   gain = { value: 1 };
@@ -41,7 +46,7 @@ class FakeAudioContext {
 async function readyPlayer(): Promise<{ player: SfxPlayer; ctx: FakeAudioContext }> {
   const player = new SfxPlayer();
   player.init();
-  // Let the fire-and-forget fetch + decode of every effect settle.
+  // Let the fire-and-forget decode of every effect settle.
   await vi.waitFor(() => {
     expect(FakeAudioContext.instances[0].decodeAudioData).toHaveBeenCalledTimes(SFX_IDS.length);
   });
@@ -49,27 +54,29 @@ async function readyPlayer(): Promise<{ player: SfxPlayer; ctx: FakeAudioContext
   return { player, ctx: FakeAudioContext.instances[0] };
 }
 
-describe("sfx catalog", () => {
-  it("serves every effect from /audio/sfx", () => {
-    expect(SFX_IDS).toHaveLength(Object.keys(SFX_FILES).length);
-    expect(sfxUrl("cardDraw")).toBe("/audio/sfx/sfx_card_draw_002.m4a");
-  });
-});
-
 describe("SfxPlayer", () => {
   beforeEach(() => {
     FakeAudioContext.instances = [];
     vi.stubGlobal("AudioContext", FakeAudioContext);
+    // Download managers intercept audio requests, so the effects must not make any.
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(8) })),
+      vi.fn(async () => {
+        throw new Error("sound effects must not be fetched");
+      }),
     );
     vi.spyOn(performance, "now").mockReturnValue(1000);
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
+  });
+
+  it("decodes every effect from the bundle without a network request", async () => {
+    await readyPlayer();
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it("plays a decoded effect through the master gain", async () => {
@@ -119,16 +126,14 @@ describe("SfxPlayer", () => {
     }).not.toThrow();
   });
 
-  it("survives an effect that fails to load", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => ({ ok: false, status: 404, arrayBuffer: async () => new ArrayBuffer(0) })),
-    );
+  it("survives an effect that fails to decode", async () => {
     vi.spyOn(console, "debug").mockImplementation(() => undefined);
     const player = new SfxPlayer();
     player.init();
-    await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(SFX_IDS.length));
+    const ctx = FakeAudioContext.instances[0];
+    ctx.decodeAudioData.mockRejectedValue(new DOMException("bad data", "EncodingError"));
+    await vi.waitFor(() => expect(ctx.decodeAudioData).toHaveBeenCalledTimes(SFX_IDS.length));
     expect(() => player.play("cardDraw")).not.toThrow();
-    expect(FakeAudioContext.instances[0].sources).toHaveLength(0);
+    expect(ctx.sources).toHaveLength(0);
   });
 });

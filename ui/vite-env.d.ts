@@ -53,3 +53,9 @@ declare module "~icons/*" {
   const svg: string;
   export default svg;
 }
+
+// `tools/sfx-data-plugin.ts`: the sound effects as base64, keyed by file name.
+declare module "virtual:sfx-data" {
+  const files: Record<string, string>;
+  export default files;
+}

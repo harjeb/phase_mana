@@ -5,6 +5,7 @@ import { lingui } from "@lingui/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 import { cardImagesPlugin, localScryfallPlugin, createProxy } from "./tools/local-runtime";
+import { sfxDataPlugin } from "./tools/sfx-data-plugin";
 
 const proxy = createProxy();
 export default defineConfig({
@@ -12,6 +13,7 @@ export default defineConfig({
     react({ babel: { plugins: ["@lingui/babel-plugin-lingui-macro"] } }),
     lingui(), tailwindcss(), Icons({ compiler: "raw" }),
     cardImagesPlugin(), localScryfallPlugin(),
+    sfxDataPlugin(fileURLToPath(new URL("./ui/audio/sfx", import.meta.url))),
   ],
   build: { rollupOptions: { input: { main: fileURLToPath(new URL("./index.html", import.meta.url)) } } },
   resolve: { alias: { "@": fileURLToPath(new URL("./ui", import.meta.url)) } },

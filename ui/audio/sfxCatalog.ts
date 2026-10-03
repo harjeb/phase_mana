@@ -1,4 +1,4 @@
-/** Short one-shot effects, served from `public/audio/sfx/`. */
+/** Short one-shot effects, bundled from `ui/audio/sfx/` by `virtual:sfx-data`. */
 export const SFX_FILES = {
   gameStart: "sfx_game_start_001.m4a",
   cardDraw: "sfx_card_draw_002.m4a",
@@ -26,8 +26,24 @@ export interface SfxCue {
   volume?: number;
 }
 
-export const SFX_BASE_URL = "/audio/sfx";
+let bank: Promise<Record<string, string>> | null = null;
 
-export function sfxUrl(id: SfxId): string {
-  return `${SFX_BASE_URL}/${SFX_FILES[id]}`;
+/**
+ * The encoded bytes of one effect. All effects arrive together in one lazily
+ * imported script rather than as `.m4a` requests, which download managers
+ * (IDM) intercept with a failed-download dialog while cancelling the request.
+ */
+export async function loadSfxBytes(id: SfxId): Promise<ArrayBuffer> {
+  bank ??= import("virtual:sfx-data").then((module) => module.default);
+  // A failed chunk load must be retryable, not cached forever.
+  const files = await bank.catch((error: unknown) => {
+    bank = null;
+    throw error;
+  });
+  const base64 = files[SFX_FILES[id]];
+  if (base64 === undefined) throw new Error(`missing sound effect ${SFX_FILES[id]}`);
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes.buffer;
 }

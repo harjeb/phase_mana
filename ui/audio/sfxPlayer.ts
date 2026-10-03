@@ -1,4 +1,4 @@
-import { SFX_IDS, sfxUrl, type SfxCue, type SfxId } from "./sfxCatalog";
+import { SFX_IDS, loadSfxBytes, type SfxCue, type SfxId } from "./sfxCatalog";
 
 export interface SfxSettings {
   enabled: boolean;
@@ -109,12 +109,10 @@ export class SfxPlayer {
     if (inFlight) return inFlight;
     const task = (async () => {
       try {
-        const response = await fetch(sfxUrl(id));
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const decoded = await ctx.decodeAudioData(await response.arrayBuffer());
+        const decoded = await ctx.decodeAudioData(await loadSfxBytes(id));
         this.buffers.set(id, decoded);
       } catch (error) {
-        // One unreachable or undecodable file must not take the rest down.
+        // One undecodable file must not take the rest down.
         console.debug(`[sfx] could not load ${id}`, error);
       } finally {
         this.loading.delete(id);
