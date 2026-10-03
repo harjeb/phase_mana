@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 export type LimitedWorkspaceTab = "pack" | "picks" | "preview";
@@ -9,7 +10,7 @@ interface LimitedWorkspaceTabsProps {
 export function LimitedWorkspaceTabs({
   value,
   onChange,
-  packLabel = "Pack",
+  packLabel = t`Pack`,
 }: LimitedWorkspaceTabsProps) {
   const tabs: Array<{
     value: LimitedWorkspaceTab;
@@ -18,11 +19,11 @@ export function LimitedWorkspaceTabs({
     { value: "pack", label: packLabel },
     {
       value: "picks",
-      label: `Picks`,
+      label: t`Picks`,
     },
     {
       value: "preview",
-      label: `Preview`,
+      label: t`Preview`,
     },
   ];
   return (

@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,30 +24,32 @@ export function DraftStatusBar({
   canBuild = false,
   seatLabel,
   isHost = false,
-  waitingLabel = "AI thinking…",
+  waitingLabel,
   viewerSeat = 0,
 }: DraftStatusBarProps) {
   const PassIcon = draft.passDirection === "right" ? ArrowRight : ArrowLeft;
+  const waiting = waitingLabel ?? t`AI thinking…`;
   const packsWaiting =
     draft.seatSummaries.find((seat) => seat.seat === viewerSeat)?.packsWaiting ?? 0;
   return (
     <header className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-2 rounded-md border border-border/70 bg-background/95 px-3 py-2 shadow-sm backdrop-blur">
       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         <span className="font-medium text-foreground">
-          Round {draft.round}/{draft.totalRounds} · Pick {draft.pickNumber}
+          <Trans>Round {draft.round}/{draft.totalRounds} · Pick {draft.pickNumber}</Trans>
         </span>
         <span className="inline-flex items-center gap-1 rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
-          <PassIcon className="h-3 w-3" /> Pass {draft.passDirection ?? "left"}
+          <PassIcon className="h-3 w-3" />{" "}
+          {draft.passDirection === "right" ? <Trans>Pass right</Trans> : <Trans>Pass left</Trans>}
         </span>
         <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
-          {draft.currentPack.length} in pack
+          <Trans>{draft.currentPack.length} in pack</Trans>
         </span>
         {draft.draftEffectActive && (
           <span className="text-xs text-primary"><Trans>Cogwork Librarian · choose one more card</Trans></span>
         )}
         {packsWaiting > 0 && (
           <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
-            {packsWaiting} waiting
+            <Trans>{packsWaiting} waiting</Trans>
           </span>
         )}
         {seatLabel && (
@@ -54,23 +57,23 @@ export function DraftStatusBar({
         )}
         {isHost && (
           <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-            Host
+            <Trans>Host</Trans>
           </span>
         )}
         {draft.isComplete ? (
           <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-            Draft complete
+            <Trans>Draft complete</Trans>
           </span>
         ) : draft.awaitingHuman ? (
           <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
             {draft.picksPerPass > 1 && draft.picksRemainingInPack > 0
-              ? `Your pick · ${draft.picksRemainingInPack} remaining`
-              : `Your pick`}
+              ? t`Your pick · ${draft.picksRemainingInPack} remaining`
+              : t`Your pick`}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1.5 rounded bg-muted/60 px-1.5 py-0.5 text-[11px] font-medium">
             <Loader2 className="h-3 w-3 animate-spin" />
-            {waitingLabel}
+            {waiting}
           </span>
         )}
       </div>
@@ -79,7 +82,7 @@ export function DraftStatusBar({
         <DraftPodButton seats={draft.seatSummaries} />
         {canBuild && onUndo && (
           <Button size="sm" variant="ghost" onClick={onUndo} className="h-8 px-2 text-xs">
-            Undo pick
+            <Trans>Undo pick</Trans>
           </Button>
         )}
         {canBuild && mode && onModeChange && (

@@ -91,7 +91,7 @@ export function SolomonWorkspace({
                         inA ? "bg-selection text-selection-foreground" : "bg-muted text-muted-foreground",
                       )}
                     >
-                      {inA ? "Pile 1" : "Pile 2"}
+                      {inA ? t`Pile 1` : t`Pile 2`}
                     </span>
                   }
                 />

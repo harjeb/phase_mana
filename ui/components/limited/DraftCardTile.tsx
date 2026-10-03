@@ -1,3 +1,4 @@
+import { Trans } from "@lingui/react/macro";
 import { memo } from "react";
 import { CardThumbnail } from "@/components/editor/deckEditor.primitives";
 import { FoilBadge } from "@/components/limited/FoilBadge";
@@ -81,7 +82,7 @@ function DraftCardTileImpl({
       <CardThumbnail card={deckCard} />
       {deckCard.isDoubleFaced && (
         <span className="pointer-events-none absolute left-1 top-1 inline-flex items-center rounded-full border border-white/20 bg-black/70 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white/90">
-          DFC
+          <Trans>DFC</Trans>
         </span>
       )}
       {card.foil && <FoilBadge />}

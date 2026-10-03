@@ -4,7 +4,7 @@ import type { ScryfallCard, ScryfallImageUris } from "@/types/scryfall";
 
 vi.mock("@/stores/useScryfallStore", () => ({}));
 
-import { refToDeckCard } from "./limited.utils";
+import { matchInitialZones, refToDeckCard } from "./limited.utils";
 
 function images(face: string): ScryfallImageUris {
   return Object.fromEntries(
@@ -127,4 +127,21 @@ describe("refToDeckCard local art", () => {
       ).toBeUndefined();
     },
   );
+});
+
+describe("matchInitialZones", () => {
+  const card = (name: string, cardNumber: string): DraftCard => ({ id: `${name}-${cardNumber}`, name, setCode: "fdn", cardNumber });
+
+  it("gives each copy to exactly one zone when main and sideboard share a card", () => {
+    const pool = [card("Turtle", "1"), card("Bear", "2"), card("Turtle", "1")];
+    const zones = matchInitialZones(pool, [card("Turtle", "1")], [card("Turtle", "1"), card("Bear", "2")]);
+    expect(zones.main).toEqual([0]);
+    expect(zones.sideboard).toEqual([2, 1]);
+  });
+
+  it("falls back to the same name when the printing differs", () => {
+    const pool = [card("Forest", "270"), card("Forest", "271")];
+    const zones = matchInitialZones(pool, [card("Forest", "999")], [card("Forest", "999")]);
+    expect(zones).toEqual({ main: [0], sideboard: [1] });
+  });
 });

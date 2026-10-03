@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -192,19 +193,19 @@ export default function Draft() {
               }}
             >
               {isStarting
-                ? "Setting up…"
+                ? t`Setting up…`
                 : builtDeck.main.length < targetMain
-                  ? `Need ${targetMain - builtDeck.main.length} more cards`
+                  ? t`Need ${targetMain - builtDeck.main.length} more cards`
                   : isCommanderDraft
-                    ? "Play 4-player Commander"
-                    : "Play against this draft pod"}
+                    ? t`Play 4-player Commander`
+                    : t`Play against this draft pod`}
             </Button>
           )}
           <LimitedDeckBuilder
             pool={activeDraft.pickedPile}
             initialSideboard={activeDraft.pickedPile}
             onChange={setBuiltDeck}
-            defaultDeckName={isCommanderDraft ? "Commander Draft Deck" : "Booster Draft Deck"}
+            defaultDeckName={isCommanderDraft ? t`Commander Draft Deck` : t`Booster Draft Deck`}
             format="draft"
             targetMainSize={targetMain}
           />

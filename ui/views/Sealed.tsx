@@ -1,9 +1,11 @@
+import { plural, t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import LimitedDeckBuilder from "@/components/limited/LimitedDeckBuilder";
 import { useLimitedStore } from "@/stores/useLimitedStore";
+import { sealedPoolName } from "@/lib/limitedLabels";
 import type { DraftCard } from "@/types/limited";
 export default function Sealed() {
   const { id } = useParams<{
@@ -62,14 +64,16 @@ export default function Sealed() {
     <div className="flex h-full flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
       <header className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <p className="font-semibold text-foreground">{activeSealed.deckName}</p>
+          <p className="font-semibold text-foreground">{sealedPoolName(activeSealed.deckName)}</p>
           <p className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>
-              {activeSealed.cards.length} cards opened · {activeSealed.aiDecks.length} AI decks
-              ready
+              <Trans>
+                {activeSealed.cards.length} cards opened · {activeSealed.aiDecks.length} AI decks
+                ready
+              </Trans>
             </span>
             <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-              Pool ready
+              <Trans>Pool ready</Trans>
             </span>
           </p>
         </div>
@@ -79,9 +83,10 @@ export default function Sealed() {
             disabled={isStarting || !id || activeSealed.aiDecks.length === 0 || mainShortBy > 0}
             title={
               mainShortBy > 0
-                ? mainShortBy === 1
-                  ? `Main deck needs one more card to start`
-                  : `Main deck needs ${mainShortBy} more cards to start`
+                ? plural(mainShortBy, {
+                    one: "Main deck needs one more card to start",
+                    other: "Main deck needs # more cards to start",
+                  })
                 : undefined
             }
             onClick={async () => {
@@ -101,10 +106,10 @@ export default function Sealed() {
             }}
           >
             {isStarting
-              ? `Setting up\u2026`
+              ? t`Setting up…`
               : mainShortBy > 0
-                ? `Need ${mainShortBy} more card${mainShortBy === 1 ? "" : "s"}`
-                : `Start Gauntlet`}
+                ? plural(mainShortBy, { one: "Need # more card", other: "Need # more cards" })
+                : t`Start Gauntlet`}
           </Button>
         </div>
       </header>
@@ -124,7 +129,7 @@ export default function Sealed() {
             pool={activeSealed.cards}
             initialMain={initialMain}
             initialSideboard={initialSideboard}
-            defaultDeckName={activeSealed.deckName}
+            defaultDeckName={sealedPoolName(activeSealed.deckName)}
             format="sealed"
             onChange={setBuiltDeck}
           />

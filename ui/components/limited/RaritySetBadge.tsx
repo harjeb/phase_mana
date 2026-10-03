@@ -1,5 +1,5 @@
 import { useCard, useSetLookup } from "@/stores/useScryfallStore";
-import { effectiveRarity, RARITY_LABEL, rarityToken } from "@/lib/cardRarity";
+import { effectiveRarity, rarityLabel, rarityToken } from "@/lib/cardRarity";
 import { RaritySetSymbol } from "@/components/limited/RaritySetSymbol";
 import type { DraftCard } from "@/types/limited";
 
@@ -18,7 +18,7 @@ export function RaritySetBadge({ card }: RaritySetBadgeProps) {
   if (!rarityToken(rarity)) return null;
 
   const set = card.setCode ? setLookup.get(card.setCode.toLowerCase()) : undefined;
-  const label = RARITY_LABEL[rarity];
+  const label = rarityLabel(rarity);
 
   return (
     <span

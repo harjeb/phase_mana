@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,12 +18,12 @@ export function DraftPodButton({ seats }: DraftPodButtonProps) {
       <DropdownMenuTrigger asChild>
         <Button size="sm" variant="ghost" className="h-8 gap-1.5 px-2 text-xs">
           <Users className="h-3.5 w-3.5" />
-          Pod ({seats.length})
+          <Trans>Pod ({seats.length})</Trans>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuLabel className="text-xs uppercase tracking-wide text-muted-foreground">
-          Pod
+          <Trans>Pod</Trans>
         </DropdownMenuLabel>
         <ul className="space-y-1 px-2 pb-2 text-sm">
           {seats.map((s) => (
@@ -34,11 +36,11 @@ export function DraftPodButton({ seats }: DraftPodButtonProps) {
               </span>
               <span className="shrink-0 text-right text-[11px] text-muted-foreground">
                 <span className="block">
-                  {s.currentPackSize ?? 0} cards
-                  {(s.packsWaiting ?? 0) > 0 ? ` · ${s.packsWaiting ?? 0} waiting` : ""}
+                  <Trans>{s.currentPackSize ?? 0} cards</Trans>
+                  {(s.packsWaiting ?? 0) > 0 ? t` · ${s.packsWaiting ?? 0} waiting` : ""}
                 </span>
                 <span className="block">
-                  {s.awaitingPick ? `Picking` : `${s.picksMade} picked`}
+                  {s.awaitingPick ? t`Picking` : t`${s.picksMade} picked`}
                 </span>
               </span>
             </li>

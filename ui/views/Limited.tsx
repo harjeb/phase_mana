@@ -11,6 +11,14 @@ import { PickAPackDialog } from "@/components/limited/PickAPackDialog";
 import { useLimitedStore } from "@/stores/useLimitedStore";
 import { fetchEditionInfo, fetchLocalSets, fetchSetPool, type EditionInfo } from "@/api/limitedEdition";
 import { cn } from "@/lib/utils";
+import { setTypeLabel } from "@/components/limited/setFilters";
+import {
+  boosterSlotLabel,
+  chaosThemeLabel,
+  foilTypeLabel,
+  sealedTemplateDescription,
+  sealedTemplateLabel,
+} from "@/lib/limitedLabels";
 import type { DraftCard, PickAPackView } from "@/types/limited";
 import type { ScryfallSet } from "@/types/scryfall";
 export default function Limited() {
@@ -662,13 +670,13 @@ export default function Limited() {
         count={sealedTemplates.length}
       >
         <ul className="grid gap-1.5 text-sm md:grid-cols-2">
-          {sealedTemplates.map((t) => (
+          {sealedTemplates.map((template) => (
             <li
-              key={t.id}
+              key={template.id}
               className="rounded border border-border/40 bg-card/30 px-3 py-2 transition hover:border-border"
             >
-              <div className="font-medium">{t.label}</div>
-              <div className="text-xs text-muted-foreground">{t.description}</div>
+              <div className="font-medium">{sealedTemplateLabel(template)}</div>
+              <div className="text-xs text-muted-foreground">{sealedTemplateDescription(template)}</div>
             </li>
           ))}
         </ul>
@@ -722,7 +730,7 @@ export default function Limited() {
                   }
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-medium">{theme.label}</div>
+                    <div className="text-sm font-medium">{chaosThemeLabel(theme)}</div>
                     <div className="text-[10px] text-muted-foreground">
                       <Trans>{matched.length} sets · pod {podSize}</Trans>
                     </div>
@@ -778,7 +786,7 @@ function SelectedSetSummary({
               {info?.alias && (
                 <span className="ml-1 font-mono text-muted-foreground/70">/{info.alias}</span>
               )}{" "}
-              · {set.set_type} · {set.released_at ?? "—"} · <Trans>{set.card_count} cards</Trans>
+              · {setTypeLabel(set.set_type)} · {set.released_at ?? "—"} · <Trans>{set.card_count} cards</Trans>
               {info?.boosterCovers && info.boosterCovers > 1 && (
                 <span className="ml-1"><Trans>· {info.boosterCovers} cover arts</Trans></span>
               )}
@@ -809,9 +817,9 @@ function SelectedSetSummary({
                 <span
                   key={`${slot.label}-${i}`}
                   className="max-w-full break-words rounded bg-muted/70 px-1.5 py-0.5 font-mono text-[11px] text-foreground/90"
-                  title={slot.label}
+                  title={boosterSlotLabel(slot.label)}
                 >
-                  {slot.count}× {slot.label}
+                  {slot.count}× {boosterSlotLabel(slot.label)}
                 </span>
               ))}
               {totalSlots !== null && (
@@ -840,7 +848,7 @@ function SelectedSetSummary({
                 <div className="mb-1 flex items-baseline justify-between gap-2">
                   <span className="text-sm font-semibold text-foreground">{foilPct}%</span>
                   <span className="truncate text-[10px] text-muted-foreground">
-                    {info.foilType}
+                    {foilTypeLabel(info.foilType)}
                   </span>
                 </div>
                 <div className="h-1.5 rounded bg-muted/60">

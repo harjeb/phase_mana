@@ -1,9 +1,11 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SetTile } from "@/components/limited/SetTile";
-import { SET_TYPE_LABELS } from "@/components/limited/setFilters";
+import { SET_TYPE_KEYS, setTypeLabel } from "@/components/limited/setFilters";
 import { cn } from "@/lib/utils";
 import type { ScryfallSet } from "@/types/scryfall";
 interface SetPickerProps {
@@ -55,7 +57,7 @@ export function SetPicker({
           className="h-8 shrink-0 text-xs"
           onClick={() => setChanging(true)}
         >
-          Change set
+          <Trans>Change set</Trans>
         </Button>
       </section>
     );
@@ -76,7 +78,7 @@ export function SetPicker({
       >
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <h2 className="mr-auto text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Pick a set
+            <Trans>Pick a set</Trans>
           </h2>
           <div
             className={cn("relative flex items-center", variant === "column" && "min-w-0 flex-1")}
@@ -86,14 +88,14 @@ export function SetPicker({
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={`Search ${sets.length} sets…`}
+              placeholder={t`Search ${sets.length} sets…`}
               className={cn("h-8 pl-7 text-xs", variant === "column" ? "w-full" : "w-64")}
             />
           </div>
         </div>
 
         <div className="flex flex-wrap gap-1">
-          {SET_TYPE_LABELS.map(({ key, label }) => {
+          {SET_TYPE_KEYS.map((key) => {
             const count = counts[key] ?? 0;
             if (key !== "all" && count === 0) return null;
             const active = typeFilter === key;
@@ -109,7 +111,7 @@ export function SetPicker({
                     : "border-border/50 text-muted-foreground hover:border-border hover:text-foreground/90",
                 )}
               >
-                {label} <span className="text-muted-foreground/70">{count}</span>
+                {setTypeLabel(key)} <span className="text-muted-foreground/70">{count}</span>
               </button>
             );
           })}
@@ -125,7 +127,7 @@ export function SetPicker({
         {!query && typeFilter === "all" && (
           <div className="mb-3">
             <h3 className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-              Latest
+              <Trans>Latest</Trans>
             </h3>
             <div className="flex flex-wrap gap-1.5">
               {recents.map((s) => (
@@ -145,7 +147,7 @@ export function SetPicker({
         <div className="grid grid-cols-1 gap-1.5 @lg:grid-cols-2 @3xl:grid-cols-3 @5xl:grid-cols-4">
           {filtered.length === 0 ? (
             <div className="col-span-full py-6 text-center text-sm text-muted-foreground">
-              {query ? `No sets match "${query}".` : `No sets match the current filter.`}
+              {query ? t`No sets match "${query}".` : t`No sets match the current filter.`}
             </div>
           ) : (
             filtered

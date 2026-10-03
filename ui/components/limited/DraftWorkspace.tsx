@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { HoverCardPreview } from "@/components/game/HoverCardPreview";
 import { DraftCardTile } from "@/components/limited/DraftCardTile";
@@ -10,6 +12,7 @@ import {
 } from "@/components/limited/LimitedWorkspaceTabs";
 import { RaritySetBadge } from "@/components/limited/RaritySetBadge";
 import { useCardPreview } from "@/hooks/useCardPreview";
+import { conspiracyHookDescription } from "@/lib/limitedLabels";
 import { cn } from "@/lib/utils";
 import type { ConspiracyHook, DraftCard, DraftState } from "@/types/limited";
 interface DraftWorkspaceProps {
@@ -64,10 +67,10 @@ export function DraftWorkspace({
     <section className="flex min-h-0 flex-1 flex-col rounded-md border border-border/70 bg-card/20">
       <div className="flex items-center justify-between border-b border-border/40 px-3 py-2">
         <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-          Current pack ({draft.currentPack.length})
+          <Trans>Current pack ({draft.currentPack.length})</Trans>
         </h2>
         <span className="text-[11px] text-muted-foreground">
-          {draft.awaitingHuman ? `Choose a card` : `Waiting for the next pack`}
+          {draft.awaitingHuman ? t`Choose a card` : t`Waiting for the next pack`}
         </span>
       </div>
       {draft.draftEffectAvailable && (
@@ -78,7 +81,7 @@ export function DraftWorkspace({
             disabled={pickPending}
             onChange={(event) => setEffectStep(event.target.checked ? stepKey : null)}
           />
-          Use Cogwork Librarian: pick two and return it to the pack (unchecked: keep it).
+          <Trans>Use Cogwork Librarian: pick two and return it to the pack (unchecked: keep it).</Trans>
         </label>
       )}
       <div
@@ -87,7 +90,7 @@ export function DraftWorkspace({
       >
         {draft.currentPack.length === 0 ? (
           <div className="flex h-full min-h-48 items-center justify-center text-sm text-muted-foreground">
-            Waiting for a pack…
+            <Trans>Waiting for a pack…</Trans>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
@@ -117,7 +120,7 @@ export function DraftWorkspace({
       {draft.humanConspiracies && draft.humanConspiracies.length > 0 && (
         <section className="shrink-0 rounded-md border border-primary/40 bg-primary/5 p-3 text-xs">
           <h2 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
-            Conspiracies ({draft.humanConspiracies.length})
+            <Trans>Conspiracies ({draft.humanConspiracies.length})</Trans>
           </h2>
           <ul className="space-y-1">
             {draft.humanConspiracies.map((name) => {
@@ -125,7 +128,7 @@ export function DraftWorkspace({
               return (
                 <li key={name}>
                   <span className="font-medium">{name}</span>
-                  {hook && <span className="ml-1 text-muted-foreground">· {hook.description}</span>}
+                  {hook && <span className="ml-1 text-muted-foreground">· {conspiracyHookDescription(hook)}</span>}
                 </li>
               );
             })}

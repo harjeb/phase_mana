@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -57,7 +59,7 @@ export default function MultiplayerDraft() {
     navigate(ROUTES.PLAY);
   }
   useTopBarOverride({
-    title: mode === "complete" ? `Build Draft Deck` : undefined,
+    title: mode === "complete" ? t`Build Draft Deck` : undefined,
     onBack: () => leave(ROUTES.LOBBY),
     onHome: () => void leaveHome(),
     navigationDisabled: true,
@@ -87,7 +89,7 @@ export default function MultiplayerDraft() {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Waiting for the host to deal the first pack…
+        <Trans>Waiting for the host to deal the first pack…</Trans>
       </div>
     );
   }
@@ -98,11 +100,11 @@ export default function MultiplayerDraft() {
         draft={state}
         seatLabel={
           mySeatAssignment
-            ? `Seat ${mySeatAssignment.seat} · ${mySeatAssignment.displayName}`
+            ? t`Seat ${mySeatAssignment.seat} · ${mySeatAssignment.displayName}`
             : undefined
         }
         isHost={amHost}
-        waitingLabel="Waiting for the pod…"
+        waitingLabel={t`Waiting for the pod…`}
         viewerSeat={mySeat ?? undefined}
       />
 
@@ -132,19 +134,21 @@ function CompletionView({ pools, myPool, onExit }: CompletionViewProps) {
       <header className="flex items-center justify-between gap-3">
         <div className="max-w-3xl">
           <p className="text-sm text-muted-foreground">
-            Drag from your picks into Main / Sideboard. Use "Save to My Decks" when you're happy
-            with the 40 — saved decks open from the Decks view like any other.
+            <Trans>
+              Drag from your picks into Main / Sideboard. Use "Save to My Decks" when you're happy
+              with the 40 — saved decks open from the Decks view like any other.
+            </Trans>
           </p>
         </div>
         <Button variant="outline" onClick={onExit}>
-          Exit
+          <Trans>Exit</Trans>
         </Button>
       </header>
 
       {myPool.length === 0 ? (
         <section>
           <p className="mb-3 text-sm text-muted-foreground">
-            You weren't seated in this draft. Pod final pools:
+            <Trans>You weren't seated in this draft. Pod final pools:</Trans>
           </p>
           <ul className="grid grid-cols-1 gap-1.5 text-sm sm:grid-cols-2 md:grid-cols-3">
             {pools.map((p) => (
@@ -155,7 +159,7 @@ function CompletionView({ pools, myPool, onExit }: CompletionViewProps) {
                 <span className={p.isHuman ? "font-semibold" : "text-muted-foreground"}>
                   {p.seat}. {p.displayName}
                 </span>
-                <span className="text-xs text-muted-foreground">{p.pool.length} cards</span>
+                <span className="text-xs text-muted-foreground"><Trans>{p.pool.length} cards</Trans></span>
               </li>
             ))}
           </ul>
@@ -164,7 +168,7 @@ function CompletionView({ pools, myPool, onExit }: CompletionViewProps) {
         <div className="min-h-0 flex-1">
           <LimitedDeckBuilder
             pool={myPool}
-            defaultDeckName="Multiplayer Draft Deck"
+            defaultDeckName={t`Multiplayer Draft Deck`}
             format="draft"
           />
         </div>

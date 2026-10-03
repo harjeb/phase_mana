@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import type { ScryfallCard } from "@/types/scryfall";
 import type { GameThemeColors } from "@/themes/gameTheme";
 export type UIRarity =
@@ -19,16 +20,26 @@ export const RARITY_ORDER: Record<UIRarity, number> = {
   token: 6,
   unknown: 7,
 };
-export const RARITY_LABEL: Record<UIRarity, string> = {
-  mythic: `Mythic`,
-  rare: `Rare`,
-  uncommon: `Uncommon`,
-  common: `Common`,
-  special: `Special`,
-  land: `Land`,
-  token: `Token`,
-  unknown: `Other`,
-};
+export function rarityLabel(rarity: UIRarity): string {
+  switch (rarity) {
+    case "mythic":
+      return t`Mythic`;
+    case "rare":
+      return t`Rare`;
+    case "uncommon":
+      return t`Uncommon`;
+    case "common":
+      return t`Common`;
+    case "special":
+      return t`Special`;
+    case "land":
+      return t`Land`;
+    case "token":
+      return t`Token`;
+    case "unknown":
+      return t`Other`;
+  }
+}
 export type RarityToken = keyof GameThemeColors["rarity"];
 const RARITY_TOKEN: Partial<Record<UIRarity, RarityToken>> = {
   common: "common",

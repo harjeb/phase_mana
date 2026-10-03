@@ -2,6 +2,12 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { Trans } from "@lingui/react/macro";
 import { t } from "@lingui/core/macro";
 import { Button } from "@/components/ui/button";
+import {
+  onlineDraftKindLabel,
+  onlineDraftStatusLabel,
+  pairingStatusLabel,
+  pickStatusLabel,
+} from "@/lib/limitedLabels";
 import { decodeInvite, encodeInvite, inviteEndpoint, randomPassword } from "@/phase/invite";
 import { hostedRoom, hostRequest, saveHostedRoom, stopHostedRoom, type HostedRoom } from "@/phase/host";
 import { closeOnline, normalizeServer } from "@/phase/online";
@@ -199,9 +205,9 @@ export default function OnlineDraftPanel({ endpoint, name, connected }: { endpoi
     </details>}
     {state.code && <p><Trans>Draft code:</Trans> <strong>{state.code}</strong></p>}
     {view && <>
-      <p role="status">{view.kind} · {view.status} · <Trans>Round</Trans> {view.current_round}</p>
+      <p role="status">{onlineDraftKindLabel(view.kind)} · {onlineDraftStatusLabel(view.status)} · <Trans>Round</Trans> {view.current_round}</p>
       <ul className="flex flex-wrap gap-3">{view.seats.map(seat => <li key={seat.seat_index}>
-        {seat.display_name} {seat.seat_index === state.seat && <Trans>(you)</Trans>} · {seat.connected ? t`Connected` : t`Disconnected`} · {seat.has_submitted_deck ? t`Deck ready` : seat.pick_status}
+        {seat.display_name} {seat.seat_index === state.seat && <Trans>(you)</Trans>} · {seat.connected ? t`Connected` : t`Disconnected`} · {seat.has_submitted_deck ? t`Deck ready` : pickStatusLabel(seat.pick_status)}
       </li>)}</ul>
       {state.seat === 0 && view.status === "Lobby" && <Button variant="primary" disabled={busyAny || state.pending} onClick={() => run(() => sendOnlineDraftAction("StartDraft"))}><Trans>Start draft</Trans></Button>}
       {view.status === "Drafting" && <>
@@ -221,7 +227,7 @@ export default function OnlineDraftPanel({ endpoint, name, connected }: { endpoi
       {view.status === "Deckbuilding" && <p><Trans>The match starts when every player has submitted a deck.</Trans></p>}
       {state.seat === 0 && view.status === "RoundComplete" && <Button variant="primary" disabled={busyAny || state.pending} onClick={() => run(() => sendOnlineDraftAction("AdvanceRound"))}><Trans>Start next round</Trans> ({view.next_pairing_round})</Button>}
       {state.matchCode && isGameActive && <Link className="inline-block rounded border px-4 py-2" to={ROUTES.GAME}><Trans>Play match</Trans></Link>}
-      {view.pairings.length > 0 && <ul>{view.pairings.map(pair => <li key={pair.match_id}>{pair.name_a} — {pair.name_b}: {pair.score_a ?? 0}–{pair.score_b ?? 0} · {pair.status}</li>)}</ul>}
+      {view.pairings.length > 0 && <ul>{view.pairings.map(pair => <li key={pair.match_id}>{pair.name_a} — {pair.name_b}: {pair.score_a ?? 0}–{pair.score_b ?? 0} · {pairingStatusLabel(pair.status)}</li>)}</ul>}
       {view.standings.length > 0 && <table className="w-full text-left"><thead><tr><th><Trans>Player</Trans></th><th><Trans>Matches</Trans></th><th><Trans>Games</Trans></th></tr></thead><tbody>{view.standings.map(row => <tr key={row.seat_index}><td>{row.display_name}</td><td>{row.match_wins}–{row.match_losses}</td><td>{row.game_wins}–{row.game_losses}</td></tr>)}</tbody></table>}
     </>}
     {(error || state.error) && <p role="alert" className="text-destructive">{error || state.error}</p>}

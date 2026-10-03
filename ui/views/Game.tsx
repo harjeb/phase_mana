@@ -60,6 +60,7 @@ import { useCombatState } from "@/hooks/useCombatState";
 import { useGameEventListeners } from "@/hooks/useGameEventListeners";
 import { useGamePrefetch } from "@/hooks/useGamePrefetch";
 import { useGameSfx } from "@/hooks/useGameSfx";
+import { localizeKeywordAbilityLabel } from "@/lib/abilityLabel";
 import { useMultiplayerInterruption } from "@/hooks/useMultiplayerInterruption";
 import { useLiveGameNavigationGuard } from "@/hooks/useLiveGameNavigationGuard";
 import { GameBoard } from "@/components/game/GameBoard";
@@ -445,7 +446,7 @@ export default function Game({ exitTo }: GameProps = {}) {
     kind: "ability" as const,
     cardId: a.cardId,
     abilityIndex: a.abilityIndex,
-    label: a.description,
+    label: localizeKeywordAbilityLabel(a.description),
     isManaAbility: a.isManaAbility,
     isClassLevelUp: a.isClassLevelUp,
     cost: a.cost,

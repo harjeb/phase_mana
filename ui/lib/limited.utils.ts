@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { useMemo } from "react";
 
 import type { DraftCard } from "@/types/limited";
@@ -211,7 +212,7 @@ export function validateLimitedDeck(
   if (main.length < targetMainSize) {
     issues.push({
       kind: "main_too_small",
-      message: `Main deck has ${main.length} cards, needs ${targetMainSize}.`,
+      message: t`Main deck has ${main.length} cards, needs ${targetMainSize}.`,
     });
   }
   return issues;
@@ -235,4 +236,35 @@ export function makeBasicLand(name: BasicLandName, idx: number): DraftCard {
 
 export function isSynthBasic(card: DraftCard): boolean {
   return card.setCode === "" && card.cardNumber.startsWith("basic-");
+}
+
+/**
+ * Pool indices for a starting main deck and sideboard. Each pool copy goes to
+ * at most one zone: main claims first, the sideboard takes from what is left.
+ * A card matches by exact printing, else by name.
+ */
+export function matchInitialZones(
+  pool: DraftCard[],
+  main: DraftCard[],
+  sideboard: DraftCard[],
+): { main: number[]; sideboard: number[] } {
+  const used = new Set<number>();
+  const claim = (wanted: DraftCard[]) => {
+    const out: number[] = [];
+    for (const want of wanted) {
+      const free = (i: number) => !used.has(i);
+      let found = pool.findIndex(
+        (p, i) =>
+          free(i) && p.name === want.name && p.setCode === want.setCode && p.cardNumber === want.cardNumber,
+      );
+      if (found === -1) found = pool.findIndex((p, i) => free(i) && p.name === want.name);
+      if (found !== -1) {
+        used.add(found);
+        out.push(found);
+      }
+    }
+    return out;
+  };
+  const mainIndices = claim(main);
+  return { main: mainIndices, sideboard: claim(sideboard) };
 }

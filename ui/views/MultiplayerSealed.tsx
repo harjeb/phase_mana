@@ -1,3 +1,5 @@
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -51,11 +53,12 @@ export default function MultiplayerSealed() {
     return cleanup;
   }, []);
   if (mode === "idle") return null;
+  const upperSetCode = setCode.toUpperCase();
   if (mode === "building" && pool.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Generating your sealed pool…
+        <Trans>Generating your sealed pool…</Trans>
         {lastError && <p className="mt-2 text-destructive">{lastError}</p>}
       </div>
     );
@@ -64,21 +67,23 @@ export default function MultiplayerSealed() {
     <div className="flex h-full flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="max-w-3xl">
-          <p className="font-semibold text-foreground">{setCode.toUpperCase()} sealed pool</p>
+          <p className="font-semibold text-foreground"><Trans>{upperSetCode} sealed pool</Trans></p>
           <p className="text-sm text-muted-foreground">
-            Build a 40-card deck from your pool. Use "Save to My Decks" when you're happy — your
-            saved deck is then selectable in any Match room.
+            <Trans>
+              Build a 40-card deck from your pool. Use "Save to My Decks" when you're happy — your
+              saved deck is then selectable in any Match room.
+            </Trans>
           </p>
         </div>
         <Button variant="outline" onClick={() => exitTo(ROUTES.LOBBY)}>
-          Exit
+          <Trans>Exit</Trans>
         </Button>
       </header>
 
       <div className="min-h-0 flex-1">
         <LimitedDeckBuilder
           pool={pool}
-          defaultDeckName={`Sealed ${setCode.toUpperCase()}`}
+          defaultDeckName={t`Sealed ${upperSetCode}`}
           format="sealed"
           onSaved={() => exitTo(ROUTES.LOBBY)}
         />

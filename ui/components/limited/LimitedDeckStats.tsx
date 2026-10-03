@@ -1,4 +1,5 @@
-import { useMemo } from "react";
+import { t } from "@lingui/core/macro";
+import { useMemo, type ReactNode } from "react";
 import { ManaSymbols } from "@/components/game/ManaSymbols";
 import { peekCard, useScryfallStore } from "@/stores/useScryfallStore";
 import { countManaPips } from "@/lib/limited.utils";
@@ -59,78 +60,106 @@ export function LimitedDeckStats({ cards, className, compact = false }: Props) {
     };
   }, [cards, cacheBucket]);
   const colorTotal = COLOR_KEYS.reduce((acc, k) => acc + stats.colors[k], 0);
+  // Leave headroom above the tallest bar for its count.
+  const barPct = (count: number) => (count / stats.curveMax) * 80;
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-3 rounded-md border border-border/70 bg-card/40 p-3 text-xs lg:grid-cols-3",
-        compact && "gap-2 p-2 lg:grid-cols-1",
+        "flex flex-col gap-4 rounded-md border border-border/70 bg-card/40 p-3",
+        compact && "gap-3 p-2.5",
         className,
       )}
     >
-      <section>
-        <h3 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-          Composition ({stats.total})
-        </h3>
-        <ul className="space-y-0.5">
-          <StatRow label={`Creatures`} value={stats.creatures} total={stats.total} />
-          <StatRow label={`Spells`} value={stats.spells} total={stats.total} />
-          <StatRow label={`Lands`} value={stats.lands} total={stats.total} />
+      <StatSection title={t`Composition`} detail={t`${stats.total} cards`}>
+        <ul className="space-y-1.5">
+          <BarRow label={t`Creatures`} value={stats.creatures} total={stats.total} />
+          <BarRow label={t`Spells`} value={stats.spells} total={stats.total} />
+          <BarRow label={t`Lands`} value={stats.lands} total={stats.total} />
         </ul>
-      </section>
+      </StatSection>
 
-      <section>
-        <h3 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-          Mana curve {stats.curveSampleSize ? `(${stats.curveSampleSize} non-land)` : ""}
-        </h3>
-        <div className="flex h-16 items-end gap-1">
+      <StatSection
+        title={t`Mana curve`}
+        detail={stats.curveSampleSize ? t`${stats.curveSampleSize} non-land` : undefined}
+      >
+        <div className={cn("flex gap-0.5", compact ? "h-20" : "h-28")}>
           {stats.curve.map((count, i) => {
-            const heightPct = (count / stats.curveMax) * 100;
+            const manaValue = i === 6 ? "6+" : String(i);
             return (
-              <div key={`cmc-${i}`} className="flex flex-1 flex-col items-center gap-1">
-                <span className="text-[10px] text-muted-foreground/80">{count || ""}</span>
+              <div
+                key={`cmc-${i}`}
+                className="relative h-full flex-1"
+                title={t`Mana value ${manaValue}: ${count} cards`}
+              >
+                {count > 0 && (
+                  <span
+                    className="absolute inset-x-0 text-center text-xs font-medium tabular-nums text-foreground/80"
+                    style={{ bottom: `calc(${barPct(count)}% + 2px)` }}
+                  >
+                    {count}
+                  </span>
+                )}
                 <div
-                  className="w-full rounded-sm bg-primary/60"
-                  style={{ height: `${heightPct}%`, minHeight: count > 0 ? 2 : 0 }}
+                  className="absolute inset-x-0 bottom-0 rounded-t bg-primary/70"
+                  style={{ height: `${barPct(count)}%`, minHeight: count > 0 ? 3 : 0 }}
                 />
-                <span className="text-[10px] text-muted-foreground">{i === 6 ? "6+" : i}</span>
               </div>
             );
           })}
         </div>
-      </section>
+        <div className="mt-1 flex gap-0.5 border-t border-border/60 pt-1">
+          {stats.curve.map((_, i) => (
+            <span key={`cmc-label-${i}`} className="flex-1 text-center text-xs tabular-nums text-muted-foreground">
+              {i === 6 ? "6+" : i}
+            </span>
+          ))}
+        </div>
+      </StatSection>
 
-      <section>
-        <h3 className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-          Colour pips {colorTotal ? `(${colorTotal})` : ""}
-        </h3>
-        <ul className="space-y-0.5">
+      <StatSection title={t`Colour pips`} detail={colorTotal ? String(colorTotal) : undefined}>
+        <ul className="space-y-1.5">
           {COLOR_KEYS.map((k) => (
-            <li key={k} className="flex items-center gap-2">
-              <ManaSymbols cost={`{${k}}`} size="sm" />
-              <span className="font-mono tabular-nums">{stats.colors[k]}</span>
-              <div className="h-1.5 flex-1 rounded bg-muted/40">
-                <div
-                  className="h-full rounded bg-primary/60"
-                  style={{
-                    width: `${colorTotal ? (stats.colors[k] / colorTotal) * 100 : 0}%`,
-                  }}
-                />
-              </div>
-            </li>
+            <BarRow
+              key={k}
+              label={<ManaSymbols cost={`{${k}}`} size="sm" />}
+              value={stats.colors[k]}
+              total={colorTotal}
+            />
           ))}
         </ul>
-      </section>
+      </StatSection>
     </div>
   );
 }
-function StatRow({ label, value, total }: { label: string; value: number; total: number }) {
+function StatSection({
+  title,
+  detail,
+  children,
+}: {
+  title: string;
+  detail?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section>
+      <h3 className="mb-2 flex items-baseline justify-between gap-2 text-sm font-semibold text-foreground">
+        <span>{title}</span>
+        {detail && <span className="text-xs font-normal text-muted-foreground">{detail}</span>}
+      </h3>
+      {children}
+    </section>
+  );
+}
+function BarRow({ label, value, total }: { label: ReactNode; value: number; total: number }) {
   const pct = total ? Math.round((value / total) * 100) : 0;
   return (
-    <li className="flex items-center justify-between gap-2">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-mono tabular-nums">
-        {value} <span className="text-muted-foreground/70">· {pct}%</span>
-      </span>
+    <li className="grid grid-cols-[3.5rem_minmax(0,1fr)_1.75rem_2.5rem] items-center gap-2 text-sm">
+      <span className="truncate text-muted-foreground">{label}</span>
+      <div className="h-2 overflow-hidden rounded-full bg-muted/60">
+        <div className="h-full rounded-full bg-primary/70" style={{ width: `${pct}%` }} />
+      </div>
+      <span className="text-right font-medium tabular-nums text-foreground">{value}</span>
+      <span className="text-right text-xs tabular-nums text-muted-foreground">{pct}%</span>
     </li>
   );
 }

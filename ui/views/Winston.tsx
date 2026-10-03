@@ -1,3 +1,4 @@
+import { plural, t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -87,22 +88,22 @@ export default function Winston() {
     <div className="flex h-full flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8">
       <header className="z-10 flex shrink-0 flex-wrap items-center justify-between gap-2 rounded-md border border-border/70 bg-background/95 px-3 py-2 shadow-sm backdrop-blur">
         <p className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Deck: {activeWinston.deckSize} cards left</span>
+          <span><Trans>Deck: {activeWinston.deckSize} cards left</Trans></span>
           <span className="rounded bg-muted/60 px-1.5 py-0.5 text-[11px]">
-            AI: {activeWinston.aiPickCount} picks
+            <Trans>AI: {activeWinston.aiPickCount} picks</Trans>
           </span>
           {activeWinston.isComplete ? (
             <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-              Complete
+              <Trans>Complete</Trans>
             </span>
           ) : activeWinston.awaitingHuman ? (
             <span className="rounded bg-primary/15 px-1.5 py-0.5 text-[11px] font-medium text-primary">
-              Your turn — viewing pile {activeIdx + 1}
+              <Trans>Your turn — viewing pile {activeIdx + 1}</Trans>
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5 rounded bg-muted/60 px-1.5 py-0.5 text-[11px] font-medium">
               <Loader2 className="h-3 w-3 animate-spin" />
-              AI thinking…
+              <Trans>AI thinking…</Trans>
             </span>
           )}
         </p>
@@ -121,7 +122,7 @@ export default function Winston() {
         <div className="min-h-0 flex-1">
           <LimitedDeckBuilder
             pool={activeWinston.pickedPile}
-            defaultDeckName="Winston Draft Deck"
+            defaultDeckName={t`Winston Draft Deck`}
             format="draft"
           />
         </div>
@@ -147,13 +148,15 @@ export default function Winston() {
           <DialogHeader>
             <DialogTitle><Trans>Pass the last pile?</Trans></DialogTitle>
             <DialogDescription>
-              Passing the last pile means you'll draw the top card of the deck instead. The pile you
-              skip stays on the table for the next player. Are you sure?
+              <Trans>
+                Passing the last pile means you'll draw the top card of the deck instead. The pile you
+                skip stays on the table for the next player. Are you sure?
+              </Trans>
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setConfirmDrawOpen(false)}>
-              Cancel
+              <Trans>Cancel</Trans>
             </Button>
             <Button
               variant="primary"
@@ -162,7 +165,7 @@ export default function Winston() {
                 await submitPass();
               }}
             >
-              Pass &amp; draw
+              <Trans>Pass &amp; draw</Trans>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -196,19 +199,19 @@ function DraftingView({
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-3 py-2">
         <div>
           <h2 className="text-xs font-semibold uppercase tracking-wide text-primary">
-            Active pile {activeIdx + 1}
+            <Trans>Active pile {activeIdx + 1}</Trans>
           </h2>
           <p className="text-[11px] text-muted-foreground">
-            {activePile.length} card{activePile.length === 1 ? "" : "s"}
+            {plural(activePile.length, { one: "# card", other: "# cards" })}
           </p>
         </div>
         {activeWinston.awaitingHuman && (
           <div className="flex gap-2">
             <Button variant="primary" onClick={onTake} disabled={activePileEmpty} size="sm">
-              Take pile
+              <Trans>Take pile</Trans>
             </Button>
             <Button variant="outline" onClick={onPass} size="sm">
-              Pass
+              <Trans>Pass</Trans>
             </Button>
           </div>
         )}
@@ -216,7 +219,7 @@ function DraftingView({
       <div className="min-h-0 flex-1 overflow-y-auto p-4">
         {activePile.length === 0 ? (
           <div className="flex h-full min-h-48 items-center justify-center text-sm text-muted-foreground">
-            This pile is empty.
+            <Trans>This pile is empty.</Trans>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
@@ -236,14 +239,14 @@ function DraftingView({
   const inactivePiles = (
     <section className="flex min-h-0 flex-col rounded-md border border-border/70 bg-card/20 p-3">
       <h2 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        Other piles
+        <Trans>Other piles</Trans>
       </h2>
       <div className="grid grid-cols-2 gap-2 lg:grid-cols-1">
         {activeWinston.piles.map((pile, index) =>
           index === activeIdx ? null : (
             <div key={index} className="rounded border border-border/40 bg-card/40 p-2">
               <div className="mb-1 text-[11px] font-medium text-muted-foreground">
-                Pile {index + 1} · {pile.length}
+                <Trans>Pile {index + 1} · {pile.length}</Trans>
               </div>
               <FaceDownStack count={pile.length} compact />
             </div>
@@ -254,7 +257,7 @@ function DraftingView({
   );
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
-      <LimitedWorkspaceTabs value={mobileTab} onChange={setMobileTab} packLabel="Piles" />
+      <LimitedWorkspaceTabs value={mobileTab} onChange={setMobileTab} packLabel={t`Piles`} />
 
       <div className="hidden min-h-0 flex-1 grid-cols-[minmax(0,1fr)_180px_340px] gap-3 overflow-hidden lg:grid">
         {activePilePanel}
@@ -296,7 +299,7 @@ function FaceDownStack({ count, compact = false }: { count: number; compact?: bo
     <div className={cn("relative aspect-[5/7] w-full", compact && "mx-auto max-w-24")}>
       <ScryfallImg
         src={CARD_BACK_IMAGE_URL}
-        alt={count === 1 ? `Face-down pile of one card` : `Face-down pile of ${count} cards`}
+        alt={plural(count, { one: "Face-down pile of one card", other: "Face-down pile of # cards" })}
         loading="lazy"
         className="absolute inset-0 h-full w-full rounded-md border border-border/40 object-cover shadow-sm"
       />
